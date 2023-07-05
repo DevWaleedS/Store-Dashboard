@@ -1,0 +1,74 @@
+.backdrop {
+	width: 100%;
+	height: calc(100vh - 80px);
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	opacity: 0.7;
+	z-index: 100;
+	background-color: #242424;
+}
+.action_body {
+	position: fixed;
+	left: 50%;
+	/* padding: 24px; */
+	z-index: 101;
+	background-color: #fff;
+	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+	border-radius: 0.25rem;
+	-webkit-border-radius: 0.25rem;
+	-moz-border-radius: 0.25rem;
+	-ms-border-radius: 0.25rem;
+	-o-border-radius: 0.25rem;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+}
+.title {
+	letter-spacing: 0.24px;
+	color: #011723;
+	white-space: 'nowrap';
+	font-weight: 400;
+	font-size: 24px;
+}
+.action_box {
+	gap: 2rem;
+}
+.line_anim {
+	height: 16px;
+
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	animation: anim 3s ease-out;
+	-webkit-animation: anim 3s ease-out;
+}
+
+.fcc {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+@keyframes anim {
+	from {
+		width: 100%;
+	}
+	to {
+		width: 0%;
+	}
+}
+@media (max-width: 768px) {
+	.backdrop {
+		background-color: #f6f6f6bf;
+		height: 100% !important;
+		opacity: 0.5;
+	}
+	.title {
+		font-size: 18px;
+	}
+	.action_box {
+		gap: 1.25rem;
+	}
+}

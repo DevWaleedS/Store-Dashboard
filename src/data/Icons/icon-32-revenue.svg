@@ -1,0 +1,7 @@
+<svg id="icon-32-revenue" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <g id="Icon.BG" fill="#fff" stroke="#a3a1fb" stroke-width="1">
+    <circle cx="16" cy="16" r="16" stroke="none"/>
+    <circle cx="16" cy="16" r="15.5" fill="none"/>
+  </g>
+  <path id="cart-icon" d="M11.014,14a2,2,0,1,1,2,2A2,2,0,0,1,11.014,14Zm-10,0a2,2,0,1,1,2,2A2,2,0,0,1,1.014,14ZM0,11V9H12.261l1.427-5H2.014V2h-2V0h3a1,1,0,0,1,1,1V2h11a1.021,1.021,0,0,1,.961,1.275l-2,7a1,1,0,0,1-.962.725ZM1,8V7H5V8ZM2,6V5H6V6Z" transform="translate(8 11)" fill="#a4a1fb"/>
+</svg>

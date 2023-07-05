@@ -1,0 +1,171 @@
+import React, { useState } from 'react';
+import { Helmet } from "react-helmet";
+import { Link, useNavigate } from 'react-router-dom';
+import { MdAdd } from 'react-icons/md';
+import { BsSearch } from 'react-icons/bs';
+// iCONS
+import howIcon from '../data/Icons/icon_24_home.svg';
+//
+import { CategoryTable } from '../components';
+import useFetch from '../Hooks/UseFetch';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { IoIosArrowDown } from 'react-icons/io';
+
+const Category = () => {
+	// to get all  data from server
+	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/category');
+	const { fetchedData: categories } = useFetch('https://backend.atlbha.com/api/Store/selector/mainCategories');
+
+	const [search, setSearch] = useState('');
+	const [category_id, setCategory_id] = useState('');
+	const navigate = useNavigate();
+	const handleSubmit = (event) => {
+		event.preventDefault();
+	};
+	let categoriesResult = fetchedData?.data?.categories;
+	let filterCategories = categoriesResult;
+
+	if (search !== '') {
+		categoriesResult = fetchedData?.data?.categories?.filter((item) => item?.name.includes(search));
+	} else {
+		categoriesResult = fetchedData?.data?.categories;
+	}
+
+	if (category_id !== '') {
+		filterCategories = categoriesResult?.filter((item) => item?.id === category_id);
+	}
+	else {
+		filterCategories = categoriesResult;
+	}
+
+	return (
+		<>
+			<Helmet>
+				<title>لوحة تحكم أطلبها | التصنيفات</title>
+			</Helmet>
+			<div className='category p-lg-3'>
+				<div className='head-category'>
+					<div className='row'>
+						<nav aria-label='breadcrumb'>
+							<ol className='breadcrumb'>
+								<li className='breadcrumb-item'>
+									<img src={howIcon} alt='' />
+									<Link to='/' className='me-2'>
+										الرئيسية
+									</Link>
+								</li>
+								<li className='breadcrumb-item active ' aria-current='page'>
+									التصنيفات
+								</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
+
+				<div className='mb-3'>
+					<div className='add-category'>
+						<form onSubmit={handleSubmit}>
+							<div className='input-group'>
+								<div className='search-input input-box'>
+									<input value={search} onChange={(e) => setSearch(e.target.value)} type='text' name='search' id='search' placeholder='ابحث في التصنيفات' />
+									<BsSearch />
+								</div>
+
+								<div className='select-input input-box '>
+									<FormControl sx={{ width: '100%' }}>
+										<Select
+											name='category_id'
+											value={category_id}
+											onChange={(e) => { setCategory_id(e.target.value) }}
+											sx={{
+												fontSize: '18px',
+												backgroundColor: '#ededed',
+												'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
+												{
+													paddingRight: '20px',
+												},
+												'& .MuiOutlinedInput-root': {
+													'& :hover': {
+														border: 'none',
+													},
+												},
+												'& .MuiOutlinedInput-notchedOutline': {
+													border: 'none',
+												},
+												'& .MuiSelect-icon': {
+													right: '90%',
+												},
+												'& .MuiSelect-nativeInput': {
+													display: 'none',
+												},
+											}}
+											IconComponent={IoIosArrowDown}
+											displayEmpty
+											inputProps={{ 'aria-label': 'Without label' }}
+											renderValue={(selected) => {
+												if (category_id === '') {
+													return <p className='text-[#ADB5B9]'>اختر التصنيف</p>;
+												}
+												const result = categories?.data?.categories?.filter((item) => item?.id === parseInt(selected)) || '';
+												return result[0]?.name;
+											}}
+										>
+											<MenuItem
+												className='souq_storge_category_filter_items'
+												sx={{
+													backgroundColor: 'rgba(211, 211, 211, 1)',
+													height: '3rem',
+													'&:hover': {},
+												}}
+												value={''}
+											>
+												الكل
+											</MenuItem>
+											{categories?.data?.categories?.map((cat, index) => {
+												return (
+													<MenuItem
+														key={index}
+														className='souq_storge_category_filter_items'
+														sx={{
+															backgroundColor: 'rgba(211, 211, 211, 1)',
+															height: '3rem',
+															'&:hover': {},
+														}}
+														value={cat?.id}
+													>
+														{cat?.name}
+													</MenuItem>
+												);
+											})}
+										</Select>
+									</FormControl>
+								</div>
+
+								<div className='add-category-bt-box'>
+									<button
+										className='add-cat-btn'
+										onClick={() => {
+											navigate('AddCategory');
+										}}
+									>
+										<MdAdd />
+										<span className='me-2'> اضافه تصنيف</span>
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div className='row'>
+					<div className='category-table'>
+						<CategoryTable fetchedData={filterCategories} loading={loading} reload={reload} setReload={setReload} />
+					</div>
+				</div>
+			</div>
+		</>
+	);
+};
+
+export default Category;
