@@ -105,8 +105,8 @@ const RootLayout = () => {
 					</CssBaseline>
 				</ThemeProvider>
 			) : (
-				// <Logout />
-				null
+				<Logout />
+				
 			)}
 		</>
 	);
