@@ -51,8 +51,9 @@ const style = {
 
 const EditRole = () => {
 	const { id } = useParams();
-	const { fetchedData: permissionsList } = useFetch('https://backend.atlbha.com/api/Store/permissions');
+	const { fetchedData: permissionsListData } = useFetch('https://backend.atlbha.com/api/Store/permissions');
 	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/roles/${id}`);
+	const [search, setSearch] = useState('');
 	const [roles, setRoles] = useState({
 		role_name: '',
 	});
@@ -63,6 +64,14 @@ const EditRole = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+	let permissionsList = permissionsListData?.data?.permissions;
+
+	if (search !== '') {
+		permissionsList = permissionsListData?.data?.permissions?.filter((item) => item?.name_ar?.toLowerCase()?.includes(search?.toLowerCase()));
+	} else {
+		permissionsList = permissionsListData?.data?.permissions;
+	}
+
 	const { register, handleSubmit, reset, formState: { errors } } = useForm({
 		mode: "onBlur",
 		defaultValues: {
@@ -132,7 +141,7 @@ const EditRole = () => {
 															<div className='input-icon'>
 																<SearchIcon />
 															</div>
-															<input className='w-100' type='text' name='search-input' id='search-input' placeholder='ابحث عن صلاحية' />
+															<input value={search} onChange={(e) => setSearch(e.target.value)} className='w-100' type='text' name='search-input' id='search-input' placeholder='ابحث عن صلاحية' />
 														</div>
 														<div className='col-md-4 col-12'>
 															<button
@@ -224,55 +233,62 @@ const EditRole = () => {
 																			</TableCell>
 																		</TableRow>
 																	) : (
-																		permissionsList?.data?.permissions?.map((row, index) => (
-																			<TableRow key={index}>
-																				<TableCell
-																					sx={{
-																						border: 'none',
-																						width: '60%',
-																					}}
-																					align='right'
-																					padding='10px'
-																				>
-																					{row?.name_ar}
-																				</TableCell>
-																				{row?.subpermissions?.map((sub, index) => (
-																					<TableCell key={index} sx={{ border: 'none' }} align='center'>
-																						<FormGroup className='' sx={{ overflow: 'hidden' }}>
-																							<FormControlLabel
-																								value={sub?.id}
-																								key={index}
-																								sx={{
-																									py: 1,
-																									mr: 0,
-																									borderBottom: '1px solid #ECECEC',
-																									'& .MuiTypography-root': {
-																										fontSize: '18px',
-																										fontWeight: '500',
-																										'@media(max-width:767px)': {
-																											fontSize: '16px',
-																										},
-																									},
-																								}}
-																								control={
-																									<Checkbox
-																										defaultChecked={permissions?.includes(sub?.id) || false}
-																										onChange={(e) => {
-																											if (e.target.checked) {
-																												setPermissions([...permissions, parseInt(e.target.value)]);
-																											} else {
-																												setPermissions(permissions?.filter((item) => item !== sub?.id));
-																											}
-																										}}
-																										sx={{ '& path': { fill: '#000000' } }}
-																									/>
-																								}
-																							/>
-																						</FormGroup>
+																		permissionsList?.length !== 0 ?
+																			permissionsList?.map((row, index) => (
+																				<TableRow key={index}>
+																					<TableCell
+																						sx={{
+																							border: 'none',
+																							width: '60%',
+																						}}
+																						align='right'
+																						padding='10px'
+																					>
+																						{row?.name_ar}
 																					</TableCell>
-																				))}
+																					{row?.subpermissions?.map((sub, index) => (
+																						<TableCell key={index} sx={{ border: 'none' }} align='center'>
+																							<FormGroup className='' sx={{ overflow: 'hidden' }}>
+																								<FormControlLabel
+																									value={sub?.id}
+																									key={index}
+																									sx={{
+																										py: 1,
+																										mr: 0,
+																										borderBottom: '1px solid #ECECEC',
+																										'& .MuiTypography-root': {
+																											fontSize: '18px',
+																											fontWeight: '500',
+																											'@media(max-width:767px)': {
+																												fontSize: '16px',
+																											},
+																										},
+																									}}
+																									control={
+																										<Checkbox
+																											defaultChecked={permissions?.includes(sub?.id) || false}
+																											onChange={(e) => {
+																												if (e.target.checked) {
+																													setPermissions([...permissions, parseInt(e.target.value)]);
+																												} else {
+																													setPermissions(permissions?.filter((item) => item !== sub?.id));
+																												}
+																											}}
+																											sx={{ '& path': { fill: '#000000' } }}
+																										/>
+																									}
+																								/>
+																							</FormGroup>
+																						</TableCell>
+																					))}
+																				</TableRow>
+																			))
+																			:
+																			<TableRow>
+																				<TableCell colSpan={6}>
+																					<p style={{ textAlign:'center' }}>لاتوجد صلاحيات</p>
+																				</TableCell>
 																			</TableRow>
-																		))
 																	)}
 																</TableBody>
 															</Table>

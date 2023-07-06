@@ -70,6 +70,8 @@ const AddNewProduct = () => {
 		}
 	});
 	const [product, setProduct] = useState({
+		selling_price: '',
+		discount_price: '',
 		category_id: '',
 		subcategory_id: [],
 	});
@@ -459,11 +461,10 @@ const AddNewProduct = () => {
 											<label htmlFor='price'> السعر SAR </label>
 										</div>
 										<div className='col-md-7 col-12'>
-											<input
-												type='number'
-												id='price'
-												name='selling_price'
-												{...register('selling_price', {
+											<Controller
+												name={"selling_price"}
+												control={control}
+												rules={{
 													required: "The selling price field is required",
 													pattern: {
 														value: /^[0-9]+$/i,
@@ -473,7 +474,19 @@ const AddNewProduct = () => {
 														value: 1,
 														message: "The selling price must be greater than 0"
 													},
-												})}
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														name={"selling_price"}
+														type='number'
+														id='price'
+														value={value}
+														onChange={(e) => {
+															handleOnChange(e);
+															onChange(e);
+														}}
+													/>
+												)}
 											/>
 										</div>
 										<div className='col-md-3 col-12'></div>
@@ -484,15 +497,25 @@ const AddNewProduct = () => {
 											<label htmlFor='low-price'> سعر التخفيض SAR </label>
 										</div>
 										<div className='col-md-7 col-12'>
-											<input
-												type='number'
-												id='low-price'
-												name='discount_price'
-												{...register('discount_price', {
-												})}
+											<Controller
+												name={"discount_price"}
+												control={control}
+												render={({ field: { onChange, value } }) => (
+													<input
+														name={"discount_price"}
+														type='number'
+														id='low-price'
+														value={value}
+														onChange={(e) => {
+															handleOnChange(e);
+															onChange(e);
+														}}
+													/>
+												)}
 											/>
 										</div>
 										<div className='col-md-3 col-12'></div>
+										<div className='col-md-7 col-12'><span className='fs-6 text-dark'>سعر البيع بعد التخفيض {Number(product?.selling_price) - Number(product?.discount_price) || 0} SAR</span></div>
 										<div className='col-md-7 col-12'><span className='fs-6 text-danger'>{productError?.discount_price}{errors?.discount_price && errors.discount_price.message}</span></div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
