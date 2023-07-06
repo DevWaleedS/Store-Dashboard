@@ -106,6 +106,7 @@ const RootLayout = () => {
 				</ThemeProvider>
 			) : (
 				<Logout />
+			
 				
 			)}
 		</>

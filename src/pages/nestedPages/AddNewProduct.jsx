@@ -515,7 +515,25 @@ const AddNewProduct = () => {
 											/>
 										</div>
 										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'><span className='fs-6 text-dark'>سعر البيع بعد التخفيض {Number(product?.selling_price) - Number(product?.discount_price) || 0} SAR</span></div>
+										{product?.discount_price &&  product?.selling_price  && 
+										<div className='col-md-7 col-12'>
+										{Number(product?.selling_price) - Number(product?.discount_price) <= 0 
+											?
+											 <span className='fs-6' style={{color:'red'}}>يجب ان يكون سعر التخفيض اقل من السعر الأساسي</span> 
+											: 
+											<span className={` ${product?.discount_price === '0' &&  product?.selling_price  ? 'd-none' : 'fs-6' }`}  style={{color:'#4ac9cb'}}>
+											سعر البيع بعد التخفيض {Number(product?.selling_price) - Number(product?.discount_price) || 0} SAR
+											</span>
+										 }
+									
+										</div>
+
+										}
+						
+										{product?.discount_price &&  product?.selling_price === '' && 
+											<div className='col-md-7 col-12'><span className='fs-6' style={{color:'red'}}>يرجي ادخال  السعر الأساسي أولاّّ حتي تتمكن من حساب سعر التخفيض</span></div>
+	
+											}
 										<div className='col-md-7 col-12'><span className='fs-6 text-danger'>{productError?.discount_price}{errors?.discount_price && errors.discount_price.message}</span></div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
