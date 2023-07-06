@@ -76,9 +76,9 @@ const UserDetails = () => {
 														<Message />
 														<span className='me-3'>{fetchedData?.data?.users?.email}</span>
 													</div>
-													<div className='contact-info'>
-														<Phone />
-														<span className='me-3'>{fetchedData?.data?.users?.phonenumber}</span>
+													<div className='contact-info' style={{direction: 'ltr', display:'flex', flexDirection: 'row-reverse'}}>
+													<Phone />
+													<span className='me-3'>{fetchedData?.data?.users?.phonenumber}</span>
 													</div>
 												</div>
 											</div>

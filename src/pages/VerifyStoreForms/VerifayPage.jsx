@@ -31,7 +31,7 @@ const inputStyle = {
 	height: '56px',
 	background: '#FFFFFF ',
 	borderRadius: '4px',
-	color: '#ADB5B9',
+	color: '#00000',
 	padding: '20px',
 	fontSize: '16px',
 	fontWeight: '400',
@@ -418,11 +418,12 @@ const VerifayPage = ({ verify }) => {
 										}}
 										placeholder='https//www.sample.com'
 										style={{
+											textAlign: 'left',
 											width: '100%',
 											height: '50px',
 											padding: '18px',
 											background: '#FAFAFA',
-											color: '#ADB5B9',
+											color: '#000000',
 											fontSize: '16px',
 											fontWeight: '400',
 											borderRadius: '4px',

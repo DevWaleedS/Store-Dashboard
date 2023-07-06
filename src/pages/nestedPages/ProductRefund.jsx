@@ -14,7 +14,7 @@ import CircularLoading from '../../HelperComponents/CircularLoading';
 import { LoadingContext } from '../../Context/LoadingProvider';
 
 const modalStyle = {
-	position: 'fixed',
+	position: 'absolute',
 	top: '90px',
 	left: '50%',
 	transform: 'translate(-50%, 0%)',
@@ -38,13 +38,14 @@ const ProductRefund = () => {
 	const navigate = useNavigate();
 
 	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`);
-
+	
 	const [open, setOpen] = React.useState(true);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [price, setPrice] = React.useState();
+	const [priceError, setPriceError] = React.useState('')
 
 	useEffect(() => {
 		if (fetchedData?.data?.products?.selling_price) {
@@ -53,6 +54,7 @@ const ProductRefund = () => {
 	}, [fetchedData?.data?.products?.selling_price]);
 
 	const importProduct = () => {
+		setPriceError('')
 		setLoadingTitle('جاري استيراد المنتج');
 		let formData = new FormData();
 		formData.append('product_id', id);
@@ -73,9 +75,10 @@ const ProductRefund = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle('');
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Products/SouqOtlobha');
 					setReload(!reload);
+					// navigate('/Products/SouqOtlobha');
+					setPriceError(res?.data?.message?.en?.price[0])
+					setEndActionTitle(res?.data?.message?.ar);
 				}
 			});
 	};
@@ -188,6 +191,11 @@ const ProductRefund = () => {
 
 													<div className='currency d-flex justify-content-center align-items-center'>ر.س</div>
 												</div>
+
+
+												{priceError &&
+													<span className='fs-6 text-danger'>{priceError}</span>
+												}
 											</div>
 
 											<div className='product-price'>
