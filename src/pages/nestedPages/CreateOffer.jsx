@@ -410,10 +410,10 @@ const CreateOffer = () => {
 													type='text'
 													id='offer-title'
 													{...register('offer_title', {
-														required: "The offer title field is required",
+														required: "حقل عنوان العرض مطلوب",
 														pattern: {
 															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-															message: "The offer title must be a string"
+															message: "عنوان العرض يجب ان يكون نص"
 														},
 													})}
 												/>
@@ -521,14 +521,14 @@ const CreateOffer = () => {
 														id='count'
 														placeholder='0'
 														{...register('purchase_quantity', {
-															required: "The purchase quantity field is required",
+															required: "حقل كمية الشراء مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
-																message: "The purchase quantity must be a number"
+																message: "يجب ان تكون كمية الشراء رقماّّ" 
 															},
 															min: {
 																value: -1,
-																message: "The purchase quantity must be greater than -1"
+																message: "يجب أن تكون كمية الشراء أكبر من -1"
 															},
 														})}
 													/>
@@ -683,14 +683,14 @@ const CreateOffer = () => {
 														id='count'
 														placeholder='0'
 														{...register('get_quantity', {
-															required: "The get quantity field is required",
+															required: "حقل الحصول على الكمية مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
-																message: "The get quantity must be a number"
+																message: "يجب أن تكون كمية الاستلام رقمًا"
 															},
 															min: {
 																value: -1,
-																message: "The get quantity must be greater than -1"
+																message: "يجب أن تكون كمية الاستلام أكبر من -1"
 															},
 														})}
 													/>
@@ -828,7 +828,7 @@ const CreateOffer = () => {
 												<Controller
 													name={"offer1_type"}
 													control={control}
-													rules={{ required: "The offer type field is required" }}
+													rules={{ required: "حقل نوع الخصم مطلوب" }}
 													render={({ field: { onChange, value } }) => (
 														<RadioGroup
 															className=' d-flex flex-row'
@@ -858,18 +858,18 @@ const CreateOffer = () => {
 																						type='number'
 																						placeholder='0'
 																						{...register('discount_percent', {
-																							required: "The discount percent field is required",
+																							required: " حقل نسبة الخصم مطلوب" ,
 																							pattern: {
 																								value: /^[0-9]+$/i,
-																								message: "The discount percent must be a number"
+																								message: "يجب أن تكون نسبة الخصم رقمًا"
 																							},
 																							min: {
 																								value: 0,
-																								message: "The discount percent must be greater than 0"
+																								message: "يجب أن تكون نسبة الخصم أكبر من 0"
 																							},
 																							max: {
 																								value: 100,
-																								message: "The discount percent must be less than 100"
+																								message: "يجب أن تكون نسبة الخصم أقل من 100"
 																							},
 																						})}
 																					/>
@@ -914,14 +914,14 @@ const CreateOffer = () => {
 																	type='number'
 																	placeholder='0'
 																	{...register('discount_value_offer2', {
-																		required: "The discount field is required",
+																		required: "حقل الخصم مطلوب",
 																		pattern: {
 																			value: /^[0-9]+$/i,
-																			message: "The discount must be a number"
+																			message: "يجب أن يكون الخصم رقمًا"
 																		},
 																		min: {
 																			value: 1,
-																			message: "The discount must be greater than 0"
+																			message: "يجب أن يكون الخصم أكبر من 0"
 																		},
 																	})}
 																/>
@@ -1128,7 +1128,7 @@ const CreateOffer = () => {
 													<div className='col-12'>{offerError?.select_payment_id && <span className='fs-6 text-danger'>{offerError?.select_payment_id}</span>}</div>
 												</div>
 											)}
-											<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
+											<div className='row  mb-3 d-flex justify-content-evenly'>
 												<div className='col-12'>
 													<div className='row-title'>
 														<h4 className='mb-2'>الحد الأدنى لتطبيق العرض</h4>
@@ -1137,7 +1137,7 @@ const CreateOffer = () => {
 													<Controller
 														name={"fixed_offer_type_minimum"}
 														control={control}
-														rules={{ required: "The fixed offer type minimum field is required" }}
+														rules={{ required: "حقل الحد الأدنى لنوع العرض الثابت مطلوب" }}
 														render={({ field: { onChange, value } }) => (
 															<RadioGroup
 																className='row d-flex flex-row mt-4'
@@ -1148,7 +1148,7 @@ const CreateOffer = () => {
 															>
 																<div className='col-md-6 col-12'>
 																	<div className='radio-box mb-1 '>
-																		<FormControlLabel id='purchase_amount' control={<Radio />} value='purchase_amount' />
+																		<FormControlLabel id='purchase_amount' control={<Radio   value='purchase_amount'/>} />
 																		<label className={value === 'purchase_amount' ? 'active me-3' : ' me-3'} htmlFor='purchase_amount'>
 																			الحد الأدنى لمبلغ الشراء
 																		</label>
@@ -1160,7 +1160,7 @@ const CreateOffer = () => {
 																			</div>
 																			<input
 																				name='fixed_offer_amount_minimum'
-																				value={offer?.fixed_offer_amount_minimum}
+																				value={value !== 'purchase_amount' ? '' : offer?.fixed_offer_amount_minimum  }
 																				onChange={(e) => {
 																					handleOnChange(e);
 																				}}
@@ -1169,13 +1169,13 @@ const CreateOffer = () => {
 																				disabled={value !== 'purchase_amount'}
 																			/>
 																		</div>
-																		<span className='currency'>ر.س</span>
+																		<span className='offer-currency'>ر.س</span>
 																		<div className='col-12'>{offerError?.offer_amount_minimum && <span className='fs-6 text-danger'>{offerError?.offer_amount_minimum}</span>}</div>
 																	</div>
 																</div>
 																<div className='col-md-6 col-12'>
 																	<div className='radio-box mb-1'>
-																		<FormControlLabel id='product_quantity' control={<Radio />} value='product_quantity' />
+																		<FormControlLabel id='product_quantity' control={<Radio value='product_quantity' />} />
 																		<label className={value === 'product_quantity' ? 'active me-3' : ' me-3'} htmlFor='product_quantity'>
 																			الحد الأدنى لكمية المنتجات
 																		</label>
@@ -1186,7 +1186,8 @@ const CreateOffer = () => {
 																		</div>
 																		<input
 																			name='fixed_offer_amount_minimum'
-																			value={offer?.fixed_offer_amount_minimum}
+																			
+																			value={value !== 'product_quantity' ? '' : offer?.fixed_offer_amount_minimum }
 																			onChange={(e) => {
 																				handleOnChange(e);
 																			}}
@@ -1204,6 +1205,7 @@ const CreateOffer = () => {
 											</div>
 											<FormGroup>
 												<FormControlLabel
+												sx={{'mr': '-10px'}}
 													value={fixedCouponStatus}
 													control={
 														<Checkbox
@@ -1240,18 +1242,18 @@ const CreateOffer = () => {
 																	type='number'
 																	placeholder='0'
 																	{...register('discount_value_offer3', {
-																		required: "The discount field is required",
+																		required: "حقل قيمة التخفيض مطلوب",
 																		pattern: {
 																			value: /^[0-9]+$/i,
-																			message: "The discount must be a number"
+																			message: "يجب أن يكون الخصم رقمًا"
 																		},
 																		min: {
 																			value: 0,
-																			message: "The discount percent must be greater than 0"
+																			message: "يجب أن تكون نسبة الخصم أكبر من 0"
 																		},
 																		max: {
 																			value: 100,
-																			message: "The discount percent must be less than 100"
+																			message: "يجب أن تكون نسبة الخصم أقل من 100"
 																		},
 																	})}
 																/>
@@ -1277,14 +1279,14 @@ const CreateOffer = () => {
 																	type='number'
 																	placeholder='0'
 																	{...register('maximum_discount', {
-																		required: "The maximum discount field is required",
+																		required: "مطلوب حقل الحد الأقصى للخصم",
 																		pattern: {
 																			value: /^[0-9]+$/i,
-																			message: "The maximum discount must be a number"
+																			message: "يجب أن يكون الحد الأقصى للخصم رقمًا"
 																		},
 																		min: {
 																			value: 1,
-																			message: "The maximum discount must be greater than 0"
+																			message: "يجب أن يكون الحد الأقصى للخصم أكبر من 0"
 																		},
 																	})}
 																/>
@@ -1491,7 +1493,7 @@ const CreateOffer = () => {
 													<div className='col-12'>{offerError?.select_payment_id && <span className='fs-6 text-danger'>{offerError?.select_payment_id}</span>}</div>
 												</div>
 											)}
-											<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
+											<div className='row  mb-3 d-flex justify-content-evenly'>
 												<div className='col-12'>
 													<div className='row-title'>
 														<h4 className='mb-2'>الحد الأدنى لتطبيق العرض</h4>
@@ -1500,7 +1502,7 @@ const CreateOffer = () => {
 													<Controller
 														name={"offer_type_minimum"}
 														control={control}
-														rules={{ required: "The offer type minimum field is required" }}
+														rules={{ required: "حقل الحد الأدنى لتطبيق العرض مطلوب" }}
 														render={({ field: { onChange, value } }) => (
 															<RadioGroup
 																className='row d-flex flex-row mt-4'
@@ -1511,7 +1513,7 @@ const CreateOffer = () => {
 															>
 																<div className='col-md-6 col-12'>
 																	<div className='radio-box mb-1 '>
-																		<FormControlLabel id='purchase_amount' control={<Radio />} value='purchase_amount' />
+																		<FormControlLabel id='purchase_amount' control={<Radio  value='purchase_amount'/>}  />
 																		<label className={value === 'purchase_amount' ? 'active me-3' : ' me-3'} htmlFor='purchase_amount'>
 																			الحد الأدنى لمبلغ الشراء
 																		</label>
@@ -1523,7 +1525,7 @@ const CreateOffer = () => {
 																			</div>
 																			<input
 																				name='offer_amount_minimum'
-																				value={offer?.offer_amount_minimum}
+																				value={value !== 'purchase_amount' ? '' : offer?.offer_amount_minimum }
 																				onChange={(e) => {
 																					handleOnChange(e);
 																				}}
@@ -1538,7 +1540,7 @@ const CreateOffer = () => {
 																</div>
 																<div className='col-md-6 col-12'>
 																	<div className='radio-box mb-1'>
-																		<FormControlLabel id='product_quantity' control={<Radio />} value='product_quantity' />
+																		<FormControlLabel id='product_quantity' control={<Radio value='product_quantity' />} />
 																		<label className={value === 'product_quantity' ? 'active me-3' : ' me-3'} htmlFor='product_quantity'>
 																			الحد الأدنى لكمية المنتجات
 																		</label>
@@ -1549,7 +1551,7 @@ const CreateOffer = () => {
 																		</div>
 																		<input
 																			name='offer_amount_minimum'
-																			value={offer?.offer_amount_minimum}
+																			value={value !== 'product_quantity' ? '' : offer?.offer_amount_minimum}
 																			onChange={(e) => {
 																				handleOnChange(e);
 																			}}
@@ -1567,6 +1569,7 @@ const CreateOffer = () => {
 											</div>
 											<FormGroup>
 												<FormControlLabel
+												 sx={{'mr': '-10px'}}
 													value={couponStatus}
 													control={
 														<Checkbox

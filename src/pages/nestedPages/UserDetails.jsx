@@ -71,7 +71,7 @@ const UserDetails = () => {
 
 											<div className='col-lg-4 col-12 d-flex justify-content-center'>
 												<div className='user-info me-md-3'>
-													<span className='user-name mb-3'>{fetchedData?.data?.users?.name === 'null' ? '' : fetchedData?.data?.users?.name}</span>
+													<span className='user-name mb-3 d-block text-center'>{fetchedData?.data?.users?.name === 'null' ? '' : fetchedData?.data?.users?.name}</span>
 													<div className='contact-info mb-2'>
 														<Message />
 														<span className='me-3'>{fetchedData?.data?.users?.email}</span>

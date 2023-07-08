@@ -135,6 +135,7 @@ const EditPage = () => {
 		});
 	}, [fetchedData?.data?.pages]);
 
+
 	useEffect(() => {
 		reset(page);
 	}, [page, reset]);
@@ -247,11 +248,11 @@ const EditPage = () => {
 														type='text'
 														placeholder='عنوان الصفحة'
 														{...register('title', {
-															required: 'The title field is required',
-															pattern: {
-																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: 'The title must be a string',
-															},
+															required: ' حقل العنوان مطلوب',
+													pattern: {
+														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+														message: 'يجب أن يكون العنوان عبارة عن نص',
+													},
 														})}
 													/>
 													<div className='col-12'>
@@ -268,7 +269,7 @@ const EditPage = () => {
 														placeholder='وصف الصفحة'
 														rows={5}
 														{...register('page_desc', {
-															required: 'The page desciption field is required',
+															required: 'حقل وصف الصفحة مطلوب',
 														})}
 													></textarea>
 													<div className='col-12'>
@@ -385,14 +386,27 @@ const EditPage = () => {
 																			}}
 																			control={
 																				<Checkbox
-																					defaultChecked={page?.pageCategory?.includes(cat?.id)}
+																				checked={page?.pageCategory?.includes(cat?.id) || false}
 																					onChange={(e) => {
-																						if (e.target.checked) {
-																							setPage({ ...page, pageCategory: [...page.pageCategory, parseInt(e.target.value)] });
+																						const categoryId = parseInt(e.target.value);
+																						const isChecked = e.target.checked;
+																						console.log(isChecked)
+																						console.log(isChecked)
+																						console.log(page?.pageCategory?.includes(cat?.id))
+																					  
+																						if (isChecked) {
+																						  setPage((prevPage) => ({
+																							...prevPage,
+																							pageCategory: [...prevPage.pageCategory, categoryId],
+																						  }));
 																						} else {
-																							setPage({ ...page, pageCategory: page?.pageCategory?.filter((item) => parseInt(item) !== parseInt(cat.id)) });
+																						  setPage((prevPage) => ({
+																							...prevPage,
+																							pageCategory: prevPage.pageCategory.filter((item) => item !== categoryId),
+																						  }));
 																						}
-																					}}
+																					  }}
+																					  
 																					sx={{ '& path': { fill: '#000000' } }}
 																				/>
 																			}
@@ -422,6 +436,12 @@ const EditPage = () => {
 																<div className='mt-2'>
 																	<span>{page?.tags?.join(' , ')}</span>
 																</div>
+																{pageError?.tags &&
+																	<div >
+																<span className='fs-6 text-danger'>
+															{	pageError?.tags}
+																</span>
+															</div>}
 															</div>
 														</div>
 													</div>

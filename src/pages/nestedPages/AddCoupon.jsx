@@ -162,14 +162,14 @@ const AddCoupon = () => {
 												placeholder='ادخل كود الكوبون'
 												name='code'
 												{...register('code', {
-													required: "The code field is required",
+													required: "حقل الكود مطلوب",
 													pattern: {
 														value: /^[A-Za-z0-9]+$/i,
-														message: "The code must be a English letter and number"
+														message: "صيغة الحقل الكود غير صحيحة(يجب ان يكون من حروف انجليزيه او حروف انجليزيه وارقام او ارقام)" 
 													},
 												})}
 											/>
-											<div className='col-12'><span className='fs-6 text-danger'>{couponError?.code}{errors?.code && errors.code.message}</span></div>
+											<div className='col-12'><span className='fs-6 text-danger' style={{whiteSpace:'normal'}}>{couponError?.code}{errors?.code && errors.code.message}</span></div>
 										</div>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='uses-count' className='d-block mb-1'>
@@ -181,14 +181,14 @@ const AddCoupon = () => {
 												placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
 												name='total_redemptions'
 												{...register('total_redemptions', {
-													required: "The total redemptions field is required",
+													required:  "حقل عدد مرات الاستخدام للجميع مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "The total redemptions must be a number"
+														message: "يجب على الحقل عدد مرات الاستخدام للجميع أن يكون رقمًا"
 													},
 													min: {
 														value: 1,
-														message: "The total redemptions must be greater than 0"
+														message: "  عدد مرات الاستخدام للجميع يجب ان يكون اكبر من 0"
 													},
 												})}
 											/>
@@ -203,7 +203,7 @@ const AddCoupon = () => {
 											<Controller
 												name={"discount_type"}
 												control={control}
-												rules={{ required: "The discount type field is required" }}
+												rules={{ required:"حقل نوع الخصم مطلوب"}}
 												render={({ field: { onChange, value } }) => (
 													<RadioGroup
 														className='d-flex flex-row mb-1'
@@ -233,14 +233,14 @@ const AddCoupon = () => {
 												placeholder=' ادخل النسبة او المبلغ'
 												name='discount'
 												{...register('discount', {
-													required: "The discount field is required",
+													required:  "حقل الخصم مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "The discount must be a number"
+														message: "يجب على الحقل الخصم أن يكون رقمًا"
 													},
 													min: {
 														value: 1,
-														message: "The discount must be greater than 0"
+														message: "  الخصم يجب ان يكون اكبر من 0"
 													},
 												})}
 											/>
@@ -257,14 +257,14 @@ const AddCoupon = () => {
 												placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
 												name='user_redemptions'
 												{...register('user_redemptions', {
-													required: "The user redemptions field is required",
+													required:    "حقل عدد مرات الاستخدام للعميل الواحد مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "The user redemptions must be a number"
+														message: "   عدد مرات الاستخدام للعميل الواحد يجب أن يكون رقمًا"
 													},
 													min: {
 														value: 1,
-														message: "The user redemptions must be greater than 0"
+														message: "  عدد مرات الاستخدام للعميل الواحد يجب ان يكون اكبر من 0"
 													},
 												})}
 											/>
@@ -290,7 +290,7 @@ const AddCoupon = () => {
 											<Controller
 												name={"free_shipping"}
 												control={control}
-												rules={{ required: "The free shipping field is required" }}
+												rules={{ required:  "حقل شحن مجاني مطلوب" }}
 												render={({ field: { onChange, value } }) => (
 													<RadioGroup
 														className='d-flex flex-row'
@@ -327,14 +327,14 @@ const AddCoupon = () => {
 												placeholder='ادخل مبلغ الحد الأدني من المشتريات'
 												name='total_price'
 												{...register('total_price', {
-													required: "The total price field is required",
+													required:  "حقل المبلغ مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "The total price must be a number"
+														message: "يجب على الحقل المبلغ أن يكون رقمًا"
 													},
 													min: {
 														value: 1,
-														message: "The total price must be greater than 0"
+														message: "  المبلغ يجب ان يكون اكبر من 0"
 													},
 												})}
 											/>
@@ -348,7 +348,7 @@ const AddCoupon = () => {
 											<Controller
 												name={"exception_discount_product"}
 												control={control}
-												rules={{ required: "The exception discount product field is required" }}
+												rules={{ required: "حقل استثناء المنتجات المخفضة مطلوب"}}
 												render={({ field: { onChange, value } }) => (
 													<RadioGroup
 														className='d-flex flex-row'

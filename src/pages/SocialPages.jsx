@@ -16,7 +16,6 @@ import { ReactComponent as Youtube } from '../data/Icons/icon-24-youtube.svg';
 import { ReactComponent as Facebock } from '../data/Icons/icon-24-facebbock.svg';
 import CircularLoading from '../HelperComponents/CircularLoading';
 import { Button } from '@mui/material';
-import { useForm } from "react-hook-form";
 import { LoadingContext } from '../Context/LoadingProvider';
 
 const SocialPages = () => {
@@ -28,17 +27,6 @@ const SocialPages = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const { register, handleSubmit, reset, formState: { errors } } = useForm({
-		mode: "onBlur",
-		defaultValues: {
-			snapchat: '',
-			facebook: '',
-			twiter: '',
-			youtube: '',
-			instegram: '',
-		}
-	});
-
 	const [socialValue, setSocialValue] = useState({
 		snapchat: '',
 		facebook: '',
@@ -46,7 +34,8 @@ const SocialPages = () => {
 		youtube: '',
 		instegram: '',
 	});
-	const [Error, setError] = useState({
+
+	const [error, setError] = useState({
 		snapchat: '',
 		facebook: '',
 		twiter: '',
@@ -63,6 +52,14 @@ const SocialPages = () => {
 			instegram: '',
 		});
 	};
+// to set values to inputs
+	const handleSocialLinks = (e) => {
+		const { name, value } = e.target;
+		setSocialValue((prevSocialValue) => ({
+	...prevSocialValue,
+		  [name]: value
+		}));
+	  };
 
 	// use this effect to get all seo data from index api
 	useEffect(() => {
@@ -74,21 +71,23 @@ const SocialPages = () => {
 			youtube: fetchedData?.data?.youtube,
 			instegram: fetchedData?.data?.instegram,
 		});
-	}, [fetchedData?.data]);
-	useEffect(() => {
-		reset(socialValue);
-	}, [socialValue]);
+	}, [fetchedData?.data?.snapchat,
+		 fetchedData?.data?.facebook,
+		 fetchedData?.data?.twiter,
+		fetchedData?.data?.youtube,
+		 fetchedData?.data?.instegram]);
+	
 
 	// to update Seo values
-	const updateSocialMedia = (data) => {
+	const updateSocialMedia = () => {
 		setLoadingTitle('جاري تعديل التواصل الاجتماعي');
 		resetError();
 		let formData = new FormData();
-		formData.append('snapchat', data?.snapchat);
-		formData.append('facebook', data?.facebook);
-		formData.append('twiter', data?.twiter);
-		formData.append('youtube', data?.youtube);
-		formData.append('instegram', data?.youtube);
+		formData.append('snapchat', socialValue?.snapchat );
+		formData.append('facebook', socialValue?.facebook);
+		formData.append('twiter', socialValue?.twiter);
+		formData.append('youtube', socialValue?.youtube);
+		formData.append('instegram', socialValue?.instegram );;
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/socialMedia_store_update`, formData, {
@@ -115,6 +114,8 @@ const SocialPages = () => {
 				}
 			});
 	};
+
+	
 	return (
 		<>
 			<Helmet>
@@ -156,8 +157,8 @@ const SocialPages = () => {
 								<CircularLoading />
 							</div>
 						) : (
-							<form onSubmit={handleSubmit(updateSocialMedia)}>
-								<div className='row'>
+							<form onSubmit={(event)=> event.preventDefault()}>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
 											<SnaChat />
@@ -169,14 +170,17 @@ const SocialPages = () => {
 											type='text'
 											name='snapchat'
 											id='snapchat'
-											className='text-start'
-											{...register('snapchat', {
-											})}
+											className='text-start direction-ltr'
+										
+											value={socialValue?.snapchat}
+											onChange={handleSocialLinks}
 										/>
-									</div>
-									<div className='col-12'><span className='fs-6 text-danger'>{Error?.snapchat}{errors?.snapchat && errors.snapchat.message}</span></div>
+										{error?.snapchat && 
+											<div><span className='fs-6 text-danger'>{error?.snapchat}</span></div>
+										}
+										</div>
 								</div>
-								<div className='row'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
 											<Twitter />
@@ -188,14 +192,17 @@ const SocialPages = () => {
 											type='text'
 											name='twiter'
 											id='twiter'
-											className='text-start'
-											{...register('twiter', {
-											})}
+											className='text-start direction-ltr'
+											value={socialValue?.twiter}
+											onChange={handleSocialLinks}
 										/>
+										{error?.twiter && 
+											<div ><span className='fs-6 text-danger'>{error?.twiter}</span></div>
+										}
 									</div>
-									<div className='col-12'><span className='fs-6 text-danger'>{Error?.twiter}{errors?.twiter && errors.twiter.message}</span></div>
+									
 								</div>
-								<div className='row'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
 											<Instagram />
@@ -207,14 +214,17 @@ const SocialPages = () => {
 											type='text'
 											name='instegram'
 											id='instegram'
-											className='text-start'
-											{...register('instegram', {
-											})}
+											className='text-start direction-ltr'
+											value={socialValue?.instegram}
+											onChange={handleSocialLinks}
 										/>
+										{error?.instegram && 
+											<div ><span className='fs-6 text-danger'>{error?.instegram}</span></div>
+										}
 									</div>
-									<div className='col-12'><span className='fs-6 text-danger'>{Error?.instegram}{errors?.instegram && errors.instegram.message}</span></div>
+									
 								</div>
-								<div className='row'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
 											<Youtube />
@@ -226,12 +236,15 @@ const SocialPages = () => {
 											type='text'
 											name='youtube'
 											id='youtube'
-											className='text-start'
-											{...register('youtube', {
-											})}
+											className='text-start direction-ltr'
+											value={socialValue?.youtube}
+											onChange={handleSocialLinks}
 										/>
+										{error?.youtube && 
+											<div ><span className='fs-6 text-danger'>{error?.youtube}</span></div>
+										}
 									</div>
-									<div className='col-12'><span className='fs-6 text-danger'>{Error?.youtube}{errors?.youtube && errors.youtube.message}</span></div>
+									
 								</div>
 								<div className='row mb-5'>
 									<div className='col-12'>
@@ -245,16 +258,19 @@ const SocialPages = () => {
 											type='text'
 											name='facebook'
 											id='facebook'
-											className='text-start'
-											{...register('facebook', {
-											})}
+											className='text-start direction-ltr'
+											value={socialValue?.facebook}
+											onChange={handleSocialLinks}
 										/>
+										{error?.facebook && 
+											<div ><span className='fs-6 text-danger'>{error?.facebook}</span></div>
+										}
 									</div>
-									<div className='col-12'><span className='fs-6 text-danger'>{Error?.facebook}{errors?.facebook && errors.facebook.message}</span></div>
+									
 								</div>
 								<div className='row'>
 									<div className='col-12 d-flex justify-content-center align-items-center '>
-										<Button className='social-save-btn' type='submit'>
+										<Button className='social-save-btn' type='submit' onClick={updateSocialMedia}>
 											حفظ
 										</Button>
 									</div>

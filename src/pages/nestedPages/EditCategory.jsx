@@ -231,10 +231,10 @@ const EditCategory = () => {
 												placeholder='أدخل اسم التصنيف الرئيسي'
 												name='name'
 												{...register('name', {
-													required: "The name field is required",
+													required: "حقل الاسم مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "The name must be a string"
+														message: "الاسم يجب ان يكون نص"
 													},
 												})}
 											/>

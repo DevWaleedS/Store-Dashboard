@@ -200,10 +200,10 @@ const ShowImportEtlobhaProduct = () => {
 													id='product-name'
 													placeholder=' اسم المنتج'
 													{...register('name', {
-														required: 'The name field is required',
+														required:"حقل الاسم مطلوب",
 														pattern: {
 															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-															message: 'The name must be a string',
+															message: "يجب على الحقل الاسم أن يكون نصاّّ"
 														},
 													})}
 												/>
@@ -227,7 +227,7 @@ const ShowImportEtlobhaProduct = () => {
 													id='product-desc'
 													placeholder='  قم بكتابه واضح للمنتج'
 													{...register('description', {
-														required: 'The description field is required',
+														required: "حقل الوصف مطلوب",
 													})}
 												></textarea>
 											</div>
@@ -314,14 +314,14 @@ const ShowImportEtlobhaProduct = () => {
 														type='text'
 														id='price'
 														{...register('price', {
-															required: 'The selling price field is required',
+															required: 'حقل سعر البيع مطلوب',
 															pattern: {
 																value: /^[0-9]+$/i,
-																message: 'The selling price must be a number',
+																message: 'يجب أن يكون سعر البيع رقمًا',
 															},
 															min: {
 																value: 1,
-																message: 'The selling price must be greater than 0',
+																message: 'يجب أن يكون سعر البيع أكبر من 0',
 															},
 														})}
 													/>

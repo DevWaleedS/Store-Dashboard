@@ -201,10 +201,10 @@ const AddNewUser = () => {
 												id='full-name'
 												name='name'
 												{...register('name', {
-													required: "The name field is required",
+													required: "حقل الاسم مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "The name must be a string"
+														message: "يجب على الحقل الاسم أن يكون نصاّّ"
 													},
 												})}
 											/>
@@ -227,10 +227,10 @@ const AddNewUser = () => {
 												id='user-name'
 												name='user_name'
 												{...register('user_name', {
-													required: "The username field is required",
+													required:   "حقل اسم المُستخدم مطلوب",
 													pattern: {
 														value: /^[^-\s][a-zA-Z0-9_]+$/,
-														message: "The username must be a English letter and number"
+														message: "اسم المُستخدم يجب ان يكون باللغه الانجليزية"
 													},
 												})}
 											/>
@@ -249,7 +249,7 @@ const AddNewUser = () => {
 												<Controller
 													name={"user_type"}
 													control={control}
-													rules={{ required: "The user type field is required" }}
+													rules={{ required: "حقل الدور مطلوب" }}
 													render={({ field: { onChange, value } }) => (
 														<Select
 															name='user_type'
@@ -325,10 +325,10 @@ const AddNewUser = () => {
 												type={passwordType}
 												id='password'
 												{...register('password', {
-													required: "The password field is required",
+													required:  "حقل كلمة المرور مطلوب",
 													minLength: {
 														value: 6,
-														message: "The password must be at least 6 characters"
+														message: "يجب أن يكون طول نص كلمة المرور على الأقل 6 حروفٍ/حرفًا"
 													},
 												})}
 											/>
@@ -351,10 +351,10 @@ const AddNewUser = () => {
 												type='email'
 												id='email'
 												{...register('email', {
-													required: "The email field is required",
+													required:"حقل البريد الالكتروني مطلوب",
 													pattern: {
 														value: /\S+@\S+\.\S+/,
-														message: "Entered value does not match email format"
+														message:  "يجب أن يكون البريد الالكتروني عنوان بريد إلكتروني صحيح البُنية"
 													}
 												})}
 											/>
@@ -373,25 +373,19 @@ const AddNewUser = () => {
 												<Mobile />
 											</div>
 											<input
-												name='phonenumber'
+											name='phonenumber'
+											
 												type='number'
 												id='phonenumber'
 												placeholder='0096654845613'
 												className='direction-ltr'
 												{...register('phonenumber', {
-													required: "The phonenumber field is required",
+													required: "حقل  رقم الجوال مطلوب",
 													pattern: {
 														value: /^[0-9+]+$/i,
-														message: "The price must be a number"
+														message: "يجب على الحقل  رقم الجوال أن يكون رقمًا"
 													},
-													minLength: {
-														value: 13,
-														message: "min length is 13"
-													},
-													maxLength: {
-														value: 14,
-														message: "max length is 14"
-													}
+													
 												})}
 											/>
 										</div>
@@ -426,7 +420,7 @@ const AddNewUser = () => {
 											<Controller
 												name={"status"}
 												control={control}
-												rules={{ required: "The status field is required" }}
+												rules={{ required: "حقل الحالة مطلوب" }}
 												render={({ field: { onChange, value } }) => (
 													<select
 														className='form-select'

@@ -79,6 +79,8 @@ const EditUserDetails = () => {
 		reset(user);
 	}, [user, reset]);
 
+	console.log(user?.phonenumber)
+
 	// Use state with useDropzone library to set banners
 	const [userImage, setUserImage] = React.useState([]);
 
@@ -199,7 +201,7 @@ const EditUserDetails = () => {
 				<title>لوحة تحكم أطلبها | تعديل حسابي</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
-				<Modal open={true} onClose={() => updateUser()} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal open={true} onClose={() => navigate('/')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
 					<Box sx={style}>
 						<div className='user-details'>
 							<div className='d-flex'>
@@ -239,7 +241,7 @@ const EditUserDetails = () => {
 
 													<div className='col-lg-4 col-12 d-flex justify-content-center'>
 														<div className='user-info me-3'>
-															<span className='user-name mb-3'>{fetchedData?.data?.users?.name === 'null' ? '' : fetchedData?.data?.users?.name}</span>
+															<span className='user-name mb-3 d-block text-center'>{fetchedData?.data?.users?.name === 'null' ? '' : fetchedData?.data?.users?.name}</span>
 															<div className='contact-info mb-2'>
 																<Message />
 																<span className='me-3'>{fetchedData?.data?.users?.email}</span>
@@ -262,15 +264,16 @@ const EditUserDetails = () => {
 															اسم المستخدم
 														</label>
 														<input
+														style={{direction: 'ltr', textAlign:'left',}}
 															name='user_name'
 															type='text'
 															placeholder='Omar'
 															{...register('user_name', {
-																required: "The username field is required",
-																pattern: {
-																	value: /^[^-\s][a-zA-Z0-9_]+$/,
-																	message: "The username must be a English letter and number"
-																},
+																required: "حقل اسم المستخدم مطلوب",
+															pattern: {
+																value: /^[^-\s][a-zA-Z0-9_]+$/,
+																message: "يجب أن يكون اسم المستخدم حروف باللغة الإنجليزية"
+															},
 															})}
 														/>
 														<br />
@@ -301,15 +304,16 @@ const EditUserDetails = () => {
 															البريد الالكتروني
 														</label>
 														<input
+														style={{direction: 'ltr', textAlign:'left',}}
 															name='email'
 															type='email'
 															placeholder='Omar.sample@sa.com'
 															{...register('email', {
-																required: "The email field is required",
-																pattern: {
-																	value: /\S+@\S+\.\S+/,
-																	message: "Entered value does not match email format"
-																}
+																required: "حقل البريد الإلكتروني مطلوب",
+															pattern: {
+																value: /\S+@\S+\.\S+/,
+																message: "القيمة التي تم إدخالها لا تطابق تنسيق البريد الإلكتروني"
+															}
 															})}
 														/>
 														<br />
@@ -360,23 +364,16 @@ const EditUserDetails = () => {
 														<input
 															name='phonenumber'
 															type='number'
-															maxLength={13}
+														
 															placeholder='0096654845613'
 															className='phone-input direction-ltr'
 															{...register('phonenumber', {
-																required: "The phonenumber field is required",
-																pattern: {
-																	value: /^[0-9+]+$/i,
-																	message: "The price must be a number"
-																},
-																minLength: {
-																	value: 13,
-																	message: "min length is 13"
-																},
-																maxLength: {
-																	value: 14,
-																	message: "max length is 14"
-																}
+																required: "حقل رقم الجوال مطلوب",
+															pattern: {
+																value: /^[0-9+]+$/i,
+																message: "يجب أن رقم الجوال رقمًا"
+															},
+															
 															})}
 														/>
 														<span className='input-icon'>
@@ -392,7 +389,7 @@ const EditUserDetails = () => {
 
 											<div className='user-details-footer'>
 												<div className='row d-flex justify-content-center align-items-center'>
-													<div className='col-lg-3 col-md-6 col-12'>
+													<div className='col-lg-3 col-md-6 col-12 mb-2'>
 														<button type='submit' className='edit-btn w-100 mb-3'>
 															حفظ
 														</button>

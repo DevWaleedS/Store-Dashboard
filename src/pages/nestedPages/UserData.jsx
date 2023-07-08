@@ -160,6 +160,8 @@ const UserData = () => {
 														<Mobile />
 													</div>
 													<input
+													maxLength='14'
+														minLength='13'
 														type='text'
 														id='phonenumber'
 														name='phonenumber'

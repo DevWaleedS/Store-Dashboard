@@ -255,10 +255,10 @@ const AddNewProduct = () => {
 												placeholder=' اسم المنتج'
 												name='name'
 												{...register('name', {
-													required: "The name field is required",
+													required:"حقل الاسم مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "The name must be a string"
+														message: "يجب على الحقل الاسم أن يكون نصاّّ"
 													},
 												})}
 											/>
@@ -276,7 +276,7 @@ const AddNewProduct = () => {
 												placeholder='  قم بكتابه واضح للمنتج'
 												name='description'
 												{...register('description', {
-													required: "The description field is required",
+													required: "حقل الوصف مطلوب",
 												})}
 											></textarea>
 										</div>
@@ -292,7 +292,7 @@ const AddNewProduct = () => {
 												<Controller
 													name={"category_id"}
 													control={control}
-													rules={{ required: "The category field is required" }}
+													rules={{ required:  "حقل التصنيف الرئيسي مطلوب"}}
 													render={({ field: { onChange, value } }) => (
 														<Select
 															name="category_id"
@@ -440,14 +440,14 @@ const AddNewProduct = () => {
 												placeholder='اضف الكمية'
 												name='stock'
 												{...register('stock', {
-													required: "The stock field is required",
+													required: "حقل المخزون مطلوب.",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "The stock must be a number"
+														message: "يجب على الحقل المخزون أن يكون رقمًا"
 													},
 													min: {
 														value: 1,
-														message: "The stock must be greater than 0"
+														message: "  المخزون يجب ان يكون اكبر من 0"
 													},
 												})}
 											/>
@@ -465,14 +465,14 @@ const AddNewProduct = () => {
 												name={"selling_price"}
 												control={control}
 												rules={{
-													required: "The selling price field is required",
+													required: "حقل سعر البيع مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "The selling price must be a number"
+														message: "يجب على الحقل سعر البيع أن يكون رقمًا"
 													},
 													min: {
 														value: 1,
-														message: "The selling price must be greater than 0"
+														message: " سعر البيع يجب ان يكون اكبر من 0"
 													},
 												}}
 												render={({ field: { onChange, value } }) => (

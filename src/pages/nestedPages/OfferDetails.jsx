@@ -507,7 +507,7 @@ const OfferDetails = () => {
 																				border: '1px solid #eeeeee',
 																			},
 																			'& .MuiSelect-icon': {
-																				right: '95%',
+																				right: '93%',
 																			},
 																		}}
 																		IconComponent={IoIosArrowDown}
@@ -977,7 +977,7 @@ const OfferDetails = () => {
 													</FormControl>
 												</div>
 											)}
-											<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
+											<div className='row mb-3 d-flex justify-content-evenly'>
 												<div className='col-12'>
 													<div className='row-title'>
 														<h4 className='mb-2'>الحد الأدنى لتطبيق العرض</h4>
@@ -994,7 +994,7 @@ const OfferDetails = () => {
 													>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1 '>
-																<FormControlLabel disabled id='purchase_amount' control={<Radio />} value='purchase_amount' />
+																<FormControlLabel disabled id='purchase_amount' control={<Radio   value='purchase_amount'/>} />
 																<label className={offer?.fixed_offer_type_minimum === 'purchase_amount' ? 'active me-3' : ' me-3'} htmlFor='purchase_amount'>
 																	الحد الأدنى لمبلغ الشراء
 																</label>
@@ -1006,7 +1006,7 @@ const OfferDetails = () => {
 																	</div>
 																	<input
 																		name='fixed_offer_amount_minimum'
-																		value={offer?.fixed_offer_amount_minimum}
+																		value={offer?.fixed_offer_type_minimum === 'purchase_amount' ? offer?.fixed_offer_amount_minimum : ''}
 																		onChange={(e) => {
 																			handleOnChange(e);
 																		}}
@@ -1020,7 +1020,7 @@ const OfferDetails = () => {
 														</div>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1'>
-																<FormControlLabel disabled id='product_quantity' control={<Radio />} value='product_quantity' />
+																<FormControlLabel disabled id='product_quantity' control={<Radio  value='product_quantity' />} />
 																<label className={offer?.fixed_offer_type_minimum === 'product_quantity' ? 'active me-3' : ' me-3'} htmlFor='product_quantity'>
 																	الحد الأدنى لكمية المنتجات
 																</label>
@@ -1031,7 +1031,7 @@ const OfferDetails = () => {
 																</div>
 																<input
 																	name='fixed_offer_amount_minimum'
-																	value={offer?.fixed_offer_amount_minimum}
+																	value={offer?.fixed_offer_type_minimum === 'product_quantity' ? offer?.fixed_offer_amount_minimum :  ''}
 																	onChange={(e) => {
 																		handleOnChange(e);
 																	}}
@@ -1046,11 +1046,13 @@ const OfferDetails = () => {
 											</div>
 											<FormGroup>
 												<FormControlLabel
+												className='active'
+												 sx={{'mr': '-10px'}}
 													value={fixedCouponStatus}
 													control={
 														<Checkbox
 															disabled
-															defaultChecked={fixedCouponStatus}
+															checked={fixedCouponStatus}
 															onChange={(e) => {
 																if (e.target.checked) {
 																	setFixedCouponStatus(1);
@@ -1314,7 +1316,7 @@ const OfferDetails = () => {
 													</FormControl>
 												</div>
 											)}
-											<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
+											<div className='row  mb-3 d-flex justify-content-evenly'>
 												<div className='col-12'>
 													<div className='row-title'>
 														<h4 className='mb-2'>الحد الأدنى لتطبيق العرض</h4>
@@ -1332,7 +1334,7 @@ const OfferDetails = () => {
 													>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1 '>
-																<FormControlLabel disabled id='purchase_amount' control={<Radio />} value='purchase_amount' />
+																<FormControlLabel disabled id='purchase_amount' control={<Radio value='purchase_amount' />} />
 																<label className={offer?.offer_type_minimum === 'purchase_amount' ? 'active me-3' : ' me-3'} htmlFor='purchase_amount'>
 																	الحد الأدنى لمبلغ الشراء
 																</label>
@@ -1344,7 +1346,7 @@ const OfferDetails = () => {
 																	</div>
 																	<input
 																		name='offer_amount_minimum'
-																		value={offer?.offer_amount_minimum}
+																		value={offer?.offer_type_minimum === 'purchase_amount' ? offer?.offer_amount_minimum : ''}
 																		onChange={(e) => {
 																			handleOnChange(e);
 																		}}
@@ -1358,7 +1360,7 @@ const OfferDetails = () => {
 														</div>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1'>
-																<FormControlLabel disabled id='product_quantity' control={<Radio />} value='product_quantity' />
+																<FormControlLabel disabled id='product_quantity' control={<Radio value='product_quantity'/>}  />
 																<label className={offer?.offer_type_minimum === 'product_quantity' ? 'active me-3' : ' me-3'} htmlFor='product_quantity'>
 																	الحد الأدنى لكمية المنتجات
 																</label>
@@ -1369,7 +1371,7 @@ const OfferDetails = () => {
 																</div>
 																<input
 																	name='offer_amount_minimum'
-																	value={offer?.offer_amount_minimum}
+																	value={offer?.offer_type_minimum === 'product_quantity' ? offer?.offer_amount_minimum :''}
 																	onChange={(e) => {
 																		handleOnChange(e);
 																	}}
@@ -1384,16 +1386,18 @@ const OfferDetails = () => {
 											</div>
 											<FormGroup>
 												<FormControlLabel
+												
+												sx={{'mr': '-10px'}}
 													value={couponStatus}
 													control={
 														<Checkbox
-															defaultChecked={couponStatus}
+														checked={couponStatus}
 															disabled
 															onChange={(e) => {
 																if (e.target.checked) {
-																	setCouponStatus(1);
+																	setFixedCouponStatus(1);
 																} else {
-																	setCouponStatus(0);
+																	setFixedCouponStatus(0);
 																}
 															}}
 														/>

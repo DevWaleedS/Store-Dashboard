@@ -151,11 +151,14 @@ const CreatePage = () => {
 		formData.append('seo_link', data?.seo_link);
 		formData.append('seo_desc', data?.seo_desc);
 		formData.append('tags', page?.tags?.join(','));
+
 		for (let i = 0; i < page?.pageCategory?.length; i++) {
 			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
 		}
+
 		formData.append('postCategory_id', itsPost ? page?.postCategory_id : null);
 		formData.append('image', itsPost ? images[0] : null);
+
 		if (type === 'push') {
 			setLoadingTitle('جاري نشر الصفحة');
 			axios
@@ -249,10 +252,10 @@ const CreatePage = () => {
 												placeholder='عنوان الصفحة'
 												name='title'
 												{...register('title', {
-													required: 'The title field is required',
+													required: ' حقل العنوان مطلوب',
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: 'The title must be a string',
+														message: 'يجب أن يكون العنوان عبارة عن نص',
 													},
 												})}
 											/>
@@ -270,7 +273,7 @@ const CreatePage = () => {
 												placeholder='وصف الصفحة'
 												rows={5}
 												{...register('page_desc', {
-													required: 'The page desciption field is required',
+													required: 'حقل وصف الصفحة مطلوب',
 												})}
 											></textarea>
 											<div className='col-12'>
@@ -422,11 +425,17 @@ const CreatePage = () => {
 															</button>
 														</div>
 														<div className='col-md-8 col-8'>
-															<input value={tag} onChange={(e) => setTag(e.target.value)} className='w-100' type='text' name='contact-tag' id='contact-tag' />
+															<input  value={tag} onChange={(e) => setTag(e.target.value)} className='w-100' type='text' name='tags' id='contact-tag' />
 														</div>
 														<div className='mt-2'>
 															<span>{page?.tags?.join(' , ')}</span>
 														</div>
+														{pageError?.tags &&
+															<div >
+														<span className='fs-6 text-danger'>
+													{	pageError?.tags}
+														</span>
+													</div>}
 													</div>
 												</div>
 											</div>

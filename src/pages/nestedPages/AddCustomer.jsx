@@ -420,6 +420,7 @@ const AddCustomer = ({ reload, setReload }) => {
 											رقم الجوال
 										</label>
 										<input
+										
 											name='phonenumber'
 											type='text'
 											id='phone-number'
@@ -430,14 +431,7 @@ const AddCustomer = ({ reload, setReload }) => {
 													value: /^[0-9+]+$/i,
 													message: "The price must be a number"
 												},
-												minLength: {
-													value: 13,
-													message: "min length is 13"
-												},
-												maxLength: {
-													value: 14,
-													message: "max length is 14"
-												}
+												
 											})}
 										/>
 										<div className='col-12'><span className='fs-6 text-danger'>{customerError?.phonenumber}{errors?.phonenumber && errors.phonenumber.message}</span></div>

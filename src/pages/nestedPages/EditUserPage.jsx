@@ -238,10 +238,10 @@ const EditUserPage = () => {
 														id='full-name'
 														name='name'
 														{...register('name', {
-															required: "The name field is required",
+															required: "حقل الاسم مطلوب",
 															pattern: {
 																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "The name must be a string"
+																message: "يجب أن يكون الاسم نص"
 															},
 														})}
 													/>
@@ -260,14 +260,15 @@ const EditUserPage = () => {
 														<User />
 													</div>
 													<input
+													style={{direction: 'ltr', textAlign:'left',}}
 														type='text'
 														id='user-name'
 														name='user_name'
 														{...register('user_name', {
-															required: "The username field is required",
+															required: "حقل اسم المستخدم مطلوب",
 															pattern: {
 																value: /^[^-\s][a-zA-Z0-9_]+$/,
-																message: "The username must be a English letter and number"
+																message: "يجب أن يكون اسم المستخدم حروف باللغة الإنجليزية"
 															},
 														})}
 													/>
@@ -286,7 +287,7 @@ const EditUserPage = () => {
 														<Controller
 															name={"role"}
 															control={control}
-															rules={{ required: "The user type field is required" }}
+															rules={{ required: "حقل نوع المستخدم مطلوب" }}
 															render={({ field: { onChange, value } }) => (
 																<Select
 																	value={value}
@@ -380,14 +381,15 @@ const EditUserPage = () => {
 														<Message />
 													</div>
 													<input
+													style={{direction: 'ltr', textAlign:'left',}}
 														name='email'
 														type='email'
 														id='email'
 														{...register('email', {
-															required: "The email field is required",
+															required: "حقل البريد الإلكتروني مطلوب",
 															pattern: {
 																value: /\S+@\S+\.\S+/,
-																message: "Entered value does not match email format"
+																message: "القيمة التي تم إدخالها لا تطابق تنسيق البريد الإلكتروني"
 															}
 														})}
 													/>
@@ -406,25 +408,19 @@ const EditUserPage = () => {
 														<Mobile />
 													</div>
 													<input
+													
 														name='phonenumber'
 														type='number'
 														id='phonenumber'
 														className='direction-ltr'
 														placeholder='0096654845613'
 														{...register('phonenumber', {
-															required: "The phonenumber field is required",
+															required: "حقل رقم الجوال مطلوب",
 															pattern: {
 																value: /^[0-9+]+$/i,
-																message: "The price must be a number"
+																message: "يجب أن رقم الجوال رقمًا"
 															},
-															minLength: {
-																value: 13,
-																message: "min length is 13"
-															},
-															maxLength: {
-																value: 14,
-																message: "max length is 14"
-															}
+															
 														})}
 													/>
 												</div>

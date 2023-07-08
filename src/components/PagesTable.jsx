@@ -117,7 +117,7 @@ function EnhancedTableToolbar(props) {
 						<Tooltip
 							className='delete-all'
 							onClick={() => {
-								setNotificationTitle('سيتم حذف جميع الصفحات وهذةالخطوة غير قابلة للرجوع');
+								setNotificationTitle('سيتم حذف جميع الصفحات وهذة الخطوة غير قابلة للرجوع');
 								setActionTitle('Delete');
 							}}
 						>

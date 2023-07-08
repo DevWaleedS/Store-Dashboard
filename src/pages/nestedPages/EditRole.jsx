@@ -186,11 +186,11 @@ const EditRole = () => {
 														placeholder='ادخل اسم الدور الوظيفي بالحروف فقط'
 														name='role_name'
 														{...register('role_name', {
-															required: "The role name field is required",
-															pattern: {
-																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "The role name must be a string"
-															},
+															required: "حقل إسم الدور مطلوب",
+														pattern: {
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+															message: "يجب أن يكون اسم الدور عبارة عن نص"
+														},
 														})}
 													/>
 													<br />
