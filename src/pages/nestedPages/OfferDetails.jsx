@@ -1047,14 +1047,18 @@ const OfferDetails = () => {
 											<FormGroup>
 												<FormControlLabel
 												className='active'
-												 sx={{'mr': '-10px'}}
+												sx={{'mr': '-10px'}}
 													value={fixedCouponStatus}
 													control={
 														<Checkbox
 															disabled
 															checked={fixedCouponStatus}
+
 															onChange={(e) => {
-																if (e.target.checked) {
+															
+																const isChecked = e.target.checked;
+			
+																if (isChecked) {
 																	setFixedCouponStatus(1);
 																} else {
 																	setFixedCouponStatus(0);

@@ -390,23 +390,20 @@ const EditPage = () => {
 																					onChange={(e) => {
 																						const categoryId = parseInt(e.target.value);
 																						const isChecked = e.target.checked;
-																						console.log(isChecked)
-																						console.log(isChecked)
-																						console.log(page?.pageCategory?.includes(cat?.id))
-																					  
+															
 																						if (isChecked) {
-																						  setPage((prevPage) => ({
+																							setPage((prevPage) => ({
 																							...prevPage,
 																							pageCategory: [...prevPage.pageCategory, categoryId],
-																						  }));
+																						}));
 																						} else {
-																						  setPage((prevPage) => ({
+																						setPage((prevPage) => ({
 																							...prevPage,
 																							pageCategory: prevPage.pageCategory.filter((item) => item !== categoryId),
-																						  }));
+																						}));
 																						}
-																					  }}
-																					  
+																					}}
+
 																					sx={{ '& path': { fill: '#000000' } }}
 																				/>
 																			}
