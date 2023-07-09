@@ -62,6 +62,8 @@ const AddCoupon = () => {
 		}
 	});
 	const [isEnable, setIsEnable] = useState(true);
+
+	// Errors
 	const [couponError, setCouponError] = useState({
 		code: '',
 		discount_type: '',
@@ -86,6 +88,7 @@ const AddCoupon = () => {
 		});
 		setStartDateError('');
 	};
+	// ---------------------------------------------------------
 
 	const addNewCoupon = (data) => {
 		setLoadingTitle('جاري اضافة الكوبون');

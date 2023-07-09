@@ -65,7 +65,7 @@ const TopBar = ({ toggleSidebar }) => {
 
 	const logOut = () => {
 		localStorage.clear();
-		removeCookies('access_token', { domain: 'atlbha.com', path: '/' });
+		removeCookies('access_token', { domain: '.atlbha.com', path: '/' });
 		window.location.href = 'https://home.atlbha.com/signInPage';
 		
 	};

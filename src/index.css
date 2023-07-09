@@ -1659,7 +1659,7 @@ nav.navigation {
 
 .offers-table{
 	width: 100%;
-	overflow-x: scroll;
+
 }
 
 .offers-table table thead {
@@ -1856,15 +1856,13 @@ nav.navigation {
 
 .seo-weight-edit-box .MuiFormControl-root {
 	background: var(--white-100) !important;
-	/* padding: 30px 0 40px 0 !important; */
 	width: 100% !important;
 }
 
 .seo-weight-edit-box .input-bx {
-	width: 700px;
+	width: 650px;
 	max-width: 100%;
-
-	margin: 0px auto;
+	margin: 0px 335px;
 }
 .seo-weight-edit-box .input-bx #outlined-textarea {
 	text-align: left;
@@ -2103,7 +2101,7 @@ nav.navigation {
 /* send replay modal style  */
 .rdw-editor-toolbar {
 	width: 964px;
-	min-width: 100%;
+	max-width: 100%;
 	height: 64px;
 	background: #ffffff;
 	border: 1px solid #67747b33;
@@ -4314,6 +4312,7 @@ textarea {
 	color: #b1bc10;
 	font-size: 16px;
 	font-weight: 500;
+	white-space: normal !important;
 }
 
 .register-date {
@@ -4789,6 +4788,8 @@ textarea {
 	padding: 16px 20px;
 }
 
+
+
 .user-cart-data .userData-container .header {
 	background-color: #dafdfe2e;
 	padding: 16px;
@@ -4806,10 +4807,20 @@ textarea {
 	font-size: 20px;
 }
 
+.user-info-row{   
+	display: flex;
+   justify-content: flex-start;
+   flex-wrap: wrap;
+   gap: 18px;
+
+}
+
 .user-cart-data .userData-container .container-body .user-name {
 	font-size: 24px;
 	font-weight: 500;
 	color: var(--primary-500);
+	text-align: right;
+
 }
 
 .user-cart-data .userData-container .container-body .user-info span {
@@ -4818,8 +4829,8 @@ textarea {
 }
 
 .user-cart-data .userData-container .container-body .user-info svg {
-	width: 30px;
-	height: 30px;
+	width: 24px;
+	height: 24px;
 }
 
 /*  */
@@ -4835,7 +4846,7 @@ textarea {
 
 .user-cart-data .rdw-editor-toolbar {
 	width: 964px;
-	min-width: 100%;
+	max-width: 100%;
 	height: 64px;
 	background: #ffffff;
 	border: 1px solid #67747b33;
@@ -4870,46 +4881,83 @@ textarea {
 	white-space: normal !important;
 }
 
+
+
 .user-cart-data-wrapper .create-offer-row {
 	display: flex;
 	padding: 0;
-	overflow: hidden;
+	
+	gap: 18px;
+	
 }
 
-.user-cart-data-wrapper .create-offer-row .box:not(:last-child) {
-	margin-left: 20px;
+.user-cart-data-wrapper .create-offer-row .box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
 }
 
 .user-cart-data-wrapper .create-offer-row .user-name-box {
-	width: 35%;
+	width: calc(100% - 220px);
+}
+.user-cart-data-wrapper .create-offer-row .total-discount-box {
+	width: 40%;
+}
+.user-cart-data-wrapper .create-offer-row .discount-date-box{
+	width: 50%;
+}
+.user-cart-data-wrapper .create-offer-row .total-discount-box {
+	align-content: center;
+}
+.user-cart-data-wrapper .create-offer-row .discount-date-box {
+	align-content: end;
 }
 
 .user-cart-data-wrapper .create-offer-row .user-name-box input {
-	width: 85%;
+	width: 100%;
 }
 
-.user-cart-data-wrapper .create-offer-row .total-discount-box {
-	display: flex;
-	align-items: center;
-
-	justify-content: flex-end;
-	width: 30%;
+.user-cart-data-wrapper .create-offer-row .total-discount-box input, 
+.user-cart-data-wrapper .create-offer-row .discount-date-box input{
+	width: 100%;
 }
-
-.user-cart-data-wrapper .create-offer-row .total-discount-box input {
-	width: 40%;
-}
-
-.user-cart-data-wrapper .create-offer-row .discount-date-box {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	width: 28%;
-}
-
 .user-cart-data-wrapper .create-offer-row .discount-date-box input {
-	width: 48%;
+	overflow: hidden;
 }
+.user-cart-data-wrapper .create-offer-row .discount-date-box .react-datepicker-wrapper input{
+	padding-right: 75px !important;
+	color: var(--black-800);
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.user-cart-data-wrapper .create-offer-row .discount-date-box .date-icon {
+    position: absolute;
+    top: 31%;
+    z-index: 1;
+    right: 0px;
+    width: 58px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+.user-cart-data-wrapper .create-offer-row .discount-date-box .date-icon svg path {
+	fill: var(--blue-800);
+}
+
+.user-cart-data-wrapper .create-offer-row .discount-date-box .react-datepicker-popper {
+	transform: translate(-300px, 0px) !important;
+	-webkit-transform: translate(-300px, 0px) !important;
+	-moz-transform: translate(-300px, 0px) !important;
+	-ms-transform: translate(-300px, 0px) !important;
+	-o-transform: translate(-300px, 0px) !important;
+}
+
+
 
 .user-cart-data-wrapper .create-offer-row .box label {
 	color: var(--black-300);
@@ -6013,15 +6061,9 @@ textarea {
 		width: 20px;
 		height: 20px;
 	}
-
 	.seo-weight-edit-box .input-bx {
-		margin: 0px auto;
-	}
-
-	
-
-	.banners-preview-container {
-		margin: 0 95px;
+		width: 642px;
+		margin: 0px 160px;
 	}
 
 	.data-box .icon {
@@ -6072,9 +6114,9 @@ textarea {
 		flex-wrap: wrap;
 	}
 
-	.seo-weight-edit-box .input-bx,
-	.banners-preview-container {
-		margin: 0px auto;
+	.seo-weight-edit-box .input-bx {
+		width: 525px;
+		margin: 0px 110px;
 	}
 
 	.package-boxes {
@@ -6092,10 +6134,21 @@ textarea {
 	.notifications {
 		padding: 16px 20px;
 	}
+	.user-cart-data-wrapper {
+		width: 100%;
+	}
 
-	/* .offers-data .form-body .arrow-icon {
-		right: 425px;
-	} */
+	.user-cart-data .userData-container .container-body .user-name {
+		padding-right: 30px;
+	}
+	.user-info-row{   
+		
+	   justify-content: center;
+	  
+	   padding-right: 10px;
+	  
+	
+	}
 	.social-links-form input{
 		width: 100%;
 	}
@@ -6230,6 +6283,10 @@ textarea {
 		width: 100%;
 		margin-right: 0;
 	}
+	.seo-weight-edit-box .input-bx {
+		width: 375px;
+		
+	}
 
 	.react-datepicker-popper, .add-coupon-form .react-datepicker-popper  {
 		transform: translate(0px, 0px) !important;
@@ -6238,6 +6295,23 @@ textarea {
 		-ms-transform: translate(0px, 0px) !important;
 		-o-transform: translate(0px, 0px) !important;
 }
+.user-cart-data-wrapper .create-offer-row .discount-date-box .react-datepicker-popper {
+	transform: translate(-200px, 0px) !important;
+	-webkit-transform: translate(-200px, 0px) !important;
+	-moz-transform: translate(-200px, 0px) !important;
+	-ms-transform: translate(-200px, 0px) !important;
+	-o-transform: translate(-200px, 0px) !important;
+}
+.user-cart-data-wrapper .create-offer-row .discount-date-box .date-icon {
+    right: 0px;
+    width: 50px; 
+}
+.user-cart-data-wrapper .create-offer-row .discount-date-box .react-datepicker-wrapper input{
+	padding-right: 45px !important;
+	font-size: 14px;
+
+}
+
 }
 
 @media (max-width: 768px) {
@@ -6377,6 +6451,11 @@ textarea {
 
 	.nav-pills .nav-link {
 		font-size: 16px;
+	}
+
+	.offers-table{
+		
+		overflow-x: scroll;
 	}
 
 	.analyse-box {
@@ -6660,6 +6739,7 @@ textarea {
 	.order-details-data .client-date .text {
 		margin-right: 12px;
 	}
+	
 
 	.register-type {
 		font-size: 14px;
@@ -7338,6 +7418,31 @@ textarea {
 		width: 100%;
 		margin-right: -15px;
 	}
+	.user-cart-data .userData-container .container-body .user-name {
+		/* padding-right: 24px; */
+		text-align: right;
+	}
+
+	.user-cart-data .userData-container .container-body .user-info span{
+		font-size: 16px;
+	}
+
+	.user-cart-data-wrapper .create-offer-row .discount-date-box .react-datepicker-popper {
+		transform: translate(-300px, 0px) !important;
+		-webkit-transform: translate(-300px, 0px) !important;
+		-moz-transform: translate(-300px, 0px) !important;
+		-ms-transform: translate(-300px, 0px) !important;
+		-o-transform: translate(-300px, 0px) !important;
+}
+	.user-cart-data-wrapper .create-offer-row .discount-date-box .date-icon {
+		
+		width: 45px;
+		height: 55px; 
+	}
+	.user-info-row{   
+		padding-left: 24px;
+		gap:0;
+	}
 
 	.user-cart-data {
 		padding: 20px 16px;
@@ -7436,7 +7541,8 @@ textarea {
 	}
 
 	.seo-weight-edit-box .input-bx {
-		margin: 0 auto;
+		width: 509px;
+		margin: 0 49px;
 	}
 
 	.seo-weight-edit-box .css-a5ci81-MuiFormLabel-root {
@@ -8446,6 +8552,11 @@ textarea {
 	.react-datepicker__triangle{
 		left:-12px !important;
 	}
+
+	.seo-weight-edit-box .input-bx {
+		width: 559px;
+		margin: 0 -119px;
+	}
 	
 	
 	
@@ -8502,9 +8613,12 @@ textarea {
 		flex-direction: column;
 		align-items: center;
 	}
-	/* .banners-preview-container{
-		margin: 0;
-	} */
+	.seo-weight-edit-box .input-bx {
+		width: 642px;
+		max-width: 100%;
+		margin: 0px 335px;
+	}
+
 }
 @media( min-width:992px) and (max-width:1200px){
 	.charts .comp-title h4{

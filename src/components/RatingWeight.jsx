@@ -20,7 +20,7 @@ import { DeleteContext } from '../Context/DeleteProvider';
 
 
 // IMPORT IMAGES
-const RatingWeight = ({ filterSelected, setCommentDetails, fetchedData, loading, reload, setReload }) => {
+const RatingWeight = ({ setCommentDetails, fetchedData, loading, reload, setReload }) => {
 	const [cookies] = useCookies(['access_token']);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -71,151 +71,7 @@ const RatingWeight = ({ filterSelected, setCommentDetails, fetchedData, loading,
 				</div>
 			) : (
 				<>
-					{filterSelected === 1 ?
-						fetchedData?.data?.comment_of_store?.length === 0 ?
-							<div className='d-flex justify-content-center align-items-center' style={{ height: '200px' }}>
-								<p>لاتوجد تعليقات في هذا القسم</p>
-							</div>
-							:
-							fetchedData?.data?.comment_of_store.map((rate) => (
-								<div className='rating-widget mb-md-5 mb-3' key={rate?.id}>
-									<div className='row'>
-										{/** user info */}
-										<div className='col-md-4 col-5'>
-											<div className='user-info'>
-												<div className='row mb-md-4 mb-3'>
-													<div className='user-data d-flex flex-md-row flex-column justify-content-start align-content-center align-items-center'>
-														<Avatar alt='avatar' src={rate?.user?.image} sx={{ width: 44, height: 44 }} />
-														<span className='user-name me-2 align-self-center'> {rate?.user?.name}</span>
-													</div>
-												</div>
-												<div className='row mb-2  date-of-rating'>
-													<div className='user-data  d-flex justify-content-center align-content-center '>
-														<MdOutlineTimer />
-														<span className='text me-2 align-self-center'> {rate?.created_at}</span>
-													</div>
-												</div>
-												<div className='row date-of-rating'>
-													<div className='user-data  d-flex justify-content-center align-content-center '>
-														<StoreIcon className='store' />
-														<span className='text me-2 align-self-center'> {rate?.user?.user_type}</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div className='col-md-8 col-7'>
-											{/**Rating action */}
-											<div className='row h-100 py-md-0 py-2'>
-												<div className='col-md-9 col-12 ratin-bx'>
-													<div className='row rates-starts d-flex justify-content-start align-items-start'>
-														<span className='start mb-2'>{rateing}</span>
-														<h6> {rate?.comment_text}</h6>
-													</div>
-													<div className='row rate-act-btn'>
-														<div className='col-md-4 col-3'>
-															{rate?.status === 'نشط' ? (
-																<Button variant='outlined' className='publish-btn'>
-																	<FcCheckmark />
-																	<span className='user-name me-2 align-self-center'>منشور</span>
-																</Button>
-															) : (
-																<Button variant='outlined' className='publish-btn' style={{ border: '1px solid #99a2a7' }}>
-																	<span style={{ color: '#99a2a7' }} className='user-name me-2 align-self-center'>
-																		معطل
-																	</span>
-																</Button>
-															)}
-														</div>
-														<div className='col-md-3 col-3'>
-															<Button
-																variant='outlined' className='delete-btn '
-																onClick={() => {
-																	setActionDelete('سيتم حذف التعليق وهذة الخطوة غير قابلة للرجوع');
-																	setDeleteMethod('delete');
-																	setUrl(`https://backend.atlbha.com/api/Store/comment/${rate?.id}`);
-																}}
-															>
-																<DeleteIcon />
-																<span className='user-name me-2 align-self-center'>حذف </span>
-															</Button>
-														</div>
-														<div className='col-md-3 col-3'>
-															<Button
-																variant='outlined'
-																className='replay-btn'
-																onClick={() => {
-																	dispatch(openReplyModal());
-																	setCommentDetails(rate);
-																}}
-															>
-																<ReplayIcon />
-																<span className='user-name me-2 align-self-center'>رد </span>
-															</Button>
-														</div>
-													</div>
-												</div>
-												<div className='col-md-3 col-12 order-md-last order-first mb-md-0 mb-2'>
-													<div className='row order-rate-number d-flex justify-content-end align-items-start'>
-														<div className='col-12 d-flex justify-content-md-end justify-content-center'>
-															<span>طلب رقم</span>
-															<span className='me-2'>{rate?.user?.user_id}</span>
-														</div>
-														<div className='d-flex justify-content-end p-0'>
-															<Switch
-																onChange={() => changeCommentStatus(rate?.id)}
-																checked={rate?.status === 'نشط' ? true : false}
-																sx={{
-																	width: '50px',
-																	'& .MuiSwitch-track': {
-																		width: 26,
-																		height: 14,
-																		opacity: 1,
-																		backgroundColor: 'rgba(0,0,0,.25)',
-																		boxSizing: 'border-box',
-																	},
-																	'& .MuiSwitch-thumb': {
-																		boxShadow: 'none',
-																		width: 10,
-																		height: 10,
-																		borderRadius: 5,
-																		transform: 'translate(6px,6px)',
-																		color: '#fff',
-																	},
-
-																	'&:hover': {
-																		'& .MuiSwitch-thumb': {
-																			boxShadow: 'none',
-																		},
-																	},
-
-																	'& .MuiSwitch-switchBase': {
-																		padding: 1,
-																		'&.Mui-checked': {
-																			transform: 'translateX(11px)',
-																			color: '#fff',
-																			'& + .MuiSwitch-track': {
-																				opacity: 1,
-																				backgroundColor: '#3AE374',
-																			},
-																		},
-																	},
-																}}
-															/>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							))
-						:
-						fetchedData?.data?.comment_of_products?.length === 0 ?
-							<div className='d-flex justify-content-center align-items-center' style={{ height: '200px' }}>
-								<p>لاتوجد تعليقات في هذا القسم</p>
-							</div>
-							:
-							fetchedData?.data?.comment_of_products.map((rate) => (
+					{fetchedData?.data?.comment_of_products.map((rate) => (
 								<div className='rating-widget mb-md-5 mb-3' key={rate?.id}>
 									<div className='row'>
 										{/** user info */}
@@ -298,7 +154,7 @@ const RatingWeight = ({ filterSelected, setCommentDetails, fetchedData, loading,
 															<span>طلب رقم</span>
 															<span className='me-2'>{rate?.user?.user_id}</span>
 														</div>
-														<div className='d-flex justify-content-end p-0'>
+														<div className='d-flex ps-md-0 ps-4 justify-content-end p-0'>
 															<Switch
 																onChange={() => changeCommentStatus(rate?.id)}
 																checked={rate?.status === 'نشط' ? true : false}
@@ -346,7 +202,8 @@ const RatingWeight = ({ filterSelected, setCommentDetails, fetchedData, loading,
 										</div>
 									</div>
 								</div>
-							))}
+						))
+					}
 				</>
 			)}
 		</Fragment>

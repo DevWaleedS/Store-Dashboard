@@ -16,7 +16,13 @@ import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { LoadingContext } from '../../Context/LoadingProvider';
 
+// Datepicker
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+
 // ICONS
+import { ReactComponent as DateIcon } from '../../data/Icons/icon-date.svg';
 import CircularLoading from '../../HelperComponents/CircularLoading';
 import howIcon from '../../data/Icons/icon_24_home.svg';
 import { ReactComponent as Message } from '../../data/Icons/icon-24-email.svg';
@@ -71,10 +77,10 @@ const ClientData = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [openPercentMenu, setOpenPercentMenu] = useState(false);
-	const [free_shipping, setFree_shipping] = useState(1);
+	const [free_shipping, setFree_shipping] = useState(true);
 	const [discount_type, setDiscount_type] = useState('fixed');
 	const [discount_value, setDiscount_value] = useState(10);
-	const [discount_total, setDiscount_total] = useState('');
+	const [discount_total, setDiscount_total] = useState(0);
 	const [discount_expire_date, setDiscount_expire_date] = useState('');
 
 	// errors
@@ -87,15 +93,15 @@ const ClientData = () => {
 	const resetError = () => {
 		setErrors({
 			message:'',
-		discount_value: '',
-		discount_expire_date: '',
+			discount_value: '',
+			discount_expire_date: '',
 		});
 	};
 	// ---------------------------------------------------
 
 	// to write the message
 	const [description, setDescription] = useState({
-		htmlValue: '<h1></h1>\n',
+		htmlValue: '',
 		editorState: EditorState.createEmpty(),
 	});
 	const onEditorStateChange = (editorValue) => {
@@ -116,12 +122,14 @@ const ClientData = () => {
 	const sendOfferCart = () => {
 		setLoadingTitle('جاري ارسال العرض');
 		resetError()
+		
 		let formData = new FormData();
 		formData.append('free_shipping', free_shipping === true ? 1 : 0);
 		formData.append('discount_type', discount_type);
 		formData.append('discount_value', discount_value);
 		formData.append('message', description?.htmlValue);
-		formData.append('discount_expire_date', moment(discount_expire_date).format('YYYY-MM-DD'));
+		formData.append('discount_total', discount_total);
+		formData.append('discount_expire_date', discount_expire_date ? moment(discount_expire_date).format('YYYY-MM-DD') : '');
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/sendOfferCart/${id}`, formData, {
@@ -131,15 +139,15 @@ const ClientData = () => {
 				},
 			})
 			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+				if (res?.data?.success === true  ) {
 					setLoadingTitle('');
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate('/Carts');
 					setReload(!reload);
 				} else {
 					setLoadingTitle('');
-					// setReload(!reload);
 					setErrors({
+						...errors,
 						messageErr: res?.data?.message?.en?.message?.[0],
 						discountValueErr: res?.data?.message?.en?.discount_value?.[0],
 						discountExpireDateErr: res?.data?.message?.en?.discount_expire_date?.[0],
@@ -153,10 +161,11 @@ const ClientData = () => {
 		if(cartDetails?.discount_total){
 			setDiscount_total(cartDetails?.discount_total);
 		}
+		
 	}, [cartDetails?.discount_total]);
 
 
-	console.log(discount_expire_date)
+
 
 	return (
 		<>
@@ -216,25 +225,25 @@ const ClientData = () => {
 																</div>
 															</div>
 														</div>
-														<div className='col-md-10 col-12  align-self-center'>
-															<div className='row mb-4'>
-																<div className='col-12'>
-																	<div className='user-name'>{cartDetails?.user?.name}</div>
+														<div className='col-md-8 col-12  align-self-center'>
+															<div className='row mb-4 '>
+																<div className='col-12 col-md-5'>
+																	<div className='user-name '>{cartDetails?.user?.name}</div>
 																</div>
 															</div>
 															<div className='user-info'>
-																<div className='row'>
+																<div className='row user-info-row'>
 																	<div className='col-md-2 col-12 mb-md-0 mb-3'>
 																		<Location />
-																		<span className='location me-2'>{cartDetails?.user?.city?.name}</span>
+																		<span className='location '>{cartDetails?.user?.city?.name}</span>
 																	</div>
-																	<div className='col-md-3 col-12 mb-md-0 mb-3'>
+																	<div className='col-md-4  col-12 mb-md-0 mb-3 d-flex justify-content-md-center align-items-center'>
 																		<Phone />
-																		<span className='location me-2'> {cartDetails?.user?.phonenumber} </span>
+																		<span className='location me-1'> {cartDetails?.user?.phonenumber} </span>
 																	</div>
-																	<div className='col-md-3 me-md-4 col-12'>
+																	<div className='col-md-3 me-md-4 col-12 p-md-0'>
 																		<Message />
-																		<span className='location me-2'>{cartDetails?.user?.email} </span>
+																		<span className='location me-1'>{cartDetails?.user?.email} </span>
 																	</div>
 																</div>
 															</div>
@@ -430,6 +439,12 @@ const ClientData = () => {
 																		نسبة الخصم
 																	</button>
 																	<ul className='dropdown-menu ul-percent-menu w-100' aria-labelledby='dropdownMenuButton1'>
+																	<div className='percent-input-wrapper my-1'>
+																			<Dollar />
+																			<input value={discount_value} onChange={(e) => setDiscount_value(e.target.value)} className='w-100 ' type='text' placeholder='أدخل نسبة الخصم من مشتريات العميل' />
+																			{discount_type === 'percent' ? <div className='percent-sign'> %</div> : <div className='percent-sign'>ر.س</div>}
+																			
+																		</div>
 																		<div className='percent-menu w-100'>
 																			<li className='w-100' style={{ cursor: 'pointer', padding: '16px' }} onClick={() => setDiscount_type('fixed')}>
 																				مبلغ ثابت من المشتريات
@@ -439,12 +454,7 @@ const ClientData = () => {
 																			</li>
 																		</div>
 
-																		<div className='percent-input-wrapper'>
-																			<Dollar />
-																			<input value={discount_value} onChange={(e) => setDiscount_value(e.target.value)} className='w-100 ' type='text' placeholder='أدخل نسبة الخصم من مشتريات العميل' />
-																			{discount_type === 'percent' ? <div className='percent-sign'> %</div> : <div className='percent-sign'>ر.س</div>}
-																			
-																		</div>
+																		
 																	</ul>
 																</div>
 															)}
@@ -466,7 +476,7 @@ const ClientData = () => {
 													onEditorStateChange={onEditorStateChange}
 													inDropdown={true}
 													placeholder={
-														<p style={{ fontSize: '20px', fontWeight: '500', color: '#011723', whiteSpace: 'normal' }}>
+														<p style={{ fontSize: '20px', fontWeight: '400', color: '#011723', whiteSpace: 'normal' }}>
 															هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى      
 															
 														</p>
@@ -496,14 +506,28 @@ const ClientData = () => {
 												</div>
 												<div className='mb-md-0 mb-3 box total-discount-box'>
 													<label htmlFor='total-discount'> اجمالي الخصم</label>
-													<input className='direction-ltr ' value={discount_total} onChange={(e) => setDiscount_total(e.target.value)} type='number' name='total-discount' id='total-discount' />
+													<input className='direction-ltr text-center' value={discount_total} onChange={(e) => setDiscount_total(e.target.value)} type='number' name='total-discount' id='total-discount' />
 													{errors?.discountValueErr && 
 														<div><span className='fs-6 text-danger'>{errors?.discountValueErr}</span></div>
 													}
 												</div>
 												<div className=' mb-md-0 mb-3 box discount-date-box'>
 													<label htmlFor='discount-date'> تاريخ انتهاء الخصم</label>
-													<input  value={discount_expire_date} onChange={(e) => setDiscount_expire_date(e.target.value)} type='text' name='discount-date' id='discount-date' />
+
+													<div className='date-icon'>
+													<DateIcon />
+												</div>
+												<DatePicker 
+												placeholderText='اختر تاريخ انتهاء الخصم' 
+												
+												type='text'
+												dateFormat='yyyy-mm-dd' 
+												minDate={moment().toDate()} 
+												selected={discount_expire_date} 
+												onChange={(date) => setDiscount_expire_date(date)} 
+												/>
+													
+													
 													{errors?.discountExpireDateErr && 
 														<div><span className='fs-6 text-danger'>{errors?.discountExpireDateErr}</span></div>
 													}

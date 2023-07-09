@@ -37,29 +37,105 @@ const Rating = () => {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
 
-	const filters = [
-		{
-			id: 1,
-			title: 'comment_of_store',
-			name: 'تقييم المتجر',
-			icon: <StoreIcon />,
-		},
-		{
-			id: 2,
-			title: 'comment_of_products',
-			name: 'تقييم المنتجات',
-			icon: <ProductIcon />,
-		},
-	];
-	const [filterSelected, setFilterSelected] = useState(1);
+	// const filters = [
+	// 	{
+	// 		id: 1,
+	// 		title: 'comment_of_store',
+	// 		name: 'تقييم المتجر',
+	// 		icon: <StoreIcon />,
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		title: 'comment_of_products',
+	// 		name: 'تقييم المنتجات',
+	// 		icon: <ProductIcon />,
+	// 	},
+	// ];
 
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
+	// <FormControl sx={{ width: '100%' }}>
+	// 								<Select
+	// 									name='filter-rating'
+	// 									value={filterSelected}
+	// 									onChange={(e) => {
+	// 										setFilterSelected(e.target.value);
+	// 									}}
+	// 									sx={{
+	// 										fontSize: '20',
+	// 										'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
+	// 										{
+	// 											paddingRight: '25px',
+	// 											marginTop: '5px',
+	// 											fontSize: '20px',
+	// 											'@media(max-width:768px)': {
+	// 												fontSize: '16px',
+	// 											},
 
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
+	// 											display: 'flex',
+	// 											justifyContent: 'flex-start',
+	// 											alignItems: 'center',
+	// 										},
+	// 										'& .MuiOutlinedInput-root': {
+	// 											'& :hover': {
+	// 												border: 'none',
+	// 											},
+	// 										},
+	// 										'& .MuiOutlinedInput-notchedOutline': {
+	// 											border: 'none',
+	// 										},
+	// 										'& .MuiSelect-icon': {
+	// 											right: '0',
+	// 											width: '24px',
+	// 											height: '24px',
+	// 										},
+	// 										'@media(max-width:768px)': {
+	// 											'& .MuiSelect-icon': {
+	// 												top: '15px',
+	// 												width: '20px',
+	// 												height: '20px',
+	// 											},
+	// 										},
+	// 										'& .css-10q54uo-MuiSelect-icon, .MuiSelect-iconOpen': {
+	// 											right: '0',
+	// 											transform: 'rotate(0deg)',
+	// 										},
+	// 										'& .MuiSelect-nativeInput': {
+	// 											display: 'none',
+	// 										},
+	// 									}}
+	// 									IconComponent={GrFormFilter}
+	// 									displayEmpty
+	// 									inputProps={{ 'aria-label': 'Without label' }}
+	// 									renderValue={(selected) => {
+	// 										if (filterSelected === '') {
+	// 											return (
+	// 												<>
+	// 													<GrFormFilter />
+	// 													<span>فلتر</span>
+	// 												</>
+	// 											);
+	// 										}
+	// 										const result = filters?.filter((item) => item?.id === parseInt(selected)) || '';
+	// 										return result[0]?.name;
+	// 									}}
+	// 								>
+	// 									{filters?.map((filter, index) => {
+	// 										return (
+	// 											<MenuItem key={index} value={filter?.id}>
+													
+	// 											</MenuItem>
+	// 										);
+	// 									})}
+	// 								</Select>
+	// </FormControl>
+	// const [filterSelected, setFilterSelected] = useState(1);
+
+	// const handleClick = (event) => {
+	// 	setAnchorEl(event.currentTarget);
+	// };
+
+	// const handleClose = () => {
+	// 	setAnchorEl(null);
+	// };
 	const allRows = () => {
 		const num = Math.ceil(fetchedData?.data?.comment_of_store?.length / rowsPerPage);
 		const arr = [];
@@ -196,93 +272,21 @@ const Rating = () => {
 								</div>
 							</div>
 							<div className='col-5 d-flex justify-content-end'>
-								<FormControl sx={{ width: '100%' }}>
-									<Select
-										name='filter-rating'
-										value={filterSelected}
-										onChange={(e) => {
-											setFilterSelected(e.target.value);
-										}}
-										sx={{
-											fontSize: '20',
-											'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-											{
-												paddingRight: '25px',
-												marginTop: '5px',
-												fontSize: '20px',
-												'@media(max-width:768px)': {
-													fontSize: '16px',
-												},
+								
 
-												display: 'flex',
-												justifyContent: 'flex-start',
-												alignItems: 'center',
-											},
-											'& .MuiOutlinedInput-root': {
-												'& :hover': {
-													border: 'none',
-												},
-											},
-											'& .MuiOutlinedInput-notchedOutline': {
-												border: 'none',
-											},
-											'& .MuiSelect-icon': {
-												right: '0',
-												width: '24px',
-												height: '24px',
-											},
-											'@media(max-width:768px)': {
-												'& .MuiSelect-icon': {
-													top: '15px',
-													width: '20px',
-													height: '20px',
-												},
-											},
-											'& .css-10q54uo-MuiSelect-icon, .MuiSelect-iconOpen': {
-												right: '0',
-												transform: 'rotate(0deg)',
-											},
-											'& .MuiSelect-nativeInput': {
-												display: 'none',
-											},
-										}}
-										IconComponent={GrFormFilter}
-										displayEmpty
-										inputProps={{ 'aria-label': 'Without label' }}
-										renderValue={(selected) => {
-											if (filterSelected === '') {
-												return (
-													<>
-														<GrFormFilter />
-														<span>فلتر</span>
-													</>
-												);
-											}
-											const result = filters?.filter((item) => item?.id === parseInt(selected)) || '';
-											return result[0]?.name;
-										}}
-									>
-										{filters?.map((filter, index) => {
-											return (
-												<MenuItem key={index} value={filter?.id}>
-													<div className='user-data d-flex justify-content-start align-content-center '>
-														{filter?.icon}
-														<span className='user-name me-2 align-self-center'>{filter?.name}</span>
-													</div>
-												</MenuItem>
-											);
-										})}
-									</Select>
-								</FormControl>
+								<div className='user-data d-flex justify-content-start align-content-center '>
+								<ProductIcon />
+									<span className='user-name me-2 align-self-center'>تقييم المنتجات</span>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div className='rating-wrapper'>
 					<div className='rating-bx mb-md-5 mb-3'>
-						<RatingWeight filterSelected={filterSelected} setCommentDetails={setCommentDetails} fetchedData={fetchedData} loading={loading} reload={reload} setReload={setReload} />
+						<RatingWeight  setCommentDetails={setCommentDetails} fetchedData={fetchedData} loading={loading} reload={reload} setReload={setReload} />
 					</div>
-					{fetchedData?.data?.comment_of_products?.length !== 0 || fetchedData?.data?.comment_of_store?.length !== 0 ?
+					{fetchedData?.data?.comment_of_products?.length !== 0 ?
 						<div className='pagination-box'>
 							<div className='d-flex align-items-center justify-content-center mt-3 mt-md-0' style={{ gap: '1rem' }}>
 								<MdOutlineArrowForwardIos
