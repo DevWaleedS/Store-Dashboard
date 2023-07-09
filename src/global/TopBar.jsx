@@ -64,9 +64,26 @@ const TopBar = ({ toggleSidebar }) => {
 	};
 
 	const logOut = () => {
-		localStorage.clear();
-		removeCookies('access_token', { domain: '.atlbha.com', path: '/' });
-		window.location.href = 'https://home.atlbha.com/signInPage';
+		
+		axios
+			.get('https://backend.atlbha.com/api/logout', {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${cookies.access_token}`,
+				},
+			})
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+				
+					localStorage.clear();
+					removeCookies('access_token', { domain: '.atlbha.com', path: '/' });
+					window.location.href = 'https://home.atlbha.com/signInPage';
+				} else {
+					console.log(res?.data?.message?.ar);
+				
+				}
+			});
+		
 		
 	};
 

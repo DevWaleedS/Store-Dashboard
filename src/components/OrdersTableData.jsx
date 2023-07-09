@@ -38,7 +38,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 								<th scope='col' className=' text-center'>
 									الحالة
 								</th>
-								<th scope='col' className=' text-center'>
+								<th scope='col' className=' text-center' style={{  width: '120px' }}>
 									الموقع
 								</th>
 								<th scope='col' className=' text-center pr-rad-left'>
@@ -89,7 +89,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 												{order?.status}
 											</span>
 										</td>
-										<td className='text-overflow'> {order?.user?.city?.name}</td>
+										<td className='text-overflow' style={{  width: '120px' }}> {order?.user?.city?.name}</td>
 										<td className=' text-center action-icon'>
 											<div className='dropdown'>
 												<div className='' data-bs-toggle='dropdown' aria-expanded='false'>
