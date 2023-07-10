@@ -1273,6 +1273,10 @@ select {
 
 .input-box select {
 	background-color: #ededed38 !important;
+	cursor: pointer;
+}
+.input-box select option{
+	cursor: pointer;
 }
 
 .form-select {
@@ -1280,12 +1284,10 @@ select {
 	background-position: left 0.75rem center !important;
 	background-size: 20px 18px !important;
 	font-size: 20px !important;
+	cursor: pointer;
 }
 
-.input-box select:is(:hover, :focus),
-.input-box input:is(:hover, :focus) {
-	border: 1px solid var(--primary-400) !important;
-}
+
 
 .add-category-bt-box {
 	width: 22%;
@@ -1477,6 +1479,9 @@ nav.navigation {
 .export-upload-btn-group {
 	width: 30%;
 }
+.products .input-group .select-input .MuiSelect-icon{
+	right: 94% !important;
+}
 
 .products .input-group .select-input,
 .drop-files {
@@ -1627,7 +1632,7 @@ nav.navigation {
 }
 
 .coupon-form .add-category select {
-	border-color: var(--primary-400) !important;
+	border-color: var(--primary-300) !important;
 }
 
 .coupon-form .add-category label {
@@ -1767,15 +1772,20 @@ nav.navigation {
 }
 
 .carts-page .MuiFormControl-root {
+	width: 490px !important;
+	height: 60px;
+	background: var(--gray-100) !important;
+	border: 1px solid var(--white--400) !important;
+	vertical-align: baseline !important;
 	width: 550px !important;
 	background: var(--gray-100) !important;
 	border: 1px solid var(--white--400) !important;
 	vertical-align: baseline !important;
-	border-radius: 10px !important;
-	-webkit-border-radius: 10px !important;
-	-moz-border-radius: 10px !important;
-	-ms-border-radius: 10px !important;
-	-o-border-radius: 10px !important;
+	border-radius: 6px !important;
+	-webkit-border-radius: 6px !important;
+	-moz-border-radius: 6px !important;
+	-ms-border-radius: 6px !important;
+	-o-border-radius: 6px !important;
 }
 
 .carts-page .MuiToolbar-root,
@@ -1791,7 +1801,9 @@ nav.navigation {
 }
 
 .carts-page .MuiFormLabel-root {
-	right: 72px !important;
+	right: 57px !important;
+    font-size: 18px;
+    top: 2px;
 }
 
 .carts-page .MuiOutlinedInput-notchedOutline {
@@ -1974,9 +1986,8 @@ nav.navigation {
 
 .close-icon-video-modal {
 	position: absolute;
-	left: 20px;
-	top: 10px;
-
+	left: 35px;
+	top: 18px;
 	z-index: 1;
 }
 
@@ -2208,7 +2219,7 @@ nav.navigation {
 
 .pages-search-bx .MuiOutlinedInput-notchedOutline {
 	border: 1px solid var(--gray-100) !important;
-	box-shadow: 0 0 1px 0 var(--gray-400);
+
 }
 
 .pages-search-bx .MuiInputBase-root {
@@ -2242,10 +2253,10 @@ nav.navigation {
 	position: relative;
 	background-color: var(--white-500);
 	border: 1px solid var(--gray-100) !important;
-	box-shadow: 0 0 1px 0 var(--gray-400) !important;
 	padding-right: 40px !important;
 	height: 60px;
 	color: var(--primary-300);
+	cursor: pointer;
 }
 
 /* ----------------------------------------------------------------------------------- */
@@ -3132,9 +3143,9 @@ textarea {
 
 .table-filter .filter-user-input-group input {
 	position: relative;
-	background-color: transparent;
+	background-color: #ffff;
 	border: 1px solid var(--gray-100) !important;
-	height: 62.65px;
+	height: 60px;
 	width: 100%;
 	font-size: 18px;
 	padding: 0 20px;
@@ -3145,11 +3156,7 @@ textarea {
 	-o-border-radius: 8px;
 }
 
-.table-filter .filter-user-input-group input:focus,
-.table-filter .filter-user-selector .MuiOutlinedInput-notchedOutline:focus {
-	border: 1px solid var(--gray-200) !important;
-	box-shadow: 0 0 5px 0 var(--gray-200) !important;
-}
+
 
 .table-filter .filter-user-input-group input {
 	padding: 0 50px 0 20px;
@@ -3158,23 +3165,25 @@ textarea {
 .table-filter .filter-user-input-group input::placeholder {
 	color: var(--gray-300);
 }
+.select-role-hint{
+	color: var(--second-400);
+}
 
 /* ------------------------- filter-user-selector -------------- */
 .table-filter .filter-user-selector .MuiOutlinedInput-notchedOutline {
 	border: 1px solid var(--gray-100) !important;
-	/* height: 62.65px !important; */
 	border-radius: 8px !important;
 	-webkit-border-radius: 8px !important;
 	-moz-border-radius: 8px !important;
 	-ms-border-radius: 8px !important;
 	-o-border-radius: 8px !important;
 }
+.table-filter .filter-user-selector  .MuiInputBase-root , .table-filter .filter-user-selector  .MuiMenuItem-root{
+	background-color: #fff;
+}
 
 .table-filter .filter-user-selector .MuiSelect-icon {
-	position: absolute;
-	right: 90% !important;
-	top: calc(50% - 0.5em);
-	pointer-events: none;
+	
 	color: var(--second-500) !important;
 }
 
@@ -3186,6 +3195,7 @@ textarea {
 
 .filter-user-input-group .search-icon svg {
 	color: var(--second-300);
+	z-index: 1;
 }
 
 .table-filter .filter-user-input-group label {
@@ -3437,6 +3447,9 @@ textarea {
 	-o-border-radius: 8px;
 	white-space: normal !important;
 }
+.add-form-wrapper form .MuiInputBase-root{
+	background: #ffffff;
+}
 
 .add-form-wrapper form input:disabled,
 .add-form-wrapper form textarea:disabled,
@@ -3451,7 +3464,7 @@ textarea {
 .add-form-wrapper form input[type='email'],
 .add-form-wrapper form textarea,
 .add-form-wrapper form select {
-	background-color: #efeff0;
+	/* background-color: #efeff0; */
 	font-size: 18px;
 }
 
@@ -3464,12 +3477,11 @@ textarea {
 	font-size: 18px;
 	padding: 0;
 	border: 1px solid #efeff0 !important;
-	box-shadow: 0 0 1px 1px var(--gray-200) !important;
-	border-radius: 8px !important;
-	-webkit-border-radius: 8px !important;
-	-moz-border-radius: 8px !important;
-	-ms-border-radius: 8px !important;
-	-o-border-radius: 8px !important;
+	border-radius: 6px !important;
+	-webkit-border-radius: 6px !important;
+	-moz-border-radius: 6px !important;
+	-ms-border-radius: 6px !important;
+	-o-border-radius: 6px !important;
 }
 
 .add-form-wrapper form .MuiOutlinedInput-notchedOutline:hover {
@@ -3491,7 +3503,7 @@ textarea {
 .add-form-wrapper form .MuiSelect-icon {
 	display: block !important;
 	position: absolute;
-	right: 92% !important;
+	right: 94% ;
 	top: calc(50% - 0.5em);
 	pointer-events: none;
 	z-index: 1;
@@ -3649,9 +3661,12 @@ textarea {
 	background-color: rgba(0, 0, 0, 0.26) !important;
 }
 
-.add-coupon-form form input:disabled {
+.add-coupon-form form input:disabled, input:disabled  {
 	cursor: not-allowed;
-	color: rgba(0, 0, 0, 0.26);
+	color: rgba(0, 0, 0, 0.8);
+}
+.add-coupon-form form input:disabled, input:disabled  {
+	background-color: var(--bs-light-bg-subtle)
 }
 
 .add-coupon-form .form-body label {
@@ -4711,6 +4726,7 @@ textarea {
 }
 
 .active-discount-btn button {
+	display: none;
 	background-color: var(--primary-500);
 	color: var(--white-100);
 	font-weight: 300;
@@ -4748,7 +4764,7 @@ textarea {
 	height: 56px;
 	width: 100%;
 	padding-right: 16px;
-	background: #f8f8f8;
+	background: #fff;
 	border: 1px solid #67747b1a;
 	display: flex;
 	align-items: center;
@@ -4845,7 +4861,7 @@ textarea {
 }
 
 .user-cart-data .rdw-editor-toolbar {
-	width: 964px;
+    width: 1200px;
 	max-width: 100%;
 	height: 64px;
 	background: #ffffff;
@@ -5020,7 +5036,7 @@ textarea {
 }
 
 .add-user-form .form-body .input-icons.password-icon {
-	right: 890px;
+	right: 95%;
 	cursor: pointer;
 }
 
@@ -5030,14 +5046,14 @@ textarea {
 }
 
 .add-user-form .form-body .upload-personal-image {
-	background-color: var(--gray-100) !important;
+	background-color: #fff !important;
 	font-size: 18px;
 	width: 100%;
 	height: 60px;
 	padding: 20px;
 	white-space: normal;
 	border: 1px solid var(--gray-100) !important;
-	box-shadow: 0 0 1px 1px var(--gray-200) !important;
+	
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
@@ -5047,6 +5063,7 @@ textarea {
 
 .add-user-form .form-body .upload-personal-image .helper {
 	color: var(--gray-300);
+	
 }
 
 .add-user-form .form-body .upload-personal-image span {
@@ -5588,7 +5605,7 @@ textarea {
 .apply-btn {
 	background-color: var(--second-500);
 	color: white;
-	width: 178px;
+	width: 218px;
 	height: 56px;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -5600,7 +5617,7 @@ textarea {
 /* product-box */
 .product-box {
 	background-color: white;
-	width: 1042px;
+	width: 1144px;
 	height: 174px;
 	border: 1px solid #ececec;
 	padding: 10px 18px 10px 60px;
@@ -5948,6 +5965,7 @@ textarea {
 	-o-border-radius: 4px !important;
 }
 
+
 /* Tag input .store-activity-input */
 .PlatformServices-page .delegate-request-form .store-activity-input {
 	border: none;
@@ -6152,6 +6170,44 @@ textarea {
 	.social-links-form input{
 		width: 100%;
 	}
+	.souqOtlobha-page .total-products span:first-child {
+		width: 70px;
+		font-size: 18px;
+		
+	}
+	.souqOtlobha-page .total-products span:last-child {
+		
+		width: 280px;
+		font-size: 18px;
+	}
+	.souqOtlobha-page .btn-group button:last-child {
+		width: 190px;
+		font-size: 16px;
+		border-radius: 6px;
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		-ms-border-radius: 6px;
+		-o-border-radius: 6px;
+}
+.souqOtlobha-page .btn-group button:first-child {
+    width: 130px;
+ 	font-size: 16px;
+}
+.souqOtlobha-page .btn-group button:first-child svg {
+    width: 18px;
+    height: 18px;
+}
+
+.souqOtlobha-wrapper .MuiInputBase-root{
+	height: 50px !important;
+    border-radius: 6px !important;
+    font-size: 18px !important;
+}
+.souqOtlobha-wrapper  .souq_storge_category_filter_items{
+	font-size: 16px;
+}
+.apply-btn{width: 188px;font-size: 18px;}
+
 }
 
 @media (max-width: 992px) {
@@ -6332,6 +6388,9 @@ textarea {
 	h5 {
 		font-size: 16px;
 		line-height: 18px;
+	}
+	.MuiSelect-icon {
+		right: 95% !important;
 	}
 
 	.app .top-bar {
@@ -6585,11 +6644,14 @@ textarea {
 		height: 48px;
 		margin-bottom: 24px;
 	}
-
+ 	input,
 	.user-details-body input,
 	.user-details-body .upload-user-image,
 	.user-details-body .upload-user-image .upload-icon {
-		height: 45px;
+		height: 45px  !important;
+		font-size: 16px;
+	}
+	input::placeholder{
 		font-size: 16px;
 	}
 
@@ -6832,11 +6894,23 @@ textarea {
 	.products .input-group .add-category-bt-box button {
 		height: 100%;
 		font-size: 14px;
-	}
+		border-radius: 5px;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		-ms-border-radius: 5px;
+		-o-border-radius: 5px;
+}
+button{
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+}
 
 	.products .mange-file {
 		display: flex;
-		flex-direction: column;
+		flex-direction: column-reverse;
 		width: 100%;
 		padding: 0;
 		margin: 0;
@@ -6980,9 +7054,7 @@ textarea {
 		font-size: 16px;
 	}
 
-	.add-form-wrapper form .MuiSelect-icon {
-		right: 90% !important;
-	}
+	
 
 	.add-form-wrapper .form-footer {
 		padding: 20px 16px;
@@ -8098,7 +8170,7 @@ textarea {
 	}
 
 	.add-user-form .form-body .input-icons.password-icon {
-		right: 85%;
+		right: 86%;
 	}
 
 	/* job-title-page */
@@ -8386,9 +8458,7 @@ textarea {
 		margin-bottom: 0;
 	}
 
-	.add-form-wrapper form .MuiSelect-icon {
-		right: 95% !important;
-	}
+	
 
 	/* platform-services-page */
 	.PlatformServices-page .delegate-request-btn {
@@ -8507,7 +8577,8 @@ textarea {
 	/* products-page */
 	.products .input-group .add-category-bt-box button {
 		font-size: 12px;
-	}
+		
+}
 
 	.rdw-option-wrapper img {
 		width: 15px;
@@ -8557,7 +8628,21 @@ textarea {
 		width: 559px;
 		margin: 0 -119px;
 	}
-	
+	.add-category .input-group {
+		flex-direction: column;
+		padding: 12px;
+	}
+	.products .input-group .select-input {
+		width: 100%;
+		margin: 0 !important;
+	}
+	.products .input-group .add-category-bt-box {
+		flex: none;
+		width: 100%;
+	}
+	.products .input-group .select-input .MuiSelect-icon,.MuiSelect-icon{
+		right: 92% !important;
+	}
 	
 	
  .react-datepicker-popper, .add-coupon-form .react-datepicker-popper  {
@@ -8618,6 +8703,7 @@ textarea {
 		max-width: 100%;
 		margin: 0px 335px;
 	}
+	.apply-btn{width: 175px;}
 
 }
 @media( min-width:992px) and (max-width:1200px){

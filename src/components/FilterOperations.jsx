@@ -201,7 +201,7 @@ const FilterOperations = ({ showFilteringOptions }) => {
 					</Select>
 				</FormControl>
 			</div>
-			<div className='col-md-4 col-12 mt-md-0 mt-3'>
+			<div className='col-md-3 col-12 mt-md-0 mt-3'>
 				<button className='apply-btn' onClick={() => onClickFilter()}>
 					تنفيذ الفرز
 				</button>

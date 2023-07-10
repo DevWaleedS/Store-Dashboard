@@ -64,7 +64,6 @@ const EditProductPage = () => {
 		selling_price: '',
 		category_id: '',
 		discount_price: '',
-		discount_percent: '',
 		subcategory_id: [],
 		stock: '',
 		SEOdescription: '',
@@ -83,7 +82,6 @@ const EditProductPage = () => {
 			selling_price: '',
 			category_id: '',
 			discount_price: '',
-			discount_percent: '',
 			stock: '',
 			SEOdescription: '',
 		},
@@ -97,7 +95,6 @@ const EditProductPage = () => {
 				selling_price: fetchedData?.data?.products?.selling_price,
 				category_id: fetchedData?.data?.products?.category?.id,
 				discount_price: fetchedData?.data?.products?.discount_price,
-				discount_percent: fetchedData?.data?.products?.discount_percent,
 				subcategory_id: fetchedData?.data?.products?.subcategory?.map((sub) => sub?.id),
 				stock: fetchedData?.data?.products?.stock,
 				SEOdescription: fetchedData?.data?.products?.SEOdescription,
@@ -117,7 +114,6 @@ const EditProductPage = () => {
 		selling_price: '',
 		category_id: '',
 		discount_price: '',
-		discount_percent: '',
 		subcategory_id: '',
 		stock: '',
 		SEOdescription: '',
@@ -131,7 +127,6 @@ const EditProductPage = () => {
 			selling_price: '',
 			category_id: '',
 			discount_price: '',
-			discount_percent: '',
 			subcategory_id: '',
 			stock: '',
 			SEOdescription: '',
@@ -201,7 +196,6 @@ const EditProductPage = () => {
 		formData.append('selling_price', data?.selling_price);
 		formData.append('category_id', data?.category_id);
 		formData.append('discount_price', data?.discount_price);
-		formData.append('discount_percent', data?.discount_percent);
 		formData.append('stock', data?.stock);
 		formData.append('SEOdescription', data?.SEOdescription);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
@@ -233,7 +227,7 @@ const EditProductPage = () => {
 						selling_price: res?.data?.message?.en?.selling_price?.[0],
 						category_id: res?.data?.message?.en?.category_id?.[0],
 						discount_price: res?.data?.message?.en?.discount_price?.[0],
-						discount_percent: res?.data?.message?.en?.discount_percent?.[0],
+
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
@@ -270,7 +264,7 @@ const EditProductPage = () => {
 									<div className='form-body'>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-image'> صورة المنتج</label>
+												<label htmlFor='product-image'> صورة المنتج<span className='text-danger'>*</span></label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div {...getRootProps()}>
@@ -298,7 +292,7 @@ const EditProductPage = () => {
 
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-name'> اسم المنتح </label>
+												<label htmlFor='product-name'> اسم المنتح<span className='text-danger'>*</span> </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<input
@@ -326,7 +320,7 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-desc'> وصف المنتح </label>
+												<label htmlFor='product-desc'> وصف المنتح<span className='text-danger'>*</span></label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<textarea
@@ -349,7 +343,7 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-category'> التصنيف الرئيسي</label>
+												<label htmlFor='product-category'> التصنيف الرئيسي<span className='text-danger'>*</span></label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<FormControl sx={{ m: 0, width: '100%' }}>
@@ -520,7 +514,7 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'> السعر SAR </label>
+												<label htmlFor='price'> السعر<span className='text-danger'>*</span> </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<Controller
@@ -539,6 +533,7 @@ const EditProductPage = () => {
 													}}
 													render={({ field: { onChange, value } }) => (
 														<input
+														disabled={product?.discount_price}
 															name={"selling_price"}
 															type='number'
 															id='price'
@@ -561,7 +556,7 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='low-price'> سعر التخفيض SAR </label>
+												<label htmlFor='low-price'> السعر بعد الخصم  </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<Controller
@@ -584,24 +579,17 @@ const EditProductPage = () => {
 											<div className='col-md-3 col-12'></div>
 											{product?.discount_price &&  product?.selling_price  && 
 												<div className='col-md-7 col-12'>
-												{Number(product?.selling_price) - Number(product?.discount_price) <= 0 
-													?
-													 <span className='fs-6' style={{color:'red'}}>يجب ان يكون سعر التخفيض اقل من السعر الأساسي</span> 
-													: 
-													<span className={` ${product?.discount_price === '0' &&  product?.selling_price  ? 'd-none' : 'fs-6' }`} style={{color:'#4ac9cb'}}>
-													
-													سعر البيع بعد التخفيض {Number(product?.selling_price) - Number(product?.discount_price) || 0} SAR
-													</span>
-												 }
+												{Number(product?.selling_price) - Number(product?.discount_price) <= 0 &&
+												<span className='fs-6' style={{color:'red'}}>يجب ان يكون سعر التخفيض اقل من السعر الأساسي</span> 
+												}
 											
 												</div>
 		
 												}
 								
 												{product?.discount_price &&  product?.selling_price === '' && 
-													<div className='col-md-7 col-12'><span className='fs-6' style={{color:'red'}}>يرجي ادخال  السعر الأساسي أولاّّ حتي تتمكن من حساب سعر التخفيض</span></div>
-			
-													}
+													<div className='col-md-7 col-12'><span className='fs-6' style={{color:'red'}}>يرجي ادخال  السعر الأساسي أولاّّ حتي تتمكن من ادخال سعر الخصم</span></div>
+												}
 												<div className='col-md-7 col-12'><span className='fs-6 text-danger'>{productError?.discount_price}{errors?.discount_price && errors.discount_price.message}</span></div>
 											<div className='col-md-7 col-12'>
 												<span className='fs-6 text-danger'>
@@ -610,27 +598,7 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
-												<label htmlFor='discount'> نسبة التخفيض % </label>
-											</div>
-											<div className='col-md-7 col-12'>
-												<input
-													name='discount_percent'
-													type='number'
-													id='discount'
-													{...register('discount_percent', {
-													})}
-												/>
-											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.discount_percent}
-													{errors?.discount_percent && errors.discount_percent.message}
-												</span>
-											</div>
-										</div>
+										
 										<div className='row mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='seo'> وصف محركات البحث SEO </label>

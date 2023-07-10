@@ -261,7 +261,7 @@ const EditUserDetails = () => {
 												<div className='row mb-md-4 mb-3'>
 													<div className='col-lg-4 col-md-5 col-12 mb-md-0 mb-3'>
 														<label className='d-block mb-2' htmlFor='user-name'>
-															اسم المستخدم
+															اسم المستخدم<span className='text-danger'>*</span>
 														</label>
 														<input
 														style={{direction: 'ltr', textAlign:'left',}}
@@ -301,7 +301,7 @@ const EditUserDetails = () => {
 												<div className='row mb-md-4 mb-3'>
 													<div className='col-lg-4 col-md-5 col-12'>
 														<label className='d-block mb-2' htmlFor='email'>
-															البريد الالكتروني
+															البريد الالكتروني<span className='text-danger'>*</span>
 														</label>
 														<input
 														style={{direction: 'ltr', textAlign:'left',}}
@@ -359,7 +359,7 @@ const EditUserDetails = () => {
 												<div className='row mb-4'>
 													<div className='col-lg-4 col-12'>
 														<label className='d-block mb-2' htmlFor='phone-number'>
-															رقم الهاتف
+															رقم الهاتف<span className='text-danger'>*</span>
 														</label>
 														<input
 															name='phonenumber'

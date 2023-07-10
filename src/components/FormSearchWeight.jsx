@@ -71,7 +71,7 @@ const FormSearchWeight = ({ type, searchInput, categories, categorySelected }) =
 										border: 'none',
 									},
 									'& .MuiSelect-icon': {
-										right: '90%',
+										right: '94%',
 									},
 									'& .MuiSelect-nativeInput': {
 										display: 'none',

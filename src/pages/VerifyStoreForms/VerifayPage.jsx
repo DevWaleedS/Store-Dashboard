@@ -222,7 +222,7 @@ const VerifayPage = ({ verify }) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: '#1DBBBE' }}>
-										الاسم التجاري
+										الاسم التجاري<span className='text-danger'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -250,7 +250,7 @@ const VerifayPage = ({ verify }) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3 city_wrapper'>
 								<div className='col-md-4 col-12'>
 									<h5 className='label' style={{ color: '#1DBBBE' }}>
-										المدينة
+										المدينة<span className='text-danger'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>

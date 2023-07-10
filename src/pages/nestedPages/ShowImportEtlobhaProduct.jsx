@@ -299,7 +299,7 @@ const ShowImportEtlobhaProduct = () => {
 
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'> سعر البيع</label>
+												<label htmlFor='price'> سعر البيع<span className='text-danger'>*</span></label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div className='d-flex justify-content-center align-items-center' style={{ background: '#FFF' }}>

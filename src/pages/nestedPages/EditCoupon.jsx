@@ -66,6 +66,7 @@ const EditCoupon = () => {
 			exception_discount_product: 1,
 		}
 	});
+
 	const [coupon, setCoupon] = useState({
 		code: '',
 		discount_type: '',
@@ -76,9 +77,12 @@ const EditCoupon = () => {
 		free_shipping: 1,
 		exception_discount_product: 1,
 	});
+
 	const [isEnable, setIsEnable] = React.useState();
 	const [startDate, setStartDate] = useState();
 
+
+	// to create errors
 	const [couponError, setCouponError] = useState({
 		code: '',
 		discount_type: '',
@@ -88,7 +92,6 @@ const EditCoupon = () => {
 		user_redemptions: '',
 	});
 	const [startDateError, setStartDateError] = useState('');
-
 	const resetCouponError = () => {
 		setCouponError({
 			code: '',
@@ -100,6 +103,7 @@ const EditCoupon = () => {
 		});
 		setStartDateError('');
 	}
+	// -----------------------------------------------------------------------------
 
 	useEffect(() => {
 		setCoupon({
@@ -110,12 +114,13 @@ const EditCoupon = () => {
 			discount: fetchedData?.data?.Coupons?.discount,
 			total_redemptions: fetchedData?.data?.Coupons?.total_redemptions,
 			user_redemptions: fetchedData?.data?.Coupons?.user_redemptions,
-			free_shipping: fetchedData?.data?.Coupons?.free_shipping,
-			exception_discount_product: fetchedData?.data?.Coupons?.exception_discount_product,
+			free_shipping: +fetchedData?.data?.Coupons?.free_shipping,
+			exception_discount_product: +fetchedData?.data?.Coupons?.exception_discount_product,
 		});
 		setIsEnable(fetchedData?.data?.Coupons?.status);
 
 	}, [fetchedData?.data?.Coupons]);
+
 
 	useEffect(() => {
 		reset(coupon);
@@ -191,6 +196,8 @@ const EditCoupon = () => {
 			});
 	};
 
+	
+
 	return (
 		<>
 			<Helmet>
@@ -239,7 +246,7 @@ const EditCoupon = () => {
 											<div className='row mb-md-5 d-flex  justify-content-evenly'>
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='coupon-name' className='d-block mb-1'>
-														كود الكوبون
+														كود الكوبون<span className='text-danger'>*</span>
 													</label>
 													<input
 														type='text'
@@ -259,7 +266,7 @@ const EditCoupon = () => {
 												</div>
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='uses-count' className='d-block mb-1'>
-														عدد مرات الاستخدام للجميع
+														عدد مرات الاستخدام للجميع<span className='text-danger'>*</span>
 													</label>
 													<input
 														type='number'
@@ -285,7 +292,7 @@ const EditCoupon = () => {
 											<div className='row mb-md-5 d-flex justify-content-evenly align-items-end'>
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='coupon-name ' className='d-block mb-1'>
-														نوع الخصم
+														نوع الخصم<span className='text-danger'>*</span>
 													</label>
 													<Controller
 														name={"discount_type"}
@@ -300,16 +307,16 @@ const EditCoupon = () => {
 																name='discount_type'
 																disabled={isEnable === 'نشط' ? false : true}
 															>
-																<div className='radio-box '>
+																<div className='radio-box'>
 																	<FormControlLabel value='percent' id='percent-price' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
 																	<label className={value === 'percent' ? 'me-3' : 'disabled me-3'} htmlFor='percent-price'>
 																		نسبة مئوية %
 																	</label>
 																</div>
-																<div className='radio-box '>
+																<div className='radio-box'>
 																	<FormControlLabel value='fixed' id='fixed-price' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
 																	<label className={value === 'fixed' ? 'me-3' : 'disabled me-3'} htmlFor='fixed-price'>
-																		مبلغ ثابت SAR
+																		مبلغ ثابت 
 																	</label>
 																</div>
 
@@ -339,7 +346,7 @@ const EditCoupon = () => {
 
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
-														عدد مرات الاستخدام للزبون الواحد
+														عدد مرات الاستخدام للزبون الواحد<span className='text-danger'>*</span>
 													</label>
 													<input
 														type='number'
@@ -365,7 +372,7 @@ const EditCoupon = () => {
 											<div className='row mb-md-5 d-flex justify-content-evenly'>
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='coupon-name ' className='d-block mb-1'>
-														تاريخ الانتهاء
+														تاريخ الانتهاء<span className='text-danger'>*</span>
 													</label>
 													<div className='date-icon'>
 														<DateIcon />
@@ -374,13 +381,13 @@ const EditCoupon = () => {
 												</div>
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
-														شحن مجاني
+														شحن مجاني<span className='text-danger'>*</span>
 													</label>
 													<Controller
 														name={"free_shipping"}
 														control={control}
 														rules={{ required:  "حقل شحن مجاني مطلوب" }}
-														render={({ field: { onChange, value } }) => (
+														render={({ field: { onChange, value } } ) => (
 															<RadioGroup
 																className='d-flex flex-row'
 																aria-labelledby='demo-controlled-radio-buttons-group'
@@ -398,7 +405,7 @@ const EditCoupon = () => {
 																<div className='radio-box '>
 																	<FormControlLabel value={0} id='no-free-shipping' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
 																	<label className={value === '0' ? 'me-3' : 'disabled me-3'} htmlFor='no-free-shipping'>
-																		لا
+																	لا
 																	</label>
 																</div>
 															</RadioGroup>
@@ -408,7 +415,7 @@ const EditCoupon = () => {
 											<div className='row mb-md-5 d-flex justify-content-evenly'>
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='coupon-name ' className='d-block mb-1'>
-														الحد الأدنى من المشتريات SAR
+														الحد الأدنى من المشتريات<span className='text-danger'>*</span> 
 													</label>
 													<input
 														type='number'
@@ -433,7 +440,7 @@ const EditCoupon = () => {
 
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
-														استثناء المنتجات المخفضة
+														استثناء المنتجات المخفضة<span className='text-danger'>*</span>
 													</label>
 													<Controller
 														name={"exception_discount_product"}
@@ -451,13 +458,13 @@ const EditCoupon = () => {
 																<div className='radio-box '>
 																	<FormControlLabel value={1} id='accept-lower-product' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
 																	<label className={value === '1' ? 'me-3' : 'disabled me-3'} htmlFor='accept-lower-product'>
-																		نعم
+																		المنتجات المخفضة
 																	</label>
 																</div>
 																<div className='radio-box '>
 																	<FormControlLabel value={0} id='no-lower-product' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
 																	<label className={value === '0' ? 'me-3' : 'disabled me-3'} htmlFor='no-lower-product'>
-																		لا
+																		المنتجات الغير مخفضة
 																	</label>
 																</div>
 															</RadioGroup>
@@ -470,7 +477,7 @@ const EditCoupon = () => {
 
 												<div className='col-md-5 col-12 mb-md-0 mb-3 enable-switches'>
 													<label htmlFor='user-count' className='d-block mb-1'>
-														الحالة
+														الحالة<span className='text-danger'>*</span>
 													</label>
 													<Switch
 														onClick={() => setIsEnable(!isEnable)}

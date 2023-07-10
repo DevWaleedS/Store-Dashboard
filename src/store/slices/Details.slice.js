@@ -23,7 +23,7 @@ const details = [
 		id: 3,
 		icon: <Sales />,
 		title: 'اجمالي المبيعات',
-		numbers: 'SAR 11,892',
+		numbers: ' 11,892',
 		color: '#02466a',
 	},
 	{

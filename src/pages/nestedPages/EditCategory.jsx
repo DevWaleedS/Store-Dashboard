@@ -180,7 +180,7 @@ const EditCategory = () => {
 								<div className='form-body'>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='add-icon'>ايقونة التصنيف</label>
+											<label htmlFor='add-icon'>ايقونة التصنيف<span className='text-danger'>*</span></label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<div>
@@ -222,7 +222,7 @@ const EditCategory = () => {
 									</div>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='category-name'>التصنيف الرئيسي</label>
+											<label htmlFor='category-name'> التصنيف الرئيسي<span className='text-danger'>*</span></label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<input

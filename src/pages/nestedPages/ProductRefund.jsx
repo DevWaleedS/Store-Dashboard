@@ -170,7 +170,7 @@ const ProductRefund = () => {
 
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
-													سعر البيع <span>(قم بإضافة السعر الخاص بك)</span>
+													سعر البيع<span className='text-danger'>*</span> <span>(قم بإضافة السعر الخاص بك)</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex  p-2 gap-3'>

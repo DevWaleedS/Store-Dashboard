@@ -148,6 +148,8 @@ const CreateOffer = () => {
 		product_id: [],
 		get_product_id: [],
 	});
+
+	// Errors
 	const [startDateError, setStartDateError] = useState();
 	const [endDateError, setEndDateError] = useState();
 
@@ -180,6 +182,7 @@ const CreateOffer = () => {
 		setStartDateError('');
 		setEndDateError('');
 	};
+	// ---------------------------------------------------------------------------
 
 	const purchaseSearchItems = (value) => {
 		setPurchase_serach(value);
@@ -305,8 +308,6 @@ const CreateOffer = () => {
 				}
 			});
 	};
-
-
 
 	return (
 		<>

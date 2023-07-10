@@ -134,7 +134,7 @@ const CreateRole = () => {
 											<div className='col-md-6 col-12'>
 												<label className='d-block mb-2' htmlFor='role-search'>
 													<StarIcon className='star-icon' />
-													<span className='me-2'>اسم الدور الوظيفي</span>
+													<span className='me-2'>اسم الدور الوظيفي<span className='text-danger'>*</span></span>
 												</label>
 												<input
 													style={{ backgroundColor: '#fff' }}

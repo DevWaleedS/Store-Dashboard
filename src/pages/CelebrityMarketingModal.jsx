@@ -62,6 +62,9 @@ const MarketingModal = () => {
 							aria-labelledby='transition-modal-title'
 							aria-describedby='transition-modal-description'
 							open={isOpenCelebrityMarketingModal}
+							onClose={() => {
+								dispatch(closeCelebrityMarketingModal());
+							}}
 							closeAfterTransition
 							BackdropComponent={Backdrop}
 							BackdropProps={{

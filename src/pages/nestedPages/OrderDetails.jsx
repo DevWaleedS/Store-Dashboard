@@ -161,7 +161,7 @@ const OrderDetails = () => {
 													<div className='order-head-row'>
 														<WalletIcon />
 														<span className='me-3 price'>
-															قيمة الطلب <span>SAR</span>
+															قيمة الطلب <span>ر.س</span>
 														</span>
 													</div>
 													<div className='order-data-row'>

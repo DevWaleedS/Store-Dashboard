@@ -189,7 +189,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='full-name' className=''>
-												الإسم الكامل
+												الإسم الكامل<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -215,7 +215,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='user-name' className=''>
-												اسم المستخدم
+												اسم المستخدم<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -241,7 +241,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='job-title' className=''>
-												الدور الوظيفي
+												الدور الوظيفي<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -271,7 +271,8 @@ const AddNewUser = () => {
 																	border: 'none',
 																},
 																'& .MuiSelect-icon.MuiSelect-iconOutlined': {
-																	right: '95% !important',
+																	right: '96%',
+																	
 																},
 																'& .MuiSelect-nativeInput': {
 																	display: 'none',
@@ -293,7 +294,7 @@ const AddNewUser = () => {
 																		key={index}
 																		className='souq_storge_category_filter_items'
 																		sx={{
-																			backgroundColor: 'rgba(211, 211, 211, 1)',
+																			backgroundColor: '#fff',
 																			height: '3rem',
 																			'&:hover': {},
 																		}}
@@ -313,7 +314,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='password' className=''>
-												كلمة المرور
+												كلمة المرور<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -339,7 +340,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='email' className=''>
-												البريد الإلكتروني
+												البريد الإلكتروني<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -365,7 +366,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='phone-number' className=''>
-												رقم الهاتف
+												رقم الهاتف<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -395,7 +396,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='personal-image' className=''>
-												الصورة الشخصية
+												الصورة الشخصية<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -413,7 +414,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='status' className=''>
-												الحالة
+												الحالة<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>

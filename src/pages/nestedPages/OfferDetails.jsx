@@ -186,7 +186,7 @@ const OfferDetails = () => {
 				fixed_offer_type_minimum: fetchedData?.data?.offers?.offer_type_minimum,
 				fixed_offer_amount_minimum: fetchedData?.data?.offers?.offer_amount_minimum,
 			});
-			setFixedCouponStatus(fetchedData?.data?.offers?.coupon_status === 1 ? true : false);
+			setFixedCouponStatus(+fetchedData?.data?.offers?.coupon_status === 1 ? true : false);
 		} else {
 			setOffer({
 				...offer,
@@ -199,7 +199,7 @@ const OfferDetails = () => {
 				discount_value_offer3: fetchedData?.data?.offers?.discount_value_offer3,
 				maximum_discount: fetchedData?.data?.offers?.maximum_discount,
 			});
-			setCouponStatus(fetchedData?.data?.offers?.coupon_status === 1 ? true : false);
+			setCouponStatus(+fetchedData?.data?.offers?.coupon_status === 1 ? true : false);
 		}
 		if (fetchedData?.data?.offers?.start_at && fetchedData?.data?.offers?.end_at) {
 			setStartDate(moment(fetchedData?.data?.offers?.start_at, 'YYYY-MM-DD').toDate());
@@ -994,7 +994,7 @@ const OfferDetails = () => {
 													>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1 '>
-																<FormControlLabel disabled id='purchase_amount' control={<Radio   value='purchase_amount'/>} />
+																<FormControlLabel value='purchase_amount' disabled id='purchase_amount' control={<Radio   />} />
 																<label className={offer?.fixed_offer_type_minimum === 'purchase_amount' ? 'active me-3' : ' me-3'} htmlFor='purchase_amount'>
 																	الحد الأدنى لمبلغ الشراء
 																</label>
@@ -1020,7 +1020,7 @@ const OfferDetails = () => {
 														</div>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1'>
-																<FormControlLabel disabled id='product_quantity' control={<Radio  value='product_quantity' />} />
+																<FormControlLabel value='product_quantity' disabled id='product_quantity' control={<Radio  />} />
 																<label className={offer?.fixed_offer_type_minimum === 'product_quantity' ? 'active me-3' : ' me-3'} htmlFor='product_quantity'>
 																	الحد الأدنى لكمية المنتجات
 																</label>
@@ -1338,7 +1338,7 @@ const OfferDetails = () => {
 													>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1 '>
-																<FormControlLabel disabled id='purchase_amount' control={<Radio value='purchase_amount' />} />
+																<FormControlLabel value='purchase_amount' disabled id='purchase_amount' control={<Radio  />} />
 																<label className={offer?.offer_type_minimum === 'purchase_amount' ? 'active me-3' : ' me-3'} htmlFor='purchase_amount'>
 																	الحد الأدنى لمبلغ الشراء
 																</label>
@@ -1364,7 +1364,7 @@ const OfferDetails = () => {
 														</div>
 														<div className='col-md-6 col-12'>
 															<div className='radio-box mb-1'>
-																<FormControlLabel disabled id='product_quantity' control={<Radio value='product_quantity'/>}  />
+																<FormControlLabel value='product_quantity' disabled id='product_quantity' control={<Radio />}  />
 																<label className={offer?.offer_type_minimum === 'product_quantity' ? 'active me-3' : ' me-3'} htmlFor='product_quantity'>
 																	الحد الأدنى لكمية المنتجات
 																</label>

@@ -157,7 +157,7 @@ const AddCoupon = () => {
 									<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='coupon-name' className='d-block mb-1'>
-												كود الكوبون
+												كود الكوبون<span className='text-danger'>*</span>
 											</label>
 											<input
 												type='text'
@@ -176,7 +176,7 @@ const AddCoupon = () => {
 										</div>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='uses-count' className='d-block mb-1'>
-												عدد مرات الاستخدام للجميع
+												عدد مرات الاستخدام للجميع<span className='text-danger'>*</span>
 											</label>
 											<input
 												type='number'
@@ -201,7 +201,7 @@ const AddCoupon = () => {
 									<div className='row mb-md-5 mb-3 d-flex justify-content-evenly align-items-end'>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='coupon-name ' className='d-block mb-1'>
-												نوع الخصم
+												نوع الخصم<span className='text-danger'>*</span>
 											</label>
 											<Controller
 												name={"discount_type"}
@@ -223,7 +223,7 @@ const AddCoupon = () => {
 														<div className='radio-box '>
 															<FormControlLabel value='fixed' id='fixed-price' control={<Radio />} />
 															<label className={value === 'fixed' ? 'me-3' : 'disabled me-3'} htmlFor='fixed-price'>
-																مبلغ ثابت SAR
+																مبلغ ثابت 
 															</label>
 														</div>
 													</RadioGroup>
@@ -252,7 +252,7 @@ const AddCoupon = () => {
 
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
-												عدد مرات الاستخدام للزبون الواحد
+												عدد مرات الاستخدام للزبون الواحد<span className='text-danger'>*</span>
 											</label>
 											<input
 												type='number'
@@ -277,7 +277,7 @@ const AddCoupon = () => {
 									<div className='row row mb-md-5 mb-3 d-flex justify-content-evenly'>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='coupon-name ' className='d-block mb-1'>
-												تاريخ الانتهاء
+												تاريخ الانتهاء<span className='text-danger'>*</span>
 											</label>
 											<div className='date-icon'>
 												<DateIcon />
@@ -288,7 +288,7 @@ const AddCoupon = () => {
 
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
-												شحن مجاني
+												شحن مجاني<span className='text-danger'>*</span>
 											</label>
 											<Controller
 												name={"free_shipping"}
@@ -322,7 +322,7 @@ const AddCoupon = () => {
 									<div className='row row mb-md-5 d-flex justify-content-evenly'>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='coupon-name ' className='d-block mb-1'>
-												الحد الأدنى من المشتريات SAR
+												الحد الأدنى من المشتريات<span className='text-danger'>*</span>
 											</label>
 											<input
 												type='number'
@@ -346,7 +346,7 @@ const AddCoupon = () => {
 
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
-												استثناء المنتجات المخفضة
+												استثناء المنتجات المخفضة<span className='text-danger'>*</span>
 											</label>
 											<Controller
 												name={"exception_discount_product"}
@@ -362,13 +362,13 @@ const AddCoupon = () => {
 														<div className='radio-box '>
 															<FormControlLabel value={1} id='accept-lower-product' control={<Radio />} />
 															<label className={value === '1' ? 'me-3' : 'disabled me-3'} htmlFor='accept-lower-product'>
-																نعم
+																المنتجات المخفضة
 															</label>
 														</div>
 														<div className='radio-box '>
 															<FormControlLabel value={0} id='no-lower-product' control={<Radio />} />
 															<label className={value === '0' ? 'me-3' : 'disabled me-3'} htmlFor='no-lower-product'>
-																لا
+																المنتجات الغير مخفضة
 															</label>
 														</div>
 													</RadioGroup>
@@ -381,7 +381,7 @@ const AddCoupon = () => {
 										<div className='col-md-5 col-12 mb-md-0 mb-3'></div>
 										<div className='col-md-5 col-12 mb-md-0 mb-3 enable-switches'>
 											<label htmlFor='user-count' className='d-block mb-1'>
-												الحالة
+												الحالة<span className='text-danger'>*</span>
 											</label>
 											<Switch
 												onClick={() => setIsEnable(!isEnable)}

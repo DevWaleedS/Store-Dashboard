@@ -271,14 +271,7 @@ const Rating = () => {
 									/>
 								</div>
 							</div>
-							<div className='col-5 d-flex justify-content-end'>
-								
-
-								<div className='user-data d-flex justify-content-start align-content-center '>
-								<ProductIcon />
-									<span className='user-name me-2 align-self-center'>تقييم المنتجات</span>
-								</div>
-							</div>
+							
 						</div>
 					</div>
 				</div>

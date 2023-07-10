@@ -63,6 +63,8 @@ const TopBar = ({ toggleSidebar }) => {
 			});
 	};
 
+
+	// To log out from dashboard!
 	const logOut = () => {
 		
 		axios

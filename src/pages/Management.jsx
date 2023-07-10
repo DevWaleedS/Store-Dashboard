@@ -139,7 +139,7 @@ const Management = () => {
 											inputProps={{ 'aria-label': 'Without label' }}
 											renderValue={(selected) => {
 												if (roll_id === '') {
-													return <p className='text-[#ADB5B9]'>اختر الدور الوظيفي</p>;
+													return <p className='select-role-hint'>اختر الدور الوظيفي</p>;
 												}
 												const result = roles?.data?.roles?.filter((item) => parseInt(item?.id) === parseInt(selected)) || '';
 												return result[0]?.name;
@@ -148,7 +148,7 @@ const Management = () => {
 											<MenuItem
 												className='souq_storge_category_filter_items'
 												sx={{
-													backgroundColor: 'rgba(211, 211, 211, 1)',
+													backgroundColor: '#fff',
 													height: '3rem',
 													'&:hover': {},
 												}}
@@ -162,7 +162,7 @@ const Management = () => {
 														key={index}
 														className='souq_storge_category_filter_items'
 														sx={{
-															backgroundColor: 'rgba(211, 211, 211, 1)',
+															backgroundColor: '#ffff',
 															height: '3rem',
 															'&:hover': {},
 														}}

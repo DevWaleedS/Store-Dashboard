@@ -67,7 +67,7 @@ function EnhancedTableHead(props) {
 					التصنيف
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
-					السعر SAR
+					السعر 
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					الكمية

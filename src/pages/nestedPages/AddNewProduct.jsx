@@ -64,7 +64,6 @@ const AddNewProduct = () => {
 			selling_price: '',
 			category_id: '',
 			discount_price: '',
-			discount_percent: '',
 			stock: '',
 			SEOdescription: '',
 		}
@@ -72,6 +71,7 @@ const AddNewProduct = () => {
 	const [product, setProduct] = useState({
 		selling_price: '',
 		discount_price: '',
+		stock: '',
 		category_id: '',
 		subcategory_id: [],
 	});
@@ -82,7 +82,6 @@ const AddNewProduct = () => {
 		selling_price: '',
 		category_id: '',
 		discount_price: '',
-		discount_percent: '',
 		subcategory_id: '',
 		stock: '',
 		SEOdescription: '',
@@ -96,7 +95,6 @@ const AddNewProduct = () => {
 			selling_price: '',
 			category_id: '',
 			discount_price: '',
-			discount_percent: '',
 			subcategory_id: '',
 			stock: '',
 			SEOdescription: '',
@@ -162,7 +160,6 @@ const AddNewProduct = () => {
 		formData.append('selling_price', data?.selling_price);
 		formData.append('category_id', data?.category_id);
 		formData.append('discount_price', data?.discount_price);
-		formData.append('discount_percent', data?.discount_percent);
 		formData.append('stock', data?.stock);
 		formData.append('SEOdescription', data?.SEOdescription);
 		formData.append('cover', icons[0]);
@@ -192,7 +189,6 @@ const AddNewProduct = () => {
 						selling_price: res?.data?.message?.en?.selling_price?.[0],
 						category_id: res?.data?.message?.en?.category_id?.[0],
 						discount_price: res?.data?.message?.en?.discount_price?.[0],
-						discount_percent: res?.data?.message?.en?.discount_percent?.[0],
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
@@ -223,7 +219,7 @@ const AddNewProduct = () => {
 								<div className='form-body'>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='product-image'> صورة المنتج</label>
+											<label htmlFor='product-image'> صورة المنتج <span className='text-danger'>*</span></label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<div {...getRootProps()}>
@@ -246,7 +242,7 @@ const AddNewProduct = () => {
 
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='product-name'> اسم المنتح </label>
+											<label htmlFor='product-name'> اسم المنتح <span className='text-danger'>*</span></label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<input
@@ -268,7 +264,7 @@ const AddNewProduct = () => {
 									</div>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='product-desc'> وصف المنتج </label>
+											<label htmlFor='product-desc'> وصف المنتج <span className='text-danger'>*</span></label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<textarea
@@ -285,7 +281,7 @@ const AddNewProduct = () => {
 									</div>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='product-category'> التصنيف الرئيسي</label>
+											<label htmlFor='product-category'>  التصنيف الرئيسي<span className='text-danger'>*</span> </label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<FormControl sx={{ m: 0, width: '100%' }}>
@@ -431,7 +427,7 @@ const AddNewProduct = () => {
 									</div>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='price'> المخزون </label>
+											<label htmlFor='price'> المخزون <span className='text-danger'>*</span></label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<input
@@ -440,7 +436,7 @@ const AddNewProduct = () => {
 												placeholder='اضف الكمية'
 												name='stock'
 												{...register('stock', {
-													required: "حقل المخزون مطلوب.",
+													required: "حقل المخزون مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
 														message: "يجب على الحقل المخزون أن يكون رقمًا"
@@ -458,7 +454,7 @@ const AddNewProduct = () => {
 
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='price'> السعر SAR </label>
+											<label htmlFor='price'> السعر <span className='text-danger'>*</span> </label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<Controller
@@ -477,6 +473,7 @@ const AddNewProduct = () => {
 												}}
 												render={({ field: { onChange, value } }) => (
 													<input
+													disabled = {product?.discount_price}
 														name={"selling_price"}
 														type='number'
 														id='price'
@@ -494,7 +491,7 @@ const AddNewProduct = () => {
 									</div>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
-											<label htmlFor='low-price'> سعر التخفيض SAR </label>
+											<label htmlFor='low-price'> السعر بعد الخصم  </label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<Controller
@@ -517,41 +514,20 @@ const AddNewProduct = () => {
 										<div className='col-md-3 col-12'></div>
 										{product?.discount_price &&  product?.selling_price  && 
 										<div className='col-md-7 col-12'>
-										{Number(product?.selling_price) - Number(product?.discount_price) <= 0 
-											?
-											 <span className='fs-6' style={{color:'red'}}>يجب ان يكون سعر التخفيض اقل من السعر الأساسي</span> 
-											: 
-											<span className={` ${product?.discount_price === '0' &&  product?.selling_price  ? 'd-none' : 'fs-6' }`}  style={{color:'#4ac9cb'}}>
-											سعر البيع بعد التخفيض {Number(product?.selling_price) - Number(product?.discount_price) || 0} SAR
-											</span>
-										 }
+										{Number(product?.selling_price) - Number(product?.discount_price) <= 0 &&
+										<span className='fs-6' style={{color:'red'}}>يجب ان يكون سعر التخفيض اقل من السعر الأساسي</span> 
+										}
 									
 										</div>
 
 										}
 						
 										{product?.discount_price &&  product?.selling_price === '' && 
-											<div className='col-md-7 col-12'><span className='fs-6' style={{color:'red'}}>يرجي ادخال  السعر الأساسي أولاّّ حتي تتمكن من حساب سعر التخفيض</span></div>
-	
-											}
+											<div className='col-md-7 col-12'><span className='fs-6' style={{color:'red'}}>يرجي ادخال  السعر الأساسي أولاّّ حتي تتمكن من ادخال سعر الخصم</span></div>
+										}
 										<div className='col-md-7 col-12'><span className='fs-6 text-danger'>{productError?.discount_price}{errors?.discount_price && errors.discount_price.message}</span></div>
 									</div>
-									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
-											<label htmlFor='discount'> نسبة التخفيض % </label>
-										</div>
-										<div className='col-md-7 col-12'>
-											<input
-												type='number'
-												id='discount_percent'
-												name='discount_percent'
-												{...register('discount_percent', {
-												})}
-											/>
-										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'><span className='fs-6 text-danger'>{productError?.discount_percent}{errors?.discount_percent && errors.discount_percent.message}</span></div>
-									</div>
+								
 
 									<div className='row mb-3'>
 										<div className='col-md-3 col-12'>

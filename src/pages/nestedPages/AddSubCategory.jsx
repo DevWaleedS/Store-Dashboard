@@ -62,7 +62,7 @@ const AddSubCategory = () => {
 									</h5>
 								</div>
 								<div className='close-icon-video-modal'>
-									<AiOutlineCloseCircle style={{ cursor: 'pointer', color: 'white' }} onClick={() => navigate('/Category/AddCategory')} />
+									<AiOutlineCloseCircle style={{ cursor: 'pointer', color: 'white' }} onClick={() => dispatch(closeAddSubCategory())} />
 								</div>
 							</div>
 						</div>

@@ -178,7 +178,7 @@ const EditRole = () => {
 											<div className='search-wrapper'>
 												<div className='col-md-6 col-12'>
 													<label className='d-block mb-2' htmlFor='role-search'>
-														<span>اسم الدور الوظيفي</span>
+														<span>اسم الدور الوظيفي<span className='text-danger'>*</span></span>
 													</label>
 													<input
 														style={{ width: '100%', backgroundColor: '#eee', padding: '8px', borderRadius: '5px' }}
