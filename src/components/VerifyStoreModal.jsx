@@ -72,27 +72,29 @@ const VerifyStore = () => {
 													مرحبا <span className='text-bold'>{localStorage.getItem('user_name') !== 'null' ? localStorage.getItem('user_name') : 'صديقي التاجر'}</span> المتجر الخاص مكتمل التوثيق <Verification />
 												</p>
 												<IoMdCloseCircleOutline
-													style={{ cursor: 'pointer' }}
+												style={{ cursor: 'pointer', fill: '#02466a' }}
+												fill='#02466a'
 													onClick={() => {
 														dispatch(closeVerifyModal());
 													}}
 												/>
 											</div>
 										) : verificationStatus === 'جاري التوثيق' ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center'>
+											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
 													مرحبا <span className='text-bold'>{localStorage.getItem('user_name') !== 'null' ? localStorage.getItem('user_name') : 'صديقي التاجر'}</span> المتجر الخاص تحت المراجعة من قبل الجهات
 													المختصة
 												</p>
 												<IoMdCloseCircleOutline
-													style={{ cursor: 'pointer' }}
+													style={{ cursor: 'pointer', fill: '#02466a' }}
+													fill='#02466a'
 													onClick={() => {
 														dispatch(closeVerifyModal());
 													}}
 												/>
 											</div>
 										) : verificationStatus === 'طلب جديد' ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center'>
+											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
 													مرحبا {localStorage.getItem('user_name') !== 'null' ? localStorage.getItem('user_name') : 'صديقي التاجر'} تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من الجهات المختصة     
 												</p>
@@ -106,7 +108,8 @@ const VerifyStore = () => {
 														التوثيق الأن
 													</Link>
 													<IoMdCloseCircleOutline
-														style={{ cursor: 'pointer' }}
+													style={{ cursor: 'pointer', fill: '#02466a' }}
+													fill='#02466a'
 														onClick={() => {
 															dispatch(closeVerifyModal());
 														}}
@@ -114,7 +117,7 @@ const VerifyStore = () => {
 												</div>
 											</div>
 										) : verificationStatus === 'لم يتم الطلب' ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center'>
+											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
 													مرحبا {localStorage.getItem('user_name') !== 'null' ? localStorage.getItem('user_name') : 'صديقي التاجر'} المتجر الخاص بك غير مكتمل الرجاء البدء بتوثيق المتجر
 												</p>
@@ -128,7 +131,8 @@ const VerifyStore = () => {
 														التوثيق الأن
 													</Link>
 													<IoMdCloseCircleOutline
-														style={{ cursor: 'pointer' }}
+													style={{ cursor: 'pointer', fill: '#02466a' }}
+													fill='#02466a'
 														onClick={() => {
 															dispatch(closeVerifyModal());
 														}}
