@@ -25,37 +25,64 @@ const TemplateUpdate = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [firstimage, setFirstImage] = useState([]);
-	const [secondimage, setSecondImage] = useState([]);
-	const [thirdimage, setThirdImage] = useState([]);
-	const [previewImage, setPreviewImage] = useState('');
+
+	// Banners Images
+	const [firstBanner, setFirstBanner] = useState([]);
+	const [secondBanner, setSecondBanner] = useState([]);
+	const [thirdBanner, setThirdBanner] = useState([]);
+	const [previewBanner, setPreviewBanner] = useState('');
+
+	// Sliders Images
+	const [firstSlider, setFirstSlider] = useState([]);
+	const [secondSlider, setSecondSlider] = useState([]);
+	const [thirdSlider, setThirdSlider] = useState([]);
+	const [previewSlider, setPreviewSlider] = useState('');
+
+	// banners status
 	const [bannerstatus1, setBannerStatus1] = useState(true);
 	const [bannerstatus2, setBannerStatus2] = useState(true);
 	const [bannerstatus3, setBannerStatus3] = useState(true);
+
+	// sliders status
+	const [sliderstatus1, setSlidersStatus1] = useState(true);
+	const [sliderstatus2, setSlidersStatus2] = useState(true);
+	const [sliderstatus3, setSlidersStatus3] = useState(true);
+
+	// comment status
 	const [commentStatus, setCommentStatus] = useState(true);
 	const [clientStatus, setClientStatus] = useState(true);
 
 	useEffect(() => {
+		// set comment status
 		setCommentStatus(fetchedData?.data?.Homepages[0]?.commentstatus === 'active' ? true : false);
+
+		// set client status
 		setClientStatus(fetchedData?.data?.Homepages[0]?.clientstatus === 'active' ? true : false);
+
+		// set banners status
 		setBannerStatus1(fetchedData?.data?.Homepages[0]?.banarstatus1 === 'active' ? true : false);
 		setBannerStatus2(fetchedData?.data?.Homepages[0]?.banarstatus2 === 'active' ? true : false);
 		setBannerStatus3(fetchedData?.data?.Homepages[0]?.banarstatus3 === 'active' ? true : false);
+
+		// set sliders status
+		setSlidersStatus1(fetchedData?.data?.Homepages[0]?.sliderstatus1 === 'active' ? true : false);
+		setSlidersStatus2(fetchedData?.data?.Homepages[0]?.sliderstatus2 === 'active' ? true : false);
+		setSlidersStatus3(fetchedData?.data?.Homepages[0]?.sliderstatus3 === 'active' ? true : false);
+
 	}, [fetchedData?.data?.Homepages]);
 
-	/** --------------------------------------------------------------------------------------------------------------- */
+	/** --------------------------------------------------------------------------------- */
 
 	// Use state with ImageUploading library to set Logo
 	const [logo, setLogo] = React.useState([]);
-
 	// maxNumbers of files uploaded
 	const maxNumber = 2;
-
 	const onChange = (imageList, addUpdateIndex) => {
 		// data for submit
 		setLogo(imageList);
 	};
 
+	// update logo function
 	const updateLogo = () => {
 		setLoadingTitle('جاري تعديل الشعار');
 		let formData = new FormData();
@@ -83,18 +110,20 @@ const TemplateUpdate = () => {
 				}
 			});
 	};
+	/** --------------------------------------------------------------------------------- */
 
+	// update banners function
 	const updateBanners = () => {
 		setLoadingTitle('جاري تعديل البنرات الإعلانية');
 		let formData = new FormData();
-		if (firstimage.length !== 0) {
-			formData.append('banar1', firstimage[0]?.file || null);
+		if (firstBanner.length !== 0) {
+			formData.append('banar1', firstBanner[0]?.file || null);
 		}
-		if (secondimage.length !== 0) {
-			formData.append('banar2', secondimage[0]?.file || null);
+		if (secondBanner.length !== 0) {
+			formData.append('banar2', secondBanner[0]?.file || null);
 		}
-		if (thirdimage.length !== 0) {
-			formData.append('banar3', thirdimage[0]?.file || null);
+		if (thirdBanner.length !== 0) {
+			formData.append('banar3', thirdBanner[0]?.file || null);
 		}
 		formData.append('banarstatus1', bannerstatus1 ? 'active' : 'not_active');
 		formData.append('banarstatus2', bannerstatus2 ? 'active' : 'not_active');
@@ -120,7 +149,49 @@ const TemplateUpdate = () => {
 				}
 			});
 	};
+	/** --------------------------------------------------------------------------------- */
 
+	
+	// update Sliders function
+	const updateSliders = () => {
+		setLoadingTitle('جاري تعديل السلايدرات المتحركة');
+		let formData = new FormData();
+		if (firstSlider.length !== 0) {
+			formData.append('slider1', firstSlider[0]?.file || null);
+		}
+		if (secondSlider.length !== 0) {
+			formData.append('slider3', secondSlider[0]?.file || null);
+		}
+		if (thirdSlider.length !== 0) {
+			formData.append('slider3', thirdSlider[0]?.file || null);
+		}
+		formData.append('sliderstatus1', sliderstatus1 ? 'active' : 'not_active');
+		formData.append('sliderstatus2', sliderstatus2 ? 'active' : 'not_active');
+		formData.append('sliderstatus3', sliderstatus3 ? 'active' : 'not_active');
+		axios
+			.post(`https://backend.atlbha.com/api/Store/sliderUpdate`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${cookies.access_token}`,
+				},
+			})
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setLoadingTitle('');
+					setEndActionTitle(res?.data?.message?.ar);
+					navigate('/Template');
+					setReload(!reload);
+				} else {
+					setLoadingTitle('');
+					setEndActionTitle(res?.data?.message?.ar);
+					navigate('/Template');
+					setReload(!reload);
+				}
+			});
+	};
+	/** --------------------------------------------------------------------------------- */
+
+	// Update comments function
 	const updateComments = () => {
 		setLoadingTitle('جاري تعديل التعليقات والعملاء');
 		let formData = new FormData();
@@ -147,9 +218,11 @@ const TemplateUpdate = () => {
 				}
 			});
 	};
+	/** --------------------------------------------------------------------------------- */
 
 	return (
 		<Fragment>
+			{/** upload logo */}
 			<div className='seo-weight-edit-box template-edit-box mb-4'>
 				<div className='title'>
 					<h4>
@@ -160,7 +233,7 @@ const TemplateUpdate = () => {
 				<FormControl variant='standard' className='py-4'>
 					<div className='row'>
 						<div className='col-12 p-4 '>
-							<div className='input-bx'>
+							<div className='input-bx logo-box'>
 								{/** Upload Image  */}
 								<ImageUploading value={logo} onChange={onChange} maxNumber={maxNumber} dataURLKey='data_url'>
 									{({ onImageUpload, dragProps }) => (
@@ -209,6 +282,7 @@ const TemplateUpdate = () => {
 				</FormControl>
 			</div>
 
+			{/** upload banner */}
 			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 				<div className='title'>
 					<h4>
@@ -219,21 +293,21 @@ const TemplateUpdate = () => {
 				<FormControl variant='standard' className='px-4'>
 					<div className='row'>
 						<div className='col-12 p-4'>
-							<div className='input-bx'>
+							<div className='input-bx banners-box'>
 								{/** preview banner here */}
 								<div className=' banners-preview-container d-flex flex-column align-items-center justify-content-center'>
 									{loading ? (
 										<CircularLoading />
 									) : (
 										<>
-											{!firstimage[0] && (
+											{!firstBanner[0] && (
 												<img
 													style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }}
 													src={fetchedData?.data?.Homepages[0]?.banar1}
 													alt={fetchedData?.data?.Homepages[0]?.banar1}
 												/>
 											)}
-											{firstimage[0] && <img style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }} src={previewImage[0]?.data_url} alt='preview-img' />}
+											{firstBanner[0] && <img style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }} src={previewBanner[0]?.data_url} alt='preview-img' />}
 										</>
 									)}
 								</div>
@@ -247,10 +321,10 @@ const TemplateUpdate = () => {
 										<label htmlFor='add-banner-1'>بانر إعلاني رقم 1</label>
 										<div className='wrapper'>
 											<ImageUploading
-												value={firstimage}
+												value={firstBanner}
 												onChange={(imageList) => {
-													setFirstImage(imageList);
-													setPreviewImage(imageList);
+													setFirstBanner(imageList);
+													setPreviewBanner(imageList);
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
@@ -305,10 +379,10 @@ const TemplateUpdate = () => {
 										<label htmlFor='add-banner-1'>بانر إعلاني رقم 2</label>
 										<div className='wrapper'>
 											<ImageUploading
-												value={secondimage}
+												value={secondBanner}
 												onChange={(imageList) => {
-													setSecondImage(imageList);
-													setPreviewImage(imageList);
+													setSecondBanner(imageList);
+													setPreviewBanner(imageList);
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
@@ -363,10 +437,10 @@ const TemplateUpdate = () => {
 										<label htmlFor='add-banner-1'>بانر إعلاني رقم 3</label>
 										<div className='wrapper'>
 											<ImageUploading
-												value={thirdimage}
+												value={thirdBanner}
 												onChange={(imageList) => {
-													setThirdImage(imageList);
-													setPreviewImage(imageList);
+													setThirdBanner(imageList);
+													setPreviewBanner(imageList);
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
@@ -423,6 +497,229 @@ const TemplateUpdate = () => {
 						<div className='col-12 p-4'>
 							<div className='btn-bx '>
 								<Button onClick={() => updateBanners()} variant='contained'>
+									حفظ
+								</Button>
+							</div>
+						</div>
+					</div>
+				</FormControl>
+			</div>
+
+			{/** upload sliders */}
+			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
+				<div className='title'>
+					<h4>
+					السلايدر المتحرك<span> ( تستطيع تغيير الصورة التي تظهر في السلايدر المتحرك أعلى الموقع )</span>
+					</h4>
+				</div>
+
+				<FormControl variant='standard' className='px-4'>
+					<div className='row'>
+						<div className='col-12 p-4'>
+							<div className='input-bx banners-box'>
+								{/** preview banner here */}
+								<div className=' banners-preview-container d-flex flex-column align-items-center justify-content-center'>
+									{loading ? (
+										<CircularLoading />
+									) : (
+										<>
+											{!firstSlider[0] && (
+												<img
+													style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }}
+													src={fetchedData?.data?.Homepages[0]?.slider1}
+													alt={fetchedData?.data?.Homepages[0]?.slider1}
+												/>
+											)}
+											{firstBanner[0] && <img style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }} src={previewSlider[0]?.data_url} alt='preview-img' />}
+										</>
+									)}
+								</div>
+							</div>
+						</div>
+						<div className='col-12 mb-2'>
+							<div className='add-banners-bts-wrapper mt-md-0 mt-3 px-md-0 px-2'>
+								{/** Btn to upload banners */}
+								<div className='add-banners'>
+									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
+										<label htmlFor='add-banner-1'>بانر إعلاني رقم 1</label>
+										<div className='wrapper'>
+											<ImageUploading
+												value={firstSlider}
+												onChange={(imageList) => {
+													setFirstSlider(imageList);
+													setPreviewSlider(imageList);
+												}}
+												maxNumber={2}
+												dataURLKey='data_url'
+												acceptType={['jpg', 'png', 'jpeg']}
+											>
+												{({ onImageUpload, dragProps }) => (
+													<div className='upload-files-input mb-2'>
+														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+															<span> تحديث البانر </span>
+															<MdFileUpload />
+														</button>
+													</div>
+												)}
+											</ImageUploading>
+											<div className='switches-group'>
+												<Switch
+													onChange={() => setSlidersStatus1(!sliderstatus1)}
+													sx={{
+														width: '35px',
+														padding: 0,
+														height: '20px',
+														borderRadius: '0.75rem',
+														'& .MuiSwitch-thumb': {
+															width: '12px',
+															height: '12px',
+														},
+														'& .MuiSwitch-switchBase': {
+															padding: '0',
+															top: '4px',
+															left: '4px',
+														},
+														'& .MuiSwitch-switchBase.Mui-checked': {
+															left: '-4px',
+														},
+														'& .Mui-checked .MuiSwitch-thumb': {
+															backgroundColor: '#FFFFFF',
+														},
+														'& .MuiSwitch-track': {
+															height: '100%',
+														},
+														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
+															backgroundColor: '#3AE374',
+															opacity: 1,
+														},
+													}}
+													checked={sliderstatus1}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
+										<label htmlFor='add-banner-1'>بانر إعلاني رقم 2</label>
+										<div className='wrapper'>
+											<ImageUploading
+												value={secondSlider}
+												onChange={(imageList) => {
+													setSecondSlider(imageList);
+													setPreviewSlider(imageList);
+												}}
+												maxNumber={2}
+												dataURLKey='data_url'
+												acceptType={['jpg', 'png', 'jpeg']}
+											>
+												{({ onImageUpload, dragProps }) => (
+													<div className='upload-files-input mb-2'>
+														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+															<span> تحديث البانر </span>
+															<MdFileUpload />
+														</button>
+													</div>
+												)}
+											</ImageUploading>
+											<div className='switches-group'>
+												<Switch
+													onChange={() => setSlidersStatus2(!sliderstatus2)}
+													sx={{
+														width: '35px',
+														padding: 0,
+														height: '20px',
+														borderRadius: '0.75rem',
+														'& .MuiSwitch-thumb': {
+															width: '12px',
+															height: '12px',
+														},
+														'& .MuiSwitch-switchBase': {
+															padding: '0',
+															top: '4px',
+															left: '4px',
+														},
+														'& .MuiSwitch-switchBase.Mui-checked': {
+															left: '-4px',
+														},
+														'& .Mui-checked .MuiSwitch-thumb': {
+															backgroundColor: '#FFFFFF',
+														},
+														'& .MuiSwitch-track': {
+															height: '100%',
+														},
+														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
+															backgroundColor: '#3AE374',
+															opacity: 1,
+														},
+													}}
+													checked={sliderstatus2}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
+										<label htmlFor='add-banner-1'>بانر إعلاني رقم 3</label>
+										<div className='wrapper'>
+											<ImageUploading
+												value={thirdSlider}
+												onChange={(imageList) => {
+													setThirdSlider(imageList);
+													setPreviewSlider(imageList);
+												}}
+												maxNumber={2}
+												dataURLKey='data_url'
+												acceptType={['jpg', 'png', 'jpeg']}
+											>
+												{({ onImageUpload, dragProps }) => (
+													<div className='upload-files-input mb-2'>
+														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+															<span> تحديث البانر </span>
+															<MdFileUpload />
+														</button>
+													</div>
+												)}
+											</ImageUploading>
+											<div className='switches-group'>
+												<Switch
+													onChange={() => setSlidersStatus3(!sliderstatus3)}
+													sx={{
+														width: '35px',
+														padding: 0,
+														height: '20px',
+														borderRadius: '0.75rem',
+														'& .MuiSwitch-thumb': {
+															width: '12px',
+															height: '12px',
+														},
+														'& .MuiSwitch-switchBase': {
+															padding: '0',
+															top: '4px',
+															left: '4px',
+														},
+														'& .MuiSwitch-switchBase.Mui-checked': {
+															left: '-4px',
+														},
+														'& .Mui-checked .MuiSwitch-thumb': {
+															backgroundColor: '#FFFFFF',
+														},
+														'& .MuiSwitch-track': {
+															height: '100%',
+														},
+														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
+															backgroundColor: '#3AE374',
+															opacity: 1,
+														},
+													}}
+													checked={sliderstatus3}
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className='col-12 p-4'>
+							<div className='btn-bx '>
+								<Button onClick={() => updateSliders()} variant='contained'>
 									حفظ
 								</Button>
 							</div>

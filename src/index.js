@@ -74,10 +74,10 @@ import {
 	SouqOtlobha,
 	ProductRefund,
 	Delegate,
-	CreateOffer,
+	// CreateOffer,
 	CreatePage,
 	EditPage,
-	OfferDetails,
+	// OfferDetails,
 } from './pages/nestedPages';
 
 
@@ -142,14 +142,14 @@ const router = createBrowserRouter([
 				element: <Offers />,
 			},
 			// nested Add Offer page
-			{
-				path: 'Offers/AddOffer',
-				element: <CreateOffer />,
-			},
-			{
-				path: 'Offers/OfferDetails/:id',
-				element: <OfferDetails />,
-			},
+			// {
+			// 	path: 'Offers/AddOffer',
+			// 	element: <CreateOffer />,
+			// },
+			// {
+			// 	path: 'Offers/OfferDetails/:id',
+			// 	element: <OfferDetails />,
+			// },
 			{
 				path: 'Carts',
 				element: <Carts />,

@@ -1871,11 +1871,17 @@ nav.navigation {
 	width: 100% !important;
 }
 
-.seo-weight-edit-box .input-bx {
-	width: 650px;
-	max-width: 100%;
-	margin: 0px 335px;
+.seo-weight-edit-box .input-bx.banners-box {
+    width: 650px;
+    max-width: 100%;
+    margin: 0px 100px;
 }
+.seo-weight-edit-box .input-bx.logo-box {
+    width: 500px;
+    max-width: 100%;
+    margin: 0px auto;
+}
+
 .seo-weight-edit-box .input-bx #outlined-textarea {
 	text-align: left;
 	direction: ltr !important;
@@ -2963,11 +2969,18 @@ nav.navigation {
 	font-weight: 500;
 }
 
+.main-info-form .select-country .MuiInputBase-root:is(:focus, :hover) .MuiOutlinedInput-notchedOutline{
+	
+	border-color: #ededed !important;
+}
+
+
+
 .upload-icon-btn {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background: var(--gray-100);
+	background: var(--white-400);
 	height: 55px;
 	border-radius: 5px;
 	padding: 20px;
@@ -2988,7 +3001,7 @@ nav.navigation {
 }
 
 .select-country .store-desc {
-	background-color: var(--gray-100) !important;
+	border:1px solid var(--gray-200) !important;
 	height: 170px !important;
 	padding: 12px 45px 12px 30px !important;
 	white-space: pre-wrap;
@@ -3682,13 +3695,25 @@ textarea {
 	font-size: 22px;
 }
 
-.add-coupon-form .radio-box:first-child {
+.add-coupon-form .radio-box:first-child, .add-coupon-form .radio-box.select-apply-offer {
 	margin-right: -30px;
 }
+.add-coupon-form .search-icon{
+	position: absolute;
+	z-index: 1;
+	right: 10px;
+	top: 18px;
+	
+}
+.add-coupon-form .search-icon path {
+	fill: var(--black-100);
+}
+.add-coupon-form .row-title p{color: var(--black-200);}
 
 .add-coupon-form .radio-box .MuiSvgIcon-root {
 	width: 25px;
 }
+
 
 /* Date-picker input style */
 .react-datepicker-popper{
@@ -6079,9 +6104,9 @@ textarea {
 		width: 20px;
 		height: 20px;
 	}
-	.seo-weight-edit-box .input-bx {
+	.seo-weight-edit-box .input-bx.banners-box {
 		width: 642px;
-		margin: 0px 160px;
+		margin: 0px 110px;
 	}
 
 	.data-box .icon {
@@ -6132,9 +6157,9 @@ textarea {
 		flex-wrap: wrap;
 	}
 
-	.seo-weight-edit-box .input-bx {
-		width: 525px;
-		margin: 0px 110px;
+	.seo-weight-edit-box .input-bx.banners-box {
+		width: 100%;
+    margin: 0px -121px;
 	}
 
 	.package-boxes {
@@ -6339,10 +6364,7 @@ textarea {
 		width: 100%;
 		margin-right: 0;
 	}
-	.seo-weight-edit-box .input-bx {
-		width: 375px;
-		
-	}
+	
 
 	.react-datepicker-popper, .add-coupon-form .react-datepicker-popper  {
 		transform: translate(0px, 0px) !important;
@@ -7612,9 +7634,9 @@ button{
 		padding: 0 !important;
 	}
 
-	.seo-weight-edit-box .input-bx {
-		width: 509px;
-		margin: 0 49px;
+	.seo-weight-edit-box .input-bx.banners-box {
+		width: 100%;
+		margin: 0px -120px;
 	}
 
 	.seo-weight-edit-box .css-a5ci81-MuiFormLabel-root {
@@ -7839,7 +7861,7 @@ button{
 	}
 
 	.template-edit-box .upload-files-input {
-		height: 45px;
+		height: 40px;
 		font-size: 16px;
 	}
 
@@ -8402,9 +8424,13 @@ button{
 		margin-bottom: 8px;
 	}
 
-	.add-coupon-form .radio-box:first-child {
+ .add-coupon-form .radio-box:first-child, .add-coupon-form .radio-box.select-apply-offer {
 		margin: 0;
 		margin-left: 10px;
+	}
+	.add-coupon-form .search-icon {
+	
+		top: 12px;
 	}
 
 	.add-coupon-form .form-body .radio-box label {
@@ -8546,6 +8572,40 @@ button{
 		height: auto;
 		right: 0;
 	}
+
+	/* main info */
+	.main-info-form .upload-image-wrapper {
+		height: 140px;
+		border-radius: 4px;
+		margin-bottom: 10px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+}
+	.main-info-form .upload-log-btn, .upload-icon-btn {
+		height: 45px;
+		font-size: 16px;
+		
+	}
+	.domain-name,
+	 .domain-name input,
+	 .domain-name .main-domain-hint 
+	 {
+		height: 45px !important;
+		font-size: 16px !important;
+	}
+	.domain-name .main-domain-hint{
+		width: 30%;
+	}
+	.select-country .store-desc{
+		height: 120px !important;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+}
 }
 
 @media (max-width: 576px) {
@@ -8624,7 +8684,7 @@ button{
 		left:-12px !important;
 	}
 
-	.seo-weight-edit-box .input-bx {
+	.seo-weight-edit-box .input-bx.banners-box {
 		width: 559px;
 		margin: 0 -119px;
 	}
@@ -8698,7 +8758,7 @@ button{
 		flex-direction: column;
 		align-items: center;
 	}
-	.seo-weight-edit-box .input-bx {
+	.seo-weight-edit-box .input-bx.banners-box {
 		width: 642px;
 		max-width: 100%;
 		margin: 0px 335px;

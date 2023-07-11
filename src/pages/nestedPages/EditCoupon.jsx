@@ -14,8 +14,14 @@ import Modal from '@mui/material/Modal';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { FormControlLabel, Switch } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 // icons
 import { ReactComponent as DateIcon } from '../../data/Icons/icon-date.svg';
+import { ReactComponent as SearchIcon } from '../../data/Icons/icon_24_search.svg';
+import { IoIosArrowDown } from 'react-icons/io';
 import { useCookies } from 'react-cookie';
 import moment from 'moment';
 import { useForm, Controller } from "react-hook-form";
@@ -46,13 +52,28 @@ const style = {
 
 
 const EditCoupon = () => {
-	const [cookies] = useCookies(['access_token']);
+	
 	const { id } = useParams();
+	const navigate = useNavigate();
+	const currentDate = new Date();
+	const [cookies] = useCookies(['access_token']);
+	const { fetchedData: categories } = useFetch('https://backend.atlbha.com/api/Store/selector/mainCategories');
+	const { fetchedData: payments } = useFetch('https://backend.atlbha.com/api/Store/selector/payment_types');
+	const { fetchedData: products } = useFetch('https://backend.atlbha.com/api/Store/selector/products');
 	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/coupons/${id}`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
+	const [coupon_apply, setCoupon_apply] = useState('')
+	const [fixed_serach, setFixed_serach] = useState('');
+	const [fixed_products, setFixed_products] = useState([]);
+	const [select_product_id , setSelect_product_id] = useState([])
+	const [select_category_id , setSelect_category_id] = useState('')
+	const [select_payment_id , setSelect_payment_id] = useState('')
+	const [isEnable, setIsEnable] = React.useState();
+	const [startDate, setStartDate] = useState();
 	const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
 		mode: "onBlur",
 		defaultValues: {
@@ -78,11 +99,9 @@ const EditCoupon = () => {
 		exception_discount_product: 1,
 	});
 
-	const [isEnable, setIsEnable] = React.useState();
-	const [startDate, setStartDate] = useState();
+	// Errors
+	const [startDateError, setStartDateError] = useState('');
 
-
-	// to create errors
 	const [couponError, setCouponError] = useState({
 		code: '',
 		discount_type: '',
@@ -90,9 +109,11 @@ const EditCoupon = () => {
 		discount: '',
 		total_redemptions: '',
 		user_redemptions: '',
-	});
-	const [startDateError, setStartDateError] = useState('');
+		coupon_apply: '',
+	}
+	);
 	const resetCouponError = () => {
+		setStartDateError('');
 		setCouponError({
 			code: '',
 			discount_type: '',
@@ -100,9 +121,26 @@ const EditCoupon = () => {
 			discount: '',
 			total_redemptions: '',
 			user_redemptions: '',
+			coupon_apply: '',
 		});
-		setStartDateError('');
-	}
+		
+	};
+	// --------------------------------------------------------------------------------
+
+	const fixed_products_selected = products?.data?.products?.filter((product) => {
+		return select_product_id?.some((ele) => {
+			return ele === product?.id;
+		});
+	});
+
+	// create product search function
+	const fixedSearchItems = (value) => {
+		setFixed_serach(value);
+		const filteredData = products?.data?.products?.filter((item) => {
+			return item?.name.includes(value);
+		});
+		setFixed_products(filteredData);
+	};
 	// -----------------------------------------------------------------------------
 
 	useEffect(() => {
@@ -117,7 +155,19 @@ const EditCoupon = () => {
 			free_shipping: +fetchedData?.data?.Coupons?.free_shipping,
 			exception_discount_product: +fetchedData?.data?.Coupons?.exception_discount_product,
 		});
+		
+		if (fetchedData?.data?.Coupons?.expire_date) {
+			setStartDate(moment(fetchedData?.data?.Coupons?.expire_date, 'YYYY-MM-DD').toDate())
+		} else {
+			setStartDate('');
+		}
+
+		setCoupon_apply(fetchedData?.data?.Coupons?.coupon_apply === 'selected_product' ? 'selected_product' : fetchedData?.data?.Coupons?.coupon_apply===  'selected_category' ? 'selected_category' :fetchedData?.data?.Coupons?.coupon_apply===  'selected_payment' ? 'selected_payment': fetchedData?.data?.Coupons?.coupon_apply===  'all' ? 'all' :  null )
 		setIsEnable(fetchedData?.data?.Coupons?.status);
+		setSelect_product_id(fetchedData?.data?.Coupons?.selected_product?.map((product)=> product?.id))
+		setSelect_category_id(fetchedData?.data?.Coupons?.selected_category?.[0]?.id)
+		setSelect_payment_id(fetchedData?.data?.Coupons?.selected_payment?.[0]?.id)
+
 
 	}, [fetchedData?.data?.Coupons]);
 
@@ -126,9 +176,7 @@ const EditCoupon = () => {
 		reset(coupon);
 	}, [coupon, reset]);
 
-	const navigate = useNavigate();
-	const currentDate = new Date();
-
+	
 	const changeCouponStatus = () => {
 		setLoadingTitle('جاري تغير حالة الكوبون');
 		axios
@@ -151,6 +199,7 @@ const EditCoupon = () => {
 			});
 	};
 
+
 	const updateCoupon = (data) => {
 		setLoadingTitle('جاري تعديل الكوبون');
 		resetCouponError();
@@ -165,6 +214,13 @@ const EditCoupon = () => {
 		formData.append('user_redemptions', data?.user_redemptions);
 		formData.append('free_shipping', data?.free_shipping);
 		formData.append('exception_discount_product', data?.exception_discount_product);
+		formData.append('coupon_apply', coupon_apply );
+		formData.append('select_category_id', coupon_apply === 'selected_category' ? select_category_id : '');
+		formData.append('select_payment_id', coupon_apply === 'selected_payment' ? select_payment_id : '');
+
+		for (var i = 0; i < fixed_products_selected?.length; i++) {
+			formData.append(`select_product_id[${i}]`, coupon_apply === 'selected_product' ? select_product_id?.[i] : '');
+		}
 		formData.append('status', isEnable === true ? 'active' : 'not_active');
 		axios
 			.post(`https://backend.atlbha.com/api/Store/coupons/${fetchedData?.data?.Coupons?.id}`, formData, {
@@ -190,13 +246,12 @@ const EditCoupon = () => {
 						discount: res?.data?.message?.en?.discount?.[0],
 						total_redemptions: res?.data?.message?.en?.total_redemptions?.[0],
 						user_redemptions: res?.data?.message?.en?.user_redemptions?.[0],
+						coupon_apply: res?.data?.message?.en?.coupon_apply?.[0],
 					});
 					setStartDateError(res?.data?.message?.en?.expire_date?.[0]);
 				}
 			});
 	};
-
-	
 
 	return (
 		<>
@@ -232,7 +287,7 @@ const EditCoupon = () => {
 														إعادة تفعيل الكوبون
 													</button>
 												</Fragment>
-											) : fetchedData?.data?.Coupons?.expire_date < currentDate ? (
+											) : moment(fetchedData?.data?.Coupons?.expire_date, 'YYYY-MM-DD').toDate() < currentDate ? (
 												<Fragment>
 													<div className='coupon-status disabled'>منتهي</div>
 												</Fragment>
@@ -308,8 +363,8 @@ const EditCoupon = () => {
 																disabled={isEnable === 'نشط' ? false : true}
 															>
 																<div className='radio-box'>
-																	<FormControlLabel value='percent' id='percent-price' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
-																	<label className={value === 'percent' ? 'me-3' : 'disabled me-3'} htmlFor='percent-price'>
+																	<FormControlLabel value='percentage' id='percent-price' control={<Radio />} disabled={isEnable === 'نشط' ? false : true} />
+																	<label className={value === 'percentage' ? 'me-3' : 'disabled me-3'} htmlFor='percent-price'>
 																		نسبة مئوية %
 																	</label>
 																</div>
@@ -323,10 +378,11 @@ const EditCoupon = () => {
 																<div className='col-12'><span className='fs-6 text-danger'>{couponError?.discount_type}{errors?.discount_type && errors.discount_type.message}</span></div>
 															</RadioGroup>
 														)} />
-													<input
+														<div>
+														<input
 														type='number'
 														id='add-ptice'
-														placeholder=' ادخل النسبة او المبلغ'
+														placeholder=   ' ادخل المبلغ او الخصم' 
 														name='discount'
 														disabled={isEnable === 'نشط' ? false : true}
 														{...register('discount', {
@@ -341,6 +397,10 @@ const EditCoupon = () => {
 													},
 														})}
 													/>
+													
+														
+													</div>
+													
 													<div className='col-12'><span className='fs-6 text-danger'>{couponError?.discount}{errors?.discount && errors.discount.message}</span></div>
 												</div>
 
@@ -473,8 +533,208 @@ const EditCoupon = () => {
 												</div>
 											</div>
 											<div className='row mb-md-5 d-flex justify-content-evenly'>
-												<div className='col-md-5 col-12'></div>
-
+											<div className='col-md-5 col-12 mb-md-0 mb-3'>
+											<div className='row mb-md-4 mb-3 d-flex justify-content-evenly'>
+													<div className='col-12'>
+														<div className='row-title mb-2'>
+															<h4 className='mb-2'>يتم تطبيق العرض على<span className='text-danger'>*</span></h4>
+															<p>اختر واحد من الخيارات التالية</p>
+														</div>
+														<RadioGroup
+															disabled={isEnable === 'نشط' ? false : true}
+															aria-labelledby='demo-controlled-radio-buttons-group'
+															name='coupon_apply'
+															value={coupon_apply}
+															onChange={(e) => {
+																setCoupon_apply(e.target.value);
+															}}
+														>
+															<div className='radio-box'>
+																<FormControlLabel value='all' id='all' control={<Radio />} disabled={isEnable === 'نشط' ? false : true}/>
+																<label className={coupon_apply === 'all' ? ' me-3' : 'disabled me-3'} htmlFor='all'>
+																	جميع المنتجات
+																</label>
+															</div>
+															<div className='radio-box select-apply-offer'>
+																<FormControlLabel value='selected_product' id='selected_product' control={<Radio />} disabled={isEnable === 'نشط' ? false : true}/>
+																<label className={coupon_apply === 'selected_product' ? ' me-3' : 'disabled me-3'} htmlFor='selected_product'>
+																	منتجات مختارة
+																</label>
+															</div>
+															<div className='radio-box select-apply-offer'>
+																<FormControlLabel value='selected_category' id='selected_category' control={<Radio />} disabled={isEnable === 'نشط' ? false : true}/>
+																<label className={coupon_apply === 'selected_category' ? ' me-3' : 'disabled me-3'} htmlFor='selected_category'>
+																	تصنيفات مختارة
+																</label>
+															</div>
+															<div className='radio-box select-apply-offer'>
+																<FormControlLabel value='selected_payment' id='selected_payment' control={<Radio />} disabled={isEnable === 'نشط' ? false : true}/>
+																<label className={coupon_apply === 'selected_payment' ? ' me-3' : 'disabled me-3'} htmlFor='selected_payment'>
+																	طرق دفع مختارة
+																</label>
+															</div>
+														</RadioGroup>
+														<div className='col-12'>{couponError?.coupon_apply && <span className='fs-6 text-danger'>{couponError?.coupon_apply}</span>}</div>
+													</div>
+											</div>
+												{coupon_apply=== 'selected_product' && (
+													<div className=''>
+														<div className='col-12'>
+															<div className='input-icon'>
+																<SearchIcon className='search-icon' />
+															</div>
+															<input disabled={isEnable === 'نشط' ? false : true} style={{paddingRight: '38px'}} value={fixed_serach} onChange={(e) => fixedSearchItems(e.target.value)} type='text' placeholder='البحث في المنتجات' />
+															<div className='col-12'>{couponError?.select_product_id && <span className='fs-6 text-danger'>{couponError?.select_product_id}</span>}</div>
+														</div>
+														{fixed_serach !== '' && (
+															<ul className='purchase_serach'>
+																{fixed_products?.map((item, index) => (
+																	<li
+																		key={index}
+																		value={select_product_id}
+																		onClick={() => {
+																			if (!select_product_id.includes(item?.id)) {
+																				setSelect_product_id([...select_product_id, item?.id]);
+																				
+																			}
+																			fixedSearchItems('');
+																		}}
+																	>
+																		{item?.name}
+																	</li>
+																))}
+															</ul>
+														)}
+														{fixed_products_selected?.length !== 0   && (
+															<ul className='purchase_products_selected'>
+																{fixed_products_selected?.map((item, index) => (
+																	<li key={index}>_ {item?.name}</li>
+																))}
+															</ul>
+														)}
+														
+														
+													</div>
+												)}
+												{coupon_apply === 'selected_category' && (
+													<div className='col-12 mb-4'>
+														<FormControl sx={{ m: 0, width: '100%' }}>
+															<Select
+															disabled={isEnable === 'نشط' ? false : true}
+																name='select_category_id'
+																value={select_category_id}
+																onChange={(e) => {setSelect_category_id(e.target.value)}}
+																sx={{
+																	fontSize: '18px',
+																	'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
+																	{
+																		paddingRight: '20px',
+																	},
+																	'& .MuiOutlinedInput-root': {
+																		'& :hover': {
+																			border: 'none',
+																		},
+																	},
+																	'& .MuiOutlinedInput-notchedOutline': {
+																		border: '1px solid #eeeeee',
+																	},
+																	'& .MuiSelect-icon': {
+																		right: '95%',
+																	},
+																}}
+																IconComponent={IoIosArrowDown}
+																displayEmpty
+																inputProps={{ 'aria-label': 'Without label' }}
+																renderValue={(selected) => {
+																	if (select_category_id === undefined ) {
+																		return <p className='text-[#ADB5B9]'>اختر التصنيف</p>;
+																	}
+																	const result = categories?.data?.categories?.filter((item) => item?.id === parseInt(selected)) || '';
+																	return result[0]?.name;
+																}}
+															>
+																{categories?.data?.categories?.map((cat, index) => {
+																	return (
+																		<MenuItem
+																			key={index}
+																			className='souq_storge_category_filter_items'
+																			sx={{
+																				backgroundColor: '#fff',
+																				height: '3rem',
+																				'&:hover': {},
+																			}}
+																			value={cat?.id}
+																		>
+																			{cat?.name}
+																		</MenuItem>
+																	);
+																})}
+															</Select>
+														</FormControl>
+														<div className='col-12'>{couponError?.select_category_id && <span className='fs-6 text-danger'>{couponError?.select_category_id}</span>}</div>
+													</div>
+												)}
+												{coupon_apply=== 'selected_payment' && (
+													<div className='col-12 mb-4'>
+														<FormControl sx={{ m: 0, width: '100%' }}>
+															<Select
+															disabled={isEnable === 'نشط' ? false : true}
+																name='select_payment_id'
+																value={select_payment_id}
+																onChange={(e) => {
+																	setSelect_payment_id(e.target.value)
+																}}
+																sx={{
+																	fontSize: '18px',
+																	'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
+																	{
+																		paddingRight: '20px',
+																	},
+																	'& .MuiOutlinedInput-root': {
+																		'& :hover': {
+																			border: 'none',
+																		},
+																	},
+																	'& .MuiOutlinedInput-notchedOutline': {
+																		border: '1px solid #eeeeee',
+																	},
+																	'& .MuiSelect-icon': {
+																		right: '95%',
+																	},
+																}}
+																IconComponent={IoIosArrowDown}
+																displayEmpty
+																inputProps={{ 'aria-label': 'Without label' }}
+																renderValue={(selected) => {
+																	if (select_payment_id === undefined) {
+																		return <p className='text-[#ADB5B9]'>اختر طريقة الدفع</p>;
+																	}
+																	const result = payments?.data?.payment_types?.filter((item) => item?.id === parseInt(selected)) || '';
+																	return result[0]?.name;
+																}}
+															>
+																{payments?.data?.payment_types?.map((payment, index) => {
+																	return (
+																		<MenuItem
+																			key={index}
+																			className='souq_storge_category_filter_items'
+																			sx={{
+																				backgroundColor: '#fff',
+																				height: '3rem',
+																				'&:hover': {},
+																			}}
+																			value={payment?.id}
+																		>
+																			{payment?.name}
+																		</MenuItem>
+																	);
+																})}
+															</Select>
+														</FormControl>
+														<div className='col-12'>{couponError?.select_payment_id && <span className='fs-6 text-danger'>{couponError?.select_payment_id}</span>}</div>
+													</div>
+												)}
+											</div>
 												<div className='col-md-5 col-12 mb-md-0 mb-3 enable-switches'>
 													<label htmlFor='user-count' className='d-block mb-1'>
 														الحالة<span className='text-danger'>*</span>

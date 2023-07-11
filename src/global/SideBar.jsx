@@ -106,13 +106,15 @@ const SideBar = ({ open, closeSidebar }) => {
 							<span className='me-2'> الكوبونات</span>
 						</MenuItem>
 					</NavLink>
-
-					<NavLink className='sub-menu-link' to='Offers' onClick={() => closeSidebar()}>
+{/**
+<NavLink className='sub-menu-link' to='Offers' onClick={() => closeSidebar()}>
 						<MenuItem>
 							<Offer />
 							<span className='me-2'> العروض الخاصة</span>
 						</MenuItem>
 					</NavLink>
+*/}
+					
 
 					<NavLink className='sub-menu-link' to='Carts' onClick={() => closeSidebar()}>
 						<MenuItem>
