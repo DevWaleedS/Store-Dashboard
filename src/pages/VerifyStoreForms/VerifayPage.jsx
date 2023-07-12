@@ -328,7 +328,8 @@ const VerifayPage = ({ verify }) => {
 
 							<div className='row d-flex justify-content-between align-items-center '>
 								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
-									<h5 className='label upload-docs-label'> رفع السجل التجاري </h5>
+									<h5 className='label upload-docs-label'> رفع السجل التجاري <span className='text-danger'>*</span></h5>
+									
 								</div>
 								<div className='col-md-8 col-12'>
 									<div
@@ -406,7 +407,7 @@ const VerifayPage = ({ verify }) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: '#1DBBBE' }}>
-										رابط صفحة معروف
+										رابط صفحة معروف<span className='text-danger'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -435,7 +436,7 @@ const VerifayPage = ({ verify }) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12'>
 									<h5 className='label' style={{ color: '#1DBBBE' }}>
-										المدينة
+										المدينة<span className='text-danger'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -484,7 +485,7 @@ const VerifayPage = ({ verify }) => {
 
 							<div className='row d-flex justify-content-between align-items-center '>
 								<div className='col-4 col-md-4 col-12 mb-md-0 mb-3 d-flex '>
-									<h5 className='label upload-docs-label'> رفع الوثيقة </h5>
+									<h5 className='label upload-docs-label'> رفع الوثيقة<span className='text-danger'>*</span></h5>
 								</div>
 								<div className='col-md-8 col-12'>
 									<div
