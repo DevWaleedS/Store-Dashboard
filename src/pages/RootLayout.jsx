@@ -59,7 +59,9 @@ const RootLayout = () => {
 	}, [verificationStoreStatus]);
 
 	function Logout() {
-		window.location.href = 'https://home.atlbha.com/signInPage';
+		if(!cookies.access_token){
+			window.location.href = 'home.atlbha.com/signInPage';
+		}
 	}
 
 	return (
@@ -106,6 +108,7 @@ const RootLayout = () => {
 				</ThemeProvider>
 			) : (
 				<Logout />
+				// null
 			)}
 		</>
 	);

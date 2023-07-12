@@ -78,7 +78,7 @@ const TopBar = ({ toggleSidebar }) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 				
 					localStorage.clear();
-					removeCookies('access_token', { domain: '.atlbha.com', path: '/' });
+					removeCookies("access_token", { path: "/", domain: "store.atlbha.com" });
 					window.location.href = 'https://home.atlbha.com/signInPage';
 				} else {
 					console.log(res?.data?.message?.ar);
