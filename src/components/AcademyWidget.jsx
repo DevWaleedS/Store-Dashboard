@@ -30,25 +30,25 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 				</div>
 
 				{/**course info */}
-				<div className='col-md-6 col-8 course-bx'>
+				<div className='col-md-10 col-8 course-bx'>
 					<div className='row course-details d-flex justify-content-start align-items-start'>
 						<h5 className='mb-4'> {name} </h5>
 					</div>
 					<div className='row course-info'>
-						<div className='col-md-3 col-6'>
+						<div className='col-md-2 col-sm-3 col-6'>
 							<div className='video-count'>
 								<BsPlayBtn />
 								<span className='text me-2 align-self-center'>{count} فيديو </span>
 							</div>
 						</div>
-						<div className='col-md-3 col-6'>
+						<div className='col-md-2 col-sm-3 col-6'>
 							<div className='video-hours '>
 								<RiTimerLine />
 								<span className='text me-2 align-self-center'>{CustomDate(duration)} ساعة </span>
 							</div>
 						</div>
-						<div className='col-md-6 col-12'>
-							<span className='course-stars mb-2 d-flex justify-content-md-end'>
+						<div className='col-md-3 col-sm-3 col-12'>
+							<span className='course-stars mt-2 mt-md-0 d-flex justify-content-md-end'>
 								<StarIcon />
 								<StarIcon />
 								<StarIcon />
@@ -56,12 +56,9 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 								<StarIcon />
 							</span>
 						</div>
-					</div>
-				</div>
-
-				<div className='col-md-4 col-12 d-flex justify-content-md-end flex-column mt-md-0 mt-1'>
-					<div className='row watch-course-btn  d-flex justify-content-md-end align-items-start'>
-						<div className='col-12 d-flex justify-content-md-end'>
+						<div className='col-md-5 col-12'>
+						<div className='watch-course-btn  d-flex justify-content-md-end align-items-start'>
+						<div className='d-flex justify-content-md-end'>
 							<Button
 								variant='outlined'
 								onClick={() => {
@@ -73,7 +70,11 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 							</Button>
 						</div>
 					</div>
+						</div>
+					</div>
 				</div>
+
+				
 			</div>
 		</div>
 	);

@@ -67,7 +67,7 @@ const VerifyStore = () => {
 								) : (
 									<div className='d-flex justify-content-center align-items-center'>
 										{verificationStatus === 'تم التوثيق' ? (
-											<div className='d-flex justify-content-between align-items-center verify-message-box '>
+											<div className='d-flex justify-content-between align-items-center verify-message-box gap-5'>
 												<p className='verify-message'>
 													مرحبا <span className='text-bold'>{localStorage.getItem('user_name') !== 'null' ? localStorage.getItem('user_name') : 'صديقي التاجر'}</span> المتجر الخاص مكتمل التوثيق <Verification />
 												</p>

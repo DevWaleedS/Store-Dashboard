@@ -69,11 +69,11 @@ function EnhancedTableHead(props) {
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					تاريخ النشر
-					<SortIcon />
+				
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					الحالة
-					<SortIcon />
+					
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					الاجراء

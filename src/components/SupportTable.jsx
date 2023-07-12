@@ -78,11 +78,11 @@ function EnhancedTableHead(props) {
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					نوع الاتصال
-					<SortIcon />
+					
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					الحاله
-					<SortIcon />
+				
 				</TableCell>
 				<TableCell align='center' sx={{ color: '#02466a' }}>
 					الاجراء

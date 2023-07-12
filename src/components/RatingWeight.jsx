@@ -105,8 +105,8 @@ const RatingWeight = ({ setCommentDetails, fetchedData, loading, reload, setRelo
 														<span className='start mb-2'>{rateing}</span>
 														<h6> {rate?.comment_text}</h6>
 													</div>
-													<div className='row rate-act-btn'>
-														<div className='col-md-4 col-3'>
+													<div className='row rate-act-btn '>
+														<div className=' col-3 col-md-4'>
 															{rate?.status === 'نشط' ? (
 																<Button variant='outlined' className='publish-btn'>
 																	<FcCheckmark />
@@ -120,7 +120,7 @@ const RatingWeight = ({ setCommentDetails, fetchedData, loading, reload, setRelo
 																</Button>
 															)}
 														</div>
-														<div className='col-md-3 col-3'>
+														<div className=' col-3'>
 															<Button 
 																variant='outlined' className='delete-btn ' 
 																onClick={() => {
@@ -133,7 +133,7 @@ const RatingWeight = ({ setCommentDetails, fetchedData, loading, reload, setRelo
 																<span className='user-name me-2 align-self-center'>حذف </span>
 															</Button>
 														</div>
-														<div className='col-md-3 col-3'>
+														<div className=' col-3 margin-right-lg'>
 															<Button
 																variant='outlined'
 																className='replay-btn'

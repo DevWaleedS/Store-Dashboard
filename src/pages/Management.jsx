@@ -62,7 +62,7 @@ const Management = () => {
 							</nav>
 						</div>
 
-						<div className='col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end'>
+						<div className='col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end mb-3 mb-md-0'>
 							<div className='add-page-btn '>
 								<Button
 									variant='contained'
