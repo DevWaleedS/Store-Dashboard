@@ -67,6 +67,7 @@
 	font-size: 94px;
 	line-height: 94px;
 	font-weight: 600;
+	white-space: normal !important;
 }
 .sign-in-box .all-content .box-form-banner .info-svg h4 {
 	margin: 0;
@@ -74,6 +75,7 @@
 	font-size: 54px;
 	line-height: 54px;
 	font-weight: 400;
+	white-space: normal !important;
 }
 /* ================================================== */
 
@@ -103,6 +105,7 @@
 	margin: 0;
 	color: var(--second-500);
 	font-size: 28px;
+	white-space: normal !important;
 }
 .sign-in-box .all-content .box-container-form .all .box {
 	margin: 70px 0 44px;
