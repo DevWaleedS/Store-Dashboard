@@ -26,6 +26,7 @@ import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.s
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 // Modal Style
 const style = {
 	position: "absolute",
@@ -57,7 +58,10 @@ const EditPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/post-categories"
 	);
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -203,7 +207,7 @@ const EditPage = () => {
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {

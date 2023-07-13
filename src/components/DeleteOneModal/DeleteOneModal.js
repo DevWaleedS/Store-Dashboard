@@ -4,14 +4,17 @@ import { DeleteContext } from "../../Context/DeleteProvider";
 import { ReactComponent as Warning } from "../../data/Icons/icon-32-warning.svg";
 import styles from "./DeleteOneModal.module.css";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import Context from "../../Context/context";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const BackDrop = () => {
 	return <div className={styles.backdrop}></div>;
 };
 const DeleteOneModal = () => {
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const [loading, setLoading] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -33,7 +36,7 @@ const DeleteOneModal = () => {
 				.delete(url, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				})
 				.then((res) => {
@@ -57,7 +60,7 @@ const DeleteOneModal = () => {
 				.get(url, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				})
 				.then((res) => {

@@ -6,9 +6,8 @@ import { openVerifyStoreAlertModal } from "../../store/slices/VerifyStoreAlertMo
 import { resetActivity } from "../../store/slices/AddActivity";
 
 import axios from "axios";
-import Context from "../../Context/context";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -25,6 +24,7 @@ import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-upload_ou
 import { IoIosArrowDown } from "react-icons/io";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const inputStyle = {
 	width: "100%",
@@ -48,13 +48,13 @@ const VerifayPage = ({ verify }) => {
 	const { fetchedData: cities } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+		const userAuthored = useContext(UserAuth);
+		const { userAuthor } = userAuthored;
 	// to open verifay alert
 	const dispatchVerifyAlert = useDispatch(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const { activity } = useSelector((state) => state.AddActivity);
@@ -147,7 +147,7 @@ const VerifayPage = ({ verify }) => {
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)

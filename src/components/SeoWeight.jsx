@@ -9,7 +9,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Context from "../Context/context";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import { TagsInput } from "react-tag-input-component";
 import axios from "axios";
 import useFetch from "../Hooks/UseFetch";
@@ -21,6 +21,7 @@ import { ReactComponent as DocumentIcon } from "../data/Icons/document_text_outl
 import { ReactComponent as EditIcon } from "../data/Icons/icon-24-write.svg";
 import { ReactComponent as CreatedIcon } from "../data/Icons/icon-24-create link.svg";
 import CircularLoading from "../HelperComponents/CircularLoading";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const TITLE_REGEX = /^[^-\s][A-Za-zأ-ي0-9-ء ]+$/i;
 const DESC_REGEX = /^[^-\s][A-Za-zأ-ي0-9-ء ]+$/i;
@@ -34,9 +35,10 @@ const SeoWeight = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/seo`
 	);
-	
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
-	const { setEndActionTitle, access_token } = contextStore;
+	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -169,7 +171,7 @@ const SeoWeight = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateSeo`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -202,7 +204,7 @@ const SeoWeight = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateLink`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -232,7 +234,7 @@ const SeoWeight = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateRobots`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {

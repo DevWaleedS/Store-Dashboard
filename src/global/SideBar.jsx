@@ -1,74 +1,83 @@
-import React from 'react';
+import React, { useContext } from "react";
 
 // Use Sidebar Pro to create sidebar
-import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 // use Nav lINKS
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link } from "react-router-dom";
 
 // Icons
-import { ReactComponent as Eye } from '../data/Icons/icon-24-invisible.svg';
-import { ReactComponent as HomeImage } from '../data/Icons/icon-24-dashboard.svg';
-import { ReactComponent as Category } from '../data/Icons/icon-24-Category.svg';
-import { ReactComponent as Products } from '../data/Icons/product-24.svg';
-import { ReactComponent as Orders } from '../data/Icons/icon-24-order.svg';
-import { ReactComponent as Marketing } from '../data/Icons/icon-24-marketing.svg';
-import { ReactComponent as MarketingCampain } from '../data/Icons/icon-24-marketing campain.svg';
-import { ReactComponent as Rating } from '../data/Icons/icon-24-ratings.svg';
-import { ReactComponent as PagesIcon } from '../data/Icons/icon-24-pages.svg';
-import { ReactComponent as Academy } from '../data/Icons/icon-24-graduatioin.svg';
-import { ReactComponent as BranchesAndWarehouses } from '../data/Icons/icon-24-Company Branch.svg';
-import { ReactComponent as Template } from '../data/Icons/icon-24-template.svg';
-import { ReactComponent as Info } from '../data/Icons/icon-24-info.svg';
-import { ReactComponent as Social } from '../data/Icons/icon-24-social.svg';
-import { ReactComponent as Support } from '../data/Icons/icon-24-support.svg';
-import { ReactComponent as Setting } from '../data/Icons/icon-24-setting.svg';
-import { ReactComponent as Clients } from '../data/Icons/icon-24-client.svg';
-import { ReactComponent as Reports } from '../data/Icons/icon-24-report.svg';
-import { ReactComponent as Services } from '../data/Icons/service.svg';
-import { ReactComponent as Discoint } from '../data/Icons/icon-24-discount.svg';
-import { ReactComponent as Shoping } from '../data/Icons/icon-24-design store.svg';
-import { ReactComponent as Delevray } from '../data/Icons/icon-24-delivery.svg';
-import { ReactComponent as Offer } from '../data/Icons/icon-24-offer.svg';
-import { ReactComponent as Payment } from '../data/Icons/icon-24-payment Getway.svg';
-import { ReactComponent as Verification } from '../data/Icons/icon-24-Verification.svg';
-import { ReactComponent as BsCart } from '../data/Icons/icon-24-shopping_cart.svg';
-import { ReactComponent as Seo } from '../data/Icons/icon-24-seo.svg';
-import { SlRocket } from 'react-icons/sl';
-import { FaCircle } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { OpenCelebrityMarketingModal } from '../store/slices/CelebrityMarketingModal';
-import { openMaintenanceModeModal } from '../store/slices/MaintenanceModeModal';
-import { openVerifyModal } from '../store/slices/VerifyStoreModal-slice';
+import { ReactComponent as Eye } from "../data/Icons/icon-24-invisible.svg";
+import { ReactComponent as HomeImage } from "../data/Icons/icon-24-dashboard.svg";
+import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
+import { ReactComponent as Products } from "../data/Icons/product-24.svg";
+import { ReactComponent as Orders } from "../data/Icons/icon-24-order.svg";
+import { ReactComponent as Marketing } from "../data/Icons/icon-24-marketing.svg";
+import { ReactComponent as MarketingCampain } from "../data/Icons/icon-24-marketing campain.svg";
+import { ReactComponent as Rating } from "../data/Icons/icon-24-ratings.svg";
+import { ReactComponent as PagesIcon } from "../data/Icons/icon-24-pages.svg";
+import { ReactComponent as Academy } from "../data/Icons/icon-24-graduatioin.svg";
+import { ReactComponent as BranchesAndWarehouses } from "../data/Icons/icon-24-Company Branch.svg";
+import { ReactComponent as Template } from "../data/Icons/icon-24-template.svg";
+import { ReactComponent as Info } from "../data/Icons/icon-24-info.svg";
+import { ReactComponent as Social } from "../data/Icons/icon-24-social.svg";
+import { ReactComponent as Support } from "../data/Icons/icon-24-support.svg";
+import { ReactComponent as Setting } from "../data/Icons/icon-24-setting.svg";
+// import { ReactComponent as Clients } from "../data/Icons/icon-24-client.svg";
+import { ReactComponent as Reports } from "../data/Icons/icon-24-report.svg";
+import { ReactComponent as Services } from "../data/Icons/service.svg";
+import { ReactComponent as Discoint } from "../data/Icons/icon-24-discount.svg";
+import { ReactComponent as Shoping } from "../data/Icons/icon-24-design store.svg";
+import { ReactComponent as Delevray } from "../data/Icons/icon-24-delivery.svg";
+// import { ReactComponent as Offer } from "../data/Icons/icon-24-offer.svg";
+import { ReactComponent as Payment } from "../data/Icons/icon-24-payment Getway.svg";
+import { ReactComponent as Verification } from "../data/Icons/icon-24-Verification.svg";
+import { ReactComponent as BsCart } from "../data/Icons/icon-24-shopping_cart.svg";
+import { ReactComponent as Seo } from "../data/Icons/icon-24-seo.svg";
+import { SlRocket } from "react-icons/sl";
+import { FaCircle } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { OpenCelebrityMarketingModal } from "../store/slices/CelebrityMarketingModal";
+import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
+import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
 	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	const domain = localStorage.getItem('store_domain');
-
+	const UserInfo = useContext(UserAuth);
+	const { userInfo } = UserInfo;
+	const domain = userInfo?.store_domain;
 
 	return (
-		<Sidebar rtl={true} className={`sidebar ${open ? 'show' : ''}`} style={{ height: '100%' }}>
+		<Sidebar
+			rtl={true}
+			className={`sidebar ${open ? "show" : ""}`}
+			style={{ height: "100%" }}>
 			<Menu>
-				{verificationStoreStatus === 'تم التوثيق'
-					?
-					<a className='menu-link' href={`https://template.atlbha.com/${domain}`} target='_blank' rel="noreferrer">
+				{verificationStoreStatus === "تم التوثيق" ? (
+					<a
+						className='menu-link'
+						href={`https://template.atlbha.com/${domain}`}
+						target='_blank'
+						rel='noreferrer'>
 						<MenuItem>
 							<Eye />
 							<span className='me-2'>عرض المتجر</span>
 						</MenuItem>
 					</a>
-
-					:
-					<NavLink style={{ pointerEvents:'none' }} className='menu-link' to='Home'>
+				) : (
+					<NavLink
+						style={{ pointerEvents: "none" }}
+						className='menu-link'
+						to='Home'>
 						<MenuItem>
 							<Eye />
 							<span className='me-2'>عرض المتجر</span>
 						</MenuItem>
 					</NavLink>
-				}
-
+				)}
 
 				<NavLink className='menu-link' to='' onClick={() => closeSidebar()}>
 					<MenuItem>
@@ -77,21 +86,30 @@ const SideBar = ({ open, closeSidebar }) => {
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Category' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Category'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Category />
 						<span className='me-2'> التصنيفات</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Products' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Products'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Products />
 						<span className='me-2'> المنتجات</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Orders' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Orders'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Orders />
 						<span className='me-2'>الطلبات </span>
@@ -100,13 +118,16 @@ const SideBar = ({ open, closeSidebar }) => {
 
 				{/** Markting Sub menu */}
 				<SubMenu label='التسويق' icon={<Marketing />}>
-					<NavLink className='sub-menu-link' to='Coupon' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='Coupon'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<Discoint />
 							<span className='me-2'> الكوبونات</span>
 						</MenuItem>
 					</NavLink>
-{/**
+					{/**
 <NavLink className='sub-menu-link' to='Offers' onClick={() => closeSidebar()}>
 						<MenuItem>
 							<Offer />
@@ -114,16 +135,21 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 */}
-					
 
-					<NavLink className='sub-menu-link' to='Carts' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='Carts'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<BsCart />
 							<span className='me-2'> السلات المتروكة</span>
 						</MenuItem>
 					</NavLink>
 
-					<NavLink className='sub-menu-link' to='Seo' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='Seo'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<Seo />
 							<span className='me-2'> الكلمات المفتاحية</span>
@@ -134,14 +160,16 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						onClick={() => {
 							dispatch(OpenCelebrityMarketingModal());
-						}}
-					>
+						}}>
 						<MenuItem>
 							<Shoping />
 							<span className='me-2'>التسويق عبر المشاهير</span>
 						</MenuItem>
 					</Link>
-					<NavLink className='sub-menu-link disabled-menu-link' to='MarketingCampaign' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link disabled-menu-link'
+						to='MarketingCampaign'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<MarketingCampain />
 							<span className='me-2'>الحملة التسويقية</span>
@@ -149,28 +177,40 @@ const SideBar = ({ open, closeSidebar }) => {
 					</NavLink>
 				</SubMenu>
 
-				<NavLink className='menu-link' to='Rating' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Rating'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Rating className='rating-icon' />
 						<span className='me-2'>التقييمات </span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Pages' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Pages'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<PagesIcon />
 						<span className='me-2'> الصفحات</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Academy' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Academy'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Academy />
 						<span className='me-2'> الأكاديمية</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Template' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Template'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Template />
 						<span className='me-2'> القالب</span>
@@ -184,69 +224,95 @@ const SideBar = ({ open, closeSidebar }) => {
 						onClick={() => {
 							closeSidebar();
 							dispatchVerifyModal(openVerifyModal());
-						}}
-					>
+						}}>
 						<MenuItem>
 							<Verification />
 							<span className='me-2'>توثيق المتجر</span>
 						</MenuItem>
 					</Link>
 
-					<NavLink className='sub-menu-link' to='SocialPages' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='SocialPages'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<Social />
 							<span className='me-2'> صفحات التواصل</span>
 						</MenuItem>
 					</NavLink>
 
-					<NavLink className='sub-menu-link' to='PackageUpgrade' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='PackageUpgrade'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<SlRocket />
 							<span className='me-2'> ترقية الباقة</span>
 						</MenuItem>
 					</NavLink>
 
-					<NavLink className='sub-menu-link disabled-menu-link' to='BranchesAndWarehouses' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link disabled-menu-link'
+						to='BranchesAndWarehouses'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<BranchesAndWarehouses />
 							<span className='me-2'>الفروع والمستودعات </span>
 						</MenuItem>
 					</NavLink>
-					<NavLink className='sub-menu-link disabled-menu-link' to='BranchesAndWarehouses' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link disabled-menu-link'
+						to='BranchesAndWarehouses'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> المحفظة والفواتير </span>
 						</MenuItem>
 					</NavLink>
-					<NavLink className='sub-menu-link disabled-menu-link' to='BranchesAndWarehouses' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link disabled-menu-link'
+						to='BranchesAndWarehouses'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> نشاط المتجر </span>
 						</MenuItem>
 					</NavLink>
-					<NavLink className='sub-menu-link disabled-menu-link' to='BranchesAndWarehouses' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link disabled-menu-link'
+						to='BranchesAndWarehouses'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> خيارات المتجر </span>
 						</MenuItem>
 					</NavLink>
 				</SubMenu>
 
-				<NavLink className='menu-link' to='Support' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Support'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Support />
 						<span className='me-2'> الدعم الفني</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='ShippingCompanies' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='ShippingCompanies'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Delevray />
 						<span className='me-2'> شركات الشحن</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='PaymentGetways' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='PaymentGetways'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Payment />
 						<span className='me-2'> بوابات الدفع</span>
@@ -255,9 +321,12 @@ const SideBar = ({ open, closeSidebar }) => {
 
 				{/** Setting Sub menu */}
 				<SubMenu label=' الاعدادات' icon={<Setting />}>
-					<NavLink className='sub-menu-link' to='MainInformation' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='MainInformation'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> البيانات الاساسية</span>
 						</MenuItem>
 					</NavLink>
@@ -265,35 +334,46 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						onClick={() => {
 							dispatch(openMaintenanceModeModal());
-						}}
-					>
+						}}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'>وضع الصيانة</span>
 						</MenuItem>
 					</Link>
-					<NavLink className='sub-menu-link' to='Management' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='Management'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> الإدارة و المستخدمين </span>
 						</MenuItem>
 					</NavLink>
-					<NavLink className='sub-menu-link' to='Notifications' onClick={() => closeSidebar()}>
+					<NavLink
+						className='sub-menu-link'
+						to='Notifications'
+						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<FaCircle style={{ width: '14px' }} />
+							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> الإشعارات </span>
 						</MenuItem>
 					</NavLink>
 				</SubMenu>
 
-				<NavLink className='menu-link' to='PlatformServices' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='PlatformServices'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Services />
 						<span className='me-2'> خدمات المنصة</span>
 					</MenuItem>
 				</NavLink>
 
-				<NavLink className='menu-link' to='Report' onClick={() => closeSidebar()}>
+				<NavLink
+					className='menu-link'
+					to='Report'
+					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Reports />
 						<span className='me-2'> التقارير</span>

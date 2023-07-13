@@ -25,6 +25,7 @@ import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -56,7 +57,9 @@ const EditProductPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
 
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const [openSubCategory, setOpenSubCategory] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -217,7 +220,7 @@ const EditProductPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)

@@ -1,21 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import useFetch from '../Hooks/UseFetch';
-import Switch from '@mui/material/Switch';
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { IoMdAdd } from 'react-icons/io';
-import { BsGift } from 'react-icons/bs';
-import { FaRegCalendarAlt } from 'react-icons/fa';
-import moment from 'moment';
-import Context from '../Context/context';
-import { useCookies } from 'react-cookie';
-import CircularLoading from '../HelperComponents/CircularLoading';
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import useFetch from "../Hooks/UseFetch";
+import Switch from "@mui/material/Switch";
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { IoMdAdd } from "react-icons/io";
+import { BsGift } from "react-icons/bs";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import moment from "moment";
+import Context from "../Context/context";
+// import { useCookies } from "react-cookie";
+import CircularLoading from "../HelperComponents/CircularLoading";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const Offers = () => {
-	const [cookies] = useCookies(['access_token']);
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/offer');
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/offer"
+	);
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -25,8 +30,8 @@ const Offers = () => {
 		axios
 			.get(`https://backend.atlbha.com/api/Store/changeOfferStatus/${id}`, {
 				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${cookies.access_token}`,
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -73,9 +78,8 @@ const Offers = () => {
 							type='button'
 							className='add-offer-btn'
 							onClick={() => {
-								navigate('AddOffer');
-							}}
-						>
+								navigate("AddOffer");
+							}}>
 							<IoMdAdd />
 							انشاء عرض
 						</button>
@@ -106,59 +110,74 @@ const Offers = () => {
 												<th scope='row'>
 													<div className='offer-content d-flex  justify-content-between align-items-center'>
 														<div>
-															<h5 className='offer-heading' role='button' onClick={() => navigate(`OfferDetails/${offer?.id}`)}>
+															<h5
+																className='offer-heading'
+																role='button'
+																onClick={() =>
+																	navigate(`OfferDetails/${offer?.id}`)
+																}>
 																{offer?.offer_title}
 															</h5>
-															{offer?.offer_type === 'If_bought_gets' ? (
+															{offer?.offer_type === "If_bought_gets" ? (
 																<p className='offer-info'>
-																	اذا اشترى العميل {offer?.purchase_quantity} قطعة يحصل على {offer?.get_quantity} مجانا
+																	اذا اشترى العميل {offer?.purchase_quantity}{" "}
+																	قطعة يحصل على {offer?.get_quantity} مجانا
 																</p>
-															) : offer?.offer_type === 'fixed_amount' ? (
-																<p className='offer-info'>مبلغ ثابت من قيمة مشتريات العميل بقيمة {offer?.discount_value_offer2} ريال</p>
+															) : offer?.offer_type === "fixed_amount" ? (
+																<p className='offer-info'>
+																	مبلغ ثابت من قيمة مشتريات العميل بقيمة{" "}
+																	{offer?.discount_value_offer2} ريال
+																</p>
 															) : (
-																<p className='offer-info'>نسبة من قيمة مشتريات العميل بقيمة {offer?.discount_value_offer3} %</p>
+																<p className='offer-info'>
+																	نسبة من قيمة مشتريات العميل بقيمة{" "}
+																	{offer?.discount_value_offer3} %
+																</p>
 															)}
 															<div className='offer-calender'>
 																<FaRegCalendarAlt />
-																<span>ينتهي العرض بتاريخ-{moment(offer?.end_at).format('YYYY-MM-DD')}</span>
+																<span>
+																	ينتهي العرض بتاريخ-
+																	{moment(offer?.end_at).format("YYYY-MM-DD")}
+																</span>
 															</div>
 														</div>
 														<div className='toggle-offer-switch'>
 															<Switch
 																onChange={() => changeOfferStatus(offer?.id)}
-																checked={offer?.status === 'نشط' ? true : false}
+																checked={offer?.status === "نشط" ? true : false}
 																sx={{
-																	width: '50px',
-																	'& .MuiSwitch-track': {
+																	width: "50px",
+																	"& .MuiSwitch-track": {
 																		width: 26,
 																		height: 14,
 																		opacity: 1,
-																		backgroundColor: 'rgba(0,0,0,.25)',
-																		boxSizing: 'border-box',
+																		backgroundColor: "rgba(0,0,0,.25)",
+																		boxSizing: "border-box",
 																	},
-																	'& .MuiSwitch-thumb': {
-																		boxShadow: 'none',
+																	"& .MuiSwitch-thumb": {
+																		boxShadow: "none",
 																		width: 10,
 																		height: 10,
 																		borderRadius: 5,
-																		transform: 'translate(6px,6px)',
-																		color: '#fff',
+																		transform: "translate(6px,6px)",
+																		color: "#fff",
 																	},
 
-																	'&:hover': {
-																		'& .MuiSwitch-thumb': {
-																			boxShadow: 'none',
+																	"&:hover": {
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
 																		},
 																	},
 
-																	'& .MuiSwitch-switchBase': {
+																	"& .MuiSwitch-switchBase": {
 																		padding: 1,
-																		'&.Mui-checked': {
-																			transform: 'translateX(11px)',
-																			color: '#fff',
-																			'& + .MuiSwitch-track': {
+																		"&.Mui-checked": {
+																			transform: "translateX(11px)",
+																			color: "#fff",
+																			"& + .MuiSwitch-track": {
 																				opacity: 1,
-																				backgroundColor: '#3AE374',
+																				backgroundColor: "#3AE374",
 																			},
 																		},
 																	},

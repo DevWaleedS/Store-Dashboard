@@ -40,6 +40,7 @@ import { ReactComponent as Dollar } from "../../data/Icons/icon-6.svg";
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 // Modal Style
 const style = {
@@ -75,7 +76,9 @@ const CreateOffer = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -350,7 +353,7 @@ const CreateOffer = () => {
 			.post(`https://backend.atlbha.com/api/Store/offer`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {

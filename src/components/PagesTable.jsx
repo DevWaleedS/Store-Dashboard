@@ -23,10 +23,10 @@ import Switch from "@mui/material/Switch";
 import TablePagination from "./TablePagination";
 // Import Icons
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { ReactComponent as SortIcon } from "../data/Icons/icon-24-sort.svg";
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import editIcon from "../data/Icons/editt 2.svg";
 import moment from "moment";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -221,7 +221,9 @@ EnhancedTableToolbar.propTypes = {
 
 // Start Pages Table
 export default function PagesTable({ data, loading, reload, setReload }) {
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
@@ -282,7 +284,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)
@@ -307,7 +309,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)
@@ -331,7 +333,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)

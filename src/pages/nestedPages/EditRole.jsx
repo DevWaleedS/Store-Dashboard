@@ -27,6 +27,7 @@ import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 // Modal Style
 const style = {
@@ -63,7 +64,10 @@ const EditRole = () => {
 	});
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -111,7 +115,7 @@ const EditRole = () => {
 			.post(`https://backend.atlbha.com/api/Store/roles/${id}`, formData, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {

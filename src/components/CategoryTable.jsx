@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import axios from "axios";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -26,6 +26,7 @@ import { DeleteContext } from "../Context/DeleteProvider";
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import editIcon from "../data/Icons/editt 2.svg";
 import CircularLoading from "../HelperComponents/CircularLoading";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 function EnhancedTableHead(props) {
 	return (
@@ -190,7 +191,9 @@ export default function EnhancedTable({
 	reload,
 	setReload,
 }) {
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -244,7 +247,7 @@ export default function EnhancedTable({
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)
@@ -269,7 +272,7 @@ export default function EnhancedTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)
@@ -293,7 +296,7 @@ export default function EnhancedTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)

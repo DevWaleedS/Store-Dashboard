@@ -89,7 +89,8 @@ import ContextProvider from "./Context/ContextProvider";
 import NotificationProvider from "./Context/NotificationProvider";
 import LoadingProvider from "./Context/LoadingProvider";
 import DeleteProvider from "./Context/DeleteProvider";
-import PrivateRoute from "./pages/Login/PrivateRoute/PrivateRoute";
+import UserAuthorProvider from "./Context/UserAuthorProvider";
+
 // ---------------------------------------------------------------------------------------//
 
 // App Routes
@@ -348,15 +349,17 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<Provider store={store}>
 		<ProSidebarProvider>
-			<ContextProvider>
-				<NotificationProvider>
-					<LoadingProvider>
-						<DeleteProvider>
-							<RouterProvider router={router} />
-						</DeleteProvider>
-					</LoadingProvider>
-				</NotificationProvider>
-			</ContextProvider>
+			<UserAuthorProvider>
+				<ContextProvider>
+					<NotificationProvider>
+						<LoadingProvider>
+							<DeleteProvider>
+								<RouterProvider router={router} />
+							</DeleteProvider>
+						</LoadingProvider>
+					</NotificationProvider>
+				</ContextProvider>
+			</UserAuthorProvider>
 		</ProSidebarProvider>
 	</Provider>
 );

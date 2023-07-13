@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import Context from "../Context/context";
 import { useDispatch, useSelector } from "react-redux";
 import { closeReplyModal } from "../store/slices/ReplyModal-slice";
@@ -14,6 +14,7 @@ import { FiSend } from "react-icons/fi";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const style = {
 	position: "absolute",
@@ -50,13 +51,15 @@ const contentStyles = {
 };
 
 const SendReplayModal = ({ commentDetails, reload, setReload }) => {
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
-	const { setEndActionTitle, access_token } = contextStore;
+	const { setEndActionTitle } = contextStore;
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
 	const dispatch = useDispatch(false);
 
 	const [description, setDescription] = useState({
-		htmlValue: "<h1></h1>\n",
+		htmlValue: "",
 		editorState: EditorState.createEmpty(),
 	});
 
@@ -80,7 +83,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/replaycomment`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {

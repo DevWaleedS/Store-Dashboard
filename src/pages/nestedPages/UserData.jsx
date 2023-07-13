@@ -1,48 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import useFetch from '../../Hooks/UseFetch';
-import { useNavigate, useParams } from 'react-router-dom';
-import CircularLoading from '../../HelperComponents/CircularLoading';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import useFetch from "../../Hooks/UseFetch";
+import { useNavigate, useParams } from "react-router-dom";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 // icons
-import { ReactComponent as Message } from '../../data/Icons/icon-24-email.svg';
-import { ReactComponent as User } from '../../data/Icons/icon-24-user.svg';
-import { ReactComponent as Password } from '../../data/Icons/icon-24-invisible.svg';
-import { ReactComponent as Mobile } from '../../data/Icons/mobile-icon-24.svg';
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
+import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
 
 const style = {
-	position: 'fixed',
-	top: '80px',
-	left: '0%',
-	transform: 'translate(0%, 0%)',
-	width: '81%',
-	height: '100%',
-	overflow: 'auto',
-	bgcolor: '#fff',
-	paddingBottom: '80px',
-	'@media(max-width:768px)': {
-		position: 'absolute',
+	position: "fixed",
+	top: "80px",
+	left: "0%",
+	transform: "translate(0%, 0%)",
+	width: "81%",
+	height: "100%",
+	overflow: "auto",
+	bgcolor: "#fff",
+	paddingBottom: "80px",
+	"@media(max-width:768px)": {
+		position: "absolute",
 		top: 0,
 		left: 0,
-		width: '100%',
-		backgroundColor: '#F6F6F6',
+		width: "100%",
+		backgroundColor: "#F6F6F6",
 		paddingBottom: 0,
 	},
 };
 const UserData = () => {
 	const { id } = useParams();
-	const { fetchedData, loading } = useFetch(`https://backend.atlbha.com/api/Store/user/${id}`);
+
+	const { fetchedData, loading } = useFetch(
+		`https://backend.atlbha.com/api/Store/user/${id}`
+	);
 	const navigate = useNavigate();
 	const [user, setUser] = useState({
-		name: '',
-		user_name: '',
-		user_type: '',
-		email: '',
-		password: '',
-		phonenumber: '',
-		image: '',
-		status: '',
+		name: "",
+		user_name: "",
+		user_type: "",
+		email: "",
+		password: "",
+		phonenumber: "",
+		image: "",
+		status: "",
 	});
 	useEffect(() => {
 		setUser({
@@ -63,7 +66,11 @@ const UserData = () => {
 				<title>لوحة تحكم أطلبها | تفاصيل المستخدم</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
-				<Modal open={true} onClose={() => navigate('/Management')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal
+					open={true}
+					onClose={() => navigate("/Management")}
+					aria-labelledby='modal-modal-title'
+					aria-describedby='modal-modal-description'>
 					<Box sx={style}>
 						<div className='add-form-wrapper add-user-form'>
 							<div className='d-flex'>
@@ -92,7 +99,13 @@ const UserData = () => {
 													<div className='input-icons'>
 														<User />
 													</div>
-													<input type='text' id='full-name' name='name' value={user?.name} disabled />
+													<input
+														type='text'
+														id='full-name'
+														name='name'
+														value={user?.name}
+														disabled
+													/>
 												</div>
 											</div>
 
@@ -106,7 +119,13 @@ const UserData = () => {
 													<div className='input-icons'>
 														<User />
 													</div>
-													<input type='text' id='full-name' name='name' value={user?.user_name} disabled />
+													<input
+														type='text'
+														id='full-name'
+														name='name'
+														value={user?.user_name}
+														disabled
+													/>
 												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
@@ -116,8 +135,13 @@ const UserData = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<select className='form-select' value={user?.user_type} disabled>
-														<option defaultValue='اختر نوع الدور الوظيفي'>اختر نوع الدور الوظيفي</option>
+													<select
+														className='form-select'
+														value={user?.user_type}
+														disabled>
+														<option defaultValue='اختر نوع الدور الوظيفي'>
+															اختر نوع الدور الوظيفي
+														</option>
 														<option value='admin'>آدمن</option>
 														<option value='store'>متجر</option>
 													</select>
@@ -133,7 +157,12 @@ const UserData = () => {
 													<div className='input-icons password-icon'>
 														<Password />
 													</div>
-													<input type='password' id='password' name='password' disabled />
+													<input
+														type='password'
+														id='password'
+														name='password'
+														disabled
+													/>
 												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
@@ -146,7 +175,13 @@ const UserData = () => {
 													<div className='input-icons'>
 														<Message />
 													</div>
-													<input type='email' id='email' name='email' value={user?.email} disabled />
+													<input
+														type='email'
+														id='email'
+														name='email'
+														value={user?.email}
+														disabled
+													/>
 												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
@@ -160,7 +195,7 @@ const UserData = () => {
 														<Mobile />
 													</div>
 													<input
-													maxLength='14'
+														maxLength='14'
 														minLength='13'
 														type='text'
 														id='phonenumber'
@@ -177,7 +212,11 @@ const UserData = () => {
 													</label>
 												</div>
 												<div className='col-2'>
-													<img width='100%' src={user?.image} alt={user?.name} />
+													<img
+														width='100%'
+														src={user?.image}
+														alt={user?.name}
+													/>
 												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
@@ -187,7 +226,12 @@ const UserData = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<select value={user?.status} className='form-select' id='status' name='status' disabled>
+													<select
+														value={user?.status}
+														className='form-select'
+														id='status'
+														name='status'
+														disabled>
 														<option defaultValue='active'>مفعل</option>
 														<option value='not_active'>غير مفعل</option>
 													</select>
@@ -197,7 +241,9 @@ const UserData = () => {
 										<div className='form-footer'>
 											<div className='row d-flex justify-content-center align-items-center'>
 												<div className='col-6'>
-													<button className='close-btn' onClick={() => navigate('/Management')}>
+													<button
+														className='close-btn'
+														onClick={() => navigate("/Management")}>
 														إلغاء
 													</button>
 												</div>

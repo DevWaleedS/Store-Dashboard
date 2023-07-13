@@ -18,6 +18,7 @@ import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
 import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-upload_outlined.svg";
 import { useForm } from "react-hook-form";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -39,10 +40,15 @@ const style = {
 };
 
 const EditUserDetails = () => {
+	const UserInfo = useContext(UserAuth);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
+	const { setUserInfo } = UserInfo;
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/profile"
 	);
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const navigate = useNavigate();
@@ -85,8 +91,6 @@ const EditUserDetails = () => {
 	useEffect(() => {
 		reset(user);
 	}, [user, reset]);
-
-	console.log(user?.phonenumber);
 
 	// Use state with useDropzone library to set banners
 	const [userImage, setUserImage] = React.useState([]);
@@ -184,12 +188,12 @@ const EditUserDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/profile`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					localStorage.setItem("user_image", res?.data?.data?.users?.image);
+					setUserInfo({ user_image: res?.data?.data?.users?.image });
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/");
 					setReload(!reload);

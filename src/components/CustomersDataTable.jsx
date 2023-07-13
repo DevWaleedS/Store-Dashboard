@@ -1,9 +1,8 @@
 import React, { Fragment, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import axios from "axios";
 
-import { useDispatch } from "react-redux";
 import Context from "../Context/context";
 import { NotificationContext } from "../Context/NotificationProvider";
 import PropTypes from "prop-types";
@@ -20,16 +19,14 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { Switch } from "@mui/material";
 import TablePagination from "./TablePagination";
-
-import { CustomerData } from "../pages/nestedPages";
 
 // import icons
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import GetDateOnly from "../HelperComponents/GetDateOnly";
+import { UserAuth } from "../Context/UserAuthorProvider";
 function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
@@ -189,8 +186,9 @@ export default function CustomersDataTable({
 	reload,
 	setReload,
 }) {
-	const [cookies] = useCookies(["access_token"]);
-
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	// Use Dispatch to open edit customer page
 	const navigate = useNavigate();
 	const NotificationStore = useContext(NotificationContext);
@@ -225,7 +223,7 @@ export default function CustomersDataTable({
 			.get(`https://backend.atlbha.com/api/Store/clientdeleteall?id[]=${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -249,7 +247,7 @@ export default function CustomersDataTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)

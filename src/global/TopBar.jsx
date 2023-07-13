@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 import CircularLoading from "../HelperComponents/CircularLoading";
@@ -21,19 +21,26 @@ import { AiOutlineSearch } from "react-icons/ai";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ReactComponent as LogOutIcon } from "../data/Icons/icon-24-sign out.svg";
 import { ReactComponent as UserIcon } from "../data/Icons/icon-24-client.svg";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const TopBar = ({ toggleSidebar }) => {
-	const [cookies, removeCookies] = useCookies(["access_token"]);
+	const navigate = useNavigate();
+
+	const theme = useTheme();
+	const colors = tokens(theme.palette);
+	const UserInfo = useContext(UserAuth);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor, setUserAuthor } = userAuthored;
+	const { userInfo, setUserInfo } = UserInfo;
+	const NotificationStore = useContext(NotificationContext);
+	const { setEndActionTitle } = NotificationStore;
+	// const [cookies, removeCookies] = useCookies(["access_token"]);
 
 	// to change logo
 	const { fetchedData: setting } = useFetch(
 		"https://backend.atlbha.com/api/Store/setting_store_show"
 	);
 	const newLogo = setting?.data?.setting_store?.logo;
-	localStorage.setItem(
-		"store_domain",
-		setting?.data?.setting_store?.domain || ""
-	);
 
 	// to get notification
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -44,14 +51,19 @@ const TopBar = ({ toggleSidebar }) => {
 	const { fetchedData: profile } = useFetch(
 		"https://backend.atlbha.com/api/Store/profile"
 	);
-	localStorage.setItem("user_name", profile?.data?.users?.name);
-	localStorage.setItem("user_image", profile?.data?.users?.image);
-	const theme = useTheme();
-	const NotificationStore = useContext(NotificationContext);
-	const { setEndActionTitle } = NotificationStore;
-	const colors = tokens(theme.palette);
-	const navigate = useNavigate();
+	// to set data to the user aut
+	useEffect(() => {
+		if (profile) {
+			setUserInfo({
+				user_name: profile?.data?.users?.user_name,
+				name: profile?.data?.users?.name,
+				user_image: profile?.data?.users?.image,
+				store_domain: setting?.data?.setting_store?.domain || "",
+			});
+		}
+	}, [profile]);
 
+	// Delete Notification
 	const deleteNotifications = () => {
 		const queryParams = fetchedData?.data?.notifications
 			?.map((not) => `id[]=${not?.id}`)
@@ -62,7 +74,7 @@ const TopBar = ({ toggleSidebar }) => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)
@@ -83,13 +95,13 @@ const TopBar = ({ toggleSidebar }) => {
 			.get("https://backend.atlbha.com/api/logout", {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					localStorage.clear();
-					removeCookies("access_token");
+					// removeCookies("access_token", { domain: "localhost:3000" });
+					setUserAuthor(null);
 					navigate("/Login");
 				} else {
 					console.log(res?.data?.message?.ar);
@@ -201,7 +213,7 @@ const TopBar = ({ toggleSidebar }) => {
 									li
 									className='nav-item dropdown d-flex align-items-end avatar-dropdown'>
 									<Box
-										className='nav-link  dropdown-wrapper'
+										className='nav-link dropdown-wrapper'
 										href='#'
 										data-bs-toggle='dropdown'
 										aria-expanded='false'
@@ -209,18 +221,16 @@ const TopBar = ({ toggleSidebar }) => {
 										<div className='dropdown-title d-md-flex align-items-center d-none'>
 											<span className='me-1 '>
 												{profile?.data?.users?.name === "null"
-													? ""
-													: profile?.data?.users?.name || "التاجر"}
+													? userInfo?.user_name || "التاجر"
+													: userInfo?.name}
 											</span>
 											<IoIosArrowDown />
 										</div>
+
 										{/** avatar img  */}
 										<Avatar
 											alt='avatarImage'
-											src={
-												profile?.data?.users?.image ||
-												localStorage.getItem("user_image")
-											}
+											src={profile?.data?.users?.image || userInfo?.user_image}
 										/>
 									</Box>
 									<ul className='dropdown-menu user-info-dropdown'>

@@ -26,6 +26,7 @@ import { useCookies } from "react-cookie";
 import moment from "moment";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 // Modal Style
 const style = {
@@ -52,7 +53,9 @@ const EditCoupon = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const currentDate = new Date();
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
@@ -213,7 +216,7 @@ const EditCoupon = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)
@@ -271,7 +274,7 @@ const EditCoupon = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)

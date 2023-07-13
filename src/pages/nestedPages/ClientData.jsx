@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Context from "../../Context/context";
 import axios from "axios";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -30,6 +30,7 @@ import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg
 import { ReactComponent as Timer } from "../../data/Icons/icon-24-timer.svg";
 import { ReactComponent as Communication } from "../../data/Icons/ico - 24 - communication - send_outlined.svg";
 import { ReactComponent as Dollar } from "../../data/Icons/icon-24-dollar.svg";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 // Modal Style
 const style = {
@@ -72,7 +73,9 @@ const ClientData = () => {
 		`https://backend.atlbha.com/api/Store/cartShow/${id}`
 	);
 	const cartDetails = fetchedData?.data?.cart;
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -145,7 +148,7 @@ const ClientData = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)

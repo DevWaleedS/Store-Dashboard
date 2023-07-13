@@ -15,6 +15,7 @@ import Modal from "@mui/material/Modal";
 import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currency.svg";
 
 import { useForm } from "react-hook-form";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -42,7 +43,9 @@ const ShowImportEtlobhaProduct = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`
 	);
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+		const userAuthored = useContext(UserAuth);
+		const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const [product, setProduct] = useState({
@@ -136,7 +139,7 @@ const ShowImportEtlobhaProduct = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)

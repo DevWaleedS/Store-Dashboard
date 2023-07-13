@@ -2,7 +2,7 @@ import React, { useContext, useState, Fragment, useEffect } from "react";
 import axios from "axios";
 import Context from "../Context/context";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import Button from "@mui/material/Button";
 import useFetch from "../Hooks/UseFetch";
 // import ImageUploading library
@@ -17,13 +17,16 @@ import { ReactComponent as Client } from "../data/Icons/icon-24-ratings.svg";
 import { Link } from "react-router-dom";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { LoadingContext } from "../Context/LoadingProvider";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const TemplateUpdate = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/homepage"
 	);
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+		const userAuthored = useContext(UserAuth);
+		const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -111,7 +114,7 @@ const TemplateUpdate = () => {
 			.post(`https://backend.atlbha.com/api/Store/logoUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -150,7 +153,7 @@ const TemplateUpdate = () => {
 			.post(`https://backend.atlbha.com/api/Store/banarUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -189,7 +192,7 @@ const TemplateUpdate = () => {
 			.post(`https://backend.atlbha.com/api/Store/sliderUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {
@@ -218,7 +221,7 @@ const TemplateUpdate = () => {
 			.post(`https://backend.atlbha.com/api/Store/commentUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies.access_token}`,
+					Authorization: `Bearer ${userAuthor}`,
 				},
 			})
 			.then((res) => {

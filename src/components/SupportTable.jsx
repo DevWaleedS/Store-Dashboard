@@ -19,7 +19,7 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-// import { openVerifyModal } from '../store/slices/VerifyStoreModal-slice';
+
 
 import TablePagination from "./TablePagination";
 
@@ -27,10 +27,10 @@ import TablePagination from "./TablePagination";
 import { GoCheck } from "react-icons/go";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
-import { ReactComponent as SortIcon } from "../data/Icons/icon-24-sort.svg";
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import { ReactComponent as DeadLineIcon } from "../data/Icons/icon-24-deadline.svg";
 import { ReactComponent as HourGleass } from "../data/Icons/icon-24-hourgleass_half.svg";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -177,9 +177,9 @@ EnhancedTableToolbar.propTypes = {
 const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	// Get Data From Redux Store
 	const navigate = useNavigate();
-	const dispatch = useDispatch(true);
-	const [cookies] = useCookies(["access_token"]);
-
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -244,7 +244,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies.access_token}`,
+							Authorization: `Bearer ${userAuthor}`,
 						},
 					}
 				)

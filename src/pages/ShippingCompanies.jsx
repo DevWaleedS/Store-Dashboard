@@ -1,35 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import useFetch from '../Hooks/UseFetch';
-import Context from '../Context/context';
-import { Link } from 'react-router-dom';
-import StoreDataWidget from '../components/StoreDataWidget';
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import useFetch from "../Hooks/UseFetch";
+import Context from "../Context/context";
+import { Link } from "react-router-dom";
+import StoreDataWidget from "../components/StoreDataWidget";
 
 // ICONS
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { AiOutlineSearch } from 'react-icons/ai';
-import CircularLoading from '../HelperComponents/CircularLoading';
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { AiOutlineSearch } from "react-icons/ai";
+import CircularLoading from "../HelperComponents/CircularLoading";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const ShippingCompanies = () => {
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/shippingtype`);
-	const [cookies] = useCookies(['access_token']);
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		`https://backend.atlbha.com/api/Store/shippingtype`
+	);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-
-
 
 	// change Comment Status
 	const changeStatus = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}`, {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${cookies.access_token}`,
-				},
-			})
+			.get(
+				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${userAuthor}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -51,7 +57,13 @@ const ShippingCompanies = () => {
 						<div className='search-icon'>
 							<AiOutlineSearch color='#02466A' />
 						</div>
-						<input type='text' name='search' id='search' className='input' placeholder='أدخل كلمة البحث' />
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='input'
+							placeholder='أدخل كلمة البحث'
+						/>
 					</div>
 				</div>
 				<div className='head-category mb-md-5 mb-3'>
@@ -78,7 +90,9 @@ const ShippingCompanies = () => {
 				<div className='data-container'>
 					<div className='row'>
 						{loading ? (
-							<div className='d-flex justify-content-center align-items-center' style={{ height: '200px' }}>
+							<div
+								className='d-flex justify-content-center align-items-center'
+								style={{ height: "200px" }}>
 								<CircularLoading />
 							</div>
 						) : (
@@ -87,7 +101,7 @@ const ShippingCompanies = () => {
 									<StoreDataWidget
 										data={item?.name}
 										changeStatus={() => changeStatus(item?.id)}
-										checked={item?.status === 'نشط' ? true : false}
+										checked={item?.status === "نشط" ? true : false}
 									/>
 								</div>
 							))

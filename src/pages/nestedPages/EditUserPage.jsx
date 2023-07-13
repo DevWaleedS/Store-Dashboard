@@ -1,78 +1,91 @@
-import React, { useState, useEffect, useContext, Fragment } from 'react';
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import useFetch from '../../Hooks/UseFetch';
-import Context from '../../Context/context';
-import { useNavigate, useParams } from 'react-router-dom';
-import CircularLoading from '../../HelperComponents/CircularLoading';
-import { useCookies } from 'react-cookie';
+import axios from "axios";
+import useFetch from "../../Hooks/UseFetch";
+import Context from "../../Context/context";
+import { useNavigate, useParams } from "react-router-dom";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+import { useCookies } from "react-cookie";
 // import Dropzone Library
-import { useDropzone } from 'react-dropzone';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { useDropzone } from "react-dropzone";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 // icons
-import { ReactComponent as Message } from '../../data/Icons/icon-24-email.svg';
-import { ReactComponent as User } from '../../data/Icons/icon-24-user.svg';
-import { ReactComponent as Password } from '../../data/Icons/icon-24-invisible.svg';
-import { ReactComponent as Mobile } from '../../data/Icons/mobile-icon-24.svg';
-import { AiOutlineEyeInvisible } from 'react-icons/ai';
-import { IoIosArrowDown } from 'react-icons/io';
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
+import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from '../../Context/LoadingProvider';
+import { LoadingContext } from "../../Context/LoadingProvider";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
-	position: 'fixed',
-	top: '80px',
-	left: '0%',
-	transform: 'translate(0%, 0%)',
-	width: '81%',
-	height: '100%',
-	overflow: 'auto',
-	bgcolor: '#fff',
-	paddingBottom: '80px',
-	'@media(max-width:768px)': {
-		position: 'absolute',
+	position: "fixed",
+	top: "80px",
+	left: "0%",
+	transform: "translate(0%, 0%)",
+	width: "81%",
+	height: "100%",
+	overflow: "auto",
+	bgcolor: "#fff",
+	paddingBottom: "80px",
+	"@media(max-width:768px)": {
+		position: "absolute",
 		top: 0,
 		left: 0,
-		width: '100%',
-		backgroundColor: '#F6F6F6',
+		width: "100%",
+		backgroundColor: "#F6F6F6",
 		paddingBottom: 0,
 	},
 };
 const EditUserPage = () => {
 	const { id } = useParams();
-	const [cookies] = useCookies(['access_token']);
-	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/user/${id}`);
-	const { fetchedData: roles } = useFetch('https://backend.atlbha.com/api/Store/selector/roles');
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		`https://backend.atlbha.com/api/Store/user/${id}`
+	);
+	const { fetchedData: roles } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/roles"
+	);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const navigate = useNavigate();
-	const { register, handleSubmit, control, reset, formState: { errors } } = useForm({
+	const {
+		register,
+		handleSubmit,
+		control,
+		reset,
+		formState: { errors },
+	} = useForm({
 		mode: "onBlur",
 		defaultValues: {
-			name: '',
-			user_name: '',
-			role: '',
-			email: '',
-			password: '',
-			phonenumber: '',
-			status: '',
-		}
+			name: "",
+			user_name: "",
+			role: "",
+			email: "",
+			password: "",
+			phonenumber: "",
+			status: "",
+		},
 	});
 	const [user, setUser] = useState({
-		name: '',
-		user_name: '',
-		role: '',
-		email: '',
-		password: '',
-		phonenumber: '',
-		image: '',
-		status: '',
+		name: "",
+		user_name: "",
+		role: "",
+		email: "",
+		password: "",
+		phonenumber: "",
+		image: "",
+		status: "",
 	});
 	const [images, setImages] = useState([]);
 	useEffect(() => {
@@ -85,7 +98,8 @@ const EditUserPage = () => {
 				email: fetchedData?.data?.users?.email,
 				image: fetchedData?.data?.users?.image,
 				phonenumber: fetchedData?.data?.users?.phonenumber,
-				status: fetchedData?.data?.users?.status === 'نشط' ? 'active' : 'not_active',
+				status:
+					fetchedData?.data?.users?.status === "نشط" ? "active" : "not_active",
 			});
 		}
 	}, [fetchedData?.data?.users]);
@@ -95,44 +109,44 @@ const EditUserPage = () => {
 	}, [user, reset]);
 
 	// Show and hidden password function
-	const [passwordType, setPasswordType] = useState('password');
+	const [passwordType, setPasswordType] = useState("password");
 	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
 	const [userError, setUserError] = useState({
-		name: '',
-		user_name: '',
-		role: '',
-		email: '',
-		password: '',
-		phonenumber: '',
-		image: '',
-		status: '',
+		name: "",
+		user_name: "",
+		role: "",
+		email: "",
+		password: "",
+		phonenumber: "",
+		image: "",
+		status: "",
 	});
 	const resetCouponError = () => {
 		setUserError({
-			name: '',
-			user_name: '',
-			role: '',
-			email: '',
-			password: '',
-			phonenumber: '',
-			image: '',
-			status: '',
+			name: "",
+			user_name: "",
+			role: "",
+			email: "",
+			password: "",
+			phonenumber: "",
+			image: "",
+			status: "",
 		});
 	};
 
 	const showPasswordToggle = () => {
-		if (passwordType === 'password') {
-			setPasswordType('text');
+		if (passwordType === "password") {
+			setPasswordType("text");
 			setShowPasswordIcon(<AiOutlineEyeInvisible />);
 		} else {
-			setPasswordType('password');
+			setPasswordType("password");
 			setShowPasswordIcon(<Password />);
 		}
 	};
 
 	//  use dropzone to get personal image
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: 'image/*',
+		accept: "image/*",
 		onDrop: (acceptedFiles) => {
 			setImages(
 				acceptedFiles.map((file) =>
@@ -155,34 +169,38 @@ const EditUserPage = () => {
 	};
 
 	const updateUser = (data) => {
-		setLoadingTitle('جاري تعديل المستخدم');
+		setLoadingTitle("جاري تعديل المستخدم");
 		resetCouponError();
 		let formData = new FormData();
-		formData.append('_method', 'PUT');
-		formData.append('name', data?.name);
-		formData.append('user_name', data?.user_name);
-		formData.append('role', data?.role);
-		formData.append('email', data?.email);
-		formData.append('phonenumber', data?.phonenumber);
-		formData.append('status', data?.status);
+		formData.append("_method", "PUT");
+		formData.append("name", data?.name);
+		formData.append("user_name", data?.user_name);
+		formData.append("role", data?.role);
+		formData.append("email", data?.email);
+		formData.append("phonenumber", data?.phonenumber);
+		formData.append("status", data?.status);
 		if (images?.length !== 0) {
-			formData.append('image', images[0]);
+			formData.append("image", images[0]);
 		}
 		axios
-			.post(`https://backend.atlbha.com/api/Store/user/${fetchedData?.data?.users?.id}`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${cookies.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/user/${fetchedData?.data?.users?.id}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${userAuthor}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Management');
+					navigate("/Management");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setReload(!reload);
 					setUserError({
 						name: res?.data?.message?.en?.name?.[0],
@@ -204,7 +222,11 @@ const EditUserPage = () => {
 				<title>لوحة تحكم أطلبها | تعديل مستخدم</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
-				<Modal open={true} onClose={() => navigate('/Management')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal
+					open={true}
+					onClose={() => navigate("/Management")}
+					aria-labelledby='modal-modal-title'
+					aria-describedby='modal-modal-description'>
 					<Box sx={style}>
 						<div className='add-form-wrapper add-user-form'>
 							<div className='d-flex'>
@@ -237,17 +259,22 @@ const EditUserPage = () => {
 														type='text'
 														id='full-name'
 														name='name'
-														{...register('name', {
+														{...register("name", {
 															required: "حقل الاسم مطلوب",
 															pattern: {
 																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "يجب أن يكون الاسم نص"
+																message: "يجب أن يكون الاسم نص",
 															},
 														})}
 													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.name}{errors?.name && errors.name.message}</span></div>
+												<div className='col-lg-9 col-12'>
+													<span className='fs-6 text-danger'>
+														{userError?.name}
+														{errors?.name && errors.name.message}
+													</span>
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
@@ -260,21 +287,27 @@ const EditUserPage = () => {
 														<User />
 													</div>
 													<input
-													style={{direction: 'ltr', textAlign:'left',}}
+														style={{ direction: "ltr", textAlign: "left" }}
 														type='text'
 														id='user-name'
 														name='user_name'
-														{...register('user_name', {
+														{...register("user_name", {
 															required: "حقل اسم المستخدم مطلوب",
 															pattern: {
 																value: /^[^-\s][a-zA-Z0-9_]+$/,
-																message: "يجب أن يكون اسم المستخدم حروف باللغة الإنجليزية"
+																message:
+																	"يجب أن يكون اسم المستخدم حروف باللغة الإنجليزية",
 															},
 														})}
 													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.user_name}{errors?.user_name && errors.user_name.message}</span></div>
+												<div className='col-lg-9 col-12'>
+													<span className='fs-6 text-danger'>
+														{userError?.user_name}
+														{errors?.user_name && errors.user_name.message}
+													</span>
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
@@ -283,7 +316,7 @@ const EditUserPage = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<FormControl sx={{ m: 0, width: '100%' }}>
+													<FormControl sx={{ m: 0, width: "100%" }}>
 														<Controller
 															name={"role"}
 															control={control}
@@ -293,59 +326,69 @@ const EditUserPage = () => {
 																	value={value}
 																	onChange={onChange}
 																	sx={{
-																		fontSize: '18px',
-																		backgroundColor: '#ededed',
-																		'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-																		{
-																			paddingRight: '20px',
-																		},
-																		'& .MuiOutlinedInput-root': {
-																			'& :hover': {
-																				border: 'none',
+																		fontSize: "18px",
+																		backgroundColor: "#ededed",
+																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																			{
+																				paddingRight: "20px",
+																			},
+																		"& .MuiOutlinedInput-root": {
+																			"& :hover": {
+																				border: "none",
 																			},
 																		},
-																		'& .MuiOutlinedInput-notchedOutline': {
-																			border: 'none',
+																		"& .MuiOutlinedInput-notchedOutline": {
+																			border: "none",
 																		},
-																		'& .MuiSelect-icon.MuiSelect-iconOutlined': {
-																			right: '95% !important',
-																		},
-																		'& .MuiSelect-nativeInput': {
-																			display: 'none',
+																		"& .MuiSelect-icon.MuiSelect-iconOutlined":
+																			{
+																				right: "95% !important",
+																			},
+																		"& .MuiSelect-nativeInput": {
+																			display: "none",
 																		},
 																	}}
 																	IconComponent={IoIosArrowDown}
 																	displayEmpty
-																	inputProps={{ 'aria-label': 'Without label' }}
+																	inputProps={{ "aria-label": "Without label" }}
 																	renderValue={(selected) => {
 																		if (!selected) {
-																			return <p className='text-[#ADB5B9]'>اختر الدور الوظيفي</p>;
+																			return (
+																				<p className='text-[#ADB5B9]'>
+																					اختر الدور الوظيفي
+																				</p>
+																			);
 																		}
 																		return selected;
-																	}}
-																>
+																	}}>
 																	{roles?.data?.roles?.map((cat, index) => {
 																		return (
 																			<MenuItem
 																				key={index}
 																				className='souq_storge_category_filter_items'
 																				sx={{
-																					backgroundColor: 'rgba(211, 211, 211, 1)',
-																					height: '3rem',
-																					'&:hover': {},
+																					backgroundColor:
+																						"rgba(211, 211, 211, 1)",
+																					height: "3rem",
+																					"&:hover": {},
 																				}}
-																				value={`${cat?.name}`}
-																			>
+																				value={`${cat?.name}`}>
 																				{cat?.name}
 																			</MenuItem>
 																		);
 																	})}
 																</Select>
-															)} />
+															)}
+														/>
 													</FormControl>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.role}{errors?.role && errors.role.message}</span></div>
+												<div className='col-lg-9 col-12'>
+													<span className='fs-6 text-danger'>
+														{userError?.role}
+														{errors?.role && errors.role.message}
+													</span>
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
@@ -354,7 +397,9 @@ const EditUserPage = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<div className='input-icons password-icon' onClick={showPasswordToggle}>
+													<div
+														className='input-icons password-icon'
+														onClick={showPasswordToggle}>
 														{showPasswordIcon}
 													</div>
 													<input
@@ -368,12 +413,19 @@ const EditUserPage = () => {
 													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'>{userError?.password && <span className='fs-6 text-danger'>{userError?.password}</span>}</div>
+												<div className='col-lg-9 col-12'>
+													{userError?.password && (
+														<span className='fs-6 text-danger'>
+															{userError?.password}
+														</span>
+													)}
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
 													<label htmlFor='email' className=''>
-														البريد الإلكتروني<span className='text-danger'>*</span>
+														البريد الإلكتروني
+														<span className='text-danger'>*</span>
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
@@ -381,21 +433,27 @@ const EditUserPage = () => {
 														<Message />
 													</div>
 													<input
-													style={{direction: 'ltr', textAlign:'left',}}
+														style={{ direction: "ltr", textAlign: "left" }}
 														name='email'
 														type='email'
 														id='email'
-														{...register('email', {
+														{...register("email", {
 															required: "حقل البريد الإلكتروني مطلوب",
 															pattern: {
 																value: /\S+@\S+\.\S+/,
-																message: "القيمة التي تم إدخالها لا تطابق تنسيق البريد الإلكتروني"
-															}
+																message:
+																	"القيمة التي تم إدخالها لا تطابق تنسيق البريد الإلكتروني",
+															},
 														})}
 													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.email}{errors?.email && errors.email.message}</span></div>
+												<div className='col-lg-9 col-12'>
+													<span className='fs-6 text-danger'>
+														{userError?.email}
+														{errors?.email && errors.email.message}
+													</span>
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
@@ -408,24 +466,27 @@ const EditUserPage = () => {
 														<Mobile />
 													</div>
 													<input
-													
 														name='phonenumber'
 														type='number'
 														id='phonenumber'
 														className='direction-ltr'
 														placeholder='0096654845613'
-														{...register('phonenumber', {
+														{...register("phonenumber", {
 															required: "حقل رقم الجوال مطلوب",
 															pattern: {
 																value: /^[0-9+]+$/i,
-																message: "يجب أن رقم الجوال رقمًا"
+																message: "يجب أن رقم الجوال رقمًا",
 															},
-															
 														})}
 													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.phonenumber}{errors?.phonenumber && errors.phonenumber.message}</span></div>
+												<div className='col-lg-9 col-12'>
+													<span className='fs-6 text-danger'>
+														{userError?.phonenumber}
+														{errors?.phonenumber && errors.phonenumber.message}
+													</span>
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
@@ -434,19 +495,45 @@ const EditUserPage = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<div {...getRootProps({ className: 'upload-personal-image d-flex justify-content-between' })}>
-														<input {...getInputProps()} id='personal-image' name='personal-image' />
-														{files.length <= 0 ? <p className='helper'>اختر صورة PNG أو JPG فقط </p> : <p className='d-none'>اختر صورة PNG أو JPG فقط </p>}
+													<div
+														{...getRootProps({
+															className:
+																"upload-personal-image d-flex justify-content-between",
+														})}>
+														<input
+															{...getInputProps()}
+															id='personal-image'
+															name='personal-image'
+														/>
+														{files.length <= 0 ? (
+															<p className='helper'>
+																اختر صورة PNG أو JPG فقط{" "}
+															</p>
+														) : (
+															<p className='d-none'>
+																اختر صورة PNG أو JPG فقط{" "}
+															</p>
+														)}
 
 														<span> استعراض</span>
 														<ul>{files}</ul>
 													</div>
 													<div className='col-2 mt-3'>
-														<img width='100%' src={user?.image} alt={user?.name} />
+														<img
+															width='100%'
+															src={user?.image}
+															alt={user?.name}
+														/>
 													</div>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'>{userError?.image && <span className='fs-6 text-danger'>{userError?.image}</span>}</div>
+												<div className='col-lg-9 col-12'>
+													{userError?.image && (
+														<span className='fs-6 text-danger'>
+															{userError?.image}
+														</span>
+													)}
+												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
@@ -465,15 +552,20 @@ const EditUserPage = () => {
 																value={value}
 																onChange={onChange}
 																className='form-select'
-																id='status'
-															>
+																id='status'>
 																<option defaultValue='active'>مفعل</option>
 																<option value='not_active'>غير مفعل</option>
 															</select>
-														)} />
+														)}
+													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
-												<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.status}{errors?.status && errors.status.message}</span></div>
+												<div className='col-lg-9 col-12'>
+													<span className='fs-6 text-danger'>
+														{userError?.status}
+														{errors?.status && errors.status.message}
+													</span>
+												</div>
 											</div>
 										</div>
 										<div className='form-footer'>
@@ -484,7 +576,9 @@ const EditUserPage = () => {
 													</button>
 												</div>
 												<div className='col-lg-4 col-6'>
-													<button className='close-btn' onClick={() => navigate('/Management')}>
+													<button
+														className='close-btn'
+														onClick={() => navigate("/Management")}>
 														إلغاء
 													</button>
 												</div>

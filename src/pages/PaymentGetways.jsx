@@ -15,6 +15,7 @@ import PayPalFormWeight from "../components/PayPalFormWeight";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { AiOutlineSearch } from "react-icons/ai";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const PaymentGetways = () => {
 	// to get all  data from server
@@ -22,7 +23,9 @@ const PaymentGetways = () => {
 		`https://backend.atlbha.com/api/Store/paymenttype`
 	);
 
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -34,7 +37,7 @@ const PaymentGetways = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies.access_token}`,
+						Authorization: `Bearer ${userAuthor}`,
 					},
 				}
 			)

@@ -21,12 +21,15 @@ import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteC
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import DeleteOneModal from "../components/DeleteOneModal/DeleteOneModal";
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
-import { useCookies } from "react-cookie";
-import { Login } from "./Login";
+// import { useCookies } from "react-cookie";
+
 import PrivateRoute from "./Login/PrivateRoute/PrivateRoute";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const RootLayout = () => {
-	const [cookies] = useCookies(["access_token"]);
+	// const [cookies] = useCookies(["access_token"]);
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor } = userAuthored;
 	const [openSidebar, setOpenSidebar] = React.useState(false);
 	const contextStore = useContext(Context);
 	const NotificationStore = useContext(NotificationContext);
@@ -53,7 +56,7 @@ const RootLayout = () => {
 	const dispatchVerifyModal = useDispatch(false);
 
 	useEffect(() => {
-		dispatch(StoreVerificationThunk(cookies.access_token));
+		dispatch(StoreVerificationThunk(userAuthor));
 	}, [dispatch]);
 
 	useEffect(() => {

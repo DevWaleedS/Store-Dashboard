@@ -6,43 +6,50 @@ import { ReactComponent as EyeOPen } from "../../data/Icons/eye_open.svg";
 import { ReactComponent as EyeClose } from "../../data/Icons/eye_close.svg";
 import "./Login.css";
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import Context from "../../Context/context";
+// import { useCookies } from "react-cookie";
+// import Context from "../../Context/context";
 import { Helmet } from "react-helmet";
+import { UserAuth } from "../../Context/UserAuthorProvider";
 
 /** -----------------------------------------------------------------------------------------------------------
- *  	=> TO HANDLE THE REG_EXPRESS <=
- *  ------------------------------------------------- */
-const PWD_REGEX = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)(?=.*?[\W_]).{8,24}$/;
+ *  TO HANDLE THE REG_EXPRESS
+ *  ---------------------------------------- */
 
 const Login = () => {
 	let type = "password";
 	const navigate = useNavigate();
-	const [cookies, setCookie] = useCookies(["access_token"]);
-	const contextStore = useContext(Context);
-	const {
-		setEmail,
-		setResendButtonDisabled,
-		setDisabledBtn,
-		setAccess_token,
-		access_token,
-	} = contextStore;
+	// const [cookies, setCookie] = useCookies(["access_token"]);
 
-	const [validPssWord, setValidPssWord] = useState(false);
-	const [showPassword, setShowPassword] = useState(false);
+	// to set the token to context
+	const userAuthored = useContext(UserAuth);
+	const { userAuthor, setUserAuthor } = userAuthored;
+
+	// to set remember me
+	const RememberMe = useContext(UserAuth);
+	const { rememberMe, setRememberMe } = RememberMe;
 	const [username, setUsername] = useState(
-		cookies.remember_me === "true" ? cookies.username : ""
+		rememberMe.remember_me ? rememberMe.username : ""
 	);
 	const [password, setPassword] = useState(
-		cookies.remember_me === "true" ? cookies.password : ""
+		rememberMe.remember_me ? rememberMe.password : ""
 	);
-	const [rememberMe, setRememberMe] = useState(false);
-
-	// to handle errors
+	/**
+	 * ---------------------------------------------------------------------------------------------------
+	 * to handle errors
+	 * ---------------------------------------------------------------------------------------------------
+	 */
+	const PWD_REGEX = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)(?=.*?[\W_]).{8,24}$/;
+	const [validPssWord, setValidPssWord] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 	const [usernameError, setUsernameError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 	const [error, setError] = useState("");
 
+	/**
+	 * ----------------------------------------------
+	 * All DASHBOARD NAVIGATORS
+	 * ----------------------------------------------
+	 */
 	const NavigateToPasswordBackPage = () => {
 		window.open("http://home.atlbha.com/passwordBackPage", "_blank");
 	};
@@ -51,20 +58,30 @@ const Login = () => {
 		window.open("http://home.atlbha.com/register/merchant", "_blank");
 	};
 
-	//Set username , password and remember_me cookie to expire
+	//Set username, password and remember_me status from context
 	function setUserInfoToCookies() {
 		// Set username cookie to expire in 1 days
-		setCookie("username", username, { maxAge: 24 * 60 * 60 });
-		setCookie("password", password, { maxAge: 24 * 60 * 60 }); // Set password cookie to expire in 1 days
-		setCookie("remember_me", "true", { maxAge: 30 * 24 * 60 * 60 }); // Set remember_me cookie to expire in 30 days
+		setRememberMe({
+			username,
+			password,
+			remember_me: true,
+		});
 	}
 
-	//remove username , password and remember_me cookie to expire
+	//remove username, password and remember_me status from context
 	function removeUserInfoToCookies() {
-		setCookie("username", "", { maxAge: 0 }); // Remove the username cookie
-		setCookie("password", "", { maxAge: 0 }); // Remove the password cookie
-		setCookie("remember_me", "false", { maxAge: 0 }); // Remove the remember_me cookie
+		setRememberMe({
+			username: "",
+			password: "",
+			remember_me: false,
+		});
 	}
+
+	/**
+	 * ---------------------------------------------------------------------------------------------------
+	 * Login Function
+	 * ---------------------------------------------------------------------------------------------------
+	 */
 
 	const Login = () => {
 		setError("");
@@ -76,37 +93,43 @@ const Login = () => {
 		};
 		axios.post("https://backend.atlbha.com/api/loginapi", data).then((res) => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-				// setAccess_token(res?.data?.data?.token);
-				setCookie("access_token", res?.data?.data?.token);
-				if (rememberMe) {
-					//Set username , password and remember_me cookie to expire
+				//Set token to context
+				const token = res?.data?.data?.token;
+				setUserAuthor(token);
+
+				// setCookie("access_token", res?.data?.data?.token);
+				if (rememberMe?.remember_me) {
+					//Set username, password and remember_me status to context
 					setUserInfoToCookies();
 				} else {
-					//remove username , password and remember_me cookie to expire
+					//remove username, password and remember_me status from context
 					removeUserInfoToCookies();
 				}
-				// if  login is go to dashboard
+				// if the user is logged we will navigate him to dashboard
 				navigate("/");
 			} else {
 				setUsernameError(res?.data?.message?.en?.user_name?.[0]);
 				setPasswordError(res?.data?.message?.en?.password?.[0]);
 				setError(res?.data?.message?.ar);
 				if (res?.data?.message?.en === "User not verified") {
-					navigate("/verificationPage");
-					setResendButtonDisabled(true);
-					setDisabledBtn(true);
-					setEmail(username);
+					window.open("https://home.atlbha.com/verificationPage", "_blank");
 				}
 			}
 		});
 	};
+
+	/**
+	 * ----------------------------------------------------------------------------------------------
+	 * to handle press enter key on your keyboard
+	 * -----------------------------------------------------------------------------------------------
+	 */
 
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			Login();
 
-			if (rememberMe) {
+			if (rememberMe?.remember_me) {
 				//Set username , password and remember_me cookie to expire
 				setUserInfoToCookies();
 			} else {
@@ -116,13 +139,18 @@ const Login = () => {
 		}
 	};
 
-	// TO HANDLE VALIDATION PASSWORD
+	/**
+	 * ----------------------------------------------------------------------------------------------
+	 * TO HANDLE VALIDATION PASSWORD
+	 * ----------------------------------------------------------------------------------------------
+	 */
 	useEffect(() => {
 		const passwordValidation = PWD_REGEX.test(password);
 		setValidPssWord(passwordValidation);
 	}, [password]);
+	// --------------------------------------------------------------------------------------------------
 
-	return access_token ? (
+	return userAuthor ? (
 		<Navigate to='/' />
 	) : (
 		<>
@@ -200,8 +228,13 @@ const Login = () => {
 											className='form-check-input'
 											type='checkbox'
 											id='flexCheckDefault'
-											value={rememberMe}
-											onChange={(e) => setRememberMe(e.target.checked)}
+											value={rememberMe?.remember_me}
+											onChange={(e) =>
+												setRememberMe({
+													...rememberMe,
+													remember_me: e.target.value,
+												})
+											}
 										/>
 									</div>
 									<h6>تذكرني</h6>
