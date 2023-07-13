@@ -1,47 +1,47 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import useFetch from '../../Hooks/UseFetch';
-import Context from '../../Context/context';
-import { useNavigate, useParams } from 'react-router-dom';
-import CircularLoading from '../../HelperComponents/CircularLoading';
-import { useCookies } from 'react-cookie';
+import axios from "axios";
+import useFetch from "../../Hooks/UseFetch";
+import Context from "../../Context/context";
+import { useNavigate, useParams } from "react-router-dom";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+import { useCookies } from "react-cookie";
 
 // import Dropzone Library
-import { useDropzone } from 'react-dropzone';
+import { useDropzone } from "react-dropzone";
 
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import { Button } from '@mui/material';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+import { Button } from "@mui/material";
 
 // icons and images
-import { ReactComponent as UploadIcon } from '../../data/Icons/icon-24-uplad.svg';
-import { IoIosArrowDown } from 'react-icons/io';
-import { useForm, Controller } from 'react-hook-form';
-import { LoadingContext } from '../../Context/LoadingProvider';
+import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
+import { IoIosArrowDown } from "react-icons/io";
+import { useForm, Controller } from "react-hook-form";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 const style = {
-	position: 'fixed',
-	top: '80px',
-	left: '-1%',
-	transform: 'translate(0%, 0%)',
-	width: '70%',
-	height: '100%',
-	overflow: 'auto',
-	bgcolor: '#fff',
-	paddingBottom: '80px',
-	'@media(max-width:768px)': {
-		position: 'absolute',
+	position: "fixed",
+	top: "80px",
+	left: "-1%",
+	transform: "translate(0%, 0%)",
+	width: "70%",
+	height: "100%",
+	overflow: "auto",
+	bgcolor: "#fff",
+	paddingBottom: "80px",
+	"@media(max-width:768px)": {
+		position: "absolute",
 		top: 0,
 		left: 0,
-		width: '100%',
-		backgroundColor: '#F6F6F6',
+		width: "100%",
+		backgroundColor: "#F6F6F6",
 		paddingBottom: 0,
 	},
 };
@@ -49,24 +49,28 @@ const style = {
 const EditProductPage = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/product/${id}`);
-	const { fetchedData: categories } = useFetch('https://backend.atlbha.com/api/Store/selector/mainCategories');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		`https://backend.atlbha.com/api/Store/product/${id}`
+	);
+	const { fetchedData: categories } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/mainCategories"
+	);
 
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const [openSubCategory, setOpenSubCategory] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [product, setProduct] = useState({
-		name: '',
-		description: '',
-		selling_price: '',
-		category_id: '',
-		discount_price: '',
+		name: "",
+		description: "",
+		selling_price: "",
+		category_id: "",
+		discount_price: "",
 		subcategory_id: [],
-		stock: '',
-		SEOdescription: '',
+		stock: "",
+		SEOdescription: "",
 	});
 	const {
 		register,
@@ -75,15 +79,15 @@ const EditProductPage = () => {
 		control,
 		formState: { errors },
 	} = useForm({
-		mode: 'onBlur',
+		mode: "onBlur",
 		defaultValues: {
-			name: '',
-			description: '',
-			selling_price: '',
-			category_id: '',
-			discount_price: '',
-			stock: '',
-			SEOdescription: '',
+			name: "",
+			description: "",
+			selling_price: "",
+			category_id: "",
+			discount_price: "",
+			stock: "",
+			SEOdescription: "",
 		},
 	});
 	useEffect(() => {
@@ -95,12 +99,13 @@ const EditProductPage = () => {
 				selling_price: fetchedData?.data?.products?.selling_price,
 				category_id: fetchedData?.data?.products?.category?.id,
 				discount_price: fetchedData?.data?.products?.discount_price,
-				subcategory_id: fetchedData?.data?.products?.subcategory?.map((sub) => sub?.id),
+				subcategory_id: fetchedData?.data?.products?.subcategory?.map(
+					(sub) => sub?.id
+				),
 				stock: fetchedData?.data?.products?.stock,
 				SEOdescription: fetchedData?.data?.products?.SEOdescription,
 			});
 		}
-
 	}, [fetchedData?.data?.products]);
 
 	useEffect(() => {
@@ -108,32 +113,30 @@ const EditProductPage = () => {
 	}, [product, reset]);
 
 	const [productError, setProductError] = useState({
-		name: '',
-		cover: '',
-		description: '',
-		selling_price: '',
-		category_id: '',
-		discount_price: '',
-		subcategory_id: '',
-		stock: '',
-		SEOdescription: '',
+		name: "",
+		cover: "",
+		description: "",
+		selling_price: "",
+		category_id: "",
+		discount_price: "",
+		subcategory_id: "",
+		stock: "",
+		SEOdescription: "",
 	});
 
 	const resetCouponError = () => {
 		setProductError({
-			name: '',
-			cover: '',
-			description: '',
-			selling_price: '',
-			category_id: '',
-			discount_price: '',
-			subcategory_id: '',
-			stock: '',
-			SEOdescription: '',
+			name: "",
+			cover: "",
+			description: "",
+			selling_price: "",
+			category_id: "",
+			discount_price: "",
+			subcategory_id: "",
+			stock: "",
+			SEOdescription: "",
 		});
 	};
-
-
 
 	// Use state with useDropzone library to set banners
 	const [icon, setIcon] = React.useState([]);
@@ -141,7 +144,7 @@ const EditProductPage = () => {
 	// Get some methods form useDropZone
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
-			'image/*': ['jpg', 'png'],
+			"image/*": ["jpg", "png"],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -184,41 +187,48 @@ const EditProductPage = () => {
 		});
 	};
 
-	const subcategory = categories?.data?.categories?.filter((sub) => sub?.id === parseInt(product?.category_id)) || [];
+	const subcategory =
+		categories?.data?.categories?.filter(
+			(sub) => sub?.id === parseInt(product?.category_id)
+		) || [];
 
 	const updateProduct = (data) => {
-		setLoadingTitle('جاري تعديل المنتج');
+		setLoadingTitle("جاري تعديل المنتج");
 		resetCouponError();
 		let formData = new FormData();
-		formData.append('_method', 'PUT');
-		formData.append('name', data?.name);
-		formData.append('description', data?.description);
-		formData.append('selling_price', data?.selling_price);
-		formData.append('category_id', data?.category_id);
-		formData.append('discount_price', data?.discount_price);
-		formData.append('stock', data?.stock);
-		formData.append('SEOdescription', data?.SEOdescription);
+		formData.append("_method", "PUT");
+		formData.append("name", data?.name);
+		formData.append("description", data?.description);
+		formData.append("selling_price", data?.selling_price);
+		formData.append("category_id", data?.category_id);
+		formData.append("discount_price", data?.discount_price);
+		formData.append("stock", data?.stock);
+		formData.append("SEOdescription", data?.SEOdescription);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
 		}
 		if (icon?.length !== 0) {
-			formData.append('cover', icon[0] || null);
+			formData.append("cover", icon[0] || null);
 		}
 		axios
-			.post(`https://backend.atlbha.com/api/Store/product/${fetchedData?.data?.products?.id}`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					Authorization: `Bearer ${cookies.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/product/${fetchedData?.data?.products?.id}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Products');
+					navigate("/Products");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setReload(!reload);
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],
@@ -236,16 +246,17 @@ const EditProductPage = () => {
 			});
 	};
 
-
-
-
 	return (
 		<>
 			<Helmet>
 				<title>لوحة تحكم أطلبها | تعديل منتج</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
-				<Modal open={true} onClose={() => navigate('/Products')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal
+					open={true}
+					onClose={() => navigate("/Products")}
+					aria-labelledby='modal-modal-title'
+					aria-describedby='modal-modal-description'>
 					<Box sx={style}>
 						<div className='add-form-wrapper'>
 							<div className='d-flex'>
@@ -260,19 +271,33 @@ const EditProductPage = () => {
 							{loading ? (
 								<CircularLoading />
 							) : (
-								<form className='form-h-full' onSubmit={handleSubmit(updateProduct)}>
+								<form
+									className='form-h-full'
+									onSubmit={handleSubmit(updateProduct)}>
 									<div className='form-body'>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-image'> صورة المنتج<span className='text-danger'>*</span></label>
+												<label htmlFor='product-image'>
+													{" "}
+													صورة المنتج<span className='text-danger'>*</span>
+												</label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div {...getRootProps()}>
 													<div className='add-image-btn-box '>
 														<UploadIcon />
 														<div className='add-image-btn'>
-															<label htmlFor='add-image'> اسحب الصورة هنا</label>
-															<input {...getInputProps()} id='add-image' disabled={fetchedData?.data?.is_import ? true : false} />
+															<label htmlFor='add-image'>
+																{" "}
+																اسحب الصورة هنا
+															</label>
+															<input
+																{...getInputProps()}
+																id='add-image'
+																disabled={
+																	fetchedData?.data?.is_import ? true : false
+																}
+															/>
 														</div>
 														<span>( سيتم قبول الصور jpeg & png )</span>
 													</div>
@@ -281,32 +306,48 @@ const EditProductPage = () => {
 												{/** preview banner here */}
 
 												<div className=' banners-preview-container'>
-													{bannersImage.length > 0 && <div className=' banners-preview-container'>{bannersImage}</div>}
+													{bannersImage.length > 0 && (
+														<div className=' banners-preview-container'>
+															{bannersImage}
+														</div>
+													)}
 
-													<img className='w-100 h-100' src={fetchedData?.data?.products?.cover} alt={fetchedData?.data?.products?.name} />
+													<img
+														className='w-100 h-100'
+														src={fetchedData?.data?.products?.cover}
+														alt={fetchedData?.data?.products?.name}
+													/>
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>{productError?.cover && <span className='fs-6 text-danger'>{productError?.cover}</span>}</div>
+											<div className='col-md-7 col-12'>
+												{productError?.cover && (
+													<span className='fs-6 text-danger'>
+														{productError?.cover}
+													</span>
+												)}
+											</div>
 										</div>
 
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-name'> اسم المنتح<span className='text-danger'>*</span> </label>
+												<label htmlFor='product-name'>
+													{" "}
+													اسم المنتح<span className='text-danger'>*</span>{" "}
+												</label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<input
-
 													name='name'
 													type='text'
 													id='product-name'
 													placeholder=' اسم المنتج'
-													{...register('name', {
-														required:"حقل الاسم مطلوب",
-													pattern: {
-														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "يجب على الحقل الاسم أن يكون نصاّّ"
-													},
+													{...register("name", {
+														required: "حقل الاسم مطلوب",
+														pattern: {
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+															message: "يجب على الحقل الاسم أن يكون نصاّّ",
+														},
 													})}
 												/>
 											</div>
@@ -320,18 +361,19 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-desc'> وصف المنتح<span className='text-danger'>*</span></label>
+												<label htmlFor='product-desc'>
+													{" "}
+													وصف المنتح<span className='text-danger'>*</span>
+												</label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<textarea
-
 													name='description'
 													id='product-desc'
 													placeholder='  قم بكتابه واضح للمنتج'
-													{...register('description', {
+													{...register("description", {
 														required: "حقل الوصف مطلوب",
-													})}
-												></textarea>
+													})}></textarea>
 											</div>
 											<div className='col-md-3 col-12'></div>
 											<div className='col-md-7 col-12'>
@@ -343,39 +385,45 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-category'> التصنيف الرئيسي<span className='text-danger'>*</span></label>
+												<label htmlFor='product-category'>
+													{" "}
+													التصنيف الرئيسي<span className='text-danger'>*</span>
+												</label>
 											</div>
 											<div className='col-md-7 col-12'>
-												<FormControl sx={{ m: 0, width: '100%' }}>
+												<FormControl sx={{ m: 0, width: "100%" }}>
 													<Controller
-														name={'category_id'}
+														name={"category_id"}
 														control={control}
-														rules={{ required:  "حقل التصنيف الرئيسي مطلوب"}}
+														rules={{ required: "حقل التصنيف الرئيسي مطلوب" }}
 														render={({ field: { onChange, value } }) => (
 															<Select
 																value={value}
 																name='category_id'
 																sx={{
-																	fontSize: '18px',
-																	'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-																	{
-																		paddingRight: '20px',
-																	},
-																	'& .MuiOutlinedInput-root': {
-																		'& :hover': {
-																			border: 'none',
+																	fontSize: "18px",
+																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																		{
+																			paddingRight: "20px",
+																		},
+																	"& .MuiOutlinedInput-root": {
+																		"& :hover": {
+																			border: "none",
 																		},
 																	},
-																	'& .MuiOutlinedInput-notchedOutline': {
-																		border: 'none',
+																	"& .MuiOutlinedInput-notchedOutline": {
+																		border: "none",
 																	},
-																	'& .MuiSelect-icon': {
-																		right: '95%',
+																	"& .MuiSelect-icon": {
+																		right: "95%",
 																	},
 																}}
 																onChange={(e) => {
 																	if (product?.category_id !== e.target.value) {
-																		setProduct({ ...product, subcategory_id: [] });
+																		setProduct({
+																			...product,
+																			subcategory_id: [],
+																		});
 																	}
 																	handleOnChange(e);
 																	onChange(e);
@@ -383,31 +431,44 @@ const EditProductPage = () => {
 																className='h-100'
 																IconComponent={IoIosArrowDown}
 																displayEmpty
-																inputProps={{ 'aria-label': 'Without label' }}
+																inputProps={{ "aria-label": "Without label" }}
 																renderValue={(selected) => {
-																	if (product?.category_id === '' || !selected) {
-																		return <p className='text-[#ADB5B9]'>اختر التصنيف</p>;
+																	if (
+																		product?.category_id === "" ||
+																		!selected
+																	) {
+																		return (
+																			<p className='text-[#ADB5B9]'>
+																				اختر التصنيف
+																			</p>
+																		);
 																	}
-																	const result = categories?.data?.categories?.filter((item) => item?.id === parseInt(selected) || item?.id === product?.category_id) || '';
+																	const result =
+																		categories?.data?.categories?.filter(
+																			(item) =>
+																				item?.id === parseInt(selected) ||
+																				item?.id === product?.category_id
+																		) || "";
 																	return result[0]?.name;
-																}}
-															>
-																{categories?.data?.categories?.map((cat, idx) => {
-																	return (
-																		<MenuItem
-																			key={idx}
-																			className='souq_storge_category_filter_items'
-																			sx={{
-																				backgroundColor: 'rgba(211, 211, 211, 1)',
-																				height: '3rem',
-																				'&:hover': {},
-																			}}
-																			value={`${cat?.id}`}
-																		>
-																			{cat?.name}
-																		</MenuItem>
-																	);
-																})}
+																}}>
+																{categories?.data?.categories?.map(
+																	(cat, idx) => {
+																		return (
+																			<MenuItem
+																				key={idx}
+																				className='souq_storge_category_filter_items'
+																				sx={{
+																					backgroundColor:
+																						"rgba(211, 211, 211, 1)",
+																					height: "3rem",
+																					"&:hover": {},
+																				}}
+																				value={`${cat?.id}`}>
+																				{cat?.name}
+																			</MenuItem>
+																		);
+																	}
+																)}
 															</Select>
 														)}
 													/>
@@ -426,40 +487,46 @@ const EditProductPage = () => {
 												<label htmlFor='sub-category'>التصنيف الفرعي </label>
 											</div>
 											<div className='col-md-7 col-12'>
-												<FormControl sx={{ m: 0, width: '100%' }}>
+												<FormControl sx={{ m: 0, width: "100%" }}>
 													<Select
-
 														sx={{
-															'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-															{
-																paddingRight: '20px',
-															},
+															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																{
+																	paddingRight: "20px",
+																},
 														}}
 														IconComponent={IoIosArrowDown}
 														multiple
 														displayEmpty
-														inputProps={{ 'aria-label': 'Without label' }}
+														inputProps={{ "aria-label": "Without label" }}
 														name='subcategory_id'
 														value={product?.subcategory_id || []}
 														onChange={(e) => handleOnChange(e)}
 														input={<OutlinedInput />}
 														renderValue={(selected) => {
 															if (product?.subcategory_id?.length === 0) {
-																return 'التصنيف الفرعي';
+																return "التصنيف الفرعي";
 															}
 															return selected?.map((item) => {
-																const result = subcategory[0]?.subcategory?.filter((sub) => sub?.id === parseInt(item)) || product?.subcategory_id;
+																const result =
+																	subcategory[0]?.subcategory?.filter(
+																		(sub) => sub?.id === parseInt(item)
+																	) || product?.subcategory_id;
 																return `${result[0]?.name} , `;
 															});
 														}}
 														open={openSubCategory}
 														onClick={() => {
 															setOpenSubCategory(true);
-														}}
-													>
+														}}>
 														{subcategory[0]?.subcategory?.map((sub, index) => (
 															<MenuItem key={index} value={sub?.id}>
-																<Checkbox checked={product?.subcategory_id?.indexOf(sub?.id) > -1} />
+																<Checkbox
+																	checked={
+																		product?.subcategory_id?.indexOf(sub?.id) >
+																		-1
+																	}
+																/>
 																<ListItemText primary={sub?.name} />
 															</MenuItem>
 														))}
@@ -470,8 +537,7 @@ const EditProductPage = () => {
 																	e.stopPropagation();
 																	e.preventDefault();
 																	setOpenSubCategory(false);
-																}}
-															>
+																}}>
 																أختر
 															</Button>
 														</MenuItem>
@@ -479,7 +545,13 @@ const EditProductPage = () => {
 												</FormControl>
 											</div>
 											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>{productError?.subcategory_id && <span className='fs-6 text-danger'>{productError?.subcategory_id}</span>}</div>
+											<div className='col-md-7 col-12'>
+												{productError?.subcategory_id && (
+													<span className='fs-6 text-danger'>
+														{productError?.subcategory_id}
+													</span>
+												)}
+											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
@@ -491,15 +563,15 @@ const EditProductPage = () => {
 													type='number'
 													id='stock'
 													placeholder='اضف الكمية'
-													{...register('stock', {
+													{...register("stock", {
 														required: "حقل المخزون مطلوب.",
 														pattern: {
 															value: /^[0-9]+$/i,
-															message: "يجب على الحقل المخزون أن يكون رقمًا"
+															message: "يجب على الحقل المخزون أن يكون رقمًا",
 														},
 														min: {
 															value: 1,
-															message: "  المخزون يجب ان يكون اكبر من 0"
+															message: "  المخزون يجب ان يكون اكبر من 0",
 														},
 													})}
 												/>
@@ -514,7 +586,10 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'> السعر<span className='text-danger'>*</span> </label>
+												<label htmlFor='price'>
+													{" "}
+													السعر<span className='text-danger'>*</span>{" "}
+												</label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<Controller
@@ -522,18 +597,18 @@ const EditProductPage = () => {
 													control={control}
 													rules={{
 														required: "حقل سعر البيع مطلوب",
-													pattern: {
-														value: /^[0-9]+$/i,
-														message: "يجب على الحقل سعر البيع أن يكون رقمًا"
-													},
-													min: {
-														value: 1,
-														message: " سعر البيع يجب ان يكون اكبر من 0"
-													},
+														pattern: {
+															value: /^[0-9]+$/i,
+															message: "يجب على الحقل سعر البيع أن يكون رقمًا",
+														},
+														min: {
+															value: 1,
+															message: " سعر البيع يجب ان يكون اكبر من 0",
+														},
 													}}
 													render={({ field: { onChange, value } }) => (
 														<input
-														disabled={product?.discount_price}
+															disabled={product?.discount_price}
 															name={"selling_price"}
 															type='number'
 															id='price'
@@ -550,13 +625,14 @@ const EditProductPage = () => {
 											<div className='col-md-7 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.selling_price}
-													{errors?.selling_price && errors.selling_price.message}
+													{errors?.selling_price &&
+														errors.selling_price.message}
 												</span>
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='low-price'> السعر بعد الخصم  </label>
+												<label htmlFor='low-price'> السعر بعد الخصم </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<Controller
@@ -577,28 +653,43 @@ const EditProductPage = () => {
 												/>
 											</div>
 											<div className='col-md-3 col-12'></div>
-											{product?.discount_price &&  product?.selling_price  && 
+											{product?.discount_price && product?.selling_price && (
 												<div className='col-md-7 col-12'>
-												{Number(product?.selling_price) - Number(product?.discount_price) <= 0 &&
-												<span className='fs-6' style={{color:'red'}}>يجب ان يكون سعر التخفيض اقل من السعر الأساسي</span> 
-												}
-											
+													{Number(product?.selling_price) -
+														Number(product?.discount_price) <=
+														0 && (
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 												</div>
-		
-												}
-								
-												{product?.discount_price &&  product?.selling_price === '' && 
-													<div className='col-md-7 col-12'><span className='fs-6' style={{color:'red'}}>يرجي ادخال  السعر الأساسي أولاّّ حتي تتمكن من ادخال سعر الخصم</span></div>
-												}
-												<div className='col-md-7 col-12'><span className='fs-6 text-danger'>{productError?.discount_price}{errors?.discount_price && errors.discount_price.message}</span></div>
+											)}
+
+											{product?.discount_price &&
+												product?.selling_price === "" && (
+													<div className='col-md-7 col-12'>
+														<span className='fs-6' style={{ color: "red" }}>
+															يرجي ادخال السعر الأساسي أولاّّ حتي تتمكن من ادخال
+															سعر الخصم
+														</span>
+													</div>
+												)}
 											<div className='col-md-7 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.discount_price}
-													{errors?.discount_price && errors.discount_price.message}
+													{errors?.discount_price &&
+														errors.discount_price.message}
+												</span>
+											</div>
+											<div className='col-md-7 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.discount_price}
+													{errors?.discount_price &&
+														errors.discount_price.message}
 												</span>
 											</div>
 										</div>
-										
+
 										<div className='row mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='seo'> وصف محركات البحث SEO </label>
@@ -608,15 +699,14 @@ const EditProductPage = () => {
 													name='SEOdescription'
 													id='SEOdescription'
 													placeholder='يرجى كتابة وصف دقيق للمنتج حتى يمكنك استخدامه في عملية الترويج للمنتج'
-													{...register('SEOdescription', {
-													})}
-												></textarea>
+													{...register("SEOdescription", {})}></textarea>
 											</div>
 											<div className='col-md-3 col-12'></div>
 											<div className='col-md-7 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.SEOdescription}
-													{errors?.SEOdescription && errors.SEOdescription.message}
+													{errors?.SEOdescription &&
+														errors.SEOdescription.message}
 												</span>
 											</div>
 										</div>
@@ -629,7 +719,9 @@ const EditProductPage = () => {
 												</button>
 											</div>
 											<div className='col-lg-4 col-6'>
-												<button className='close-btn' onClick={() => navigate('/Products')}>
+												<button
+													className='close-btn'
+													onClick={() => navigate("/Products")}>
 													إلغاء
 												</button>
 											</div>

@@ -1,30 +1,38 @@
-import React, { useState, useContext, Fragment } from 'react';
-import ReactDom from 'react-dom';
-import { DeleteContext } from '../../Context/DeleteProvider';
-import { ReactComponent as Warning } from '../../data/Icons/icon-32-warning.svg';
-import styles from './DeleteOneModal.module.css';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import Context from '../../Context/context';
+import React, { useState, useContext, Fragment } from "react";
+import ReactDom from "react-dom";
+import { DeleteContext } from "../../Context/DeleteProvider";
+import { ReactComponent as Warning } from "../../data/Icons/icon-32-warning.svg";
+import styles from "./DeleteOneModal.module.css";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import Context from "../../Context/context";
 
 const BackDrop = () => {
 	return <div className={styles.backdrop}></div>;
 };
 const DeleteOneModal = () => {
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const [loading, setLoading] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteProvider = useContext(DeleteContext);
-	const { setUrl, url, actionDelete, setActionDelete, setDeleteReload, deleteReload, deleteMethod } = DeleteProvider;
+	const {
+		setUrl,
+		url,
+		actionDelete,
+		setActionDelete,
+		setDeleteReload,
+		deleteReload,
+		deleteMethod,
+	} = DeleteProvider;
 
 	const confirm = () => {
-		if (deleteMethod === 'delete') {
+		if (deleteMethod === "delete") {
 			setLoading(true);
 			axios
 				.delete(url, {
 					headers: {
-						'Content-Type': 'application/json',
+						"Content-Type": "application/json",
 						Authorization: `Bearer ${cookies.access_token}`,
 					},
 				})
@@ -43,13 +51,12 @@ const DeleteOneModal = () => {
 						setLoading(false);
 					}
 				});
-		}
-		else {
+		} else {
 			setLoading(true);
 			axios
 				.get(url, {
 					headers: {
-						'Content-Type': 'application/json',
+						"Content-Type": "application/json",
 						Authorization: `Bearer ${cookies.access_token}`,
 					},
 				})
@@ -69,7 +76,7 @@ const DeleteOneModal = () => {
 					}
 				});
 		}
-	}
+	};
 
 	return (
 		<Fragment>
@@ -82,26 +89,29 @@ const DeleteOneModal = () => {
 					</div>
 					<p className={styles.confirm_title}>هل أنت متأكد !</p>
 					<h6 className={styles.notificationTitle}>{actionDelete}</h6>
-					<div className={`d-flex flex-row align-items-center ${styles.btn_box} gap-4`}>
+					<div
+						className={`d-flex flex-row align-items-center ${styles.btn_box} gap-4`}>
 						<button
-							type={'normal'}
-							style={{ backgroundColor: '#02466A', color: '#EFF9FF' }}
+							type={"normal"}
+							style={{ backgroundColor: "#02466A", color: "#EFF9FF" }}
 							className={`${styles.confirm_btn} ${styles.notifi_btn}`}
 							onClick={() => confirm()}
-							disabled={loading}
-						>
+							disabled={loading}>
 							تأكيد
 						</button>
 						<button
-							type={'outline'}
+							type={"outline"}
 							className={`${styles.notifi_btn}`}
-							style={{ backgroundColor: '#02466A00', border: '1px solid #02466A', color: '#02466A' }}
+							style={{
+								backgroundColor: "#02466A00",
+								border: "1px solid #02466A",
+								color: "#02466A",
+							}}
 							onClick={() => {
 								setActionDelete(null);
 								setUrl(null);
 							}}
-							disabled={loading}
-						>
+							disabled={loading}>
 							الغاء
 						</button>
 					</div>
@@ -112,7 +122,14 @@ const DeleteOneModal = () => {
 };
 
 const DeleteOneModalComp = ({ title, cancelEarly }) => {
-	return <Fragment>{ReactDom.createPortal(<DeleteOneModal title={title} cancelEarly={cancelEarly} />, document.getElementById('action_div'))}</Fragment>;
+	return (
+		<Fragment>
+			{ReactDom.createPortal(
+				<DeleteOneModal title={title} cancelEarly={cancelEarly} />,
+				document.getElementById("action_div")
+			)}
+		</Fragment>
+	);
 };
 
 export default DeleteOneModalComp;

@@ -1,0 +1,18 @@
+.logo-header {
+	height: 98px;
+	padding-top: 21px;
+	display: flex;
+	align-items: center;
+	justify-content: start;
+}
+
+.logo-header .box-logo {
+	width: 70px;
+	height: 77px;
+	cursor: pointer;
+}
+
+.logo-header .box-logo svg {
+	max-height: 100%;
+	max-width: 100%;
+}

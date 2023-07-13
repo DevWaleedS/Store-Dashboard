@@ -1,26 +1,29 @@
-import React, { useContext, useState, Fragment, useEffect } from 'react';
-import axios from 'axios';
-import Context from '../Context/context';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import Button from '@mui/material/Button';
-import useFetch from '../Hooks/UseFetch';
+import React, { useContext, useState, Fragment, useEffect } from "react";
+import axios from "axios";
+import Context from "../Context/context";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import Button from "@mui/material/Button";
+import useFetch from "../Hooks/UseFetch";
 // import ImageUploading library
-import ImageUploading from 'react-images-uploading';
+import ImageUploading from "react-images-uploading";
 // IMPORT ICONS
-import { MdFileUpload } from 'react-icons/md';
-import { BsArrowLeft } from 'react-icons/bs';
-import { FormControl, Switch } from '@mui/material';
-import { ReactComponent as CommentIcon } from '../data/Icons/icon-32-comment.svg';
-import { ReactComponent as Client } from '../data/Icons/icon-24-ratings.svg';
-import { Link } from 'react-router-dom';
-import CircularLoading from '../HelperComponents/CircularLoading';
-import { LoadingContext } from '../Context/LoadingProvider';
+import { MdFileUpload } from "react-icons/md";
+import { BsArrowLeft } from "react-icons/bs";
+import { FormControl, Switch } from "@mui/material";
+import LogoSvg from "../data/Icons/logo svg.svg";
+import { ReactComponent as CommentIcon } from "../data/Icons/icon-32-comment.svg";
+import { ReactComponent as Client } from "../data/Icons/icon-24-ratings.svg";
+import { Link } from "react-router-dom";
+import CircularLoading from "../HelperComponents/CircularLoading";
+import { LoadingContext } from "../Context/LoadingProvider";
 
 const TemplateUpdate = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/homepage');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/homepage"
+	);
 	const navigate = useNavigate();
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -30,13 +33,13 @@ const TemplateUpdate = () => {
 	const [firstBanner, setFirstBanner] = useState([]);
 	const [secondBanner, setSecondBanner] = useState([]);
 	const [thirdBanner, setThirdBanner] = useState([]);
-	const [previewBanner, setPreviewBanner] = useState('');
+	const [previewBanner, setPreviewBanner] = useState("");
 
 	// Sliders Images
 	const [firstSlider, setFirstSlider] = useState([]);
 	const [secondSlider, setSecondSlider] = useState([]);
 	const [thirdSlider, setThirdSlider] = useState([]);
-	const [previewSlider, setPreviewSlider] = useState('');
+	const [previewSlider, setPreviewSlider] = useState("");
 
 	// banners status
 	const [bannerstatus1, setBannerStatus1] = useState(true);
@@ -54,21 +57,36 @@ const TemplateUpdate = () => {
 
 	useEffect(() => {
 		// set comment status
-		setCommentStatus(fetchedData?.data?.Homepages[0]?.commentstatus === 'active' ? true : false);
+		setCommentStatus(
+			fetchedData?.data?.Homepages[0]?.commentstatus === "active" ? true : false
+		);
 
 		// set client status
-		setClientStatus(fetchedData?.data?.Homepages[0]?.clientstatus === 'active' ? true : false);
+		setClientStatus(
+			fetchedData?.data?.Homepages[0]?.clientstatus === "active" ? true : false
+		);
 
 		// set banners status
-		setBannerStatus1(fetchedData?.data?.Homepages[0]?.banarstatus1 === 'active' ? true : false);
-		setBannerStatus2(fetchedData?.data?.Homepages[0]?.banarstatus2 === 'active' ? true : false);
-		setBannerStatus3(fetchedData?.data?.Homepages[0]?.banarstatus3 === 'active' ? true : false);
+		setBannerStatus1(
+			fetchedData?.data?.Homepages[0]?.banarstatus1 === "active" ? true : false
+		);
+		setBannerStatus2(
+			fetchedData?.data?.Homepages[0]?.banarstatus2 === "active" ? true : false
+		);
+		setBannerStatus3(
+			fetchedData?.data?.Homepages[0]?.banarstatus3 === "active" ? true : false
+		);
 
 		// set sliders status
-		setSlidersStatus1(fetchedData?.data?.Homepages[0]?.sliderstatus1 === 'active' ? true : false);
-		setSlidersStatus2(fetchedData?.data?.Homepages[0]?.sliderstatus2 === 'active' ? true : false);
-		setSlidersStatus3(fetchedData?.data?.Homepages[0]?.sliderstatus3 === 'active' ? true : false);
-
+		setSlidersStatus1(
+			fetchedData?.data?.Homepages[0]?.sliderstatus1 === "active" ? true : false
+		);
+		setSlidersStatus2(
+			fetchedData?.data?.Homepages[0]?.sliderstatus2 === "active" ? true : false
+		);
+		setSlidersStatus3(
+			fetchedData?.data?.Homepages[0]?.sliderstatus3 === "active" ? true : false
+		);
 	}, [fetchedData?.data?.Homepages]);
 
 	/** --------------------------------------------------------------------------------- */
@@ -84,28 +102,28 @@ const TemplateUpdate = () => {
 
 	// update logo function
 	const updateLogo = () => {
-		setLoadingTitle('جاري تعديل الشعار');
+		setLoadingTitle("جاري تعديل الشعار");
 		let formData = new FormData();
 		if (logo.length !== 0) {
-			formData.append('logo', logo[0]?.file);
+			formData.append("logo", logo[0]?.file);
 		}
 		axios
 			.post(`https://backend.atlbha.com/api/Store/logoUpdate`, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
+					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies.access_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				}
 			});
@@ -114,77 +132,76 @@ const TemplateUpdate = () => {
 
 	// update banners function
 	const updateBanners = () => {
-		setLoadingTitle('جاري تعديل البنرات الإعلانية');
+		setLoadingTitle("جاري تعديل البنرات الإعلانية");
 		let formData = new FormData();
 		if (firstBanner.length !== 0) {
-			formData.append('banar1', firstBanner[0]?.file || null);
+			formData.append("banar1", firstBanner[0]?.file || null);
 		}
 		if (secondBanner.length !== 0) {
-			formData.append('banar2', secondBanner[0]?.file || null);
+			formData.append("banar2", secondBanner[0]?.file || null);
 		}
 		if (thirdBanner.length !== 0) {
-			formData.append('banar3', thirdBanner[0]?.file || null);
+			formData.append("banar3", thirdBanner[0]?.file || null);
 		}
-		formData.append('banarstatus1', bannerstatus1 ? 'active' : 'not_active');
-		formData.append('banarstatus2', bannerstatus2 ? 'active' : 'not_active');
-		formData.append('banarstatus3', bannerstatus3 ? 'active' : 'not_active');
+		formData.append("banarstatus1", bannerstatus1 ? "active" : "not_active");
+		formData.append("banarstatus2", bannerstatus2 ? "active" : "not_active");
+		formData.append("banarstatus3", bannerstatus3 ? "active" : "not_active");
 		axios
 			.post(`https://backend.atlbha.com/api/Store/banarUpdate`, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
+					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies.access_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				}
 			});
 	};
 	/** --------------------------------------------------------------------------------- */
 
-	
 	// update Sliders function
 	const updateSliders = () => {
-		setLoadingTitle('جاري تعديل السلايدرات المتحركة');
+		setLoadingTitle("جاري تعديل السلايدرات المتحركة");
 		let formData = new FormData();
 		if (firstSlider.length !== 0) {
-			formData.append('slider1', firstSlider[0]?.file || null);
+			formData.append("slider1", firstSlider[0]?.file || null);
 		}
 		if (secondSlider.length !== 0) {
-			formData.append('slider3', secondSlider[0]?.file || null);
+			formData.append("slider3", secondSlider[0]?.file || null);
 		}
 		if (thirdSlider.length !== 0) {
-			formData.append('slider3', thirdSlider[0]?.file || null);
+			formData.append("slider3", thirdSlider[0]?.file || null);
 		}
-		formData.append('sliderstatus1', sliderstatus1 ? 'active' : 'not_active');
-		formData.append('sliderstatus2', sliderstatus2 ? 'active' : 'not_active');
-		formData.append('sliderstatus3', sliderstatus3 ? 'active' : 'not_active');
+		formData.append("sliderstatus1", sliderstatus1 ? "active" : "not_active");
+		formData.append("sliderstatus2", sliderstatus2 ? "active" : "not_active");
+		formData.append("sliderstatus3", sliderstatus3 ? "active" : "not_active");
 		axios
 			.post(`https://backend.atlbha.com/api/Store/sliderUpdate`, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
+					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies.access_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				}
 			});
@@ -193,27 +210,27 @@ const TemplateUpdate = () => {
 
 	// Update comments function
 	const updateComments = () => {
-		setLoadingTitle('جاري تعديل التعليقات والعملاء');
+		setLoadingTitle("جاري تعديل التعليقات والعملاء");
 		let formData = new FormData();
-		formData.append('commentstatus', commentStatus ? 'active' : 'not_active');
-		formData.append('clientstatus', clientStatus ? 'active' : 'not_active');
+		formData.append("commentstatus", commentStatus ? "active" : "not_active");
+		formData.append("clientstatus", clientStatus ? "active" : "not_active");
 		axios
 			.post(`https://backend.atlbha.com/api/Store/commentUpdate`, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
+					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies.access_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Template');
+					navigate("/Template");
 					setReload(!reload);
 				}
 			});
@@ -226,7 +243,10 @@ const TemplateUpdate = () => {
 			<div className='seo-weight-edit-box template-edit-box mb-4'>
 				<div className='title'>
 					<h4>
-						الشعار <span>( تستطيع تغيير الشعار الذي يظهر في الهيدر في الصفحة الرئيسية )</span>
+						الشعار{" "}
+						<span>
+							( تستطيع تغيير الشعار الذي يظهر في الهيدر في الصفحة الرئيسية )
+						</span>
 					</h4>
 				</div>
 
@@ -235,7 +255,11 @@ const TemplateUpdate = () => {
 						<div className='col-12 p-4 '>
 							<div className='input-bx logo-box'>
 								{/** Upload Image  */}
-								<ImageUploading value={logo} onChange={onChange} maxNumber={maxNumber} dataURLKey='data_url'>
+								<ImageUploading
+									value={logo}
+									onChange={onChange}
+									maxNumber={maxNumber}
+									dataURLKey='data_url'>
 									{({ onImageUpload, dragProps }) => (
 										// Ui For Upload Log
 										<Fragment>
@@ -247,20 +271,39 @@ const TemplateUpdate = () => {
 													<>
 														{!logo[0] && (
 															<img
-																style={{ objectFit: 'contain', borderRadius: 'inherit' }}
+																style={{
+																	objectFit: "contain",
+																	borderRadius: "inherit",
+																}}
 																className='w-100 h-100 logo-img-uploaded'
-																src={fetchedData?.data?.Homepages[0]?.logo}
+																src={
+																	fetchedData?.data?.Homepages[0]?.logo ||
+																	LogoSvg
+																}
 																alt={fetchedData?.data?.Homepages[0]?.logo}
 															/>
 														)}
-														{logo[0] && <img style={{ objectFit: 'contain', borderRadius: 'inherit' }} src={logo[0]?.data_url} alt='' className='w-100 h-100 logo-img-uploaded' />}
+														{logo[0] && (
+															<img
+																style={{
+																	objectFit: "contain",
+																	borderRadius: "inherit",
+																}}
+																src={logo[0]?.data_url}
+																alt=''
+																className='w-100 h-100 logo-img-uploaded'
+															/>
+														)}
 													</>
 												)}
 											</div>
 
 											{/** upload btn */}
 											<div className='upload-files-input'>
-												<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+												<button
+													className=' d-flex justify-content-between align-items-center w-100'
+													onClick={onImageUpload}
+													{...dragProps}>
 													<span> تحديث الشعار </span>
 													<MdFileUpload />
 												</button>
@@ -286,7 +329,12 @@ const TemplateUpdate = () => {
 			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 				<div className='title'>
 					<h4>
-						البنرات الإعلانية <span> ( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين الأقسام )</span>
+						البنرات الإعلانية{" "}
+						<span>
+							{" "}
+							( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين
+							الأقسام )
+						</span>
 					</h4>
 				</div>
 
@@ -302,12 +350,31 @@ const TemplateUpdate = () => {
 										<>
 											{!firstBanner[0] && (
 												<img
-													style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }}
-													src={fetchedData?.data?.Homepages[0]?.banar1}
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+														height: "100%",
+														maxWidth: "100%",
+													}}
+													src={
+														fetchedData?.data?.Homepages[0]?.banar1 ||
+														"https://placehold.co/572x166"
+													}
 													alt={fetchedData?.data?.Homepages[0]?.banar1}
 												/>
 											)}
-											{firstBanner[0] && <img style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }} src={previewBanner[0]?.data_url} alt='preview-img' />}
+											{firstBanner[0] && (
+												<img
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+														height: "100%",
+														maxWidth: "100%",
+													}}
+													src={previewBanner[0]?.data_url}
+													alt='preview-img'
+												/>
+											)}
 										</>
 									)}
 								</div>
@@ -328,11 +395,13 @@ const TemplateUpdate = () => {
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
-												acceptType={['jpg', 'png', 'jpeg']}
-											>
+												acceptType={["jpg", "png", "jpeg"]}>
 												{({ onImageUpload, dragProps }) => (
 													<div className='upload-files-input mb-2'>
-														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
 															<span> تحديث البانر </span>
 															<MdFileUpload />
 														</button>
@@ -343,30 +412,30 @@ const TemplateUpdate = () => {
 												<Switch
 													onChange={() => setBannerStatus1(!bannerstatus1)}
 													sx={{
-														width: '35px',
+														width: "35px",
 														padding: 0,
-														height: '20px',
-														borderRadius: '0.75rem',
-														'& .MuiSwitch-thumb': {
-															width: '12px',
-															height: '12px',
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
 														},
-														'& .MuiSwitch-switchBase': {
-															padding: '0',
-															top: '4px',
-															left: '4px',
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
 														},
-														'& .MuiSwitch-switchBase.Mui-checked': {
-															left: '-4px',
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
 														},
-														'& .Mui-checked .MuiSwitch-thumb': {
-															backgroundColor: '#FFFFFF',
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
 														},
-														'& .MuiSwitch-track': {
-															height: '100%',
+														"& .MuiSwitch-track": {
+															height: "100%",
 														},
-														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-															backgroundColor: '#3AE374',
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
 															opacity: 1,
 														},
 													}}
@@ -386,11 +455,13 @@ const TemplateUpdate = () => {
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
-												acceptType={['jpg', 'png', 'jpeg']}
-											>
+												acceptType={["jpg", "png", "jpeg"]}>
 												{({ onImageUpload, dragProps }) => (
 													<div className='upload-files-input mb-2'>
-														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
 															<span> تحديث البانر </span>
 															<MdFileUpload />
 														</button>
@@ -401,30 +472,30 @@ const TemplateUpdate = () => {
 												<Switch
 													onChange={() => setBannerStatus2(!bannerstatus2)}
 													sx={{
-														width: '35px',
+														width: "35px",
 														padding: 0,
-														height: '20px',
-														borderRadius: '0.75rem',
-														'& .MuiSwitch-thumb': {
-															width: '12px',
-															height: '12px',
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
 														},
-														'& .MuiSwitch-switchBase': {
-															padding: '0',
-															top: '4px',
-															left: '4px',
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
 														},
-														'& .MuiSwitch-switchBase.Mui-checked': {
-															left: '-4px',
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
 														},
-														'& .Mui-checked .MuiSwitch-thumb': {
-															backgroundColor: '#FFFFFF',
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
 														},
-														'& .MuiSwitch-track': {
-															height: '100%',
+														"& .MuiSwitch-track": {
+															height: "100%",
 														},
-														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-															backgroundColor: '#3AE374',
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
 															opacity: 1,
 														},
 													}}
@@ -444,11 +515,13 @@ const TemplateUpdate = () => {
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
-												acceptType={['jpg', 'png', 'jpeg']}
-											>
+												acceptType={["jpg", "png", "jpeg"]}>
 												{({ onImageUpload, dragProps }) => (
 													<div className='upload-files-input mb-2'>
-														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
 															<span> تحديث البانر </span>
 															<MdFileUpload />
 														</button>
@@ -459,30 +532,30 @@ const TemplateUpdate = () => {
 												<Switch
 													onChange={() => setBannerStatus3(!bannerstatus3)}
 													sx={{
-														width: '35px',
+														width: "35px",
 														padding: 0,
-														height: '20px',
-														borderRadius: '0.75rem',
-														'& .MuiSwitch-thumb': {
-															width: '12px',
-															height: '12px',
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
 														},
-														'& .MuiSwitch-switchBase': {
-															padding: '0',
-															top: '4px',
-															left: '4px',
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
 														},
-														'& .MuiSwitch-switchBase.Mui-checked': {
-															left: '-4px',
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
 														},
-														'& .Mui-checked .MuiSwitch-thumb': {
-															backgroundColor: '#FFFFFF',
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
 														},
-														'& .MuiSwitch-track': {
-															height: '100%',
+														"& .MuiSwitch-track": {
+															height: "100%",
 														},
-														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-															backgroundColor: '#3AE374',
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
 															opacity: 1,
 														},
 													}}
@@ -509,7 +582,11 @@ const TemplateUpdate = () => {
 			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 				<div className='title'>
 					<h4>
-					السلايدر المتحرك<span> ( تستطيع تغيير الصورة التي تظهر في السلايدر المتحرك أعلى الموقع )</span>
+						السلايدر المتحرك
+						<span>
+							{" "}
+							( تستطيع تغيير الصورة التي تظهر في السلايدر المتحرك أعلى الموقع )
+						</span>
 					</h4>
 				</div>
 
@@ -525,12 +602,31 @@ const TemplateUpdate = () => {
 										<>
 											{!firstSlider[0] && (
 												<img
-													style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }}
-													src={fetchedData?.data?.Homepages[0]?.slider1}
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+														height: "100%",
+														maxWidth: "100%",
+													}}
+													src={
+														fetchedData?.data?.Homepages[0]?.slider1 ||
+														"https://placehold.co/572x166"
+													}
 													alt={fetchedData?.data?.Homepages[0]?.slider1}
 												/>
 											)}
-											{firstBanner[0] && <img style={{  borderRadius: 'inherit', width: '100%', height: '100%', maxWidth: '100%' }} src={previewSlider[0]?.data_url} alt='preview-img' />}
+											{firstBanner[0] && (
+												<img
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+														height: "100%",
+														maxWidth: "100%",
+													}}
+													src={previewSlider[0]?.data_url}
+													alt='preview-img'
+												/>
+											)}
 										</>
 									)}
 								</div>
@@ -551,11 +647,13 @@ const TemplateUpdate = () => {
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
-												acceptType={['jpg', 'png', 'jpeg']}
-											>
+												acceptType={["jpg", "png", "jpeg"]}>
 												{({ onImageUpload, dragProps }) => (
 													<div className='upload-files-input mb-2'>
-														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
 															<span> تحديث البانر </span>
 															<MdFileUpload />
 														</button>
@@ -566,30 +664,30 @@ const TemplateUpdate = () => {
 												<Switch
 													onChange={() => setSlidersStatus1(!sliderstatus1)}
 													sx={{
-														width: '35px',
+														width: "35px",
 														padding: 0,
-														height: '20px',
-														borderRadius: '0.75rem',
-														'& .MuiSwitch-thumb': {
-															width: '12px',
-															height: '12px',
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
 														},
-														'& .MuiSwitch-switchBase': {
-															padding: '0',
-															top: '4px',
-															left: '4px',
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
 														},
-														'& .MuiSwitch-switchBase.Mui-checked': {
-															left: '-4px',
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
 														},
-														'& .Mui-checked .MuiSwitch-thumb': {
-															backgroundColor: '#FFFFFF',
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
 														},
-														'& .MuiSwitch-track': {
-															height: '100%',
+														"& .MuiSwitch-track": {
+															height: "100%",
 														},
-														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-															backgroundColor: '#3AE374',
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
 															opacity: 1,
 														},
 													}}
@@ -609,11 +707,13 @@ const TemplateUpdate = () => {
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
-												acceptType={['jpg', 'png', 'jpeg']}
-											>
+												acceptType={["jpg", "png", "jpeg"]}>
 												{({ onImageUpload, dragProps }) => (
 													<div className='upload-files-input mb-2'>
-														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
 															<span> تحديث البانر </span>
 															<MdFileUpload />
 														</button>
@@ -624,30 +724,30 @@ const TemplateUpdate = () => {
 												<Switch
 													onChange={() => setSlidersStatus2(!sliderstatus2)}
 													sx={{
-														width: '35px',
+														width: "35px",
 														padding: 0,
-														height: '20px',
-														borderRadius: '0.75rem',
-														'& .MuiSwitch-thumb': {
-															width: '12px',
-															height: '12px',
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
 														},
-														'& .MuiSwitch-switchBase': {
-															padding: '0',
-															top: '4px',
-															left: '4px',
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
 														},
-														'& .MuiSwitch-switchBase.Mui-checked': {
-															left: '-4px',
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
 														},
-														'& .Mui-checked .MuiSwitch-thumb': {
-															backgroundColor: '#FFFFFF',
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
 														},
-														'& .MuiSwitch-track': {
-															height: '100%',
+														"& .MuiSwitch-track": {
+															height: "100%",
 														},
-														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-															backgroundColor: '#3AE374',
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
 															opacity: 1,
 														},
 													}}
@@ -667,11 +767,13 @@ const TemplateUpdate = () => {
 												}}
 												maxNumber={2}
 												dataURLKey='data_url'
-												acceptType={['jpg', 'png', 'jpeg']}
-											>
+												acceptType={["jpg", "png", "jpeg"]}>
 												{({ onImageUpload, dragProps }) => (
 													<div className='upload-files-input mb-2'>
-														<button className=' d-flex justify-content-between align-items-center w-100' onClick={onImageUpload} {...dragProps}>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
 															<span> تحديث البانر </span>
 															<MdFileUpload />
 														</button>
@@ -682,30 +784,30 @@ const TemplateUpdate = () => {
 												<Switch
 													onChange={() => setSlidersStatus3(!sliderstatus3)}
 													sx={{
-														width: '35px',
+														width: "35px",
 														padding: 0,
-														height: '20px',
-														borderRadius: '0.75rem',
-														'& .MuiSwitch-thumb': {
-															width: '12px',
-															height: '12px',
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
 														},
-														'& .MuiSwitch-switchBase': {
-															padding: '0',
-															top: '4px',
-															left: '4px',
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
 														},
-														'& .MuiSwitch-switchBase.Mui-checked': {
-															left: '-4px',
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
 														},
-														'& .Mui-checked .MuiSwitch-thumb': {
-															backgroundColor: '#FFFFFF',
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
 														},
-														'& .MuiSwitch-track': {
-															height: '100%',
+														"& .MuiSwitch-track": {
+															height: "100%",
 														},
-														'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-															backgroundColor: '#3AE374',
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
 															opacity: 1,
 														},
 													}}
@@ -731,7 +833,8 @@ const TemplateUpdate = () => {
 			<div className='seo-weight-edit-box template-edit-box '>
 				<div className='title d-flex flex-md-row flex-column justify-content-between align-items-md-center flex-wrap gap-4'>
 					<h4>
-						التعليقات والعملاء <span> (تستطيع تفعيل وتعطيل العملاء المميزين والتعليقات )</span>
+						التعليقات والعملاء{" "}
+						<span> (تستطيع تفعيل وتعطيل العملاء المميزين والتعليقات )</span>
 					</h4>
 					<div className='view-more-btn mx-md-4 mt-md-0 mt-3'>
 						<Link to='/Rating' variant='contained'>
@@ -754,30 +857,30 @@ const TemplateUpdate = () => {
 										<Switch
 											onChange={() => setClientStatus(!clientStatus)}
 											sx={{
-												width: '35px',
+												width: "35px",
 												padding: 0,
-												height: '20px',
-												borderRadius: '0.75rem',
-												'& .MuiSwitch-thumb': {
-													width: '12px',
-													height: '12px',
+												height: "20px",
+												borderRadius: "0.75rem",
+												"& .MuiSwitch-thumb": {
+													width: "12px",
+													height: "12px",
 												},
-												'& .MuiSwitch-switchBase': {
-													padding: '0',
-													top: '4px',
-													left: '4px',
+												"& .MuiSwitch-switchBase": {
+													padding: "0",
+													top: "4px",
+													left: "4px",
 												},
-												'& .MuiSwitch-switchBase.Mui-checked': {
-													left: '-4px',
+												"& .MuiSwitch-switchBase.Mui-checked": {
+													left: "-4px",
 												},
-												'& .Mui-checked .MuiSwitch-thumb': {
-													backgroundColor: '#FFFFFF',
+												"& .Mui-checked .MuiSwitch-thumb": {
+													backgroundColor: "#FFFFFF",
 												},
-												'& .MuiSwitch-track': {
-													height: '100%',
+												"& .MuiSwitch-track": {
+													height: "100%",
 												},
-												'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-													backgroundColor: '#3AE374',
+												"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+													backgroundColor: "#3AE374",
 													opacity: 1,
 												},
 											}}
@@ -794,30 +897,30 @@ const TemplateUpdate = () => {
 										<Switch
 											onChange={() => setCommentStatus(!commentStatus)}
 											sx={{
-												width: '35px',
+												width: "35px",
 												padding: 0,
-												height: '20px',
-												borderRadius: '0.75rem',
-												'& .MuiSwitch-thumb': {
-													width: '12px',
-													height: '12px',
+												height: "20px",
+												borderRadius: "0.75rem",
+												"& .MuiSwitch-thumb": {
+													width: "12px",
+													height: "12px",
 												},
-												'& .MuiSwitch-switchBase': {
-													padding: '0',
-													top: '4px',
-													left: '4px',
+												"& .MuiSwitch-switchBase": {
+													padding: "0",
+													top: "4px",
+													left: "4px",
 												},
-												'& .MuiSwitch-switchBase.Mui-checked': {
-													left: '-4px',
+												"& .MuiSwitch-switchBase.Mui-checked": {
+													left: "-4px",
 												},
-												'& .Mui-checked .MuiSwitch-thumb': {
-													backgroundColor: '#FFFFFF',
+												"& .Mui-checked .MuiSwitch-thumb": {
+													backgroundColor: "#FFFFFF",
 												},
-												'& .MuiSwitch-track': {
-													height: '100%',
+												"& .MuiSwitch-track": {
+													height: "100%",
 												},
-												'&.MuiSwitch-root .Mui-checked+.MuiSwitch-track': {
-													backgroundColor: '#3AE374',
+												"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+													backgroundColor: "#3AE374",
 													opacity: 1,
 												},
 											}}

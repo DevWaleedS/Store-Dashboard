@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 export default function useFetch(url) {
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const [fetchedData, setFetchedData] = useState(null);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export default function useFetch(url) {
 				setLoading(true);
 				const response = await axios.get(url, {
 					headers: {
-						'Content-Type': 'application/json',
+						"Content-Type": "application/json",
 						Authorization: `Bearer ${cookies.access_token}`,
 					},
 				});
@@ -26,6 +26,6 @@ export default function useFetch(url) {
 			}
 		})();
 	}, [url, reload]);
-	
+
 	return { fetchedData, error, loading, reload, setReload };
 }

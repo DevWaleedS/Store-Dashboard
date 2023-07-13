@@ -1,112 +1,119 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import Context from '../../Context/context';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import axios from "axios";
+import Context from "../../Context/context";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 // import Dropzone Library
-import { useDropzone } from 'react-dropzone';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { useDropzone } from "react-dropzone";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 // icons
-import { ReactComponent as Message } from '../../data/Icons/icon-24-email.svg';
-import { ReactComponent as User } from '../../data/Icons/icon-24-user.svg';
-import { ReactComponent as Password } from '../../data/Icons/icon-24-invisible.svg';
-import { ReactComponent as Mobile } from '../../data/Icons/mobile-icon-24.svg';
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
+import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
 
-import { AiOutlineEyeInvisible } from 'react-icons/ai';
-import { IoIosArrowDown } from 'react-icons/io';
-import useFetch from '../../Hooks/UseFetch';
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
+import useFetch from "../../Hooks/UseFetch";
 import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from '../../Context/LoadingProvider';
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 const style = {
-	position: 'fixed',
-	top: '80px',
-	left: '0%',
-	transform: 'translate(0%, 0%)',
-	width: '81%',
-	height: '100%',
-	overflow: 'auto',
-	bgcolor: '#fff',
-	paddingBottom: '80px',
+	position: "fixed",
+	top: "80px",
+	left: "0%",
+	transform: "translate(0%, 0%)",
+	width: "81%",
+	height: "100%",
+	overflow: "auto",
+	bgcolor: "#fff",
+	paddingBottom: "80px",
 
-	'@media(max-width:768px)': {
-		position: 'absolute',
+	"@media(max-width:768px)": {
+		position: "absolute",
 		top: 0,
 		left: 0,
-		width: '100%',
-		backgroundColor: '#F6F6F6',
+		width: "100%",
+		backgroundColor: "#F6F6F6",
 		paddingBottom: 0,
 	},
 };
 const AddNewUser = () => {
-	const { fetchedData: roles } = useFetch('https://backend.atlbha.com/api/Store/selector/roles');
+	const { fetchedData: roles } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/roles"
+	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const { register, handleSubmit, control, formState: { errors } } = useForm({
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm({
 		mode: "onBlur",
 		defaultValues: {
-			name: '',
-			user_name: '',
-			user_type: '',
-			email: '',
-			password: '',
-			phonenumber: '',
-			image: '',
-			status: 'active',
-		}
+			name: "",
+			user_name: "",
+			user_type: "",
+			email: "",
+			password: "",
+			phonenumber: "",
+			image: "",
+			status: "active",
+		},
 	});
 	const [images, setImages] = useState([]);
 	const [userError, setUserError] = useState({
-		name: '',
-		user_name: '',
-		user_type: '',
-		email: '',
-		password: '',
-		phonenumber: '',
-		image: '',
-		status: '',
+		name: "",
+		user_name: "",
+		user_type: "",
+		email: "",
+		password: "",
+		phonenumber: "",
+		image: "",
+		status: "",
 	});
 
 	const resetCouponError = () => {
 		setUserError({
-			name: '',
-			user_name: '',
-			user_type: '',
-			email: '',
-			password: '',
-			phonenumber: '',
-			image: '',
-			status: '',
+			name: "",
+			user_name: "",
+			user_type: "",
+			email: "",
+			password: "",
+			phonenumber: "",
+			image: "",
+			status: "",
 		});
 	};
 
 	// Show and hidden password function
-	const [passwordType, setPasswordType] = useState('password');
+	const [passwordType, setPasswordType] = useState("password");
 	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
 
 	const showPasswordToggle = () => {
-		if (passwordType === 'password') {
-			setPasswordType('text');
+		if (passwordType === "password") {
+			setPasswordType("text");
 			setShowPasswordIcon(<AiOutlineEyeInvisible />);
 		} else {
-			setPasswordType('password');
+			setPasswordType("password");
 			setShowPasswordIcon(<Password />);
 		}
 	};
 
 	//  use dropzone to get personal image
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: 'image/*',
+		accept: "image/*",
 		onDrop: (acceptedFiles) => {
 			setImages(
 				acceptedFiles.map((file) =>
@@ -125,32 +132,32 @@ const AddNewUser = () => {
 	));
 
 	const addNewUser = (data) => {
-		setLoadingTitle('جاري اضافة المستخدم');
+		setLoadingTitle("جاري اضافة المستخدم");
 		resetCouponError();
 		let formData = new FormData();
-		formData.append('name', data?.name);
-		formData.append('user_name', data?.user_name);
-		formData.append('role', data?.user_type);
-		formData.append('email', data?.email);
-		formData.append('password', data?.password);
-		formData.append('phonenumber', data?.phonenumber);
-		formData.append('status', data?.status);
-		formData.append('image', images[0]);
+		formData.append("name", data?.name);
+		formData.append("user_name", data?.user_name);
+		formData.append("role", data?.user_type);
+		formData.append("email", data?.email);
+		formData.append("password", data?.password);
+		formData.append("phonenumber", data?.phonenumber);
+		formData.append("status", data?.status);
+		formData.append("image", images[0]);
 		axios
 			.post(`https://backend.atlbha.com/api/Store/user`, formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
+					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies.access_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate('/Management');
+					navigate("/Management");
 					setReload(!reload);
 				} else {
-					setLoadingTitle('');
+					setLoadingTitle("");
 					setReload(!reload);
 					setUserError({
 						name: res?.data?.message?.en?.name?.[0],
@@ -172,7 +179,11 @@ const AddNewUser = () => {
 				<title>لوحة تحكم أطلبها | اضافة مستخدم</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
-				<Modal open={true} onClose={() => navigate('/Management')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal
+					open={true}
+					onClose={() => navigate("/Management")}
+					aria-labelledby='modal-modal-title'
+					aria-describedby='modal-modal-description'>
 					<Box sx={style}>
 						<div className='add-form-wrapper add-user-form'>
 							<div className='d-flex'>
@@ -200,17 +211,22 @@ const AddNewUser = () => {
 												type='text'
 												id='full-name'
 												name='name'
-												{...register('name', {
+												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "يجب على الحقل الاسم أن يكون نصاّّ"
+														message: "يجب على الحقل الاسم أن يكون نصاّّ",
 													},
 												})}
 											/>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.name}{errors?.name && errors.name.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.name}
+												{errors?.name && errors.name.message}
+											</span>
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -226,17 +242,23 @@ const AddNewUser = () => {
 												type='text'
 												id='user-name'
 												name='user_name'
-												{...register('user_name', {
-													required:   "حقل اسم المُستخدم مطلوب",
+												{...register("user_name", {
+													required: "حقل اسم المُستخدم مطلوب",
 													pattern: {
 														value: /^[^-\s][a-zA-Z0-9_]+$/,
-														message: "اسم المُستخدم يجب ان يكون باللغه الانجليزية"
+														message:
+															"اسم المُستخدم يجب ان يكون باللغه الانجليزية",
 													},
 												})}
 											/>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.user_name}{errors?.user_name && errors.user_name.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.user_name}
+												{errors?.user_name && errors.user_name.message}
+											</span>
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -245,7 +267,7 @@ const AddNewUser = () => {
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
-											<FormControl sx={{ m: 0, width: '100%' }}>
+											<FormControl sx={{ m: 0, width: "100%" }}>
 												<Controller
 													name={"user_type"}
 													control={control}
@@ -254,62 +276,71 @@ const AddNewUser = () => {
 														<Select
 															name='user_type'
 															value={value}
-															onChange={(e) => { onChange(e) }}
+															onChange={(e) => {
+																onChange(e);
+															}}
 															sx={{
-																fontSize: '18px',
-																backgroundColor: '#ededed',
-																'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-																{
-																	paddingRight: '20px',
-																},
-																'& .MuiOutlinedInput-root': {
-																	'& :hover': {
-																		border: 'none',
+																fontSize: "18px",
+																backgroundColor: "#ededed",
+																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																	{
+																		paddingRight: "20px",
+																	},
+																"& .MuiOutlinedInput-root": {
+																	"& :hover": {
+																		border: "none",
 																	},
 																},
-																'& .MuiOutlinedInput-notchedOutline': {
-																	border: 'none',
+																"& .MuiOutlinedInput-notchedOutline": {
+																	border: "none",
 																},
-																'& .MuiSelect-icon.MuiSelect-iconOutlined': {
-																	right: '96%',
-																	
+																"& .MuiSelect-icon.MuiSelect-iconOutlined": {
+																	right: "96%",
 																},
-																'& .MuiSelect-nativeInput': {
-																	display: 'none',
+																"& .MuiSelect-nativeInput": {
+																	display: "none",
 																},
 															}}
 															IconComponent={IoIosArrowDown}
 															displayEmpty
-															inputProps={{ 'aria-label': 'Without label' }}
+															inputProps={{ "aria-label": "Without label" }}
 															renderValue={(selected) => {
 																if (!selected) {
-																	return <p className='text-[#ADB5B9]'>اختر الدور الوظيفي</p>;
+																	return (
+																		<p className='text-[#ADB5B9]'>
+																			اختر الدور الوظيفي
+																		</p>
+																	);
 																}
 																return selected;
-															}}
-														>
+															}}>
 															{roles?.data?.roles?.map((cat, index) => {
 																return (
 																	<MenuItem
 																		key={index}
 																		className='souq_storge_category_filter_items'
 																		sx={{
-																			backgroundColor: '#fff',
-																			height: '3rem',
-																			'&:hover': {},
+																			backgroundColor: "#fff",
+																			height: "3rem",
+																			"&:hover": {},
 																		}}
-																		value={cat?.name}
-																	>
+																		value={cat?.name}>
 																		{cat?.name}
 																	</MenuItem>
 																);
 															})}
 														</Select>
-													)} />
+													)}
+												/>
 											</FormControl>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.user_type}{errors?.user_type && errors.user_type.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.user_type}
+												{errors?.user_type && errors.user_type.message}
+											</span>
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -318,24 +349,32 @@ const AddNewUser = () => {
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
-											<div className='input-icons password-icon' onClick={showPasswordToggle}>
+											<div
+												className='input-icons password-icon'
+												onClick={showPasswordToggle}>
 												{showPasswordIcon}
 											</div>
 											<input
 												name='password'
 												type={passwordType}
 												id='password'
-												{...register('password', {
-													required:  "حقل كلمة المرور مطلوب",
+												{...register("password", {
+													required: "حقل كلمة المرور مطلوب",
 													minLength: {
 														value: 6,
-														message: "يجب أن يكون طول نص كلمة المرور على الأقل 6 حروفٍ/حرفًا"
+														message:
+															"يجب أن يكون طول نص كلمة المرور على الأقل 6 حروفٍ/حرفًا",
 													},
 												})}
 											/>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.password}{errors?.password && errors.password.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.password}
+												{errors?.password && errors.password.message}
+											</span>
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -351,17 +390,23 @@ const AddNewUser = () => {
 												name='email'
 												type='email'
 												id='email'
-												{...register('email', {
-													required:"حقل البريد الالكتروني مطلوب",
+												{...register("email", {
+													required: "حقل البريد الالكتروني مطلوب",
 													pattern: {
 														value: /\S+@\S+\.\S+/,
-														message:  "يجب أن يكون البريد الالكتروني عنوان بريد إلكتروني صحيح البُنية"
-													}
+														message:
+															"يجب أن يكون البريد الالكتروني عنوان بريد إلكتروني صحيح البُنية",
+													},
 												})}
 											/>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.email}{errors?.email && errors.email.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.email}
+												{errors?.email && errors.email.message}
+											</span>
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -374,24 +419,27 @@ const AddNewUser = () => {
 												<Mobile />
 											</div>
 											<input
-											name='phonenumber'
-											
+												name='phonenumber'
 												type='number'
 												id='phonenumber'
 												placeholder='0096654845613'
 												className='direction-ltr'
-												{...register('phonenumber', {
+												{...register("phonenumber", {
 													required: "حقل  رقم الجوال مطلوب",
 													pattern: {
 														value: /^[0-9+]+$/i,
-														message: "يجب على الحقل  رقم الجوال أن يكون رقمًا"
+														message: "يجب على الحقل  رقم الجوال أن يكون رقمًا",
 													},
-													
 												})}
 											/>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.phonenumber}{errors?.phonenumber && errors.phonenumber.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.phonenumber}
+												{errors?.phonenumber && errors.phonenumber.message}
+											</span>
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -400,16 +448,34 @@ const AddNewUser = () => {
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
-											<div {...getRootProps({ className: 'upload-personal-image d-flex justify-content-between' })}>
-												<input {...getInputProps()} id='personal-image' name='personal-image' />
-												{files.length <= 0 ? <p className='helper'>اختر صورة PNG أو JPG فقط </p> : <p className='d-none'>اختر صورة PNG أو JPG فقط </p>}
+											<div
+												{...getRootProps({
+													className:
+														"upload-personal-image d-flex justify-content-between",
+												})}>
+												<input
+													{...getInputProps()}
+													id='personal-image'
+													name='personal-image'
+												/>
+												{files.length <= 0 ? (
+													<p className='helper'>اختر صورة PNG أو JPG فقط </p>
+												) : (
+													<p className='d-none'>اختر صورة PNG أو JPG فقط </p>
+												)}
 
 												<span> استعراض</span>
 												<ul>{files}</ul>
 											</div>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'>{userError?.image && <span className='fs-6 text-danger'>{userError?.image}</span>}</div>
+										<div className='col-lg-9 col-12'>
+											{userError?.image && (
+												<span className='fs-6 text-danger'>
+													{userError?.image}
+												</span>
+											)}
+										</div>
 									</div>
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
@@ -427,15 +493,22 @@ const AddNewUser = () => {
 														className='form-select'
 														id='status'
 														value={value}
-														onChange={onChange}
-													>
-														<option selected value='active'>مفعل</option>
+														onChange={onChange}>
+														<option selected value='active'>
+															مفعل
+														</option>
 														<option value='not_active'>غير مفعل</option>
 													</select>
-												)} />
+												)}
+											/>
 										</div>
 										<div className='col-lg-2 col-12'></div>
-										<div className='col-lg-9 col-12'><span className='fs-6 text-danger'>{userError?.status}{errors?.status && errors.status.message}</span></div>
+										<div className='col-lg-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{userError?.status}
+												{errors?.status && errors.status.message}
+											</span>
+										</div>
 									</div>
 								</div>
 								<div className='form-footer'>
@@ -446,7 +519,9 @@ const AddNewUser = () => {
 											</button>
 										</div>
 										<div className='col-lg-4 col-6'>
-											<button onClick={() => navigate('/Management')} className='close-btn'>
+											<button
+												onClick={() => navigate("/Management")}
+												className='close-btn'>
 												إلغاء
 											</button>
 										</div>

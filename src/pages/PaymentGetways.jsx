@@ -1,40 +1,43 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import useFetch from '../Hooks/UseFetch';
-import { useCookies } from 'react-cookie';
-import Context from '../Context/context';
-import { Switch } from '@mui/material';
-import { Link } from 'react-router-dom';
+import axios from "axios";
+import useFetch from "../Hooks/UseFetch";
+import { useCookies } from "react-cookie";
+import Context from "../Context/context";
+import { Switch } from "@mui/material";
+import { Link } from "react-router-dom";
 
 // components
-import MadaFormWeight from '../components/MadaFormWeight';
-import PayPalFormWeight from '../components/PayPalFormWeight';
+import MadaFormWeight from "../components/MadaFormWeight";
+import PayPalFormWeight from "../components/PayPalFormWeight";
 
 // import images
-import CircularLoading from '../HelperComponents/CircularLoading';
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { AiOutlineSearch } from 'react-icons/ai';
+import CircularLoading from "../HelperComponents/CircularLoading";
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const PaymentGetways = () => {
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(`https://backend.atlbha.com/api/Store/paymenttype`);
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		`https://backend.atlbha.com/api/Store/paymenttype`
+	);
 
-
-
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
 	// change Status function
 	const changeStatus = (id, e) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/changePaymenttypeStatus/${id}`, {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${cookies.access_token}`,
-				},
-			})
+			.get(
+				`https://backend.atlbha.com/api/Store/changePaymenttypeStatus/${id}`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookies.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -57,7 +60,13 @@ const PaymentGetways = () => {
 						<div className='search-icon'>
 							<AiOutlineSearch color='#02466A' />
 						</div>
-						<input type='text' name='search' id='search' className='input' placeholder='أدخل كلمة البحث' />
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='input'
+							placeholder='أدخل كلمة البحث'
+						/>
 					</div>
 				</div>
 				<div className='head-category mb-3'>
@@ -82,7 +91,9 @@ const PaymentGetways = () => {
 				</div>
 
 				{loading ? (
-					<div className='d-flex justify-content-center align-items-center' style={{ height: '200px' }}>
+					<div
+						className='d-flex justify-content-center align-items-center'
+						style={{ height: "200px" }}>
 						<CircularLoading />
 					</div>
 				) : (
@@ -93,53 +104,58 @@ const PaymentGetways = () => {
 									<div className='data-widget'>
 										<div className='data'>
 											<div className='image-box'>
-												<img className='img-fluid' src={item?.image} alt={item?.name} style={{ padding: '30px' }} />
+												<img
+													className='img-fluid'
+													src={item?.image}
+													alt={item?.name}
+													style={{ padding: "30px" }}
+												/>
 											</div>
 										</div>
 										<div className='switch-box'>
 											<Switch
 												name={item?.name}
-												checked={item?.status === 'نشط' ? true : false}
+												checked={item?.status === "نشط" ? true : false}
 												onChange={() => changeStatus(item?.id)}
 												sx={{
-													'& .MuiSwitch-track': {
+													"& .MuiSwitch-track": {
 														width: 36,
 														height: 22,
 														opacity: 1,
-														backgroundColor: 'rgba(0,0,0,.25)',
-														boxSizing: 'border-box',
+														backgroundColor: "rgba(0,0,0,.25)",
+														boxSizing: "border-box",
 														borderRadius: 20,
 													},
-													'& .MuiSwitch-thumb': {
-														boxShadow: 'none',
-														backgroundColor: '#EBEBEB',
+													"& .MuiSwitch-thumb": {
+														boxShadow: "none",
+														backgroundColor: "#EBEBEB",
 														width: 16,
 														height: 16,
 														borderRadius: 4,
-														transform: 'translate(6px,7px)',
+														transform: "translate(6px,7px)",
 													},
-													'&:hover': {
-														'& .MuiSwitch-thumb': {
-															boxShadow: 'none',
+													"&:hover": {
+														"& .MuiSwitch-thumb": {
+															boxShadow: "none",
 														},
 													},
 
-													'& .MuiSwitch-switchBase': {
-														'&:hover': {
-															boxShadow: 'none',
-															backgroundColor: 'none',
+													"& .MuiSwitch-switchBase": {
+														"&:hover": {
+															boxShadow: "none",
+															backgroundColor: "none",
 														},
 														padding: 1,
-														'&.Mui-checked': {
-															transform: 'translateX(12px)',
-															color: '#fff',
-															'& + .MuiSwitch-track': {
+														"&.Mui-checked": {
+															transform: "translateX(12px)",
+															color: "#fff",
+															"& + .MuiSwitch-track": {
 																opacity: 1,
-																backgroundColor: '#3AE374',
+																backgroundColor: "#3AE374",
 															},
-															'&:hover': {
-																boxShadow: 'none',
-																backgroundColor: 'none',
+															"&:hover": {
+																boxShadow: "none",
+																backgroundColor: "none",
 															},
 														},
 													},
@@ -150,15 +166,23 @@ const PaymentGetways = () => {
 								</div>
 							))}
 
-							<div className='payment-form' style={{ height: '550px' }}>
-
-								{fetchedData?.data?.paymenttypes.map((item) => item?.name)[0] === 'paypal' && fetchedData?.data?.paymenttypes.map((item) => item?.status)[0] === 'نشط' ? (
+							<div className='payment-form' style={{ height: "550px" }}>
+								{fetchedData?.data?.paymenttypes.map(
+									(item) => item?.name
+								)[0] === "paypal" &&
+								fetchedData?.data?.paymenttypes.map(
+									(item) => item?.status
+								)[0] === "نشط" ? (
 									<PayPalFormWeight />
-
-								) : fetchedData?.data?.paymenttypes.map((item) => item?.name)[1] === 'mada' && fetchedData?.data?.paymenttypes.map((item) => item?.status)[1] === 'نشط' ? (
+								) : fetchedData?.data?.paymenttypes.map(
+										(item) => item?.name
+								  )[1] === "mada" &&
+								  fetchedData?.data?.paymenttypes.map(
+										(item) => item?.status
+								  )[1] === "نشط" ? (
 									<MadaFormWeight />
 								) : (
-									''
+									""
 								)}
 							</div>
 						</div>

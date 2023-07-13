@@ -1,27 +1,27 @@
-import React, { Fragment, useState, useContext } from 'react';
+import React, { Fragment, useState, useContext } from "react";
 
-import { useNavigate } from 'react-router-dom';
-import Context from '../Context/context';
-import { NotificationContext } from '../Context/NotificationProvider';
-import CircularLoading from '../HelperComponents/CircularLoading';
-import { useCookies } from 'react-cookie';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Toolbar from '@mui/material/Toolbar';
-import Paper from '@mui/material/Paper';
+import { useNavigate } from "react-router-dom";
+import Context from "../Context/context";
+import { NotificationContext } from "../Context/NotificationProvider";
+import CircularLoading from "../HelperComponents/CircularLoading";
+import { useCookies } from "react-cookie";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Toolbar from "@mui/material/Toolbar";
+import Paper from "@mui/material/Paper";
 
-import TablePagination from './TablePagination';
+import TablePagination from "./TablePagination";
 // Icons
-import { ReactComponent as ReportIcon } from '../data/Icons/icon-24-actions-info_outined.svg';
-import DateRangePicker from 'rsuite/DateRangePicker';
-import 'rsuite/dist/rsuite.min.css';
-import moment from 'moment';
+import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
+import DateRangePicker from "rsuite/DateRangePicker";
+import "rsuite/dist/rsuite.min.css";
+import moment from "moment";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -34,7 +34,9 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-	return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+	return order === "desc"
+		? (a, b) => descendingComparator(a, b, orderBy)
+		: (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
@@ -51,30 +53,30 @@ function stableSort(array, comparator) {
 
 function EnhancedTableHead(props) {
 	return (
-		<TableHead sx={{ backgroundColor: '#d9f2f9' }}>
+		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					م
 				</TableCell>
-				<TableCell align='right' sx={{ color: '#02466a' }}>
+				<TableCell align='right' sx={{ color: "#02466a" }}>
 					رقم الطلب
 				</TableCell>
-				<TableCell sx={{ color: '#02466a' }} align='right'>
+				<TableCell sx={{ color: "#02466a" }} align='right'>
 					الاسم
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الحالة
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الموقع
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الكمية
 				</TableCell>
-				<TableCell sx={{ color: '#02466a' }} align='center'>
+				<TableCell sx={{ color: "#02466a" }} align='center'>
 					المجموع
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الاجراء
 				</TableCell>
 			</TableRow>
@@ -86,15 +88,13 @@ EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 	onRequestSort: PropTypes.func.isRequired,
 	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
 	orderBy: PropTypes.string.isRequired,
 	rowCount: PropTypes.number.isRequired,
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick, itemSelected, setItemSelected, dateValue, setDateValue } = props;
-	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { dateValue, setDateValue } = props;
 
 	return (
 		<React.Fragment>
@@ -108,25 +108,14 @@ function EnhancedTableToolbar(props) {
 						<div className='w-100 d-flex flex-row align-items-center justify-content-end flex-sm-nowrap flex-wrap'>
 							<div className='orders-date-picker mw-100'>
 								<div className='date-picker'>
-									<DateRangePicker value={dateValue} onChange={setDateValue} dir='rtl' placeholder='اختر الفترة من - إلي' />
+									<DateRangePicker
+										value={dateValue}
+										onChange={setDateValue}
+										dir='rtl'
+										placeholder='اختر الفترة من - إلي'
+									/>
 								</div>
 							</div>
-							{/**
-						<div className='filter-btn-col mw-100'>
-								<Box sx={{ minWidth: 150, width: '100%' }}>
-									<select value={itemSelected} onChange={(e) => setItemSelected(e.target.value)} className='form-select filter-select' aria-label='Default select example'>
-										<option defaultValue=''>فرز حسب</option>
-										<option value='new'>الأحدث</option>
-										<option value='old'>الأقدم</option>
-										<option value='location'>الموقع</option>
-										<option value='status'>الحالة</option>
-										<option value='shipping'>شركة الشحن</option>
-										<option value='order_type'>نوع الطلب</option>
-										<option value='payment'>طريقة الدفع</option>
-									</select>
-								</Box>
-							</div>
-						*/}
 						</div>
 					</div>
 				</div>
@@ -142,8 +131,8 @@ EnhancedTableToolbar.propTypes = {
 export default function BigOrdersTable({ data, loading, reload, setReload }) {
 	// Use Navigate for navigate to order details page
 	const navigate = useNavigate();
-	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState('calories');
+	const [order, setOrder] = React.useState("asc");
+	const [orderBy, setOrderBy] = React.useState("calories");
 	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(8);
@@ -151,16 +140,22 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	let filterData = data;
 	let filterDataResult = filterData;
-	const [itemSelected, setItemSelected] = useState('');
+	const [itemSelected, setItemSelected] = useState("");
 	const [dateValue, setDateValue] = useState([]);
 
-	if (itemSelected === 'new') {
-		filterData = data?.sort((a, b) => a?.created_at.localeCompare(b?.created_at));
-	} else if (itemSelected === 'old') {
-		filterData = data?.sort((a, b) => b?.created_at.localeCompare(a?.created_at));
-	} else if (itemSelected === 'location') {
-		filterData = data?.sort((a, b) => a?.user?.city?.name?.localeCompare(b?.user?.city?.name));
-	} else if (itemSelected === 'status') {
+	if (itemSelected === "new") {
+		filterData = data?.sort((a, b) =>
+			a?.created_at.localeCompare(b?.created_at)
+		);
+	} else if (itemSelected === "old") {
+		filterData = data?.sort((a, b) =>
+			b?.created_at.localeCompare(a?.created_at)
+		);
+	} else if (itemSelected === "location") {
+		filterData = data?.sort((a, b) =>
+			a?.user?.city?.name?.localeCompare(b?.user?.city?.name)
+		);
+	} else if (itemSelected === "status") {
 		filterData = data?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
 		filterData = data?.sort((a, b) => a?.id - b?.id);
@@ -168,12 +163,15 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 
 	if (dateValue?.length !== 0 && dateValue !== null) {
 		filterDataResult = filterData?.filter(
-			(item) => moment(item?.created_at).format('YYYY-MM-DD') >= moment(dateValue[0]).format('YYYY-MM-DD') && moment(item?.created_at).format('YYYY-MM-DD') <= moment(dateValue[1]).format('YYYY-MM-DD')
+			(item) =>
+				moment(item?.created_at).format("YYYY-MM-DD") >=
+					moment(dateValue[0]).format("YYYY-MM-DD") &&
+				moment(item?.created_at).format("YYYY-MM-DD") <=
+					moment(dateValue[1]).format("YYYY-MM-DD")
 		);
 	} else {
 		filterDataResult = filterData;
 	}
-
 
 	const open = Boolean(anchorEl);
 	const handleRowsClick = (event) => {
@@ -184,8 +182,8 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 	};
 
 	const handleRequestSort = (property) => {
-		const isAsc = orderBy === property && order === 'asc';
-		setOrder(isAsc ? 'desc' : 'asc');
+		const isAsc = orderBy === property && order === "asc";
+		setOrder(isAsc ? "desc" : "asc");
 		setOrderBy(property);
 	};
 
@@ -195,7 +193,10 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 	};
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterDataResult?.length) : 0;
+	const emptyRows =
+		page > 0
+			? Math.max(0, (1 + page) * rowsPerPage - filterDataResult?.length)
+			: 0;
 
 	const allRows = () => {
 		const num = Math.ceil(filterDataResult?.length / rowsPerPage);
@@ -207,8 +208,8 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 	};
 
 	return (
-		<Box sx={{ width: '100%' }}>
-			<Paper sx={{ width: '100%', mb: 2 }}>
+		<Box sx={{ width: "100%" }}>
+			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					dateValue={dateValue}
 					setDateValue={setDateValue}
@@ -219,7 +220,13 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-						<EnhancedTableHead numSelected={selected.length} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={filterDataResult?.length} />
+						<EnhancedTableHead
+							numSelected={selected.length}
+							order={order}
+							orderBy={orderBy}
+							onRequestSort={handleRequestSort}
+							rowCount={filterDataResult?.length}
+						/>
 
 						<TableBody>
 							{loading ? (
@@ -238,55 +245,97 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 										</TableRow>
 									) : (
 										stableSort(filterDataResult, getComparator(order, orderBy))
-											?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+											?.slice(
+												page * rowsPerPage,
+												page * rowsPerPage + rowsPerPage
+											)
 											?.map((row, index) => {
 												const labelId = `enhanced-table-checkbox-${index}`;
 
 												return (
 													<TableRow hover tabIndex={-1} key={index}>
-														<TableCell component='th' id={labelId} scope='row' align='right'>
-															<div className='flex items-center' style={{ display: 'flex', justifyContent: 'start', alignItems: 'center', gap: '7px' }}>
-																{(index + 1).toLocaleString('en-US', {
+														<TableCell
+															component='th'
+															id={labelId}
+															scope='row'
+															align='right'>
+															<div
+																className='flex items-center'
+																style={{
+																	display: "flex",
+																	justifyContent: "start",
+																	alignItems: "center",
+																	gap: "7px",
+																}}>
+																{(index + 1).toLocaleString("en-US", {
 																	minimumIntegerDigits: 2,
 																	useGrouping: false,
 																})}
 															</div>
 														</TableCell>
 
-														<TableCell align='right'>{row?.order_number}</TableCell>
+														<TableCell align='right'>
+															{row?.order_number}
+														</TableCell>
 														<TableCell align='right'>
 															<div className='cate-prim'>
-																<img src={row?.user?.image} alt='img' className=' rounded-circle' />
+																<img
+																	src={row?.user?.image}
+																	alt='img'
+																	className=' rounded-circle'
+																/>
 																<span className='me-3'>{row?.user?.name}</span>
 															</div>
 														</TableCell>
-														<TableCell align='right' sx={{ width: '90px' }}>
+														<TableCell align='right' sx={{ width: "90px" }}>
 															<div className='sub-categories'>
 																<span
 																	className='status d-flex justify-content-center align-items-center'
 																	style={{
 																		backgroundColor:
-																			row?.status === 'مكتمل' ? '#ebfcf1' : row?.status === 'جديد' ? '#d4ebf7' : row?.status === 'ملغي' ? '#ffebeb' : row?.status === 'جاري التجهيز' ? '#ffecd1c7' : '#e8f8f8',
-																		color: row?.status === 'مكتمل' ? '##9df1ba' : row?.status === 'جديد' ? '#0077ff' : row?.status === 'ملغي' ? '#ff7b7b' : row?.status === 'جاري التجهيز' ? '#ff9f1a' : '#46c7ca',
-																		borderRadius: '16px',
-																		padding: '5px 25px',
+																			row?.status === "مكتمل"
+																				? "#ebfcf1"
+																				: row?.status === "جديد"
+																				? "#d4ebf7"
+																				: row?.status === "ملغي"
+																				? "#ffebeb"
+																				: row?.status === "جاري التجهيز"
+																				? "#ffecd1c7"
+																				: "#e8f8f8",
+																		color:
+																			row?.status === "مكتمل"
+																				? "##9df1ba"
+																				: row?.status === "جديد"
+																				? "#0077ff"
+																				: row?.status === "ملغي"
+																				? "#ff7b7b"
+																				: row?.status === "جاري التجهيز"
+																				? "#ff9f1a"
+																				: "#46c7ca",
+																		borderRadius: "16px",
+																		padding: "5px 25px",
 																		fontWeight: 500,
-																		width: '120px',
-																	}}
-																>
+																		width: "120px",
+																	}}>
 																	{row?.status}
 																</span>
 															</div>
 														</TableCell>
-														<TableCell align='center'>{row?.user?.city?.name}</TableCell>
-														<TableCell align='center'>{row?.quantity}</TableCell>
-														<TableCell align='center'>{row?.total_price} ر.س</TableCell>
+														<TableCell align='center'>
+															{row?.user?.city?.name}
+														</TableCell>
+														<TableCell align='center'>
+															{row?.quantity}
+														</TableCell>
+														<TableCell align='center'>
+															{row?.total_price} ر.س
+														</TableCell>
 
 														<TableCell align='right'>
 															<div className='actions d-flex justify-content-evenly'>
 																<span>
 																	<ReportIcon
-																		style={{ cursor: 'pointer' }}
+																		style={{ cursor: "pointer" }}
 																		onClick={() => {
 																			navigate(`OrderDetails/${row?.id}`);
 																		}}
@@ -302,8 +351,7 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 										<TableRow
 											style={{
 												height: 53 * emptyRows,
-											}}
-										>
+											}}>
 											<TableCell colSpan={6} />
 										</TableRow>
 									)}
@@ -313,7 +361,7 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 					</Table>
 				</TableContainer>
 			</Paper>
-			{filterDataResult?.length !== 0 && !loading &&
+			{filterDataResult?.length !== 0 && !loading && (
 				<TablePagination
 					rowsPerPagesCount={rowsPerPagesCount}
 					handleChangeRowsPerPage={handleChangeRowsPerPage}
@@ -325,7 +373,7 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 					setPage={setPage}
 					allRows={allRows}
 				/>
-			}
+			)}
 		</Box>
 	);
 }

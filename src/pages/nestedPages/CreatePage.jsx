@@ -1,93 +1,99 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
-import axios from 'axios';
-import Context from '../../Context/context';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import useFetch from '../../Hooks/UseFetch';
-import { useDropzone } from 'react-dropzone';
+import axios from "axios";
+import Context from "../../Context/context";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import useFetch from "../../Hooks/UseFetch";
+import { useDropzone } from "react-dropzone";
 // MUI
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import { Checkbox } from '@mui/material';
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { Checkbox } from "@mui/material";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 // ICONS
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { ReactComponent as DocsIcon } from '../../data/Icons/icon-24-write.svg';
-import { ReactComponent as PaperIcon } from '../../data/Icons/icon-24- details.svg';
-import { IoIosArrowDown } from 'react-icons/io';
-import { useForm } from 'react-hook-form';
-import { LoadingContext } from '../../Context/LoadingProvider';
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
+import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.svg";
+import { IoIosArrowDown } from "react-icons/io";
+import { useForm } from "react-hook-form";
+import { LoadingContext } from "../../Context/LoadingProvider";
 // Modal Style
 const style = {
-	position: 'absolute',
-	top: '112px',
-	left: '50%',
-	transform: 'translate(-50%, 0%)',
-	width: '70%',
-	height: 'auto',
-	bgcolor: '#f8f9fa',
-	borderRadius: '8px 8px 0 0',
-	paddingBottom: '60px',
-	'@media(max-width:768px)': {
-		width: '100%',
-		maxWidth: '90%',
-		top: '80px',
+	position: "absolute",
+	top: "112px",
+	left: "50%",
+	transform: "translate(-50%, 0%)",
+	width: "70%",
+	height: "auto",
+	bgcolor: "#f8f9fa",
+	borderRadius: "8px 8px 0 0",
+	paddingBottom: "60px",
+	"@media(max-width:768px)": {
+		width: "100%",
+		maxWidth: "90%",
+		top: "80px",
 	},
 };
 
 const CreatePage = () => {
-	const { fetchedData: pageCategories, loading } = useFetch('https://backend.atlbha.com/api/Store/selector/page-categories');
-	const { fetchedData: postCategories } = useFetch('https://backend.atlbha.com/api/Store/selector/post-categories');
+	const { fetchedData: pageCategories, loading } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/page-categories"
+	);
+	const { fetchedData: postCategories } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/post-categories"
+	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [type, setType] = useState('');
+	const [type, setType] = useState("");
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
-		mode: 'onBlur',
+		mode: "onBlur",
 		defaultValues: {
-			title: '',
-			page_desc: '',
-			seo_title: '',
-			seo_link: '',
-			seo_desc: '',
+			title: "",
+			page_desc: "",
+			seo_title: "",
+			seo_link: "",
+			seo_desc: "",
 		},
 	});
 	const [page, setPage] = useState({
 		tags: [],
 		pageCategory: [],
-		postCategory_id: '',
+		postCategory_id: "",
 	});
 	const itsPost = page?.pageCategory?.includes(1);
-	const [tag, setTag] = useState('');
+	const [tag, setTag] = useState("");
 	const [description, setDescription] = useState({
-		htmlValue: '',
+		htmlValue: "",
 		editorState: EditorState.createEmpty(),
 	});
 
 	const addTags = () => {
 		setPage({ ...page, tags: [...page.tags, tag] });
-		setTag('');
+		setTag("");
 	};
 
 	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(convertToRaw(editorValue.getCurrentContent()));
+		const editorStateInHtml = draftToHtml(
+			convertToRaw(editorValue.getCurrentContent())
+		);
 
 		setDescription({
 			htmlValue: editorStateInHtml,
@@ -97,7 +103,7 @@ const CreatePage = () => {
 
 	const [images, setImages] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: 'image/*',
+		accept: "image/*",
 		onDrop: (acceptedFiles) => {
 			setImages(
 				acceptedFiles.map((file) =>
@@ -116,24 +122,24 @@ const CreatePage = () => {
 	));
 
 	const [pageError, setPageError] = useState({
-		title: '',
-		page_desc: '',
-		page_content: '',
-		seo_title: '',
-		seo_link: '',
-		seo_desc: '',
-		tags: '',
+		title: "",
+		page_desc: "",
+		page_content: "",
+		seo_title: "",
+		seo_link: "",
+		seo_desc: "",
+		tags: "",
 	});
 
 	const resetCouponError = () => {
 		setPageError({
-			title: '',
-			page_desc: '',
-			page_content: '',
-			seo_title: '',
-			seo_link: '',
-			seo_desc: '',
-			tags: '',
+			title: "",
+			page_desc: "",
+			page_content: "",
+			seo_title: "",
+			seo_link: "",
+			seo_desc: "",
+			tags: "",
 		});
 	};
 
@@ -144,38 +150,38 @@ const CreatePage = () => {
 	const handlePage = (data) => {
 		resetCouponError();
 		let formData = new FormData();
-		formData.append('title', data?.title);
-		formData.append('page_desc', data?.page_desc);
-		formData.append('page_content', description?.htmlValue);
-		formData.append('seo_title', data?.seo_title);
-		formData.append('seo_link', data?.seo_link);
-		formData.append('seo_desc', data?.seo_desc);
-		formData.append('tags', page?.tags?.join(','));
+		formData.append("title", data?.title);
+		formData.append("page_desc", data?.page_desc);
+		formData.append("page_content", description?.htmlValue);
+		formData.append("seo_title", data?.seo_title);
+		formData.append("seo_link", data?.seo_link);
+		formData.append("seo_desc", data?.seo_desc);
+		formData.append("tags", page?.tags?.join(","));
 
 		for (let i = 0; i < page?.pageCategory?.length; i++) {
 			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
 		}
 
-		formData.append('postCategory_id', itsPost ? page?.postCategory_id : null);
-		formData.append('image', itsPost ? images[0] : null);
+		formData.append("postCategory_id", itsPost ? page?.postCategory_id : null);
+		formData.append("image", itsPost ? images[0] : null);
 
-		if (type === 'push') {
-			setLoadingTitle('جاري نشر الصفحة');
+		if (type === "push") {
+			setLoadingTitle("جاري نشر الصفحة");
 			axios
 				.post(`https://backend.atlbha.com/api/Store/page-publish`, formData, {
 					headers: {
-						'Content-Type': 'multipart/form-data',
+						"Content-Type": "multipart/form-data",
 						Authorization: `Bearer ${cookies.access_token}`,
 					},
 				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setLoadingTitle('');
+						setLoadingTitle("");
 						setEndActionTitle(res?.data?.message?.ar);
-						navigate('/Pages');
+						navigate("/Pages");
 						setReload(!reload);
 					} else {
-						setLoadingTitle('');
+						setLoadingTitle("");
 						setReload(!reload);
 						setPageError({
 							title: res?.data?.message?.en?.title?.[0],
@@ -189,22 +195,22 @@ const CreatePage = () => {
 					}
 				});
 		} else {
-			setLoadingTitle('جاري حفظ الصفحة');
+			setLoadingTitle("جاري حفظ الصفحة");
 			axios
 				.post(`https://backend.atlbha.com/api/Store/page`, formData, {
 					headers: {
-						'Content-Type': 'multipart/form-data',
+						"Content-Type": "multipart/form-data",
 						Authorization: `Bearer ${cookies.access_token}`,
 					},
 				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setLoadingTitle('');
+						setLoadingTitle("");
 						setEndActionTitle(res?.data?.message?.ar);
-						navigate('/Pages');
+						navigate("/Pages");
 						setReload(!reload);
 					} else {
-						setLoadingTitle('');
+						setLoadingTitle("");
 						setReload(!reload);
 						setPageError({
 							title: res?.data?.message?.en?.title?.[0],
@@ -226,7 +232,11 @@ const CreatePage = () => {
 				<title>لوحة تحكم أطلبها | اضافة صفحة</title>
 			</Helmet>
 			<div open={true}>
-				<Modal open={true} onClose={() => navigate('/Pages')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal
+					open={true}
+					onClose={() => navigate("/Pages")}
+					aria-labelledby='modal-modal-title'
+					aria-describedby='modal-modal-description'>
 					<Box sx={style} className='create-pages-modal'>
 						<form onSubmit={handleSubmit(handlePage)}>
 							{/** Offers Details */}
@@ -235,7 +245,9 @@ const CreatePage = () => {
 									<div className='col-12'>
 										<div className='form-title  d-flex justify-content-between align-items-center'>
 											<h5 className=''> إنشاء صفحة</h5>
-											<AiOutlineCloseCircle onClick={() => navigate('/Pages')} />
+											<AiOutlineCloseCircle
+												onClick={() => navigate("/Pages")}
+											/>
 										</div>
 									</div>
 								</div>
@@ -251,11 +263,11 @@ const CreatePage = () => {
 												type='text'
 												placeholder='عنوان الصفحة'
 												name='title'
-												{...register('title', {
-													required: ' حقل العنوان مطلوب',
+												{...register("title", {
+													required: " حقل العنوان مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: 'يجب أن يكون العنوان عبارة عن نص',
+														message: "يجب أن يكون العنوان عبارة عن نص",
 													},
 												})}
 											/>
@@ -272,10 +284,9 @@ const CreatePage = () => {
 												className='w-100 h-auto p-3'
 												placeholder='وصف الصفحة'
 												rows={5}
-												{...register('page_desc', {
-													required: 'حقل وصف الصفحة مطلوب',
-												})}
-											></textarea>
+												{...register("page_desc", {
+													required: "حقل وصف الصفحة مطلوب",
+												})}></textarea>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
 													{pageError?.page_desc}
@@ -295,38 +306,54 @@ const CreatePage = () => {
 														onEditorStateChange={onEditorStateChange}
 														inDropdown={true}
 														placeholder={
-															<div className='d-flex flex-column  ' style={{ color: '#ADB5B9' }}>
+															<div
+																className='d-flex flex-column  '
+																style={{ color: "#ADB5B9" }}>
 																محتوي الصفحة
 															</div>
 														}
 														editorClassName='demo-editor'
 														toolbar={{
-															options: ['inline', 'textAlign', 'image', 'list'],
+															options: ["inline", "textAlign", "image", "list"],
 															inline: {
-																options: ['bold'],
+																options: ["bold"],
 															},
 															list: {
-																options: ['unordered', 'ordered'],
+																options: ["unordered", "ordered"],
 															},
 														}}
 													/>
 												</div>
 											</div>
 										</div>
-										<div className='col-12'>{pageError?.page_content && <span className='fs-6 text-danger'>{pageError?.page_content}</span>}</div>
+										<div className='col-12'>
+											{pageError?.page_content && (
+												<span className='fs-6 text-danger'>
+													{pageError?.page_content}
+												</span>
+											)}
+										</div>
 									</div>
 									<div className='row mb-md-5 mb-3 seo-inputs'>
 										<div className='col-12 mb-md-4 mb-3'>
 											<h4>تحسينات SEO</h4>
 										</div>
 										<div className='col-12 mb-md-4 mb-3'>
-											<label htmlFor='page-title-input' className='d-block mb-1'>
+											<label
+												htmlFor='page-title-input'
+												className='d-block mb-1'>
 												عنوان صفحة تعريفية ( Page Title)
 											</label>
 											<div className='input-icon'>
 												<DocsIcon />
 											</div>
-											<input className='w-100' type='text' placeholder='عنوان صفحة تعريفية ( Page Title)' name='seo_title' {...register('seo_title', {})} />
+											<input
+												className='w-100'
+												type='text'
+												placeholder='عنوان صفحة تعريفية ( Page Title)'
+												name='seo_title'
+												{...register("seo_title", {})}
+											/>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
 													{pageError?.seo_title}
@@ -335,13 +362,21 @@ const CreatePage = () => {
 											</div>
 										</div>
 										<div className='col-12 mb-md-4 mb-3'>
-											<label htmlFor='page-title-input' className='d-block mb-1'>
+											<label
+												htmlFor='page-title-input'
+												className='d-block mb-1'>
 												رابط صفحة تعريفية ( SEO Page URL )
 											</label>
 											<div className='input-icon'>
 												<DocsIcon />
 											</div>
-											<input className='seo_link w-100' name='seo_link' type='text' placeholder='رابط صفحة تعريفية ( SEO Page URL )' {...register('seo_link', {})} />
+											<input
+												className='seo_link w-100'
+												name='seo_link'
+												type='text'
+												placeholder='رابط صفحة تعريفية ( SEO Page URL )'
+												{...register("seo_link", {})}
+											/>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
 													{pageError?.seo_link}
@@ -350,13 +385,21 @@ const CreatePage = () => {
 											</div>
 										</div>
 										<div className='col-12'>
-											<label htmlFor='page-title-input' className='d-block mb-1'>
+											<label
+												htmlFor='page-title-input'
+												className='d-block mb-1'>
 												وصف صفحة تعريفية ( Page Description)
 											</label>
 											<div className='input-icon'>
 												<PaperIcon />
 											</div>
-											<input name='seo_desc' className='w-100' type='text' placeholder='وصف صفحة تعريفية ( Page Description)' {...register('seo_desc', {})} />
+											<input
+												name='seo_desc'
+												className='w-100'
+												type='text'
+												placeholder='وصف صفحة تعريفية ( Page Description)'
+												{...register("seo_desc", {})}
+											/>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
 													{pageError?.seo_desc}
@@ -372,41 +415,56 @@ const CreatePage = () => {
 													<h4>تصنيف الصفحة</h4>
 												</div>
 												<div className='body page-category '>
-													<FormGroup className='' sx={{ overflow: 'hidden' }}>
-														{pageCategories?.data?.pagesCategory?.map((cat, index) =>
-															loading ? (
-																<p>...</p>
-															) : (
-																<FormControlLabel
-																	value={cat?.id}
-																	key={index}
-																	sx={{
-																		py: 1,
-																		mr: 0,
-																		borderBottom: '1px solid #ECECEC',
-																		'& .MuiTypography-root': {
-																			fontSize: '18px',
-																			fontWeight: '500',
-																			'@media(max-width:767px)': {
-																				fontSize: '16px',
+													<FormGroup className='' sx={{ overflow: "hidden" }}>
+														{pageCategories?.data?.pagesCategory?.map(
+															(cat, index) =>
+																loading ? (
+																	<p>...</p>
+																) : (
+																	<FormControlLabel
+																		value={cat?.id}
+																		key={index}
+																		sx={{
+																			py: 1,
+																			mr: 0,
+																			borderBottom: "1px solid #ECECEC",
+																			"& .MuiTypography-root": {
+																				fontSize: "18px",
+																				fontWeight: "500",
+																				"@media(max-width:767px)": {
+																					fontSize: "16px",
+																				},
 																			},
-																		},
-																	}}
-																	control={
-																		<Checkbox
-																			onChange={(e) => {
-																				if (e.target.checked) {
-																					setPage({ ...page, pageCategory: [...page.pageCategory, parseInt(e.target.value)] });
-																				} else {
-																					setPage({ ...page, pageCategory: page?.pageCategory?.filter((item) => parseInt(item) !== parseInt(cat.id)) });
-																				}
-																			}}
-																			sx={{ '& path': { fill: '#000000' } }}
-																		/>
-																	}
-																	label={cat?.name}
-																/>
-															)
+																		}}
+																		control={
+																			<Checkbox
+																				onChange={(e) => {
+																					if (e.target.checked) {
+																						setPage({
+																							...page,
+																							pageCategory: [
+																								...page.pageCategory,
+																								parseInt(e.target.value),
+																							],
+																						});
+																					} else {
+																						setPage({
+																							...page,
+																							pageCategory:
+																								page?.pageCategory?.filter(
+																									(item) =>
+																										parseInt(item) !==
+																										parseInt(cat.id)
+																								),
+																						});
+																					}
+																				}}
+																				sx={{ "& path": { fill: "#000000" } }}
+																			/>
+																		}
+																		label={cat?.name}
+																	/>
+																)
 														)}
 													</FormGroup>
 												</div>
@@ -420,22 +478,33 @@ const CreatePage = () => {
 												<div className='body'>
 													<div className='row p-md-4 p-2'>
 														<div className='col-md-4 col-4'>
-															<button type='button' onClick={addTags} className='w-100'>
+															<button
+																type='button'
+																onClick={addTags}
+																className='w-100'>
 																اضافة
 															</button>
 														</div>
 														<div className='col-md-8 col-8'>
-															<input  value={tag} onChange={(e) => setTag(e.target.value)} className='w-100' type='text' name='tags' id='contact-tag' />
+															<input
+																value={tag}
+																onChange={(e) => setTag(e.target.value)}
+																className='w-100'
+																type='text'
+																name='tags'
+																id='contact-tag'
+															/>
 														</div>
 														<div className='mt-2'>
-															<span>{page?.tags?.join(' , ')}</span>
+															<span>{page?.tags?.join(" , ")}</span>
 														</div>
-														{pageError?.tags &&
-															<div >
-														<span className='fs-6 text-danger'>
-													{	pageError?.tags}
-														</span>
-													</div>}
+														{pageError?.tags && (
+															<div>
+																<span className='fs-6 text-danger'>
+																	{pageError?.tags}
+																</span>
+															</div>
+														)}
 													</div>
 												</div>
 											</div>
@@ -447,7 +516,7 @@ const CreatePage = () => {
 														<div className='title'>
 															<h4>تصنيف المدونة</h4>
 														</div>
-														<FormControl sx={{ m: 0, width: '100%' }}>
+														<FormControl sx={{ m: 0, width: "100%" }}>
 															<Select
 																name='postCategory_id'
 																value={page?.postCategory_id}
@@ -455,50 +524,58 @@ const CreatePage = () => {
 																	handleOnChange(e);
 																}}
 																sx={{
-																	fontSize: '18px',
-																	'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-																	{
-																		paddingRight: '20px',
-																	},
-																	'& .MuiOutlinedInput-root': {
-																		'& :hover': {
-																			border: 'none',
+																	fontSize: "18px",
+																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																		{
+																			paddingRight: "20px",
+																		},
+																	"& .MuiOutlinedInput-root": {
+																		"& :hover": {
+																			border: "none",
 																		},
 																	},
-																	'& .MuiOutlinedInput-notchedOutline': {
-																		border: 'none',
+																	"& .MuiOutlinedInput-notchedOutline": {
+																		border: "none",
 																	},
-																	'& .MuiSelect-icon': {
-																		right: '95%',
+																	"& .MuiSelect-icon": {
+																		right: "95%",
 																	},
 																}}
 																IconComponent={IoIosArrowDown}
 																displayEmpty
-																inputProps={{ 'aria-label': 'Without label' }}
+																inputProps={{ "aria-label": "Without label" }}
 																renderValue={(selected) => {
-																	if (page?.postCategory_id === '') {
-																		return <p className='text-[#ADB5B9]'>اختر التصنيف</p>;
+																	if (page?.postCategory_id === "") {
+																		return (
+																			<p className='text-[#ADB5B9]'>
+																				اختر التصنيف
+																			</p>
+																		);
 																	}
-																	const result = postCategories?.data?.categories?.filter((item) => item?.id === parseInt(selected)) || '';
+																	const result =
+																		postCategories?.data?.categories?.filter(
+																			(item) => item?.id === parseInt(selected)
+																		) || "";
 																	return result[0]?.name;
-																}}
-															>
-																{postCategories?.data?.categories?.map((cat, index) => {
-																	return (
-																		<MenuItem
-																			key={index}
-																			className='souq_storge_category_filter_items'
-																			sx={{
-																				backgroundColor: 'rgba(211, 211, 211, 1)',
-																				height: '3rem',
-																				'&:hover': {},
-																			}}
-																			value={cat?.id}
-																		>
-																			{cat?.name}
-																		</MenuItem>
-																	);
-																})}
+																}}>
+																{postCategories?.data?.categories?.map(
+																	(cat, index) => {
+																		return (
+																			<MenuItem
+																				key={index}
+																				className='souq_storge_category_filter_items'
+																				sx={{
+																					backgroundColor:
+																						"rgba(211, 211, 211, 1)",
+																					height: "3rem",
+																					"&:hover": {},
+																				}}
+																				value={cat?.id}>
+																				{cat?.name}
+																			</MenuItem>
+																		);
+																	}
+																)}
 															</Select>
 														</FormControl>
 													</div>
@@ -508,12 +585,27 @@ const CreatePage = () => {
 														<div className='title'>
 															<h4>صورة المدونة</h4>
 														</div>
-														<div {...getRootProps({ className: 'd-flex justify-content-between p-3' })}>
-															<input {...getInputProps()} id='personal-image' name='personal-image' />
-															{files.length <= 0 ? <p role='button'>اختر صورة PNG أو JPG فقط </p> : <p className='d-none'>اختر صورة PNG أو JPG فقط </p>}
+														<div
+															{...getRootProps({
+																className: "d-flex justify-content-between p-3",
+															})}>
+															<input
+																{...getInputProps()}
+																id='personal-image'
+																name='personal-image'
+															/>
+															{files.length <= 0 ? (
+																<p role='button'>اختر صورة PNG أو JPG فقط </p>
+															) : (
+																<p className='d-none'>
+																	اختر صورة PNG أو JPG فقط{" "}
+																</p>
+															)}
 
 															<span> استعراض</span>
-															{files?.length !== 0 && <ul className='m-0'>{files}</ul>}
+															{files?.length !== 0 && (
+																<ul className='m-0'>{files}</ul>
+															)}
 														</div>
 													</div>
 												</div>
@@ -532,7 +624,9 @@ const CreatePage = () => {
 										</button>
 									</div>
 									<div className='col-md-2 col-6'>
-										<button className='create-page-btn share-btn' onClick={() => setType('push')}>
+										<button
+											className='create-page-btn share-btn'
+											onClick={() => setType("push")}>
 											نشر
 										</button>
 									</div>

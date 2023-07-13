@@ -1,36 +1,36 @@
-import React, { Fragment, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import { useDispatch } from 'react-redux';
-import Context from '../Context/context';
-import { NotificationContext } from '../Context/NotificationProvider';
-import { DeleteContext } from '../Context/DeleteProvider';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Toolbar from '@mui/material/Toolbar';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import React, { Fragment, useEffect, useContext } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
+import Context from "../Context/context";
+import { NotificationContext } from "../Context/NotificationProvider";
+import { DeleteContext } from "../Context/DeleteProvider";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Toolbar from "@mui/material/Toolbar";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 // import { openVerifyModal } from '../store/slices/VerifyStoreModal-slice';
 
-import TablePagination from './TablePagination';
+import TablePagination from "./TablePagination";
 
 // ICons
-import { GoCheck } from 'react-icons/go';
-import CircularLoading from '../HelperComponents/CircularLoading';
-import { ReactComponent as ReportIcon } from '../data/Icons/icon-24-report.svg';
-import { ReactComponent as SortIcon } from '../data/Icons/icon-24-sort.svg';
-import { ReactComponent as DeletteIcon } from '../data/Icons/icon-24-delete.svg';
-import { ReactComponent as DeadLineIcon } from '../data/Icons/icon-24-deadline.svg';
-import { ReactComponent as HourGleass } from '../data/Icons/icon-24-hourgleass_half.svg';
+import { GoCheck } from "react-icons/go";
+import CircularLoading from "../HelperComponents/CircularLoading";
+import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
+import { ReactComponent as SortIcon } from "../data/Icons/icon-24-sort.svg";
+import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
+import { ReactComponent as DeadLineIcon } from "../data/Icons/icon-24-deadline.svg";
+import { ReactComponent as HourGleass } from "../data/Icons/icon-24-hourgleass_half.svg";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -43,7 +43,9 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-	return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+	return order === "desc"
+		? (a, b) => descendingComparator(a, b, orderBy)
+		: (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
@@ -65,26 +67,24 @@ function EnhancedTableHead(props) {
 	};
 
 	return (
-		<TableHead sx={{ backgroundColor: '#d9f2f9' }}>
+		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='left' sx={{ color: '#02466a', width: '80px' }}>
+				<TableCell align='left' sx={{ color: "#02466a", width: "80px" }}>
 					م
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					عنوان الشكوى
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					اسم العميل
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					نوع الاتصال
-					
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الحاله
-				
 				</TableCell>
-				<TableCell align='center' sx={{ color: '#02466a' }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الاجراء
 				</TableCell>
 			</TableRow>
@@ -96,7 +96,7 @@ EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 	onRequestSort: PropTypes.func.isRequired,
 	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
 	orderBy: PropTypes.string.isRequired,
 	rowCount: PropTypes.number,
 };
@@ -113,11 +113,10 @@ function EnhancedTableToolbar(props) {
 					pl: { sm: 2 },
 					pr: { xs: 1, sm: 1 },
 
-					display: 'flex',
-					justifyContent: 'space-between',
-					flexDirection: 'row-reverse',
-				}}
-			>
+					display: "flex",
+					justifyContent: "space-between",
+					flexDirection: "row-reverse",
+				}}>
 				<div className=' d-flex flex-row-reverse  justify-content-between align-items-center '>
 					<div></div>
 					{numSelected > 0 && (
@@ -125,10 +124,11 @@ function EnhancedTableToolbar(props) {
 							<Tooltip
 								className='delete-all'
 								onClick={() => {
-									setNotificationTitle('سيتم حذف جميع الشكاوي وهذةالخطوة غير قابلة للرجوع');
-									setActionTitle('Delete');
-								}}
-							>
+									setNotificationTitle(
+										"سيتم حذف جميع الشكاوي وهذةالخطوة غير قابلة للرجوع"
+									);
+									setActionTitle("Delete");
+								}}>
 								<IconButton>
 									<DeletteIcon />
 									حذف الكل
@@ -142,27 +142,26 @@ function EnhancedTableToolbar(props) {
 					<h2
 						className='h4'
 						style={{
-							fontSize: '20px',
-							fontWeight: '500',
-							color: '#02466a',
+							fontSize: "20px",
+							fontWeight: "500",
+							color: "#02466a",
 							marginBottom: 0,
-						}}
-					>
+						}}>
 						تحديد الكل
 					</h2>
 
 					<Checkbox
 						sx={{
-							color: '#356b88',
-							'& .MuiSvgIcon-root': {
-								color: '#356b88',
+							color: "#356b88",
+							"& .MuiSvgIcon-root": {
+								color: "#356b88",
 							},
 						}}
 						indeterminate={numSelected > 0 && numSelected < rowCount}
 						checked={rowCount > 0 && numSelected === rowCount}
 						onChange={onSelectAllClick}
 						inputProps={{
-							'aria-label': 'select all desserts',
+							"aria-label": "select all desserts",
 						}}
 					/>
 				</div>
@@ -179,16 +178,23 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	// Get Data From Redux Store
 	const navigate = useNavigate();
 	const dispatch = useDispatch(true);
-	const [cookies] = useCookies(['access_token']);
+	const [cookies] = useCookies(["access_token"]);
 
 	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } = NotificationStore;
+	const { confirm, setConfirm, actionTitle, setActionTitle } =
+		NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const { setUrl, setActionDelete, deleteReload, setDeleteReload, setDeleteMethod } = DeleteStore;
-	const [order, setOrder] = React.useState('asc');
-	const [orderBy, setOrderBy] = React.useState('calories');
+	const {
+		setUrl,
+		setActionDelete,
+		deleteReload,
+		setDeleteReload,
+		setDeleteMethod,
+	} = DeleteStore;
+	const [order, setOrder] = React.useState("asc");
+	const [orderBy, setOrderBy] = React.useState("calories");
 	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -204,8 +210,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	};
 
 	const handleRequestSort = (property) => {
-		const isAsc = orderBy === property && order === 'asc';
-		setOrder(isAsc ? 'desc' : 'asc');
+		const isAsc = orderBy === property && order === "asc";
+		setOrder(isAsc ? "desc" : "asc");
 		setOrderBy(property);
 	};
 
@@ -230,15 +236,18 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 
 	// Delete all items and Change all status
 	useEffect(() => {
-		if (confirm && actionTitle === 'Delete') {
-			const queryParams = selected.map((id) => `id[]=${id}`).join('&');
+		if (confirm && actionTitle === "Delete") {
+			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?${queryParams}`, {
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${cookies.access_token}`,
-					},
-				})
+				.get(
+					`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?${queryParams}`,
+					{
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${cookies.access_token}`,
+						},
+					}
+				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -264,7 +273,10 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		} else if (selectedIndex === selected.length - 1) {
 			newSelected = newSelected.concat(selected.slice(0, -1));
 		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
 		}
 
 		setSelected(newSelected);
@@ -281,7 +293,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	};
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
 
 	const allRows = () => {
 		const num = Math.ceil(fetchedData?.length / rowsPerPage);
@@ -293,12 +306,23 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	};
 
 	return (
-		<Box sx={{ width: '100%' }}>
-			<Paper sx={{ width: '100%', mb: 2 }}>
-				<EnhancedTableToolbar numSelected={selected.length} rowCount={fetchedData?.length} onSelectAllClick={handleSelectAllClick} />
+		<Box sx={{ width: "100%" }}>
+			<Paper sx={{ width: "100%", mb: 2 }}>
+				<EnhancedTableToolbar
+					numSelected={selected.length}
+					rowCount={fetchedData?.length}
+					onSelectAllClick={handleSelectAllClick}
+				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-						<EnhancedTableHead numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={fetchedData?.length} />
+						<EnhancedTableHead
+							numSelected={selected.length}
+							order={order}
+							orderBy={orderBy}
+							onSelectAllClick={handleSelectAllClick}
+							onRequestSort={handleRequestSort}
+							rowCount={fetchedData?.length}
+						/>
 
 						<TableBody>
 							{loading ? (
@@ -317,48 +341,83 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 										</TableRow>
 									) : (
 										stableSort(fetchedData, getComparator(order, orderBy))
-											?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+											?.slice(
+												page * rowsPerPage,
+												page * rowsPerPage + rowsPerPage
+											)
 											?.map((row, index) => {
 												const isItemSelected = isSelected(row?.id);
 												const labelId = `enhanced-table-checkbox-${index}`;
 
 												return (
-													<TableRow hover role='checkbox' aria-checked={isItemSelected} tabIndex={-1} key={index} selected={isItemSelected}>
-														<TableCell component='th' id={labelId} scope='row' align='right'>
-															<div className='flex items-center ' style={{ display: 'flex', justifyContent: 'start', alignItems: 'center', gap: '8px' }}>
+													<TableRow
+														hover
+														role='checkbox'
+														aria-checked={isItemSelected}
+														tabIndex={-1}
+														key={index}
+														selected={isItemSelected}>
+														<TableCell
+															component='th'
+															id={labelId}
+															scope='row'
+															align='right'>
+															<div
+																className='flex items-center '
+																style={{
+																	display: "flex",
+																	justifyContent: "start",
+																	alignItems: "center",
+																	gap: "8px",
+																}}>
 																<Checkbox
 																	sx={{
-																		color: '#356b88',
-																		pr: '14px',
-																		'& .MuiSvgIcon-root': {
-																			color: '#356b88',
+																		color: "#356b88",
+																		pr: "14px",
+																		"& .MuiSvgIcon-root": {
+																			color: "#356b88",
 																		},
 																	}}
 																	checked={isItemSelected}
-																	onClick={(event) => handleClick(event, row.id)}
+																	onClick={(event) =>
+																		handleClick(event, row.id)
+																	}
 																	inputProps={{
-																		'aria-labelledby': labelId,
+																		"aria-labelledby": labelId,
 																	}}
 																/>
-																{(index + 1).toLocaleString('en-US', {
+																{(index + 1).toLocaleString("en-US", {
 																	minimumIntegerDigits: 1,
 																	useGrouping: false,
 																})}
 															</div>
 														</TableCell>
 														<TableCell align='center'> {row?.title}</TableCell>
-														<TableCell align='center'> {row?.store?.user?.name}</TableCell>
+														<TableCell align='center'>
+															{" "}
+															{row?.store?.user?.name}
+														</TableCell>
 														<TableCell align='center'> {row?.type}</TableCell>
 														<TableCell align='center'>
 															<div className='sub-categories'>
 																<span
 																	className='status d-inline-flex align-items-center'
 																	style={{
-																		backgroundColor: row?.supportstatus === 'منتهية' ? '#3ae374' : row?.supportstatus === 'قيد المعالجة' ? '#ff9f1a' : '#d3d3d3',
-																		color: '#fff',
-																	}}
-																>
-																	{row?.supportstatus === 'منتهية' ? <GoCheck /> : row?.supportstatus === 'قيد المعالجة' ? <HourGleass /> : <DeadLineIcon />}
+																		backgroundColor:
+																			row?.supportstatus === "منتهية"
+																				? "#3ae374"
+																				: row?.supportstatus === "قيد المعالجة"
+																				? "#ff9f1a"
+																				: "#d3d3d3",
+																		color: "#fff",
+																	}}>
+																	{row?.supportstatus === "منتهية" ? (
+																		<GoCheck />
+																	) : row?.supportstatus === "قيد المعالجة" ? (
+																		<HourGleass />
+																	) : (
+																		<DeadLineIcon />
+																	)}
 																	{row?.supportstatus}
 																</span>
 															</div>
@@ -368,18 +427,25 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																<span>
 																	<DeletteIcon
 																		onClick={() => {
-																			setActionDelete('سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع');
-																			setDeleteMethod('get');
-																			setUrl(`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?id[]=${row?.id}`);
+																			setActionDelete(
+																				"سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع"
+																			);
+																			setDeleteMethod("get");
+																			setUrl(
+																				`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?id[]=${row?.id}`
+																			);
 																		}}
 																		style={{
-																			cursor: 'pointer',
-																			color: 'red',
-																			fontSize: '1.2rem',
-																		}}
-																	></DeletteIcon>
+																			cursor: "pointer",
+																			color: "red",
+																			fontSize: "1.2rem",
+																		}}></DeletteIcon>
 																</span>
-																<span style={{ cursor: 'pointer' }} onClick={() => navigate(`supportDetails/${row?.id}`)}>
+																<span
+																	style={{ cursor: "pointer" }}
+																	onClick={() =>
+																		navigate(`supportDetails/${row?.id}`)
+																	}>
 																	<ReportIcon />
 																</span>
 															</div>
@@ -392,8 +458,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 										<TableRow
 											style={{
 												height: 53 * emptyRows,
-											}}
-										>
+											}}>
 											<TableCell colSpan={6} />
 										</TableRow>
 									)}
@@ -403,7 +468,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					</Table>
 				</TableContainer>
 			</Paper>
-			{fetchedData?.length !== 0 && !loading &&
+			{fetchedData?.length !== 0 && !loading && (
 				<TablePagination
 					rowsPerPagesCount={rowsPerPagesCount}
 					handleChangeRowsPerPage={handleChangeRowsPerPage}
@@ -415,7 +480,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					setPage={setPage}
 					allRows={allRows}
 				/>
-			}
+			)}
 		</Box>
 	);
 };
