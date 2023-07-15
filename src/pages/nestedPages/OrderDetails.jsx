@@ -38,7 +38,7 @@ const OrderDetails = () => {
 		`https://backend.atlbha.com/api/Store/orders/${id}`
 	);
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const navigate = useNavigate();
@@ -159,7 +159,7 @@ const OrderDetails = () => {
 													<div className='order-head-row'>
 														<WalletIcon />
 														<span className='me-3 price'>
-															قيمة الطلب <span>ر.س</span>
+															قيمة الطلب <span>(ر.س)</span>
 														</span>
 													</div>
 													<div className='order-data-row'>
