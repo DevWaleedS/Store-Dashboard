@@ -286,7 +286,7 @@ const AddNewProduct = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
 														message: "يجب على الحقل الاسم أن يكون نصاّّ",
 													},
 												})}

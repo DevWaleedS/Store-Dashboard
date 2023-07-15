@@ -20,7 +20,6 @@ import { RiText } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../Context/LoadingProvider";
 
-
 const style = {
 	position: "fixed",
 	top: "55%",
@@ -40,14 +39,14 @@ const style = {
 
 const MaintenanceModeModal = () => {
 	const [cookies] = useCookies(["access_token"]);
-
 	const { fetchedData, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/maintenance"
 	);
 
-	const title = fetchedData?.data?.Maintenances.map((item) => item.title);
-	const message = fetchedData?.data?.Maintenances.map((item) => item.message);
-	const status = fetchedData?.data?.Maintenances.map((item) => item.status);
+	const title = fetchedData?.data?.Maintenances[0]?.title;
+	const message = fetchedData?.data?.Maintenances[0]?.message;
+	const status = fetchedData?.data?.Maintenances[0]?.status;
+
 	// create video modal function
 	const { isOpenMaintenanceModeModal } = useSelector(
 		(state) => state.MaintenanceModeModal
@@ -69,6 +68,7 @@ const MaintenanceModeModal = () => {
 			message: "",
 		},
 	});
+	const [maintenanceStatus, setMaintenanceStatus] = useState(false);
 	const [maintenanceModeValue, setMaintenanceModeValue] = useState({
 		title: "",
 		message: "",
@@ -83,7 +83,6 @@ const MaintenanceModeModal = () => {
 			message: "",
 		});
 	};
-	const [maintenanceStatus, setMaintenanceStatus] = useState();
 
 	// to set all data info from api
 	useEffect(() => {
@@ -92,7 +91,7 @@ const MaintenanceModeModal = () => {
 				title: title,
 				message: message,
 			});
-			setMaintenanceStatus(status[0] === "نشط" ? true : false);
+			setMaintenanceStatus(status === "نشط" ? true : false);
 		}
 	}, [fetchedData?.data?.Maintenances]);
 
@@ -183,8 +182,8 @@ const MaintenanceModeModal = () => {
 												</div>
 												<Switch
 													name='status'
-													onChange={() => {
-														setMaintenanceStatus(!maintenanceStatus);
+													onChange={(e) => {
+														setMaintenanceStatus(e.target.checked);
 													}}
 													checked={maintenanceStatus}
 													className='d-flex align-self-start mb-md-2 mb-3 mx-md-0 mx-auto'
@@ -244,10 +243,10 @@ const MaintenanceModeModal = () => {
 														id='maintenance-title-input'
 														placeholder='المتجر مغلق مؤقتاََ للصيانة'
 														{...register("title", {
-															required: "The title field is required",
+															required: "حقل العنوان مطلوب",
 															pattern: {
-																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "The title must be a string",
+																value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+																message: "العنوان يجب أن يكون نصاً",
 															},
 														})}
 													/>

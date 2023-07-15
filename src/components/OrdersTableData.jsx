@@ -31,7 +31,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 					style={{ minHeight: "400px" }}>
 					{ordersDetails?.length === 0 ? (
 						<div className='d-flex justify-content-center align-items-center h-100'>
-							لا يوجد طلبات حتي الان
+							لا يوجد طلبات حتي الآن
 						</div>
 					) : (
 						<table className='table table-borderless orders-table text-center'>

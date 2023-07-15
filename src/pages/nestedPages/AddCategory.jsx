@@ -240,8 +240,8 @@ const AddCategory = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "الاسم يجب ان يكون نص",
+														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+														message: "الاسم يجب أن يكون نصاً",
 													},
 												})}
 											/>

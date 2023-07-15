@@ -55,7 +55,7 @@ const CreatePage = () => {
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -268,8 +268,8 @@ const CreatePage = () => {
 												{...register("title", {
 													required: " حقل العنوان مطلوب",
 													pattern: {
-														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "يجب أن يكون العنوان عبارة عن نص",
+														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+														message: "يجب أن يكون العنوان عبارة عن نصاّّ",
 													},
 												})}
 											/>

@@ -25,7 +25,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-
 const style = {
 	position: "fixed",
 	top: "80px",
@@ -134,7 +133,6 @@ const EditUserPage = () => {
 			status: "",
 		});
 	};
-
 	const showPasswordToggle = () => {
 		if (passwordType === "password") {
 			setPasswordType("text");
@@ -263,8 +261,8 @@ const EditUserPage = () => {
 														{...register("name", {
 															required: "حقل الاسم مطلوب",
 															pattern: {
-																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "يجب أن يكون الاسم نص",
+																value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+																message: "يجب أن يكون الاسم نصاّّ",
 															},
 														})}
 													/>

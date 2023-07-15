@@ -216,7 +216,7 @@ const AddNewUser = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
 														message: "يجب على الحقل الاسم أن يكون نصاّّ",
 													},
 												})}
@@ -363,9 +363,9 @@ const AddNewUser = () => {
 												{...register("password", {
 													required: "حقل كلمة المرور مطلوب",
 													minLength: {
-														value: 6,
+														value: 8,
 														message:
-															"يجب أن يكون طول نص كلمة المرور على الأقل 6 حروفٍ/حرفًا",
+															"يجب أن يكون طول نص كلمة المرور على الأقل 8 حروفٍ",
 													},
 												})}
 											/>

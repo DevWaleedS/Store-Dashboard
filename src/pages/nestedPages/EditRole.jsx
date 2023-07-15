@@ -218,8 +218,8 @@ const EditRole = () => {
 														{...register("role_name", {
 															required: "حقل إسم الدور مطلوب",
 															pattern: {
-																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "يجب أن يكون اسم الدور عبارة عن نص",
+																value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+																message: "يجب أن يكون اسم الدور عبارة عن نصاّّ",
 															},
 														})}
 													/>

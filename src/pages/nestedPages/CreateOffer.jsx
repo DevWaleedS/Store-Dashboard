@@ -42,7 +42,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-
 // Modal Style
 const style = {
 	position: "fixed",
@@ -78,7 +77,7 @@ const CreateOffer = () => {
 	const dispatch = useDispatch(false);
 	const [reload, setReload] = useState(false);
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -546,7 +545,7 @@ const CreateOffer = () => {
 														required: "حقل عنوان العرض مطلوب",
 														pattern: {
 															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-															message: "عنوان العرض يجب ان يكون نص",
+															message: "عنوان العرض يجب أن يكون نصاً",
 														},
 													})}
 												/>

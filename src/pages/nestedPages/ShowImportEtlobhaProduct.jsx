@@ -12,9 +12,7 @@ import Modal from "@mui/material/Modal";
 
 // icons and images
 import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currency.svg";
-
 import { useForm } from "react-hook-form";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -221,7 +219,7 @@ const ShowImportEtlobhaProduct = () => {
 													{...register("name", {
 														required: "حقل الاسم مطلوب",
 														pattern: {
-															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+															value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
 															message: "يجب على الحقل الاسم أن يكون نصاّّ",
 														},
 													})}
