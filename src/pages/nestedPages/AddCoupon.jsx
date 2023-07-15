@@ -152,7 +152,7 @@ const AddCoupon = () => {
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("code", data?.code);
-		formData.append("discount_type", data?.discount_type);
+		formData.append("discount_type", data.discount_type || "percentage");
 		formData.append("discount", data?.discount);
 		formData.append("total_price", data?.total_price);
 		formData.append("expire_date", moment(startDate).format("YYYY-MM-DD"));
