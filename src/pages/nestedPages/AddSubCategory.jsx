@@ -25,7 +25,6 @@ const AddSubCategory = () => {
 	const { isOpen } = useSelector((state) => state.AddSubCategorySlice);
 
 	const dispatch = useDispatch(false);
-	const navigate = useNavigate();
 	const contextStore = useContext(Context);
 	const { setSubCategories } = contextStore;
 	const [subcat, setSubCat] = useState('');

@@ -12,8 +12,6 @@ import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currenc
 import { useCookies } from "react-cookie";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
-
 const modalStyle = {
 	position: "absolute",
 	top: "90px",
@@ -21,7 +19,7 @@ const modalStyle = {
 	transform: "translate(-50%, 0%)",
 	width: 1042,
 	maxWidth: "90%",
-	height: 760,
+	height: "auto",
 	bgcolor: "#F4F5F7",
 	border: "1px solid #ECECEC",
 	borderRadius: "6px",
@@ -34,9 +32,8 @@ const modalStyle = {
 };
 
 const ProductRefund = () => {
-	// const [cookies] = useCookies(["access_token"]);
-		const userAuthored = useContext(UserAuth);
-		const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -69,7 +66,7 @@ const ProductRefund = () => {
 			.post(`https://backend.atlbha.com/api/Store/importproduct`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {
@@ -137,7 +134,7 @@ const ProductRefund = () => {
 															<img
 																key={index}
 																src={item?.image}
-																alt='product'
+																alt={item?.image}
 																className='img-fluid'
 															/>
 														)
@@ -173,7 +170,7 @@ const ProductRefund = () => {
 											<div className='product-price mb-3'>
 												<div className='label mb-1'>سعر الشراء</div>
 												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='price-icon d-flex  p-2 gap-3'>
+													<div className='price-icon d-flex align-items-center  p-2 gap-3'>
 														<CurrencyIcon />
 														<div className='price w-100 d-flex justify-content-center align-items-center'>
 															{fetchedData?.data?.products?.purchasing_price}
@@ -185,12 +182,20 @@ const ProductRefund = () => {
 													</div>
 												</div>
 											</div>
-
 											<div className='product-price mb-3'>
 												<div className='label mb-1'> الكمية في المخزن</div>
 												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='count' style={{ color: "#67747B" }}>
-														{fetchedData?.data?.products?.stock}
+													<div className='price-icon d-flex  p-2 gap-3'>
+														<CurrencyIcon className='invisible ' />
+														<div
+															className='price w-100 d-flex justify-content-center align-items-center'
+															style={{ color: "#67747B" }}>
+															{fetchedData?.data?.products?.stock}
+														</div>
+													</div>
+
+													<div className='currency d-flex justify-content-center align-items-center invisible '>
+														ر.س
 													</div>
 												</div>
 											</div>
@@ -201,7 +206,7 @@ const ProductRefund = () => {
 													<span>(قم بإضافة السعر الخاص بك)</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='price-icon d-flex  p-2 gap-3'>
+													<div className='price-icon d-flex align-items-center p-2 gap-3'>
 														<CurrencyIcon />
 														<div className='price w-100 d-flex justify-content-center align-items-center'>
 															<input

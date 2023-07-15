@@ -9,7 +9,7 @@ import { LoadingContext } from "../Context/LoadingProvider";
 import { DeleteContext } from "../Context/DeleteProvider";
 import { theme } from "../Theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { Navigate, Outlet, ScrollRestoration } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 import TopBar from "../global/TopBar";
 import SideBar from "../global/SideBar";
 
@@ -21,15 +21,12 @@ import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteC
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import DeleteOneModal from "../components/DeleteOneModal/DeleteOneModal";
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 import PrivateRoute from "./Login/PrivateRoute/PrivateRoute";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const RootLayout = () => {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const [openSidebar, setOpenSidebar] = React.useState(false);
 	const contextStore = useContext(Context);
 	const NotificationStore = useContext(NotificationContext);
@@ -56,7 +53,7 @@ const RootLayout = () => {
 	const dispatchVerifyModal = useDispatch(false);
 
 	useEffect(() => {
-		dispatch(StoreVerificationThunk(userAuthor));
+		dispatch(StoreVerificationThunk(cookies?.access_token));
 	}, [dispatch]);
 
 	useEffect(() => {

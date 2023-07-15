@@ -18,12 +18,12 @@ import { Button } from "@mui/material";
 import { TagInput } from "evergreen-ui";
 import { Link } from "react-router-dom";
 import { DelegateRequestAlert } from "../components";
+
 // ICONS
 import { AiOutlineSearch } from "react-icons/ai";
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { IoIosArrowDown } from "react-icons/io";
 import { LoadingContext } from "../Context/LoadingProvider";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const PlatformServices = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -38,9 +38,8 @@ const PlatformServices = () => {
 		services: [],
 	});
 	const navigate = useNavigate();
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -72,7 +71,7 @@ const PlatformServices = () => {
 			.post(`https://backend.atlbha.com/api/Store/etlobhaservice`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

@@ -64,10 +64,7 @@ const EditRole = () => {
 	});
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	// const [cookies] = useCookies(["access_token"]);
-
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -115,7 +112,7 @@ const EditRole = () => {
 			.post(`https://backend.atlbha.com/api/Store/roles/${id}`, formData, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

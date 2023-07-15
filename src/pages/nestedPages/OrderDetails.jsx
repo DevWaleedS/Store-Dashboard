@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import axios from "axios";
 import Context from "../../Context/context";
 import { useNavigate, useParams } from "react-router-dom";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -37,9 +37,8 @@ const OrderDetails = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/orders/${id}`
 	);
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const navigate = useNavigate();
@@ -52,7 +51,7 @@ const OrderDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/orders/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

@@ -18,7 +18,6 @@ import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.sv
 import { AiOutlinePlus } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 // Modal style
 const style = {
@@ -45,9 +44,8 @@ const AddCategory = () => {
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const { subCategories, setSubCategories } = contextStore;
@@ -99,7 +97,7 @@ const AddCategory = () => {
 			.post(`https://backend.atlbha.com/api/Store/category`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

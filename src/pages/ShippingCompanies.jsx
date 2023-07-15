@@ -11,16 +11,14 @@ import StoreDataWidget from "../components/StoreDataWidget";
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { AiOutlineSearch } from "react-icons/ai";
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const ShippingCompanies = () => {
 	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/shippingtype`
 	);
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -32,7 +30,7 @@ const ShippingCompanies = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

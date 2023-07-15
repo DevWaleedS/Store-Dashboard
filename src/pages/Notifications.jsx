@@ -6,19 +6,18 @@ import Context from "../Context/context";
 import { NotificationContext } from "../Context/NotificationProvider";
 import { DeleteContext } from "../Context/DeleteProvider";
 import CircularLoading from "../HelperComponents/CircularLoading";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 // Icons
 import Checkbox from "@mui/material/Checkbox";
 import DeleteIcon from "../data/Icons/icon-24-delete.svg";
 import { ReactComponent as CheckedSquare } from "../data/Icons/icon-24-square checkmark.svg";
 import { AiOutlineSearch } from "react-icons/ai";
 import moment from "moment";
-import { UserAuth } from "../Context/UserAuthorProvider";
+
 
 const Notifications = () => {
-	// const [cookies] = useCookies(["access_token"]);
-		const userAuthored = useContext(UserAuth);
-		const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);
@@ -89,7 +88,7 @@ const Notifications = () => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

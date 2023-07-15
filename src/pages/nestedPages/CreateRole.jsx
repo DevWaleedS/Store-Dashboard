@@ -6,6 +6,7 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { useCookies } from "react-cookie";
 import Context from "../../Context/context";
 import axios from "axios";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -25,7 +26,7 @@ import { ReactComponent as StarIcon } from "../../data/Icons/icon-20-star.svg";
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+
 
 // Modal Style
 const style = {
@@ -54,9 +55,7 @@ const CreateRole = () => {
 	);
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -82,7 +81,7 @@ const CreateRole = () => {
 			.post("https://backend.atlbha.com/api/Store/roles", data, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

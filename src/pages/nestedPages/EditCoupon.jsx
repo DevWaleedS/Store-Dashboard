@@ -5,9 +5,11 @@ import useFetch from "../../Hooks/UseFetch";
 import Context from "../../Context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+
 // Datepicker
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -26,7 +28,6 @@ import { useCookies } from "react-cookie";
 import moment from "moment";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 // Modal Style
 const style = {
@@ -53,9 +54,7 @@ const EditCoupon = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const currentDate = new Date();
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
@@ -63,7 +62,7 @@ const EditCoupon = () => {
 		"https://backend.atlbha.com/api/Store/selector/payment_types"
 	);
 	const { fetchedData: products } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/products"
+		"https://backend.atlbha.com/api/Store/selector/productImportproduct"
 	);
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/coupons/${id}`
@@ -216,7 +215,7 @@ const EditCoupon = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)
@@ -274,7 +273,7 @@ const EditCoupon = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

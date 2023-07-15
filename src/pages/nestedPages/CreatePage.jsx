@@ -18,6 +18,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+
 // ICONS
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
@@ -25,7 +26,7 @@ import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.s
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+
 // Modal Style
 const style = {
 	position: "absolute",
@@ -53,10 +54,8 @@ const CreatePage = () => {
 	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -174,7 +173,7 @@ const CreatePage = () => {
 				.post(`https://backend.atlbha.com/api/Store/page-publish`, formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				})
 				.then((res) => {
@@ -203,7 +202,7 @@ const CreatePage = () => {
 				.post(`https://backend.atlbha.com/api/Store/page`, formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				})
 				.then((res) => {

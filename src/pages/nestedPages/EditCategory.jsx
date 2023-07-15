@@ -7,8 +7,8 @@ import { useDispatch } from "react-redux";
 import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 import ImageUploading from "react-images-uploading";
 import AddSubCategory from "./AddSubCategory";
-// ICONS
 
+// ICONS
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
 import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -45,10 +45,7 @@ const EditCategory = () => {
 	const { id } = useParams();
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
-	// const [cookies] = useCookies(["access_token"]);
-	
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const { fetchedData, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/category/${id}`
 	);
@@ -118,7 +115,7 @@ const EditCategory = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

@@ -20,12 +20,12 @@ import Context from "../Context/context";
 import { NotificationContext } from "../Context/NotificationProvider";
 import { DeleteContext } from "../Context/DeleteProvider";
 import CircularLoading from "../HelperComponents/CircularLoading";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
+
 // import icons
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
 import moment from "moment";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -218,9 +218,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function CouponTable({ data, loading, reload, setReload }) {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
@@ -282,7 +280,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)
@@ -307,7 +305,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)
@@ -331,7 +329,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

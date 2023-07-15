@@ -40,17 +40,16 @@ const style = {
 };
 
 const EditUserDetails = () => {
+	const [cookies] = useCookies(["access_token"]);
 	const UserInfo = useContext(UserAuth);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const contextStore = useContext(Context);
 	const { setUserInfo } = UserInfo;
+	const { setEndActionTitle } = contextStore;
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/profile"
 	);
-	// const [cookies] = useCookies(["access_token"]);
-	
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const navigate = useNavigate();
 	const {
 		register,
@@ -188,7 +187,7 @@ const EditUserDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/profile`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

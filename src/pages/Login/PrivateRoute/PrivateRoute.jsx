@@ -1,17 +1,11 @@
 import { Navigate, useLocation } from "react-router-dom";
-
-// import { useCookies } from "react-cookie";
-import { useContext } from "react";
-import { UserAuth } from "../../../Context/UserAuthorProvider";
+import { useCookies } from "react-cookie";
 
 const PrivateRoute = ({ children }) => {
-	// const [cookies] = useCookies(["access_token"]);
 	const location = useLocation();
+	const [cookies] = useCookies(["access_token"]);
 
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
-
-	return userAuthor ? (
+	return cookies?.access_token ? (
 		children
 	) : (
 		<Navigate state={{ from: location }} replace to='/login' />

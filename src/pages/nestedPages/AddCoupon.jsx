@@ -5,6 +5,7 @@ import axios from "axios";
 import Context from "../../Context/context";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -18,15 +19,16 @@ import Select from "@mui/material/Select";
 // Datepicker
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 // icons
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
 import { IoIosArrowDown } from "react-icons/io";
+
 // Modal Style
 import moment from "moment";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -56,14 +58,13 @@ const AddCoupon = () => {
 		"https://backend.atlbha.com/api/Store/selector/payment_types"
 	);
 	const { fetchedData: products } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/products"
+		"https://backend.atlbha.com/api/Store/selector/productImportproduct"
 	);
 
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -183,7 +184,7 @@ const AddCoupon = () => {
 			.post(`https://backend.atlbha.com/api/Store/coupons`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

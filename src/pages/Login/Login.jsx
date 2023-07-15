@@ -6,8 +6,8 @@ import { ReactComponent as EyeOPen } from "../../data/Icons/eye_open.svg";
 import { ReactComponent as EyeClose } from "../../data/Icons/eye_close.svg";
 import "./Login.css";
 import axios from "axios";
-// import { useCookies } from "react-cookie";
-// import Context from "../../Context/context";
+import { useCookies } from "react-cookie";
+
 import { Helmet } from "react-helmet";
 import { UserAuth } from "../../Context/UserAuthorProvider";
 
@@ -18,21 +18,20 @@ import { UserAuth } from "../../Context/UserAuthorProvider";
 const Login = () => {
 	let type = "password";
 	const navigate = useNavigate();
-	// const [cookies, setCookie] = useCookies(["access_token"]);
-
-	// to set the token to context
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor, setUserAuthor } = userAuthored;
+	const [cookies, setCookie] = useCookies(["access_token"]);
 
 	// to set remember me
 	const RememberMe = useContext(UserAuth);
 	const { rememberMe, setRememberMe } = RememberMe;
+
 	const [username, setUsername] = useState(
 		rememberMe.remember_me ? rememberMe.username : ""
 	);
+
 	const [password, setPassword] = useState(
-		rememberMe.remember_me ? rememberMe.password : ""
+		cookies.remember_me === "true" ? cookies.password : ""
 	);
+
 	/**
 	 * ---------------------------------------------------------------------------------------------------
 	 * to handle errors
@@ -51,28 +50,28 @@ const Login = () => {
 	 * ----------------------------------------------
 	 */
 	const NavigateToPasswordBackPage = () => {
-		window.open("http://home.atlbha.com/passwordBackPage", "_blank");
+		window.location.href = "http://home.atlbha.com/passwordBackPage";
 	};
 
 	const NavigateToRegisterPage = () => {
-		window.open("http://home.atlbha.com/register/merchant", "_blank");
+		window.location.href = "http://home.atlbha.com/register/merchant";
 	};
 
 	//Set username, password and remember_me status from context
 	function setUserInfoToCookies() {
 		// Set username cookie to expire in 1 days
+		setCookie("password", password, { maxAge: 24 * 60 * 60 }); // Set password cookie to expire in 1 days
 		setRememberMe({
 			username,
-			password,
 			remember_me: true,
 		});
 	}
 
 	//remove username, password and remember_me status from context
 	function removeUserInfoToCookies() {
+		setCookie("password", "", { maxAge: 0 }); // Remove the password cookie
 		setRememberMe({
 			username: "",
-			password: "",
 			remember_me: false,
 		});
 	}
@@ -82,7 +81,6 @@ const Login = () => {
 	 * Login Function
 	 * ---------------------------------------------------------------------------------------------------
 	 */
-
 	const Login = () => {
 		setError("");
 		setUsernameError("");
@@ -93,11 +91,10 @@ const Login = () => {
 		};
 		axios.post("https://backend.atlbha.com/api/loginapi", data).then((res) => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-				//Set token to context
-				const token = res?.data?.data?.token;
-				setUserAuthor(token);
-
-				// setCookie("access_token", res?.data?.data?.token);
+				//Set token to cookies
+				setCookie("access_token", res?.data?.data?.token, { path: "/" });
+				setCookie("username", res?.data?.data?.user?.email || username);
+				console.log(res?.data?.data?.user?.email);
 				if (rememberMe?.remember_me) {
 					//Set username, password and remember_me status to context
 					setUserInfoToCookies();
@@ -105,6 +102,7 @@ const Login = () => {
 					//remove username, password and remember_me status from context
 					removeUserInfoToCookies();
 				}
+
 				// if the user is logged we will navigate him to dashboard
 				navigate("/");
 			} else {
@@ -112,7 +110,9 @@ const Login = () => {
 				setPasswordError(res?.data?.message?.en?.password?.[0]);
 				setError(res?.data?.message?.ar);
 				if (res?.data?.message?.en === "User not verified") {
-					window.open("https://home.atlbha.com/verificationPage", "_blank");
+					window.location.href = "http://home.atlbha.com//verificationPage";
+
+					setCookie("username", res?.data?.data?.user?.email || username);
 				}
 			}
 		});
@@ -150,7 +150,7 @@ const Login = () => {
 	}, [password]);
 	// --------------------------------------------------------------------------------------------------
 
-	return userAuthor ? (
+	return cookies?.access_token ? (
 		<Navigate to='/' />
 	) : (
 		<>

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+
 // icons
 import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";

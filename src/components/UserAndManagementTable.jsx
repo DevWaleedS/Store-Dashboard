@@ -24,8 +24,7 @@ import Context from "../Context/context";
 import { NotificationContext } from "../Context/NotificationProvider";
 import { DeleteContext } from "../Context/DeleteProvider";
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { UserAuth } from "../Context/UserAuthorProvider";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -218,9 +217,8 @@ export default function UserAndManagementTable({
 	reload,
 	setReload,
 }) {
-	// const [cookies] = useCookies(["access_token"]);
-		const userAuthored = useContext(UserAuth);
-		const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -280,7 +278,7 @@ export default function UserAndManagementTable({
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)
@@ -305,7 +303,7 @@ export default function UserAndManagementTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)
@@ -329,7 +327,7 @@ export default function UserAndManagementTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

@@ -18,7 +18,6 @@ import { ReactComponent as ImageIcon } from "../../data/Icons/icon-24-image.svg"
 import { ReactComponent as AddImageIcon } from "../../data/Icons/icon-24-action-add.svg";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -55,9 +54,8 @@ const AddCustomer = ({ reload, setReload }) => {
 		{ id: 2, name: "أنثي", name_en: "female" },
 	];
 
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -131,7 +129,7 @@ const AddCustomer = ({ reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/client`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

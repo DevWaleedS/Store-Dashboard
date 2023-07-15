@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useContext, useEffect } from "react";
 
 import PropTypes from "prop-types";
-// import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import Context from "../Context/context";
 import { NotificationContext } from "../Context/NotificationProvider";
@@ -157,9 +157,7 @@ export default function CartsTables({
 	search,
 	setSearch,
 }) {
-	// const [cookies] = useCookies(['access_token']);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const NotificationStore = useContext(NotificationContext);
@@ -236,7 +234,7 @@ export default function CartsTables({
 				.get(`https://backend.atlbha.com/api/Store/deleteCart?${queryParams}`, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				})
 				.then((res) => {

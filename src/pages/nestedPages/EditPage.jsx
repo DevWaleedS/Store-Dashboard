@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import useFetch from "../../Hooks/UseFetch";
 import { useDropzone } from "react-dropzone";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -19,6 +20,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+
 // ICONS
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
@@ -27,6 +29,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 import { UserAuth } from "../../Context/UserAuthorProvider";
+
 // Modal Style
 const style = {
 	position: "absolute",
@@ -58,10 +61,7 @@ const EditPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/post-categories"
 	);
 	const navigate = useNavigate();
-	// const [cookies] = useCookies(["access_token"]);
-
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -207,7 +207,7 @@ const EditPage = () => {
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

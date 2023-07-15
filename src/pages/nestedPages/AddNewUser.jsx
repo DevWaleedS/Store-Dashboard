@@ -22,7 +22,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import useFetch from "../../Hooks/UseFetch";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+
 
 const style = {
 	position: "fixed",
@@ -50,9 +50,8 @@ const AddNewUser = () => {
 	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -150,7 +149,7 @@ const AddNewUser = () => {
 			.post(`https://backend.atlbha.com/api/Store/user`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

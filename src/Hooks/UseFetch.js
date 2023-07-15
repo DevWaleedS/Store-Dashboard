@@ -1,12 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 export default function useFetch(url) {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const [fetchedData, setFetchedData] = useState(null);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -18,7 +16,7 @@ export default function useFetch(url) {
 				const response = await axios.get(url, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				});
 				setFetchedData(response.data);

@@ -218,9 +218,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function BigProductsTable({ data, loading, reload, setReload }) {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -281,7 +279,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)
@@ -305,7 +303,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)
@@ -329,7 +327,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

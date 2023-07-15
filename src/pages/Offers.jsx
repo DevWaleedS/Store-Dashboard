@@ -10,14 +10,12 @@ import { BsGift } from "react-icons/bs";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import moment from "moment";
 import Context from "../Context/context";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const Offers = () => {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/offer"
 	);
@@ -31,7 +29,7 @@ const Offers = () => {
 			.get(`https://backend.atlbha.com/api/Store/changeOfferStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

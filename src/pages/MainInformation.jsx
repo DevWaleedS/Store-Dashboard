@@ -22,12 +22,11 @@ import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg
 import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-import { UserAuth } from "../Context/UserAuthorProvider";
+
 
 const MainInformation = () => {
-	// const [cookies] = useCookies(["access_token"]);
-		const userAuthored = useContext(UserAuth);
-		const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+	
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -103,7 +102,7 @@ const MainInformation = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

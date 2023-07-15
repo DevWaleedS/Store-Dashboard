@@ -57,9 +57,7 @@ const EditProductPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
 
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const [openSubCategory, setOpenSubCategory] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -220,7 +218,7 @@ const EditProductPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

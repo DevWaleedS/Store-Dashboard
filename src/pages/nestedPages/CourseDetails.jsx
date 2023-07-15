@@ -17,8 +17,10 @@ import { BiPlayCircle } from 'react-icons/bi';
 const CourseDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+
 	// to open video modal
 	const dispatch = useDispatch(false);
+	
 	// to get all  data from server
 	const { fetchedData, loading } = useFetch(`https://backend.atlbha.com/api/Store/course/${id}`);
 

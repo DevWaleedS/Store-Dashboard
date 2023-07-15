@@ -19,7 +19,7 @@ import { ReactComponent as TextIcon } from "../data/Icons/icon-24-format text ri
 import { RiText } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../Context/LoadingProvider";
-import { UserAuth } from "../Context/UserAuthorProvider";
+
 
 const style = {
 	position: "fixed",
@@ -39,9 +39,8 @@ const style = {
 };
 
 const MaintenanceModeModal = () => {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const { fetchedData, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/maintenance"
 	);
@@ -120,7 +119,7 @@ const MaintenanceModeModal = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

@@ -9,7 +9,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Context from "../Context/context";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { TagsInput } from "react-tag-input-component";
 import axios from "axios";
 import useFetch from "../Hooks/UseFetch";
@@ -35,8 +35,7 @@ const SeoWeight = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/seo`
 	);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -171,7 +170,7 @@ const SeoWeight = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateSeo`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {
@@ -204,7 +203,7 @@ const SeoWeight = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateLink`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {
@@ -234,7 +233,7 @@ const SeoWeight = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateRobots`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

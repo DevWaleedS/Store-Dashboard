@@ -20,7 +20,6 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-
 import TablePagination from "./TablePagination";
 
 // ICons
@@ -177,9 +176,7 @@ EnhancedTableToolbar.propTypes = {
 const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	// Get Data From Redux Store
 	const navigate = useNavigate();
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -244,7 +241,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

@@ -14,7 +14,7 @@ import { ReactComponent as ReplayIcon } from "../data/Icons/icon-24-repley.svg";
 
 import CircularLoading from "../HelperComponents/CircularLoading";
 import axios from "axios";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import Context from "../Context/context";
 import { DeleteContext } from "../Context/DeleteProvider";
 import { UserAuth } from "../Context/UserAuthorProvider";
@@ -27,9 +27,7 @@ const RatingWeight = ({
 	reload,
 	setReload,
 }) => {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
@@ -65,7 +63,7 @@ const RatingWeight = ({
 			.get(`https://backend.atlbha.com/api/Store/changeCommentStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

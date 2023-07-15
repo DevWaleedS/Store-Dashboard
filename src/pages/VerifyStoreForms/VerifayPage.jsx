@@ -7,7 +7,7 @@ import { resetActivity } from "../../store/slices/AddActivity";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -48,9 +48,8 @@ const VerifayPage = ({ verify }) => {
 	const { fetchedData: cities } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
-	// const [cookies] = useCookies(["access_token"]);
-		const userAuthored = useContext(UserAuth);
-		const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	// to open verifay alert
 	const dispatchVerifyAlert = useDispatch(false);
 	const dispatch = useDispatch();
@@ -147,7 +146,7 @@ const VerifayPage = ({ verify }) => {
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

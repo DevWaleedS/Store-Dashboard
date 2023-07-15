@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import useFetch from "../Hooks/UseFetch";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import Context from "../Context/context";
 import { Link } from "react-router-dom";
 import howIcon from "../data/Icons/icon_24_home.svg";
@@ -17,7 +17,6 @@ import { ReactComponent as Facebock } from "../data/Icons/icon-24-facebbock.svg"
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { Button } from "@mui/material";
 import { LoadingContext } from "../Context/LoadingProvider";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const SocialPages = () => {
 	// to get all  data from server
@@ -25,9 +24,7 @@ const SocialPages = () => {
 		`https://backend.atlbha.com/api/Store/socialMedia_store_show`
 	);
 
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -102,7 +99,7 @@ const SocialPages = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

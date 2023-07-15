@@ -6,6 +6,7 @@ import Context from "../../Context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { useCookies } from "react-cookie";
+
 // import Dropzone Library
 import { useDropzone } from "react-dropzone";
 import Box from "@mui/material/Box";
@@ -13,6 +14,7 @@ import Modal from "@mui/material/Modal";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
 // icons
 import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
@@ -22,7 +24,7 @@ import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+
 
 const style = {
 	position: "fixed",
@@ -45,9 +47,8 @@ const style = {
 };
 const EditUserPage = () => {
 	const { id } = useParams();
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/user/${id}`
 	);
@@ -189,7 +190,7 @@ const EditUserPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)

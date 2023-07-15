@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 
 import Context from "../Context/context";
@@ -186,10 +186,8 @@ export default function CustomersDataTable({
 	reload,
 	setReload,
 }) {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
-	// Use Dispatch to open edit customer page
+	const [cookies] = useCookies(["access_token"]);
+
 	const navigate = useNavigate();
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
@@ -223,7 +221,7 @@ export default function CustomersDataTable({
 			.get(`https://backend.atlbha.com/api/Store/clientdeleteall?id[]=${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {
@@ -247,7 +245,7 @@ export default function CustomersDataTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userAuthor}`,
+							Authorization: `Bearer ${cookies?.access_token}`,
 						},
 					}
 				)

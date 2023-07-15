@@ -5866,7 +5866,8 @@ input:disabled {
 .product-images .another-image {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-start;
+	gap: 10px;
 }
 
 .product-images .another-image img {
@@ -7240,13 +7241,13 @@ input:disabled {
 	.souqOtlobha-page .total-products span:first-child {
 		width: 100px;
 		height: 100%;
-		font-size: 20px;
+		font-size: 18px;
 	}
 
 	.souqOtlobha-page .total-products span:last-child {
 		width: 100%;
 		height: 100%;
-		font-size: 20px;
+		font-size: 18px;
 	}
 
 	.souqOtlobha-page .btn-group button:first-child,
@@ -7274,14 +7275,23 @@ input:disabled {
 	}
 
 	.product-box .product-name,
-	.product-box .product-category {
-		font-size: 16px;
+	.product-box .product-category,
+	.product-box .product-name span,
+	.product-box .product-category span {
+		font-size: 14px;
 	}
-
+	.product-box .product-category {
+		padding: 0 6px;
+	}
+	.ProductRefund-wrapper .product-price .currency,
+	.product-box .product-price .currency {
+		height: 45px;
+		font-size: 14px;
+	}
 	.product-price,
 	.recovery-button {
 		width: 100%;
-		margin-bottom: 12px;
+		margin-bottom: 16px;
 	}
 
 	.product-box .product-price .input {
@@ -7291,6 +7301,9 @@ input:disabled {
 
 	.product-box .recovery-button button {
 		width: 100%;
+	}
+	.recovery-button button {
+		font-size: 18px;
 	}
 
 	/* ProductRefund*/

@@ -10,17 +10,15 @@ import {
 import { MdAdd } from "react-icons/md";
 import AddProductFromStore from "./nestedPages/AddProductFromStore";
 import axios from "axios";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import Context from "../Context/context";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { LoadingContext } from "../Context/LoadingProvider";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const Products = () => {
-	// const [cookies] = useCookies(["access_token"]);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor } = userAuthored;
+	const [cookies] = useCookies(["access_token"]);
+
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
@@ -100,7 +98,7 @@ const Products = () => {
 			.post(`https://backend.atlbha.com/api/Store/import-products`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {

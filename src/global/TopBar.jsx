@@ -28,13 +28,14 @@ const TopBar = ({ toggleSidebar }) => {
 
 	const theme = useTheme();
 	const colors = tokens(theme.palette);
+
 	const UserInfo = useContext(UserAuth);
-	const userAuthored = useContext(UserAuth);
-	const { userAuthor, setUserAuthor } = userAuthored;
-	const { userInfo, setUserInfo } = UserInfo;
 	const NotificationStore = useContext(NotificationContext);
+
+	const { userInfo, setUserInfo } = UserInfo;
+
 	const { setEndActionTitle } = NotificationStore;
-	// const [cookies, removeCookies] = useCookies(["access_token"]);
+	const [cookies, removeCookies] = useCookies(["access_token"]);
 
 	// to change logo
 	const { fetchedData: setting } = useFetch(
@@ -74,7 +75,7 @@ const TopBar = ({ toggleSidebar }) => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${userAuthor}`,
+						Authorization: `Bearer ${cookies?.access_token}`,
 					},
 				}
 			)
@@ -95,13 +96,14 @@ const TopBar = ({ toggleSidebar }) => {
 			.get("https://backend.atlbha.com/api/logout", {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${userAuthor}`,
+					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					// removeCookies("access_token", { domain: "localhost:3000" });
-					setUserAuthor(null);
+					document.cookie =
+						"access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
 					navigate("/Login");
 				} else {
 					console.log(res?.data?.message?.ar);
