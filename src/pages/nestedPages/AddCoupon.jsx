@@ -70,12 +70,13 @@ const AddCoupon = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
-	//to set date
-	const [startDate, setStartDate] = useState();
 	const [coupon_apply, setCoupon_apply] = useState("");
-	const [fixed_serach, setFixed_serach] = useState("");
-	const [fixed_products, setFixed_products] = useState([]);
-	const [select_product_id, setSelect_product_id] = useState([]);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [filteredProducts, setFilteredProducts] = useState([]);
+	const [selectedProductIds, setSelectProductId] = useState([]);
+	const [selectedProducts, setSelectedProducts] = useState([]);
+
+	const [startDate, setStartDate] = useState("");
 	const [select_category_id, setSelect_category_id] = useState("");
 	const [select_payment_id, setSelect_payment_id] = useState("");
 	const [isEnable, setIsEnable] = useState(true);
@@ -88,7 +89,7 @@ const AddCoupon = () => {
 		mode: "onBlur",
 		defaultValues: {
 			code: "",
-			discount_type: "",
+			discount_type: "percent",
 			total_price: "",
 			discount: "",
 			total_redemptions: "",
@@ -129,21 +130,32 @@ const AddCoupon = () => {
 		setCoupon_apply(e.target.value);
 	};
 
-	const fixed_products_selected = products?.data?.products?.filter(
-		(product) => {
-			return select_product_id?.some((ele) => {
-				return ele === product?.id;
-			});
-		}
-	);
+	const handleSearch = (event) => {
+		const value = event.target.value;
+		setSearchTerm(value);
 
-	// create product search function
-	const fixedSearchItems = (value) => {
-		setFixed_serach(value);
-		const filteredData = products?.data?.products?.filter((item) => {
-			return item?.name.includes(value);
-		});
-		setFixed_products(filteredData);
+		const filtered = products?.data?.products.filter((product) =>
+			product.name.toLowerCase().includes(value.toLowerCase())
+		);
+		setFilteredProducts(filtered);
+	};
+
+	const handleProductSelect = (productId) => {
+		setSelectProductId((prevSelectedIds) =>
+			prevSelectedIds.includes(productId)
+				? prevSelectedIds.filter((id) => id !== productId)
+				: [...prevSelectedIds, productId]
+		);
+
+		// Add the selected product to the list of selected products
+		const selectedProduct = products?.data?.products.find(
+			(product) => product.id === productId
+		);
+		setSelectedProducts((prevSelectedProducts) =>
+			prevSelectedProducts.some((product) => product.id === selectedProduct.id)
+				? prevSelectedProducts
+				: [...prevSelectedProducts, selectedProduct]
+		);
 	};
 
 	// add coupon function
@@ -163,6 +175,7 @@ const AddCoupon = () => {
 			"exception_discount_product",
 			data?.exception_discount_product
 		);
+
 		formData.append("coupon_apply", coupon_apply);
 		formData.append(
 			"select_category_id",
@@ -172,13 +185,13 @@ const AddCoupon = () => {
 			"select_payment_id",
 			coupon_apply === "selected_payment" ? select_payment_id : ""
 		);
-
-		for (var i = 0; i < fixed_products_selected?.length; i++) {
+		selectedProductIds.forEach((id, idx) =>
 			formData.append(
-				`select_product_id[${i}]`,
-				coupon_apply === "selected_product" ? select_product_id?.[i] : ""
-			);
-		}
+				`select_product_id[${idx}]`,
+				coupon_apply === "selected_product" ? id : ""
+			)
+		);
+
 		formData.append("status", isEnable === true ? "active" : "not_active");
 		axios
 			.post(`https://backend.atlbha.com/api/Store/coupons`, formData, {
@@ -425,13 +438,13 @@ const AddCoupon = () => {
 												onChange={(date) => setStartDate(date)}
 												dateFormat='yyyy-MM-dd'
 											/>
-											<div className='col-12'>
-												{startDateError && (
+											{startDateError && (
+												<div className='col-12'>
 													<span className='fs-6 text-danger'>
 														{startDateError}
 													</span>
-												)}
-											</div>
+												</div>
+											)}
 										</div>
 
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
@@ -675,8 +688,8 @@ const AddCoupon = () => {
 														</div>
 														<input
 															style={{ paddingRight: "38px" }}
-															value={fixed_serach}
-															onChange={(e) => fixedSearchItems(e.target.value)}
+															value={searchTerm}
+															onChange={handleSearch}
 															type='text'
 															placeholder='البحث في المنتجات'
 														/>
@@ -688,33 +701,26 @@ const AddCoupon = () => {
 															)}
 														</div>
 													</div>
-													{fixed_serach !== "" && (
+													{searchTerm !== "" && (
 														<ul className='purchase_serach'>
-															{fixed_products?.map((item, index) => (
+															{filteredProducts.map((product) => (
 																<li
-																	key={index}
-																	value={select_product_id}
+																	key={product.id}
 																	onClick={() => {
-																		if (!select_product_id.includes(item?.id)) {
-																			setSelect_product_id([
-																				...select_product_id,
-																				item?.id,
-																			]);
-																		}
-																		fixedSearchItems("");
+																		handleProductSelect(product.id);
+																		setSearchTerm("");
 																	}}>
-																	{item?.name}
+																	{product.name}
 																</li>
 															))}
 														</ul>
 													)}
-													{fixed_products_selected?.length !== 0 && (
-														<ul className='purchase_products_selected'>
-															{fixed_products_selected?.map((item, index) => (
-																<li key={index}>_ {item?.name}</li>
-															))}
-														</ul>
-													)}
+
+													<ul className='purchase_products_selected'>
+														{selectedProducts.map((product) => (
+															<li key={product.id}> _ {product.name}</li>
+														))}
+													</ul>
 												</div>
 											)}
 											{coupon_apply === "selected_category" && (
@@ -867,7 +873,9 @@ const AddCoupon = () => {
 												الحالة<span className='text-danger'>*</span>
 											</label>
 											<Switch
-												onClick={() => setIsEnable(!isEnable)}
+												onClick={(e) => {
+													setIsEnable(e.target.checked);
+												}}
 												checked={isEnable}
 												sx={{
 													width: "50px",

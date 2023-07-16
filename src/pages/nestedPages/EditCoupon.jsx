@@ -64,22 +64,29 @@ const EditCoupon = () => {
 	const { fetchedData: products } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/productImportproduct"
 	);
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/coupons/${id}`
 	);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
 	const [coupon_apply, setCoupon_apply] = useState("");
-	const [fixed_serach, setFixed_serach] = useState("");
-	const [fixed_products, setFixed_products] = useState([]);
-	const [select_product_id, setSelect_product_id] = useState([]);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [filteredProducts, setFilteredProducts] = useState([]);
+	const [selectedProductIds, setSelectProductId] = useState([]);
+	const [selectedProducts, setSelectedProducts] = useState([]);
+
 	const [select_category_id, setSelect_category_id] = useState("");
 	const [select_payment_id, setSelect_payment_id] = useState("");
-	const [isEnable, setIsEnable] = React.useState();
-	const [startDate, setStartDate] = useState();
+	const [isEnable, setIsEnable] = useState(true);
+	const [startDate, setStartDate] = useState("");
+	const [activeCoupon, setActiveCoupon] = useState(false);
+
+	console.log(selectedProductIds);
 	const {
 		register,
 		handleSubmit,
@@ -111,7 +118,11 @@ const EditCoupon = () => {
 		exception_discount_product: 1,
 	});
 
-	// Errors
+	/**
+	 * ---------------------------------------------------------------------------------
+	 * Errors
+	 * ---------------------------------------------------------------------------------
+	 */
 	const [startDateError, setStartDateError] = useState("");
 
 	const [couponError, setCouponError] = useState({
@@ -123,6 +134,7 @@ const EditCoupon = () => {
 		user_redemptions: "",
 		coupon_apply: "",
 	});
+
 	const resetCouponError = () => {
 		setStartDateError("");
 		setCouponError({
@@ -135,26 +147,50 @@ const EditCoupon = () => {
 			coupon_apply: "",
 		});
 	};
-	// --------------------------------------------------------------------------------
 
-	const fixed_products_selected = products?.data?.products?.filter(
-		(product) => {
-			return select_product_id?.some((ele) => {
-				return ele === product?.id;
-			});
-		}
-	);
+	useEffect(() => {
+		reset(coupon);
+	}, [coupon, reset]);
 
-	// create product search function
-	const fixedSearchItems = (value) => {
-		setFixed_serach(value);
-		const filteredData = products?.data?.products?.filter((item) => {
-			return item?.name.includes(value);
-		});
-		setFixed_products(filteredData);
+	/**
+	 * ---------------------------------------------------------------------------------
+	 * get products
+	 * ---------------------------------------------------------------------------------
+	 */
+
+	const handleSearch = (event) => {
+		const value = event.target.value;
+		setSearchTerm(value);
+
+		const filtered = products?.data?.products.filter((product) =>
+			product.name.toLowerCase().includes(value.toLowerCase())
+		);
+		setFilteredProducts(filtered);
 	};
-	// -----------------------------------------------------------------------------
 
+	const handleProductSelect = (productId) => {
+		setSelectProductId((prevSelectedIds) =>
+			prevSelectedIds.includes(productId)
+				? prevSelectedIds.filter((id) => id !== productId)
+				: [...prevSelectedIds, productId]
+		);
+
+		// Add the selected product to the list of selected products
+		const selectedProduct = products?.data?.products.find(
+			(product) => product.id === productId
+		);
+		setSelectedProducts((prevSelectedProducts) =>
+			prevSelectedProducts.some((product) => product.id === selectedProduct.id)
+				? prevSelectedProducts
+				: [...prevSelectedProducts, selectedProduct]
+		);
+	};
+
+	/**
+	 * ---------------------------------------------------------------------------------
+	 * to add coupon data to inputs
+	 * ---------------------------------------------------------------------------------
+	 */
 	useEffect(() => {
 		setCoupon({
 			...coupon,
@@ -191,22 +227,27 @@ const EditCoupon = () => {
 				? "all"
 				: null
 		);
-		setIsEnable(fetchedData?.data?.Coupons?.status);
-		setSelect_product_id(
+
+		setSelectProductId(
 			fetchedData?.data?.Coupons?.selected_product?.map(
 				(product) => product?.id
-			)
+			) || []
 		);
+
 		setSelect_category_id(
 			fetchedData?.data?.Coupons?.selected_category?.[0]?.id
 		);
+
+		setIsEnable(fetchedData?.data?.Coupons?.status);
+
 		setSelect_payment_id(fetchedData?.data?.Coupons?.selected_payment?.[0]?.id);
 	}, [fetchedData?.data?.Coupons]);
 
-	useEffect(() => {
-		reset(coupon);
-	}, [coupon, reset]);
-
+	/**
+	 * ---------------------------------------------------------------------------------
+	 *  change Coupon Status Function
+	 * ---------------------------------------------------------------------------------
+	 */
 	const changeCouponStatus = () => {
 		setLoadingTitle("جاري تغير حالة الكوبون");
 		axios
@@ -232,6 +273,11 @@ const EditCoupon = () => {
 			});
 	};
 
+	/**
+	 * ---------------------------------------------------------------------------------
+	 * update Coupon Function
+	 * ---------------------------------------------------------------------------------
+	 */
 	const updateCoupon = (data) => {
 		setLoadingTitle("جاري تعديل الكوبون");
 		resetCouponError();
@@ -241,7 +287,10 @@ const EditCoupon = () => {
 		formData.append("discount_type", data?.discount_type);
 		formData.append("discount", data?.discount);
 		formData.append("total_price", data?.total_price);
-		formData.append("expire_date", moment(startDate).format("YYYY-MM-DD"));
+		formData.append(
+			"expire_date",
+			startDate ? moment(startDate).format("YYYY-MM-DD") : ""
+		);
 		formData.append("total_redemptions", data?.total_redemptions);
 		formData.append("user_redemptions", data?.user_redemptions);
 		formData.append("free_shipping", data?.free_shipping);
@@ -249,6 +298,7 @@ const EditCoupon = () => {
 			"exception_discount_product",
 			data?.exception_discount_product
 		);
+
 		formData.append("coupon_apply", coupon_apply);
 		formData.append(
 			"select_category_id",
@@ -258,14 +308,14 @@ const EditCoupon = () => {
 			"select_payment_id",
 			coupon_apply === "selected_payment" ? select_payment_id : ""
 		);
-
-		for (var i = 0; i < fixed_products_selected?.length; i++) {
+		selectedProductIds.forEach((id, idx) =>
 			formData.append(
-				`select_product_id[${i}]`,
-				coupon_apply === "selected_product" ? select_product_id?.[i] : ""
-			);
-		}
-		formData.append("status", isEnable === true ? "active" : "not_active");
+				`select_product_id[${idx}]`,
+				coupon_apply === "selected_product" ? id : ""
+			)
+		);
+
+		formData.append("status", isEnable === "نشط" ? "active" : "not_active");
 		axios
 			.post(
 				`https://backend.atlbha.com/api/Store/coupons/${fetchedData?.data?.Coupons?.id}`,
@@ -350,6 +400,19 @@ const EditCoupon = () => {
 											  ).toDate() < currentDate ? (
 												<Fragment>
 													<div className='coupon-status disabled'>منتهي</div>
+
+													<button
+														type='button'
+														className='enable-coupon-btn'
+														onClick={() => setActiveCoupon(true)}>
+														إعادة تفعيل الكوبون
+													</button>
+													{activeCoupon && (
+														<div style={{ fontSize: "16px", color: "red" }}>
+															يرجي تحديث تاريخ الانتهاء لكي يتم إعادة تفعيل
+															الكوبون
+														</div>
+													)}
 												</Fragment>
 											) : (
 												""
@@ -565,9 +628,19 @@ const EditCoupon = () => {
 														placeholderText='30/Sep/2022'
 														onChange={(date) => setStartDate(date)}
 														dateFormat='yyyy-MM-dd'
-														disabled={isEnable === "نشط" ? false : true}
+														disabled={
+															isEnable === "نشط" || "منتهي" ? false : true
+														}
 													/>
+													{startDateError && (
+														<div className='col-12'>
+															<span className='fs-6 text-danger'>
+																{startDateError}
+															</span>
+														</div>
+													)}
 												</div>
+
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
 														شحن مجاني<span className='text-danger'>*</span>
@@ -811,6 +884,7 @@ const EditCoupon = () => {
 															</div>
 														</div>
 													</div>
+
 													{coupon_apply === "selected_product" && (
 														<div className=''>
 															<div className='col-12'>
@@ -818,12 +892,9 @@ const EditCoupon = () => {
 																	<SearchIcon className='search-icon' />
 																</div>
 																<input
-																	disabled={isEnable === "نشط" ? false : true}
 																	style={{ paddingRight: "38px" }}
-																	value={fixed_serach}
-																	onChange={(e) =>
-																		fixedSearchItems(e.target.value)
-																	}
+																	value={searchTerm}
+																	onChange={handleSearch}
 																	type='text'
 																	placeholder='البحث في المنتجات'
 																/>
@@ -835,37 +906,26 @@ const EditCoupon = () => {
 																	)}
 																</div>
 															</div>
-															{fixed_serach !== "" && (
+															{searchTerm !== "" && (
 																<ul className='purchase_serach'>
-																	{fixed_products?.map((item, index) => (
+																	{filteredProducts.map((product) => (
 																		<li
-																			key={index}
-																			value={select_product_id}
+																			key={product.id}
 																			onClick={() => {
-																				if (
-																					!select_product_id.includes(item?.id)
-																				) {
-																					setSelect_product_id([
-																						...select_product_id,
-																						item?.id,
-																					]);
-																				}
-																				fixedSearchItems("");
+																				handleProductSelect(product.id);
+																				setSearchTerm("");
 																			}}>
-																			{item?.name}
+																			{product.name}
 																		</li>
 																	))}
 																</ul>
 															)}
-															{fixed_products_selected?.length !== 0 && (
-																<ul className='purchase_products_selected'>
-																	{fixed_products_selected?.map(
-																		(item, index) => (
-																			<li key={index}>_ {item?.name}</li>
-																		)
-																	)}
-																</ul>
-															)}
+
+															<ul className='purchase_products_selected'>
+																{selectedProducts.map((product) => (
+																	<li key={product.id}> _ {product.name}</li>
+																))}
+															</ul>
 														</div>
 													)}
 													{coupon_apply === "selected_category" && (
@@ -1022,7 +1082,9 @@ const EditCoupon = () => {
 														الحالة<span className='text-danger'>*</span>
 													</label>
 													<Switch
-														onClick={() => setIsEnable(!isEnable)}
+														onClick={() => {
+															setIsEnable(!isEnable);
+														}}
 														checked={isEnable}
 														disabled={isEnable === "نشط" ? false : true}
 														sx={{

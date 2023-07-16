@@ -23,10 +23,9 @@ import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
 import { AiOutlineSearch } from "react-icons/ai";
 
-
 const MainInformation = () => {
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);

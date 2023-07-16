@@ -24,6 +24,7 @@ const TemplateUpdate = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/homepage"
 	);
+
 	const navigate = useNavigate();
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
@@ -617,7 +618,7 @@ const TemplateUpdate = () => {
 													alt={fetchedData?.data?.Homepages[0]?.slider1}
 												/>
 											)}
-											{firstBanner[0] && (
+											{firstSlider[0] && (
 												<img
 													style={{
 														borderRadius: "inherit",
@@ -639,7 +640,7 @@ const TemplateUpdate = () => {
 								{/** Btn to upload banners */}
 								<div className='add-banners'>
 									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
-										<label htmlFor='add-banner-1'>بانر إعلاني رقم 1</label>
+										<label htmlFor='add-banner-1'> سلايدر رقم 1</label>
 										<div className='wrapper'>
 											<ImageUploading
 												value={firstSlider}
@@ -656,7 +657,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث البانر </span>
+															<span> تحديث السلايدر </span>
 															<MdFileUpload />
 														</button>
 													</div>
@@ -699,7 +700,7 @@ const TemplateUpdate = () => {
 										</div>
 									</div>
 									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
-										<label htmlFor='add-banner-1'>بانر إعلاني رقم 2</label>
+										<label htmlFor='add-banner-1'> سلايدر رقم 2</label>
 										<div className='wrapper'>
 											<ImageUploading
 												value={secondSlider}
@@ -716,7 +717,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث البانر </span>
+															<span> تحديث السلايدر </span>
 															<MdFileUpload />
 														</button>
 													</div>
@@ -759,7 +760,7 @@ const TemplateUpdate = () => {
 										</div>
 									</div>
 									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
-										<label htmlFor='add-banner-1'>بانر إعلاني رقم 3</label>
+										<label htmlFor='add-banner-1'> سلايدر رقم 3</label>
 										<div className='wrapper'>
 											<ImageUploading
 												value={thirdSlider}
@@ -776,7 +777,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث البانر </span>
+															<span> تحديث السلايدر </span>
 															<MdFileUpload />
 														</button>
 													</div>

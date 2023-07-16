@@ -29,22 +29,24 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Modal Style
 const style = {
-	position: "absolute",
-	top: "112px",
+	position: "fixed",
+	top: "88px",
 	left: "50%",
 	transform: "translate(-50%, 0%)",
-	width: "70%",
-	height: "auto",
+	width: "80%",
+	height: "100%",
+	"overflow-y": "auto",
+
 	bgcolor: "#f8f9fa",
-	borderRadius: "8px 8px 0 0",
-	paddingBottom: "60px",
+	borderRadius: "4px 4px 0 0",
+	paddingBottom: "110px",
 	"@media(max-width:992px)": {
-		width: "80%",
+		width: "90%",
 	},
 	"@media(max-width:768px)": {
 		width: "100%",
 		maxWidth: "90%",
-		top: "80px",
+		top: "73px",
 	},
 };
 
@@ -414,7 +416,7 @@ const CreatePage = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3 check-box-inputs'>
-										<div className='col-md-6 col-12 mb-md-0 mb-3'>
+										<div className='col-md-6 col-12 mb-3'>
 											<div className='wrapper'>
 												<div className='title'>
 													<h4>تصنيف الصفحة</h4>
@@ -515,7 +517,7 @@ const CreatePage = () => {
 											</div>
 										</div>
 										{itsPost && (
-											<div className='row my-3'>
+											<>
 												<div className='col-md-6 col-12'>
 													<div className='wrapper h-auto'>
 														<div className='title'>
@@ -543,7 +545,7 @@ const CreatePage = () => {
 																		border: "none",
 																	},
 																	"& .MuiSelect-icon": {
-																		right: "95%",
+																		right: "92%",
 																	},
 																}}
 																IconComponent={IoIosArrowDown}
@@ -600,21 +602,32 @@ const CreatePage = () => {
 																name='personal-image'
 															/>
 															{files.length <= 0 ? (
-																<p role='button'>اختر صورة PNG أو JPG فقط </p>
+																<p role='button' style={{ fontSize: "16px" }}>
+																	اختر صورة PNG أو JPG فقط{" "}
+																</p>
 															) : (
-																<p className='d-none'>
+																<p
+																	className='d-none'
+																	style={{ fontSize: "16px" }}>
 																	اختر صورة PNG أو JPG فقط{" "}
 																</p>
 															)}
 
-															<span> استعراض</span>
+															<span
+																style={{ fontSize: "16px", color: "#1dbbbe" }}>
+																استعراض
+															</span>
 															{files?.length !== 0 && (
-																<ul className='m-0'>{files}</ul>
+																<ul
+																	style={{ fontSize: "14px" }}
+																	className='m-0'>
+																	{files}
+																</ul>
 															)}
 														</div>
 													</div>
 												</div>
-											</div>
+											</>
 										)}
 									</div>
 								</div>
