@@ -29,7 +29,7 @@ const Login = () => {
 	);
 
 	const [password, setPassword] = useState(
-		cookies.remember_me === "true" ? cookies.password : ""
+		rememberMe.remember_me ? cookies.password : ""
 	);
 
 	/**
@@ -93,8 +93,7 @@ const Login = () => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
 				//Set token to cookies
 				setCookie("access_token", res?.data?.data?.token, { path: "/" });
-				setCookie("username", res?.data?.data?.user?.email || username);
-				console.log(res?.data?.data?.user?.email);
+				setCookie("username", res?.data?.data?.user?.email);
 				if (rememberMe?.remember_me) {
 					//Set username, password and remember_me status to context
 					setUserInfoToCookies();
@@ -110,9 +109,8 @@ const Login = () => {
 				setPasswordError(res?.data?.message?.en?.password?.[0]);
 				setError(res?.data?.message?.ar);
 				if (res?.data?.message?.en === "User not verified") {
-					window.location.href = "http://home.atlbha.com//verificationPage";
-
-					setCookie("username", res?.data?.data?.user?.email || username);
+					window.location.href = "http://home.atlbha.com/verificationPage";
+					setCookie("username", res?.data?.data?.user?.email);
 				}
 			}
 		});

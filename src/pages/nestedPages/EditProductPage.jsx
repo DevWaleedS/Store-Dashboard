@@ -25,7 +25,6 @@ import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -91,24 +90,26 @@ const EditProductPage = () => {
 			SEOdescription: "",
 		},
 	});
+
 	useEffect(() => {
-		if (fetchedData?.data?.products) {
+		if (fetchedData?.data?.product) {
 			setProduct({
 				...product,
-				name: fetchedData?.data?.products?.name,
-				description: fetchedData?.data?.products?.description,
-				selling_price: fetchedData?.data?.products?.selling_price,
-				category_id: fetchedData?.data?.products?.category?.id,
-				discount_price: fetchedData?.data?.products?.discount_price,
-				subcategory_id: fetchedData?.data?.products?.subcategory?.map(
+				name: fetchedData?.data?.product?.name,
+				description: fetchedData?.data?.product?.description,
+				selling_price: fetchedData?.data?.product?.selling_price,
+				category_id: fetchedData?.data?.product?.category?.id,
+				discount_price: fetchedData?.data?.product?.discount_price,
+				subcategory_id: fetchedData?.data?.product?.subcategory?.map(
 					(sub) => sub?.id
 				),
-				stock: fetchedData?.data?.products?.stock,
-				SEOdescription: fetchedData?.data?.products?.SEOdescription,
+				stock: fetchedData?.data?.product?.stock,
+				SEOdescription: fetchedData?.data?.product?.SEOdescription,
 			});
 		}
-	}, [fetchedData?.data?.products]);
+	}, [fetchedData?.data?.product]);
 
+	// To Handle Errors
 	useEffect(() => {
 		reset(product);
 	}, [product, reset]);
@@ -202,7 +203,7 @@ const EditProductPage = () => {
 		formData.append("description", data?.description);
 		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
-		formData.append("discount_price", data?.discount_price);
+		formData.append("discount_price", data?.discount_price || 0);
 		formData.append("stock", data?.stock);
 		formData.append("SEOdescription", data?.SEOdescription);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
@@ -213,7 +214,7 @@ const EditProductPage = () => {
 		}
 		axios
 			.post(
-				`https://backend.atlbha.com/api/Store/product/${fetchedData?.data?.products?.id}`,
+				`https://backend.atlbha.com/api/Store/product/${fetchedData?.data?.product?.id}`,
 				formData,
 				{
 					headers: {
@@ -315,8 +316,8 @@ const EditProductPage = () => {
 
 													<img
 														className='w-100 h-100'
-														src={fetchedData?.data?.products?.cover}
-														alt={fetchedData?.data?.products?.name}
+														src={fetchedData?.data?.product?.cover}
+														alt={fetchedData?.data?.product?.name}
 													/>
 												</div>
 											</div>
@@ -346,7 +347,7 @@ const EditProductPage = () => {
 													{...register("name", {
 														required: "حقل الاسم مطلوب",
 														pattern: {
-															value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 															message: "يجب على الحقل الاسم أن يكون نصاّّ",
 														},
 													})}
@@ -599,7 +600,7 @@ const EditProductPage = () => {
 													rules={{
 														required: "حقل سعر البيع مطلوب",
 														pattern: {
-															value: /^[0-9]+$/i,
+															value: /^[0-9.]+$/i,
 															message: "يجب على الحقل سعر البيع أن يكون رقمًا",
 														},
 														min: {
@@ -654,34 +655,34 @@ const EditProductPage = () => {
 												/>
 											</div>
 											<div className='col-md-3 col-12'></div>
-											{product?.discount_price && product?.selling_price && (
-												<div className='col-md-7 col-12'>
-													{Number(product?.selling_price) -
-														Number(product?.discount_price) <=
-														0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
-												</div>
-											)}
-
-											{product?.discount_price &&
-												product?.selling_price === "" && (
-													<div className='col-md-7 col-12'>
-														<span className='fs-6' style={{ color: "red" }}>
-															يرجي ادخال السعر الأساسي أولاّّ حتي تتمكن من ادخال
-															سعر الخصم
-														</span>
-													</div>
+											<div
+												className={
+													product?.discount_price && product?.selling_price
+														? "col-md-7 col-12"
+														: "d-none"
+												}>
+												{Number(product?.selling_price) -
+													Number(product?.discount_price) <=
+													0 && (
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
 												)}
-											<div className='col-md-7 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.discount_price}
-													{errors?.discount_price &&
-														errors.discount_price.message}
+											</div>
+
+											<div
+												className={
+													product?.discount_price &&
+													product?.selling_price === ""
+														? "col-md-7 col-12"
+														: "d-none"
+												}>
+												<span className='fs-6' style={{ color: "red" }}>
+													يرجي ادخال السعر الأساسي أولاّّ حتي تتمكن من ادخال سعر
+													الخصم
 												</span>
 											</div>
+
 											<div className='col-md-7 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.discount_price}

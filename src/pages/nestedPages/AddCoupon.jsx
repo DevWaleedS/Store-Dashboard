@@ -152,7 +152,7 @@ const AddCoupon = () => {
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("code", data?.code);
-		formData.append("discount_type", data.discount_type || "percentage");
+		formData.append("discount_type", data.discount_type);
 		formData.append("discount", data?.discount);
 		formData.append("total_price", data?.total_price);
 		formData.append("expire_date", moment(startDate).format("YYYY-MM-DD"));
@@ -313,15 +313,13 @@ const AddCoupon = () => {
 														onChange={onChange}>
 														<div className='radio-box'>
 															<FormControlLabel
-																value='percentage'
+																value='percent'
 																id='percent-price'
 																control={<Radio />}
 															/>
 															<label
 																className={
-																	value === "percentage"
-																		? "me-3"
-																		: "disabled me-3"
+																	value === "percent" ? "me-3" : "disabled me-3"
 																}
 																htmlFor='percent-price'>
 																نسبة مئوية %

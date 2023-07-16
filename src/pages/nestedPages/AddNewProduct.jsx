@@ -35,6 +35,10 @@ const style = {
 	bgcolor: "#fff",
 	paddingBottom: "80px",
 
+	"@media(max-width:992px)": {
+		width: "80%",
+	},
+
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: 0,
@@ -286,7 +290,7 @@ const AddNewProduct = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 														message: "يجب على الحقل الاسم أن يكون نصاّّ",
 													},
 												})}
@@ -551,7 +555,7 @@ const AddNewProduct = () => {
 												rules={{
 													required: "حقل سعر البيع مطلوب",
 													pattern: {
-														value: /^[0-9]+$/i,
+														value: /^[0-9.]+$/i,
 														message: "يجب على الحقل سعر البيع أن يكون رقمًا",
 													},
 													min: {

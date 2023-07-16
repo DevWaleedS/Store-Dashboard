@@ -295,7 +295,7 @@ const EditCategory = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 														message: "الاسم يجب أن يكون نصاً",
 													},
 												})}

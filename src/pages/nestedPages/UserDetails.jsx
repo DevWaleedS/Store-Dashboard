@@ -18,7 +18,9 @@ const style = {
 	width: "74%",
 	height: "auto",
 	bgcolor: "#F6F6F6",
-	// paddingBottom: '80px',
+	"@media(max-width:992px)": {
+		width: "80%",
+	},
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: 0,

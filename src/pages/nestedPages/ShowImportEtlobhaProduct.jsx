@@ -12,7 +12,7 @@ import Modal from "@mui/material/Modal";
 
 // icons and images
 import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currency.svg";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 const style = {
 	position: "fixed",
@@ -24,6 +24,9 @@ const style = {
 	overflow: "auto",
 	bgcolor: "#fff",
 	paddingBottom: "80px",
+	"@media(max-width:992px)": {
+		width: "80%",
+	},
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: 0,
@@ -38,11 +41,12 @@ const ShowImportEtlobhaProduct = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`
+		`https://backend.atlbha.com/api/Store/product/${id}`
 	);
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
 	const [product, setProduct] = useState({
 		name: "",
 		description: "",
@@ -51,11 +55,12 @@ const ShowImportEtlobhaProduct = () => {
 		price: "",
 		stock: "",
 	});
+
 	const {
 		register,
 		handleSubmit,
 		reset,
-
+		control,
 		formState: { errors },
 	} = useForm({
 		mode: "onBlur",
@@ -64,22 +69,40 @@ const ShowImportEtlobhaProduct = () => {
 			description: "",
 			selling_price: "",
 			price: "",
-
 			stock: "",
 		},
 	});
+	const handleOnChange = (e) => {
+		const { name, value } = e.target;
+		setProduct((prevProduct) => {
+			return { ...prevProduct, [name]: value };
+		});
+	};
+	/**
+	 * --------------------------------------------------------------------
+	 * to set data that coming from api
+	 * --------------------------------------------------------------------
+	 */
+
 	useEffect(() => {
-		if (fetchedData?.data?.products) {
+		if (fetchedData?.data?.product) {
 			setProduct({
 				...product,
-				name: fetchedData?.data?.products?.name,
-				description: fetchedData?.data?.products?.description,
-				selling_price: fetchedData?.data?.products?.selling_price,
-				price: fetchedData?.data?.products?.selling_price,
-				stock: fetchedData?.data?.products?.stock,
+				name: fetchedData?.data?.product?.name,
+				description: fetchedData?.data?.product?.description,
+				price: fetchedData?.data?.product?.selling_price,
+				stock: fetchedData?.data?.product?.stock,
 			});
 		}
-	}, [fetchedData?.data?.products]);
+	}, [fetchedData?.data?.product]);
+
+	console.log(product?.selling_price);
+
+	/**
+	 * --------------------------------------------------------------------
+	 * to handle errors
+	 * --------------------------------------------------------------------
+	 */
 
 	useEffect(() => {
 		reset(product);
@@ -89,6 +112,7 @@ const ShowImportEtlobhaProduct = () => {
 		name: "",
 		cover: "",
 		description: "",
+		price: "",
 		selling_price: "",
 		category_id: "",
 		discount_price: "",
@@ -104,6 +128,7 @@ const ShowImportEtlobhaProduct = () => {
 			cover: "",
 			description: "",
 			selling_price: "",
+			price: "",
 			category_id: "",
 			discount_price: "",
 			discount_percent: "",
@@ -112,7 +137,11 @@ const ShowImportEtlobhaProduct = () => {
 			SEOdescription: "",
 		});
 	};
-
+	/**
+	 * --------------------------------------------------------------------
+	 * images
+	 * --------------------------------------------------------------------
+	 */
 	// Use state with useDropzone library to set banners
 	const [icon, setIcon] = React.useState([]);
 
@@ -122,6 +151,11 @@ const ShowImportEtlobhaProduct = () => {
 		return () => icon.forEach((banner) => URL.revokeObjectURL(banner.preview));
 	}, []);
 
+	/**
+	 * --------------------------------------------------------------------
+	 * Update Import Product Function
+	 * --------------------------------------------------------------------
+	 */
 	const updateImportProduct = (data) => {
 		resetCouponError();
 		let formData = new FormData();
@@ -129,7 +163,7 @@ const ShowImportEtlobhaProduct = () => {
 
 		axios
 			.post(
-				`https://backend.atlbha.com/api/Store/updateimportproduct/${fetchedData?.data?.products?.id}`,
+				`https://backend.atlbha.com/api/Store/updateimportproduct/${fetchedData?.data?.product?.id}`,
 				formData,
 				{
 					headers: {
@@ -146,7 +180,7 @@ const ShowImportEtlobhaProduct = () => {
 				} else {
 					setReload(!reload);
 					setProductError({
-						selling_price: res?.data?.message?.en?.selling_price?.[0],
+						price: res?.data?.message?.en?.price?.[0],
 					});
 				}
 			});
@@ -187,11 +221,16 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 											<div className='col-md-7 col-12'>
 												{/** preview banner here */}
-												<div className=' banners-preview-container'>
+												<div
+													className=' banners-preview-container import-product-PreviewImage'
+													style={{
+														height: "200px",
+														width: "200px",
+													}}>
 													<img
 														className='w-100 h-100'
-														src={fetchedData?.data?.products?.cover}
-														alt={fetchedData?.data?.products?.name}
+														src={fetchedData?.data?.product?.cover}
+														alt={fetchedData?.data?.product?.name}
 													/>
 												</div>
 											</div>
@@ -219,7 +258,7 @@ const ShowImportEtlobhaProduct = () => {
 													{...register("name", {
 														required: "حقل الاسم مطلوب",
 														pattern: {
-															value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 															message: "يجب على الحقل الاسم أن يكون نصاّّ",
 														},
 													})}
@@ -267,7 +306,7 @@ const ShowImportEtlobhaProduct = () => {
 													<input
 														className='input'
 														type='text'
-														value={fetchedData?.data?.products?.category?.name}
+														value={fetchedData?.data?.product?.category?.name}
 														onChange={() => console.log("")}
 														disabled={true}
 													/>
@@ -284,15 +323,24 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
-													<div className='d-flex align-items-center justify-content-start gap-3'>
-														{fetchedData?.data?.products?.subcategory?.map(
-															(sub, index) => (
-																<div key={index} className='tags'>
-																	{sub?.name}
-																</div>
-															)
-														)}
-													</div>
+													{fetchedData?.data?.product?.subcategory?.length ===
+													0 ? (
+														<div
+															className='d-flex align-items-center justify-content-center gap-3 '
+															style={{ color: "#1dbbbe", fontSize: "16px" }}>
+															(لا يوجد تصنيفات فرعية)
+														</div>
+													) : (
+														<div className='d-flex align-items-center justify-content-start gap-3'>
+															{fetchedData?.data?.product?.subcategory?.map(
+																(sub, index) => (
+																	<div key={index} className='tags'>
+																		{sub?.name}
+																	</div>
+																)
+															)}
+														</div>
+													)}
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
@@ -314,16 +362,18 @@ const ShowImportEtlobhaProduct = () => {
 													style={{
 														background: "#eeeeef",
 														border: "1px solid #a7a7a71a",
-														height: "45px",
+														height: "48px",
 													}}>
 													<div className='currency_icon d-flex justify-content-center align-items-center'>
 														<CurrencyIcon />
 													</div>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{fetchedData?.data?.products?.purchasing_price}
+														{fetchedData?.data?.product?.purchasing_price}
 													</div>
 
-													<div className='currency d-flex justify-content-center align-items-center'>
+													<div
+														className='currency d-flex justify-content-center align-items-center'
+														style={{ fontSize: "18px" }}>
 														ر.س
 													</div>
 												</div>
@@ -341,11 +391,11 @@ const ShowImportEtlobhaProduct = () => {
 													style={{
 														background: "#eeeeef",
 														border: "1px solid #a7a7a71a",
-														height: "45px",
+														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
 														{" "}
-														{fetchedData?.data?.products?.stock}
+														{fetchedData?.data?.product?.stock}
 													</div>
 												</div>
 											</div>
@@ -355,7 +405,6 @@ const ShowImportEtlobhaProduct = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='price'>
-													{" "}
 													سعر البيع<span className='text-danger'>*</span>
 												</label>
 											</div>
@@ -366,36 +415,58 @@ const ShowImportEtlobhaProduct = () => {
 													<div className='currency_icon d-flex justify-content-center align-items-center'>
 														<CurrencyIcon />
 													</div>
-
-													<input
-														className='import_products_input'
-														style={{ background: "#FFF" }}
-														name='price'
-														type='text'
-														id='price'
-														{...register("price", {
+													<Controller
+														name={"price"}
+														control={control}
+														rules={{
 															required: "حقل سعر البيع مطلوب",
 															pattern: {
-																value: /^[0-9]+$/i,
+																value: /^[0-9.]+$/i,
 																message: "يجب أن يكون سعر البيع رقمًا",
 															},
 															min: {
 																value: 1,
 																message: "يجب أن يكون سعر البيع أكبر من 0",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																className='import_products_input'
+																style={{ background: "#FFF", height: "48px" }}
+																name={"price"}
+																type='number'
+																id='price'
+																value={value}
+																onChange={(e) => {
+																	handleOnChange(e);
+																	onChange(e);
+																}}
+															/>
+														)}
 													/>
-													<div className='currency d-flex justify-content-center align-items-center'>
+
+													<div
+														className='currency d-flex justify-content-center align-items-center'
+														style={{ fontSize: "18px" }}>
 														ر.س
 													</div>
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
 											<div className='col-md-7 col-12'>
+												{product?.price <
+													fetchedData?.data?.product?.purchasing_price && (
+													<span className='fs-6 text-danger'>
+														السعر يجب ان يكون اكبر من او يساوي (
+														{fetchedData?.data?.product?.purchasing_price})
+													</span>
+												)}
+											</div>
+
+											<div className='col-md-7 col-12'>
 												<span className='fs-6 text-danger'>
-													{productError?.selling_price}
-													{errors?.selling_price &&
-														errors.selling_price.message}
+													{productError?.price}
+													{errors?.price && errors.price.message}
 												</span>
 											</div>
 										</div>

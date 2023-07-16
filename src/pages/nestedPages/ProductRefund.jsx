@@ -227,13 +227,20 @@ const ProductRefund = () => {
 													</div>
 												</div>
 
+												{price <
+													fetchedData?.data?.products?.purchasing_price && (
+													<span className='fs-6 text-danger'>
+														السعر يجب ان يكون اكبر من او يساوي (
+														{fetchedData?.data?.products?.purchasing_price})
+													</span>
+												)}
 												{priceError && (
 													<span className='fs-6 text-danger'>{priceError}</span>
 												)}
 											</div>
 
 											<div className='product-price'>
-												<div className='label about-product-label mb-3'>
+												<div className='label about-product-label mb-2'>
 													نبذة عن المنتج
 												</div>
 												<div className='input textarea d-flex justify-content-center align-items-center'>

@@ -30,6 +30,9 @@ const style = {
 	overflow: "auto",
 	bgcolor: "#fff",
 	paddingBottom: "80px",
+	"@media(max-width:992px)": {
+		width: "80%",
+	},
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: 0,
@@ -240,7 +243,7 @@ const AddCategory = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 														message: "الاسم يجب أن يكون نصاً",
 													},
 												})}

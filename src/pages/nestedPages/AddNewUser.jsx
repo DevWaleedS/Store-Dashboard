@@ -23,7 +23,6 @@ import useFetch from "../../Hooks/UseFetch";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-
 const style = {
 	position: "fixed",
 	top: "80px",
@@ -51,7 +50,7 @@ const AddNewUser = () => {
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -216,7 +215,7 @@ const AddNewUser = () => {
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {
-														value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 														message: "يجب على الحقل الاسم أن يكون نصاّّ",
 													},
 												})}

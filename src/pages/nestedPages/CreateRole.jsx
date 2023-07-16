@@ -27,7 +27,6 @@ import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-
 // Modal Style
 const style = {
 	position: "fixed",
@@ -158,7 +157,7 @@ const CreateRole = () => {
 													{...register("role_name", {
 														required: "حقل إسم الدور مطلوب",
 														pattern: {
-															value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 															message: "يجب أن يكون اسم الدور عبارة عن نصاّّ",
 														},
 													})}

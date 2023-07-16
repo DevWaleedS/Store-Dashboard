@@ -5794,6 +5794,7 @@ input:disabled {
 .product-box .product-price .currency {
 	width: 54px;
 	height: 48px;
+	font-size: 18px;
 	background: #fafafa;
 	border: 1px solid #ececec;
 }
@@ -6316,6 +6317,15 @@ input:disabled {
 		width: 250px;
 		height: 118px;
 	}
+	.edit-job-title {
+		width: 96%;
+	}
+	.page-wrapper {
+		width: 98%;
+	}
+	.edit-job-title .page-header .search .save-btn {
+		font-size: 22px;
+	}
 }
 
 @media (max-width: 992px) {
@@ -6497,6 +6507,11 @@ input:disabled {
 	.seo-weight-edit-box .input-bx {
 		width: 99%;
 		margin: 0 auto;
+	}
+
+	.edit-job-title .page-header .search .save-btn {
+		font-size: 20px;
+		font-weight: 400;
 	}
 }
 
@@ -7176,6 +7191,10 @@ input:disabled {
 		width: 75px;
 		height: 70px;
 	}
+	.add-form-wrapper .banners-preview-container.import-product-PreviewImage {
+		width: 150px !important;
+		height: 150px !important;
+	}
 
 	.add-form-wrapper .banners-preview-container .banner-preview {
 		width: 75px;
@@ -7275,6 +7294,14 @@ input:disabled {
 	.product-box img {
 		width: 100%;
 	}
+	.ProductRefund-wrapper .product-category .input {
+		height: 40px;
+		padding: 4px 16px;
+		font-size: 16px;
+	}
+	.ProductRefund-wrapper .product-category .tags {
+		font-size: 16px;
+	}
 
 	.product-box .product-name,
 	.product-box .product-category,
@@ -7287,7 +7314,7 @@ input:disabled {
 	}
 	.ProductRefund-wrapper .product-price .currency,
 	.product-box .product-price .currency {
-		height: 45px;
+		height: 46px;
 		font-size: 14px;
 	}
 	.product-price,
@@ -7346,6 +7373,9 @@ input:disabled {
 		font-size: 16px;
 	}
 
+	.ProductRefund-wrapper .product-price .label {
+		margin-bottom: 0 !important;
+	}
 	.ProductRefund-wrapper .product-category .input {
 		width: 100%;
 		max-width: 85%;
@@ -7353,6 +7383,12 @@ input:disabled {
 
 	.ProductRefund-wrapper .input.textarea {
 		height: auto;
+		font-size: 18px;
+	}
+
+	.ProductRefund-wrapper .refund-btn {
+		height: 46px;
+		font-size: 18px;
 	}
 
 	/* category */
@@ -8306,7 +8342,13 @@ input:disabled {
 
 	.management-page .add-page-btn button {
 		height: 45px;
-		font-size: 18px;
+		font-size: 16px;
+	}
+	.management-page .add-page-btn button svg {
+		font-size: 20px;
+	}
+	.management-page .add-page-btn button span {
+		margin-right: 2px !important;
 	}
 
 	.management-page .add-page-btn .roles-btn {
@@ -8802,7 +8844,7 @@ input:disabled {
 
 	/* products-page */
 	.products .input-group .add-category-bt-box button {
-		font-size: 12px;
+		font-size: 14px;
 	}
 
 	.rdw-option-wrapper img {

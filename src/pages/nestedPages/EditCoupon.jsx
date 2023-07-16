@@ -162,7 +162,7 @@ const EditCoupon = () => {
 			discount_type:
 				fetchedData?.data?.Coupons?.discount_type === "مبلغ ثابت"
 					? "fixed"
-					: "percentage",
+					: "percent",
 			total_price: fetchedData?.data?.Coupons?.total_price,
 			discount: fetchedData?.data?.Coupons?.discount,
 			total_redemptions: fetchedData?.data?.Coupons?.total_redemptions,
@@ -442,14 +442,14 @@ const EditCoupon = () => {
 																disabled={isEnable === "نشط" ? false : true}>
 																<div className='radio-box'>
 																	<FormControlLabel
-																		value='percentage'
+																		value='percent'
 																		id='percent-price'
 																		control={<Radio />}
 																		disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
-																			value === "percentage"
+																			value === "percent"
 																				? "me-3"
 																				: "disabled me-3"
 																		}

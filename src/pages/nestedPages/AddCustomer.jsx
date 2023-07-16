@@ -29,6 +29,9 @@ const style = {
 	overflow: "auto",
 	bgcolor: "#fff",
 	paddingBottom: "80px",
+	"@media(max-width:992px)": {
+		width: "80%",
+	},
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: 0,

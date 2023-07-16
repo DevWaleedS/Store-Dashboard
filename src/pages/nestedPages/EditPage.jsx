@@ -28,7 +28,7 @@ import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.s
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+
 
 // Modal Style
 const style = {
@@ -42,6 +42,9 @@ const style = {
 	bgcolor: "#f8f9fa",
 	borderRadius: "8px 8px 0 0",
 	paddingBottom: "60px",
+	"@media(max-width:992px)": {
+		width: "80%",
+	},
 	"@media(max-width:768px)": {
 		width: "100%",
 		maxWidth: "90%",
@@ -277,7 +280,7 @@ const EditPage = () => {
 														{...register("title", {
 															required: " حقل العنوان مطلوب",
 															pattern: {
-																value: /^(?![\p{N}])[A-Za-z\p{L}0-9\s]+$/u,
+																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 																message: "يجب أن يكون العنوان عبارة عن نصاً",
 															},
 														})}
