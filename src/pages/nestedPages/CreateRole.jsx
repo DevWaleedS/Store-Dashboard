@@ -93,7 +93,7 @@ const CreateRole = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Management");
-					setReload(!reload);
+				
 				}
 			});
 	};

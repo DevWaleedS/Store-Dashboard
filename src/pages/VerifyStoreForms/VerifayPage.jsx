@@ -24,7 +24,6 @@ import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-upload_ou
 import { IoIosArrowDown } from "react-icons/io";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const inputStyle = {
 	width: "100%",
@@ -62,6 +61,8 @@ const VerifayPage = ({ verify }) => {
 			return ele === item?.id;
 		});
 	});
+
+	// to handle datat
 	const [data, setData] = useState({
 		name: "",
 		phonenumber: "",
@@ -72,6 +73,28 @@ const VerifayPage = ({ verify }) => {
 		link: "",
 	});
 	const [file, setFile] = useState([]);
+	// errors
+	const [dataErrors, setDataErrors] = useState({
+		name: "",
+		phonenumber: "",
+		commercialregistertype: "",
+		store_name: "",
+		city_id: "",
+		file: "",
+		link: "",
+	});
+
+	const resetDataErrors = () => {
+		setDataErrors({
+			name: "",
+			phonenumber: "",
+			commercialregistertype: "",
+			store_name: "",
+			city_id: "",
+			file: "",
+			link: "",
+		});
+	};
 	// to set radio input
 	const [
 		openCommercialRegisterInputGroup,
@@ -114,6 +137,7 @@ const VerifayPage = ({ verify }) => {
 
 	useEffect(() => {
 		if (verify) {
+			resetDataErrors();
 			setLoadingTitle("جاري ارسال طلب التوثيق");
 			let formData = new FormData();
 			formData.append("name", data?.name);
@@ -154,18 +178,23 @@ const VerifayPage = ({ verify }) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setLoadingTitle("");
 						dispatchVerifyAlert(openVerifyStoreAlertModal());
-						// setEndActionTitle(res?.data?.message?.ar);
 						setReload(!reload);
 						navigate("/");
 						dispatch(resetActivity());
 					} else {
 						setLoadingTitle("");
-						dispatchVerifyAlert(openVerifyStoreAlertModal());
-						// setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-						navigate("/");
-
+						// setReload(!reload);
 						dispatch(resetActivity());
+						setDataErrors({
+							name: res?.data?.message?.en?.name?.[0],
+							phonenumber: res?.data?.message?.en?.phonenumber?.[0],
+							commercialregistertype:
+								res?.data?.message?.en?.commercialregistertype?.[0],
+							store_name: res?.data?.message?.en?.store_name?.[0],
+							city_id: res?.data?.message?.en?.city_id?.[0],
+							link: res?.data?.message?.en?.link?.[0],
+							file: res?.data?.message?.en?.file?.[0],
+						});
 					}
 				});
 		}
@@ -204,6 +233,59 @@ const VerifayPage = ({ verify }) => {
 						</div>
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4 pt-3'>
+						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
+							<h5 className='label'>
+								اسم المالك <span className='important-hint mx-1'>(اجباري)</span>
+							</h5>
+						</div>
+						<div className='col-md-8 col-12'>
+							<input
+								name='name'
+								value={data?.name}
+								onChange={(e) => {
+									handleOnChange(e);
+								}}
+								type='text'
+								placeholder='قم بكتابة اسم المالك'
+								style={inputStyle}
+							/>
+							{dataErrors?.name && (
+								<div
+									className='important-hint me-1'
+									style={{ fontSize: "16px" }}>
+									{dataErrors?.name}
+								</div>
+							)}
+						</div>
+					</div>
+					<div className='row d-flex justify-content-between align-items-center pt-4'>
+						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
+							<h5 className='label'>
+								رقم الجوال <span className='important-hint mx-1'>(اجباري)</span>
+							</h5>
+						</div>
+						<div className='col-md-8 col-12'>
+							<input
+								name='phonenumber'
+								value={data?.phonenumber}
+								onChange={(e) => {
+									handleOnChange(e);
+								}}
+								type='text'
+								placeholder='+966'
+								style={inputStyle}
+								dir='ltr'
+							/>
+							{dataErrors?.phonenumber && (
+								<div
+									className='important-hint me-1'
+									style={{ fontSize: "16px" }}>
+									{dataErrors?.phonenumber}
+								</div>
+							)}
+						</div>
+					</div>
+					<div className='row d-flex justify-content-between align-items-center pt-4'>
 						<div className='col-4 d-flex justify-content-start gap-3 align-items-center'>
 							<RadioGroup
 								aria-labelledby='demo-radio-buttons-group-label'
@@ -239,6 +321,13 @@ const VerifayPage = ({ verify }) => {
 									}
 									label='السجل التجاري'
 								/>
+								{dataErrors?.commercialregistertype && (
+									<div
+										className='important-hint me-1'
+										style={{ fontSize: "16px" }}>
+										{dataErrors?.commercialregistertype}
+									</div>
+								)}
 							</RadioGroup>
 							<WebsiteIcon className='mx-3' />
 						</div>
@@ -246,12 +335,17 @@ const VerifayPage = ({ verify }) => {
 						{/** radio input group */}
 						<div
 							className={
-								openCommercialRegisterInputGroup ? "row-input-group " : "d-none"
-							}>
+								openCommercialRegisterInputGroup
+									? "row-input-group CommercialRegisterInputGroup "
+									: "d-none"
+							}
+							style={{
+								top: dataErrors?.commercialregistertype ? "150px" : "130px",
+							}}>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										الاسم التجاري<span className='text-danger'>*</span>
+										الاسم التجاري<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -279,7 +373,7 @@ const VerifayPage = ({ verify }) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3 city_wrapper'>
 								<div className='col-md-4 col-12'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										المدينة<span className='text-danger'>*</span>
+										المدينة<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -354,6 +448,13 @@ const VerifayPage = ({ verify }) => {
 											))}
 										</Select>
 									</FormControl>
+									{dataErrors?.city_id && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px" }}>
+											{dataErrors?.city_id}
+										</div>
+									)}
 								</div>
 							</div>
 
@@ -361,7 +462,7 @@ const VerifayPage = ({ verify }) => {
 								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
 										{" "}
-										رفع السجل التجاري <span className='text-danger'>*</span>
+										رفع السجل التجاري <span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -399,9 +500,17 @@ const VerifayPage = ({ verify }) => {
 										<ul>{files}</ul>
 									</div>
 
-									<div className='important-hint'>
-										يجب ان تكون صيغة الملف pdf{" "}
-									</div>
+									{dataErrors?.file ? (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px" }}>
+											{dataErrors?.file}
+										</div>
+									) : (
+										<div className='important-hint'>
+											يجب ان تكون صيغة الملف pdf
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
@@ -443,19 +552,27 @@ const VerifayPage = ({ verify }) => {
 							</RadioGroup>
 							<WebsiteIcon className='mx-3' />
 						</div>
+						{dataErrors?.commercialregistertype && (
+							<div className='important-hint me-1' style={{ fontSize: "16px" }}>
+								{dataErrors?.commercialregistertype}
+							</div>
+						)}
 
 						{/** radio input group */}
 
 						<div
 							className={
 								openFreeLaborDocumentInputGroup
-									? "row-input-group "
+									? "row-input-group FreeLaborDocumentInputGroup "
 									: " d-none "
-							}>
+							}
+							style={{
+								top: dataErrors?.commercialregistertype ? "90px" : "70px",
+							}}>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										رابط صفحة معروف<span className='text-danger'>*</span>
+										رابط صفحة معروف<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -479,12 +596,18 @@ const VerifayPage = ({ verify }) => {
 										}}
 									/>
 								</div>
+								{dataErrors?.link && (
+									<div
+										className='important-hint me-1'
+										style={{ fontSize: "16px" }}>
+										{dataErrors?.link}
+									</div>
+								)}
 							</div>
-
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										المدينة<span className='text-danger'>*</span>
+										المدينة<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -529,14 +652,19 @@ const VerifayPage = ({ verify }) => {
 											))}
 										</Select>
 									</FormControl>
+									{dataErrors?.city_id && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px" }}>
+											{dataErrors?.city_id}
+										</div>
+									)}
 								</div>
 							</div>
-
 							<div className='row d-flex justify-content-between align-items-center '>
 								<div className='col-4 col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
-										{" "}
-										رفع الوثيقة<span className='text-danger'>*</span>
+										رفع الوثيقة<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -575,50 +703,19 @@ const VerifayPage = ({ verify }) => {
 										<ul>{files}</ul>
 									</div>
 
-									<div className='important-hint'>
-										يجب ان تكون صيغة الملف pdf{" "}
-									</div>
+									{dataErrors?.file ? (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px" }}>
+											{dataErrors?.file}
+										</div>
+									) : (
+										<div className='important-hint'>
+											يجب ان تكون صيغة الملف pdf
+										</div>
+									)}
 								</div>
 							</div>
-						</div>
-					</div>
-					<div className='row d-flex justify-content-between align-items-center pt-4'>
-						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
-							<h5 className='label'>
-								اسم المالك <span className='important-hint mx-1'>(اجباري)</span>
-							</h5>
-						</div>
-						<div className='col-md-8 col-12'>
-							<input
-								name='name'
-								value={data?.name}
-								onChange={(e) => {
-									handleOnChange(e);
-								}}
-								type='text'
-								placeholder='قم بكتابة اسم المالك'
-								style={inputStyle}
-							/>
-						</div>
-					</div>
-					<div className='row d-flex justify-content-between align-items-center pt-4'>
-						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
-							<h5 className='label'>
-								رقم الجوال <span className='important-hint mx-1'>(اجباري)</span>
-							</h5>
-						</div>
-						<div className='col-md-8 col-12'>
-							<input
-								name='phonenumber'
-								value={data?.phonenumber}
-								onChange={(e) => {
-									handleOnChange(e);
-								}}
-								type='text'
-								placeholder='+966'
-								style={inputStyle}
-								dir='ltr'
-							/>
 						</div>
 					</div>
 				</Fragment>

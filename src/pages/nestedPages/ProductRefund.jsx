@@ -77,8 +77,6 @@ const ProductRefund = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
-					// navigate('/Products/SouqOtlobha');
 					setPriceError(res?.data?.message?.en?.price[0]);
 					setEndActionTitle(res?.data?.message?.ar);
 				}

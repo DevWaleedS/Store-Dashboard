@@ -178,7 +178,6 @@ const ShowImportEtlobhaProduct = () => {
 					navigate("/Products");
 					setReload(!reload);
 				} else {
-					setReload(!reload);
 					setProductError({
 						price: res?.data?.message?.en?.price?.[0],
 					});

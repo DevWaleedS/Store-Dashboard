@@ -43,6 +43,7 @@ const Products = () => {
 
 	let products = fetchedData?.data?.products;
 	let filterProducts = products;
+	console.log(fetchedData?.data?.products);
 
 	const getSearchInput = (value) => {
 		setSearch(value);
@@ -75,7 +76,6 @@ const Products = () => {
 				description: item?.description,
 				selling_price: item?.selling_price,
 				category_id: item?.category?.name,
-				discount_percent: item?.discount_percent,
 				discount_price: item?.discount_price,
 				subcategory_id: item?.subcategory?.map((sub) => sub?.name)?.toString(),
 				stock: item?.stock,
@@ -86,7 +86,7 @@ const Products = () => {
 		const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
 		const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
 		const data = new Blob([excelBuffer], { type: fileType });
-		FileSaver.saveAs(data, "products" + fileExtension);
+		FileSaver.saveAs(data, "StoreProducts" + fileExtension);
 	};
 
 	const uploadFile = () => {

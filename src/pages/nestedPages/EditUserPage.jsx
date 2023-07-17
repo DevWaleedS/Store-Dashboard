@@ -200,7 +200,6 @@ const EditUserPage = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
 					setUserError({
 						name: res?.data?.message?.en?.name?.[0],
 						user_name: res?.data?.message?.en?.user_name?.[0],

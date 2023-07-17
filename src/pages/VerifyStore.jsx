@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { resetActivity } from '../store/slices/AddActivity';
-
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { resetActivity } from "../store/slices/AddActivity";
 
 // ICONS
-import howIcon from '../data/Icons/icon_24_home.svg';
+import howIcon from "../data/Icons/icon_24_home.svg";
 
 //components
-import VerifayPage from './VerifyStoreForms/VerifayPage';
-import ActivityType from './VerifyStoreForms/ActivityType';
+import VerifayPage from "./VerifyStoreForms/VerifayPage";
+import ActivityType from "./VerifyStoreForms/ActivityType";
 
 const cursor = {
-	cursor: 'pointer',
+	cursor: "pointer",
 };
 
 const VerifyStore = () => {
-
-	const [verify, setVerify] = useState(false);
 	const dispatch = useDispatch(true);
+	const { activity } = useSelector((state) => state.AddActivity);
+	const [verify, setVerify] = useState(false);
+	const [showErr, setShowErr] = useState(false);
 
 	// Use state to the next button
 	const [page, setPage] = useState(1);
@@ -28,7 +28,12 @@ const VerifyStore = () => {
 	// Set function to change between pages
 	const handleNextPage = () => {
 		const nextPage = page + 1;
-		setPage(nextPage);
+		if (activity.length === 0) {
+			setShowErr(true);
+		} else {
+			setShowErr(false);
+			setPage(nextPage);
+		}
 	};
 
 	return (
@@ -69,19 +74,25 @@ const VerifyStore = () => {
 											dispatch(resetActivity());
 										}}
 										style={cursor}
-										className={page === 1 ? 'store-type verify-tab-bx active' : 'store-type verify-tab-bx '}
-									>
+										className={
+											page === 1
+												? "store-type verify-tab-bx active"
+												: "store-type verify-tab-bx "
+										}>
 										<h5>نشاط المتجر</h5>
 									</div>
 								</div>
 								<div className='col-md-3 col-6'>
 									<div
 										onClick={() => {
-											setPage(2);
+											activity?.length === 0 ? setShowErr(true) : setPage(2);
 										}}
 										style={cursor}
-										className={page === 2 ? 'national-id verify-tab-bx active' : 'national-id verify-tab-bx '}
-									>
+										className={
+											page === 2
+												? "national-id verify-tab-bx active"
+												: "national-id verify-tab-bx "
+										}>
 										<h5> التوثيق </h5>
 									</div>
 								</div>
@@ -93,7 +104,13 @@ const VerifyStore = () => {
 					<div className='row select-store-type form-row p-md-5 p-3'>
 						<form className='px-md-2 px-0'>
 							<div className='col-12'>
-								<div className='form'>{page === 1 ? <ActivityType /> : <VerifayPage verify={verify} />} </div>
+								<div className='form'>
+									{page === 1 ? (
+										<ActivityType showErr={showErr} setShowErr={setShowErr} />
+									) : (
+										<VerifayPage verify={verify} />
+									)}{" "}
+								</div>
 							</div>
 							<div className='col-12 d-flex justify-content-center align-items-center gap-md-5 gap-3'>
 								{page > 1 ? (
@@ -102,24 +119,24 @@ const VerifyStore = () => {
 										onClick={() => {
 											setPage(1);
 											dispatch(resetActivity());
-										}}
-									>
+										}}>
 										السابق
 									</Button>
 								) : (
-									''
+									""
 								)}
 								{page === 2 ? (
-									<Button className='next-btn custom-width' onClick={() => {
-										setVerify(true)
-
-
-									}
-									}>
+									<Button
+										className='next-btn custom-width'
+										onClick={() => {
+											setVerify(true);
+										}}>
 										رفع الطلب
 									</Button>
 								) : (
-									<Button className={page > 1 ? 'next-btn custom-width' : 'next-btn'} onClick={handleNextPage}>
+									<Button
+										className={page > 1 ? "next-btn custom-width" : "next-btn"}
+										onClick={handleNextPage}>
 										التالي
 									</Button>
 								)}

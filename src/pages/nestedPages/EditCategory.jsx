@@ -128,7 +128,6 @@ const EditCategory = () => {
 				} else {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
 					setCategoryError({
 						...categoryError,
 						name: res?.data?.message?.en?.name?.[0],

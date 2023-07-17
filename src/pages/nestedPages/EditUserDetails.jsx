@@ -201,7 +201,6 @@ const EditUserDetails = () => {
 					setReload(!reload);
 					window.location.reload();
 				} else {
-					setReload(!reload);
 					setDataError({
 						...dataError,
 						user_name: res?.data?.message?.en?.user_name?.[0],

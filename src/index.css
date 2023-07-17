@@ -2670,7 +2670,7 @@ nav.navigation {
 }
 
 .form-row .form {
-	height: 600px;
+	height: 800px;
 }
 
 .select-store-type .label {
@@ -2700,13 +2700,19 @@ nav.navigation {
 
 .row-input-group {
 	position: absolute;
-	top: 70px;
-	right: 10px;
 	height: 400px;
 	background: rgb(255, 255, 255);
 	border-radius: 8px;
 	z-index: 99;
 	padding: 20px;
+}
+.CommercialRegisterInputGroup {
+	top: 130px;
+	right: 10px;
+}
+.FreeLaborDocumentInputGroup {
+	top: 70px;
+	right: 10px;
 }
 
 /* end of this style for radio input to select   */

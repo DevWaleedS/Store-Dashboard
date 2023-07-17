@@ -208,7 +208,7 @@ const AddCoupon = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
+
 					setCouponError({
 						...couponError,
 						code: res?.data?.message?.en?.code?.[0],

@@ -112,7 +112,6 @@ const AddCategory = () => {
 					setSubCategories([]);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
 					setCategoryError({
 						...categoryError,
 						name: res?.data?.message?.en?.name?.[0],

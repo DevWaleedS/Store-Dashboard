@@ -10,6 +10,7 @@ import { useCookies } from "react-cookie";
 
 import { Helmet } from "react-helmet";
 import { UserAuth } from "../../Context/UserAuthorProvider";
+import { ResetPasswordContext } from "../../Context/ResetPasswordProvider";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  TO HANDLE THE REG_EXPRESS
@@ -20,6 +21,10 @@ const Login = () => {
 	const navigate = useNavigate();
 	const [cookies, setCookie] = useCookies(["access_token"]);
 
+	// If user is not verify
+	const ResetPasswordInfo = useContext(ResetPasswordContext);
+	const { setEmail } = ResetPasswordInfo;
+
 	// to set remember me
 	const RememberMe = useContext(UserAuth);
 	const { rememberMe, setRememberMe } = RememberMe;
@@ -29,7 +34,7 @@ const Login = () => {
 	);
 
 	const [password, setPassword] = useState(
-		rememberMe.remember_me ? cookies.password : ""
+		rememberMe.remember_me ? rememberMe.password : ""
 	);
 
 	/**
@@ -49,8 +54,9 @@ const Login = () => {
 	 * All DASHBOARD NAVIGATORS
 	 * ----------------------------------------------
 	 */
-	const NavigateToPasswordBackPage = () => {
-		window.location.href = "http://home.atlbha.com/passwordBackPage";
+	const NavigateToRestorePassword = () => {
+		// window.location.href = "http://home.atlbha.com/passwordBackPage";
+		navigate("/RestorePassword");
 	};
 
 	const NavigateToRegisterPage = () => {
@@ -58,20 +64,19 @@ const Login = () => {
 	};
 
 	//Set username, password and remember_me status from context
-	function setUserInfoToCookies() {
-		// Set username cookie to expire in 1 days
-		setCookie("password", password, { maxAge: 24 * 60 * 60 }); // Set password cookie to expire in 1 days
+	function setUserInfoToUserAuthContext() {
 		setRememberMe({
 			username,
+			password,
 			remember_me: true,
 		});
 	}
 
 	//remove username, password and remember_me status from context
-	function removeUserInfoToCookies() {
-		setCookie("password", "", { maxAge: 0 }); // Remove the password cookie
+	function removeUserInfoUserAuthContext() {
 		setRememberMe({
 			username: "",
+			password: "",
 			remember_me: false,
 		});
 	}
@@ -93,13 +98,13 @@ const Login = () => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
 				//Set token to cookies
 				setCookie("access_token", res?.data?.data?.token, { path: "/" });
-				setCookie("username", res?.data?.data?.user?.email);
+
 				if (rememberMe?.remember_me) {
 					//Set username, password and remember_me status to context
-					setUserInfoToCookies();
+					setUserInfoToUserAuthContext();
 				} else {
 					//remove username, password and remember_me status from context
-					removeUserInfoToCookies();
+					removeUserInfoUserAuthContext();
 				}
 
 				// if the user is logged we will navigate him to dashboard
@@ -109,8 +114,8 @@ const Login = () => {
 				setPasswordError(res?.data?.message?.en?.password?.[0]);
 				setError(res?.data?.message?.ar);
 				if (res?.data?.message?.en === "User not verified") {
-					window.location.href = "http://home.atlbha.com/verificationPage";
-					setCookie("username", res?.data?.data?.user?.email);
+					setEmail(username);
+					navigate("/verificationPage");
 				}
 			}
 		});
@@ -129,10 +134,10 @@ const Login = () => {
 
 			if (rememberMe?.remember_me) {
 				//Set username , password and remember_me cookie to expire
-				setUserInfoToCookies();
+				setUserInfoToUserAuthContext();
 			} else {
 				//remove username , password and remember_me cookie to expire
-				removeUserInfoToCookies();
+				removeUserInfoUserAuthContext();
 			}
 		}
 	};
@@ -237,7 +242,7 @@ const Login = () => {
 									</div>
 									<h6>تذكرني</h6>
 								</div>
-								<h5 onClick={NavigateToPasswordBackPage}>نسيت كلمة المرور ؟</h5>
+								<h5 onClick={NavigateToRestorePassword}>نسيت كلمة المرور ؟</h5>
 							</div>
 							<button className='bt-main' onClick={Login}>
 								تسجيل الدخول

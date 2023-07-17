@@ -196,7 +196,7 @@ const AddNewProduct = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
+
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],
 						cover: res?.data?.message?.en?.cover?.[0],

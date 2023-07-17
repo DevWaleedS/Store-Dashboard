@@ -7,6 +7,7 @@ const UserAuthorProvider = ({ children }) => {
 
 	const [rememberMe, setRememberMe] = useState({
 		username: "",
+		password: "",
 		remember_me: false,
 	});
 

@@ -221,7 +221,6 @@ const EditPage = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
 					setPageError({
 						title: res?.data?.message?.en?.title?.[0],
 						page_desc: res?.data?.message?.en?.page_desc?.[0],

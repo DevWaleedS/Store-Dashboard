@@ -837,7 +837,7 @@ const TemplateUpdate = () => {
 				<div className='title d-flex flex-md-row flex-column justify-content-between align-items-md-center flex-wrap gap-4'>
 					<h4>
 						التعليقات والعملاء{" "}
-						<span> (تستطيع تفعيل وتعطيل العملاء المميزين والتعليقات )</span>
+						<span> (تستطيع تفعيل وتعطيل العملاء المميزون والتعليقات )</span>
 					</h4>
 					<div className='view-more-btn mx-md-4 mt-md-0 mt-3'>
 						<Link to='/Rating' variant='contained'>
@@ -854,7 +854,7 @@ const TemplateUpdate = () => {
 								<div className='switch-widget mb-2 d-flex justify-content-between align-items-center'>
 									<div className='widget-text'>
 										<Client className='client-icon' />
-										<span className='me-3'>العملاء المميزن</span>
+										<span className='me-3'>العملاء المميزون</span>
 									</div>
 									<div className='switch-btn'>
 										<Switch

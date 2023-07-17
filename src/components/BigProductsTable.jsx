@@ -504,7 +504,24 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																{row?.category?.name}
 															</TableCell>
 															<TableCell align='center'>
-																{row?.selling_price}
+																{row?.discount_price ? (
+																	<>
+																		<span class='me-1'>
+																			{row?.discount_price}
+																		</span>
+
+																		<del
+																			class='original-price'
+																			style={{
+																				fontSize: "16px",
+																				color: "#99a2a7",
+																			}}>
+																			{row?.selling_price}
+																		</del>
+																	</>
+																) : (
+																	row?.selling_price
+																)}
 															</TableCell>
 															<TableCell align='center'>
 																{" "}

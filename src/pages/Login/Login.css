@@ -291,6 +291,16 @@ ellipse {
 	.password-field .show-password-icon {
 		top: 52px;
 	}
+	.sign-in-box .all-content .box-form-banner .info-svg h1 {
+		font-size: 80px;
+		line-height: 80px;
+		font-weight: 500;
+	}
+	.sign-in-box .all-content .box-form-banner .info-svg h4 {
+		font-size: 48px;
+		line-height: 48px;
+		font-weight: 300;
+	}
 }
 @media (max-width: 390px) {
 	.sign-in-box .all-content .box-form-banner {

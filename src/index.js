@@ -21,6 +21,7 @@ import RootLayout from "./pages/RootLayout";
 
 // Import All Pages to create routes
 import { Login } from "./pages/Login";
+// import { RestorePassword } from "./pages/Login/re";
 
 import {
 	Academy,
@@ -85,17 +86,40 @@ import {
 
 // INDEX CSS FILE
 import "./index.css";
+
+// IMPORT ALL Context Providers
 import ContextProvider from "./Context/ContextProvider";
 import NotificationProvider from "./Context/NotificationProvider";
 import LoadingProvider from "./Context/LoadingProvider";
 import DeleteProvider from "./Context/DeleteProvider";
 import UserAuthorProvider from "./Context/UserAuthorProvider";
+import { RestorePassword } from "./pages/Login/ResetPasswordPages/RestorePassword";
+import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
+import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
+import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 
-// ---------------------------------------------------------------------------------------//
+/**
+ * ----------------------------------------------------------------------------------------------
+ *  ALL App Routes
+ * -----------------------------------------------------------------------------------------------
+ */
 
-// App Routes
 const router = createBrowserRouter([
 	{ path: "Login", element: <Login /> },
+	// RestorePassword Pages
+	{
+		path: "RestorePassword",
+		element: <RestorePassword />,
+	},
+	{
+		path: "SendVerificationCode",
+		element: <SendVerificationCode />,
+	},
+
+	{
+		path: "CreateNewPassword",
+		element: <CreateNewPassword />,
+	},
 	{
 		path: "/",
 		element: <RootLayout />,
@@ -104,6 +128,9 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <Home /> },
 			{ path: "Home", element: <Home /> },
+			/**--------------------------------------------------------------------------- */
+
+			/**--------------------------------------------------------------------------- */
 
 			{
 				path: "Academy",
@@ -351,13 +378,15 @@ root.render(
 		<ProSidebarProvider>
 			<UserAuthorProvider>
 				<ContextProvider>
-					<NotificationProvider>
-						<LoadingProvider>
-							<DeleteProvider>
-								<RouterProvider router={router} />
-							</DeleteProvider>
-						</LoadingProvider>
-					</NotificationProvider>
+					<ResetPasswordProvider>
+						<NotificationProvider>
+							<LoadingProvider>
+								<DeleteProvider>
+									<RouterProvider router={router} />
+								</DeleteProvider>
+							</LoadingProvider>
+						</NotificationProvider>
+					</ResetPasswordProvider>
 				</ContextProvider>
 			</UserAuthorProvider>
 		</ProSidebarProvider>

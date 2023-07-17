@@ -27,7 +27,7 @@ import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+
 
 // Modal Style
 const style = {
@@ -125,7 +125,7 @@ const EditRole = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Management");
-					setReload(!reload);
+					
 				}
 			});
 	};
