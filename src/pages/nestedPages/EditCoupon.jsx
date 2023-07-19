@@ -79,14 +79,12 @@ const EditCoupon = () => {
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [selectedProductIds, setSelectProductId] = useState([]);
 	const [selectedProducts, setSelectedProducts] = useState([]);
-
 	const [select_category_id, setSelect_category_id] = useState("");
 	const [select_payment_id, setSelect_payment_id] = useState("");
 	const [isEnable, setIsEnable] = useState(true);
 	const [startDate, setStartDate] = useState("");
 	const [activeCoupon, setActiveCoupon] = useState(false);
 
-	console.log(selectedProductIds);
 	const {
 		register,
 		handleSubmit,
@@ -124,7 +122,6 @@ const EditCoupon = () => {
 	 * ---------------------------------------------------------------------------------
 	 */
 	const [startDateError, setStartDateError] = useState("");
-
 	const [couponError, setCouponError] = useState({
 		code: "",
 		discount_type: "",
@@ -176,11 +173,13 @@ const EditCoupon = () => {
 		);
 
 		// Add the selected product to the list of selected products
-		const selectedProduct = products?.data?.products.find(
-			(product) => product.id === productId
+		const selectedProduct = products?.data?.products?.find(
+			(product) => product?.id === productId
 		);
 		setSelectedProducts((prevSelectedProducts) =>
-			prevSelectedProducts.some((product) => product.id === selectedProduct.id)
+			prevSelectedProducts?.some(
+				(product) => product?.id === selectedProduct?.id
+			)
 				? prevSelectedProducts
 				: [...prevSelectedProducts, selectedProduct]
 		);
@@ -228,11 +227,7 @@ const EditCoupon = () => {
 				: null
 		);
 
-		setSelectProductId(
-			fetchedData?.data?.Coupons?.selected_product?.map(
-				(product) => product?.id
-			) || []
-		);
+		setSelectedProducts(fetchedData?.data?.Coupons?.selected_product || []);
 
 		setSelect_category_id(
 			fetchedData?.data?.Coupons?.selected_category?.[0]?.id
@@ -308,12 +303,13 @@ const EditCoupon = () => {
 			"select_payment_id",
 			coupon_apply === "selected_payment" ? select_payment_id : ""
 		);
-		selectedProductIds.forEach((id, idx) =>
+
+		selectedProducts.forEach((product, idx) => {
 			formData.append(
 				`select_product_id[${idx}]`,
-				coupon_apply === "selected_product" ? id : ""
-			)
-		);
+				coupon_apply === "selected_product" ? product.id : ""
+			);
+		});
 
 		formData.append("status", isEnable === "نشط" ? "active" : "not_active");
 		axios
@@ -349,6 +345,9 @@ const EditCoupon = () => {
 				}
 			});
 	};
+
+	console.log(selectedProducts);
+	console.log(selectedProductIds);
 
 	return (
 		<>
