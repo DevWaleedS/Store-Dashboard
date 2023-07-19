@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import useFetch from "../../Hooks/UseFetch";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
@@ -57,7 +57,7 @@ const UserDetails = () => {
 											<nav aria-label='breadcrumb'>
 												<ol className='breadcrumb'>
 													<li className='breadcrumb-item text-bold'>
-														جدول المستخدمين
+														<Link to='/Management'> جدول المستخدمين</Link>
 													</li>
 													<li
 														className='breadcrumb-item active'
@@ -89,8 +89,8 @@ const UserDetails = () => {
 											<div className='col-lg-4 col-12 d-flex justify-content-center'>
 												<div className='user-info me-md-3'>
 													<span className='user-name mb-3 d-block text-center'>
-														{fetchedData?.data?.users?.name === "null"
-															? ""
+														{fetchedData?.data?.users?.name === null
+															? fetchedData?.data?.users?.user_name
 															: fetchedData?.data?.users?.name}
 													</span>
 													<div className='contact-info mb-2'>
@@ -116,7 +116,9 @@ const UserDetails = () => {
 
 											<div className='col-lg-4 col-12 d-flex justify-content-center order-md-last order-first'>
 												<div className='job-title'>
-													{fetchedData?.data?.users?.role?.name}
+													{fetchedData?.data?.users?.role === null
+														? "الدور الوظيفي"
+														: fetchedData?.data?.users?.role?.name}
 												</div>
 											</div>
 										</div>

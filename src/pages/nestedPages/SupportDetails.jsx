@@ -1,47 +1,47 @@
-import React from 'react';
+import React from "react";
 import { Helmet } from "react-helmet";
-import useFetch from '../../Hooks/UseFetch';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import GetDateOnly from '../../HelperComponents/GetDateOnly';
+import useFetch from "../../Hooks/UseFetch";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import GetDateOnly from "../../HelperComponents/GetDateOnly";
 // MUI
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 // ICONS
-import CircularLoading from '../../HelperComponents/CircularLoading';
-import { ReactComponent as StatusIcon } from '../../data/Icons/status.svg';
-import { ReactComponent as DateIcon } from '../../data/Icons/icon-date.svg';
-import { ReactComponent as TypeSuport } from '../../data/Icons/type support.svg';
-import { ReactComponent as Client } from '../../data/Icons/icon-24-user.svg';
-import { ReactComponent as Customer } from '../../data/Icons/icon-support.svg';
-import { ReactComponent as Phone } from '../../data/Icons/icon-24- call.svg';
+import CircularLoading from "../../HelperComponents/CircularLoading";
+import { ReactComponent as StatusIcon } from "../../data/Icons/status.svg";
+import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
+import { ReactComponent as TypeSuport } from "../../data/Icons/type support.svg";
+import { ReactComponent as Client } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Customer } from "../../data/Icons/icon-support.svg";
+import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
 
-import { ReactComponent as BoldIcon } from '../../data/Icons/icon-24-Bold.svg';
-import { ReactComponent as FormatTextCenter } from '../../data/Icons/icon-24-format text center.svg';
-import { ReactComponent as FormatTextLeft } from '../../data/Icons/icon-24-format text lift.svg';
-import { ReactComponent as FormatTextRight } from '../../data/Icons/icon-24-format text right.svg';
-import { ReactComponent as FormatTextPoint } from '../../data/Icons/icon-24-format text point.svg';
-import { ReactComponent as FormatTextPointSqure } from '../../data/Icons/icon-24-format text-point.svg';
-import { ReactComponent as Attchment } from '../../data/Icons/icon-5.svg';
+import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
+import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
+import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
+import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
+import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
+import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
+import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
 
 // Modal Style
 const style = {
-	position: 'fixed',
-	top: '80px',
-	left: '0%',
-	transform: 'translate(0%, 0%)',
-	width: '80%',
-	height: '100%',
-	overflow: 'auto',
-	bgcolor: '#f8f9fa',
-	paddingBottom: '60px',
+	position: "fixed",
+	top: "80px",
+	left: "0%",
+	transform: "translate(0%, 0%)",
+	width: "80%",
+	height: "100%",
+	overflow: "auto",
+	bgcolor: "#f8f9fa",
+	paddingBottom: "60px",
 
-	'@media(max-width:768px)': {
-		position: 'absolute',
+	"@media(max-width:768px)": {
+		position: "absolute",
 		top: 0,
 		left: 0,
-		width: '100%',
-		backgroundColor: '#F6F6F6',
+		width: "100%",
+		backgroundColor: "#F6F6F6",
 	},
 };
 
@@ -50,14 +50,20 @@ const SupportDetails = () => {
 	const navigate = useNavigate();
 
 	// to get all  data from server
-	const { fetchedData, loading } = useFetch(`https://backend.atlbha.com/api/Store/technicalSupport/${id}`);
+	const { fetchedData, loading } = useFetch(
+		`https://backend.atlbha.com/api/Store/technicalSupport/${id}`
+	);
 	return (
 		<>
 			<Helmet>
 				<title>لوحة تحكم أطلبها | تفاصيل الدعم الفني</title>
 			</Helmet>
 			<div className='' open={true}>
-				<Modal open={true} onClose={() => navigate('/Support')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
+				<Modal
+					open={true}
+					onClose={() => navigate("/Support")}
+					aria-labelledby='modal-modal-title'
+					aria-describedby='modal-modal-description'>
 					<Box sx={style} className='nested-pages-modal'>
 						<section className='SupportDetails-page'>
 							<div className='head-category mb-md-5 mb-3'>
@@ -76,10 +82,14 @@ const SupportDetails = () => {
 												</Link>
 											</li>
 											<li className='breadcrumb-item ' aria-current='page'>
-												جدول الشكاوى
+												<Link to='/Support' className='me-2'>
+													جدول الشكاوى
+												</Link>
 											</li>
 
-											<li className='breadcrumb-item active' aria-current='page'>
+											<li
+												className='breadcrumb-item active'
+												aria-current='page'>
 												تفاصيل الشكوى
 											</li>
 										</ol>
@@ -89,7 +99,9 @@ const SupportDetails = () => {
 
 							<div className='mb-md-5 mb-3'>
 								{loading ? (
-									<div className='d-flex justify-content-center align-items-center' style={{ height: '200px' }}>
+									<div
+										className='d-flex justify-content-center align-items-center'
+										style={{ height: "200px" }}>
 										<CircularLoading />
 									</div>
 								) : (
@@ -113,7 +125,12 @@ const SupportDetails = () => {
 																	</div>
 
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>{fetchedData?.data?.technicalSupports?.store?.user?.name}</span>
+																		<span>
+																			{
+																				fetchedData?.data?.technicalSupports
+																					?.store?.user?.name
+																			}
+																		</span>
 																	</div>
 																</div>
 															</div>
@@ -126,7 +143,12 @@ const SupportDetails = () => {
 																	</div>
 
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>{fetchedData?.data?.technicalSupports?.phonenumber}</span>
+																		<span>
+																			{
+																				fetchedData?.data?.technicalSupports
+																					?.phonenumber
+																			}
+																		</span>
 																	</div>
 																</div>
 															</div>
@@ -138,7 +160,12 @@ const SupportDetails = () => {
 																		<span className='me-2'> الحالة</span>
 																	</div>
 																	<div className='box pending-box d-flex justify-content-center'>
-																		<span>{fetchedData?.data?.technicalSupports?.supportstatus}</span>
+																		<span>
+																			{
+																				fetchedData?.data?.technicalSupports
+																					?.supportstatus
+																			}
+																		</span>
 																	</div>
 																</div>
 															</div>
@@ -152,7 +179,12 @@ const SupportDetails = () => {
 																		<span className='me-2'> تاريخ الشكوى</span>
 																	</div>
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>{GetDateOnly(fetchedData?.data?.technicalSupports?.created_at)}</span>
+																		<span>
+																			{GetDateOnly(
+																				fetchedData?.data?.technicalSupports
+																					?.created_at
+																			)}
+																		</span>
 																	</div>
 																</div>
 															</div>
@@ -164,7 +196,12 @@ const SupportDetails = () => {
 																	</div>
 
 																	<div className='box wring-box d-flex justify-content-center'>
-																		<span>{fetchedData?.data?.technicalSupports?.type} </span>
+																		<span>
+																			{
+																				fetchedData?.data?.technicalSupports
+																					?.type
+																			}{" "}
+																		</span>
 																	</div>
 																</div>
 															</div>
@@ -175,7 +212,12 @@ const SupportDetails = () => {
 																		<span className='me-2'>عنوان الشكوى </span>
 																	</div>
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>{fetchedData?.data?.technicalSupports?.title}</span>
+																		<span>
+																			{
+																				fetchedData?.data?.technicalSupports
+																					?.title
+																			}
+																		</span>
 																	</div>
 																</div>
 															</div>
@@ -205,7 +247,9 @@ const SupportDetails = () => {
 											</div>
 
 											<div className='col-12'>
-												<textarea name='page-content-input' id='page-content-input'>
+												<textarea
+													name='page-content-input'
+													id='page-content-input'>
 													{fetchedData?.data?.technicalSupports?.content}
 												</textarea>
 											</div>
@@ -215,7 +259,9 @@ const SupportDetails = () => {
 										<div className='row'>
 											<div className='col-12'>
 												<div className=' close-btn d-flex justify-content-center align-items-center mb-3'>
-													<button onClick={() => navigate('/Support')}>إغلاق</button>
+													<button onClick={() => navigate("/Support")}>
+														إغلاق
+													</button>
 												</div>
 											</div>
 										</div>

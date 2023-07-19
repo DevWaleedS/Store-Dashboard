@@ -4,7 +4,7 @@ import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import axios from "axios";
 import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -245,7 +245,7 @@ const EditUserDetails = () => {
 											<nav aria-label='breadcrumb'>
 												<ol className='breadcrumb'>
 													<li className='breadcrumb-item text-bold'>
-														حساب الادمن{" "}
+														<Link to='/UserDetails'>حساب الادمن</Link>
 													</li>
 
 													<li

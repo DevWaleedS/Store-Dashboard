@@ -282,29 +282,38 @@ const OrderDetails = () => {
 													data-bs-parent='#accordionExample'>
 													<div className='accordion-body'>
 														<ul className='select-status p-0'>
-															<li onClick={() => updateOrderStatus("new")}>
+															<li
+																onClick={() => updateOrderStatus("new")}
+																style={{ cursor: "pointer" }}>
 																جديد
 															</li>
 															<li
-																onClick={() => updateOrderStatus("completed")}>
+																onClick={() => updateOrderStatus("completed")}
+																style={{ cursor: "pointer" }}>
 																مكتمل
 															</li>
 															<li
 																onClick={() =>
 																	updateOrderStatus("delivery_in_progress")
-																}>
+																}
+																style={{ cursor: "pointer" }}>
 																جاري التجهيز
 															</li>
-															<li onClick={() => updateOrderStatus("ready")}>
+															<li
+																onClick={() => updateOrderStatus("ready")}
+																style={{ cursor: "pointer" }}>
 																جاهز
 															</li>
-															<li onClick={() => updateOrderStatus("canceled")}>
+															<li
+																onClick={() => updateOrderStatus("canceled")}
+																style={{ cursor: "pointer" }}>
 																ملغي
 															</li>
 															<li
 																onClick={() =>
 																	updateOrderStatus("not_completed")
-																}>
+																}
+																style={{ cursor: "pointer" }}>
 																غير مكتمل
 															</li>
 														</ul>
