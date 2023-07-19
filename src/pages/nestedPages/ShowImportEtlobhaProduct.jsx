@@ -96,8 +96,6 @@ const ShowImportEtlobhaProduct = () => {
 		}
 	}, [fetchedData?.data?.product]);
 
-	console.log(product?.selling_price);
-
 	/**
 	 * --------------------------------------------------------------------
 	 * to handle errors

@@ -97,7 +97,12 @@ const EditUserPage = () => {
 				role: fetchedData?.data?.users?.role?.name,
 				email: fetchedData?.data?.users?.email,
 				image: fetchedData?.data?.users?.image,
-				phonenumber: fetchedData?.data?.users?.phonenumber,
+				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
+					? fetchedData?.data?.users?.phonenumber?.slice(4)
+					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
+					? fetchedData?.data?.users?.phonenumber.slice(5)
+					: fetchedData?.data?.users?.phonenumber,
+
 				status:
 					fetchedData?.data?.users?.status === "نشط" ? "active" : "not_active",
 			});
@@ -176,7 +181,14 @@ const EditUserPage = () => {
 		formData.append("user_name", data?.user_name);
 		formData.append("role", data?.role);
 		formData.append("email", data?.email);
-		formData.append("phonenumber", data?.phonenumber);
+
+		formData.append(
+			"phonenumber",
+			data?.phonenumber?.startsWith("+966") ||
+				data?.phonenumber?.startsWith("00966")
+				? data?.phonenumber
+				: `+966${data?.phonenumber}`
+		);
 		formData.append("status", data?.status);
 		if (images?.length !== 0) {
 			formData.append("image", images[0]);
@@ -285,7 +297,6 @@ const EditUserPage = () => {
 														<User />
 													</div>
 													<input
-														style={{ direction: "ltr", textAlign: "left" }}
 														type='text'
 														id='user-name'
 														name='user_name'
@@ -464,6 +475,7 @@ const EditUserPage = () => {
 														<Mobile />
 													</div>
 													<input
+														maxLength={9}
 														name='phonenumber'
 														type='number'
 														id='phonenumber'

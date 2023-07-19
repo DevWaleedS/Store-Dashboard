@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Helmet } from "react-helmet";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -17,9 +17,9 @@ const cursor = {
 };
 
 const VerifyStore = () => {
+	const verifayPageRef = useRef(null);
 	const dispatch = useDispatch(true);
 	const { activity } = useSelector((state) => state.AddActivity);
-	const [verify, setVerify] = useState(false);
 	const [showErr, setShowErr] = useState(false);
 
 	// Use state to the next button
@@ -36,6 +36,12 @@ const VerifyStore = () => {
 		}
 	};
 
+	// Function in the parent component that will be triggered by the child component
+	const handleChildButtonClick = () => {
+		if (verifayPageRef.current) {
+			verifayPageRef.current.uploadVerifyStoreOrder();
+		}
+	};
 	return (
 		<>
 			<Helmet>
@@ -108,7 +114,7 @@ const VerifyStore = () => {
 									{page === 1 ? (
 										<ActivityType showErr={showErr} setShowErr={setShowErr} />
 									) : (
-										<VerifayPage verify={verify} />
+										<VerifayPage ref={verifayPageRef} />
 									)}{" "}
 								</div>
 							</div>
@@ -128,9 +134,7 @@ const VerifyStore = () => {
 								{page === 2 ? (
 									<Button
 										className='next-btn custom-width'
-										onClick={() => {
-											setVerify(true);
-										}}>
+										onClick={handleChildButtonClick}>
 										رفع الطلب
 									</Button>
 								) : (

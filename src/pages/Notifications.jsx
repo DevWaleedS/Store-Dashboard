@@ -14,10 +14,9 @@ import { ReactComponent as CheckedSquare } from "../data/Icons/icon-24-square ch
 import { AiOutlineSearch } from "react-icons/ai";
 import moment from "moment";
 
-
 const Notifications = () => {
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);

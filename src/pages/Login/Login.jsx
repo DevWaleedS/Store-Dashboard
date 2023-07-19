@@ -115,7 +115,7 @@ const Login = () => {
 				setError(res?.data?.message?.ar);
 				if (res?.data?.message?.en === "User not verified") {
 					setEmail(username);
-					navigate("/verificationPage");
+					navigate("/LogInVerificationCode");
 				}
 			}
 		});

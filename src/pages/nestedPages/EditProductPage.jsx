@@ -345,10 +345,6 @@ const EditProductPage = () => {
 													placeholder=' اسم المنتج'
 													{...register("name", {
 														required: "حقل الاسم مطلوب",
-														pattern: {
-															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-															message: "يجب على الحقل الاسم أن يكون نصاّّ",
-														},
 													})}
 												/>
 											</div>
@@ -489,60 +485,72 @@ const EditProductPage = () => {
 											</div>
 											<div className='col-md-7 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
-													<Select
-														sx={{
-															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
-														}}
-														IconComponent={IoIosArrowDown}
-														multiple
-														displayEmpty
-														inputProps={{ "aria-label": "Without label" }}
-														name='subcategory_id'
-														value={product?.subcategory_id || []}
-														onChange={(e) => handleOnChange(e)}
-														input={<OutlinedInput />}
-														renderValue={(selected) => {
-															if (product?.subcategory_id?.length === 0) {
-																return "التصنيف الفرعي";
-															}
-															return selected?.map((item) => {
-																const result =
-																	subcategory[0]?.subcategory?.filter(
-																		(sub) => sub?.id === parseInt(item)
-																	) || product?.subcategory_id;
-																return `${result[0]?.name} , `;
-															});
-														}}
-														open={openSubCategory}
-														onClick={() => {
-															setOpenSubCategory(true);
-														}}>
-														{subcategory[0]?.subcategory?.map((sub, index) => (
-															<MenuItem key={index} value={sub?.id}>
-																<Checkbox
-																	checked={
-																		product?.subcategory_id?.indexOf(sub?.id) >
-																		-1
-																	}
-																/>
-																<ListItemText primary={sub?.name} />
+													{product?.category_id !== "" &&
+													subcategory[0]?.subcategory?.length === 0 ? (
+														<div
+															className='d-flex justify-content-center align-items-center'
+															style={{ color: "#1dbbbe" }}>
+															لا يوجد تصنيفات فرعية للتصنيف الرئيسي الذي اخترتة
+														</div>
+													) : (
+														<Select
+															sx={{
+																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																	{
+																		paddingRight: "20px",
+																	},
+															}}
+															IconComponent={IoIosArrowDown}
+															multiple
+															displayEmpty
+															inputProps={{ "aria-label": "Without label" }}
+															name='subcategory_id'
+															value={product?.subcategory_id || []}
+															onChange={(e) => handleOnChange(e)}
+															input={<OutlinedInput />}
+															renderValue={(selected) => {
+																if (product?.subcategory_id?.length === 0) {
+																	return "التصنيف الفرعي";
+																}
+																return selected?.map((item) => {
+																	const result =
+																		subcategory[0]?.subcategory?.filter(
+																			(sub) => sub?.id === parseInt(item)
+																		) || product?.subcategory_id;
+																	return `${result[0]?.name} , `;
+																});
+															}}
+															open={openSubCategory}
+															onClick={() => {
+																setOpenSubCategory(true);
+															}}>
+															{subcategory[0]?.subcategory?.map(
+																(sub, index) => (
+																	<MenuItem key={index} value={sub?.id}>
+																		<Checkbox
+																			checked={
+																				product?.subcategory_id?.indexOf(
+																					sub?.id
+																				) > -1
+																			}
+																		/>
+																		<ListItemText primary={sub?.name} />
+																	</MenuItem>
+																)
+															)}
+															<MenuItem className='select-btn d-flex justify-content-center'>
+																<Button
+																	className='button'
+																	onClick={(e) => {
+																		e.stopPropagation();
+																		e.preventDefault();
+																		setOpenSubCategory(false);
+																	}}>
+																	أختر
+																</Button>
 															</MenuItem>
-														))}
-														<MenuItem className='select-btn d-flex justify-content-center'>
-															<Button
-																className='button'
-																onClick={(e) => {
-																	e.stopPropagation();
-																	e.preventDefault();
-																	setOpenSubCategory(false);
-																}}>
-																أختر
-															</Button>
-														</MenuItem>
-													</Select>
+														</Select>
+													)}
 												</FormControl>
 											</div>
 											<div className='col-md-3 col-12'></div>

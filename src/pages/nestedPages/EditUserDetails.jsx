@@ -43,9 +43,12 @@ const style = {
 };
 
 const EditUserDetails = () => {
+	const navigate = useNavigate();
 	const [cookies] = useCookies(["access_token"]);
+
 	const UserInfo = useContext(UserAuth);
 	const contextStore = useContext(Context);
+
 	const { setUserInfo } = UserInfo;
 	const { setEndActionTitle } = contextStore;
 
@@ -53,7 +56,16 @@ const EditUserDetails = () => {
 		"https://backend.atlbha.com/api/Store/profile"
 	);
 
-	const navigate = useNavigate();
+	const [user, setUser] = useState({
+		name: "",
+		user_name: "",
+		email: "",
+		password: "",
+		confirm_password: "",
+		phonenumber: "",
+		image: "",
+	});
+
 	const {
 		register,
 		handleSubmit,
@@ -70,24 +82,21 @@ const EditUserDetails = () => {
 			phonenumber: "",
 		},
 	});
-	const [user, setUser] = useState({
-		name: "",
-		user_name: "",
-		email: "",
-		password: "",
-		confirm_password: "",
-		phonenumber: "",
-		image: "",
-	});
 
 	useEffect(() => {
-		setUser({
-			...user,
-			name: fetchedData?.data?.users?.name,
-			user_name: fetchedData?.data?.users?.user_name,
-			email: fetchedData?.data?.users?.email,
-			phonenumber: fetchedData?.data?.users?.phonenumber,
-		});
+		if (fetchedData?.data?.users) {
+			setUser({
+				...user,
+				name: fetchedData?.data?.users?.name,
+				user_name: fetchedData?.data?.users?.user_name,
+				email: fetchedData?.data?.users?.email,
+				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
+					? fetchedData?.data?.users?.phonenumber?.slice(4)
+					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
+					? fetchedData?.data?.users?.phonenumber.slice(5)
+					: fetchedData?.data?.users?.phonenumber,
+			});
+		}
 	}, [fetchedData?.data?.users]);
 
 	useEffect(() => {
@@ -177,6 +186,7 @@ const EditUserDetails = () => {
 		formData.append("user_name", data?.user_name);
 		formData.append("email", data?.email);
 		formData.append("phonenumber", data?.phonenumber);
+
 		if (data?.password !== "") {
 			formData.append("password", data?.password);
 		}
@@ -275,8 +285,8 @@ const EditUserDetails = () => {
 											<div className='col-lg-4 col-12 d-flex justify-content-center'>
 												<div className='user-info me-3'>
 													<span className='user-name mb-3 d-block text-center'>
-														{fetchedData?.data?.users?.name === "null"
-															? ""
+														{fetchedData?.data?.users?.name === null
+															? fetchedData?.data?.users?.user_name
 															: fetchedData?.data?.users?.name}
 													</span>
 													<div className='contact-info mb-2'>
@@ -302,7 +312,9 @@ const EditUserDetails = () => {
 
 											<div className='col-lg-4 col-12 d-flex justify-content-center order-md-last order-first'>
 												<div className='job-title'>
-													{fetchedData?.data?.users?.role?.name}
+													{fetchedData?.data?.users?.role === null
+														? "الدور الوظيفي"
+														: fetchedData?.data?.users?.role?.name}
 												</div>
 											</div>
 										</div>
@@ -440,23 +452,28 @@ const EditUserDetails = () => {
 												<label className='d-block mb-2' htmlFor='phone-number'>
 													رقم الهاتف<span className='text-danger'>*</span>
 												</label>
+
 												<input
-													name='phonenumber'
-													type='number'
-													placeholder='0096654845613'
+													maxLength={9}
 													className='phone-input direction-ltr'
+													name='phonenumber'
+													type='tel'
+													placeholder={500000000}
 													{...register("phonenumber", {
 														required: "حقل رقم الجوال مطلوب",
+
 														pattern: {
 															value: /^[0-9+]+$/i,
 															message: "يجب أن رقم الجوال رقمًا",
 														},
 													})}
 												/>
+
 												<span className='input-icon'>
 													<Mobile />
 												</span>
 												<br />
+
 												<span className='fs-6 text-danger'>
 													{dataError?.phonenumber}
 													{errors?.phonenumber && errors.phonenumber.message}

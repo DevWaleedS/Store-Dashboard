@@ -4939,6 +4939,9 @@ input:disabled {
 	width: 24px;
 	height: 24px;
 }
+.discount-radio-box {
+	margin-right: -30px;
+}
 
 /*  */
 .user-cart-data .userData-container .text-editor-icons {
@@ -5858,7 +5861,8 @@ input:disabled {
 	gap: 30px;
 }
 
-.product-images .main-image img {
+.product-images .main-image img,
+.product-images .main-image video {
 	width: 254px;
 	height: 230px;
 	object-fit: contain;
@@ -5877,7 +5881,8 @@ input:disabled {
 	gap: 10px;
 }
 
-.product-images .another-image img {
+.product-images .another-image img,
+.product-images .another-image video {
 	width: 70px;
 	height: 65px;
 	object-fit: cover;
@@ -5887,6 +5892,29 @@ input:disabled {
 	-moz-border-radius: 4px;
 	-ms-border-radius: 4px;
 	-o-border-radius: 4px;
+}
+.product-images .another-image .video_wrapper {
+	position: relative;
+}
+.product-images .another-image .video_wrapper .play-video-icon {
+	position: absolute;
+	top: 0px;
+	left: 0;
+	z-index: 1;
+	background: #0000004f;
+	width: 70px;
+	height: 65px;
+	transform: translate(0%, 0%);
+	-webkit-transform: translate(0%, 0%);
+	-moz-transform: translate(0%, 0%);
+	-ms-transform: translate(0%, 0%);
+	-o-transform: translate(0%, 0%);
+}
+.product-images .another-image .video_wrapper .play-video-icon svg {
+	color: #ffff;
+	top: 16px;
+	left: -24px;
+	cursor: pointer;
 }
 
 .ProductRefund-wrapper .product-category {
@@ -7357,12 +7385,14 @@ input:disabled {
 		justify-content: center;
 	}
 
-	.product-images .main-image img {
+	.product-images .main-image img,
+	.product-images .main-image video {
 		width: 185px;
 		height: 165px;
 	}
 
-	.product-images .another-image img {
+	.product-images .another-image img,
+	.product-images .another-image video {
 		width: 50px;
 		height: 45px;
 	}
@@ -7811,6 +7841,10 @@ input:disabled {
 	.user-cart-data .send-offer-btn button {
 		height: 45px;
 		font-size: 18px;
+	}
+	.discount-radio-box,
+	.last_one {
+		margin-right: -30px;
 	}
 
 	/* seo-page */

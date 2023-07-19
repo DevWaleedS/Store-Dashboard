@@ -76,9 +76,9 @@ const VerifyStore = () => {
 												<p className='verify-message'>
 													مرحبا{" "}
 													<span className='text-bold'>
-														{userInfo?.name !== "null"
-															? userInfo?.name
-															: userInfo?.user_name || "صديقي التاجر"}
+														{userInfo?.name === null
+															? userInfo?.user_name || "صديقي التاجر"
+															: userInfo?.name}
 													</span>{" "}
 													المتجر الخاص مكتمل التوثيق <Verification />
 												</p>
@@ -95,9 +95,9 @@ const VerifyStore = () => {
 												<p className='verify-message'>
 													مرحبا{" "}
 													<span className='text-bold'>
-														{userInfo?.name !== "null"
-															? userInfo?.name
-															: "صديقي التاجر"}
+														{userInfo?.name === null
+															? "صديقي التاجر"
+															: userInfo?.name}
 													</span>{" "}
 													المتجر الخاص تحت المراجعة من قبل الجهات المختصة
 												</p>
@@ -113,9 +113,9 @@ const VerifyStore = () => {
 											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
 													مرحبا{" "}
-													{userInfo?.name !== "null"
-														? userInfo?.name
-														: userInfo?.user_name || "صديقي التاجر"}{" "}
+													{userInfo?.name === null
+														? userInfo?.user_name || "صديقي التاجر"
+														: userInfo?.name}{" "}
 													تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من
 													الجهات المختصة
 												</p>
@@ -140,9 +140,9 @@ const VerifyStore = () => {
 											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
 													مرحبا{" "}
-													{userInfo?.name !== "null"
-														? userInfo?.name
-														: userInfo?.user_name || "صديقي التاجر"}{" "}
+													{userInfo?.name === null
+														? userInfo?.user_name || "صديقي التاجر"
+														: userInfo?.name}{" "}
 													المتجر الخاص بك غير مكتمل الرجاء البدء بتوثيق المتجر
 												</p>
 												<div className='btns-box' style={{ width: "250px" }}>

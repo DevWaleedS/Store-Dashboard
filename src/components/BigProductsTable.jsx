@@ -506,7 +506,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															<TableCell align='center'>
 																{row?.discount_price ? (
 																	<>
-																		<span class='me-1'>
+																		<span class='me-1 d-block'>
 																			{row?.discount_price}
 																		</span>
 
@@ -514,6 +514,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																			class='original-price'
 																			style={{
 																				fontSize: "16px",
+																				fontWeight: " 500",
 																				color: "#99a2a7",
 																			}}>
 																			{row?.selling_price}

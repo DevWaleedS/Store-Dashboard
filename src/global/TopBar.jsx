@@ -24,24 +24,25 @@ import { ReactComponent as UserIcon } from "../data/Icons/icon-24-client.svg";
 import { UserAuth } from "../Context/UserAuthorProvider";
 
 const TopBar = ({ toggleSidebar }) => {
-	const navigate = useNavigate();
-
 	const theme = useTheme();
+	const navigate = useNavigate();
 	const colors = tokens(theme.palette);
+	const [cookies] = useCookies(["access_token"]);
 
+	// TO SET THE NAME AND IMAGE TO CONTEXT
 	const UserInfo = useContext(UserAuth);
-	const NotificationStore = useContext(NotificationContext);
-
 	const { userInfo, setUserInfo } = UserInfo;
 
+	const NotificationStore = useContext(NotificationContext);
 	const { setEndActionTitle } = NotificationStore;
-	const [cookies, removeCookies] = useCookies(["access_token"]);
 
 	// to change logo
 	const { fetchedData: setting } = useFetch(
 		"https://backend.atlbha.com/api/Store/setting_store_show"
 	);
 	const newLogo = setting?.data?.setting_store?.logo;
+	const store_domain = setting?.data?.setting_store?.domain;
+	localStorage.setItem("domain", store_domain);
 
 	// to get notification
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -59,7 +60,6 @@ const TopBar = ({ toggleSidebar }) => {
 				user_name: profile?.data?.users?.user_name,
 				name: profile?.data?.users?.name,
 				user_image: profile?.data?.users?.image,
-				store_domain: setting?.data?.setting_store?.domain || "",
 			});
 		}
 	}, [profile]);
@@ -222,7 +222,7 @@ const TopBar = ({ toggleSidebar }) => {
 										color={colors.white[300]}>
 										<div className='dropdown-title d-md-flex align-items-center d-none'>
 											<span className='me-1 '>
-												{profile?.data?.users?.name === "null"
+												{userInfo?.name === null
 													? userInfo?.user_name || "التاجر"
 													: userInfo?.name}
 											</span>

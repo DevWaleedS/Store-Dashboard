@@ -40,15 +40,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { OpenCelebrityMarketingModal } from "../store/slices/CelebrityMarketingModal";
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
 	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	const UserInfo = useContext(UserAuth);
-	const { userInfo } = UserInfo;
-	const domain = userInfo?.store_domain;
+	const domain = localStorage.getItem("domain");
 
 	return (
 		<Sidebar

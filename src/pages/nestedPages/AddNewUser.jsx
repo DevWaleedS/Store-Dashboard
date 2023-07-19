@@ -141,7 +141,14 @@ const AddNewUser = () => {
 		formData.append("role", data?.user_type);
 		formData.append("email", data?.email);
 		formData.append("password", data?.password);
-		formData.append("phonenumber", data?.phonenumber);
+
+		formData.append(
+			"phonenumber",
+			data?.phonenumber?.startsWith("+966") ||
+				data?.phonenumber?.startsWith("00966")
+				? data?.phonenumber
+				: `+966${data?.phonenumber}`
+		);
 		formData.append("status", data?.status);
 		formData.append("image", images[0]);
 		axios

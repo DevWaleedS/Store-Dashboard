@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import useFetch from "../../Hooks/UseFetch";
@@ -12,6 +12,7 @@ import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currenc
 import { useCookies } from "react-cookie";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { BsPlayCircle } from "react-icons/bs";
 const modalStyle = {
 	position: "absolute",
 	top: "90px",
@@ -40,7 +41,7 @@ const ProductRefund = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`
 	);
-
+	console.log(fetchedData?.data);
 	const [open, setOpen] = React.useState(true);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -48,12 +49,14 @@ const ProductRefund = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const [price, setPrice] = React.useState();
 	const [priceError, setPriceError] = React.useState("");
+	const [imagesPreview, setImagesPreview] = useState();
 
 	useEffect(() => {
-		if (fetchedData?.data?.products?.selling_price) {
+		if (fetchedData?.data?.products) {
 			setPrice(fetchedData?.data?.products?.selling_price);
+			setImagesPreview(fetchedData?.data?.products?.cover);
 		}
-	}, [fetchedData?.data?.products?.selling_price]);
+	}, [fetchedData?.data?.products]);
 
 	const importProduct = () => {
 		setPriceError("");
@@ -120,22 +123,65 @@ const ProductRefund = () => {
 											</div>
 											<div className='product-images mb-3'>
 												<div className='main-image'>
-													<img
-														src={fetchedData?.data?.products?.cover}
-														alt='product'
-														className='img-fluid'
-													/>
+													{imagesPreview?.includes(
+														".mp4" || ".avi" || ".mov" || ".mkv"
+													) ? (
+														<div className='video_wrapper'>
+															<video
+																src={imagesPreview}
+																className='img-fluid'
+																autoPlay
+																controls
+															/>
+														</div>
+													) : (
+														<img
+															src={imagesPreview}
+															alt='product'
+															className='img-fluid'
+														/>
+													)}
 												</div>
 												<div className='another-image'>
 													{fetchedData?.data?.products?.images?.map(
-														(item, index) => (
-															<img
-																key={index}
-																src={item?.image}
-																alt={item?.image}
-																className='img-fluid'
-															/>
-														)
+														(item, index) => {
+															const isVideo = item?.image.includes(
+																".mp4" || ".avi" || ".mov" || ".mkv"
+															);
+
+															if (isVideo) {
+																return (
+																	<div className='video_wrapper'>
+																		<div className='play-video-icon'>
+																			<BsPlayCircle
+																				onClick={() => {
+																					setImagesPreview(item?.image);
+																				}}
+																			/>
+																		</div>
+																		<video
+																			style={{ cursor: "pointer" }}
+																			key={index}
+																			src={item?.image}
+																			className='img-fluid'
+																		/>
+																	</div>
+																);
+															} else {
+																return (
+																	<img
+																		style={{ cursor: "pointer" }}
+																		onClick={() => {
+																			setImagesPreview(item?.image);
+																		}}
+																		key={index}
+																		src={item?.image}
+																		alt={item?.image}
+																		className='img-fluid'
+																	/>
+																);
+															}
+														}
 													)}
 												</div>
 											</div>

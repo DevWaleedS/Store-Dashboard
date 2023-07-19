@@ -86,11 +86,11 @@ const SocialPages = () => {
 		setLoadingTitle("جاري تعديل التواصل الاجتماعي");
 		resetError();
 		let formData = new FormData();
-		formData.append("snapchat", socialValue?.snapchat);
-		formData.append("facebook", socialValue?.facebook);
-		formData.append("twiter", socialValue?.twiter);
-		formData.append("youtube", socialValue?.youtube);
-		formData.append("instegram", socialValue?.instegram);
+		formData.append("snapchat", socialValue?.snapchat || "");
+		formData.append("facebook", socialValue?.facebook || "");
+		formData.append("twiter", socialValue?.twiter || "");
+		formData.append("youtube", socialValue?.youtube || "");
+		formData.append("instegram", socialValue?.instegram || "");
 
 		axios
 			.post(

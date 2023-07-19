@@ -97,6 +97,7 @@ import { RestorePassword } from "./pages/Login/ResetPasswordPages/RestorePasswor
 import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
 import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
+import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -114,6 +115,13 @@ const router = createBrowserRouter([
 	{
 		path: "SendVerificationCode",
 		element: <SendVerificationCode />,
+	},
+
+	// if user name is not verify his account
+	// LogInVerificationCode
+	{
+		path: "LogInVerificationCode",
+		element: <LogInVerificationCode />,
 	},
 
 	{

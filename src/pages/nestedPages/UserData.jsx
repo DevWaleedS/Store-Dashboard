@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // icons
+
 import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
 import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
@@ -37,11 +38,12 @@ const UserData = () => {
 	const { fetchedData, loading } = useFetch(
 		`https://backend.atlbha.com/api/Store/user/${id}`
 	);
+
 	const navigate = useNavigate();
 	const [user, setUser] = useState({
 		name: "",
 		user_name: "",
-		user_type: "",
+		role: "",
 		email: "",
 		password: "",
 		phonenumber: "",
@@ -53,13 +55,15 @@ const UserData = () => {
 			...user,
 			name: fetchedData?.data?.users?.name,
 			user_name: fetchedData?.data?.users?.user_name,
-			user_type: fetchedData?.data?.users?.user_type,
+			role: fetchedData?.data?.users?.role?.name,
 			email: fetchedData?.data?.users?.email,
 			image: fetchedData?.data?.users?.image,
 			phonenumber: fetchedData?.data?.users?.phonenumber,
 			status: fetchedData?.data?.users?.status,
 		});
 	}, [fetchedData?.data?.users]);
+
+	console.log(fetchedData?.data?.users?.role?.name);
 
 	return (
 		<>
@@ -136,36 +140,16 @@ const UserData = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<select
-														className='form-select'
-														value={user?.user_type}
-														disabled>
-														<option defaultValue='اختر نوع الدور الوظيفي'>
-															اختر نوع الدور الوظيفي
-														</option>
-														<option value='admin'>آدمن</option>
-														<option value='store'>متجر</option>
-													</select>
-												</div>
-											</div>
-											<div className='row mb-lg-4 mb-3'>
-												<div className='col-lg-2 col-12'>
-													<label htmlFor='password' className=''>
-														كلمة المرور
-													</label>
-												</div>
-												<div className='col-lg-9 col-12'>
-													<div className='input-icons password-icon'>
-														<Password />
-													</div>
 													<input
-														type='password'
-														id='password'
-														name='password'
+														type='text'
+														id='role'
+														name='role'
+														value={user?.role}
 														disabled
 													/>
 												</div>
 											</div>
+
 											<div className='row mb-lg-4 mb-3'>
 												<div className='col-lg-2 col-12'>
 													<label htmlFor='email' className=''>
@@ -195,19 +179,25 @@ const UserData = () => {
 													<div className='input-icons'>
 														<Mobile />
 													</div>
+
 													<input
-														maxLength='14'
-														minLength='13'
 														type='text'
 														id='phonenumber'
 														name='phonenumber'
-														value={user?.phonenumber}
+														maxLength={9}
+														value={
+															user?.phonenumber?.startsWith("+966")
+																? user?.phonenumber?.slice(4)
+																: user?.phonenumber?.startsWith("00966")
+																? user?.phonenumber?.slice(5)
+																: user?.phonenumber
+														}
 														disabled
 													/>
 												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>
-												<div className='col-lg-2 col-12'>
+												<div className='col-lg-2 col-12 d-flex align-items-center'>
 													<label htmlFor='personal-image' className=''>
 														الصورة الشخصية
 													</label>
@@ -227,15 +217,13 @@ const UserData = () => {
 													</label>
 												</div>
 												<div className='col-lg-9 col-12'>
-													<select
-														value={user?.status}
-														className='form-select'
+													<input
+														type='text'
 														id='status'
 														name='status'
-														disabled>
-														<option defaultValue='active'>مفعل</option>
-														<option value='not_active'>غير مفعل</option>
-													</select>
+														value={user?.status}
+														disabled
+													/>
 												</div>
 											</div>
 										</div>

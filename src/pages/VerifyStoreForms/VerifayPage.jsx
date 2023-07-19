@@ -1,4 +1,11 @@
-import React, { useContext, Fragment, useState, useEffect } from "react";
+import React, {
+	useContext,
+	Fragment,
+	useState,
+	useEffect,
+	forwardRef,
+	useImperativeHandle,
+} from "react";
 import useFetch from "../../Hooks/UseFetch";
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +43,13 @@ const inputStyle = {
 	fontWeight: "400",
 };
 
-const VerifayPage = ({ verify }) => {
+const VerifayPage = forwardRef((props, ref) => {
+	/** -----------------------------------------------------------------------------------------------------------
+	 *  	=> TO HANDLE THE REG_EXPRESS <=
+	 *  ------------------------------------------------- */
+	const PHONE_REGEX = /^(5\d{8})$/;
+	const [validUserPhoneNumber, setValidUserPhoneNumber] = useState(false);
+	const [userPhoneNumberFocus, setUserPhoneNumberFocus] = useState(false);
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/verification_show"
 	);
@@ -56,13 +69,15 @@ const VerifayPage = ({ verify }) => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const { activity } = useSelector((state) => state.AddActivity);
+
 	const selectedActivity = activities?.data?.activities?.filter((item) => {
 		return activity?.some((ele) => {
 			return ele === item?.id;
 		});
 	});
 
-	// to handle datat
+	// to handle data
+	const [file, setFile] = useState([]);
 	const [data, setData] = useState({
 		name: "",
 		phonenumber: "",
@@ -72,7 +87,7 @@ const VerifayPage = ({ verify }) => {
 		maeruf_city_id: "",
 		link: "",
 	});
-	const [file, setFile] = useState([]);
+
 	// errors
 	const [dataErrors, setDataErrors] = useState({
 		name: "",
@@ -84,7 +99,7 @@ const VerifayPage = ({ verify }) => {
 		link: "",
 	});
 
-	const resetDataErrors = () => {
+	const resetDataErrors = (uploadVerifyStoreOrder) => {
 		setDataErrors({
 			name: "",
 			phonenumber: "",
@@ -131,74 +146,92 @@ const VerifayPage = ({ verify }) => {
 		setData({
 			...data,
 			name: fetchedData?.data?.username,
-			phonenumber: fetchedData?.data?.phonenumber,
+			phonenumber: fetchedData?.data?.phonenumber?.startsWith("+966")
+				? fetchedData?.data?.phonenumber.slice(4)
+				: fetchedData?.data?.phonenumber?.startsWith("00966")
+				? fetchedData?.data?.phonenumber.slice(5)
+				: fetchedData?.data?.phonenumber,
 		});
 	}, [fetchedData?.data]);
 
+	// TO HANDLE VALIDATION USER PHONE NUMBER
 	useEffect(() => {
-		if (verify) {
-			resetDataErrors();
-			setLoadingTitle("جاري ارسال طلب التوثيق");
-			let formData = new FormData();
-			formData.append("name", data?.name);
-			formData.append("phonenumber", data?.phonenumber);
-			formData.append("commercialregistertype", data?.commercialregistertype);
-			formData.append(
-				"store_name",
-				data?.commercialregistertype === "maeruf" ? "" : data?.store_name
-			);
-			formData.append(
-				"link",
-				data?.commercialregistertype === "maeruf" ? data?.link : ""
-			);
-			formData.append(
-				"city_id",
-				data?.commercialregistertype === "maeruf"
-					? data?.maeruf_city_id
-					: data?.city_id
-			);
-			if (file?.length !== 0) {
-				formData.append("file", file[0]);
-			}
-			for (let i = 0; i < activity?.length; i++) {
-				formData.append([`activity_id[${i}]`], activity[i]);
-			}
-			axios
-				.post(
-					`https://backend.atlbha.com/api/Store/verification_update`,
-					formData,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${cookies?.access_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setLoadingTitle("");
-						dispatchVerifyAlert(openVerifyStoreAlertModal());
-						setReload(!reload);
-						navigate("/");
-						dispatch(resetActivity());
-					} else {
-						setLoadingTitle("");
-						// setReload(!reload);
-						dispatch(resetActivity());
-						setDataErrors({
-							name: res?.data?.message?.en?.name?.[0],
-							phonenumber: res?.data?.message?.en?.phonenumber?.[0],
-							commercialregistertype:
-								res?.data?.message?.en?.commercialregistertype?.[0],
-							store_name: res?.data?.message?.en?.store_name?.[0],
-							city_id: res?.data?.message?.en?.city_id?.[0],
-							link: res?.data?.message?.en?.link?.[0],
-							file: res?.data?.message?.en?.file?.[0],
-						});
-					}
-				});
+		const userPhoneNumberValidation = PHONE_REGEX.test(data?.phonenumber);
+		setValidUserPhoneNumber(userPhoneNumberValidation);
+	}, [data?.phonenumber]);
+
+	const uploadVerifyStoreOrder = () => {
+		resetDataErrors();
+		setLoadingTitle("جاري ارسال طلب التوثيق");
+
+		let formData = new FormData();
+		formData.append("name", data?.name);
+		formData.append(
+			"phonenumber",
+			data?.phonenumber?.startsWith("+966") ||
+				data?.phonenumber?.startsWith("00966")
+				? data?.phonenumber
+				: `+966${data?.phonenumber}`
+		);
+		formData.append("commercialregistertype", data?.commercialregistertype);
+		formData.append(
+			"store_name",
+			data?.commercialregistertype === "maeruf" ? "" : data?.store_name
+		);
+		formData.append(
+			"link",
+			data?.commercialregistertype === "maeruf" ? data?.link : ""
+		);
+		formData.append(
+			"city_id",
+			data?.commercialregistertype === "maeruf"
+				? data?.maeruf_city_id
+				: data?.city_id
+		);
+		if (file?.length !== 0) {
+			formData.append("file", file[0]);
 		}
-	}, [verify]);
+		for (let i = 0; i < activity?.length; i++) {
+			formData.append([`activity_id[${i}]`], activity[i]);
+		}
+		axios
+			.post(
+				`https://backend.atlbha.com/api/Store/verification_update`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setLoadingTitle("");
+					dispatchVerifyAlert(openVerifyStoreAlertModal());
+					setReload(!reload);
+					navigate("/");
+					dispatch(resetActivity());
+				} else {
+					setLoadingTitle("");
+					setDataErrors({
+						name: res?.data?.message?.en?.name?.[0],
+						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
+						commercialregistertype:
+							res?.data?.message?.en?.commercialregistertype?.[0],
+						store_name: res?.data?.message?.en?.store_name?.[0],
+						city_id: res?.data?.message?.en?.city_id?.[0],
+						link: res?.data?.message?.en?.link?.[0],
+						file: res?.data?.message?.en?.file?.[0],
+					});
+				}
+			});
+	};
+
+	// Expose the function to the parent component using useImperativeHandle
+	useImperativeHandle(ref, () => ({
+		uploadVerifyStoreOrder,
+	}));
 
 	return (
 		<Fragment>
@@ -265,20 +298,61 @@ const VerifayPage = ({ verify }) => {
 							</h5>
 						</div>
 						<div className='col-md-8 col-12'>
-							<input
-								name='phonenumber'
-								value={data?.phonenumber}
-								onChange={(e) => {
-									handleOnChange(e);
-								}}
-								type='text'
-								placeholder='+966'
-								style={inputStyle}
-								dir='ltr'
-							/>
+							<div
+								style={{
+									width: "100%",
+
+									background: "#FFF",
+									borderRadius: "4px",
+									color: "#00000",
+
+									fontSize: "16px",
+									fontWeight: "400",
+								}}>
+								<input
+									className='ps-5'
+									name='phonenumber'
+									value={data?.phonenumber}
+									onChange={(e) => {
+										handleOnChange(e);
+									}}
+									type='text'
+									style={inputStyle}
+									dir='ltr'
+									maxLength='9'
+									required
+									aria-invalid={validUserPhoneNumber ? "false" : "true"}
+									aria-describedby='userPhoneNumber'
+									onFocus={() => setUserPhoneNumberFocus(true)}
+									onBlur={() => setUserPhoneNumberFocus(true)}
+								/>
+
+								<span
+									style={{
+										direction: "ltr",
+										position: "absolute",
+										left: "14px",
+										top: "11px",
+									}}>
+									+966
+								</span>
+							</div>
+							<div
+								id='userPhoneNumber'
+								className={
+									userPhoneNumberFocus &&
+									data?.phonenumber &&
+									!validUserPhoneNumber
+										? " d-block important-hint me-1 "
+										: "d-none"
+								}
+								style={{ fontSize: "16px" }}>
+								تأكد ان رقم الجوال يبدأ برقم 5 ولا يقل عن 9 أرقام
+							</div>
+
 							{dataErrors?.phonenumber && (
 								<div
-									className='important-hint me-1'
+									className=' important-hint me-1 '
 									style={{ fontSize: "16px" }}>
 									{dataErrors?.phonenumber}
 								</div>
@@ -361,13 +435,20 @@ const VerifayPage = ({ verify }) => {
 											height: "50px",
 											padding: "18px",
 											background: "#FAFAFA",
-											color: "#ADB5B9",
+											color: "#00000",
 											fontSize: "16px",
 											fontWeight: "400",
 											borderRadius: "4px",
 										}}
 									/>
 								</div>
+								{dataErrors?.store_name && (
+									<div
+										className='important-hint me-1'
+										style={{ fontSize: "16px", whiteSpace: "normal" }}>
+										{dataErrors?.store_name}
+									</div>
+								)}
 							</div>
 
 							<div className='row  d-flex justify-content-between align-items-center mb-3 city_wrapper'>
@@ -413,7 +494,7 @@ const VerifayPage = ({ verify }) => {
 											sx={{
 												height: "50px",
 												background: "#FAFAFA",
-												color: "#ADB5B9",
+												color: "#00000",
 												fontSize: "16px",
 												fontWeight: "400",
 												borderRadius: "4px",
@@ -472,7 +553,7 @@ const VerifayPage = ({ verify }) => {
 											height: "56px",
 											background: "#FAFAFA",
 											borderRadius: "4px",
-											color: "#ADB5B9",
+											color: "#00000",
 											padding: "20px",
 											fontSize: "16px",
 											fontWeight: "400",
@@ -505,6 +586,7 @@ const VerifayPage = ({ verify }) => {
 											className='important-hint me-1'
 											style={{ fontSize: "16px" }}>
 											{dataErrors?.file}
+											وتأكد ان صيغة الملف pdf
 										</div>
 									) : (
 										<div className='important-hint'>
@@ -617,7 +699,7 @@ const VerifayPage = ({ verify }) => {
 												height: "50px",
 
 												background: "#FAFAFA",
-												color: "#ADB5B9",
+												color: "#00000",
 												fontSize: "16px",
 												fontWeight: "400",
 												borderRadius: "4px",
@@ -674,7 +756,7 @@ const VerifayPage = ({ verify }) => {
 											height: "56px",
 											background: "#FAFAFA",
 											borderRadius: "4px",
-											color: "#ADB5B9",
+											color: "#00000",
 											padding: "20px",
 											fontSize: "16px",
 											fontWeight: "400",
@@ -708,6 +790,7 @@ const VerifayPage = ({ verify }) => {
 											className='important-hint me-1'
 											style={{ fontSize: "16px" }}>
 											{dataErrors?.file}
+											وتأكد ان صيغة الملف pdf
 										</div>
 									) : (
 										<div className='important-hint'>
@@ -722,6 +805,6 @@ const VerifayPage = ({ verify }) => {
 			)}
 		</Fragment>
 	);
-};
+});
 
 export default VerifayPage;

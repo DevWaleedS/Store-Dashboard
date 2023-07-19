@@ -8,7 +8,7 @@ import { useCookies } from "react-cookie";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-import { Switch } from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import useFetch from "../../Hooks/UseFetch";
@@ -31,7 +31,6 @@ import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg
 import { ReactComponent as Timer } from "../../data/Icons/icon-24-timer.svg";
 import { ReactComponent as Communication } from "../../data/Icons/ico - 24 - communication - send_outlined.svg";
 import { ReactComponent as Dollar } from "../../data/Icons/icon-24-dollar.svg";
-
 
 // Modal Style
 const style = {
@@ -75,7 +74,7 @@ const ClientData = () => {
 	);
 	const cartDetails = fetchedData?.data?.cart;
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -83,8 +82,8 @@ const ClientData = () => {
 	const [openPercentMenu, setOpenPercentMenu] = useState(false);
 	const [free_shipping, setFree_shipping] = useState(true);
 	const [discount_type, setDiscount_type] = useState("fixed");
-	const [discount_value, setDiscount_value] = useState(10);
-	const [discount_total, setDiscount_total] = useState(0);
+	const [discount_value, setDiscount_value] = useState("");
+	const [discount_total, setDiscount_total] = useState("");
 	const [discount_expire_date, setDiscount_expire_date] = useState("");
 
 	// errors
@@ -173,10 +172,11 @@ const ClientData = () => {
 
 	// To set  discount_total
 	useEffect(() => {
-		if (cartDetails?.discount_total) {
+		if (cartDetails) {
 			setDiscount_total(cartDetails?.discount_total);
+			setDiscount_value(cartDetails?.discount_value);
 		}
-	}, [cartDetails?.discount_total]);
+	}, [cartDetails]);
 
 	return (
 		<>
@@ -207,7 +207,9 @@ const ClientData = () => {
 														<li
 															className='breadcrumb-item '
 															aria-current='page'>
-															السلات المتروكة
+															<Link to='/Carts' className='me-2'>
+																السلات المتروكة
+															</Link>
 														</li>
 														<li
 															className='breadcrumb-item active'
@@ -353,7 +355,7 @@ const ClientData = () => {
 															</div>
 															<div className='col-2'>
 																<div className='count text-center'>
-																	{item?.product?.quantity}
+																	{item?.qty}
 																</div>
 															</div>
 															<div className='col-2'>
@@ -487,26 +489,78 @@ const ClientData = () => {
 														</div>
 														<div className='col-12 '>
 															{openPercentMenu && (
-																<div className='dropdown'>
-																	<button
-																		className='btn btn-secondary dropdown-toggle w-100 d-flex justify-content-between align-items-center'
-																		type='button'
-																		id='dropdownMenuButton1'
-																		data-bs-toggle='dropdown'
-																		aria-expanded='false'
-																		style={{
-																			background: "#f4f5f7",
-																			minHeight: "58px",
-																			border: "none",
-																			color: "#000",
-																			fontSize: "20px",
-																			borderRadius: "0",
+																<>
+																	<label
+																		htmlFor='coupon-name '
+																		className='d-block mb-1'>
+																		نوع الخصم
+																		<span className='text-danger'>*</span>
+																	</label>
+																	<RadioGroup
+																		defaultValue='percent'
+																		className='d-flex flex-row gap-2 mb-1'
+																		aria-labelledby='demo-controlled-radio-buttons-group'
+																		value={discount_type}
+																		onClick={(e) => {
+																			setDiscount_type(e.target.value);
+																			console.log(e.target.value);
 																		}}>
-																		نسبة الخصم
-																	</button>
-																	<ul
-																		className='dropdown-menu ul-percent-menu w-100'
-																		aria-labelledby='dropdownMenuButton1'>
+																		<div
+																			className='radio-box discount-radio-box'
+																			style={{ marginRight: "-30px" }}>
+																			<FormControlLabel
+																				value='percent'
+																				id='percent'
+																				control={
+																					<Radio
+																						sx={{
+																							".MuiSvgIcon-root": {
+																								width: "24px",
+																								height: "24px",
+																							},
+																						}}
+																					/>
+																				}
+																			/>
+
+																			<label
+																				className={
+																					discount_type === "percent"
+																						? "me-3"
+																						: "disabled me-3"
+																				}
+																				htmlFor='percent-price'>
+																				نسبة من المشتريات
+																			</label>
+																		</div>
+																		<div className='radio-box last_one'>
+																			<FormControlLabel
+																				value='fixed'
+																				id='fixed'
+																				control={
+																					<Radio
+																						sx={{
+																							".MuiSvgIcon-root": {
+																								width: "24px",
+																								height: "24px",
+																							},
+																						}}
+																					/>
+																				}
+																			/>
+																			<label
+																				className={
+																					discount_type === "fixed"
+																						? "me-3"
+																						: "disabled me-3"
+																				}
+																				htmlFor='fixed-price'>
+																				مبلغ ثابت من المشتريات
+																			</label>
+																		</div>
+																	</RadioGroup>
+
+																	<div>
 																		<div className='percent-input-wrapper my-1'>
 																			<Dollar />
 																			<input
@@ -516,7 +570,7 @@ const ClientData = () => {
 																				}
 																				className='w-100 '
 																				type='text'
-																				placeholder='أدخل نسبة الخصم من مشتريات العميل'
+																				placeholder='أدخل نسبة الخصم اول المبلغ'
 																			/>
 																			{discount_type === "percent" ? (
 																				<div className='percent-sign'> %</div>
@@ -524,32 +578,8 @@ const ClientData = () => {
 																				<div className='percent-sign'>ر.س</div>
 																			)}
 																		</div>
-																		<div className='percent-menu w-100'>
-																			<li
-																				className='w-100'
-																				style={{
-																					cursor: "pointer",
-																					padding: "16px",
-																				}}
-																				onClick={() =>
-																					setDiscount_type("fixed")
-																				}>
-																				مبلغ ثابت من المشتريات
-																			</li>
-																			<li
-																				className='w-100'
-																				style={{
-																					cursor: "pointer",
-																					padding: "16px",
-																				}}
-																				onClick={() =>
-																					setDiscount_type("percent")
-																				}>
-																				نسبة من المشتريات
-																			</li>
-																		</div>
-																	</ul>
-																</div>
+																	</div>
+																</>
 															)}
 														</div>
 													</div>
@@ -617,6 +647,7 @@ const ClientData = () => {
 												<div className='mb-md-0 mb-3 box user-name-box '>
 													<label htmlFor='user-name'>اسم العميل</label>
 													<input
+														disabled
 														value={cartDetails?.user?.name}
 														onChange={() => console.log("")}
 														type='text'
@@ -627,9 +658,9 @@ const ClientData = () => {
 												<div className='mb-md-0 mb-3 box total-discount-box'>
 													<label htmlFor='total-discount'> اجمالي الخصم</label>
 													<input
+														disabled
 														className='direction-ltr text-center'
-														value={discount_total}
-														onChange={(e) => setDiscount_total(e.target.value)}
+														value={discount_value}
 														type='number'
 														name='total-discount'
 														id='total-discount'
