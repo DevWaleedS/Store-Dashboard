@@ -141,6 +141,7 @@ button.resend-code-btn:disabled {
 	color: var(--second-500);
 	font-size: 28px;
 	font-weight: 600;
+	white-space: normal !important;
 }
 .verificationBox-box .all-content .box-container-form .all .box {
 	margin: 90px 0 37px;
@@ -253,7 +254,13 @@ button.resend-code-btn:disabled {
 		padding: 0 140px;
 	}
 }
-
+@media (max-width: 768px) {
+	.verificationBox-box .all-content .box-container-form .all h2 {
+		font-size: 26px;
+		font-weight: 500;
+		white-space: normal !important;
+	}
+}
 @media (max-width: 390px) {
 	.verificationBox-box .all-content .box-form-banner {
 		height: 600px;

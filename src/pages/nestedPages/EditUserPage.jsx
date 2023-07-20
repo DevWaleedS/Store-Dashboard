@@ -477,7 +477,7 @@ const EditUserPage = () => {
 													<input
 														maxLength={9}
 														name='phonenumber'
-														type='number'
+														type='tel'
 														id='phonenumber'
 														className='direction-ltr'
 														placeholder='0096654845613'

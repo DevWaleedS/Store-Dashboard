@@ -427,8 +427,9 @@ const AddNewUser = () => {
 												<Mobile />
 											</div>
 											<input
+												maxLength={9}
 												name='phonenumber'
-												type='number'
+												type='tel'
 												id='phonenumber'
 												placeholder='0096654845613'
 												className='direction-ltr'

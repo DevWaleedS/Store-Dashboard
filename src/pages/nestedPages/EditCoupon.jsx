@@ -167,8 +167,8 @@ const EditCoupon = () => {
 
 	const handleProductSelect = (productId) => {
 		setSelectProductId((prevSelectedIds) =>
-			prevSelectedIds.includes(productId)
-				? prevSelectedIds.filter((id) => id !== productId)
+			prevSelectedIds?.includes(productId)
+				? prevSelectedIds?.filter((id) => id !== productId)
 				: [...prevSelectedIds, productId]
 		);
 
@@ -227,7 +227,9 @@ const EditCoupon = () => {
 				: null
 		);
 
-		setSelectedProducts(fetchedData?.data?.Coupons?.selected_product || []);
+		setSelectedProducts(
+			fetchedData?.data?.Coupons?.selected_product?.data || []
+		);
 
 		setSelect_category_id(
 			fetchedData?.data?.Coupons?.selected_category?.[0]?.id
@@ -304,7 +306,7 @@ const EditCoupon = () => {
 			coupon_apply === "selected_payment" ? select_payment_id : ""
 		);
 
-		selectedProducts.forEach((product, idx) => {
+		selectedProducts?.forEach((product, idx) => {
 			formData.append(
 				`select_product_id[${idx}]`,
 				coupon_apply === "selected_product" ? product.id : ""
@@ -346,8 +348,7 @@ const EditCoupon = () => {
 			});
 	};
 
-	console.log(selectedProducts);
-	console.log(selectedProductIds);
+	console.log(fetchedData?.data?.Coupons?.selected_product?.data);
 
 	return (
 		<>
@@ -402,7 +403,9 @@ const EditCoupon = () => {
 													<button
 														type='button'
 														className='enable-coupon-btn'
-														onClick={() => setActiveCoupon(true)}>
+														onClick={() => {
+															setActiveCoupon(true);
+														}}>
 														إعادة تفعيل الكوبون
 													</button>
 													{activeCoupon && (
@@ -890,6 +893,7 @@ const EditCoupon = () => {
 																	<SearchIcon className='search-icon' />
 																</div>
 																<input
+																	disabled={isEnable === "نشط" ? false : true}
 																	style={{ paddingRight: "38px" }}
 																	value={searchTerm}
 																	onChange={handleSearch}
@@ -906,7 +910,7 @@ const EditCoupon = () => {
 															</div>
 															{searchTerm !== "" && (
 																<ul className='purchase_serach'>
-																	{filteredProducts.map((product) => (
+																	{filteredProducts?.map((product) => (
 																		<li
 																			key={product.id}
 																			onClick={() => {
@@ -920,7 +924,7 @@ const EditCoupon = () => {
 															)}
 
 															<ul className='purchase_products_selected'>
-																{selectedProducts.map((product) => (
+																{selectedProducts?.map((product) => (
 																	<li key={product.id}> _ {product.name}</li>
 																))}
 															</ul>

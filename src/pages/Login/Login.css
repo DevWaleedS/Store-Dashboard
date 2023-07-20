@@ -292,14 +292,18 @@ ellipse {
 		top: 52px;
 	}
 	.sign-in-box .all-content .box-form-banner .info-svg h1 {
-		font-size: 80px;
-		line-height: 80px;
+		font-size: 65px;
+		line-height: 65px;
 		font-weight: 500;
 	}
 	.sign-in-box .all-content .box-form-banner .info-svg h4 {
-		font-size: 48px;
-		line-height: 48px;
-		font-weight: 300;
+		font-size: 44px;
+		line-height: 44px;
+		font-weight: 400;
+	}
+	.sign-in-box .all-content .box-container-form .all h2 {
+		font-size: 26px;
+		font-weight: 500 !important;
 	}
 }
 @media (max-width: 390px) {

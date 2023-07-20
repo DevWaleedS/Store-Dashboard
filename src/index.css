@@ -6550,6 +6550,15 @@ input:disabled {
 }
 
 @media (max-width: 768px) {
+	.password-back-box .all-content .box-form-banner .info-svg h4 {
+		line-height: 47px !important;
+		font-size: 47px !important;
+	}
+	.password-back-box .all-content .box-container-form .all h2 {
+		font-size: 26px !important;
+		font-weight: 500 !important;
+		white-space: normal !important;
+	}
 	::-webkit-scrollbar {
 		width: 5px;
 	}
