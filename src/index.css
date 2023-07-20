@@ -2678,7 +2678,12 @@ nav.navigation {
 	font-weight: 400;
 	color: #011723;
 }
-
+.select-store-type .Country_Key {
+	direction: ltr;
+	position: absolute;
+	left: 14px;
+	top: 16px;
+}
 .select-store-type .important-hint {
 	font-size: 16px;
 	color: #ff3838;
@@ -4867,8 +4872,10 @@ input:disabled {
 }
 
 .userData-container .percent-input-wrapper input {
-	height: 100%;
 	all: unset;
+	direction: ltr;
+	text-align: right;
+	height: 100%;
 	padding-right: 16px;
 	font: normal normal normal 16px/22px "Tajawal";
 	letter-spacing: 0.16px;
@@ -5126,6 +5133,13 @@ input:disabled {
 
 .add-user-form .form-body input {
 	padding: 20px 50px;
+}
+
+.add-user-form .form-body .Country_Key {
+	position: absolute;
+	left: 20px;
+	top: 13px;
+	direction: ltr;
 }
 
 .add-user-form .form-body .input-icons {
@@ -5591,6 +5605,15 @@ input:disabled {
 .user-details-body .phone-input {
 	position: relative;
 	padding-right: 55px;
+	padding-left: 58px;
+}
+.user-details-body .Country_Key {
+	direction: ltr;
+	position: absolute;
+	left: 32px;
+	top: 51px;
+	z-index: 6;
+	font-size: 18px;
 }
 
 /* Upload user image input */
@@ -6547,9 +6570,28 @@ input:disabled {
 		font-size: 20px;
 		font-weight: 400;
 	}
+	.add-user-form .form-body .input-icons.password-icon {
+		right: 92%;
+	}
+	.add-user-form .form-body input#email {
+		padding-left: 17px;
+	}
 }
 
 @media (max-width: 768px) {
+	.select-store-type .Country_Key {
+		top: 11px;
+	}
+	.add-user-form .form-body .Country_Key {
+		top: 11px;
+		left: 30px;
+		font-size: 16px;
+	}
+	.user-details-body .Country_Key {
+		left: 35px;
+		top: 45px;
+		font-size: 16px;
+	}
 	.password-back-box .all-content .box-form-banner .info-svg h4 {
 		line-height: 47px !important;
 		font-size: 47px !important;
@@ -7825,6 +7867,9 @@ input:disabled {
 		font-size: 16px;
 		right: 65px !important;
 		top: -5px;
+	}
+	.discount-type-radio-group {
+		gap: 14px;
 	}
 
 	.create-offer-row .box {

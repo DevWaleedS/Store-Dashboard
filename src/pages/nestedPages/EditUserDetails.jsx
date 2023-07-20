@@ -452,7 +452,7 @@ const EditUserDetails = () => {
 												<label className='d-block mb-2' htmlFor='phone-number'>
 													رقم الهاتف<span className='text-danger'>*</span>
 												</label>
-
+												<span className='Country_Key'>+966</span>
 												<input
 													maxLength={9}
 													className='phone-input direction-ltr'

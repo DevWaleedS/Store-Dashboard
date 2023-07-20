@@ -431,7 +431,7 @@ const AddNewUser = () => {
 												name='phonenumber'
 												type='tel'
 												id='phonenumber'
-												placeholder='0096654845613'
+												placeholder='54845613'
 												className='direction-ltr'
 												{...register("phonenumber", {
 													required: "حقل  رقم الجوال مطلوب",
@@ -441,6 +441,7 @@ const AddNewUser = () => {
 													},
 												})}
 											/>
+											<span className='Country_Key'>+966</span>
 										</div>
 										<div className='col-lg-2 col-12'></div>
 										<div className='col-lg-9 col-12'>

@@ -504,7 +504,8 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																{row?.category?.name}
 															</TableCell>
 															<TableCell align='center'>
-																{row?.discount_price ? (
+																{row?.discount_price &&
+																row?.discount_price !== 0 ? (
 																	<>
 																		<span class='me-1 d-block'>
 																			{row?.discount_price}
@@ -524,10 +525,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																	row?.selling_price
 																)}
 															</TableCell>
-															<TableCell align='center'>
-																{" "}
-																{row?.stock}
-															</TableCell>
+															<TableCell align='center'>{row?.stock}</TableCell>
 
 															<TableCell align='center'>
 																<div

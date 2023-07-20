@@ -81,9 +81,11 @@ const ClientData = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const [openPercentMenu, setOpenPercentMenu] = useState(false);
 	const [free_shipping, setFree_shipping] = useState(true);
-	const [discount_type, setDiscount_type] = useState("fixed");
-	const [discount_value, setDiscount_value] = useState("");
-	const [discount_total, setDiscount_total] = useState("");
+	const [discount_type, setDiscount_type] = useState("percent");
+	const [discount_value, setDiscount_value] = useState();
+	const [discountPercentValue, setDiscountPercentValue] = useState();
+	const [discountFixedValue, setDiscountFixedValue] = useState();
+	const [discount_total, setDiscount_total] = useState();
 	const [discount_expire_date, setDiscount_expire_date] = useState("");
 
 	// errors
@@ -177,6 +179,19 @@ const ClientData = () => {
 			setDiscount_value(cartDetails?.discount_value);
 		}
 	}, [cartDetails]);
+
+	// To Calc discount total if the discount value is percent
+	useEffect(() => {
+		if (cartDetails && discount_type === "percent") {
+			setDiscountPercentValue((discount_value / 100) * cartDetails?.total);
+		} else if (cartDetails && discount_type === "fixed") {
+			setDiscountFixedValue(cartDetails?.total - discount_value);
+		} else {
+			setDiscountPercentValue();
+			setDiscountFixedValue();
+		}
+	}, [cartDetails, discount_type, discount_value]);
+	// im using varible to handle
 
 	return (
 		<>
@@ -298,7 +313,9 @@ const ClientData = () => {
 										</div>
 										{/** Products details */}
 										<div className='mb-md-5 mb-3'>
-											<div className='userData-container'>
+											<div
+												className='userData-container overflow-hidden'
+												style={{ borderBottom: "none" }}>
 												<div className='container-title d-flex justify-content-between align-items-center'>
 													<div className='tit-box'>
 														<span className=''>المنتجات</span>
@@ -372,6 +389,37 @@ const ClientData = () => {
 													</div>
 												))}
 											</div>
+											<div
+												className='overflow-hidden'
+												style={{
+													border: "1px solid #f4f2f2",
+													borderRadius: "0 0 6px 6px",
+												}}>
+												<div
+													className='row  d-flex justify-content-between align-items-center'
+													style={{
+														backgroundColor: "#dafdfe14",
+														padding: "10px",
+														paddingLeft: "20px",
+													}}>
+													<div className='col-5'></div>
+													<div className='col-2 d-flex flex-column justify-content-center align-content-center flex-wrap'>
+														<div
+															className='align-self-center'
+															style={{ fontWeight: "500" }}>
+															{cartDetails?.count}
+														</div>
+													</div>
+													<div className='col-2'></div>
+													<div className='col-3 d-flex flex-column justify-content-end'>
+														<div
+															className='align-self-end'
+															style={{ fontWeight: "500" }}>
+															{cartDetails?.total} ر.س
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 										{/** Discount details */}
 										<div className='mb-md-5 mb-3'>
@@ -432,7 +480,7 @@ const ClientData = () => {
 																}}
 															/>
 
-															<span className='me-4'>شحن مجاني </span>
+															<span className='me-2'>شحن مجاني </span>
 														</div>
 														<div className='col-12 mb-4'>
 															<Switch
@@ -485,7 +533,7 @@ const ClientData = () => {
 																}}
 															/>
 
-															<span className='me-4'> خصم على السلة </span>
+															<span className='me-2'> خصم على السلة </span>
 														</div>
 														<div className='col-12 '>
 															{openPercentMenu && (
@@ -498,7 +546,7 @@ const ClientData = () => {
 																	</label>
 																	<RadioGroup
 																		defaultValue='percent'
-																		className='d-flex flex-row gap-2 mb-1'
+																		className='d-flex flex-row discount-type-radio-group mb-1'
 																		aria-labelledby='demo-controlled-radio-buttons-group'
 																		value={discount_type}
 																		onClick={(e) => {
@@ -570,7 +618,11 @@ const ClientData = () => {
 																				}
 																				className='w-100 '
 																				type='text'
-																				placeholder='أدخل نسبة الخصم اول المبلغ'
+																				placeholder={
+																					discount_type === "percent"
+																						? "أدخل نسبة الخصم  "
+																						: "أدخل قيمة المبلغ"
+																				}
 																			/>
 																			{discount_type === "percent" ? (
 																				<div className='percent-sign'> %</div>
@@ -578,6 +630,51 @@ const ClientData = () => {
 																				<div className='percent-sign'>ر.س</div>
 																			)}
 																		</div>
+
+																		{discount_type === "fixed" &&
+																			discount_value > cartDetails?.total && (
+																				<div>
+																					<span className='fs-6 text-danger'>
+																						قيمة المبلغ اكبر من اجمالي السعر
+																					</span>
+																				</div>
+																			)}
+																		{discount_type === "fixed" &&
+																			discount_value == cartDetails?.total && (
+																				<div>
+																					<span className='fs-6 text-danger'>
+																						قيمة المبلغ متساوية من اجمالي السعر
+																					</span>
+																				</div>
+																			)}
+																		{discount_type === "percent" &&
+																			cartDetails?.total -
+																				discountPercentValue <
+																				0 && (
+																				<div>
+																					<span className='fs-6 text-danger'>
+																						قيمة النسبة اكبر من اجمالي السعر
+																					</span>
+																				</div>
+																			)}
+																		{discount_type === "percent" &&
+																			cartDetails?.total -
+																				discountPercentValue ===
+																				0 && (
+																				<div>
+																					<span className='fs-6 text-danger'>
+																						قيمة النسبة متساوية من اجمالي السعر
+																					</span>
+																				</div>
+																			)}
+
+																		{errors?.discountValueErr && (
+																			<div>
+																				<span className='fs-6 text-danger'>
+																					{errors?.discountValueErr}
+																				</span>
+																			</div>
+																		)}
 																	</div>
 																</>
 															)}
@@ -660,22 +757,18 @@ const ClientData = () => {
 													<input
 														disabled
 														className='direction-ltr text-center'
-														value={discount_value}
+														value={
+															discount_type === "fixed"
+																? discountFixedValue
+																: cartDetails?.total - discountPercentValue
+														}
 														type='number'
 														name='total-discount'
 														id='total-discount'
 													/>
-													{errors?.discountValueErr && (
-														<div>
-															<span className='fs-6 text-danger'>
-																{errors?.discountValueErr}
-															</span>
-														</div>
-													)}
 												</div>
 												<div className=' mb-md-0 mb-3 box discount-date-box'>
 													<label htmlFor='discount-date'>
-														{" "}
 														تاريخ انتهاء الخصم
 													</label>
 
@@ -690,20 +783,21 @@ const ClientData = () => {
 														selected={discount_expire_date}
 														onChange={(date) => setDiscount_expire_date(date)}
 													/>
-
-													{errors?.discountExpireDateErr && (
-														<div>
-															<span className='fs-6 text-danger'>
-																{errors?.discountExpireDateErr}
-															</span>
-														</div>
-													)}
 												</div>
 											</div>
 										</div>
 										{/** Products */}
 										<div className='mb-md-5 mb-3'>
 											<div className='col-12 p-0'>
+												{errors?.discountExpireDateErr && (
+													<div
+														className='text-center '
+														style={{ marginTop: "-35px" }}>
+														<span className='fs-6 text-danger'>
+															({errors?.discountExpireDateErr})
+														</span>
+													</div>
+												)}
 												<div className='send-offer-btn'>
 													<button onClick={sendOfferCart}>
 														<Communication />

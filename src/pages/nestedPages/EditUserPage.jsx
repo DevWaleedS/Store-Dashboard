@@ -489,6 +489,7 @@ const EditUserPage = () => {
 															},
 														})}
 													/>
+													<span className='Country_Key'>+966</span>
 												</div>
 												<div className='col-lg-2 col-12'></div>
 												<div className='col-lg-9 col-12'>

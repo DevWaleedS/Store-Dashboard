@@ -301,16 +301,14 @@ const VerifayPage = forwardRef((props, ref) => {
 							<div
 								style={{
 									width: "100%",
-
 									background: "#FFF",
 									borderRadius: "4px",
 									color: "#00000",
-
 									fontSize: "16px",
 									fontWeight: "400",
 								}}>
 								<input
-									className='ps-5'
+									className='ps-5 '
 									name='phonenumber'
 									value={data?.phonenumber}
 									onChange={(e) => {
@@ -327,15 +325,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									onBlur={() => setUserPhoneNumberFocus(true)}
 								/>
 
-								<span
-									style={{
-										direction: "ltr",
-										position: "absolute",
-										left: "14px",
-										top: "11px",
-									}}>
-									+966
-								</span>
+								<span className='Country_Key'>+966</span>
 							</div>
 							<div
 								id='userPhoneNumber'
