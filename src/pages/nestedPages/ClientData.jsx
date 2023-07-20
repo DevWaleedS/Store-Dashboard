@@ -635,7 +635,7 @@ const ClientData = () => {
 																			discount_value > cartDetails?.total && (
 																				<div>
 																					<span className='fs-6 text-danger'>
-																						قيمة المبلغ اكبر من اجمالي السعر
+																						قيمة المبلغ اكبر من اجمالي السلة
 																					</span>
 																				</div>
 																			)}
@@ -643,7 +643,7 @@ const ClientData = () => {
 																			discount_value == cartDetails?.total && (
 																				<div>
 																					<span className='fs-6 text-danger'>
-																						قيمة المبلغ متساوية من اجمالي السعر
+																						قيمة المبلغ متساوية من اجمالي السلة
 																					</span>
 																				</div>
 																			)}
@@ -653,7 +653,7 @@ const ClientData = () => {
 																				0 && (
 																				<div>
 																					<span className='fs-6 text-danger'>
-																						قيمة النسبة اكبر من اجمالي السعر
+																						قيمة النسبة اكبر من اجمالي السلة
 																					</span>
 																				</div>
 																			)}
@@ -663,7 +663,7 @@ const ClientData = () => {
 																				0 && (
 																				<div>
 																					<span className='fs-6 text-danger'>
-																						قيمة النسبة متساوية من اجمالي السعر
+																						قيمة النسبة متساوية من اجمالي السلة
 																					</span>
 																				</div>
 																			)}
@@ -753,7 +753,9 @@ const ClientData = () => {
 													/>
 												</div>
 												<div className='mb-md-0 mb-3 box total-discount-box'>
-													<label htmlFor='total-discount'> اجمالي الخصم</label>
+													<label htmlFor='total-discount'>
+														اجمالي السلة بعد الخصم
+													</label>
 													<input
 														disabled
 														className='direction-ltr text-center'
