@@ -36,14 +36,6 @@ const TopBar = ({ toggleSidebar }) => {
 	const NotificationStore = useContext(NotificationContext);
 	const { setEndActionTitle } = NotificationStore;
 
-	// to change logo
-	const { fetchedData: setting } = useFetch(
-		"https://backend.atlbha.com/api/Store/setting_store_show"
-	);
-	const newLogo = setting?.data?.setting_store?.logo;
-	const store_domain = setting?.data?.setting_store?.domain;
-	localStorage.setItem("domain", store_domain);
-
 	// to get notification
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
@@ -121,7 +113,11 @@ const TopBar = ({ toggleSidebar }) => {
 						<img
 							className=' img-fluid'
 							style={{ objectFit: "contain" }}
-							src={newLogo ? newLogo : demoLogo}
+							src={
+								localStorage.getItem("storeLogo")
+									? localStorage.getItem("storeLogo")
+									: demoLogo
+							}
 							alt='logo'
 						/>
 					</div>
@@ -156,6 +152,7 @@ const TopBar = ({ toggleSidebar }) => {
 									aria-expanded='false'>
 									<img src={notification} alt='notification' />
 								</div>
+
 								<ul className='dropdown-menu notification-dropdown'>
 									{fetchedData?.data?.notifications.length === 0 ? (
 										<></>
@@ -211,9 +208,7 @@ const TopBar = ({ toggleSidebar }) => {
 							{/** avatar-box */}
 							<ul className='nav-item avatar-box'>
 								{/** dropdown */}
-								<li
-									li
-									className='nav-item dropdown d-flex align-items-end avatar-dropdown'>
+								<li className='nav-item dropdown d-flex align-items-end avatar-dropdown'>
 									<Box
 										className='nav-link dropdown-wrapper'
 										href='#'

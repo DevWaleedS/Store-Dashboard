@@ -116,7 +116,7 @@ const ProductRefund = () => {
 								</div>
 							) : (
 								<div className='body'>
-									<div className='row container-row'>
+									<div className='row container-row overflow-hidden'>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<div className='product-title mb-3 '>
 												{fetchedData?.data?.products?.name}

@@ -351,7 +351,7 @@ const EditUserPage = () => {
 																		},
 																		"& .MuiSelect-icon.MuiSelect-iconOutlined":
 																			{
-																				right: "95% !important",
+																				right: "92% !important",
 																			},
 																		"& .MuiSelect-nativeInput": {
 																			display: "none",

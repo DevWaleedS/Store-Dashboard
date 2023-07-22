@@ -480,18 +480,16 @@ textarea,
 
 .notification-header {
 	position: sticky;
-	top: 0;
-	left: 0;
-	z-index: 1;
 	background: #fff;
+	z-index: 1;
+	top: -10px;
+	left: 0;
+	padding: 6px 0;
 }
 
 .navbar-nav .notification-dropdown {
 	--bs-dropdown-border-width: none !important;
 	border: 1px solid var(--gray-100);
-	width: 376px;
-	height: 376px;
-	overflow-y: auto;
 	top: 130% !important;
 	left: -330px;
 	padding: 10px;
@@ -500,18 +498,25 @@ textarea,
 	-moz-border-radius: 4px;
 	-ms-border-radius: 4px;
 	-o-border-radius: 4px;
+	width: 376px;
+	height: 376px;
+	overflow-y: auto;
 }
 
 .navbar-nav .notification-dropdown .notifications-title {
 	font-size: 18px;
 	letter-spacing: 0px;
 	color: #67747b;
+	cursor: auto;
 }
 
 .navbar-nav .notification-dropdown .delete-notifications {
 	font-size: 16px;
 	letter-spacing: 0px;
 	color: #67747b;
+}
+.navbar-nav .notification-dropdown .delete-notifications:hover {
+	color: var(--second-500);
 }
 
 .navbar-nav .notification-dropdown li {
@@ -2708,7 +2713,7 @@ nav.navigation {
 	height: 400px;
 	background: rgb(255, 255, 255);
 	border-radius: 8px;
-	z-index: 99;
+	z-index: 1;
 	padding: 20px;
 }
 .CommercialRegisterInputGroup {
@@ -5877,6 +5882,7 @@ input:disabled {
 	letter-spacing: 0px;
 	color: #011723;
 	margin-right: 60px;
+	white-space: normal;
 }
 
 .product-images {
@@ -6045,7 +6051,7 @@ input:disabled {
 	color: #011723;
 }
 
-.notifications-title {
+.page-title .notifications-title {
 	font: 500 20px/20px "Tajawal";
 	letter-spacing: 0px;
 	color: #011723;
@@ -7868,6 +7874,10 @@ input:disabled {
 		right: 65px !important;
 		top: -5px;
 	}
+	.total-of-orders,
+	.total-of-price {
+		font-size: 17px;
+	}
 	.discount-type-radio-group {
 		gap: 14px;
 	}
@@ -7898,7 +7908,7 @@ input:disabled {
 	}
 	.discount-radio-box,
 	.last_one {
-		margin-right: -30px;
+		margin-right: -16px !important;
 	}
 
 	/* seo-page */
@@ -8498,7 +8508,7 @@ input:disabled {
 	}
 
 	.add-user-form .form-body .input-icons.password-icon {
-		right: 86%;
+		right: 88%;
 	}
 
 	/* job-title-page */
@@ -8637,7 +8647,7 @@ input:disabled {
 		font-size: 18px;
 	}
 
-	.notifications-title {
+	.page-title .notifications-title {
 		max-width: 185px;
 		font-size: 18px;
 		margin-bottom: 10px;

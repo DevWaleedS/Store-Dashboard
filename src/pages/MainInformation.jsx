@@ -22,14 +22,19 @@ import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg
 import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
 import { AiOutlineSearch } from "react-icons/ai";
+import { UserAuth } from "../Context/UserAuthorProvider";
 
 const MainInformation = () => {
 	const [cookies] = useCookies(["access_token"]);
-
+	// TO SET THE NAME AND IMAGE TO CONTEXT
+	const UserInfo = useContext(UserAuth);
+	const { setUserInfo } = UserInfo;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
+	// To show the store info that come from api
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/setting_store_show"
 	);
@@ -42,12 +47,14 @@ const MainInformation = () => {
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
 
-	const [descriptionValue, setDescriptionValue] = useState("");
-	const [country, setCountry] = useState("");
+	// ---------------------------------------------------------------
+
 	const [city, setCity] = useState("");
+	const [domain, setDomain] = useState("");
+	const [country, setCountry] = useState("");
 	const [storeLogo, setStoreLogo] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
-	const [domain, setDomain] = useState("");
+	const [descriptionValue, setDescriptionValue] = useState("");
 	const [settingErr, setSettingErr] = useState({
 		description: "",
 		logo: "",
@@ -56,6 +63,24 @@ const MainInformation = () => {
 		city_id: "",
 		country_id: "",
 	});
+
+	// We use this effect to avoid the errors
+	useEffect(() => {
+		if (fetchedData?.data?.setting_store) {
+			setDescriptionValue(fetchedData?.data?.setting_store?.description);
+			// setStoreIcon([fetchedData?.data?.setting_store?.icon]);
+			// setStoreLogo([fetchedData?.data?.setting_store?.logo]);
+			setDomain([fetchedData?.data?.setting_store?.domain]);
+			setCountry([fetchedData?.data?.setting_store?.country?.id]);
+			setCity([fetchedData?.data?.setting_store?.city?.id]);
+
+			// to set the domain and  sent store logo to top bar name of store to local storage
+			localStorage.setItem("domain", fetchedData?.data?.setting_store?.domain);
+			localStorage.setItem("storeLogo", fetchedData?.data?.setting_store?.logo);
+		}
+	}, [fetchedData?.data?.setting_store]);
+
+	// ---------------------------
 
 	const resetSettingError = () => {
 		setSettingErr({
@@ -67,11 +92,12 @@ const MainInformation = () => {
 			country_id: "",
 		});
 	};
-
+	// to upload the store logo
 	const onChangeStoreLogo = (imageList, addUpdateIndex) => {
 		// data for submit
 		setStoreLogo(imageList);
 	};
+	// to upload the store icon
 	const onChangeSelectIcon = (imageList, addUpdateIndex) => {
 		// data for submit
 		setStoreIcon(imageList);
@@ -82,14 +108,14 @@ const MainInformation = () => {
 		setLoadingTitle("جاري تعديل البيانات الأساسية");
 		resetSettingError();
 		let formData = new FormData();
-
 		formData.append("description", descriptionValue);
-		if (storeLogo?.length !== 0) {
-			formData.append("logo", storeLogo[0]?.file);
-		}
-		if (storeIcon?.length !== 0) {
-			formData.append("icon", storeIcon[0]?.file);
-		}
+
+		// Check if a new logo is uploaded, otherwise use the existing one
+		formData.append("logo", storeLogo.length > 0 ? storeLogo[0]?.file : "");
+
+		// Check if a new icon is uploaded, otherwise use the existing one
+		formData.append("icon", storeIcon.length > 0 ? storeIcon[0]?.file : "");
+
 		formData.append("domain", domain);
 		formData.append("city_id", city);
 		formData.append("country_id", country);
@@ -110,14 +136,15 @@ const MainInformation = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
+					window.location.reload();
 				} else {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
 					setSettingErr({
 						description: res?.data?.message?.en?.description?.[0],
-						logo: res?.data?.message?.en?.logo?.[0],
-						icon: res?.data?.message?.en?.icon?.[0],
+						logo: res?.data?.message?.en?.logo,
+						icon: res?.data?.message?.en?.icon,
 						domain: res?.data?.message?.en?.domain?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
 						country_id: res?.data?.message?.en?.country_id?.[0],
@@ -126,25 +153,6 @@ const MainInformation = () => {
 			});
 	};
 
-	// We use this effect to avoid the errors
-	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (fetchedData?.data?.setting_store) {
-				setDescriptionValue(fetchedData?.data?.setting_store?.description);
-				setStoreIcon([fetchedData?.data?.setting_store?.icon]);
-				setStoreLogo([fetchedData?.data?.setting_store?.logo]);
-				setDomain([fetchedData?.data?.setting_store?.domain]);
-				setCountry([fetchedData?.data?.setting_store?.country?.id]);
-				setCity([fetchedData?.data?.setting_store?.city?.id]);
-			}
-		}, 1000);
-
-		return () => {
-			clearTimeout(debounce);
-		};
-	}, [fetchedData?.data?.setting_store]);
-
-	// ---------------------------
 	return (
 		<>
 			<Helmet>
@@ -216,7 +224,8 @@ const MainInformation = () => {
 																<div className='upload-image-bx mb-2'>
 																	<img
 																		src={
-																			storeLogo?.[0]?.data_url || storeLogo?.[0]
+																			storeLogo?.[0]?.data_url ||
+																			fetchedData?.data?.setting_store?.logo
 																		}
 																		alt={""}
 																		className='img-fluid'
@@ -234,9 +243,14 @@ const MainInformation = () => {
 															<MdFileUpload />
 														</button>
 														{settingErr?.logo && (
-															<span className='fs-6 w-100 text-danger'>
-																{settingErr?.logo}
-															</span>
+															<>
+																<span className='fs-6 w-100 text-danger'>
+																	{settingErr?.logo[0]}
+																</span>
+																<span className='fs-6 w-100 text-danger'>
+																	{settingErr?.logo[1]}
+																</span>
+															</>
 														)}
 													</Fragment>
 												)}
@@ -452,7 +466,10 @@ const MainInformation = () => {
 																{storeIcon[0] && (
 																	<img
 																		className='img-fluid'
-																		src={storeIcon[0].data_url || storeIcon[0]}
+																		src={
+																			storeIcon[0].data_url ||
+																			fetchedData?.data?.setting_store?.icon
+																		}
 																		alt=''
 																		style={{ objectFit: "contain" }}
 																	/>
@@ -470,9 +487,14 @@ const MainInformation = () => {
 											</p>
 										</div>
 										{settingErr?.icon && (
-											<span className='fs-6 w-100 text-danger'>
-												{settingErr?.icon}
-											</span>
+											<div className='d-flex flex-wrap'>
+												<span className='fs-6 w-100 text-danger'>
+													{settingErr?.icon[0]}
+												</span>
+												<span className='fs-6 w-100 text-danger'>
+													{settingErr?.icon[1]}
+												</span>
+											</div>
 										)}
 									</div>
 								</div>

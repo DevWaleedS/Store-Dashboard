@@ -285,7 +285,7 @@ const VerifayPage = forwardRef((props, ref) => {
 							{dataErrors?.name && (
 								<div
 									className='important-hint me-1'
-									style={{ fontSize: "16px" }}>
+									style={{ fontSize: "16px", whiteSpace: "normal" }}>
 									{dataErrors?.name}
 								</div>
 							)}
@@ -336,14 +336,14 @@ const VerifayPage = forwardRef((props, ref) => {
 										? " d-block important-hint me-1 "
 										: "d-none"
 								}
-								style={{ fontSize: "16px" }}>
+								style={{ fontSize: "16px", whiteSpace: "normal" }}>
 								تأكد ان رقم الجوال يبدأ برقم 5 ولا يقل عن 9 أرقام
 							</div>
 
 							{dataErrors?.phonenumber && (
 								<div
 									className=' important-hint me-1 '
-									style={{ fontSize: "16px" }}>
+									style={{ fontSize: "16px", whiteSpace: "normal" }}>
 									{dataErrors?.phonenumber}
 								</div>
 							)}
@@ -388,7 +388,7 @@ const VerifayPage = forwardRef((props, ref) => {
 								{dataErrors?.commercialregistertype && (
 									<div
 										className='important-hint me-1'
-										style={{ fontSize: "16px" }}>
+										style={{ fontSize: "16px", whiteSpace: "normal" }}>
 										{dataErrors?.commercialregistertype}
 									</div>
 								)}
@@ -522,7 +522,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									{dataErrors?.city_id && (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px" }}>
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.city_id}
 										</div>
 									)}
@@ -574,7 +574,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									{dataErrors?.file ? (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px" }}>
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
 											وتأكد ان صيغة الملف pdf
 										</div>
@@ -625,7 +625,9 @@ const VerifayPage = forwardRef((props, ref) => {
 							<WebsiteIcon className='mx-3' />
 						</div>
 						{dataErrors?.commercialregistertype && (
-							<div className='important-hint me-1' style={{ fontSize: "16px" }}>
+							<div
+								className='important-hint me-1'
+								style={{ fontSize: "16px", whiteSpace: "normal" }}>
 								{dataErrors?.commercialregistertype}
 							</div>
 						)}
@@ -671,7 +673,7 @@ const VerifayPage = forwardRef((props, ref) => {
 								{dataErrors?.link && (
 									<div
 										className='important-hint me-1'
-										style={{ fontSize: "16px" }}>
+										style={{ fontSize: "16px", whiteSpace: "normal" }}>
 										{dataErrors?.link}
 									</div>
 								)}
@@ -727,7 +729,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									{dataErrors?.city_id && (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px" }}>
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.city_id}
 										</div>
 									)}
@@ -778,7 +780,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									{dataErrors?.file ? (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px" }}>
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
 											وتأكد ان صيغة الملف pdf
 										</div>

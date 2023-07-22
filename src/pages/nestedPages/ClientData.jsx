@@ -398,14 +398,14 @@ const ClientData = () => {
 												<div
 													className='row  d-flex justify-content-between align-items-center'
 													style={{
-														backgroundColor: "#dafdfe14",
+														backgroundColor: "rgb(218 253 254 / 43%)",
 														padding: "10px",
 														paddingLeft: "20px",
 													}}>
 													<div className='col-5'></div>
 													<div className='col-2 d-flex flex-column justify-content-center align-content-center flex-wrap'>
 														<div
-															className='align-self-center'
+															className='align-self-center total-of-orders'
 															style={{ fontWeight: "500" }}>
 															{cartDetails?.count}
 														</div>
@@ -413,7 +413,7 @@ const ClientData = () => {
 													<div className='col-2'></div>
 													<div className='col-3 d-flex flex-column justify-content-end'>
 														<div
-															className='align-self-end'
+															className='align-self-end total-of-price'
 															style={{ fontWeight: "500" }}>
 															{cartDetails?.total} ر.س
 														</div>
@@ -795,7 +795,9 @@ const ClientData = () => {
 													<div
 														className='text-center '
 														style={{ marginTop: "-35px" }}>
-														<span className='fs-6 text-danger'>
+														<span
+															className='fs-6 text-danger'
+															style={{ whiteSpace: "normal" }}>
 															({errors?.discountExpireDateErr})
 														</span>
 													</div>
