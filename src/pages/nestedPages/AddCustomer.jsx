@@ -58,7 +58,7 @@ const AddCustomer = ({ reload, setReload }) => {
 	];
 
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -166,7 +166,7 @@ const AddCustomer = ({ reload, setReload }) => {
 				onClose={() => dispatch(closeCustomerDataModal())}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
-				<Box sx={style}>
+				<Box component={"div"} sx={style}>
 					<div className='add-form-wrapper add-customer-form'>
 						<div className='d-flex'>
 							<div className='col-12'>

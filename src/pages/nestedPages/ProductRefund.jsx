@@ -99,7 +99,7 @@ const ProductRefund = () => {
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={modalStyle}>
+					<Box component={"div"} sx={modalStyle}>
 						<div className='ProductRefund-wrapper p-md-4 p-3'>
 							<div className='header w-100 d-flex justify-content-end align-items-center '>
 								<IoIosCloseCircleOutline

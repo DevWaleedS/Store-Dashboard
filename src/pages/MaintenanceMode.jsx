@@ -158,7 +158,7 @@ const MaintenanceModeModal = () => {
 							timeout: 500,
 						}}>
 						<Fade in={isOpenMaintenanceModeModal}>
-							<Box sx={style}>
+							<Box component={"div"} sx={style}>
 								<form onSubmit={handleSubmit(UpdateMaintenanceMode)}>
 									<div className='maintenance-modal-header d-flex justify-content-between align-items-center'>
 										<span> وضع الصيانة</span>

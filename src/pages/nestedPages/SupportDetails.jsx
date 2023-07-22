@@ -64,7 +64,7 @@ const SupportDetails = () => {
 					onClose={() => navigate("/Support")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='nested-pages-modal'>
+					<Box component={"div"} sx={style} className='nested-pages-modal'>
 						<section className='SupportDetails-page'>
 							<div className='head-category mb-md-5 mb-3'>
 								<div className='row'>

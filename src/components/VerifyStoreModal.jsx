@@ -64,6 +64,7 @@ const VerifyStore = () => {
 					aria-describedby='modal-modal-description'>
 					<Box sx={style}>
 						<Typography
+							component={"div"}
 							id='modal-modal-description'
 							sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
 							<div className='d-flex justify-content-center align-items-center'>

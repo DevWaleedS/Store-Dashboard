@@ -7080,6 +7080,7 @@ input:disabled {
 	}
 
 	.order-details-body .order-details-box .order-action-box.accordion-box {
+		padding: 10px 20px;
 		height: auto;
 	}
 

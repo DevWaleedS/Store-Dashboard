@@ -43,7 +43,7 @@ const VerifyAlert = () => {
 				open={isVerifyStoreAlertOpen}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
-				<Box sx={style}>
+				<Box component={"div"} sx={style}>
 					<div className='store-alert-body text-center' style={contentStyle}>
 						<p>جاري مراجعة طلب التوثيق الخاص بك </p>
 						<p>من الجهات الرسمية</p>

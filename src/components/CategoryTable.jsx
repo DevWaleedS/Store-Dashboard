@@ -26,7 +26,6 @@ import { DeleteContext } from "../Context/DeleteProvider";
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import editIcon from "../data/Icons/editt 2.svg";
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 function EnhancedTableHead(props) {
 	return (
@@ -456,9 +455,7 @@ export default function EnhancedTable({
 															</div>
 														</TableCell>
 
-														<TableCell
-															align='center text-overflow'
-															sx={{ width: "73px" }}>
+														<TableCell align='center' sx={{ width: "73px" }}>
 															{row?.number}
 														</TableCell>
 														<TableCell>
@@ -483,7 +480,7 @@ export default function EnhancedTable({
 																</span>
 															</div>
 														</TableCell>
-														<TableCell align='center text-overflow'>
+														<TableCell align='center'>
 															{row?.countsubcategory}
 														</TableCell>
 

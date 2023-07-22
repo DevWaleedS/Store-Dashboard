@@ -51,7 +51,10 @@ const MarketingModal = () => {
 							BackdropProps={{
 								timeout: 500,
 							}}>
-							<Box sx={style} className='video-modal-container'>
+							<Box
+								component={"div"}
+								sx={style}
+								className='video-modal-container'>
 								<div className='close-icon-video-modal'>
 									<AiOutlineCloseCircle
 										style={{ cursor: "pointer" }}

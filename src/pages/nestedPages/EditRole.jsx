@@ -28,7 +28,6 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-
 // Modal Style
 const style = {
 	position: "fixed",
@@ -125,7 +124,6 @@ const EditRole = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Management");
-					
 				}
 			});
 	};
@@ -140,7 +138,10 @@ const EditRole = () => {
 					open={true}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='nested-pages-modal edit-job-title-modal'>
+					<Box
+						component={"div"}
+						sx={style}
+						className='nested-pages-modal edit-job-title-modal'>
 						<form onSubmit={handleSubmit(updateRole)}>
 							<section className='SupportDetails-page create-role edit-job-title'>
 								<div className='page-wrapper'>

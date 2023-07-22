@@ -93,7 +93,6 @@ const CreateRole = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Management");
-				
 				}
 			});
 	};
@@ -108,7 +107,7 @@ const CreateRole = () => {
 					open={true}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='nested-pages-modal'>
+					<Box component={"div"} sx={style} className='nested-pages-modal'>
 						<form onSubmit={handleSubmit(createRole)}>
 							<section className='SupportDetails-page create-role'>
 								<div className='head-category mb-md-5'>

@@ -1,33 +1,35 @@
-import React, { Fragment } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import useFetch from '../../Hooks/UseFetch';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import ImageUploading from 'react-images-uploading';
+import React, { Fragment } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import useFetch from "../../Hooks/UseFetch";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import ImageUploading from "react-images-uploading";
 
 const style = {
-	position: 'fixed',
-	top: '80px',
-	left: '0%',
-	transform: 'translate(0%, 0%)',
-	width: '70%',
-	height: '100%',
-	overflow: 'auto',
-	bgcolor: '#fff',
-	paddingBottom: '83px',
-	'@media(max-width:768px)': {
-		position: 'absolute',
+	position: "fixed",
+	top: "80px",
+	left: "0%",
+	transform: "translate(0%, 0%)",
+	width: "70%",
+	height: "100%",
+	overflow: "auto",
+	bgcolor: "#fff",
+	paddingBottom: "83px",
+	"@media(max-width:768px)": {
+		position: "absolute",
 		top: 0,
 		left: 0,
-		width: '100%',
-		backgroundColor: '#F6F6F6',
+		width: "100%",
+		backgroundColor: "#F6F6F6",
 		paddingBottom: 0,
 	},
 };
 const CustomerData = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { fetchedData } = useFetch(`https://backend.atlbha.com/api/Store/client/${id}`);
+	const { fetchedData } = useFetch(
+		`https://backend.atlbha.com/api/Store/client/${id}`
+	);
 	const customerDataInfo = fetchedData?.data?.$clients;
 
 	const handleSubmit = (event) => {
@@ -36,8 +38,12 @@ const CustomerData = () => {
 
 	return (
 		<div className='add-category-form' open={true}>
-			<Modal open={true} onClose={() => navigate('/Customer')} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
-				<Box sx={style}>
+			<Modal
+				open={true}
+				onClose={() => navigate("/Customer")}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'>
+				<Box component={"div"} sx={style}>
 					<div className='add-form-wrapper add-customer-form customer-data '>
 						<div className='d-flex'>
 							<div className='col-12'>
@@ -58,7 +64,11 @@ const CustomerData = () => {
 												<Fragment>
 													{/** Preview Image Box */}
 													<div className='banners-preview-container mx-md-0 mx-auto mb-md-0 mb-3'>
-														<img src={customerDataInfo?.image} alt='' className='img-fluid' />
+														<img
+															src={customerDataInfo?.image}
+															alt=''
+															className='img-fluid'
+														/>
 													</div>
 												</Fragment>
 											)}
@@ -68,14 +78,29 @@ const CustomerData = () => {
 										<label htmlFor='id-number' className='d-block mb-2'>
 											الرقم ID
 										</label>
-										<input name='ID_number' value={customerDataInfo?.ID_number} onChange={null} type='text' id='id-number' placeholder='DA88' disabled />
+										<input
+											name='ID_number'
+											value={customerDataInfo?.ID_number}
+											onChange={null}
+											type='text'
+											id='id-number'
+											placeholder='DA88'
+											disabled
+										/>
 
 										<div className='row mt-4'>
 											<div className='col-12'>
 												<label htmlFor='first-name' className='d-block mb-2'>
 													الاسم الأول
 												</label>
-												<input name='first_name' value={customerDataInfo?.first_name} onChange={null} type='text' id='first-name' disabled />
+												<input
+													name='first_name'
+													value={customerDataInfo?.first_name}
+													onChange={null}
+													type='text'
+													id='first-name'
+													disabled
+												/>
 											</div>
 										</div>
 									</div>
@@ -86,13 +111,27 @@ const CustomerData = () => {
 										<label htmlFor='city' className='d-block mb-2'>
 											الدولة
 										</label>
-										<input name='phonenumber' value={customerDataInfo?.country?.name} onChange={null} type='text' id='phone-number' disabled />
+										<input
+											name='phonenumber'
+											value={customerDataInfo?.country?.name}
+											onChange={null}
+											type='text'
+											id='phone-number'
+											disabled
+										/>
 									</div>
 									<div className='col-md-4 col-12'>
 										<label htmlFor='last-name' className='d-block mb-2'>
 											الاسم الثاني
 										</label>
-										<input name='last_name' value={customerDataInfo?.last_name} onChange={null} type='text' id='last-name' disabled />
+										<input
+											name='last_name'
+											value={customerDataInfo?.last_name}
+											onChange={null}
+											type='text'
+											id='last-name'
+											disabled
+										/>
 									</div>
 								</div>
 
@@ -101,14 +140,28 @@ const CustomerData = () => {
 										<label htmlFor='email' className='d-block mb-2'>
 											البريد الالكتروني
 										</label>
-										<input name='email' value={customerDataInfo?.email} onChange={null} type='email' id='email' disabled />
+										<input
+											name='email'
+											value={customerDataInfo?.email}
+											onChange={null}
+											type='email'
+											id='email'
+											disabled
+										/>
 									</div>
 
 									<div className='col-md-4 col-12'>
 										<label htmlFor='city' className='d-block mb-2'>
 											المدينة
 										</label>
-										<input name='phonenumber' value={customerDataInfo?.city?.name} onChange={null} type='text' id='phone-number' disabled />
+										<input
+											name='phonenumber'
+											value={customerDataInfo?.city?.name}
+											onChange={null}
+											type='text'
+											id='phone-number'
+											disabled
+										/>
 									</div>
 								</div>
 
@@ -117,14 +170,28 @@ const CustomerData = () => {
 										<label htmlFor='phone-number' className='d-block mb-2'>
 											رقم الجوال
 										</label>
-										<input name='phonenumber' value={customerDataInfo?.phonenumber} onChange={null} type='text' id='phone-number' disabled />
+										<input
+											name='phonenumber'
+											value={customerDataInfo?.phonenumber}
+											onChange={null}
+											type='text'
+											id='phone-number'
+											disabled
+										/>
 									</div>
 
 									<div className='col-md-4 col-12'>
 										<label htmlFor='gender' className='d-block mb-2'>
 											الجنس
 										</label>
-										<input name='phonenumber' value={customerDataInfo?.gender} onChange={null} type='text' id='phone-number' disabled />
+										<input
+											name='phonenumber'
+											value={customerDataInfo?.gender}
+											onChange={null}
+											type='text'
+											id='phone-number'
+											disabled
+										/>
 									</div>
 								</div>
 							</div>
@@ -132,7 +199,9 @@ const CustomerData = () => {
 							<div className='form-footer'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-md-5 col-12'>
-										<button className='close-btn' onClick={() => navigate('/Customer')}>
+										<button
+											className='close-btn'
+											onClick={() => navigate("/Customer")}>
 											إلغاء
 										</button>
 									</div>

@@ -105,7 +105,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 				open={isOpenReplyModal}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
-				<Box sx={style}>
+				<Box component={"div"} sx={style}>
 					<div className=''>
 						<h3
 							className='d-flex justify-content-center align-items-center '

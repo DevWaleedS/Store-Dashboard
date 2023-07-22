@@ -204,7 +204,7 @@ const ClientData = () => {
 					onClose={() => navigate("/Carts")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='nested-pages-modal'>
+					<Box component={"div"} sx={style} className='nested-pages-modal'>
 						<div className='user-cart-data'>
 							<div className='d-flex'>
 								<div className='col-12'>

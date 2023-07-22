@@ -244,7 +244,7 @@ const CreatePage = () => {
 					onClose={() => navigate("/Pages")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='create-pages-modal'>
+					<Box component={"div"} sx={style} className='create-pages-modal'>
 						<form onSubmit={handleSubmit(handlePage)}>
 							{/** Offers Details */}
 							<div className='create-pages-form-wrapper'>

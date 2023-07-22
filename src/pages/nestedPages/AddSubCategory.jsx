@@ -43,25 +43,35 @@ const AddSubCategory = () => {
 
 	return (
 		<div className='add-category-form bg-white' open={isOpen}>
-			<Modal open={isOpen} onClose={() => dispatch(closeAddSubCategory())} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
-				<Box sx={style}>
-					<div className='add-form-wrapper bg-white' style={{ borderRadius: '16px' }}>
+			<Modal
+				open={isOpen}
+				onClose={() => dispatch(closeAddSubCategory())}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'>
+				<Box component={"div"} sx={style}>
+					<div
+						className='add-form-wrapper bg-white'
+						style={{ borderRadius: "16px" }}>
 						<div className='row'>
 							<div className='col-12'>
 								<div
 									className='form-title  '
 									style={{
-										borderRadius: '16px 16px 0 0',
-										backgroundColor: '#1DBBBE',
-										padding: '20px ',
-									}}
-								>
-									<h5 className='text-white text-center' style={{ fontSize: '22px', fontWeight: 400 }}>
+										borderRadius: "16px 16px 0 0",
+										backgroundColor: "#1DBBBE",
+										padding: "20px ",
+									}}>
+									<h5
+										className='text-white text-center'
+										style={{ fontSize: "22px", fontWeight: 400 }}>
 										اضف تصنيف فرعي
 									</h5>
 								</div>
 								<div className='close-icon-video-modal'>
-									<AiOutlineCloseCircle style={{ cursor: 'pointer', color: 'white' }} onClick={() => dispatch(closeAddSubCategory())} />
+									<AiOutlineCloseCircle
+										style={{ cursor: "pointer", color: "white" }}
+										onClick={() => dispatch(closeAddSubCategory())}
+									/>
 								</div>
 							</div>
 						</div>
@@ -77,14 +87,16 @@ const AddSubCategory = () => {
 											type='text'
 											id='category-name'
 											placeholder='ادخل اسم التصنيف الفرعي'
-											style={{ backgroundColor: 'white' }}
+											style={{ backgroundColor: "white" }}
 											value={subcat}
 											onChange={(e) => setSubCat(e.target.value)}
 										/>
 									</div>
 								</div>
 							</div>
-							<div className='form-footer bg-white' style={{ borderRadius: '0 0 16px 16px' }}>
+							<div
+								className='form-footer bg-white'
+								style={{ borderRadius: "0 0 16px 16px" }}>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-4 col-6'>
 										<button className='save-btn' onClick={addSubCat}>
@@ -92,7 +104,9 @@ const AddSubCategory = () => {
 										</button>
 									</div>
 									<div className='col-lg-4 col-6'>
-										<button className='close-btn' onClick={() => dispatch(closeAddSubCategory())}>
+										<button
+											className='close-btn'
+											onClick={() => dispatch(closeAddSubCategory())}>
 											إلغاء
 										</button>
 									</div>

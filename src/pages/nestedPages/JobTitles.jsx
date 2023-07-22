@@ -67,7 +67,7 @@ const JobTitles = () => {
 					onClose={() => navigate("/Management")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='nested-pages-modal'>
+					<Box component={"div"} sx={style} className='nested-pages-modal'>
 						<section className='job-title-page'>
 							<div className='form-title mb-md-5 mb-3'>
 								<div className='row header-row'>

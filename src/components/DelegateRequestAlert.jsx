@@ -41,31 +41,49 @@ const DelegateRequestAlert = () => {
 
 	return (
 		<div className='add-category-form' open={isOpen}>
-			<Modal onClick={() => dispatch(closeDelegateRequestAlert())} open={isOpen} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
-				<Box sx={style}>
+			<Modal
+				onClick={() => dispatch(closeDelegateRequestAlert())}
+				open={isOpen}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'>
+				<Box component={"div"} sx={style}>
 					<div className='close-icon p-2 text-start'>
-						<AiOutlineCloseCircle onClick={() => dispatch(closeDelegateRequestAlert())} style={{ color: '#000', width: '22px', height: '22px', cursor: 'pointer' }} />
+						<AiOutlineCloseCircle
+							onClick={() => dispatch(closeDelegateRequestAlert())}
+							style={{
+								color: "#000",
+								width: "22px",
+								height: "22px",
+								cursor: "pointer",
+							}}
+						/>
 					</div>
-					<div className='delegate-request-alert text-center' style={contentStyle}>
+					<div
+						className='delegate-request-alert text-center'
+						style={contentStyle}>
 						<div className='mb-4'>
-							<TbAlertCircle style={{ color: 'red', width: '30px', height: '30px' }} />
+							<TbAlertCircle
+								style={{ color: "red", width: "30px", height: "30px" }}
+							/>
 						</div>
-						عند طلبك <span style={{ fontWeight: 500 }}>لخدمة المندوبين</span> فإننا في إدارة منصة اطلبها لا نتحمل مسئولية المندوب{' '}
-						<span style={{ color: '#1DBBBE' }}>ونحن نخلي مسؤليتنا تماماً من أي تفاصيل تتعلق بالمندوب</span>
+						عند طلبك <span style={{ fontWeight: 500 }}>لخدمة المندوبين</span>{" "}
+						فإننا في إدارة منصة اطلبها لا نتحمل مسئولية المندوب{" "}
+						<span style={{ color: "#1DBBBE" }}>
+							ونحن نخلي مسؤليتنا تماماً من أي تفاصيل تتعلق بالمندوب
+						</span>
 					</div>
 					<div className='d-flex justify-between '>
 						<button
-							onClick={() => navigate('Delegate')}
+							onClick={() => navigate("Delegate")}
 							style={{
-								color: '#fff',
-								fontSize: '24px',
+								color: "#fff",
+								fontSize: "24px",
 								fontWight: 500,
-								height: '70px',
-								backgroundColor: '#1DBBBE',
-								borderRadius: ' 0 0 16px 16px',
+								height: "70px",
+								backgroundColor: "#1DBBBE",
+								borderRadius: " 0 0 16px 16px",
 							}}
-							className='w-100'
-						>
+							className='w-100'>
 							موافق
 						</button>
 					</div>

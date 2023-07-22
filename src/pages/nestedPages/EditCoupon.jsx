@@ -361,7 +361,7 @@ const EditCoupon = () => {
 					onClose={() => navigate("/Coupon")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style}>
+					<Box component={"div"} sx={style}>
 						<div className='add-form-wrapper add-coupon-form coupon-details'>
 							<div className='d-flex'>
 								<div className='col-12'>

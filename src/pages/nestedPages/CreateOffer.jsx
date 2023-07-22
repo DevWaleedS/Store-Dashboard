@@ -411,7 +411,7 @@ const CreateOffer = () => {
 					onClose={() => navigate("/Offers")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style} className='nested-pages-modal'>
+					<Box component={"div"} sx={style} className='nested-pages-modal'>
 						<section className='create-offers-page p-3'>
 							<div className='head-category mb-md-5 mb-3'>
 								<div className='row'>

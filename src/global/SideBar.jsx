@@ -114,7 +114,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 
 				{/** Markting Sub menu */}
-				<SubMenu label='التسويق' icon={<Marketing />}>
+				<SubMenu label='التسويق' icon={<Marketing />} as='li'>
 					<NavLink
 						className='sub-menu-link'
 						to='Coupon'
@@ -154,6 +154,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					</NavLink>
 
 					<Link
+						as='li'
 						className='sub-menu-link'
 						onClick={() => {
 							dispatch(OpenCelebrityMarketingModal());
@@ -215,8 +216,9 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 
 				{/** Store Sub menu */}
-				<SubMenu label='بيانات المتجر' icon={<Info />}>
+				<SubMenu label='بيانات المتجر' icon={<Info />} as='li'>
 					<Link
+						as='li'
 						className='sub-menu-link'
 						onClick={() => {
 							closeSidebar();
@@ -317,7 +319,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 
 				{/** Setting Sub menu */}
-				<SubMenu label=' الاعدادات' icon={<Setting />}>
+				<SubMenu label=' الاعدادات' icon={<Setting />} as='li'>
 					<NavLink
 						className='sub-menu-link'
 						to='MainInformation'
@@ -328,6 +330,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 					<Link
+						as='li'
 						className='sub-menu-link'
 						onClick={() => {
 							dispatch(openMaintenanceModeModal());

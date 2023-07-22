@@ -258,7 +258,7 @@ const EditProductPage = () => {
 					onClose={() => navigate("/Products")}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
-					<Box sx={style}>
+					<Box component={"div"} sx={style}>
 						<div className='add-form-wrapper'>
 							<div className='d-flex'>
 								<div className='col-12'>
