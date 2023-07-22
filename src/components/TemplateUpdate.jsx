@@ -180,7 +180,7 @@ const TemplateUpdate = () => {
 			formData.append("slider1", firstSlider[0]?.file || null);
 		}
 		if (secondSlider.length !== 0) {
-			formData.append("slider3", secondSlider[0]?.file || null);
+			formData.append("slider2", secondSlider[0]?.file || null);
 		}
 		if (thirdSlider.length !== 0) {
 			formData.append("slider3", thirdSlider[0]?.file || null);

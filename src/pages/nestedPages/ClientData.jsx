@@ -670,7 +670,9 @@ const ClientData = () => {
 
 																		{errors?.discountValueErr && (
 																			<div>
-																				<span className='fs-6 text-danger'>
+																				<span
+																					className='fs-6 text-danger'
+																					style={{ whiteSpace: "normal" }}>
 																					{errors?.discountValueErr}
 																				</span>
 																			</div>

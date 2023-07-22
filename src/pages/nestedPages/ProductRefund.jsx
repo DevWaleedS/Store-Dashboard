@@ -279,7 +279,11 @@ const ProductRefund = () => {
 													</span>
 												)}
 												{priceError && (
-													<span className='fs-6 text-danger'>{priceError}</span>
+													<span
+														className='fs-6 text-danger'
+														style={{ whiteSpace: "normal" }}>
+														{priceError}
+													</span>
 												)}
 											</div>
 

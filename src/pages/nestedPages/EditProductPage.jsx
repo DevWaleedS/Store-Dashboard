@@ -691,7 +691,9 @@ const EditProductPage = () => {
 											</div>
 
 											<div className='col-md-7 col-12'>
-												<span className='fs-6 text-danger'>
+												<span
+													className='fs-6 text-danger'
+													style={{ whiteSpace: "normal" }}>
 													{productError?.discount_price}
 													{errors?.discount_price &&
 														errors.discount_price.message}

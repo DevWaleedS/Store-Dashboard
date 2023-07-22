@@ -22,13 +22,9 @@ import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg
 import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const MainInformation = () => {
 	const [cookies] = useCookies(["access_token"]);
-	// TO SET THE NAME AND IMAGE TO CONTEXT
-	const UserInfo = useContext(UserAuth);
-	const { setUserInfo } = UserInfo;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -111,10 +107,14 @@ const MainInformation = () => {
 		formData.append("description", descriptionValue);
 
 		// Check if a new logo is uploaded, otherwise use the existing one
-		formData.append("logo", storeLogo.length > 0 ? storeLogo[0]?.file : "");
+		if (storeLogo?.length !== 0) {
+			formData.append("logo", storeLogo[0]?.file);
+		}
 
 		// Check if a new icon is uploaded, otherwise use the existing one
-		formData.append("icon", storeIcon.length > 0 ? storeIcon[0]?.file : "");
+		if (storeIcon?.length !== 0) {
+			formData.append("icon", storeIcon[0]?.file);
+		}
 
 		formData.append("domain", domain);
 		formData.append("city_id", city);
@@ -136,7 +136,6 @@ const MainInformation = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
-					window.location.reload();
 				} else {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
@@ -220,13 +219,18 @@ const MainInformation = () => {
 													<Fragment>
 														{/** Preview Image Box */}
 														<div className='upload-image-wrapper'>
-															{storeLogo[0] && (
+															{storeLogo[0] ? (
 																<div className='upload-image-bx mb-2'>
 																	<img
-																		src={
-																			storeLogo?.[0]?.data_url ||
-																			fetchedData?.data?.setting_store?.logo
-																		}
+																		src={storeLogo?.[0]?.data_url}
+																		alt={""}
+																		className='img-fluid'
+																	/>
+																</div>
+															) : (
+																<div className='upload-image-bx mb-2'>
+																	<img
+																		src={fetchedData?.data?.setting_store?.logo}
 																		alt={""}
 																		className='img-fluid'
 																	/>
@@ -463,13 +467,17 @@ const MainInformation = () => {
 															}}
 															{...dragProps}>
 															<div style={{ width: "35px", height: "35px" }}>
-																{storeIcon[0] && (
+																{storeIcon[0] ? (
 																	<img
 																		className='img-fluid'
-																		src={
-																			storeIcon[0].data_url ||
-																			fetchedData?.data?.setting_store?.icon
-																		}
+																		src={storeIcon[0].data_url}
+																		alt=''
+																		style={{ objectFit: "contain" }}
+																	/>
+																) : (
+																	<img
+																		className='img-fluid'
+																		src={fetchedData?.data?.setting_store?.icon}
 																		alt=''
 																		style={{ objectFit: "contain" }}
 																	/>
