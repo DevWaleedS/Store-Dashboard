@@ -18,6 +18,7 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 import { IoIosArrowDown } from "react-icons/io";
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { MdFileUpload } from "react-icons/md";
+import DemoImage from "../data/Icons/demo-logo.png";
 import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg";
 import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
@@ -48,6 +49,8 @@ const MainInformation = () => {
 	const [city, setCity] = useState("");
 	const [domain, setDomain] = useState("");
 	const [country, setCountry] = useState("");
+	const [defaultStoreLogo, setDefaultStoreLogo] = useState(DemoImage);
+	const [defaultStoreIcon, setDefaultStoreIcon] = useState(DemoImage);
 	const [storeLogo, setStoreLogo] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
 	const [descriptionValue, setDescriptionValue] = useState("");
@@ -64,8 +67,8 @@ const MainInformation = () => {
 	useEffect(() => {
 		if (fetchedData?.data?.setting_store) {
 			setDescriptionValue(fetchedData?.data?.setting_store?.description);
-			// setStoreIcon([fetchedData?.data?.setting_store?.icon]);
-			// setStoreLogo([fetchedData?.data?.setting_store?.logo]);
+			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
+			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);
@@ -230,7 +233,7 @@ const MainInformation = () => {
 															) : (
 																<div className='upload-image-bx mb-2'>
 																	<img
-																		src={fetchedData?.data?.setting_store?.logo}
+																		src={defaultStoreLogo}
 																		alt={""}
 																		className='img-fluid'
 																	/>
@@ -477,7 +480,7 @@ const MainInformation = () => {
 																) : (
 																	<img
 																		className='img-fluid'
-																		src={fetchedData?.data?.setting_store?.icon}
+																		src={defaultStoreIcon}
 																		alt=''
 																		style={{ objectFit: "contain" }}
 																	/>
