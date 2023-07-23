@@ -1,24 +1,24 @@
-import React, { useState, useContext } from 'react';
-import Context from '../../Context/context';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { closeAddSubCategory } from '../../store/slices/AddSubCategory-slice';
+import React, { useState, useContext } from "react";
+import Context from "../../Context/context";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { closeAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 
 // MUI
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 // ICONS
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 // Modal style
 const style = {
-	position: 'absolute',
-	top: '120px',
-	left: '50%',
-	transform: 'translate(-50%, 0%)',
-	width: '1062px',
-	maxWidth: '90%',
+	position: "absolute",
+	top: "120px",
+	left: "50%",
+	transform: "translate(-50%, 0%)",
+	width: "1062px",
+	maxWidth: "90%",
 };
 
 const AddSubCategory = () => {
@@ -27,15 +27,18 @@ const AddSubCategory = () => {
 	const dispatch = useDispatch(false);
 	const contextStore = useContext(Context);
 	const { setSubCategories } = contextStore;
-	const [subcat, setSubCat] = useState('');
+	const [subcat, setSubCat] = useState("");
+	const [subError, setSubError] = useState("");
 
 	const addSubCat = () => {
 		setSubCategories((subCategories) => [...subCategories, { name: subcat }]);
-		setSubCat('');
-		dispatch(closeAddSubCategory());
+		setSubCat("");
+		if (subcat) {
+			dispatch(closeAddSubCategory());
+		} else {
+			setSubError("يرجي اضافه التصنيف أولاً");
+		}
 	};
-
-
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -89,8 +92,13 @@ const AddSubCategory = () => {
 											placeholder='ادخل اسم التصنيف الفرعي'
 											style={{ backgroundColor: "white" }}
 											value={subcat}
-											onChange={(e) => setSubCat(e.target.value)}
+											onChange={(e) => setSubCat(e.target.value.trimStart())}
 										/>
+										{subError && (
+											<div className='text-danger' style={{ fontSize: "16px" }}>
+												{subError}
+											</div>
+										)}
 									</div>
 								</div>
 							</div>
