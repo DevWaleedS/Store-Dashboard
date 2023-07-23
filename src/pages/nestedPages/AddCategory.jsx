@@ -94,7 +94,9 @@ const AddCategory = () => {
 
 		// to select all subcategories names
 		for (let i = 0; i < subCategories?.length; i++) {
-			formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
+			if(subCategories[i]?.name !== ''){
+				formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
+			}
 		}
 		axios
 			.post(`https://backend.atlbha.com/api/Store/category`, formData, {
@@ -259,6 +261,7 @@ const AddCategory = () => {
 
 									{subCategories &&
 										subCategories.map((subCategory, index) => (
+											subCategory?.name &&
 											<div className='row mb-md-5 mb-3' key={index}>
 												<div className='col-md-3 col-12'>
 													<label

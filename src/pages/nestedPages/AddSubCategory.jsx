@@ -89,7 +89,7 @@ const AddSubCategory = () => {
 											placeholder='ادخل اسم التصنيف الفرعي'
 											style={{ backgroundColor: "white" }}
 											value={subcat}
-											onChange={(e) => setSubCat(e.target.value)}
+											onChange={(e) => setSubCat(e.target.value.trimStart())}
 										/>
 									</div>
 								</div>
