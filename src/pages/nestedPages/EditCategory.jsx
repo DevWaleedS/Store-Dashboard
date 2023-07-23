@@ -105,8 +105,10 @@ const EditCategory = () => {
 
 		// to select all subcategories
 		for (let i = 0; i < subCategories?.length; i++) {
-			formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
-			formData.append([`data[${i}][id]`], subCategories[i]?.id || "");
+			if(subCategories[i]?.name !== ''){
+				formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
+				formData.append([`data[${i}][id]`], subCategories[i]?.id || "");
+			}
 		}
 		axios
 			.post(
@@ -310,6 +312,7 @@ const EditCategory = () => {
 									</div>
 									{subCategories &&
 										subCategories.map((subCategory, index) => (
+											subCategory?.name &&
 											<div className='row mb-md-5 mb-3' key={index}>
 												<div className='col-md-3 col-12'>
 													<label
