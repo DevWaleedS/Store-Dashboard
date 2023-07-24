@@ -243,7 +243,7 @@ const ShowImportEtlobhaProduct = () => {
 
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-name'> اسم المنتح </label>
+												<label htmlFor='product-name'> اسم المنتج </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<input

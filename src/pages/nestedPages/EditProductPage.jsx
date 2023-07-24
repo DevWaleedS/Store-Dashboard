@@ -334,7 +334,7 @@ const EditProductPage = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-name'>
 													{" "}
-													اسم المنتح<span className='text-danger'>*</span>{" "}
+													اسم المنتج<span className='text-danger'>*</span>{" "}
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
