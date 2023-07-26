@@ -117,10 +117,12 @@ const ProductRefund = () => {
 							) : (
 								<div className='body'>
 									<div className='row container-row overflow-hidden'>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-12'>
 											<div className='product-title mb-3 '>
 												{fetchedData?.data?.products?.name}
 											</div>
+										</div>
+										<div className='col-md-5 col-12 mb-md-0 mb-3'>
 											<div className='product-images mb-3'>
 												<div className='main-image'>
 													{imagesPreview?.includes(
@@ -159,8 +161,11 @@ const ProductRefund = () => {
 																				}}
 																			/>
 																		</div>
+
 																		<video
-																			style={{ cursor: "pointer" }}
+																			style={{
+																				cursor: "pointer",
+																			}}
 																			key={index}
 																			src={item?.image}
 																			className='img-fluid'
@@ -169,16 +174,21 @@ const ProductRefund = () => {
 																);
 															} else {
 																return (
-																	<img
-																		style={{ cursor: "pointer" }}
-																		onClick={() => {
-																			setImagesPreview(item?.image);
-																		}}
-																		key={index}
-																		src={item?.image}
-																		alt={item?.image}
-																		className='img-fluid'
-																	/>
+																	<div>
+																		<img
+																			style={{
+																				cursor: "pointer",
+																				objectFit: "contain",
+																			}}
+																			onClick={() => {
+																				setImagesPreview(item?.image);
+																			}}
+																			key={index}
+																			src={item?.image}
+																			alt={item?.image}
+																			className='img-fluid'
+																		/>
+																	</div>
 																);
 															}
 														}
@@ -196,12 +206,23 @@ const ProductRefund = () => {
 												</div>
 												<div className='sub-category category'>
 													<div className='label mb-2'>التصنيفات الفرعية </div>
-													<div className='d-flex align-items-center justify-content-start gap-3'>
-														{fetchedData?.data?.products?.subcategory?.map(
-															(sub, index) => (
-																<div key={index} className='tags'>
-																	{sub?.name}
-																</div>
+													<div className='d-flex align-items-center justify-content-start flex-wrap gap-3'>
+														{fetchedData?.data?.products?.subcategory
+															?.length === 0 ? (
+															<div
+																className='tags'
+																style={{
+																	color: "#1dbbbe",
+																}}>
+																لا يوجد تصنيفات فرعية
+															</div>
+														) : (
+															fetchedData?.data?.products?.subcategory?.map(
+																(sub, index) => (
+																	<div key={index} className='tags'>
+																		{sub?.name}
+																	</div>
+																)
 															)
 														)}
 													</div>
@@ -291,7 +312,7 @@ const ProductRefund = () => {
 												<div className='label about-product-label mb-2'>
 													نبذة عن المنتج
 												</div>
-												<div className='input textarea d-flex justify-content-center align-items-center'>
+												<div className='input textarea '>
 													{fetchedData?.data?.products?.description}
 												</div>
 											</div>

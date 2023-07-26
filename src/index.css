@@ -5881,7 +5881,7 @@ input:disabled {
 	font-weight: 500;
 	letter-spacing: 0px;
 	color: #011723;
-	margin-right: 60px;
+	/* margin-right: 60px; */
 	white-space: normal;
 }
 
@@ -5909,18 +5909,18 @@ input:disabled {
 	justify-content: flex-start;
 	gap: 10px;
 }
-
-.product-images .another-image img,
-.product-images .another-image video {
+.product-images .another-image div {
 	width: 70px;
 	height: 65px;
-	object-fit: cover;
-	object-position: right;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	-ms-border-radius: 4px;
 	-o-border-radius: 4px;
+}
+.product-images .another-image div img,
+.product-images .another-image div video {
+	object-fit: cover;
 }
 .product-images .another-image .video_wrapper {
 	position: relative;
@@ -5947,6 +5947,7 @@ input:disabled {
 }
 
 .ProductRefund-wrapper .product-category {
+	overflow-y: auto;
 	background: #f0f0f0;
 	width: 347px;
 	height: 248px;
@@ -5984,7 +5985,8 @@ input:disabled {
 }
 
 .ProductRefund-wrapper .product-category .tags {
-	width: 134px;
+	width: max-content;
+	padding: 0 10px;
 	height: 38px;
 	display: flex;
 	justify-content: center;
@@ -6021,10 +6023,11 @@ input:disabled {
 	height: 157px;
 	max-width: 100%;
 	color: #67747b;
-	white-space: normal;
-	padding: 20px 16px 25px 13px;
 	font-size: 20px;
 	font-weight: 400;
+	padding: 20px 16px 25px 13px;
+	white-space: normal;
+	overflow-y: auto;
 }
 
 .ProductRefund-wrapper .refund-btn {
@@ -7448,9 +7451,7 @@ input:disabled {
 		width: 185px;
 		height: 165px;
 	}
-
-	.product-images .another-image img,
-	.product-images .another-image video {
+	.product-images .another-image div {
 		width: 50px;
 		height: 45px;
 	}
@@ -7476,7 +7477,6 @@ input:disabled {
 	}
 
 	.ProductRefund-wrapper .input.textarea {
-		height: auto;
 		font-size: 18px;
 	}
 
