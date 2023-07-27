@@ -13,7 +13,7 @@ import PlayVideo from "../../data/Icons/video-play.svg";
 import { useCookies } from "react-cookie";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { BsPlayCircle } from "react-icons/bs";
+
 const modalStyle = {
 	position: "absolute",
 	top: "90px",
@@ -51,6 +51,7 @@ const ProductRefund = () => {
 	const [price, setPrice] = React.useState();
 	const [priceError, setPriceError] = React.useState("");
 	const [imagesPreview, setImagesPreview] = useState();
+	const [isActive, setIsActive] = useState(null);
 
 	useEffect(() => {
 		if (fetchedData?.data?.products) {
@@ -151,10 +152,19 @@ const ProductRefund = () => {
 															const isVideo = item?.image.includes(
 																".mp4" || ".avi" || ".mov" || ".mkv"
 															);
+															const handleClick = () => {
+																setImagesPreview(item?.image);
+																setIsActive(index);
+															};
 
 															if (isVideo) {
 																return (
-																	<div className='video_wrapper'>
+																	<div
+																		key={index}
+																		onClick={handleClick}
+																		className={`video_wrapper ${
+																			isActive === index ? "active" : ""
+																		}`}>
 																		<video
 																			onClick={() => {
 																				setImagesPreview(item?.image);
@@ -163,7 +173,6 @@ const ProductRefund = () => {
 																				cursor: "pointer",
 																			}}
 																			poster={PlayVideo}
-																			key={index}
 																			src={item?.image}
 																			className='img-fluid'
 																		/>
@@ -171,7 +180,12 @@ const ProductRefund = () => {
 																);
 															} else {
 																return (
-																	<div>
+																	<div
+																		key={index}
+																		onClick={handleClick}
+																		className={`${
+																			isActive === index ? "active" : ""
+																		}`}>
 																		<img
 																			style={{
 																				cursor: "pointer",
@@ -180,7 +194,6 @@ const ProductRefund = () => {
 																			onClick={() => {
 																				setImagesPreview(item?.image);
 																			}}
-																			key={index}
 																			src={item?.image}
 																			alt={item?.image}
 																			className='img-fluid'

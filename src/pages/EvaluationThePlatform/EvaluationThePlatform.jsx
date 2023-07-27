@@ -7,7 +7,6 @@ import "./EvaluationThePlatform.css";
 import { Helmet } from "react-helmet";
 
 import { useContext } from "react";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 import { LoadingContext } from "../../Context/LoadingProvider";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -20,12 +19,11 @@ const EvaluationThePlatform = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-	const UserInfo = useContext(UserAuth);
-	const { userInfo } = UserInfo;
+	const [commentText, setCommentText] = useState("");
+
 	// To handle errors
 	const [evaluationError, setEvaluationError] = useState("");
 
-	const [commentText, setCommentText] = useState("");
 	// send add Evaluation The Platform Function
 	const addEvaluationThePlatform = () => {
 		setLoadingTitle("جاري إضافة تعليقك لمنصة اطلبها ");
@@ -111,7 +109,10 @@ const EvaluationThePlatform = () => {
 					<div className='col-12 mb-5'>
 						<div className='preview-valuation-wrapper d-flex flex-column justify-content-center align-items-center gap-4'>
 							<div className='user-image  '>
-								<img src={userInfo?.user_image || UserImage} alt='' />
+								<img
+									src={localStorage.getItem("storeLogo") || UserImage}
+									alt=''
+								/>
 							</div>
 							<div className='evaluation-content'>
 								{commentText
