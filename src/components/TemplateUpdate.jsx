@@ -328,264 +328,11 @@ const TemplateUpdate = () => {
 				</FormControl>
 			</div>
 
-			{/** upload banner */}
-			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
-				<div className='title'>
-					<h4>
-						البنرات الإعلانية{" "}
-						<span>
-							{" "}
-							( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين
-							الأقسام )
-						</span>
-					</h4>
-				</div>
-
-				<FormControl variant='standard' className='px-4'>
-					<div className='row'>
-						<div className='col-12 p-4'>
-							<div className='input-bx banners-box'>
-								{/** preview banner here */}
-								<div className=' banners-preview-container d-flex flex-column align-items-center justify-content-center'>
-									{loading ? (
-										<CircularLoading />
-									) : (
-										<>
-											{!firstBanner[0] && (
-												<img
-													style={{
-														borderRadius: "inherit",
-														width: "100%",
-														height: "100%",
-														maxWidth: "100%",
-													}}
-													src={
-														fetchedData?.data?.Homepages[0]?.banar1 ||
-														"https://placehold.co/572x166"
-													}
-													alt={fetchedData?.data?.Homepages[0]?.banar1}
-												/>
-											)}
-											{firstBanner[0] && (
-												<img
-													style={{
-														borderRadius: "inherit",
-														width: "100%",
-														height: "100%",
-														maxWidth: "100%",
-													}}
-													src={previewBanner[0]?.data_url}
-													alt='preview-img'
-												/>
-											)}
-										</>
-									)}
-								</div>
-							</div>
-						</div>
-						<div className='col-12 mb-2'>
-							<div className='add-banners-bts-wrapper mt-md-0 mt-3 px-md-0 px-2'>
-								{/** Btn to upload banners */}
-								<div className='add-banners'>
-									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
-										<label htmlFor='add-banner-1'>بانر إعلاني رقم 1</label>
-										<div className='wrapper'>
-											<ImageUploading
-												value={firstBanner}
-												onChange={(imageList) => {
-													setFirstBanner(imageList);
-													setPreviewBanner(imageList);
-												}}
-												maxNumber={2}
-												dataURLKey='data_url'
-												acceptType={["jpg", "png", "jpeg"]}>
-												{({ onImageUpload, dragProps }) => (
-													<div className='upload-files-input mb-2'>
-														<button
-															className=' d-flex justify-content-between align-items-center w-100'
-															onClick={onImageUpload}
-															{...dragProps}>
-															<span> تحديث البانر </span>
-															<MdFileUpload />
-														</button>
-													</div>
-												)}
-											</ImageUploading>
-											<div className='switches-group'>
-												<Switch
-													onChange={() => setBannerStatus1(!bannerstatus1)}
-													sx={{
-														width: "35px",
-														padding: 0,
-														height: "20px",
-														borderRadius: "0.75rem",
-														"& .MuiSwitch-thumb": {
-															width: "12px",
-															height: "12px",
-														},
-														"& .MuiSwitch-switchBase": {
-															padding: "0",
-															top: "4px",
-															left: "4px",
-														},
-														"& .MuiSwitch-switchBase.Mui-checked": {
-															left: "-4px",
-														},
-														"& .Mui-checked .MuiSwitch-thumb": {
-															backgroundColor: "#FFFFFF",
-														},
-														"& .MuiSwitch-track": {
-															height: "100%",
-														},
-														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-															backgroundColor: "#3AE374",
-															opacity: 1,
-														},
-													}}
-													checked={bannerstatus1}
-												/>
-											</div>
-										</div>
-									</div>
-									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
-										<label htmlFor='add-banner-1'>بانر إعلاني رقم 2</label>
-										<div className='wrapper'>
-											<ImageUploading
-												value={secondBanner}
-												onChange={(imageList) => {
-													setSecondBanner(imageList);
-													setPreviewBanner(imageList);
-												}}
-												maxNumber={2}
-												dataURLKey='data_url'
-												acceptType={["jpg", "png", "jpeg"]}>
-												{({ onImageUpload, dragProps }) => (
-													<div className='upload-files-input mb-2'>
-														<button
-															className=' d-flex justify-content-between align-items-center w-100'
-															onClick={onImageUpload}
-															{...dragProps}>
-															<span> تحديث البانر </span>
-															<MdFileUpload />
-														</button>
-													</div>
-												)}
-											</ImageUploading>
-											<div className='switches-group'>
-												<Switch
-													onChange={() => setBannerStatus2(!bannerstatus2)}
-													sx={{
-														width: "35px",
-														padding: 0,
-														height: "20px",
-														borderRadius: "0.75rem",
-														"& .MuiSwitch-thumb": {
-															width: "12px",
-															height: "12px",
-														},
-														"& .MuiSwitch-switchBase": {
-															padding: "0",
-															top: "4px",
-															left: "4px",
-														},
-														"& .MuiSwitch-switchBase.Mui-checked": {
-															left: "-4px",
-														},
-														"& .Mui-checked .MuiSwitch-thumb": {
-															backgroundColor: "#FFFFFF",
-														},
-														"& .MuiSwitch-track": {
-															height: "100%",
-														},
-														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-															backgroundColor: "#3AE374",
-															opacity: 1,
-														},
-													}}
-													checked={bannerstatus2}
-												/>
-											</div>
-										</div>
-									</div>
-									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
-										<label htmlFor='add-banner-1'>بانر إعلاني رقم 3</label>
-										<div className='wrapper'>
-											<ImageUploading
-												value={thirdBanner}
-												onChange={(imageList) => {
-													setThirdBanner(imageList);
-													setPreviewBanner(imageList);
-												}}
-												maxNumber={2}
-												dataURLKey='data_url'
-												acceptType={["jpg", "png", "jpeg"]}>
-												{({ onImageUpload, dragProps }) => (
-													<div className='upload-files-input mb-2'>
-														<button
-															className=' d-flex justify-content-between align-items-center w-100'
-															onClick={onImageUpload}
-															{...dragProps}>
-															<span> تحديث البانر </span>
-															<MdFileUpload />
-														</button>
-													</div>
-												)}
-											</ImageUploading>
-											<div className='switches-group'>
-												<Switch
-													onChange={() => setBannerStatus3(!bannerstatus3)}
-													sx={{
-														width: "35px",
-														padding: 0,
-														height: "20px",
-														borderRadius: "0.75rem",
-														"& .MuiSwitch-thumb": {
-															width: "12px",
-															height: "12px",
-														},
-														"& .MuiSwitch-switchBase": {
-															padding: "0",
-															top: "4px",
-															left: "4px",
-														},
-														"& .MuiSwitch-switchBase.Mui-checked": {
-															left: "-4px",
-														},
-														"& .Mui-checked .MuiSwitch-thumb": {
-															backgroundColor: "#FFFFFF",
-														},
-														"& .MuiSwitch-track": {
-															height: "100%",
-														},
-														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-															backgroundColor: "#3AE374",
-															opacity: 1,
-														},
-													}}
-													checked={bannerstatus3}
-												/>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className='col-12 p-4'>
-							<div className='btn-bx '>
-								<Button onClick={() => updateBanners()} variant='contained'>
-									حفظ
-								</Button>
-							</div>
-						</div>
-					</div>
-				</FormControl>
-			</div>
-
 			{/** upload sliders */}
 			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 				<div className='title'>
 					<h4>
-						السلايدر المتحرك
+						السلايدر المتحرك (440 * 1110)
 						<span>
 							{" "}
 							( تستطيع تغيير الصورة التي تظهر في السلايدر المتحرك أعلى الموقع )
@@ -596,7 +343,7 @@ const TemplateUpdate = () => {
 				<FormControl variant='standard' className='px-4'>
 					<div className='row'>
 						<div className='col-12 p-4'>
-							<div className='input-bx banners-box'>
+							<div className='input-bx banners-box first-one'>
 								{/** preview banner here */}
 								<div className=' banners-preview-container d-flex flex-column align-items-center justify-content-center'>
 									{loading ? (
@@ -613,7 +360,7 @@ const TemplateUpdate = () => {
 													}}
 													src={
 														fetchedData?.data?.Homepages[0]?.slider1 ||
-														"https://placehold.co/572x166"
+														"https://placehold.co/1110x170"
 													}
 													alt={fetchedData?.data?.Homepages[0]?.slider1}
 												/>
@@ -825,6 +572,258 @@ const TemplateUpdate = () => {
 						<div className='col-12 p-4'>
 							<div className='btn-bx '>
 								<Button onClick={() => updateSliders()} variant='contained'>
+									حفظ
+								</Button>
+							</div>
+						</div>
+					</div>
+				</FormControl>
+			</div>
+
+			{/** upload banner */}
+			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
+				<div className='title'>
+					<h4>
+						البنرات الإعلانية (170 * 1110)
+						<span>
+							( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين
+							الأقسام )
+						</span>
+					</h4>
+				</div>
+
+				<FormControl variant='standard' className='px-4'>
+					<div className='row'>
+						<div className='col-12 p-4'>
+							<div className='input-bx banners-box '>
+								{/** preview banner here */}
+								<div className=' banners-preview-container d-flex flex-column align-items-center justify-content-center'>
+									{loading ? (
+										<CircularLoading />
+									) : (
+										<>
+											{!firstBanner[0] && (
+												<img
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+														height: "100%",
+														maxWidth: "100%",
+													}}
+													src={
+														fetchedData?.data?.Homepages[0]?.banar1 ||
+														"https://placehold.co/1110x440"
+													}
+													alt={fetchedData?.data?.Homepages[0]?.banar1}
+												/>
+											)}
+											{firstBanner[0] && (
+												<img
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+														height: "100%",
+														maxWidth: "100%",
+													}}
+													src={previewBanner[0]?.data_url}
+													alt='preview-img'
+												/>
+											)}
+										</>
+									)}
+								</div>
+							</div>
+						</div>
+						<div className='col-12 mb-2'>
+							<div className='add-banners-bts-wrapper mt-md-0 mt-3 px-md-0 px-2'>
+								{/** Btn to upload banners */}
+								<div className='add-banners'>
+									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
+										<label htmlFor='add-banner-1'>بانر إعلاني رقم 1</label>
+										<div className='wrapper'>
+											<ImageUploading
+												value={firstBanner}
+												onChange={(imageList) => {
+													setFirstBanner(imageList);
+													setPreviewBanner(imageList);
+												}}
+												maxNumber={2}
+												dataURLKey='data_url'
+												acceptType={["jpg", "png", "jpeg"]}>
+												{({ onImageUpload, dragProps }) => (
+													<div className='upload-files-input mb-2'>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
+															<span> تحديث البانر </span>
+															<MdFileUpload />
+														</button>
+													</div>
+												)}
+											</ImageUploading>
+											<div className='switches-group'>
+												<Switch
+													onChange={() => setBannerStatus1(!bannerstatus1)}
+													sx={{
+														width: "35px",
+														padding: 0,
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
+														},
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
+														},
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
+														},
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
+														},
+														"& .MuiSwitch-track": {
+															height: "100%",
+														},
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
+															opacity: 1,
+														},
+													}}
+													checked={bannerstatus1}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
+										<label htmlFor='add-banner-1'>بانر إعلاني رقم 2</label>
+										<div className='wrapper'>
+											<ImageUploading
+												value={secondBanner}
+												onChange={(imageList) => {
+													setSecondBanner(imageList);
+													setPreviewBanner(imageList);
+												}}
+												maxNumber={2}
+												dataURLKey='data_url'
+												acceptType={["jpg", "png", "jpeg"]}>
+												{({ onImageUpload, dragProps }) => (
+													<div className='upload-files-input mb-2'>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
+															<span> تحديث البانر </span>
+															<MdFileUpload />
+														</button>
+													</div>
+												)}
+											</ImageUploading>
+											<div className='switches-group'>
+												<Switch
+													onChange={() => setBannerStatus2(!bannerstatus2)}
+													sx={{
+														width: "35px",
+														padding: 0,
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
+														},
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
+														},
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
+														},
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
+														},
+														"& .MuiSwitch-track": {
+															height: "100%",
+														},
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
+															opacity: 1,
+														},
+													}}
+													checked={bannerstatus2}
+												/>
+											</div>
+										</div>
+									</div>
+									<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
+										<label htmlFor='add-banner-1'>بانر إعلاني رقم 3</label>
+										<div className='wrapper'>
+											<ImageUploading
+												value={thirdBanner}
+												onChange={(imageList) => {
+													setThirdBanner(imageList);
+													setPreviewBanner(imageList);
+												}}
+												maxNumber={2}
+												dataURLKey='data_url'
+												acceptType={["jpg", "png", "jpeg"]}>
+												{({ onImageUpload, dragProps }) => (
+													<div className='upload-files-input mb-2'>
+														<button
+															className=' d-flex justify-content-between align-items-center w-100'
+															onClick={onImageUpload}
+															{...dragProps}>
+															<span> تحديث البانر </span>
+															<MdFileUpload />
+														</button>
+													</div>
+												)}
+											</ImageUploading>
+											<div className='switches-group'>
+												<Switch
+													onChange={() => setBannerStatus3(!bannerstatus3)}
+													sx={{
+														width: "35px",
+														padding: 0,
+														height: "20px",
+														borderRadius: "0.75rem",
+														"& .MuiSwitch-thumb": {
+															width: "12px",
+															height: "12px",
+														},
+														"& .MuiSwitch-switchBase": {
+															padding: "0",
+															top: "4px",
+															left: "4px",
+														},
+														"& .MuiSwitch-switchBase.Mui-checked": {
+															left: "-4px",
+														},
+														"& .Mui-checked .MuiSwitch-thumb": {
+															backgroundColor: "#FFFFFF",
+														},
+														"& .MuiSwitch-track": {
+															height: "100%",
+														},
+														"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+															backgroundColor: "#3AE374",
+															opacity: 1,
+														},
+													}}
+													checked={bannerstatus3}
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className='col-12 p-4'>
+							<div className='btn-bx '>
+								<Button onClick={() => updateBanners()} variant='contained'>
 									حفظ
 								</Button>
 							</div>

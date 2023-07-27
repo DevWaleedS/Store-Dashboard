@@ -34,8 +34,11 @@ import { ReactComponent as Payment } from "../data/Icons/icon-24-payment Getway.
 import { ReactComponent as Verification } from "../data/Icons/icon-24-Verification.svg";
 import { ReactComponent as BsCart } from "../data/Icons/icon-24-shopping_cart.svg";
 import { ReactComponent as Seo } from "../data/Icons/icon-24-seo.svg";
+import { ReactComponent as Evaluation } from "../data/Icons/evaluation.svg";
 import { SlRocket } from "react-icons/sl";
 import { FaCircle } from "react-icons/fa";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { OpenCelebrityMarketingModal } from "../store/slices/CelebrityMarketingModal";
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
@@ -75,14 +78,12 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 				)}
-
 				<NavLink className='menu-link' to='' onClick={() => closeSidebar()}>
 					<MenuItem>
 						<HomeImage />
 						<span className='me-2'>الرئيسية </span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Category'
@@ -92,7 +93,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> التصنيفات</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Products'
@@ -102,7 +102,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> المنتجات</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Orders'
@@ -112,7 +111,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'>الطلبات </span>
 					</MenuItem>
 				</NavLink>
-
 				{/** Markting Sub menu */}
 				<SubMenu label='التسويق' icon={<Marketing />} as='li'>
 					<NavLink
@@ -174,7 +172,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 				</SubMenu>
-
 				<NavLink
 					className='menu-link'
 					to='Rating'
@@ -184,7 +181,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'>التقييمات </span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Pages'
@@ -194,7 +190,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> الصفحات</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Academy'
@@ -204,7 +199,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> الأكاديمية</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Template'
@@ -214,7 +208,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> القالب</span>
 					</MenuItem>
 				</NavLink>
-
 				{/** Store Sub menu */}
 				<SubMenu label='بيانات المتجر' icon={<Info />} as='li'>
 					<Link
@@ -287,7 +280,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 				</SubMenu>
-
 				<NavLink
 					className='menu-link'
 					to='Support'
@@ -297,7 +289,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> الدعم الفني</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='ShippingCompanies'
@@ -307,7 +298,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> شركات الشحن</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='PaymentGetways'
@@ -317,7 +307,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> بوابات الدفع</span>
 					</MenuItem>
 				</NavLink>
-
 				{/** Setting Sub menu */}
 				<SubMenu label=' الاعدادات' icon={<Setting />} as='li'>
 					<NavLink
@@ -359,7 +348,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 				</SubMenu>
-
 				<NavLink
 					className='menu-link'
 					to='PlatformServices'
@@ -369,7 +357,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> خدمات المنصة</span>
 					</MenuItem>
 				</NavLink>
-
 				<NavLink
 					className='menu-link'
 					to='Report'
@@ -377,6 +364,15 @@ const SideBar = ({ open, closeSidebar }) => {
 					<MenuItem>
 						<Reports />
 						<span className='me-2'> التقارير</span>
+					</MenuItem>
+				</NavLink>
+				<NavLink
+					className='menu-link'
+					to='EvaluationThePlatform'
+					onClick={() => closeSidebar()}>
+					<MenuItem>
+						<Evaluation />
+						<span className='me-2'> تقييم المنصة</span>
 					</MenuItem>
 				</NavLink>
 			</Menu>

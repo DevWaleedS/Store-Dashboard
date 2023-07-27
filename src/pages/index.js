@@ -30,3 +30,4 @@ export { default as BranchesAndWarehouses } from "./BranchesAndWarehouses";
 export { default as PackageUpgrade } from "./PackageUpgrade";
 export { default as Notifications } from "./Notifications";
 export { default as PlatformServices } from "./PlatformServices";
+export { default as EvaluationThePlatform } from "./EvaluationThePlatform/EvaluationThePlatform";

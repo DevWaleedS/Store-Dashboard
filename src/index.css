@@ -688,7 +688,8 @@ textarea,
 	height: 10px !important;
 }
 
-.ps-menu-button svg {
+.ps-menu-button svg,
+.ps-menu-button svg#evaluation path {
 	fill: var(--primary-500);
 }
 
@@ -1879,6 +1880,9 @@ nav.navigation {
 	max-width: 100%;
 	margin: 0px 100px;
 }
+.seo-weight-edit-box .input-bx.banners-box.first-one {
+	margin: 0px 90px;
+}
 .seo-weight-edit-box .input-bx.logo-box {
 	width: 500px;
 	max-width: 100%;
@@ -2133,6 +2137,7 @@ nav.navigation {
 	margin-bottom: 20px;
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: 20px;
 }
 
@@ -6247,7 +6252,8 @@ input:disabled {
 		width: 20px;
 		height: 20px;
 	}
-	.seo-weight-edit-box .input-bx.banners-box {
+	.seo-weight-edit-box .input-bx.banners-box,
+	.seo-weight-edit-box .input-bx.banners-box.first-one {
 		width: 642px;
 		margin: 0px 110px;
 	}
@@ -6300,7 +6306,8 @@ input:disabled {
 		flex-wrap: wrap;
 	}
 
-	.seo-weight-edit-box .input-bx.banners-box {
+	.seo-weight-edit-box .input-bx.banners-box,
+	.seo-weight-edit-box .input-bx.banners-box.first-one {
 		width: 100%;
 		margin: 0px -121px;
 	}
@@ -7922,7 +7929,8 @@ input:disabled {
 		padding: 0 !important;
 	}
 
-	.seo-weight-edit-box .input-bx.banners-box {
+	.seo-weight-edit-box .input-bx.banners-box,
+	.seo-weight-edit-box .input-bx.banners-box.first-one {
 		width: 100%;
 		margin: 0px -120px;
 	}
@@ -8995,8 +9003,8 @@ input:disabled {
 	.react-datepicker__triangle {
 		left: -12px !important;
 	}
-
-	.seo-weight-edit-box .input-bx.banners-box {
+	.seo-weight-edit-box .input-bx.banners-box,
+	.seo-weight-edit-box .input-bx.banners-box.first-one {
 		width: 559px;
 		margin: 0 -119px;
 	}
@@ -9076,6 +9084,10 @@ input:disabled {
 		max-width: 100%;
 		margin: 0px 108px;
 	}
+	.seo-weight-edit-box .input-bx.banners-box.first-one {
+		margin: 0px 90px;
+	}
+
 	.apply-btn {
 		width: 175px;
 	}

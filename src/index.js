@@ -50,6 +50,7 @@ import {
 	BranchesAndWarehouses,
 	Notifications,
 	PlatformServices,
+	EvaluationThePlatform,
 } from "./pages";
 // ---------------------------------------------------------------------------------------//
 
@@ -375,6 +376,10 @@ const router = createBrowserRouter([
 			{
 				path: "PlatformServices/Delegate",
 				element: <Delegate />,
+			},
+			{
+				path: "EvaluationThePlatform",
+				element: <EvaluationThePlatform />,
 			},
 		],
 	},
