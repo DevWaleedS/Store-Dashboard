@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currency.svg";
+import PlayVideo from "../../data/Icons/video-play.svg";
 import { useCookies } from "react-cookie";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { LoadingContext } from "../../Context/LoadingProvider";
@@ -154,18 +155,14 @@ const ProductRefund = () => {
 															if (isVideo) {
 																return (
 																	<div className='video_wrapper'>
-																		<div className='play-video-icon'>
-																			<BsPlayCircle
-																				onClick={() => {
-																					setImagesPreview(item?.image);
-																				}}
-																			/>
-																		</div>
-
 																		<video
+																			onClick={() => {
+																				setImagesPreview(item?.image);
+																			}}
 																			style={{
 																				cursor: "pointer",
 																			}}
+																			poster={PlayVideo}
 																			key={index}
 																			src={item?.image}
 																			className='img-fluid'

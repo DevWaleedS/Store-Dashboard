@@ -5769,7 +5769,9 @@ input:disabled {
 	width: 160px;
 	height: 144px;
 	object-fit: contain;
-	object-position: right;
+	object-position: center;
+	aspect-ratio: 1/1;
+	mix-blend-mode: multiply;
 }
 
 .product-box .star-icon-bg {
@@ -5886,7 +5888,6 @@ input:disabled {
 	font-weight: 500;
 	letter-spacing: 0px;
 	color: #011723;
-	/* margin-right: 60px; */
 	white-space: normal;
 }
 
@@ -5894,13 +5895,20 @@ input:disabled {
 	display: flex;
 	gap: 30px;
 }
-
+.product-images .main-image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-shadow: inset 0 0 0 2px #ededed;
+	padding: 20px;
+}
 .product-images .main-image img,
 .product-images .main-image video {
 	width: 254px;
 	height: 230px;
 	object-fit: contain;
-	object-position: right;
+	object-position: center;
+	mix-blend-mode: multiply;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -5916,19 +5924,29 @@ input:disabled {
 }
 .product-images .another-image div {
 	width: 70px;
-	height: 65px;
+	padding: 12px;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	-ms-border-radius: 4px;
 	-o-border-radius: 4px;
+	box-shadow: inset 0 0 0 2px #ededed;
+}
+.product-images .another-image div:hover,
+.product-images .another-image div.active {
+	box-shadow: inset 0 0 0 2px var(--second-500);
 }
 .product-images .another-image div img,
 .product-images .another-image div video {
-	object-fit: cover;
+	object-fit: contain;
+	mix-blend-mode: multiply;
+	aspect-ratio: 1/1;
 }
 .product-images .another-image .video_wrapper {
-	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 70px;
 }
 .product-images .another-image .video_wrapper .play-video-icon {
 	position: absolute;
@@ -7450,6 +7468,7 @@ input:disabled {
 	}
 
 	.product-images {
+		flex-direction: column;
 		justify-content: center;
 	}
 
@@ -7458,9 +7477,9 @@ input:disabled {
 		width: 185px;
 		height: 165px;
 	}
-	.product-images .another-image div {
-		width: 50px;
-		height: 45px;
+	.product-images .another-image {
+		flex-direction: row;
+		justify-content: flex-start;
 	}
 
 	.ProductRefund-wrapper .product-category {

@@ -19,28 +19,39 @@ const ProductBox = ({ data, loading }) => {
 					<div className='product-box mb-md-4 mb-3' key={index}>
 						<div className='row'>
 							<div className='col-sm-3 col-12 mb-sm-0 mb-3'>
-								<div className='row align-items-sm-start align-items-center'>
-									<div className='col-sm-2 col-4'>
-										<div className='d-flex flex-column gap-3  align-items-center'>
-											{product?.special === "مميز" ? (
+								{product?.special === "مميز" ? (
+									<div className='row align-items-sm-start align-items-center'>
+										<div className='col-sm-2 col-4'>
+											<div className='d-flex flex-column gap-3  align-items-center'>
 												<span className='star-icon-bg d-flex justify-content-center align-items-center'>
 													<BsStarFill className='star-icon' />
 												</span>
-											) : (
-												""
-											)}
+											</div>
+										</div>
+
+										<div className='col-sm-10 col-8'>
+											<img
+												src={product?.cover}
+												alt='product'
+												loading='lazy'
+												className='img-fluid'
+												style={{ borderRadius: "4px" }}
+											/>
 										</div>
 									</div>
-									<div className='col-sm-10 col-8'>
-										<img
-											src={product?.cover}
-											alt='product'
-											loading='lazy'
-											className='img-fluid'
-											style={{ borderRadius: "4px" }}
-										/>
+								) : (
+									<div className='row align-items-sm-start align-items-center'>
+										<div className='col-12'>
+											<img
+												src={product?.cover}
+												alt='product'
+												loading='lazy'
+												className='img-fluid'
+												style={{ borderRadius: "4px" }}
+											/>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 							<div className='col-sm-9 col-12'>
 								<div className=' d-flex justify-content-between mb-4'>
