@@ -6077,7 +6077,7 @@ input:disabled {
 	color: #011723;
 }
 
-.page-title .notifications-title {
+.notifications .notifications-title {
 	font: 500 20px/20px "Tajawal";
 	letter-spacing: 0px;
 	color: #011723;
@@ -8675,7 +8675,7 @@ input:disabled {
 		font-size: 18px;
 	}
 
-	.page-title .notifications-title {
+	.notifications .notifications-title {
 		max-width: 185px;
 		font-size: 18px;
 		margin-bottom: 10px;
