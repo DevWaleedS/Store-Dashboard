@@ -488,6 +488,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																			objectFit: "contain",
 																		}}
 																	/>
+
 																	<span
 																		className='me-3'
 																		style={{

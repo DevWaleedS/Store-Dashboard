@@ -43,11 +43,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { OpenCelebrityMarketingModal } from "../store/slices/CelebrityMarketingModal";
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
+import useFetch from "../Hooks/UseFetch";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
 	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+
+	/**
+	 * to set the domain name of store to local storage
+	 *To show the store info that come from api
+	-------------------------------------------------------------------------------------------
+	 */
+
+	const { fetchedData } = useFetch(
+		"https://backend.atlbha.com/api/Store/setting_store_show"
+	);
+	localStorage.setItem("domain", fetchedData?.data?.setting_store?.domain);
 	const domain = localStorage.getItem("domain");
 
 	return (

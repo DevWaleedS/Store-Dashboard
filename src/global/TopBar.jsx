@@ -45,6 +45,12 @@ const TopBar = ({ toggleSidebar }) => {
 	const { fetchedData: profile } = useFetch(
 		"https://backend.atlbha.com/api/Store/profile"
 	);
+
+	const { fetchedData: store_Setting } = useFetch(
+		"https://backend.atlbha.com/api/Store/setting_store_show"
+	);
+	// to set the store logo to local storage
+	localStorage.setItem("storeLogo", store_Setting?.data?.setting_store?.logo);
 	// to set data to the user aut
 	useEffect(() => {
 		if (profile) {

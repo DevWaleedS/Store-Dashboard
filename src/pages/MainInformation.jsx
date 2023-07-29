@@ -72,12 +72,10 @@ const MainInformation = () => {
 			setDomain([fetchedData?.data?.setting_store?.domain]);
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);
-
-			// to set the domain and  sent store logo to top bar name of store to local storage
-			localStorage.setItem("domain", fetchedData?.data?.setting_store?.domain);
-			localStorage.setItem("storeLogo", fetchedData?.data?.setting_store?.logo);
 		}
 	}, [fetchedData?.data?.setting_store]);
+
+
 
 	// ---------------------------
 
