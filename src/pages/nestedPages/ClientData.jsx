@@ -782,7 +782,7 @@ const ClientData = () => {
 													<DatePicker
 														placeholderText='اختر تاريخ انتهاء الخصم'
 														type='text'
-														dateFormat='yyyy-mm-dd'
+														dateFormat='yyyy-MM-dd'
 														minDate={moment().toDate()}
 														selected={discount_expire_date}
 														onChange={(date) => setDiscount_expire_date(date)}
