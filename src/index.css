@@ -2124,7 +2124,10 @@ nav.navigation {
 	font-size: 18px;
 	font-weight: 500;
 }
-
+.rating-page .pagination-box {
+	width: 1100px;
+	max-width: 100%;
+}
 /* send replay modal style  */
 .rdw-editor-toolbar {
 	width: 964px;
@@ -5869,6 +5872,10 @@ input:disabled {
 	font-weight: 500;
 	border-radius: 2px;
 }
+.souqOtlobha-page .pagination-box {
+	width: 1144px;
+	max-width: 1144px;
+}
 
 /* ----------------------------------------------------------------- */
 
@@ -7454,6 +7461,11 @@ input:disabled {
 	.recovery-button button {
 		font-size: 18px;
 	}
+	.souqOtlobha-page .pagination-box {
+	width: 100%;
+	max-width: 100%;
+}
+
 
 	/* ProductRefund*/
 	.ProductRefund-wrapper .container-row {
