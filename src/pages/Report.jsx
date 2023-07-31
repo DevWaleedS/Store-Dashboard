@@ -1,40 +1,48 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Button } from '@mui/material';
+import { Button } from "@mui/material";
 
 // TO print this page
-import ReactToPrint from 'react-to-print';
+import ReactToPrint from "react-to-print";
 
-import { Link } from 'react-router-dom';
-import useFetch from '../Hooks/UseFetch';
+import { Link } from "react-router-dom";
+import useFetch from "../Hooks/UseFetch";
 
 // Date picker component
-import DateRangePicker from 'rsuite/DateRangePicker';
-import 'rsuite/dist/rsuite.min.css';
+import DateRangePicker from "rsuite/DateRangePicker";
+import "rsuite/dist/rsuite.min.css";
 // Moment
-import moment from 'moment';
+import moment from "moment";
 
 // import icons and images
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { ReactComponent as PrintIcon } from '../data/Icons/icon-24-print.svg';
-import { ReactComponent as WalletIcon } from '../data/Icons/icon-24-wallet.svg';
-import { ReactComponent as ClientsIcon } from '../data/Icons/icon-24-user.svg';
-import { CustomersReports, SalesReports } from './nestedPages';
-import { AiOutlineSearch } from 'react-icons/ai';
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { ReactComponent as PrintIcon } from "../data/Icons/icon-24-print.svg";
+import { ReactComponent as WalletIcon } from "../data/Icons/icon-24-wallet.svg";
+import { ReactComponent as ClientsIcon } from "../data/Icons/icon-24-user.svg";
+import { CustomersReports, SalesReports } from "./nestedPages";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Report = () => {
 	const componentRef = useRef();
 	const [dateValue, setDateValue] = useState([]);
-	const [url, setUrl] = useState(`https://backend.atlbha.com/api/Store/reports?startDate=2023-02-12&endDate=2023-05-14`);
+	const [url, setUrl] = useState(
+		`https://backend.atlbha.com/api/Store/reports?startDate=2023-02-12&endDate=2023-05-14`
+	);
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (dateValue?.length !== 0 && dateValue !== null) {
-				setUrl(`https://backend.atlbha.com/api/Store/reports?startDate=${moment(dateValue[0]).format('YYYY-MM-DD')}&endDate=${moment(dateValue[1]).format('YYYY-MM-DD')}`);
+				setUrl(
+					`https://backend.atlbha.com/api/Store/reports?startDate=${moment(
+						dateValue[0]
+					).format("YYYY-MM-DD")}&endDate=${moment(dateValue[1]).format(
+						"YYYY-MM-DD"
+					)}`
+				);
 				console.log(url);
 			} else {
-				console.log('data not found');
+				console.log("data not found");
 			}
 		}, 1000);
 
@@ -57,7 +65,13 @@ const Report = () => {
 						<div className='search-icon'>
 							<AiOutlineSearch color='#02466A' />
 						</div>
-						<input type='text' name='search' id='search' className='input' placeholder='أدخل كلمة البحث' />
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='input'
+							placeholder='أدخل كلمة البحث'
+						/>
 					</div>
 				</div>
 				<div className='head-category mb-md-4'>
@@ -84,7 +98,12 @@ const Report = () => {
 					<div className='row mb-md-4 mb-3'>
 						<div className='col-lg-6 col-md-6 col-sm-12 mb-2'>
 							<div className='date-picker'>
-								<DateRangePicker value={dateValue} onChange={setDateValue} dir='rtl' placeholder='اختر الفترة من - إلي' />
+								<DateRangePicker
+									value={dateValue}
+									onChange={setDateValue}
+									dir='rtl'
+									placeholder='اختر الفترة من - إلي'
+								/>
 							</div>
 						</div>
 						<div className='col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end'>
@@ -107,9 +126,20 @@ const Report = () => {
 
 					<div className='select-report-links mb-md-5 mb-3'>
 						<div className='d-flex align-items-center'>
-							<ul className='w-100 nav nav-pills  reports-tabs-buttons' id='pills-tab' role='tablist'>
+							<ul
+								className='w-100 nav nav-pills  reports-tabs-buttons'
+								id='pills-tab'
+								role='tablist'>
 								<li className='nav-item mb-2' role='presentation'>
-									<button className='sales-btn active' id='sales-tab' data-bs-toggle='pill' data-bs-target='#pills-sales-tab' type='button' role='tab' aria-controls='pills-home' aria-selected='true'>
+									<button
+										className='sales-btn active'
+										id='sales-tab'
+										data-bs-toggle='pill'
+										data-bs-target='#pills-sales-tab'
+										type='button'
+										role='tab'
+										aria-controls='pills-home'
+										aria-selected='true'>
 										<WalletIcon />
 										<span className='me-2'>المبيعات</span>
 									</button>
@@ -123,8 +153,7 @@ const Report = () => {
 										type='button'
 										role='tab'
 										aria-controls='pills-custmores'
-										aria-selected='false'
-									>
+										aria-selected='false'>
 										<ClientsIcon />
 										<span className='me-2'>العملاء</span>
 									</button>
@@ -136,10 +165,18 @@ const Report = () => {
 
 				<div className='reports-wrapper' ref={componentRef}>
 					<div className='tab-content reports-content' id='pills-tabContent'>
-						<div className='tab-pane fade show active' id='pills-sales-tab' role='tabpanel' aria-labelledby='sales-tab'>
+						<div
+							className='tab-pane fade show active'
+							id='pills-sales-tab'
+							role='tabpanel'
+							aria-labelledby='sales-tab'>
 							<SalesReports salesReport={fetchedData} loading={loading} />
 						</div>
-						<div className='tab-pane fade' id='pills-custmores' role='tabpanel' aria-labelledby='pills-custmores-tab'>
+						<div
+							className='tab-pane fade'
+							id='pills-custmores'
+							role='tabpanel'
+							aria-labelledby='pills-custmores-tab'>
 							<CustomersReports />
 						</div>
 					</div>

@@ -189,7 +189,7 @@ const CreatePage = () => {
 						setReload(!reload);
 					} else {
 						setLoadingTitle("");
-						
+
 						setPageError({
 							title: res?.data?.message?.en?.title?.[0],
 							page_desc: res?.data?.message?.en?.page_desc?.[0],

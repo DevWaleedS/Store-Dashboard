@@ -1,21 +1,23 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
-import useFetch from '../Hooks/UseFetch';
-import { CustomersDataTable } from '../components';
-import { AddCustomer } from './nestedPages';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import useFetch from "../Hooks/UseFetch";
+import { CustomersDataTable } from "../components";
+import { AddCustomer } from "./nestedPages";
+import { useDispatch } from "react-redux";
 
 // icons
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { MdAdd } from 'react-icons/md';
-import { BsSearch } from 'react-icons/bs';
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { MdAdd } from "react-icons/md";
+import { BsSearch } from "react-icons/bs";
 
-import { openCustomerDataModal } from '../store/slices/CustomerDataModal-slice';
+import { openCustomerDataModal } from "../store/slices/CustomerDataModal-slice";
 
 const Customer = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/client');
-	
-	const [search, setSearch] = useState('');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/client"
+	);
+
+	const [search, setSearch] = useState("");
 	let clients = fetchedData?.data?.clients;
 	let filterClients = fetchedData?.data?.clients;
 
@@ -23,15 +25,14 @@ const Customer = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 	};
-	const [category_id, setCategory_id] = useState('');
-	if (search !== '') {
+	const [category_id, setCategory_id] = useState("");
+	if (search !== "") {
 		clients = fetchedData?.data?.clients?.filter((item) => {
 			return (
 				item?.ID_number?.toLowerCase()?.includes(search?.toLowerCase()) ||
 				item?.phonenumber?.toLowerCase()?.includes(search?.toLowerCase()) ||
 				item?.first_name?.toLowerCase()?.includes(search?.toLowerCase()) ||
-				item?.last_name?.toLowerCase()?.includes(search?.toLowerCase()) 
-
+				item?.last_name?.toLowerCase()?.includes(search?.toLowerCase())
 			);
 		});
 	} else {
@@ -39,13 +40,12 @@ const Customer = () => {
 	}
 
 	if (category_id !== 5) {
-		filterClients = clients?.sort((a, b) => a?.country?.name?.localeCompare(b?.country?.name));
-	}
-	else {
+		filterClients = clients?.sort((a, b) =>
+			a?.country?.name?.localeCompare(b?.country?.name)
+		);
+	} else {
 		filterClients = clients?.sort((a, b) => a?.id - b?.id);
 	}
-
-	
 
 	return (
 		<section className='customer-page p-lg-3'>
@@ -72,17 +72,25 @@ const Customer = () => {
 					<form onSubmit={handleSubmit}>
 						<div className='input-group'>
 							<div className='search-input input-box'>
-								<input value={search} onChange={(e) => { setSearch(e.target.value); }} type='text' name='search' id='search' placeholder='ابحث بواسطة الرقم ID / الاسم/ رقم الجوال' />
+								<input
+									value={search}
+									onChange={(e) => {
+										setSearch(e.target.value);
+									}}
+									type='text'
+									name='search'
+									id='search'
+									placeholder='ابحث بواسطة الرقم ID / الاسم/ رقم الجوال'
+								/>
 								<BsSearch />
 							</div>
-						
+
 							<div className='add-category-bt-box'>
 								<button
 									className='add-cat-btn'
 									onClick={() => {
 										dispatch(openCustomerDataModal());
-									}}
-								>
+									}}>
 									<MdAdd />
 									اضافه عميل
 								</button>
@@ -93,16 +101,18 @@ const Customer = () => {
 			</div>
 
 			<div className='customer-table'>
-				<CustomersDataTable fetchedData={filterClients} loading={loading} reload={reload} setReload={setReload} />
+				<CustomersDataTable
+					fetchedData={filterClients}
+					loading={loading}
+					reload={reload}
+					setReload={setReload}
+				/>
 			</div>
 
 			{/** AddCustomer page */}
-			<AddCustomer
-				reload={reload}
-				setReload={setReload}
-			/>
+			<AddCustomer reload={reload} setReload={setReload} />
 		</section>
 	);
-}
+};
 
-export default Customer
+export default Customer;

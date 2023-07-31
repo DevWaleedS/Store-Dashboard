@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
-import { CartsTables } from '../components';
+import { Link } from "react-router-dom";
+import { CartsTables } from "../components";
 
 // icons
-import howIcon from '../data/Icons/icon_24_home.svg';
+import howIcon from "../data/Icons/icon_24_home.svg";
 // custom hooks to get data from server
-import useFetch from '../Hooks/UseFetch';
+import useFetch from "../Hooks/UseFetch";
 
 const Carts = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/admin');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/admin"
+	);
 
 	// to create search
-	const [search, setSearch] = useState('');
+	const [search, setSearch] = useState("");
 	let carts = fetchedData?.data?.cart;
 
-	if (search !== '') {
-		carts = fetchedData?.data?.cart?.filter((item) => item?.user?.name?.toLowerCase()?.includes(search?.toLowerCase()));
+	if (search !== "") {
+		carts = fetchedData?.data?.cart?.filter((item) =>
+			item?.user?.name?.toLowerCase()?.includes(search?.toLowerCase())
+		);
 	} else {
 		carts = fetchedData?.data?.cart;
 	}
@@ -50,7 +54,14 @@ const Carts = () => {
 
 				<div className='row'>
 					<div className='carts-table'>
-						<CartsTables cartsData={carts} loading={loading} reload={reload} setReload={setReload} search={search} setSearch={setSearch} />
+						<CartsTables
+							cartsData={carts}
+							loading={loading}
+							reload={reload}
+							setReload={setReload}
+							search={search}
+							setSearch={setSearch}
+						/>
 					</div>
 				</div>
 			</section>

@@ -218,7 +218,7 @@ export default function UserAndManagementTable({
 	setReload,
 }) {
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;

@@ -55,7 +55,6 @@ const Login = () => {
 	 * ----------------------------------------------
 	 */
 	const NavigateToRestorePassword = () => {
-		// window.location.href = "http://home.atlbha.com/passwordBackPage";
 		navigate("/RestorePassword");
 	};
 

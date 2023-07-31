@@ -15,7 +15,7 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 
 const Offers = () => {
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/offer"
 	);

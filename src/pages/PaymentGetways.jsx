@@ -24,7 +24,7 @@ const PaymentGetways = () => {
 	);
 
 	const [cookies] = useCookies(["access_token"]);
-	
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 

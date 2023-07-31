@@ -1,16 +1,18 @@
-import React from 'react';
+import React from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
-import useFetch from '../Hooks/UseFetch';
+import { Link } from "react-router-dom";
+import useFetch from "../Hooks/UseFetch";
 // MUI
-import { DataBox, BigOrdersTable } from '../components';
+import { DataBox, BigOrdersTable } from "../components";
 
 // Icons
-import arrowBack from '../data/Icons/icon-30-arrwos back.svg';
-import { AiOutlineSearch } from 'react-icons/ai';
+import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Orders = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/orders');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/orders"
+	);
 	return (
 		<>
 			<Helmet>
@@ -22,7 +24,13 @@ const Orders = () => {
 						<div className='search-icon'>
 							<AiOutlineSearch color='#02466A' />
 						</div>
-						<input type='text' name='search' id='search' className='input' placeholder='أدخل كلمة البحث' />
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='input'
+							placeholder='أدخل كلمة البحث'
+						/>
 					</div>
 				</div>
 				<div className='head-category'>
@@ -52,13 +60,17 @@ const Orders = () => {
 							not_completed={fetchedData?.data?.not_completed}
 							canceled={fetchedData?.data?.canceled}
 							all={fetchedData?.data?.all}
-
 						/>
 					</div>
 				</div>
 				{/** Orders table */}
 				<div className='tables'>
-					<BigOrdersTable data={fetchedData?.data?.orders} loading={loading} reload={reload} setReload={setReload} />
+					<BigOrdersTable
+						data={fetchedData?.data?.orders}
+						loading={loading}
+						reload={reload}
+						setReload={setReload}
+					/>
 				</div>
 			</section>
 		</>

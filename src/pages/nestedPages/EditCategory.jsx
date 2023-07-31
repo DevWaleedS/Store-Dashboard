@@ -105,7 +105,7 @@ const EditCategory = () => {
 
 		// to select all subcategories
 		for (let i = 0; i < subCategories?.length; i++) {
-			if(subCategories[i]?.name !== ''){
+			if (subCategories[i]?.name !== "") {
 				formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
 				formData.append([`data[${i}][id]`], subCategories[i]?.id || "");
 			}
@@ -311,47 +311,49 @@ const EditCategory = () => {
 										</div>
 									</div>
 									{subCategories &&
-										subCategories.map((subCategory, index) => (
-											subCategory?.name &&
-											<div className='row mb-md-5 mb-3' key={index}>
-												<div className='col-md-3 col-12'>
-													<label
-														htmlFor='category-name'
-														style={{
-															color: "#1DBBBE",
-														}}>
-														فرعي رقم {index + 1}
-													</label>
-												</div>
-												<div className='col-md-7 col-12 d-flex justify-content-end align-items-center gap-2'>
-													<input
-														className='flex-1'
-														type='text'
-														id='category-name'
-														value={subCategory?.name}
-														onChange={(e) => updateSubCatChanged(e, index)}
-														style={{
-															color: "#1DBBBE",
-															border: "1px solid #1DBBBE",
-														}}
-													/>
-													<DeleteIcon
-														onClick={() => {
-															setSubCategories((subCategories) => [
-																...subCategories.filter(
-																	(sub) => sub?.name !== subCategory?.name
-																),
-															]);
-														}}
-														style={{
-															width: "25px",
-															height: "25px",
-															cursor: "pointer",
-														}}
-													/>
-												</div>
-											</div>
-										))}
+										subCategories.map(
+											(subCategory, index) =>
+												subCategory?.name && (
+													<div className='row mb-md-5 mb-3' key={index}>
+														<div className='col-md-3 col-12'>
+															<label
+																htmlFor='category-name'
+																style={{
+																	color: "#1DBBBE",
+																}}>
+																فرعي رقم {index + 1}
+															</label>
+														</div>
+														<div className='col-md-7 col-12 d-flex justify-content-end align-items-center gap-2'>
+															<input
+																className='flex-1'
+																type='text'
+																id='category-name'
+																value={subCategory?.name}
+																onChange={(e) => updateSubCatChanged(e, index)}
+																style={{
+																	color: "#1DBBBE",
+																	border: "1px solid #1DBBBE",
+																}}
+															/>
+															<DeleteIcon
+																onClick={() => {
+																	setSubCategories((subCategories) => [
+																		...subCategories.filter(
+																			(sub) => sub?.name !== subCategory?.name
+																		),
+																	]);
+																}}
+																style={{
+																	width: "25px",
+																	height: "25px",
+																	cursor: "pointer",
+																}}
+															/>
+														</div>
+													</div>
+												)
+										)}
 
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'></div>

@@ -1,14 +1,15 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from "react";
 import { Helmet } from "react-helmet";
-import Details from '../components/Details';
-import TopSection from '../components/TopSection';
-import LineCharts from '../components/LineCharts';
-import useFetch from '../Hooks/UseFetch';
-import { OrdersTableData, PieCharts, ProductsTableData } from '../components';
-
+import Details from "../components/Details";
+import TopSection from "../components/TopSection";
+import LineCharts from "../components/LineCharts";
+import useFetch from "../Hooks/UseFetch";
+import { OrdersTableData, PieCharts, ProductsTableData } from "../components";
 
 const Home = () => {
-	const { fetchedData, loading } = useFetch('https://backend.atlbha.com/api/Store/index');
+	const { fetchedData, loading } = useFetch(
+		"https://backend.atlbha.com/api/Store/index"
+	);
 	return (
 		<Fragment>
 			<Helmet>
@@ -28,7 +29,11 @@ const Home = () => {
 			<section className='charts mb-5'>
 				<div className='row'>
 					<div className='col-lg-8 col-md-12 mb-4'>
-						<LineCharts array_sales_daily={fetchedData?.data?.array_sales_daily} array_sales_monthly={fetchedData?.data?.array_sales_monthly} array_sales_weekly={fetchedData?.data?.array_sales_weekly} />
+						<LineCharts
+							array_sales_daily={fetchedData?.data?.array_sales_daily}
+							array_sales_monthly={fetchedData?.data?.array_sales_monthly}
+							array_sales_weekly={fetchedData?.data?.array_sales_weekly}
+						/>
 					</div>
 					<div className='col-lg-4 col-md-12 '>
 						<PieCharts fetchedData={fetchedData} />

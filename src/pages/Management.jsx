@@ -1,36 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import useFetch from '../Hooks/UseFetch';
-import { Link, useNavigate } from 'react-router-dom';
+import useFetch from "../Hooks/UseFetch";
+import { Link, useNavigate } from "react-router-dom";
 // Icons and Image
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { MdAdd } from 'react-icons/md';
-import { BsSearch } from 'react-icons/bs';
-import { IoIosArrowDown } from 'react-icons/io';
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { MdAdd } from "react-icons/md";
+import { BsSearch } from "react-icons/bs";
+import { IoIosArrowDown } from "react-icons/io";
 // MUI
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { Button } from '@mui/material';
-import { UserAndManagementTable } from '../components';
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { Button } from "@mui/material";
+import { UserAndManagementTable } from "../components";
 
 const Management = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/user');
-	const { fetchedData: roles } = useFetch('https://backend.atlbha.com/api/Store/selector/roles');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/user"
+	);
+	const { fetchedData: roles } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/roles"
+	);
 	const navigate = useNavigate();
-	const [roll_id, setRoll_id] = useState('');
-	const [search, setSearch] = useState('');
+	const [roll_id, setRoll_id] = useState("");
+	const [search, setSearch] = useState("");
 	let users = fetchedData?.data?.users;
 	let filterUsers = users;
 
-	if (search !== '') {
-		users = fetchedData?.data?.users?.filter((item) => item?.name?.toLowerCase()?.includes(search?.toLowerCase()));
+	if (search !== "") {
+		users = fetchedData?.data?.users?.filter((item) =>
+			item?.name?.toLowerCase()?.includes(search?.toLowerCase())
+		);
 	} else {
 		users = fetchedData?.data?.users;
 	}
 
-	if (roll_id !== '') {
-		filterUsers = users?.filter((item) => parseInt(item?.role?.id) === parseInt(roll_id));
+	if (roll_id !== "") {
+		filterUsers = users?.filter(
+			(item) => parseInt(item?.role?.id) === parseInt(roll_id)
+		);
 	} else {
 		filterUsers = users;
 	}
@@ -68,9 +76,8 @@ const Management = () => {
 									variant='contained'
 									className='outline'
 									onClick={() => {
-										navigate('AddUser');
-									}}
-								>
+										navigate("AddUser");
+									}}>
 									<MdAdd />
 									<span className='me-2'>إضافة مستخدم</span>
 								</Button>
@@ -80,9 +87,8 @@ const Management = () => {
 									className='roles-btn'
 									variant='contained'
 									onClick={() => {
-										navigate('JobTitles');
-									}}
-								>
+										navigate("JobTitles");
+									}}>
 									الأدوار
 								</Button>
 							</div>
@@ -105,7 +111,7 @@ const Management = () => {
 										فرز حسب
 									</label>
 
-									<FormControl sx={{ m: 0, width: '100%' }}>
+									<FormControl sx={{ m: 0, width: "100%" }}>
 										<Select
 											name='roll_id'
 											value={roll_id}
@@ -113,47 +119,52 @@ const Management = () => {
 												setRoll_id(e.target.value);
 											}}
 											sx={{
-												fontSize: '18px',
-												backgroundColor: '#ededed',
-												'& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
-												{
-													paddingRight: '20px',
-												},
-												'& .MuiOutlinedInput-root': {
-													'& :hover': {
-														border: 'none',
+												fontSize: "18px",
+												backgroundColor: "#ededed",
+												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+													{
+														paddingRight: "20px",
+													},
+												"& .MuiOutlinedInput-root": {
+													"& :hover": {
+														border: "none",
 													},
 												},
-												'& .MuiOutlinedInput-notchedOutline': {
-													border: 'none',
+												"& .MuiOutlinedInput-notchedOutline": {
+													border: "none",
 												},
-												'& .MuiSelect-icon': {
-													right: '95%',
+												"& .MuiSelect-icon": {
+													right: "95%",
 												},
-												'& .MuiSelect-nativeInput': {
-													display: 'none',
+												"& .MuiSelect-nativeInput": {
+													display: "none",
 												},
 											}}
 											IconComponent={IoIosArrowDown}
 											displayEmpty
-											inputProps={{ 'aria-label': 'Without label' }}
+											inputProps={{ "aria-label": "Without label" }}
 											renderValue={(selected) => {
-												if (roll_id === '') {
-													return <p className='select-role-hint'>اختر الدور الوظيفي</p>;
+												if (roll_id === "") {
+													return (
+														<p className='select-role-hint'>
+															اختر الدور الوظيفي
+														</p>
+													);
 												}
-												const result = roles?.data?.roles?.filter((item) => parseInt(item?.id) === parseInt(selected)) || '';
+												const result =
+													roles?.data?.roles?.filter(
+														(item) => parseInt(item?.id) === parseInt(selected)
+													) || "";
 												return result[0]?.name;
-											}}
-										>
+											}}>
 											<MenuItem
 												className='souq_storge_category_filter_items'
 												sx={{
-													backgroundColor: '#fff',
-													height: '3rem',
-													'&:hover': {},
+													backgroundColor: "#fff",
+													height: "3rem",
+													"&:hover": {},
 												}}
-												value={''}
-											>
+												value={""}>
 												الكل
 											</MenuItem>
 											{roles?.data?.roles?.map((cat, index) => {
@@ -162,12 +173,11 @@ const Management = () => {
 														key={index}
 														className='souq_storge_category_filter_items'
 														sx={{
-															backgroundColor: '#ffff',
-															height: '3rem',
-															'&:hover': {},
+															backgroundColor: "#ffff",
+															height: "3rem",
+															"&:hover": {},
 														}}
-														value={cat?.id}
-													>
+														value={cat?.id}>
 														{cat?.name}
 													</MenuItem>
 												);
@@ -184,7 +194,14 @@ const Management = () => {
 											<BsSearch />
 										</span>
 									</div>
-									<input value={search} onChange={(e) => setSearch(e.target.value)} type='text' name='search-user' id='search-user' placeholder='ابحث عن مستخدم' />
+									<input
+										value={search}
+										onChange={(e) => setSearch(e.target.value)}
+										type='text'
+										name='search-user'
+										id='search-user'
+										placeholder='ابحث عن مستخدم'
+									/>
 								</div>
 							</div>
 						</div>
@@ -192,7 +209,12 @@ const Management = () => {
 				</div>
 
 				<div className='management-table'>
-					<UserAndManagementTable data={filterUsers} loading={loading} reload={reload} setReload={setReload} />
+					<UserAndManagementTable
+						data={filterUsers}
+						loading={loading}
+						reload={reload}
+						setReload={setReload}
+					/>
 				</div>
 			</section>
 		</>

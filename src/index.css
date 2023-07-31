@@ -2109,15 +2109,17 @@ nav.navigation {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-	margin-top: -30px;
-}
-
-.rates-starts {
-	padding: 35px 0 0 0;
 }
 
 .start svg path {
 	fill: var(--bs-yellow);
+}
+.rating-page .product-name span {
+	font-size: 16px;
+}
+.rating-page .product-name-title {
+	font-size: 18px;
+	font-weight: 500;
 }
 
 .ratin-bx h6 {
@@ -7462,10 +7464,9 @@ input:disabled {
 		font-size: 18px;
 	}
 	.souqOtlobha-page .pagination-box {
-	width: 100%;
-	max-width: 100%;
-}
-
+		width: 100%;
+		max-width: 100%;
+	}
 
 	/* ProductRefund*/
 	.ProductRefund-wrapper .container-row {
@@ -8396,7 +8397,6 @@ input:disabled {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		justify-content: center;
 	}
 
 	.rates-starts .start svg {
@@ -8407,6 +8407,10 @@ input:disabled {
 	.ratin-bx .rates-starts h6 {
 		font-size: 16px;
 		white-space: pre-wrap;
+	}
+	.rating-page .product-name span {
+		font-size: 14px;
+		font-weight: 400;
 	}
 
 	.rate-act-btn {

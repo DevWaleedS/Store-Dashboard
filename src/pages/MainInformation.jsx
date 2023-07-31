@@ -75,8 +75,6 @@ const MainInformation = () => {
 		}
 	}, [fetchedData?.data?.setting_store]);
 
-
-
 	// ---------------------------
 
 	const resetSettingError = () => {

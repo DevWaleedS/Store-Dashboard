@@ -1,34 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from 'react-router-dom';
-import useFetch from '../Hooks/UseFetch';
-import { Button, InputAdornment, TextField } from '@mui/material';
-import { MdAdd } from 'react-icons/md';
-import { BiSearch } from 'react-icons/bi';
-import { GrFormFilter } from 'react-icons/gr';
-import arrowBack from '../data/Icons/icon-30-arrwos back.svg';
-import PagesTable from '../components/PagesTable';
+import { Link, useNavigate } from "react-router-dom";
+import useFetch from "../Hooks/UseFetch";
+import { Button, InputAdornment, TextField } from "@mui/material";
+import { MdAdd } from "react-icons/md";
+import { BiSearch } from "react-icons/bi";
+import { GrFormFilter } from "react-icons/gr";
+import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+import PagesTable from "../components/PagesTable";
 
 const Pages = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch('https://backend.atlbha.com/api/Store/page');
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/page"
+	);
 	const navigate = useNavigate();
-	const [search, setSearch] = useState('');
-	const [select, setSelect] = useState('');
+	const [search, setSearch] = useState("");
+	const [select, setSelect] = useState("");
 	let pages = fetchedData?.data?.pages;
 	let filterPages = fetchedData?.data?.pages;
-	if (search !== '') {
-		pages = fetchedData?.data?.pages?.filter((item) => item?.title?.toLowerCase()?.includes(search?.toLowerCase()));
+	if (search !== "") {
+		pages = fetchedData?.data?.pages?.filter((item) =>
+			item?.title?.toLowerCase()?.includes(search?.toLowerCase())
+		);
 	} else {
 		pages = fetchedData?.data?.pages;
 	}
 
-	if (select === 'date') {
-		filterPages = pages?.sort((a, b) => a?.created_at.localeCompare(b?.created_at));
-	}
-	else if (select === 'status') {
+	if (select === "date") {
+		filterPages = pages?.sort((a, b) =>
+			a?.created_at.localeCompare(b?.created_at)
+		);
+	} else if (select === "status") {
 		filterPages = pages?.sort((a, b) => a?.status.localeCompare(b?.status));
-	}
-	else {
+	} else {
 		filterPages = pages?.sort((a, b) => a?.id - b?.id);
 	}
 
@@ -60,9 +64,8 @@ const Pages = () => {
 								<Button
 									variant='contained'
 									onClick={() => {
-										navigate('AddPage');
-									}}
-								>
+										navigate("AddPage");
+									}}>
 									<MdAdd />
 									<span className='me-2'>انشاء صفحة</span>
 								</Button>
@@ -95,7 +98,11 @@ const Pages = () => {
 							<label htmlFor=''>
 								<GrFormFilter />
 							</label>
-							<select value={select} onChange={(e) => setSelect(e.target.value)} className='form-select' aria-label='Default select example'>
+							<select
+								value={select}
+								onChange={(e) => setSelect(e.target.value)}
+								className='form-select'
+								aria-label='Default select example'>
 								<option value=''>فرز حسب</option>
 								<option value='date'>تاريخ الانشاء</option>
 								<option value='status'>الحالة</option>
