@@ -32,10 +32,13 @@ const Rating = () => {
 	// to get current comment status
 	const commentActivation = fetchedData?.data?.commentActivation;
 	const [commentDetails, setCommentDetails] = React.useState(null);
-
+	
 	/**
+	 * -------------------------------------------------------------
 	 * TO CREATE PAGINATION
+	 * -------------------------------------------------------------
 	 */
+
 	const [page, setPage] = useState(0);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
 	const [rowsPerPage, setRowsPerPage] = useState(5);

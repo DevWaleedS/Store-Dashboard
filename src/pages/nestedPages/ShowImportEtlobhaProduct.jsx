@@ -252,13 +252,7 @@ const ShowImportEtlobhaProduct = () => {
 													type='text'
 													id='product-name'
 													placeholder=' اسم المنتج'
-													{...register("name", {
-														required: "حقل الاسم مطلوب",
-														pattern: {
-															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-															message: "يجب على الحقل الاسم أن يكون نصاّّ",
-														},
-													})}
+													{...register("name")}
 												/>
 											</div>
 											<div className='col-md-3 col-12'></div>
@@ -279,9 +273,7 @@ const ShowImportEtlobhaProduct = () => {
 													name='description'
 													id='product-desc'
 													placeholder='  قم بكتابه واضح للمنتج'
-													{...register("description", {
-														required: "حقل الوصف مطلوب",
-													})}></textarea>
+													{...register("description")}></textarea>
 											</div>
 											<div className='col-md-3 col-12'></div>
 											<div className='col-md-7 col-12'>

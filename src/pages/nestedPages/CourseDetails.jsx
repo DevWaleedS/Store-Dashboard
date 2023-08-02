@@ -77,7 +77,7 @@ const CourseDetails = () => {
 						</div>
 					</div>
 				</div>
-				<div className='row'>
+				<div className='row mb-5'>
 					{loading ? (
 						<div
 							className='d-flex justify-content-center align-items-center'

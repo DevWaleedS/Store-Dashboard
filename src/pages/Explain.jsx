@@ -24,6 +24,7 @@ const Explain = ({ searchExplain }) => {
 	}
 
 	const dispatch = useDispatch(false);
+
 	return (
 		<div className='row'>
 			{loading ? (
@@ -49,13 +50,18 @@ const Explain = ({ searchExplain }) => {
 							</div>
 
 							<div className='play-video-icon'>
-								<BsPlayCircle onClick={() => dispatch(openModal())} />
+								<BsPlayCircle
+									onClick={() => {
+										dispatch(openModal(course?.video));
+									}}
+								/>
 							</div>
 							<figcaption className='figure-caption'>
 								{course?.title}{" "}
 							</figcaption>
 						</figure>
-						<CourseVideoModal video={course?.video} />
+						{/** to play video  */}
+						<CourseVideoModal />
 					</div>
 				))
 			)}

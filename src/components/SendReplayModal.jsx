@@ -14,7 +14,6 @@ import { FiSend } from "react-icons/fi";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 const style = {
 	position: "absolute",
@@ -73,10 +72,15 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 		});
 	};
 
+	// Handle errors
+	const [messageError, serMessageError] = useState("");
+
 	// to send Replay Comment
 	const sendReplayComment = () => {
+		serMessageError("");
 		let formData = new FormData();
 		formData.append("comment_text", description?.htmlValue);
+		formData.append("comment_id", commentDetails?.id);
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/replaycomment`, formData, {
@@ -91,9 +95,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 					dispatch(closeReplyModal());
 					setReload(!reload);
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					dispatch(closeReplyModal());
-					setReload(!reload);
+					serMessageError(res?.data?.message?.en?.comment_text?.[0]);
 				}
 			});
 	};
@@ -176,6 +178,9 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 										}}
 									/>
 								</div>
+								{messageError && (
+									<span className='fs-6 text-danger me-2'>{messageError}</span>
+								)}
 							</div>
 						</div>
 					</div>
