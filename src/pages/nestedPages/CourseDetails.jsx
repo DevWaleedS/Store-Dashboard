@@ -89,6 +89,7 @@ const CourseDetails = () => {
 							<div className='course-name mb-4'>
 								<h4>{courseDetails?.name} </h4>
 							</div>
+
 							{courseDetails?.unit?.map((unit) => (
 								<div className='col-12' key={unit?.id}>
 									<div
@@ -123,42 +124,48 @@ const CourseDetails = () => {
 												data-bs-parent={`#unit${unit?.id}`}>
 												<div className='accordion-body'>
 													<ul className='select-status p-0'>
-														{unit?.videos?.map((video) => (
-															<li
-																className='d-flex justify-content-between align-items-center'
-																key={video?.id}>
-																<div className='unit-name'>
-																	<BiPlayCircle
-																		style={{ cursor: "pointer" }}
-																		onClick={() => {
-																			dispatch(openModal(video));
-																		}}
-																	/>
-																	<span className='me-2'> {video?.name}</span>
-																	<CourseVideoModal />
-																</div>
-																<div className='unit-time'>
-																	<span>{video?.duration}</span>
-																</div>
-															</li>
-														))}
+														{unit?.videos?.length !== 0 &&
+															unit?.videos?.map((video) => (
+																<li
+																	className='d-flex justify-content-between align-items-center'
+																	key={video?.id}>
+																	<div className='unit-name text-overflow'>
+																		<BiPlayCircle
+																			style={{ cursor: "pointer" }}
+																			onClick={() => {
+																				dispatch(openModal(video));
+																			}}
+																		/>
+																		<span className='me-2'> {video?.name}</span>
+																		<CourseVideoModal />
+																	</div>
+																	<div className='unit-time'>
+																		<span>{video?.duration}</span>
+																	</div>
+																</li>
+															))}
 
-														<li className='d-flex justify-content-between align-items-center'>
-															<div className='unit-files'>
-																<PDFIcon />
-																<span className='me-2'> ملفات الوحدة</span>
-															</div>
-															<div className='unit-download'>
-																<a
-																	style={{ cursor: "pointer" }}
-																	href={unit?.file}
-																	download={unit?.file}
-																	target='_blank'
-																	rel='noreferrer'>
-																	<span>تحميل</span>
-																</a>
-															</div>
-														</li>
+														{unit?.file?.length !== 0 &&
+															unit?.file?.map((file) => (
+																<li
+																	className='d-flex justify-content-between align-items-center'
+																	key={file?.id}>
+																	<div className='unit-files text-overflow '>
+																		<PDFIcon />
+																		<span className='m2-2'> {file} </span>
+																	</div>
+																	<div className='unit-download'>
+																		<a
+																			style={{ cursor: "pointer" }}
+																			href={file}
+																			download={file}
+																			target='_blank'
+																			rel='noreferrer'>
+																			<span>تحميل</span>
+																		</a>
+																	</div>
+																</li>
+															))}
 													</ul>
 												</div>
 											</div>

@@ -158,6 +158,8 @@ const EditUserDetails = () => {
 			userImage.forEach((image) => URL.revokeObjectURL(image.preview));
 	}, []);
 
+	// TO HANDLE ERRORS
+
 	const [dataError, setDataError] = useState({
 		name: "",
 		user_name: "",
@@ -322,6 +324,28 @@ const EditUserDetails = () => {
 										<div className='row mb-md-4 mb-3'>
 											<div className='col-lg-4 col-md-5 col-12 mb-md-0 mb-3'>
 												<label className='d-block mb-2' htmlFor='user-name'>
+													الاسم <span className='text-danger'>*</span>
+												</label>
+												<input
+													style={{ direction: "ltr", textAlign: "left" }}
+													name='name'
+													type='text'
+													placeholder='Omar'
+													{...register("name", {
+														required: "حقل الاسم  مطلوب",
+													})}
+												/>
+												<br />
+												<span className='fs-6 text-danger'>
+													{dataError?.name}
+													{errors?.name && errors.name.message}
+												</span>
+											</div>
+
+											<div className='col-md-2 col-0'></div>
+
+											<div className='col-lg-4 col-md-5 col-12'>
+												<label className='d-block mb-2' htmlFor='user-name'>
 													اسم المستخدم<span className='text-danger'>*</span>
 												</label>
 												<input
@@ -344,29 +368,8 @@ const EditUserDetails = () => {
 													{errors?.user_name && errors.user_name.message}
 												</span>
 											</div>
-											<div className='col-md-2 col-0'></div>
-
-											<div className='col-lg-4 col-md-5 col-12'>
-												<label className='d-block mb-2' htmlFor='password'>
-													كلمة المرور
-												</label>
-												<input
-													name='password'
-													type='password'
-													placeholder='********'
-													className='d-block'
-													{...register("password", {})}
-												/>
-												<span className='password-hint'>
-													أدخل أرقام وحروف ورموز
-												</span>
-												<br />
-												<span className='fs-6 text-danger'>
-													{dataError?.password}
-													{errors?.password && errors.password.message}
-												</span>
-											</div>
 										</div>
+
 										<div className='row mb-md-4 mb-3'>
 											<div className='col-lg-4 col-md-5 col-12'>
 												<label className='d-block mb-2' htmlFor='email'>
@@ -395,25 +398,24 @@ const EditUserDetails = () => {
 											</div>
 											<div className='col-md-2 col-0'></div>
 
-											<div className='col-lg-4 col-md-5 col-12 order-md-last order-first mb-md-0 mb-3'>
-												<label className='d-block mb-2' htmlFor='re-password'>
-													تأكيد كلمة المرور
+											<div className=' col-lg-4 col-md-5 col-12 order-md-last order-first mb-md-0 mb-3'>
+												<label className='d-block mb-2' htmlFor='password'>
+													كلمة المرور
 												</label>
 												<input
-													name='confirm_password'
+													name='password'
 													type='password'
 													placeholder='********'
 													className='d-block'
-													{...register("confirm_password", {})}
+													{...register("password", {})}
 												/>
 												<span className='password-hint'>
 													أدخل أرقام وحروف ورموز
 												</span>
 												<br />
 												<span className='fs-6 text-danger'>
-													{dataError?.confirm_password}
-													{errors?.confirm_password &&
-														errors.confirm_password.message}
+													{dataError?.password}
+													{errors?.password && errors.password.message}
 												</span>
 											</div>
 										</div>
@@ -439,13 +441,35 @@ const EditUserDetails = () => {
 														<UploadIcon />
 													</span>
 												</div>
+
+												<span className='fs-6 text-danger'>
+													{dataError?.image}
+												</span>
 											</div>
-											<br />
-											<span className='fs-6 text-danger'>
-												{dataError?.image}
-											</span>
+
 											<div className='col-lg-2 col-0'></div>
-											<div className='col-lg-4 col-0'></div>
+
+											<div className='col-lg-4 col-12'>
+												<label className='d-block mb-2' htmlFor='re-password'>
+													تأكيد كلمة المرور
+												</label>
+												<input
+													name='confirm_password'
+													type='password'
+													placeholder='********'
+													className='d-block'
+													{...register("confirm_password", {})}
+												/>
+												<span className='password-hint'>
+													أدخل أرقام وحروف ورموز
+												</span>
+												<br />
+												<span className='fs-6 text-danger'>
+													{dataError?.confirm_password}
+													{errors?.confirm_password &&
+														errors.confirm_password.message}
+												</span>
+											</div>
 										</div>
 										<div className='row mb-4'>
 											<div className='col-lg-4 col-12'>

@@ -1,14 +1,13 @@
 import React from "react";
-
-// icons
-import { BsPlayCircle } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { openModal } from "../store/slices/VideoModal-slice";
-import CourseVideoModal from "../components/CourseVideoModal";
+import { useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
+// icons
+import { BsPlayCircle } from "react-icons/bs";
+
 const Explain = ({ searchExplain }) => {
+	const navigate = useNavigate();
 	// to get all  data from server
 	const { fetchedData, loading } = useFetch(
 		"https://backend.atlbha.com/api/Store/explainVideos"
@@ -23,8 +22,6 @@ const Explain = ({ searchExplain }) => {
 		explainvideos = fetchedData?.data?.explainvideos;
 	}
 
-	const dispatch = useDispatch(false);
-
 	return (
 		<div className='row'>
 			{loading ? (
@@ -38,30 +35,29 @@ const Explain = ({ searchExplain }) => {
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
-				explainvideos?.map((course) => (
-					<div className='col-lg-4 col-6 mb-md-4 mb-3' key={course?.id}>
+				explainvideos?.map((lesson) => (
+					<div className='col-lg-4 col-6 mb-md-4 mb-3' key={lesson?.id}>
 						<figure className='course-figure'>
 							<div className='course-prev-image'>
 								<img
-									src={course?.thumbnail}
+									src={lesson?.thumbnail}
 									className='figure-img img-fluid rounded'
-									alt={course?.title}
+									alt={lesson?.title}
 								/>
 							</div>
 
 							<div className='play-video-icon'>
 								<BsPlayCircle
 									onClick={() => {
-										dispatch(openModal(course?.video));
+										navigate(`ExplainDetails/${lesson?.id}`);
 									}}
 								/>
 							</div>
 							<figcaption className='figure-caption'>
-								{course?.title}{" "}
+								{lesson?.title}{" "}
 							</figcaption>
 						</figure>
 						{/** to play video  */}
-						<CourseVideoModal />
 					</div>
 				))
 			)}

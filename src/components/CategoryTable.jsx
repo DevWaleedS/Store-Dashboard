@@ -488,20 +488,24 @@ export default function EnhancedTable({
 															<div className='sub-categories'>
 																{row?.subcategory.slice(0, 3).map((tag) => {
 																	return (
-																		<span
+																		<div
+																			key={tag?.id}
 																			style={{
 																				background:
 																					row?.store === null
 																						? "#FFFF"
 																						: "#dcdcdc",
-																			}}
-																			key={tag?.id}>
-																			{tag?.name}
-																		</span>
+																			}}>
+																			<span className='w-100 text-center text-overflow'>
+																				{tag?.name}
+																			</span>
+																		</div>
 																	);
 																})}
 																{row?.subcategory?.length > 3 && (
-																	<span>...</span>
+																	<div>
+																		<span>...</span>
+																	</div>
 																)}
 															</div>
 														</TableCell>

@@ -81,6 +81,7 @@ import {
 	// CreateOffer,
 	CreatePage,
 	EditPage,
+	ExplainDetails,
 	// OfferDetails,
 } from "./pages/nestedPages";
 // ---------------------------------------------------------------------------------------//
@@ -151,6 +152,12 @@ const router = createBrowserRouter([
 				path: "Academy/CourseDetails/:id",
 				element: <CourseDetails />,
 			},
+			// Add ExplainDetails page nested page for Academy page
+			{
+				path: "Academy/ExplainDetails/:id",
+				element: <ExplainDetails />,
+			},
+
 			{
 				path: "Category",
 				element: <Category />,
