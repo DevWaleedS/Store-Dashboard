@@ -55,7 +55,7 @@ const Details = ({ summeryDetails, loading }) => {
 										<h4>
 											{loading
 												? 0
-												: detail?.numbers === summeryDetails?.sales
+												: detail?.title === "اجمالي المبيعات"
 												? ` ${detail?.numbers} ر.س `
 												: detail?.numbers}
 										</h4>

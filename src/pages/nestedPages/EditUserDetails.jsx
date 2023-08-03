@@ -327,7 +327,6 @@ const EditUserDetails = () => {
 													الاسم <span className='text-danger'>*</span>
 												</label>
 												<input
-													style={{ direction: "ltr", textAlign: "left" }}
 													name='name'
 													type='text'
 													placeholder='Omar'
