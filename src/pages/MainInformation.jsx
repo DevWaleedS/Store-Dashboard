@@ -44,8 +44,14 @@ const MainInformation = () => {
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
 
-	// ---------------------------------------------------------------
+	/** -----------------------------------------------------------------------------------------------------------
+	 *  	=> TO HANDLE THE REG_EXPRESS <=
+	 *  ------------------------------------------------- */
+	const PHONE_REGEX = /^(5\d{8})$/;
+	const [validPhoneNumber, setValidPhoneNumber] = useState(false);
+	const [phoneNumberFocus, setPhoneNumberFocus] = useState(false);
 
+	// ---------------------------------------------------------------
 	const [city, setCity] = useState("");
 	const [domain, setDomain] = useState("");
 	const [country, setCountry] = useState("");
@@ -54,6 +60,9 @@ const MainInformation = () => {
 	const [storeLogo, setStoreLogo] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
 	const [descriptionValue, setDescriptionValue] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [storeEmail, setStoreEmail] = useState("");
+
 	const [settingErr, setSettingErr] = useState({
 		description: "",
 		logo: "",
@@ -61,6 +70,8 @@ const MainInformation = () => {
 		domain: "",
 		city_id: "",
 		country_id: "",
+		phoneNumber: "",
+		storeEmail: "",
 	});
 
 	// We use this effect to avoid the errors
@@ -70,6 +81,15 @@ const MainInformation = () => {
 			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
+			setStoreEmail(fetchedData?.data?.setting_store?.store_email);
+			setPhoneNumber(
+				fetchedData?.data?.setting_store?.phonenumber?.startsWith("+966")
+					? fetchedData?.data?.setting_store?.phonenumber.slice(4)
+					: fetchedData?.data?.setting_store?.phonenumber?.startsWith("00966")
+					? fetchedData?.data?.setting_store?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.phonenumber
+			);
+
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);
 		}
@@ -85,6 +105,8 @@ const MainInformation = () => {
 			domain: "",
 			city_id: "",
 			country_id: "",
+			phoneNumber: "",
+			storeEmail: "",
 		});
 	};
 	// to upload the store logo
@@ -114,10 +136,17 @@ const MainInformation = () => {
 		if (storeIcon?.length !== 0) {
 			formData.append("icon", storeIcon[0]?.file);
 		}
-
 		formData.append("domain", domain);
 		formData.append("city_id", city);
 		formData.append("country_id", country);
+
+		formData.append(
+			"phonenumber",
+			phoneNumber?.startsWith("+966") || phoneNumber?.startsWith("00966")
+				? phoneNumber
+				: `+966${phoneNumber}`
+		);
+		formData.append("store_email", storeEmail);
 
 		axios
 			.post(
@@ -146,10 +175,18 @@ const MainInformation = () => {
 						domain: res?.data?.message?.en?.domain?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
 						country_id: res?.data?.message?.en?.country_id?.[0],
+						phoneNumber: res?.data?.message?.en?.phonenumber?.[0],
+						store_email: res?.data?.message?.en?.store_email?.[0],
 					});
 				}
 			});
 	};
+
+	// TO HANDLE VALIDATION USER PHONE NUMBER
+	useEffect(() => {
+		const PhoneNumberValidation = PHONE_REGEX.test(phoneNumber);
+		setValidPhoneNumber(PhoneNumberValidation);
+	}, [phoneNumber]);
 
 	return (
 		<>
@@ -201,7 +238,7 @@ const MainInformation = () => {
 						</div>
 					) : (
 						<div className='row'>
-							<div className='col-12 mb-md-4 mb-3'>
+							<div className='col-12 mb-4'>
 								{/** Upload Logo row */}
 								<div className='row d-flex justify-content-center align-items-center mb-3'>
 									<div className='col-lg-6 col-12'>
@@ -262,10 +299,10 @@ const MainInformation = () => {
 									</div>
 								</div>
 							</div>
-							<div className='col-12 mb-3'>
+							<div className='col-12 mb-4'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
-										<div className='domain-name d-flex align-content-center justify-content-between'>
+										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
 											<div className='main-domain-hint'>atlbha.com/</div>
 											<input
 												className=''
@@ -284,7 +321,7 @@ const MainInformation = () => {
 									</div>
 								</div>
 							</div>
-							<div className='col-12 mb-3'>
+							<div className='col-12 mb-4'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
 										<div className='select-country'>
@@ -360,7 +397,7 @@ const MainInformation = () => {
 									</div>
 								</div>
 							</div>
-							<div className='col-12 mb-3'>
+							<div className='col-12 mb-4'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
 										<div className='select-country'>
@@ -440,16 +477,14 @@ const MainInformation = () => {
 								</div>
 							</div>
 
-							<div className='col-12 mb-3'>
+							<div className='col-12 mb-4'>
 								{/** Upload Icon row */}
 								<div
 									className='row d-flex justify-content-center align-items-center'
 									style={{ cursor: "pointer" }}>
 									<div className='col-lg-8 col-12'>
 										<div className='select-country'>
-											<label
-												htmlFor='upload-icon'
-												className='upload-icon-label'>
+											<label htmlFor='upload-icon' className='setting_label'>
 												ايقونة تبويب المتجر في المتصفح
 											</label>
 											<div>
@@ -500,6 +535,84 @@ const MainInformation = () => {
 												</span>
 												<span className='fs-6 w-100 text-danger'>
 													{settingErr?.icon[1]}
+												</span>
+											</div>
+										)}
+									</div>
+								</div>
+							</div>
+
+							<div className=' col-12 mb-4'>
+								<div className='row d-flex justify-content-center align-items-center'>
+									<div className='col-lg-8 col-12'>
+										<div className='store_email'>
+											<label
+												htmlFor='store_email'
+												className='setting_label d-block'>
+												البريد الالكتروني للمتجر
+											</label>
+											<input
+												className='direction-ltr text-right store-email-input w-100'
+												name='store_email'
+												id='store_email'
+												placeholder='البريد الالكتروني للمتجر'
+												value={storeEmail}
+												onChange={(e) => setStoreEmail(e.target.value)}
+											/>
+										</div>
+										{settingErr?.storeEmail && (
+											<div className='d-flex flex-wrap'>
+												<span className='fs-6 w-100 text-danger'>
+													{settingErr?.storeEmail}
+												</span>
+											</div>
+										)}
+									</div>
+								</div>
+							</div>
+
+							<div className=' col-12 mb-4'>
+								<div className='row d-flex justify-content-center align-items-center'>
+									<div className='col-lg-8 col-12'>
+										<div className='store_email'>
+											<label
+												htmlFor='phonenumber'
+												className='setting_label d-block'>
+												رقم هاتف المتجر
+											</label>
+
+											<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
+												<div className='main-domain-hint'>+996</div>
+												<input
+													className='direction-ltr text-right store-email-input w-100'
+													name='phonenumber'
+													id='phonenumber'
+													placeholder='رقم هاتف المتجر'
+													value={phoneNumber}
+													onChange={(e) => setPhoneNumber(e.target.value)}
+													maxLength='9'
+													required
+													aria-invalid={validPhoneNumber ? "false" : "true"}
+													aria-describedby='phoneNumber'
+													onFocus={() => setPhoneNumberFocus(true)}
+													onBlur={() => setPhoneNumberFocus(true)}
+												/>
+											</div>
+										</div>
+										<div
+											id='phoneNumber'
+											className={
+												phoneNumberFocus && phoneNumber && !validPhoneNumber
+													? " d-block important-hint me-1 "
+													: "d-none"
+											}
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											تأكد ان رقم الجوال يبدأ برقم 5 ولا يقل عن 9 أرقام
+										</div>
+										{settingErr?.phoneNumber && (
+											<div className='d-flex flex-wrap'>
+												<span className='fs-6 w-100 text-danger'>
+													{settingErr?.phoneNumber}
 												</span>
 											</div>
 										)}
