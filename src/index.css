@@ -2347,7 +2347,6 @@ nav.navigation {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: rgba(0, 0, 0, 0.1);
 	position: absolute;
 	content: "";
 	width: 100%;
@@ -2359,8 +2358,8 @@ nav.navigation {
 
 .video-preview .play-video-icon svg {
 	color: var(--white-100);
-	font-size: 22px;
-	stroke-width: 0.6;
+	font-size: 35px;
+	stroke-width: 0;
 	cursor: pointer;
 }
 .academy-widget {
@@ -6712,6 +6711,9 @@ input:disabled {
 	.add-user-form .form-body input#email {
 		padding-left: 17px;
 	}
+	.academy-widget .course-bx {
+		margin-right: 55px;
+	}
 }
 
 @media (max-width: 768px) {
@@ -8202,9 +8204,9 @@ input:disabled {
 		height: auto;
 	}
 	.video-preview {
-		width: 115px;
-		max-width: 115px;
-		max-height: 140px;
+		width: 100%;
+		max-width: 100%;
+		max-height: 100%;
 		border-radius: 0 4px 4px 0px;
 		-webkit-border-radius: 0 4px 4px 0px;
 		-moz-border-radius: 0 4px 4px 0px;
@@ -8212,9 +8214,9 @@ input:disabled {
 		-o-border-radius: 0 4px 4px 0px;
 	}
 	.video-preview .img-wrapper {
-		width: 115px;
-		max-width: 115px;
-		max-height: 140px;
+		width: 100%;
+		max-width: 100%;
+		max-height: 100%;
 	}
 
 	.academy-widget .course-bx {
@@ -9208,7 +9210,80 @@ input:disabled {
 		-o-transform: translate(0px, 0px) !important;
 	}
 }
+@media (max-width: 420px) {
+	.video-preview .img-wrapper {
+		align-items: flex-start;
+	}
+	.video-preview img {
+		object-position: top;
+	}
+	.video-preview .play-video-icon {
+		width: 0;
+		height: 0;
+		left: 50%;
+		top: 30%;
+	}
+	.academy-widget .watch-course-btn {
+		padding-top: 13px;
+		position: relative;
+		right: -45px;
+		width: 100%;
+	}
+	.academy-widget .watch-course-btn .btn-wrapper {
+		width: max-content;
+	}
+}
 
+@media (max-width: 320px) {
+	.academy-widget {
+		padding: 8px;
+	}
+	.video-preview .img-wrapper {
+		width: 215px;
+		max-width: 215px;
+		height: 100%;
+		max-height: 160px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+	.video-preview img {
+		max-height: 160px;
+		object-fit: contain;
+		object-position: center;
+	}
+	.video-preview .play-video-icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		content: "";
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+		z-index: 1;
+	}
+	.video-preview .play-video-icon svg {
+		font-size: 24px;
+	}
+	.academy-widget .course-bx {
+		justify-content: space-evenly;
+		margin-right: -7px;
+	}
+	.course-details {
+		position: relative;
+		right: -88px;
+	}
+	.academy-widget .watch-course-btn {
+		right: -91px;
+		top: 10px;
+	}
+	.academy-widget .watch-course-btn button {
+		height: 30px;
+	}
+}
 .offer-currency {
 	background-color: #eff9ff;
 	height: 100%;

@@ -33,7 +33,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 				</div>
 
 				{/**course info */}
-				<div className='col-md-9 col-8 course-bx'>
+				<div className='col-8 course-bx'>
 					<div className='row course-details d-flex justify-content-start align-items-start text-overflow'>
 						<h5 className='mb-4 text-overflow'> {name} </h5>
 					</div>
