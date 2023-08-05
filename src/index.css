@@ -6499,6 +6499,9 @@ input:disabled {
 	.rate-act-btn .margin-right-lg {
 		margin-right: 12px;
 	}
+	.academy-widget .course-bx {
+		margin-right: 26px;
+	}
 	.academy-page .btns-group-container button {
 		font-size: 20px;
 		font-weight: 400;
@@ -6517,6 +6520,11 @@ input:disabled {
 	/* Explain Details */
 	.explain-details-page .explain-title {
 		margin-right: 0;
+	}
+}
+@media (max-width: 1024px) {
+	.academy-widget .course-bx {
+		margin-right: 55px;
 	}
 }
 
@@ -6710,9 +6718,6 @@ input:disabled {
 	}
 	.add-user-form .form-body input#email {
 		padding-left: 17px;
-	}
-	.academy-widget .course-bx {
-		margin-right: 55px;
 	}
 }
 
