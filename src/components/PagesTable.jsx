@@ -26,7 +26,6 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import editIcon from "../data/Icons/editt 2.svg";
 import moment from "moment";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {

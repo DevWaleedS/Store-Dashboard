@@ -83,14 +83,14 @@ const SupportDetails = () => {
 											</li>
 											<li className='breadcrumb-item ' aria-current='page'>
 												<Link to='/Support' className='me-2'>
-													جدول الشكاوى
+													جدول الرسائل
 												</Link>
 											</li>
 
 											<li
 												className='breadcrumb-item active'
 												aria-current='page'>
-												تفاصيل الشكوى
+												تفاصيل الرسالة
 											</li>
 										</ol>
 									</nav>
@@ -109,7 +109,7 @@ const SupportDetails = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-12 mb-4'>
 												<div className='issue-number'>
-													<h5>رقم الشكوى</h5>
+													<h5>رقم الرسالة</h5>
 													<div>{fetchedData?.data?.technicalSupports?.id}</div>
 												</div>
 											</div>
@@ -125,7 +125,7 @@ const SupportDetails = () => {
 																	</div>
 
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>
+																		<span className='text-center text-overflow'>
 																			{
 																				fetchedData?.data?.technicalSupports
 																					?.store?.user?.name
@@ -176,7 +176,7 @@ const SupportDetails = () => {
 																<div className='data-row d-flex flex-md-row flex-column justify-content-end data-row'>
 																	<div className='box label-box'>
 																		<DateIcon className='date-icon' />
-																		<span className='me-2'> تاريخ الشكوى</span>
+																		<span className='me-2'> تاريخ الرسالة</span>
 																	</div>
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
@@ -188,28 +188,12 @@ const SupportDetails = () => {
 																	</div>
 																</div>
 															</div>
-															<div className='row mb-md-4 mb-3'>
-																<div className='data-row d-flex flex-md-row flex-column justify-content-end'>
-																	<div className='box label-box'>
-																		<TypeSuport className='support-icon' />
-																		<span className='me-2'> نوع الاتصال</span>
-																	</div>
 
-																	<div className='box wring-box d-flex justify-content-center'>
-																		<span>
-																			{
-																				fetchedData?.data?.technicalSupports
-																					?.type
-																			}{" "}
-																		</span>
-																	</div>
-																</div>
-															</div>
 															<div className='row mb-md-4 mb-3'>
 																<div className='data-row d-flex flex-md-row flex-column justify-content-end'>
 																	<div className='box label-box'>
 																		<Customer className='customer-icon' />
-																		<span className='me-2'>عنوان الشكوى </span>
+																		<span className='me-2'>عنوان الرسالة </span>
 																	</div>
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
@@ -231,7 +215,7 @@ const SupportDetails = () => {
 
 										<div className='issue-content mb-3'>
 											<div className='col-12 mb-3'>
-												<h4 className='issue-title'>محتوي الشكوي</h4>
+												<h4 className='issue-title'>محتوي الرسالة</h4>
 											</div>
 
 											<div className='col-12'>

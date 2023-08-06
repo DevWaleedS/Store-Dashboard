@@ -492,7 +492,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																	<span
 																		className='me-3'
 																		style={{
-																			width: "100%",
+																			maxWidth: "100%",
 																			whiteSpace: "nowrap",
 																			overflow: "hidden",
 																			textOverflow: "ellipsis",

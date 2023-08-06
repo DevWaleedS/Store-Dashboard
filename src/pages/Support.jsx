@@ -53,7 +53,7 @@ const Support = () => {
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
 								id='filled-textarea'
-								placeholder='ابحث عن شكوي '
+								placeholder='ابحث عن رسالة '
 								InputProps={{
 									startAdornment: (
 										<InputAdornment position='start'>

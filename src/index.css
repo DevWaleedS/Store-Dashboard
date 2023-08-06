@@ -1394,6 +1394,9 @@ select {
 	justify-content: center;
 	border-radius: 20px;
 }
+.support-table .support-title {
+	max-width: 500px;
+}
 
 .actions {
 	display: flex;
@@ -2344,6 +2347,7 @@ nav.navigation {
 }
 
 .video-preview .play-video-icon {
+	background-color: rgba(0, 0, 0, 0.1);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -4513,7 +4517,9 @@ input:disabled {
 }
 
 .order-details-body .order-details-box .order-details-data .info-box span {
-	width: 50%;
+	width: 100%;
+	text-align: center;
+	direction: ltr;
 }
 
 .order-details-body .order-details-box .order-action-box {
@@ -8319,11 +8325,11 @@ input:disabled {
 	}
 
 	.banners-preview-container {
-		border-radius: 9px;
-		-webkit-border-radius: 9px;
-		-moz-border-radius: 9px;
-		-ms-border-radius: 9px;
-		-o-border-radius: 9px;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
 	}
 
 	.banners-preview-container img {
@@ -9094,7 +9100,8 @@ input:disabled {
 	}
 	.domain-name,
 	.domain-name input,
-	.domain-name .main-domain-hint {
+	.domain-name .main-domain-hint,
+	.store-email-input {
 		height: 45px !important;
 		font-size: 16px !important;
 	}
@@ -9108,6 +9115,12 @@ input:disabled {
 		-moz-border-radius: 4px;
 		-ms-border-radius: 4px;
 		-o-border-radius: 4px;
+	}
+	.select-icon {
+		top: 7px;
+	}
+	.support-table .support-title {
+		max-width: 240px;
 	}
 }
 

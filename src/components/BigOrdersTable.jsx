@@ -281,7 +281,16 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 																	alt='img'
 																	className=' rounded-circle'
 																/>
-																<span className='me-3'>{row?.user?.name}</span>
+																<span
+																	className='me-3'
+																	style={{
+																		maxWidth: "100%",
+																		whiteSpace: "nowrap",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
+																	}}>
+																	{row?.user?.name}
+																</span>
 															</div>
 														</TableCell>
 														<TableCell align='right' sx={{ width: "90px" }}>

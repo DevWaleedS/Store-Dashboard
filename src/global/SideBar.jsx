@@ -327,7 +327,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> البيانات الاساسية</span>
+							<span className='me-2'> بيانات المتجر الاساسية</span>
 						</MenuItem>
 					</NavLink>
 					<Link

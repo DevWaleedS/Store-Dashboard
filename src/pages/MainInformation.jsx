@@ -48,21 +48,25 @@ const MainInformation = () => {
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
 	 *  ------------------------------------------------- */
 	const PHONE_REGEX = /^(5\d{8})$/;
+
 	const [validPhoneNumber, setValidPhoneNumber] = useState(false);
 	const [phoneNumberFocus, setPhoneNumberFocus] = useState(false);
+	const [domainNameFocus, setDomainNameFocus] = useState(false);
 
 	// ---------------------------------------------------------------
-	const [city, setCity] = useState("");
-	const [domain, setDomain] = useState("");
-	const [country, setCountry] = useState("");
 	const [defaultStoreLogo, setDefaultStoreLogo] = useState(DemoImage);
 	const [defaultStoreIcon, setDefaultStoreIcon] = useState(DemoImage);
 	const [storeLogo, setStoreLogo] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
-	const [descriptionValue, setDescriptionValue] = useState("");
-	const [phoneNumber, setPhoneNumber] = useState("");
+	const [domain, setDomain] = useState("");
+	const [country, setCountry] = useState("");
+	const [city, setCity] = useState("");
 	const [storeEmail, setStoreEmail] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [storeAddress, setStoreAddress] = useState("");
+	const [descriptionValue, setDescriptionValue] = useState("");
 
+	// ERRORS
 	const [settingErr, setSettingErr] = useState({
 		description: "",
 		logo: "",
@@ -72,15 +76,18 @@ const MainInformation = () => {
 		country_id: "",
 		phoneNumber: "",
 		storeEmail: "",
+		storeAddress: "",
 	});
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
 		if (fetchedData?.data?.setting_store) {
-			setDescriptionValue(fetchedData?.data?.setting_store?.description);
 			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
+			setCountry([fetchedData?.data?.setting_store?.country?.id]);
+			setCity([fetchedData?.data?.setting_store?.city?.id]);
+			setStoreAddress(fetchedData?.data?.setting_store?.store_address);
 			setStoreEmail(fetchedData?.data?.setting_store?.store_email);
 			setPhoneNumber(
 				fetchedData?.data?.setting_store?.phonenumber?.startsWith("+966")
@@ -90,13 +97,11 @@ const MainInformation = () => {
 					: fetchedData?.data?.setting_store?.phonenumber
 			);
 
-			setCountry([fetchedData?.data?.setting_store?.country?.id]);
-			setCity([fetchedData?.data?.setting_store?.city?.id]);
+			setDescriptionValue(fetchedData?.data?.setting_store?.description);
 		}
 	}, [fetchedData?.data?.setting_store]);
 
 	// ---------------------------
-
 	const resetSettingError = () => {
 		setSettingErr({
 			description: "",
@@ -107,13 +112,16 @@ const MainInformation = () => {
 			country_id: "",
 			phoneNumber: "",
 			storeEmail: "",
+			storeAddress: "",
 		});
 	};
+
 	// to upload the store logo
 	const onChangeStoreLogo = (imageList, addUpdateIndex) => {
 		// data for submit
 		setStoreLogo(imageList);
 	};
+
 	// to upload the store icon
 	const onChangeSelectIcon = (imageList, addUpdateIndex) => {
 		// data for submit
@@ -122,23 +130,24 @@ const MainInformation = () => {
 
 	// to update UpdateMaintenanceMode values
 	const settingsStoreUpdate = () => {
-		setLoadingTitle("جاري تعديل البيانات الأساسية");
 		resetSettingError();
+		setLoadingTitle("جاري تعديل البيانات الأساسية");
+
 		let formData = new FormData();
-		formData.append("description", descriptionValue);
 
 		// Check if a new logo is uploaded, otherwise use the existing one
 		if (storeLogo?.length !== 0) {
 			formData.append("logo", storeLogo[0]?.file);
 		}
-
 		// Check if a new icon is uploaded, otherwise use the existing one
 		if (storeIcon?.length !== 0) {
 			formData.append("icon", storeIcon[0]?.file);
 		}
 		formData.append("domain", domain);
-		formData.append("city_id", city);
 		formData.append("country_id", country);
+		formData.append("city_id", city);
+		formData.append("store_address", storeAddress || "");
+		formData.append("store_email", storeEmail || "");
 
 		formData.append(
 			"phonenumber",
@@ -146,7 +155,8 @@ const MainInformation = () => {
 				? phoneNumber
 				: `+966${phoneNumber}`
 		);
-		formData.append("store_email", storeEmail);
+
+		formData.append("description", descriptionValue);
 
 		axios
 			.post(
@@ -167,16 +177,16 @@ const MainInformation = () => {
 				} else {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
 					setSettingErr({
-						description: res?.data?.message?.en?.description?.[0],
 						logo: res?.data?.message?.en?.logo,
 						icon: res?.data?.message?.en?.icon,
 						domain: res?.data?.message?.en?.domain?.[0],
-						city_id: res?.data?.message?.en?.city_id?.[0],
 						country_id: res?.data?.message?.en?.country_id?.[0],
+						city_id: res?.data?.message?.en?.city_id?.[0],
+						storeAddress: res?.data?.message?.en?.store_address?.[0],
+						storeEmail: res?.data?.message?.en?.store_email?.[0],
 						phoneNumber: res?.data?.message?.en?.phonenumber?.[0],
-						store_email: res?.data?.message?.en?.store_email?.[0],
+						description: res?.data?.message?.en?.description?.[0],
 					});
 				}
 			});
@@ -299,18 +309,106 @@ const MainInformation = () => {
 									</div>
 								</div>
 							</div>
+
+							<div className='col-12 mb-4'>
+								{/** Upload Icon row */}
+								<div
+									className='row d-flex justify-content-center align-items-center'
+									style={{ cursor: "pointer" }}>
+									<div className='col-lg-8 col-12'>
+										<div className='select-country'>
+											<label htmlFor='upload-icon' className='setting_label'>
+												ايقونة تبويب المتجر في المتصفح
+											</label>
+											<div>
+												<ImageUploading
+													value={storeIcon}
+													onChange={onChangeSelectIcon}
+													dataURLKey='data_url'
+													acceptType={["jpg", "png", "jpeg"]}>
+													{({ onImageUpload, dragProps }) => (
+														<div
+															className='upload-icon-btn'
+															onClick={() => {
+																onImageUpload();
+															}}
+															{...dragProps}>
+															<div style={{ width: "35px", height: "35px" }}>
+																{storeIcon[0] ? (
+																	<img
+																		className='img-fluid'
+																		src={storeIcon[0].data_url}
+																		alt=''
+																		style={{ objectFit: "contain" }}
+																	/>
+																) : (
+																	<img
+																		className='img-fluid'
+																		src={defaultStoreIcon}
+																		alt=''
+																		style={{ objectFit: "contain" }}
+																	/>
+																)}
+															</div>
+
+															<MdFileUpload />
+														</div>
+													)}
+												</ImageUploading>
+											</div>
+
+											<p className='upload-icon-hint'>
+												المقاس الأنسب 32 بكسل عرض 32 بكسل الارتفاع
+											</p>
+										</div>
+										{settingErr?.icon && (
+											<div className='d-flex flex-wrap'>
+												<span className='fs-6 w-100 text-danger'>
+													{settingErr?.icon[0]}
+												</span>
+												<span className='fs-6 w-100 text-danger'>
+													{settingErr?.icon[1]}
+												</span>
+											</div>
+										)}
+									</div>
+								</div>
+							</div>
+
 							<div className='col-12 mb-4'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
+										<div className='store_email'>
+											<label htmlFor='domain' className='setting_label d-block'>
+												الدومين
+											</label>
+										</div>
 										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
 											<div className='main-domain-hint'>atlbha.com/</div>
 											<input
-												className=''
 												type='text'
 												name='domain'
+												id='domain'
 												value={domain}
-												onChange={(e) => setDomain(e.target.value)}
+												onChange={(e) => {
+													setDomain(e.target.value);
+													setDomainNameFocus(true);
+												}}
+												aria-describedby='domainName'
+												onFocus={() => setDomainNameFocus(true)}
+												onBlur={() => setDomainNameFocus(false)}
 											/>
+										</div>
+										<div
+											id='domainName'
+											className={
+												domainNameFocus
+													? " d-block important-hint me-1 "
+													: "d-none"
+											}
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور او عدم ظهور
+											المتجر الخاص بك.
 										</div>
 
 										{settingErr?.domain && (
@@ -321,16 +419,25 @@ const MainInformation = () => {
 									</div>
 								</div>
 							</div>
+
 							<div className='col-12 mb-4'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
+										<div className='store_email'>
+											<label
+												htmlFor='country_id'
+												className='setting_label d-block'>
+												الدولة
+											</label>
+										</div>
 										<div className='select-country'>
 											<div className='select-icon'>
 												<CountryIcon />
 											</div>
 
 											<Select
-												name='category_id'
+												id='country_id'
+												name='country_id'
 												value={country}
 												onChange={(e) => {
 													setCountry(e.target.value);
@@ -397,15 +504,24 @@ const MainInformation = () => {
 									</div>
 								</div>
 							</div>
+
 							<div className='col-12 mb-4'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
+										<div className='store_email'>
+											<label
+												htmlFor='city_id'
+												className='setting_label d-block'>
+												المدينة
+											</label>
+										</div>
 										<div className='select-country'>
 											<div className='select-icon'>
 												<CitIcon className='' />
 											</div>
 
 											<Select
+												id='city_id'
 												name='city_id'
 												value={city}
 												onChange={(e) => {
@@ -477,64 +593,28 @@ const MainInformation = () => {
 								</div>
 							</div>
 
-							<div className='col-12 mb-4'>
-								{/** Upload Icon row */}
-								<div
-									className='row d-flex justify-content-center align-items-center'
-									style={{ cursor: "pointer" }}>
+							<div className=' col-12 mb-4'>
+								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
-										<div className='select-country'>
-											<label htmlFor='upload-icon' className='setting_label'>
-												ايقونة تبويب المتجر في المتصفح
+										<div className='store_email'>
+											<label
+												htmlFor='address'
+												className='setting_label d-block'>
+												عنوان المتجر
 											</label>
-											<div>
-												<ImageUploading
-													value={storeIcon}
-													onChange={onChangeSelectIcon}
-													dataURLKey='data_url'
-													acceptType={["jpg", "png", "jpeg"]}>
-													{({ onImageUpload, dragProps }) => (
-														<div
-															className='upload-icon-btn'
-															onClick={() => {
-																onImageUpload();
-															}}
-															{...dragProps}>
-															<div style={{ width: "35px", height: "35px" }}>
-																{storeIcon[0] ? (
-																	<img
-																		className='img-fluid'
-																		src={storeIcon[0].data_url}
-																		alt=''
-																		style={{ objectFit: "contain" }}
-																	/>
-																) : (
-																	<img
-																		className='img-fluid'
-																		src={defaultStoreIcon}
-																		alt=''
-																		style={{ objectFit: "contain" }}
-																	/>
-																)}
-															</div>
-
-															<MdFileUpload />
-														</div>
-													)}
-												</ImageUploading>
-											</div>
-
-											<p className='upload-icon-hint'>
-												المقاس الأنسب 32 بكسل عرض 32 بكسل الارتفاع
-											</p>
+											<input
+												className='text-right store-email-input w-100'
+												name='address'
+												id='address'
+												placeholder='قم بادخال عنوان المتجر '
+												value={storeAddress}
+												onChange={(e) => setStoreAddress(e.target.value)}
+											/>
 										</div>
-										{settingErr?.icon && (
+										{settingErr?.storeAddress && (
 											<div className='d-flex flex-wrap'>
 												<span className='fs-6 w-100 text-danger'>
-													{settingErr?.icon[0]}
-												</span>
-												<span className='fs-6 w-100 text-danger'>
-													{settingErr?.icon[1]}
+													{settingErr?.storeAddress}
 												</span>
 											</div>
 										)}

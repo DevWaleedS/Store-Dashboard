@@ -30,6 +30,7 @@ import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg"
 import { ReactComponent as DeadLineIcon } from "../data/Icons/icon-24-deadline.svg";
 import { ReactComponent as HourGleass } from "../data/Icons/icon-24-hourgleass_half.svg";
 import { UserAuth } from "../Context/UserAuthorProvider";
+import { Switch } from "@mui/material";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -72,14 +73,12 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					عنوان الشكوى
+					عنوان الرسالة
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					اسم العميل
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a" }}>
-					نوع الاتصال
-				</TableCell>
+
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الحاله
 				</TableCell>
@@ -259,6 +258,29 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		}
 	}, [confirm]);
 
+	// change Message status
+	const changeStatus = (id) => {
+		axios
+			.get(
+				`https://backend.atlbha.com/api/Store/changeTechnicalSupportStatus/${id}`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				} else {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				}
+			});
+	};
+
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -389,12 +411,15 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																})}
 															</div>
 														</TableCell>
-														<TableCell align='center'> {row?.title}</TableCell>
 														<TableCell align='center'>
-															{" "}
+															<div className='text-overflow support-title'>
+																{row?.title}
+															</div>
+														</TableCell>
+														<TableCell align='center'>
 															{row?.store?.user?.name}
 														</TableCell>
-														<TableCell align='center'> {row?.type}</TableCell>
+
 														<TableCell align='center'>
 															<div className='sub-categories'>
 																<span
@@ -403,14 +428,14 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																		backgroundColor:
 																			row?.supportstatus === "منتهية"
 																				? "#3ae374"
-																				: row?.supportstatus === "قيد المعالجة"
+																				: row?.supportstatus === "غير منتهية "
 																				? "#ff9f1a"
 																				: "#d3d3d3",
 																		color: "#fff",
 																	}}>
 																	{row?.supportstatus === "منتهية" ? (
 																		<GoCheck />
-																	) : row?.supportstatus === "قيد المعالجة" ? (
+																	) : row?.supportstatus === "غير منتهية " ? (
 																		<HourGleass />
 																	) : (
 																		<DeadLineIcon />
@@ -420,7 +445,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 															</div>
 														</TableCell>
 														<TableCell align='right'>
-															<div className='actions d-flex justify-content-evenly'>
+															<div className='actions gap-0 d-flex justify-content-center'>
 																<span>
 																	<DeletteIcon
 																		onClick={() => {
@@ -438,6 +463,54 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			fontSize: "1.2rem",
 																		}}></DeletteIcon>
 																</span>
+
+																<span>
+																	<Switch
+																		onChange={() => changeStatus(row?.id)}
+																		checked={
+																			row?.supportstatus === "منتهية"
+																				? true
+																				: false
+																		}
+																		sx={{
+																			width: "50px",
+																			"& .MuiSwitch-track": {
+																				width: 26,
+																				height: 14,
+																				opacity: 1,
+																				backgroundColor: "rgba(0,0,0,.25)",
+																				boxSizing: "border-box",
+																			},
+																			"& .MuiSwitch-thumb": {
+																				boxShadow: "none",
+																				width: 10,
+																				height: 10,
+																				borderRadius: 5,
+																				transform: "translate(6px,6px)",
+																				color: "#fff",
+																			},
+
+																			"&:hover": {
+																				"& .MuiSwitch-thumb": {
+																					boxShadow: "none",
+																				},
+																			},
+
+																			"& .MuiSwitch-switchBase": {
+																				padding: 1,
+																				"&.Mui-checked": {
+																					transform: "translateX(11px)",
+																					color: "#fff",
+																					"& + .MuiSwitch-track": {
+																						opacity: 1,
+																						backgroundColor: "#3AE374",
+																					},
+																				},
+																			},
+																		}}
+																	/>
+																</span>
+
 																<span
 																	style={{ cursor: "pointer" }}
 																	onClick={() =>

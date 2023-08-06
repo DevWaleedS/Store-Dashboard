@@ -475,7 +475,14 @@ export default function EnhancedTable({
 																		objectFit: "contain",
 																	}}
 																/>
-																<span className='me-3 text-overflow'>
+																<span
+																	className='me-3'
+																	style={{
+																		maxWidth: "100%",
+																		whiteSpace: "nowrap",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
+																	}}>
 																	{row?.name}
 																</span>
 															</div>

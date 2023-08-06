@@ -205,7 +205,7 @@ const OrderDetails = () => {
 														<div className='col-md-6 col-12 mb-md-0 mb-3'>
 															<div className='info-box'>
 																<Client className='client-icon' />
-																<span style={{ whiteSpace: "normal" }}>
+																<span className=' text-overflow'>
 																	{fetchedData?.data?.orders?.user?.name}
 																</span>
 															</div>
@@ -228,7 +228,7 @@ const OrderDetails = () => {
 																	gap: "30px",
 																}}>
 																<Message />
-																<span style={{ whiteSpace: "normal" }}>
+																<span className='text-overflow'>
 																	{fetchedData?.data?.orders?.user?.email}
 																</span>
 															</div>

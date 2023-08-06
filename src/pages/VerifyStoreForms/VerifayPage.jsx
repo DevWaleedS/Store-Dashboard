@@ -174,10 +174,7 @@ const VerifayPage = forwardRef((props, ref) => {
 				: `+966${data?.phonenumber}`
 		);
 		formData.append("commercialregistertype", data?.commercialregistertype);
-		formData.append(
-			"store_name",
-			data?.commercialregistertype === "maeruf" ? "" : data?.store_name
-		);
+		formData.append("store_name", data?.store_name);
 		formData.append(
 			"link",
 			data?.commercialregistertype === "maeruf" ? data?.link : ""
@@ -419,7 +416,7 @@ const VerifayPage = forwardRef((props, ref) => {
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
-										placeholder='قم بكتابة الاسم التجاري'
+										placeholder='قم بكتابة الاسم التجاري كما هو موجود في السجل التجاري'
 										style={{
 											width: "100%",
 											height: "50px",
@@ -431,14 +428,15 @@ const VerifayPage = forwardRef((props, ref) => {
 											borderRadius: "4px",
 										}}
 									/>
+
+									{dataErrors?.store_name && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.store_name}
+										</div>
+									)}
 								</div>
-								{dataErrors?.store_name && (
-									<div
-										className='important-hint me-1'
-										style={{ fontSize: "16px", whiteSpace: "normal" }}>
-										{dataErrors?.store_name}
-									</div>
-								)}
 							</div>
 
 							<div className='row  d-flex justify-content-between align-items-center mb-3 city_wrapper'>
@@ -532,7 +530,6 @@ const VerifayPage = forwardRef((props, ref) => {
 							<div className='row d-flex justify-content-between align-items-center '>
 								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
-										{" "}
 										رفع السجل التجاري <span className='important-hint'>*</span>
 									</h5>
 								</div>
@@ -643,6 +640,40 @@ const VerifayPage = forwardRef((props, ref) => {
 							style={{
 								top: dataErrors?.commercialregistertype ? "90px" : "70px",
 							}}>
+							<div className='row  d-flex justify-content-between align-items-center mb-3'>
+								<div className='col-md-4 col-12 mb-md-0 mb-3'>
+									<h5 className='label' style={{ color: "#1DBBBE" }}>
+										اسم المتجر<span className='important-hint'>*</span>
+									</h5>
+								</div>
+								<div className='col-md-8 col-12'>
+									<input
+										name='store_name'
+										value={data?.store_name}
+										onChange={(e) => {
+											handleOnChange(e);
+										}}
+										placeholder='قم بكتابة اسم المتجر كما هو موجود في الوثيقة'
+										style={{
+											width: "100%",
+											height: "50px",
+											padding: "18px",
+											background: "#FAFAFA",
+											color: "#00000",
+											fontSize: "16px",
+											fontWeight: "400",
+											borderRadius: "4px",
+										}}
+									/>
+									{dataErrors?.store_name && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.store_name}
+										</div>
+									)}
+								</div>
+							</div>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
