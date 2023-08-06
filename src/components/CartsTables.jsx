@@ -363,7 +363,7 @@ export default function CartsTables({
 																	<img
 																		src={row?.user?.image}
 																		alt='img'
-																		className=' rounded-circle'
+																		className=' rounded-circle img_icons'
 																	/>
 																	<span className='me-3 text-black'>
 																		{row?.user?.name}

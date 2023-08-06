@@ -67,7 +67,7 @@ const ProductsTableData = ({ productsDetails }) => {
 												<div style={{ whiteSpace: "nowrap", width: "40px" }}>
 													<img
 														style={{ borderRadius: "50%", width: "100%" }}
-														className='rounded-circle'
+														className='rounded-circle img_icons'
 														src={product?.cover}
 														alt={product?.name}
 													/>

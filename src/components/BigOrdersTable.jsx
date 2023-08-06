@@ -279,7 +279,7 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 																<img
 																	src={row?.user?.image}
 																	alt='img'
-																	className=' rounded-circle'
+																	className=' rounded-circle img_icons'
 																/>
 																<span
 																	className='me-3'

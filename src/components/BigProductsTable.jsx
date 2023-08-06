@@ -475,18 +475,12 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																	className='cate-prim d-flex align-items-center justify-content-start'
 																	style={{
 																		width: " 350px",
-																		paddingRight: "60px",
+																		paddingRight: "30px",
 																	}}>
 																	<img
+																		className='img_icons'
 																		src={row?.cover}
 																		alt='img'
-																		style={{
-																			minWidth: "40px",
-																			maxWidth: "40px",
-																			height: "40px",
-																			borderRadius: "50%",
-																			objectFit: "contain",
-																		}}
 																	/>
 
 																	<span

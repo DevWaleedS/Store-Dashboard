@@ -74,7 +74,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 												<div style={{ whiteSpace: "normal", width: "40px" }}>
 													<img
 														style={{ width: "100%" }}
-														className=' rounded-circle '
+														className=' rounded-circle img_icons'
 														src={order?.user?.image}
 														alt={order?.user?.name}
 													/>

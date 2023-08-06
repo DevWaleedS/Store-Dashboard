@@ -214,6 +214,21 @@ svg:not(:root) {
 	color: #ff3838;
 }
 
+.img_icons {
+	min-width: 40px;
+	max-width: 40px;
+	height: 40px;
+	object-fit: scale-down;
+	border: 1px solid #ddd;
+	padding: 3px;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+	mix-blend-mode: multiply;
+}
+
 ul {
 	list-style: none;
 	padding: 0;
@@ -1369,9 +1384,10 @@ select {
 }
 
 .sub-categories div {
-	width: 118px;
+	min-width: 70px;
+	max-width: 118px;
 	background-color: var(--gray-200);
-	padding: 5px 10px;
+	padding: 5px 8px;
 	border-radius: 20px;
 	font-size: 16px;
 	font-weight: 500;

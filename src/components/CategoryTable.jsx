@@ -31,14 +31,14 @@ function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='left' sx={{ color: "#02466a", width: "73px" }}>
+				<TableCell align='left' sx={{ color: "#02466a", minWidth: "73px" }}>
 					م
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a", width: "80px" }}>
+				<TableCell align='center' sx={{ color: "#02466a", minWidth: "80px" }}>
 					ID
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a", width: "300px" }}>
-					الأساسي
+				<TableCell align='center' sx={{ color: "#02466a", minWidth: "300px" }}>
+					التصنيف الأساسي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					فرعي
@@ -455,25 +455,26 @@ export default function EnhancedTable({
 															</div>
 														</TableCell>
 
-														<TableCell align='center' sx={{ width: "73px" }}>
+														<TableCell align='center' sx={{ minWidth: "73px" }}>
 															{row?.number}
 														</TableCell>
 														<TableCell>
 															<div
 																className='cate-prim d-flex align-items-center justify-content-start'
 																style={{
-																	width: " 300px",
-																	paddingRight: "60px",
+																	minWidth: " 300px",
+																	marginRight: "30px",
 																}}>
 																<img
+																	className='img_icons'
+																	style={{
+																		border:
+																			row?.store === null
+																				? "1px solid #cfcdcd"
+																				: "	border: 1px solid #ddd;",
+																	}}
 																	src={row?.icon}
 																	alt={row?.name}
-																	style={{
-																		minWidth: " 40px",
-																		maxWidth: "40px",
-																		height: "40px",
-																		objectFit: "contain",
-																	}}
 																/>
 																<span
 																	className='me-3'
@@ -491,7 +492,7 @@ export default function EnhancedTable({
 															{row?.countsubcategory}
 														</TableCell>
 
-														<TableCell align='right'>
+														<TableCell align='center'>
 															<div className='sub-categories'>
 																{row?.subcategory.slice(0, 3).map((tag) => {
 																	return (
