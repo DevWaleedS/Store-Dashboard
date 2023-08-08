@@ -220,7 +220,7 @@ svg:not(:root) {
 	height: 40px;
 	object-fit: scale-down;
 	border: 1px solid #ddd;
-	padding: 3px;
+	padding: 5px;
 	border-radius: 50%;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
@@ -6332,6 +6332,17 @@ input:disabled {
 	color: #02466a;
 }
 
+.time-input{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 180px;
+    height: 56px;
+    border-radius: 4px;
+    border: 1px solid rgb(173, 181, 185);
+}
+
 /* ---------------------------------------------------------------- */
 /* Media queries */
 @media (max-width: 1400px) {
@@ -6740,6 +6751,10 @@ input:disabled {
 	}
 	.add-user-form .form-body input#email {
 		padding-left: 17px;
+	}
+	.time-input{
+		width: 120px;
+		height: 48px;
 	}
 }
 
@@ -9138,6 +9153,9 @@ input:disabled {
 	.support-table .support-title {
 		max-width: 240px;
 	}
+	.pm-am{
+		font-size: 16px !important;
+	}
 }
 
 @media (max-width: 576px) {
@@ -9394,4 +9412,36 @@ input:disabled {
 	.rating-page .user-info {
 		width: 100%;
 	}
+}
+.day-switch{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 105px;
+	height: 32px;
+	border-radius: 16px;
+	padding: 10px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+.day-switch span{
+	font-size: 14px;
+	color: #ffffff;
+	font-weight: 400;
+	font-family: "Tajawal", sans-serif;
+	letter-spacing: 0.14px;
+}
+.day-switch .circle{
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background-color: #ffffff;
+	margin: 0;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+	background: url('./data/Icons/down-arrow.svg') no-repeat;
+	background-size: 100%;
+	cursor: pointer;
 }
