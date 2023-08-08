@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
 import { useCookies } from "react-cookie";
 import { LoadingContext } from "../Context/LoadingProvider";
@@ -26,52 +26,52 @@ import DemoImage from "../data/Icons/demo-logo.png";
 import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg";
 import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
+import { ReactComponent as Address } from "../data/Icons/address.svg";
 import { ReactComponent as Timer } from "../data/Icons/timer.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const style = {
-	position: 'absolute',
-	top: '55%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
+	position: "absolute",
+	top: "55%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
 	width: "900px",
-	maxWidth: '90%',
-	bgcolor: '#fff',
-	border: '1px solid #707070',
-	borderRadius: '16px',
+	maxWidth: "90%",
+	bgcolor: "#fff",
+	border: "1px solid #707070",
+	borderRadius: "16px",
 	boxShadow: 24,
 };
 
 const contentStyle = {
-	height: '500px',
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '18px',
-	fontSize: '20px',
+	height: "500px",
+	display: "flex",
+	flexDirection: "column",
+	gap: "18px",
+	fontSize: "20px",
 	fontWight: 400,
-	letterSpacing: '0.2px',
-	color: '#FFFFFF',
-	padding: '30px 80px 20px',
-	whiteSpace: 'normal',
-	overflow: 'auto'
+	letterSpacing: "0.2px",
+	color: "#FFFFFF",
+	padding: "30px 80px 20px",
+	whiteSpace: "normal",
+	overflow: "auto",
 };
 
 const times = [
-	'1:00',
-	'2:00',
-	'3:00',
-	'4:00',
-	'5:00',
-	'6:00',
-	'7:00',
-	'8:00',
-	'9:00',
-	'10:00',
-	'11:00',
-	'12:00',
-]
+	"1:00",
+	"2:00",
+	"3:00",
+	"4:00",
+	"5:00",
+	"6:00",
+	"7:00",
+	"8:00",
+	"9:00",
+	"10:00",
+	"11:00",
+	"12:00",
+];
 
 const MainInformation = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -82,25 +82,29 @@ const MainInformation = () => {
 	const [openHoursWork, setOpenHoursWork] = useState(false);
 
 	const [openAlawys, setOpenAlawys] = useState();
-	const [workDays, setWorkDays] = useState([{
-		day: {
-			id: '',
-			name: '',
+	const [workDays, setWorkDays] = useState([
+		{
+			day: {
+				id: "",
+				name: "",
+			},
+			from: "",
+			status: "",
+			to: "",
 		},
-		from: '',
-		status: '',
-		to: '',
-	}]);
+	]);
 
-	const [newWorkDays, setNewWorkDays] = useState([{
-		day: {
-			id: '',
-			name: '',
+	const [newWorkDays, setNewWorkDays] = useState([
+		{
+			day: {
+				id: "",
+				name: "",
+			},
+			from: "",
+			status: "",
+			to: "",
 		},
-		from: '',
-		status: '',
-		to: '',
-	}]);
+	]);
 
 	// To show the store info that come from api
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -164,12 +168,16 @@ const MainInformation = () => {
 				fetchedData?.data?.setting_store?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.phonenumber?.startsWith("00966")
-						? fetchedData?.data?.setting_store?.phonenumber.slice(5)
-						: fetchedData?.data?.setting_store?.phonenumber
+					? fetchedData?.data?.setting_store?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.phonenumber
 			);
 
 			setDescriptionValue(fetchedData?.data?.setting_store?.description);
-			setOpenAlawys(fetchedData?.data?.setting_store?.working_status === 'active' ? true : false);
+			setOpenAlawys(
+				fetchedData?.data?.setting_store?.working_status === "active"
+					? true
+					: false
+			);
 			setWorkDays(fetchedData?.data?.setting_store?.workDays);
 		}
 	}, [fetchedData?.data?.setting_store]);
@@ -204,7 +212,7 @@ const MainInformation = () => {
 	// to update UpdateMaintenanceMode values
 	const settingsStoreUpdate = () => {
 		resetSettingError();
-		setLoadingTitle("جاري تعديل البيانات الأساسية");
+		setLoadingTitle("جاري تعديل بيانات المتجر الأساسية");
 
 		let formData = new FormData();
 
@@ -230,12 +238,18 @@ const MainInformation = () => {
 		);
 
 		formData.append("description", descriptionValue);
-		formData.append("working_status", openAlawys ? 'active' : 'not_active');
+		formData.append("working_status", openAlawys ? "active" : "not_active");
 		for (let i = 0; i < workDays?.length; i++) {
 			formData.append([`data[${i}][status]`], workDays?.[i]?.status);
 			formData.append([`data[${i}][id]`], workDays?.[i]?.day?.id);
-			formData.append([`data[${i}][from]`], workDays?.[i]?.status === 'active' ? workDays?.[i]?.from : null);
-			formData.append([`data[${i}][to]`], workDays?.[i]?.status === 'active' ? workDays?.[i]?.to : null);
+			formData.append(
+				[`data[${i}][from]`],
+				workDays?.[i]?.status === "active" ? workDays?.[i]?.from : null
+			);
+			formData.append(
+				[`data[${i}][to]`],
+				workDays?.[i]?.status === "active" ? workDays?.[i]?.to : null
+			);
 		}
 
 		axios
@@ -279,10 +293,13 @@ const MainInformation = () => {
 	}, [phoneNumber]);
 
 	const updateState = (index) => {
-		setWorkDays(prevState => {
+		setWorkDays((prevState) => {
 			const newState = prevState.map((obj, i) => {
 				if (index === i) {
-					return { ...obj, status: obj?.status === 'active' ? 'not_active' : 'active' };
+					return {
+						...obj,
+						status: obj?.status === "active" ? "not_active" : "active",
+					};
 				}
 				return obj;
 			});
@@ -291,7 +308,7 @@ const MainInformation = () => {
 	};
 
 	const updateFromTime = (index, value) => {
-		setWorkDays(prevState => {
+		setWorkDays((prevState) => {
 			const newState = prevState.map((obj, i) => {
 				if (index === i) {
 					return { ...obj, from: value };
@@ -300,10 +317,10 @@ const MainInformation = () => {
 			});
 			return newState;
 		});
-	}
+	};
 
 	const updateToTime = (index, value) => {
-		setWorkDays(prevState => {
+		setWorkDays((prevState) => {
 			const newState = prevState.map((obj, i) => {
 				if (index === i) {
 					return { ...obj, to: value };
@@ -312,15 +329,16 @@ const MainInformation = () => {
 			});
 			return newState;
 		});
-	}
+	};
 
 	const updateAll = (value) => {
-		setWorkDays(prevState => {
-			const newState = prevState.map((obj,index) => {
-				if(value === true){
-					return { ...obj, status: 'active',from:'',to:''};
+		setWorkDays((prevState) => {
+			const newState = prevState.map((obj, index) => {
+				if (value === true) {
+					return { ...obj, status: "active", from: "", to: "" };
 				}
-				return { ...obj, 
+				return {
+					...obj,
 					status: fetchedData?.data?.setting_store?.workDays?.[index]?.status,
 					from: fetchedData?.data?.setting_store?.workDays?.[index]?.from,
 					to: fetchedData?.data?.setting_store?.workDays?.[index]?.to,
@@ -328,24 +346,30 @@ const MainInformation = () => {
 			});
 			return newState;
 		});
-	}
+	};
 
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | البيانات الأساسية</title>
+				<title>لوحة تحكم أطلبها | بيانات المتجر الأساسية</title>
 			</Helmet>
 			<Modal
 				open={openHoursWork}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
-					<div className='d-flex flex-row align-items-center justify-content-between p-4' style={{ backgroundColor: '#1DBBBE', borderRadius: '8px' }}>
-						<h6 style={{ color: '#F7FCFF' }}>ساعات العمل</h6>
+					<div
+						className='d-flex flex-row align-items-center justify-content-between p-4'
+						style={{ backgroundColor: "#1DBBBE", borderRadius: "8px" }}>
+						<h6 style={{ color: "#F7FCFF" }}>ساعات العمل</h6>
 						<AiOutlineCloseCircle
 							onClick={() => {
 								setOpenHoursWork(false);
-								setOpenAlawys(fetchedData?.data?.setting_store?.working_status === 'active' ? true : false);
+								setOpenAlawys(
+									fetchedData?.data?.setting_store?.working_status === "active"
+										? true
+										: false
+								);
 								setWorkDays(fetchedData?.data?.setting_store?.workDays);
 							}}
 							style={{
@@ -358,9 +382,15 @@ const MainInformation = () => {
 					</div>
 					<div
 						className='delegate-request-alert text-center'
-						style={contentStyle}
-					>
-						<div className="d-flex flex-row align-items-center justify-content-center gap-3" style={{ backgroundColor: !openAlawys ? '#011723' : '#ADB5B9', borderRadius: '8px', fontSize: '20px', padding: '14px' }}>
+						style={contentStyle}>
+						<div
+							className='d-flex flex-row align-items-center justify-content-center gap-3'
+							style={{
+								backgroundColor: !openAlawys ? "#011723" : "#ADB5B9",
+								borderRadius: "8px",
+								fontSize: "20px",
+								padding: "14px",
+							}}>
 							<Switch
 								onChange={(e) => {
 									setOpenAlawys(!openAlawys);
@@ -373,17 +403,17 @@ const MainInformation = () => {
 									padding: "0",
 									borderRadius: "20px",
 									"& .MuiSwitch-track": {
-										width: '36px',
-										height: '22px',
+										width: "36px",
+										height: "22px",
 										opacity: 1,
 										backgroundColor: "rgba(0,0,0,.25)",
 										boxSizing: "border-box",
 									},
 									"& .MuiSwitch-thumb": {
 										boxShadow: "none",
-										width: '16px',
-										height: '16px',
-										borderRadius: '50%',
+										width: "16px",
+										height: "16px",
+										borderRadius: "50%",
 										transform: "translate(3px,3px)",
 										color: "#fff",
 									},
@@ -410,25 +440,61 @@ const MainInformation = () => {
 							مفتوح دائماً
 						</div>
 						{workDays?.map((day, index) => (
-							<div key={index} className="d-flex flex-row align-items-center justify-content-between px-3 py-2 gap-3" style={{ minWidth: 'max-content', minHeight: '80px', backgroundColor: '#FFFFFF', boxShadow: '0px 3px 6px #0000000F', borderRadius: '8px' }}>
-								<div className="d-flex flex-row align-items-center gap-3">
-									<span style={{ minWidth: '100px', color: '#011723', fontSize: '18px', fontWeight: '500' }}>{day?.day?.name}</span>
-									<button disabled={!openAlawys} onClick={() => updateState(index)} className="day-switch" style={{ backgroundColor: day?.status === 'active' ? '#3AE374' : '#ADB5B9'}}>
-										{day?.status === 'not_active' && <span>مغلق</span>}
-										<p className="circle"></p>
-										{day?.status === 'active' && <span>مفتوح</span>}
+							<div
+								key={index}
+								className='d-flex flex-row align-items-center justify-content-between px-3 py-2 gap-3'
+								style={{
+									minWidth: "max-content",
+									minHeight: "80px",
+									backgroundColor: "#FFFFFF",
+									boxShadow: "0px 3px 6px #0000000F",
+									borderRadius: "8px",
+								}}>
+								<div className='d-flex flex-row align-items-center gap-3'>
+									<span
+										style={{
+											minWidth: "100px",
+											color: "#011723",
+											fontSize: "18px",
+											fontWeight: "500",
+										}}>
+										{day?.day?.name}
+									</span>
+									<button
+										disabled={!openAlawys}
+										onClick={() => updateState(index)}
+										className='day-switch'
+										style={{
+											backgroundColor:
+												day?.status === "active" ? "#3AE374" : "#ADB5B9",
+										}}>
+										{day?.status === "not_active" && <span>مغلق</span>}
+										<p className='circle'></p>
+										{day?.status === "active" && <span>مفتوح</span>}
 									</button>
 								</div>
-								{day?.status === 'active' &&
-									<div className="d-flex flex-row align-items-center gap-3">
-										<div className="time-input">
-											<input value={day?.from} onChange={(e) => updateFromTime(index, e.target.value)} type="time" style={{ color: '#000000' }} disabled={!openAlawys} />
+								{day?.status === "active" && (
+									<div className='d-flex flex-row align-items-center gap-3'>
+										<div className='time-input'>
+											<input
+												value={day?.from}
+												onChange={(e) => updateFromTime(index, e.target.value)}
+												type='time'
+												style={{ color: "#000000" }}
+												disabled={!openAlawys}
+											/>
 										</div>
-										<div className="time-input">
-											<input value={day?.to} onChange={(e) => updateToTime(index, e.target.value)} type="time" style={{ color: '#000000' }} disabled={!openAlawys} />
+										<div className='time-input'>
+											<input
+												value={day?.to}
+												onChange={(e) => updateToTime(index, e.target.value)}
+												type='time'
+												style={{ color: "#000000" }}
+												disabled={!openAlawys}
+											/>
 										</div>
 									</div>
-								}
+								)}
 							</div>
 						))}
 						{/*<div className="d-flex flex-row align-items-center justify-content-between px-3 py-2 gap-3" style={{ minWidth: 'max-content', minHeight: '80px', backgroundColor: '#FFFFFF', boxShadow: '0px 3px 6px #0000000F', borderRadius: '8px' }}>
@@ -581,7 +647,7 @@ const MainInformation = () => {
 						</div>*/}
 						<button
 							onClick={() => {
-								setEndActionTitle('تم حفظ تحديث ساعات العمل');
+								setEndActionTitle("تم حفظ تحديث ساعات العمل");
 								setOpenHoursWork(false);
 							}}
 							style={{
@@ -997,14 +1063,21 @@ const MainInformation = () => {
 												className='setting_label d-block'>
 												عنوان المتجر
 											</label>
-											<input
-												className='text-right store-email-input w-100'
-												name='address'
-												id='address'
-												placeholder='قم بادخال عنوان المتجر '
-												value={storeAddress}
-												onChange={(e) => setStoreAddress(e.target.value)}
-											/>
+
+											<div className='select-country'>
+												<div className='select-icon'>
+													<Address className='edit-icon' />
+												</div>
+												<textarea
+													className='text-right form-control store-desc w-100'
+													name='address'
+													id='address'
+													placeholder='قم بادخال عنوان المتجر '
+													value={storeAddress}
+													onChange={(e) => setStoreAddress(e.target.value)}
+													rows='3'
+													onResize='false'></textarea>
+											</div>
 										</div>
 										{settingErr?.storeAddress && (
 											<div className='d-flex flex-wrap'>
@@ -1098,6 +1171,9 @@ const MainInformation = () => {
 							<div className='col-12 mb-5'>
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
+										<label htmlFor='address' className='setting_label d-block'>
+											وصف المتجر
+										</label>
 										<div className='select-country'>
 											<div className='select-icon'>
 												<EditIcon className='edit-icon' />
@@ -1121,9 +1197,9 @@ const MainInformation = () => {
 							</div>
 
 							<div className='col-12 mb-3 d-flex flex-column align-items-center justify-content-center'>
-								<div className="col-lg-8 col-12 mb-4">
+								<div className='col-lg-8 col-12 mb-4'>
 									<Button
-										className="flex align-items-center gap-1"
+										className='flex align-items-center gap-1'
 										variant='outlined'
 										style={{
 											width: "100%",
@@ -1131,13 +1207,12 @@ const MainInformation = () => {
 											backgroundColor: "transparent",
 											border: "1px solid #02466A",
 										}}
-										onClick={() => setOpenHoursWork(true)}
-									>
+										onClick={() => setOpenHoursWork(true)}>
 										<Timer />
 										ساعات العمل
 									</Button>
 								</div>
-								<div className="col-lg-8 col-12">
+								<div className='col-lg-8 col-12'>
 									<Button
 										variant='contained'
 										style={{
