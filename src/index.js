@@ -51,6 +51,7 @@ import {
 	Notifications,
 	PlatformServices,
 	EvaluationThePlatform,
+	PostalSubscriptions,
 } from "./pages";
 // ---------------------------------------------------------------------------------------//
 
@@ -214,6 +215,10 @@ const router = createBrowserRouter([
 			{
 				path: "Seo",
 				element: <Seo />,
+			},
+			{
+				path: "PostalSubscriptions",
+				element: <PostalSubscriptions />,
 			},
 			{
 				path: "MarketingCampaign",

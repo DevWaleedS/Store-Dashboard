@@ -43,7 +43,6 @@ const Products = () => {
 
 	let products = fetchedData?.data?.products;
 	let filterProducts = products;
-	console.log(fetchedData?.data?.products);
 
 	const getSearchInput = (value) => {
 		setSearch(value);

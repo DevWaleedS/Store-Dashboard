@@ -356,9 +356,9 @@ const AddNewProduct = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -426,7 +426,7 @@ const AddNewProduct = () => {
 										<div className='col-md-7 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-												subcategory[0]?.subcategory.length === 0 ? (
+													subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{ color: "#1dbbbe" }}>
@@ -437,9 +437,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+															{
+																paddingRight: "20px",
+															},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -520,14 +520,11 @@ const AddNewProduct = () => {
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
-											<input
-												type='number'
-												id='stock'
-												placeholder='اضف الكمية'
-												name='stock'
-												{...register("stock", {
+											<Controller
+												name={"stock"}
+												control={control}
+												rules={{
 													required: "حقل المخزون مطلوب",
-
 													pattern: {
 														value: /^[0-9]+$/i,
 														message: "يجب على الحقل المخزون أن يكون رقمًا",
@@ -536,7 +533,17 @@ const AddNewProduct = () => {
 														value: 1,
 														message: "  المخزون يجب ان يكون اكبر من 0",
 													},
-												})}
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														type='text'
+														id='stock'
+														placeholder='اضف الكمية'
+														name='stock'
+														value={value}
+														onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+													/>
+												)}
 											/>
 										</div>
 										<div className='col-md-3 col-12'></div>
@@ -574,12 +581,12 @@ const AddNewProduct = () => {
 													<input
 														disabled={product?.discount_price}
 														name={"selling_price"}
-														type='number'
+														type='text'
 														id='price'
 														value={value}
 														onChange={(e) => {
-															handleOnChange(e);
-															onChange(e);
+															setProduct({ ...product, selling_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+															onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
 														}}
 													/>
 												)}
@@ -604,12 +611,12 @@ const AddNewProduct = () => {
 												render={({ field: { onChange, value } }) => (
 													<input
 														name={"discount_price"}
-														type='number'
+														type='text'
 														id='low-price'
 														value={value}
 														onChange={(e) => {
-															handleOnChange(e);
-															onChange(e);
+															setProduct({ ...product, discount_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+															onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
 														}}
 													/>
 												)}
@@ -621,10 +628,10 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 										)}
 

@@ -313,32 +313,32 @@ const CreateOffer = () => {
 			offer?.offer_type === "fixed_amount"
 				? offer?.fixed_offer_apply
 				: offer?.offer_type === "percent"
-				? offer?.offer_apply
-				: ""
+					? offer?.offer_apply
+					: ""
 		);
 		formData.append(
 			"offer_type_minimum",
 			offer?.offer_type === "fixed_amount"
 				? data?.fixed_offer_type_minimum
 				: offer?.offer_type === "percent"
-				? data?.offer_type_minimum
-				: ""
+					? data?.offer_type_minimum
+					: ""
 		);
 		formData.append(
 			"offer_amount_minimum",
 			offer?.offer_type === "fixed_amount"
 				? offer?.fixed_offer_amount_minimum
 				: offer?.offer_type === "percent"
-				? offer?.offer_amount_minimum
-				: ""
+					? offer?.offer_amount_minimum
+					: ""
 		);
 		formData.append(
 			"coupon_status",
 			offer?.offer_type === "fixed_amount"
 				? fixedCouponStatus
 				: offer?.offer_type === "percent"
-				? couponStatus
-				: ""
+					? couponStatus
+					: ""
 		);
 		formData.append(
 			"discount_value_offer3",
@@ -589,8 +589,8 @@ const CreateOffer = () => {
 															return selected === "store_website"
 																? "موقع المتجر"
 																: selected === "store_application"
-																? "تطبيق الموقع"
-																: "موقع و تطبيق المتجر";
+																	? "تطبيق الموقع"
+																	: "موقع و تطبيق المتجر";
 														}}>
 														<MenuItem value='store_website'>
 															<LaptopIcon />
@@ -702,12 +702,10 @@ const CreateOffer = () => {
 													<div className='input-icon'>
 														<Quantity className='quantity' />
 													</div>
-													<input
-														name='purchase_quantity'
-														type='number'
-														id='count'
-														placeholder='0'
-														{...register("purchase_quantity", {
+													<Controller
+														name={"purchase_quantity"}
+														control={control}
+														rules={{
 															required: "حقل كمية الشراء مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
@@ -717,7 +715,17 @@ const CreateOffer = () => {
 																value: -1,
 																message: "يجب أن تكون كمية الشراء أكبر من -1",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='purchase_quantity'
+																type='text'
+																id='count'
+																placeholder='0'
+																value={value}
+																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+															/>
+														)}
 													/>
 												</div>
 												<div className='col-12'>
@@ -840,9 +848,9 @@ const CreateOffer = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																				{
-																					paddingRight: "20px",
-																				},
+																			{
+																				paddingRight: "20px",
+																			},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -936,12 +944,10 @@ const CreateOffer = () => {
 													<div className='input-icon'>
 														<Quantity className='quantity' />
 													</div>
-													<input
-														name='get_quantity'
-														type='number'
-														id='count'
-														placeholder='0'
-														{...register("get_quantity", {
+													<Controller
+														name={"get_quantity"}
+														control={control}
+														rules={{
 															required: "حقل الحصول على الكمية مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
@@ -951,7 +957,17 @@ const CreateOffer = () => {
 																value: -1,
 																message: "يجب أن تكون كمية الاستلام أكبر من -1",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='get_quantity'
+																type='text'
+																id='count'
+																placeholder='0'
+																value={value}
+																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+															/>
+														)}
 													/>
 													<div className='col-12'>
 														<span className='fs-6 text-danger'>
@@ -1070,9 +1086,9 @@ const CreateOffer = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																				{
-																					paddingRight: "20px",
-																				},
+																			{
+																				paddingRight: "20px",
+																			},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -1188,11 +1204,10 @@ const CreateOffer = () => {
 																		<div className='col-12 mt-3'>
 																			<div className='d-flex flex-row align-items-center'>
 																				<div className='col-12'>
-																					<input
-																						name='discount_percent'
-																						type='number'
-																						placeholder='0'
-																						{...register("discount_percent", {
+																					<Controller
+																						name={"discount_percent"}
+																						control={control}
+																						rules={{
 																							required: " حقل نسبة الخصم مطلوب",
 																							pattern: {
 																								value: /^[0-9]+$/i,
@@ -1209,7 +1224,16 @@ const CreateOffer = () => {
 																								message:
 																									"يجب أن تكون نسبة الخصم أقل من 100",
 																							},
-																						})}
+																						}}
+																						render={({ field: { onChange, value } }) => (
+																							<input
+																								name='discount_percent'
+																								type='text'
+																								placeholder='0'
+																								value={value}
+																								onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																							/>
+																						)}
 																					/>
 																				</div>
 																				<span className='offer-currency'>
@@ -1271,11 +1295,10 @@ const CreateOffer = () => {
 																<div className='input-icon'>
 																	<Dollar className='search-icon' />
 																</div>
-																<input
-																	name='discount_value_offer2'
-																	type='number'
-																	placeholder='0'
-																	{...register("discount_value_offer2", {
+																<Controller
+																	name={"discount_value_offer2"}
+																	control={control}
+																	rules={{
 																		required: "حقل الخصم مطلوب",
 																		pattern: {
 																			value: /^[0-9]+$/i,
@@ -1285,7 +1308,16 @@ const CreateOffer = () => {
 																			value: 1,
 																			message: "يجب أن يكون الخصم أكبر من 0",
 																		},
-																	})}
+																	}}
+																	render={({ field: { onChange, value } }) => (
+																		<input
+																			name='discount_value_offer2'
+																			type='text'
+																			placeholder='0'
+																			value={value}
+																			onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																		/>
+																	)}
 																/>
 															</div>
 															<span className='offer-currency'>ر.س</span>
@@ -1338,7 +1370,7 @@ const CreateOffer = () => {
 															<label
 																className={
 																	offer?.fixed_offer_apply ===
-																	"selected_product"
+																		"selected_product"
 																		? "active me-3"
 																		: " me-3"
 																}
@@ -1355,7 +1387,7 @@ const CreateOffer = () => {
 															<label
 																className={
 																	offer?.fixed_offer_apply ===
-																	"selected_category"
+																		"selected_category"
 																		? "active me-3"
 																		: " me-3"
 																}
@@ -1372,7 +1404,7 @@ const CreateOffer = () => {
 															<label
 																className={
 																	offer?.fixed_offer_apply ===
-																	"selected_payment"
+																		"selected_payment"
 																		? "active me-3"
 																		: " me-3"
 																}
@@ -1451,9 +1483,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -1524,9 +1556,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -1628,19 +1660,26 @@ const CreateOffer = () => {
 																			<div className='input-icon'>
 																				<Dollar className='search-icon' />
 																			</div>
-																			<input
-																				name='fixed_offer_amount_minimum'
-																				value={
-																					value !== "purchase_amount"
-																						? ""
-																						: offer?.fixed_offer_amount_minimum
-																				}
-																				onChange={(e) => {
-																					handleOnChange(e);
-																				}}
-																				type='number'
-																				placeholder='0'
-																				disabled={value !== "purchase_amount"}
+																			<Controller
+																				name={"fixed_offer_amount_minimum"}
+																				control={control}
+																				render={({ field: { onChange, value } }) => (
+																					<input
+																						name='fixed_offer_amount_minimum'
+																						value={
+																							value !== "purchase_amount"
+																								? ""
+																								: offer?.fixed_offer_amount_minimum
+																						}
+																						onChange={(e) => {
+																							setOffer({ ...offer, fixed_offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																							onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																						}}
+																						type='text'
+																						placeholder='0'
+																						disabled={value !== "purchase_amount"}
+																					/>
+																				)}
 																			/>
 																		</div>
 																		<span className='offer-currency'>ر.س</span>
@@ -1675,19 +1714,26 @@ const CreateOffer = () => {
 																		<div className='input-icon'>
 																			<Quantity className='search-icon' />
 																		</div>
-																		<input
-																			name='fixed_offer_amount_minimum'
-																			value={
-																				value !== "product_quantity"
-																					? ""
-																					: offer?.fixed_offer_amount_minimum
-																			}
-																			onChange={(e) => {
-																				handleOnChange(e);
-																			}}
-																			type='number'
-																			placeholder='0'
-																			disabled={value !== "product_quantity"}
+																		<Controller
+																			name={"fixed_offer_amount_minimum"}
+																			control={control}
+																			render={({ field: { onChange, value } }) => (
+																				<input
+																					name='fixed_offer_amount_minimum'
+																					value={
+																						value !== "product_quantity"
+																							? ""
+																							: offer?.fixed_offer_amount_minimum
+																					}
+																					onChange={(e) => {
+																						setOffer({ ...offer, fixed_offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																						onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																					}}
+																					type='text'
+																					placeholder='0'
+																					disabled={value !== "product_quantity"}
+																				/>
+																			)}
 																		/>
 																		<div className='col-12'>
 																			{offerError?.offer_amount_minimum && (
@@ -1753,11 +1799,10 @@ const CreateOffer = () => {
 																<div className='input-icon'>
 																	<Dollar className='search-icon' />
 																</div>
-																<input
-																	name='discount_value_offer3'
-																	type='number'
-																	placeholder='0'
-																	{...register("discount_value_offer3", {
+																<Controller
+																	name={"discount_value_offer3"}
+																	control={control}
+																	rules={{
 																		required: "حقل قيمة التخفيض مطلوب",
 																		pattern: {
 																			value: /^[0-9]+$/i,
@@ -1773,7 +1818,16 @@ const CreateOffer = () => {
 																			message:
 																				"يجب أن تكون نسبة الخصم أقل من 100",
 																		},
-																	})}
+																	}}
+																	render={({ field: { onChange, value } }) => (
+																		<input
+																			name='discount_value_offer3'
+																			type='text'
+																			placeholder='0'
+																			value={value}
+																			onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																		/>
+																	)}
 																/>
 															</div>
 															<span className='offer-currency'>%</span>
@@ -1800,11 +1854,10 @@ const CreateOffer = () => {
 																<div className='input-icon'>
 																	<Dollar className='search-icon' />
 																</div>
-																<input
-																	name='maximum_discount'
-																	type='number'
-																	placeholder='0'
-																	{...register("maximum_discount", {
+																<Controller
+																	name={"maximum_discount"}
+																	control={control}
+																	rules={{
 																		required: "مطلوب حقل الحد الأقصى للخصم",
 																		pattern: {
 																			value: /^[0-9]+$/i,
@@ -1816,7 +1869,16 @@ const CreateOffer = () => {
 																			message:
 																				"يجب أن يكون الحد الأقصى للخصم أكبر من 0",
 																		},
-																	})}
+																	}}
+																	render={({ field: { onChange, value } }) => (
+																		<input
+																			name='maximum_discount'
+																			type='text'
+																			placeholder='0'
+																			value={value}
+																			onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																		/>
+																	)}
 																/>
 															</div>
 															<span className='offer-currency'>ر.س</span>
@@ -1979,9 +2041,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -2052,9 +2114,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -2157,19 +2219,26 @@ const CreateOffer = () => {
 																			<div className='input-icon'>
 																				<Dollar className='search-icon' />
 																			</div>
-																			<input
-																				name='offer_amount_minimum'
-																				value={
-																					value !== "purchase_amount"
-																						? ""
-																						: offer?.offer_amount_minimum
-																				}
-																				onChange={(e) => {
-																					handleOnChange(e);
-																				}}
-																				type='number'
-																				placeholder='0'
-																				disabled={value !== "purchase_amount"}
+																			<Controller
+																				name={"offer_amount_minimum"}
+																				control={control}
+																				render={({ field: { onChange, value } }) => (
+																					<input
+																						name='offer_amount_minimum'
+																						value={
+																							value !== "purchase_amount"
+																								? ""
+																								: offer?.offer_amount_minimum
+																						}
+																						onChange={(e) => {
+																							setOffer({ ...offer, offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																							onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																						}}
+																						type='text'
+																						placeholder='0'
+																						disabled={value !== "purchase_amount"}
+																					/>
+																				)}
 																			/>
 																		</div>
 																		<span className='offer-currency'>ر.س</span>
@@ -2204,19 +2273,26 @@ const CreateOffer = () => {
 																		<div className='input-icon'>
 																			<Quantity className='search-icon' />
 																		</div>
-																		<input
-																			name='offer_amount_minimum'
-																			value={
-																				value !== "product_quantity"
-																					? ""
-																					: offer?.offer_amount_minimum
-																			}
-																			onChange={(e) => {
-																				handleOnChange(e);
-																			}}
-																			type='number'
-																			placeholder='0'
-																			disabled={value !== "product_quantity"}
+																		<Controller
+																			name={"offer_amount_minimum"}
+																			control={control}
+																			render={({ field: { onChange, value } }) => (
+																				<input
+																					name='offer_amount_minimum'
+																					value={
+																						value !== "product_quantity"
+																							? ""
+																							: offer?.offer_amount_minimum
+																					}
+																					onChange={(e) => {
+																						setOffer({ ...offer, offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																						onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																					}}
+																					type='text'
+																					placeholder='0'
+																					disabled={value !== "product_quantity"}
+																				/>
+																			)}
 																		/>
 																	</div>
 																	<div className='col-12'>

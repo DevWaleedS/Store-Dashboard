@@ -34,8 +34,6 @@ const ExplainDetails = () => {
 		}
 	}, [fetchedData]);
 
-	console.log(explainDetails);
-
 	return (
 		<>
 			<Helmet>

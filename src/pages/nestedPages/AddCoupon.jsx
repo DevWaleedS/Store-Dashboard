@@ -281,12 +281,10 @@ const AddCoupon = () => {
 												عدد مرات الاستخدام للجميع
 												<span className='text-danger'>*</span>
 											</label>
-											<input
-												type='number'
-												id='uses-count'
-												placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
-												name='total_redemptions'
-												{...register("total_redemptions", {
+											<Controller
+												name={"total_redemptions"}
+												control={control}
+												rules={{
 													required: "حقل عدد مرات الاستخدام للجميع مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
@@ -298,7 +296,17 @@ const AddCoupon = () => {
 														message:
 															"  عدد مرات الاستخدام للجميع يجب ان يكون اكبر من 0",
 													},
-												})}
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														type='text'
+														id='uses-count'
+														placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
+														name='total_redemptions'
+														value={value}
+														onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+													/>
+												)}
 											/>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
@@ -363,12 +371,10 @@ const AddCoupon = () => {
 												</span>
 											</div>
 											<div>
-												<input
-													type='number'
-													id='add-ptice'
-													placeholder={"ادخل المبلغ او النسبة"}
-													name='discount'
-													{...register("discount", {
+												<Controller
+													name={"discount"}
+													control={control}
+													rules={{
 														required: "حقل الخصم مطلوب",
 														pattern: {
 															value: /^[0-9]+$/i,
@@ -378,7 +384,17 @@ const AddCoupon = () => {
 															value: 1,
 															message: "  الخصم يجب ان يكون اكبر من 0",
 														},
-													})}
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															type='text'
+															id='add-ptice'
+															placeholder={"ادخل المبلغ او النسبة"}
+															name='discount'
+															value={value}
+															onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+														/>
+													)}
 												/>
 											</div>
 											<div className='col-12'>
@@ -394,25 +410,33 @@ const AddCoupon = () => {
 												عدد مرات الاستخدام للزبون الواحد
 												<span className='text-danger'>*</span>
 											</label>
-											<input
-												type='number'
-												id='user-count'
-												placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
-												name='user_redemptions'
-												{...register("user_redemptions", {
+											<Controller
+												name={"user_redemptions"}
+												control={control}
+												rules={{
 													required:
 														"حقل عدد مرات الاستخدام للعميل الواحد مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
 														message:
-															"   عدد مرات الاستخدام للعميل الواحد يجب أن يكون رقمًا",
+															"عدد مرات الاستخدام للعميل الواحد يجب أن يكون رقمًا",
 													},
 													min: {
 														value: 1,
 														message:
-															"  عدد مرات الاستخدام للعميل الواحد يجب ان يكون اكبر من 0",
+															"عدد مرات الاستخدام للعميل الواحد يجب ان يكون اكبر من 0",
 													},
-												})}
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														type='text'
+														id='user-count'
+														placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
+														name='user_redemptions'
+														value={value}
+														onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+													/>
+												)}
 											/>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
@@ -506,12 +530,10 @@ const AddCoupon = () => {
 												الحد الأدنى من المشتريات
 												<span className='text-danger'>*</span>
 											</label>
-											<input
-												type='number'
-												id='add-ptice'
-												placeholder='ادخل مبلغ الحد الأدني من المشتريات'
-												name='total_price'
-												{...register("total_price", {
+											<Controller
+												name={"total_price"}
+												control={control}
+												rules={{
 													required: "حقل المبلغ مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
@@ -521,7 +543,17 @@ const AddCoupon = () => {
 														value: 1,
 														message: "  المبلغ يجب ان يكون اكبر من 0",
 													},
-												})}
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														type='text'
+														id='add-ptice'
+														placeholder='ادخل مبلغ الحد الأدني من المشتريات'
+														name='total_price'
+														value={value}
+														onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+													/>
+												)}
 											/>
 											<div className='col-12'>
 												<span className='fs-6 text-danger'>
@@ -735,9 +767,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -807,9 +839,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",

@@ -36,3 +36,4 @@ export { default as PayPalFormWeight } from "./PayPalFormWeight";
 export { default as MadaFormWeight } from "./MadaFormWeight";
 export { default as DelegateRequestAlert } from "./DelegateRequestAlert";
 export { default as DelegateTable } from "./DelegateTable";
+export { default as PostalSubscriptionsTable } from "./PostalSubscriptionsTable";

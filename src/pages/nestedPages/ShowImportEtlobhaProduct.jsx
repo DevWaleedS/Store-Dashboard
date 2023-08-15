@@ -72,12 +72,6 @@ const ShowImportEtlobhaProduct = () => {
 			stock: "",
 		},
 	});
-	const handleOnChange = (e) => {
-		const { name, value } = e.target;
-		setProduct((prevProduct) => {
-			return { ...prevProduct, [name]: value };
-		});
-	};
 	/**
 	 * --------------------------------------------------------------------
 	 * to set data that coming from api
@@ -313,7 +307,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
 													{fetchedData?.data?.product?.subcategory?.length ===
-													0 ? (
+														0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -423,12 +417,12 @@ const ShowImportEtlobhaProduct = () => {
 																className='import_products_input'
 																style={{ background: "#FFF", height: "48px" }}
 																name={"price"}
-																type='number'
+																type='text'
 																id='price'
 																value={value}
 																onChange={(e) => {
-																	handleOnChange(e);
-																	onChange(e);
+																	setProduct({ ...product, price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																	onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
 																}}
 															/>
 														)}
@@ -445,11 +439,11 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												{product?.price <
 													fetchedData?.data?.product?.purchasing_price && (
-													<span className='fs-6 text-danger'>
-														السعر يجب ان يكون اكبر من او يساوي (
-														{fetchedData?.data?.product?.purchasing_price})
-													</span>
-												)}
+														<span className='fs-6 text-danger'>
+															السعر يجب ان يكون اكبر من او يساوي (
+															{fetchedData?.data?.product?.purchasing_price})
+														</span>
+													)}
 											</div>
 
 											<div className='col-md-7 col-12'>

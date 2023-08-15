@@ -851,7 +851,7 @@ const TemplateUpdate = () => {
 					<div className='row'>
 						<div className='col-12 p-4'>
 							<div className='input-bx'>
-								<div className='switch-widget mb-2 d-flex justify-content-between align-items-center'>
+								{/*<div className='switch-widget mb-2 d-flex justify-content-between align-items-center'>
 									<div className='widget-text'>
 										<Client className='client-icon' />
 										<span className='me-3'>العملاء المميزون</span>
@@ -890,7 +890,7 @@ const TemplateUpdate = () => {
 											checked={clientStatus}
 										/>
 									</div>
-								</div>
+										</div>*/}
 								<div className='switch-widget d-flex justify-content-between align-items-center'>
 									<div className='widget-text'>
 										<CommentIcon />
