@@ -42,7 +42,6 @@ const ProductRefund = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`
 	);
-	console.log(fetchedData?.data);
 	const [open, setOpen] = React.useState(true);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -289,10 +288,10 @@ const ProductRefund = () => {
 																style={{
 																	direction: "ltr",
 																}}
-																type='number'
+																type='text'
 																name='price'
 																value={price}
-																onChange={(e) => setPrice(e.target.value)}
+																onChange={(e) => setPrice(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
 															/>
 														</div>
 													</div>
@@ -302,8 +301,8 @@ const ProductRefund = () => {
 													</div>
 												</div>
 
-												{price <
-													fetchedData?.data?.products?.purchasing_price && (
+												{Number(price) <
+													Number(fetchedData?.data?.products?.purchasing_price) && (
 													<span className='fs-6 text-danger'>
 														السعر يجب ان يكون اكبر من او يساوي (
 														{fetchedData?.data?.products?.purchasing_price})

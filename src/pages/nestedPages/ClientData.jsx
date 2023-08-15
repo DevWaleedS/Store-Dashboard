@@ -766,7 +766,7 @@ const ClientData = () => {
 																? discountFixedValue
 																: cartDetails?.total - discountPercentValue
 														}
-														type='number'
+														type='text'
 														name='total-discount'
 														id='total-discount'
 													/>

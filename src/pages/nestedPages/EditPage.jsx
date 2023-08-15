@@ -79,6 +79,7 @@ const EditPage = () => {
 		tags: [],
 		pageCategory: [],
 		postCategory_id: "",
+		image: '',
 	});
 	const {
 		register,
@@ -154,6 +155,7 @@ const EditPage = () => {
 				(item) => item?.id
 			),
 			postCategory_id: fetchedData?.data?.pages?.postCategory?.id,
+			image: fetchedData?.data?.pages?.image,
 		});
 	}, [fetchedData?.data?.pages]);
 
@@ -205,7 +207,9 @@ const EditPage = () => {
 			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
 		}
 		formData.append("postCategory_id", itsPost ? page?.postCategory_id : null);
-		formData.append("image", itsPost ? images[0] : null);
+		if (images.length !== 0) {
+			formData.append("image", itsPost ? images[0] || null : null);
+		}
 		axios
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
@@ -562,9 +566,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																				{
-																					paddingRight: "20px",
-																				},
+																			{
+																				paddingRight: "20px",
+																			},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -662,9 +666,11 @@ const EditPage = () => {
 																			className='m-0'>
 																			{files}
 																		</ul>
+
 																	)}
 																</div>
 															</div>
+															{page?.image !== '' && <img className="mt-3" src={images[0]?.preview || page?.image} width={200} height={100} alt="img-page" />}
 														</div>
 													</>
 												)}
