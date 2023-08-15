@@ -79,7 +79,7 @@ const EditPage = () => {
 		tags: [],
 		pageCategory: [],
 		postCategory_id: "",
-		image: '',
+		image: "",
 	});
 	const {
 		register,
@@ -566,9 +566,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																				{
+																					paddingRight: "20px",
+																				},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -666,11 +666,19 @@ const EditPage = () => {
 																			className='m-0'>
 																			{files}
 																		</ul>
-
 																	)}
 																</div>
 															</div>
-															{page?.image !== '' && <img className="mt-3" src={images[0]?.preview || page?.image} width={200} height={100} alt="img-page" />}
+															{page?.image !== "" && (
+																<img
+																	style={{ objectFit: "contain" }}
+																	className='mt-3'
+																	src={images[0]?.preview || page?.image}
+																	width={200}
+																	height={100}
+																	alt='img-page'
+																/>
+															)}
 														</div>
 													</>
 												)}

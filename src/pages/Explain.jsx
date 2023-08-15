@@ -36,12 +36,14 @@ const Explain = ({ searchExplain }) => {
 				</div>
 			) : (
 				explainvideos?.map((lesson) => (
-					<div className='col-lg-4 col-6 mb-md-4 mb-3' key={lesson?.id}>
+					<div
+						className='col-lg-4 col-md-6 col-xm-12  mb-md-4 mb-3'
+						key={lesson?.id}>
 						<figure className='course-figure'>
 							<div className='course-prev-image'>
 								<img
 									src={lesson?.thumbnail}
-									className='figure-img img-fluid rounded'
+									className=' img-fluid rounded'
 									alt={lesson?.title}
 								/>
 							</div>
