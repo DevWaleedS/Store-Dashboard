@@ -303,6 +303,7 @@ const MainInformation = () => {
 				}
 				return obj;
 			});
+
 			return newState;
 		});
 	};
