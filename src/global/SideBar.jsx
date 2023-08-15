@@ -37,6 +37,7 @@ import { ReactComponent as Seo } from "../data/Icons/icon-24-seo.svg";
 import { ReactComponent as Evaluation } from "../data/Icons/evaluation.svg";
 import { SlRocket } from "react-icons/sl";
 import { FaCircle } from "react-icons/fa";
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -174,6 +175,15 @@ const SideBar = ({ open, closeSidebar }) => {
 							<span className='me-2'>التسويق عبر المشاهير</span>
 						</MenuItem>
 					</Link>
+					<NavLink
+						className='sub-menu-link'
+						to='PostalSubscriptions'
+						onClick={() => closeSidebar()}>
+						<MenuItem>
+							<MarkEmailReadIcon style={{ fontSize:'24px' }} />
+							<span className='me-2'>الاشتراكات البريدية</span>
+						</MenuItem>
+					</NavLink>
 					<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='MarketingCampaign'

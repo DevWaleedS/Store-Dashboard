@@ -63,8 +63,6 @@ const UserData = () => {
 		});
 	}, [fetchedData?.data?.users]);
 
-	console.log(fetchedData?.data?.users?.role?.name);
-
 	return (
 		<>
 			<Helmet>

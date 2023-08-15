@@ -219,12 +219,12 @@ const EditCoupon = () => {
 			fetchedData?.data?.Coupons?.coupon_apply === "selected_product"
 				? "selected_product"
 				: fetchedData?.data?.Coupons?.coupon_apply === "selected_category"
-				? "selected_category"
-				: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
-				? "selected_payment"
-				: fetchedData?.data?.Coupons?.coupon_apply === "all"
-				? "all"
-				: null
+					? "selected_category"
+					: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
+						? "selected_payment"
+						: fetchedData?.data?.Coupons?.coupon_apply === "all"
+							? "all"
+							: null
 		);
 
 		setSelectedProducts(
@@ -348,8 +348,6 @@ const EditCoupon = () => {
 			});
 	};
 
-	console.log(fetchedData?.data?.Coupons?.selected_product?.data);
-
 	return (
 		<>
 			<Helmet>
@@ -394,9 +392,9 @@ const EditCoupon = () => {
 													</button>
 												</Fragment>
 											) : moment(
-													fetchedData?.data?.Coupons?.expire_date,
-													"YYYY-MM-DD"
-											  ).toDate() < currentDate ? (
+												fetchedData?.data?.Coupons?.expire_date,
+												"YYYY-MM-DD"
+											).toDate() < currentDate ? (
 												<Fragment>
 													<div className='coupon-status disabled'>منتهي</div>
 
@@ -456,13 +454,10 @@ const EditCoupon = () => {
 														عدد مرات الاستخدام للجميع
 														<span className='text-danger'>*</span>
 													</label>
-													<input
-														type='number'
-														id='uses-count'
-														placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
-														name='total_redemptions'
-														disabled={isEnable === "نشط" ? false : true}
-														{...register("total_redemptions", {
+													<Controller
+														name={"total_redemptions"}
+														control={control}
+														rules={{
 															required: "حقل عدد مرات الاستخدام للجميع مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
@@ -474,7 +469,18 @@ const EditCoupon = () => {
 																message:
 																	"  عدد مرات الاستخدام للجميع يجب ان يكون اكبر من 0",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																type='text'
+																id='uses-count'
+																placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
+																name='total_redemptions'
+																disabled={isEnable === "نشط" ? false : true}
+																value={value}
+																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+															/>
+														)}
 													/>
 													<div className='col-12'>
 														<span className='fs-6 text-danger'>
@@ -550,13 +556,10 @@ const EditCoupon = () => {
 														)}
 													/>
 													<div>
-														<input
-															type='number'
-															id='add-ptice'
-															placeholder=' ادخل المبلغ او الخصم'
-															name='discount'
-															disabled={isEnable === "نشط" ? false : true}
-															{...register("discount", {
+														<Controller
+															name={"discount"}
+															control={control}
+															rules={{
 																required: "حقل الخصم مطلوب",
 																pattern: {
 																	value: /^[0-9]+$/i,
@@ -566,7 +569,18 @@ const EditCoupon = () => {
 																	value: 1,
 																	message: "  الخصم يجب ان يكون اكبر من 0",
 																},
-															})}
+															}}
+															render={({ field: { onChange, value } }) => (
+																<input
+																	type='text'
+																	id='add-ptice'
+																	placeholder=' ادخل المبلغ او الخصم'
+																	name='discount'
+																	disabled={isEnable === "نشط" ? false : true}
+																	value={value}
+																	onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																/>
+															)}
 														/>
 													</div>
 
@@ -583,13 +597,10 @@ const EditCoupon = () => {
 														عدد مرات الاستخدام للزبون الواحد
 														<span className='text-danger'>*</span>
 													</label>
-													<input
-														type='number'
-														name='user_redemptions'
-														id='user-count'
-														placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
-														disabled={isEnable === "نشط" ? false : true}
-														{...register("user_redemptions", {
+													<Controller
+														name={"user_redemptions"}
+														control={control}
+														rules={{
 															required:
 																"حقل عدد مرات الاستخدام للعميل الواحد مطلوب",
 															pattern: {
@@ -602,7 +613,18 @@ const EditCoupon = () => {
 																message:
 																	"  عدد مرات الاستخدام للعميل الواحد يجب ان يكون اكبر من 0",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																type='text'
+																name='user_redemptions'
+																id='user-count'
+																placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
+																disabled={isEnable === "نشط" ? false : true}
+																value={value}
+																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+															/>
+														)}
 													/>
 													<div className='col-12'>
 														<span className='fs-6 text-danger'>
@@ -701,13 +723,10 @@ const EditCoupon = () => {
 														الحد الأدنى من المشتريات
 														<span className='text-danger'>*</span>
 													</label>
-													<input
-														type='number'
-														name='total_price'
-														id='add-ptice'
-														placeholder=' ادخل مبلغ الحد الأدني من المشتريات'
-														disabled={isEnable === "نشط" ? false : true}
-														{...register("total_price", {
+													<Controller
+														name={"total_price"}
+														control={control}
+														rules={{
 															required: "حقل المبلغ مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
@@ -717,7 +736,18 @@ const EditCoupon = () => {
 																value: 1,
 																message: "  المبلغ يجب ان يكون اكبر من 0",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																type='text'
+																name='total_price'
+																id='add-ptice'
+																placeholder=' ادخل مبلغ الحد الأدني من المشتريات'
+																disabled={isEnable === "نشط" ? false : true}
+																value={value}
+																onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+															/>
+														)}
 													/>
 													<div className='col-12'>
 														<span className='fs-6 text-danger'>
@@ -727,7 +757,6 @@ const EditCoupon = () => {
 														</span>
 													</div>
 												</div>
-
 												<div className='col-md-5 col-12 mb-md-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
 														استثناء المنتجات المخفضة
@@ -943,9 +972,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																		{
+																			paddingRight: "20px",
+																		},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",
@@ -1017,9 +1046,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																		{
+																			paddingRight: "20px",
+																		},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",

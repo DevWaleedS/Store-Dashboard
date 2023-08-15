@@ -399,9 +399,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																	{
+																		paddingRight: "20px",
+																	},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -485,7 +485,7 @@ const EditProductPage = () => {
 											<div className='col-md-7 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-													subcategory[0]?.subcategory?.length === 0 ? (
+														subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -495,9 +495,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -566,13 +566,11 @@ const EditProductPage = () => {
 												<label htmlFor='price'> المخزون </label>
 											</div>
 											<div className='col-md-7 col-12'>
-												<input
-													name='stock'
-													type='number'
-													id='stock'
-													placeholder='اضف الكمية'
-													{...register("stock", {
-														required: "حقل المخزون مطلوب.",
+												<Controller
+													name={"stock"}
+													control={control}
+													rules={{
+														required: "حقل المخزون مطلوب",
 														pattern: {
 															value: /^[0-9]+$/i,
 															message: "يجب على الحقل المخزون أن يكون رقمًا",
@@ -581,7 +579,17 @@ const EditProductPage = () => {
 															value: 1,
 															message: "  المخزون يجب ان يكون اكبر من 0",
 														},
-													})}
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															name='stock'
+															type='text'
+															id='stock'
+															placeholder='اضف الكمية'
+															value={value}
+															onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+														/>
+													)}
 												/>
 											</div>
 											<div className='col-md-3 col-12'></div>
@@ -618,12 +626,12 @@ const EditProductPage = () => {
 														<input
 															disabled={product?.discount_price}
 															name={"selling_price"}
-															type='number'
+															type='text'
 															id='price'
 															value={value}
 															onChange={(e) => {
-																handleOnChange(e);
-																onChange(e);
+																setProduct({ ...product, selling_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
 															}}
 														/>
 													)}
@@ -649,12 +657,12 @@ const EditProductPage = () => {
 													render={({ field: { onChange, value } }) => (
 														<input
 															name={"discount_price"}
-															type='number'
+															type='text'
 															id='low-price'
 															value={value}
 															onChange={(e) => {
-																handleOnChange(e);
-																onChange(e);
+																setProduct({ ...product, discount_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
+																onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
 															}}
 														/>
 													)}
@@ -670,16 +678,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-													product?.selling_price === ""
+														product?.selling_price === ""
 														? "col-md-7 col-12"
 														: "d-none"
 												}>
