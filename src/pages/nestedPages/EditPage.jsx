@@ -13,7 +13,12 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Checkbox } from "@mui/material";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+	EditorState,
+	convertToRaw,
+	ContentState,
+	convertFromHTML,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -37,7 +42,7 @@ const style = {
 	transform: "translate(-50%, 0%)",
 	width: "70%",
 	height: "100%",
-	"overflow-y": "auto",
+	overflowY: "auto",
 
 	bgcolor: "#f8f9fa",
 	borderRadius: "8px 8px 0 0",
@@ -105,7 +110,7 @@ const EditPage = () => {
 	});
 
 	const addTags = () => {
-		setPage({ ...page, tags: [...page.tags, tag] });
+		setPage({ ...page, tags: [...page?.tags, tag] });
 		setTag("");
 	};
 
@@ -157,6 +162,10 @@ const EditPage = () => {
 			postCategory_id: fetchedData?.data?.pages?.postCategory?.id,
 			image: fetchedData?.data?.pages?.image,
 		});
+		setDescription({
+			...description,
+			editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(fetchedData?.data?.pages?.page_content || '')))
+		})
 	}, [fetchedData?.data?.pages]);
 
 	useEffect(() => {
@@ -317,7 +326,6 @@ const EditPage = () => {
 													<div className=''>
 														<div className='d-flex flex-row align-items-center gap-4 py-4'>
 															<Editor
-																className='text-black'
 																toolbarHidden={false}
 																editorState={description.editorState}
 																onEditorStateChange={onEditorStateChange}
@@ -325,14 +333,11 @@ const EditPage = () => {
 																placeholder={
 																	<div
 																		className='d-flex flex-column  '
-																		style={{
-																			color: "#ADB5B9",
-																			whiteSpace: "normal",
-																		}}
-																		dangerouslySetInnerHTML={{
-																			__html: page?.page_content,
-																		}}></div>
+																		style={{ color: "#ADB5B9" }}>
+																		محتوي الصفحة
+																	</div>
 																}
+																wrapperClassName='demo-wrapper'
 																editorClassName='demo-editor'
 																toolbar={{
 																	options: [
@@ -566,9 +571,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																				{
-																					paddingRight: "20px",
-																				},
+																			{
+																				paddingRight: "20px",
+																			},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
