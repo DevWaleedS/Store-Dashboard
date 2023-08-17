@@ -4207,7 +4207,7 @@ input:disabled {
 }
 
 .create-pages-form-wrapper .rdw-editor-toolbar {
-	width: 1065px;
+	width: 100%;
 	max-width: 100%;
 	background-color: #f8f9fa;
 	padding: 20px;
