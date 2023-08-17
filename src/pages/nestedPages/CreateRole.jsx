@@ -70,6 +70,9 @@ const CreateRole = () => {
 		},
 	});
 
+	// To handle errors
+	const [handleErrors, setHandleErrors] = useState("");
+
 	const createRole = (dataRole) => {
 		setLoadingTitle("جاري حفظ الدور");
 		const data = {
@@ -91,8 +94,7 @@ const CreateRole = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Management");
+					setHandleErrors(res?.data?.message?.en?.role_name[0]);
 				}
 			});
 	};
@@ -161,6 +163,13 @@ const CreateRole = () => {
 														},
 													})}
 												/>
+												<br />
+
+												{handleErrors && (
+													<span className='fs-6 text-danger'>
+														{handleErrors}
+													</span>
+												)}
 												<br />
 												<span className='fs-6 text-danger'>
 													{errors?.role_name && errors.role_name.message}

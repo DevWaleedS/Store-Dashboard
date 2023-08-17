@@ -68,6 +68,9 @@ const EditRole = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
+	// To handle errors
+	const [handleErrors, setHandleErrors] = useState("");
 	let permissionsList = permissionsListData?.data?.permissions;
 
 	if (search !== "") {
@@ -122,8 +125,7 @@ const EditRole = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Management");
+					setHandleErrors(res?.data?.message?.en?.role_name[0]);
 				}
 			});
 	};
@@ -150,6 +152,11 @@ const EditRole = () => {
 											<div className='col-md-6 col-12 mb-md-0 mb-3'>
 												<span>{fetchedData?.data?.role?.name}</span>
 											</div>
+											<br />
+
+											{handleErrors && (
+												<span className='fs-6 text-danger'>{handleErrors}</span>
+											)}
 											<div className='col-md-6 col-12'>
 												<div className='search'>
 													<div className='row'>
