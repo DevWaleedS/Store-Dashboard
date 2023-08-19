@@ -164,8 +164,12 @@ const EditPage = () => {
 		});
 		setDescription({
 			...description,
-			editorState: EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(fetchedData?.data?.pages?.page_content || '')))
-		})
+			editorState: EditorState.createWithContent(
+				ContentState.createFromBlockArray(
+					convertFromHTML(fetchedData?.data?.pages?.page_content || "")
+				)
+			),
+		});
 	}, [fetchedData?.data?.pages]);
 
 	useEffect(() => {
@@ -571,9 +575,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																				{
+																					paddingRight: "20px",
+																				},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",

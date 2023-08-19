@@ -4242,6 +4242,64 @@ input:disabled {
 .rdw-editor-wrapper {
 	min-width: 100%;
 }
+.rdw-image-modal {
+	position: absolute;
+	top: 35px;
+	/* left: 5px; */
+	display: flex;
+	flex-direction: column;
+	width: 250px;
+	border: 1px solid #f1f1f1;
+	padding: 15px;
+	border-radius: 2px;
+	z-index: 100;
+	background: white;
+	box-shadow: 3px 3px 5px #bfbdbd;
+}
+.rdw-image-modal-url-input {
+	width: 90% !important;
+	height: 35px !important;
+	margin: 15px 0 12px;
+	border: 1px solid #f1f1f1;
+	border-radius: 2px;
+	font-size: 15px;
+	padding: 0 5px;
+}
+.rdw-image-mandatory-sign {
+	color: red;
+	margin-left: 3px;
+	margin-right: 3px;
+}
+.rdw-image-modal-size {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.rdw-image-modal-size-input {
+	width: 40% !important;
+	height: 20px !important;
+	border: 1px solid #f1f1f1;
+	padding-right: 10px !important;
+	border-radius: 2px;
+	font-size: 12px;
+}
+.rdw-image-modal-btn-section {
+	margin: 10px auto 0;
+}
+.rdw-image-modal-btn {
+	margin: 0 5px;
+	width: 75px !important;
+	height: 30px;
+	border: 1px solid #f1f1f1;
+	border-radius: 2px;
+	cursor: pointer;
+	background: white;
+	text-transform: capitalize;
+	font-size: 16px;
+}
+.rdw-image-modal-btn:disabled {
+	background: #ece9e9;
+}
 
 .create-pages-form-wrapper .form-body .input-icon svg {
 	width: 30px;
@@ -9263,6 +9321,9 @@ input:disabled {
 		-ms-transform: translate(0px, 0px) !important;
 		-o-transform: translate(0px, 0px) !important;
 	}
+	.rdw-image-modal {
+		left: -124px;
+	}
 }
 @media (max-width: 420px) {
 	.video-preview .img-wrapper {
@@ -9285,6 +9346,9 @@ input:disabled {
 	}
 	.academy-widget .watch-course-btn .btn-wrapper {
 		width: max-content;
+	}
+	.rdw-image-modal {
+		left: -75px;
 	}
 }
 
@@ -9336,6 +9400,9 @@ input:disabled {
 	}
 	.academy-widget .watch-course-btn button {
 		height: 30px;
+	}
+	.rdw-image-modal {
+		left: -39px;
 	}
 }
 .offer-currency {
