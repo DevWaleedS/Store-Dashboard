@@ -2753,7 +2753,11 @@ nav.navigation {
 	direction: ltr;
 	position: absolute;
 	left: 14px;
-	top: 16px;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
 }
 
 .select-store-type .upload-docs-label {
@@ -6815,9 +6819,6 @@ input:disabled {
 }
 
 @media (max-width: 768px) {
-	.select-store-type .Country_Key {
-		top: 11px;
-	}
 	.add-user-form .form-body .Country_Key {
 		top: 11px;
 		left: 30px;

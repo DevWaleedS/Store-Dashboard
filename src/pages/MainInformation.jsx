@@ -12,7 +12,6 @@ import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
 import { useCookies } from "react-cookie";
 import { LoadingContext } from "../Context/LoadingProvider";
-import moment from "moment";
 
 // import ImageUploading library
 import ImageUploading from "react-images-uploading";
@@ -58,21 +57,6 @@ const contentStyle = {
 	overflow: "auto",
 };
 
-const times = [
-	"1:00",
-	"2:00",
-	"3:00",
-	"4:00",
-	"5:00",
-	"6:00",
-	"7:00",
-	"8:00",
-	"9:00",
-	"10:00",
-	"11:00",
-	"12:00",
-];
-
 const MainInformation = () => {
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
@@ -83,18 +67,6 @@ const MainInformation = () => {
 
 	const [openAlawys, setOpenAlawys] = useState();
 	const [workDays, setWorkDays] = useState([
-		{
-			day: {
-				id: "",
-				name: "",
-			},
-			from: "",
-			status: "",
-			to: "",
-		},
-	]);
-
-	const [newWorkDays, setNewWorkDays] = useState([
 		{
 			day: {
 				id: "",
@@ -118,15 +90,22 @@ const MainInformation = () => {
 	const { fetchedData: citiesList } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
+	// to get the user profile info
+	// const { fetchedData: profile } = useFetch(
+	// 	"https://backend.atlbha.com/api/Store/profile"
+	// );
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
 	 *  ------------------------------------------------- */
+	const USER_REGEX = /^[A-Za-z]+$/;
 	const PHONE_REGEX = /^(5\d{8})$/;
 
 	const [validPhoneNumber, setValidPhoneNumber] = useState(false);
 	const [phoneNumberFocus, setPhoneNumberFocus] = useState(false);
 	const [domainNameFocus, setDomainNameFocus] = useState(false);
+	const [domainNameValidFocus, setDomainNameValidFocus] = useState(false);
+	const [validDomainName, setValidDomainName] = useState(false);
 
 	// ---------------------------------------------------------------
 	const [defaultStoreLogo, setDefaultStoreLogo] = useState(DemoImage);
@@ -138,8 +117,11 @@ const MainInformation = () => {
 	const [city, setCity] = useState("");
 	const [storeEmail, setStoreEmail] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
-	const [storeAddress, setStoreAddress] = useState("");
 	const [descriptionValue, setDescriptionValue] = useState("");
+
+	// to set the store address to api
+	const [countryAddress, setCountryAddress] = useState("");
+	const [cityAddress, setCityAddress] = useState("");
 
 	// ERRORS
 	const [settingErr, setSettingErr] = useState({
@@ -162,7 +144,6 @@ const MainInformation = () => {
 			setDomain([fetchedData?.data?.setting_store?.domain]);
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);
-			setStoreAddress(fetchedData?.data?.setting_store?.store_address);
 			setStoreEmail(fetchedData?.data?.setting_store?.store_email);
 			setPhoneNumber(
 				fetchedData?.data?.setting_store?.phonenumber?.startsWith("+966")
@@ -171,8 +152,8 @@ const MainInformation = () => {
 					? fetchedData?.data?.setting_store?.phonenumber.slice(5)
 					: fetchedData?.data?.setting_store?.phonenumber
 			);
-
 			setDescriptionValue(fetchedData?.data?.setting_store?.description);
+
 			setOpenAlawys(
 				fetchedData?.data?.setting_store?.working_status === "active"
 					? true
@@ -227,7 +208,10 @@ const MainInformation = () => {
 		formData.append("domain", domain);
 		formData.append("country_id", country);
 		formData.append("city_id", city);
-		formData.append("store_address", storeAddress || "");
+		formData.append(
+			"store_address",
+			`${countryAddress} - ${cityAddress}` || ""
+		);
 		formData.append("store_email", storeEmail || "");
 
 		formData.append(
@@ -268,6 +252,7 @@ const MainInformation = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
+					window.location.reload();
 				} else {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
@@ -291,6 +276,12 @@ const MainInformation = () => {
 		const PhoneNumberValidation = PHONE_REGEX.test(phoneNumber);
 		setValidPhoneNumber(PhoneNumberValidation);
 	}, [phoneNumber]);
+
+	// TO HANDLE VALIDATION FOR DOMAIN NAME
+	useEffect(() => {
+		const domainNameValidation = USER_REGEX.test(domain);
+		setValidDomainName(domainNameValidation);
+	}, [domain]);
 
 	const updateState = (index) => {
 		setWorkDays((prevState) => {
@@ -474,6 +465,7 @@ const MainInformation = () => {
 										{day?.status === "active" && <span>مفتوح</span>}
 									</button>
 								</div>
+
 								{day?.status === "active" && (
 									<div className='d-flex flex-row align-items-center gap-3'>
 										<div className='time-input'>
@@ -498,154 +490,7 @@ const MainInformation = () => {
 								)}
 							</div>
 						))}
-						{/*<div className="d-flex flex-row align-items-center justify-content-between px-3 py-2 gap-3" style={{ minWidth: 'max-content', minHeight: '80px', backgroundColor: '#FFFFFF', boxShadow: '0px 3px 6px #0000000F', borderRadius: '8px' }}>
-							<div className="d-flex flex-row align-items-center gap-3">
-								<span style={{ minWidth: '100px', color: '#011723', fontSize: '18px', fontWeight: '500' }}>الأحد</span>
-								<button disabled={openAlawys} onClick={() => setOpenSun(!openSun)} className="day-switch" style={{ backgroundColor: openSun ? '#3AE374' : '#ADB5B9' }}>
-									{!openSun && <span>مغلق</span>}
-									<p className="circle"></p>
-									{openSun && <span>مفتوح</span>}
-								</button>
-							</div>
-							{openSun &&
-								<div className="d-flex flex-row align-items-center gap-3">
-									<div className="time-input">
-										<Select
-											disabled={openAlawys}
-											name='sun_from'
-											value={sunFrom}
-											onChange={(e) => {
-												setSunFrom(e.target.value);
-											}}
-											sx={{
-												width: "100%",
-												fontSize: "18px",
-												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-												{
-													width:"100%",
-													paddingRight: "40px",
-												},
-												"& .MuiOutlinedInput-root": {
-													"& :hover": {
-														border: "none",
-													},
-												},
-												"& .MuiOutlinedInput-notchedOutline": {
-													border: "none",
-												},
-												"& .MuiSelect-icon": {
-													right: "35px",
-													color: "#000000",
-													fontSize:"20px",
-													'@media (max-width: 768px)': {
-														right: "10px !important",
-														fontSize:"16px",
-													}
-												},
-											}}
-											IconComponent={IoIosArrowDown}
-											displayEmpty
-											inputProps={{ "aria-label": "Without label" }}
-											renderValue={(selected) => {
-												if (sunFrom === "" || !selected) {
-													return (
-														<p className='text-[#ADB5B9]'>
-															----
-														</p>
-													);
-												}
-												return <p style={{ direction:'ltr' }}>{`${selected}`} <span className="pm-am">AM</span></p>;
-											}}>
-											{times?.map(
-												(time, index) => {
-													return (
-														<MenuItem
-															key={index}
-															className='souq_storge_category_filter_items'
-															sx={{
-																backgroundColor:
-																	"rgba(211, 211, 211, 1)",
-																height: "3rem",
-																"&:hover": {},
-															}}
-															value={`${time}`}>
-															<p style={{ direction:'ltr' }}>{`${time}`} <span className="pm-am">AM</span></p>
-														</MenuItem>
-													);
-												}
-											)}
-										</Select>
-									</div>
-									<div className="time-input">
-										<Select
-											disabled={openAlawys}
-											name='sun_to'
-											value={sunTo}
-											onChange={(e) => {
-												setSunTo(e.target.value);
-											}}
-											sx={{
-												width: "100%",
-												fontSize: "18px",
-												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-												{
-													width:"100%",
-													paddingRight: "40px",
-												},
-												"& .MuiOutlinedInput-root": {
-													"& :hover": {
-														border: "none",
-													},
-												},
-												"& .MuiOutlinedInput-notchedOutline": {
-													border: "none",
-												},
-												"& .MuiSelect-icon": {
-													right: "35px",
-													color: "#000000",
-													fontSize:"20px",
-													'@media (max-width: 768px)': {
-														right: "10px !important",
-														fontSize:"16px",
-													}
-												},
-											}}
-											IconComponent={IoIosArrowDown}
-											displayEmpty
-											inputProps={{ "aria-label": "Without label" }}
-											renderValue={(selected) => {
-												if (sunTo === "" || !selected) {
-													return (
-														<p className='text-[#ADB5B9]'>
-															----
-														</p>
-													);
-												}
-												return <p style={{ direction:'ltr' }}>{`${selected}`} <span className="pm-am">PM</span></p>;
-											}}>
-											{times?.map(
-												(time, index) => {
-													return (
-														<MenuItem
-															key={index}
-															className='souq_storge_category_filter_items'
-															sx={{
-																backgroundColor:
-																	"rgba(211, 211, 211, 1)",
-																height: "3rem",
-																"&:hover": {},
-															}}
-															value={`${time}`}>
-															<p style={{ direction:'ltr' }}>{`${time}`} <span className="pm-am">PM</span></p>
-														</MenuItem>
-													);
-												}
-											)}
-										</Select>
-									</div>
-								</div>
-							}
-						</div>*/}
+
 						<button
 							onClick={() => {
 								setEndActionTitle("تم حفظ تحديث ساعات العمل");
@@ -842,7 +687,7 @@ const MainInformation = () => {
 									<div className='col-lg-8 col-12'>
 										<div className='store_email'>
 											<label htmlFor='domain' className='setting_label d-block'>
-												الدومين
+												الدومين(رابط المتجر)
 											</label>
 										</div>
 										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -857,20 +702,38 @@ const MainInformation = () => {
 													setDomainNameFocus(true);
 												}}
 												aria-describedby='domainName'
-												onFocus={() => setDomainNameFocus(true)}
-												onBlur={() => setDomainNameFocus(false)}
+												onFocus={() => {
+													setDomainNameFocus(true);
+													setDomainNameValidFocus(true);
+												}}
+												onBlur={() => {
+													setDomainNameFocus(false);
+													setDomainNameValidFocus(true);
+												}}
+												aria-invalid={validDomainName ? "false" : "true"}
 											/>
 										</div>
 										<div
 											id='domainName'
 											className={
-												domainNameFocus
+												domainNameFocus && domain
 													? " d-block important-hint me-1 "
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور او عدم ظهور
+											قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور او عدم ظهور-
 											المتجر الخاص بك.
+										</div>
+
+										<div
+											id='domainName'
+											className={
+												domainNameValidFocus && domain && !validDomainName
+													? " d-block important-hint me-1 "
+													: "d-none"
+											}
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											يجب أن يكون الدومين باللغة الانجليزية فقط.-
 										</div>
 
 										{settingErr?.domain && (
@@ -939,6 +802,7 @@ const MainInformation = () => {
 													const result = countryList?.data?.countries?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
 													);
+													setCountryAddress(result?.[0]?.name);
 													return result?.[0]?.name;
 												}}>
 												{countryList?.data?.countries?.map((item, idx) => {
@@ -1026,6 +890,7 @@ const MainInformation = () => {
 													const result = citiesList?.data?.cities?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
 													);
+													setCityAddress(result?.[0]?.name);
 
 													return result?.[0]?.name;
 												}}>
@@ -1070,12 +935,13 @@ const MainInformation = () => {
 													<Address className='edit-icon' />
 												</div>
 												<textarea
+													disabled
 													className='text-right form-control store-desc w-100'
 													name='address'
 													id='address'
 													placeholder='قم بادخال عنوان المتجر '
-													value={storeAddress}
-													onChange={(e) => setStoreAddress(e.target.value)}
+													value={`${countryAddress} - ${cityAddress}`}
+													onChange={() => console.log("test")}
 													rows='3'
 													onResize='false'></textarea>
 											</div>

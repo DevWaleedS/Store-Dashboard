@@ -118,7 +118,7 @@ const TopBar = ({ toggleSidebar }) => {
 						style={{ width: "70px", height: "65.59px" }}>
 						<img
 							className=' img-fluid'
-							style={{ objectFit: "contain", mixBlendMode: "multiply" }}
+							style={{ objectFit: "contain" }}
 							src={
 								localStorage.getItem("storeLogo")
 									? localStorage.getItem("storeLogo")

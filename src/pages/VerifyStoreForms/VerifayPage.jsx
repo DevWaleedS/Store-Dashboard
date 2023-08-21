@@ -554,7 +554,7 @@ const VerifayPage = forwardRef((props, ref) => {
 											id='upload-docs-input'
 											name='upload-docs-input'
 										/>
-										<p className={files.length <= 0 ? "helper" : "d-none"}>
+										<p className={files?.length <= 0 ? "helper" : "d-none"}>
 											قم رفع السجل التجاري{" "}
 										</p>
 										<span
@@ -568,14 +568,16 @@ const VerifayPage = forwardRef((props, ref) => {
 										<ul>{files}</ul>
 									</div>
 
-									{dataErrors?.file ? (
+									{dataErrors?.file && (
 										<div
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
 											وتأكد ان صيغة الملف pdf
 										</div>
-									) : (
+									)}
+
+									{files?.length === 0 && (
 										<div className='important-hint'>
 											يجب ان تكون صيغة الملف pdf
 										</div>
@@ -677,7 +679,8 @@ const VerifayPage = forwardRef((props, ref) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										رابط صفحة معروف<span className='important-hint'>*</span>
+										رابط معروف / وثيقة العمل الحر
+										<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -700,14 +703,14 @@ const VerifayPage = forwardRef((props, ref) => {
 											borderRadius: "4px",
 										}}
 									/>
+									{dataErrors?.link && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.link}
+										</div>
+									)}
 								</div>
-								{dataErrors?.link && (
-									<div
-										className='important-hint me-1'
-										style={{ fontSize: "16px", whiteSpace: "normal" }}>
-										{dataErrors?.link}
-									</div>
-								)}
 							</div>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12'>
@@ -807,15 +810,15 @@ const VerifayPage = forwardRef((props, ref) => {
 										</span>
 										<ul>{files}</ul>
 									</div>
-
-									{dataErrors?.file ? (
+									{dataErrors?.file && (
 										<div
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
 											وتأكد ان صيغة الملف pdf
 										</div>
-									) : (
+									)}
+									{files?.length === 0 && (
 										<div className='important-hint'>
 											يجب ان تكون صيغة الملف pdf
 										</div>
