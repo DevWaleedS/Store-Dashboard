@@ -120,7 +120,9 @@ const VerifayPage = forwardRef((props, ref) => {
 
 	//  use dropzone to get personal image
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: ".pdf",
+		accept: {
+			"file/*": [".pdf"],
+		},
 		onDrop: (acceptedFiles) => {
 			setFile(
 				acceptedFiles.map((file) =>
@@ -236,6 +238,13 @@ const VerifayPage = forwardRef((props, ref) => {
 				<CircularLoading />
 			) : (
 				<Fragment>
+					<div className='row d-flex justify-content-between align-items-center pt-md-1 mb-4'>
+						<div
+							className='important-hint d-flex justify-content-center align-content-center'
+							style={{ fontSize: "18px", whiteSpace: "normal" }}>
+							هذه البيانات خاصة فقط بتوثيق المتجر ولن يتم عرضها في أي مكان أخر.
+						</div>
+					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
 						<div className='col-4 d-flex '>
 							<h5 className='label'>نوع النشاط</h5>

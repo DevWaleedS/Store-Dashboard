@@ -325,7 +325,6 @@ const MainInformation = () => {
 	};
 
 	const updateAll = (value) => {
-		console.log(value);
 		setWorkDays((prevState) => {
 			const newState = prevState.map((obj, index) => {
 				return {
