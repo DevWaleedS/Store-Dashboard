@@ -118,7 +118,8 @@ const AddNewProduct = () => {
 	// Get some methods form useDropZone
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
-			"image/*": ["jpg", "png"],
+			"image/jpeg": [],
+			"image/png": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -356,9 +357,9 @@ const AddNewProduct = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -426,7 +427,7 @@ const AddNewProduct = () => {
 										<div className='col-md-7 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-													subcategory[0]?.subcategory.length === 0 ? (
+												subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{ color: "#1dbbbe" }}>
@@ -437,9 +438,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+																{
+																	paddingRight: "20px",
+																},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -541,7 +542,9 @@ const AddNewProduct = () => {
 														placeholder='اضف الكمية'
 														name='stock'
 														value={value}
-														onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+														onChange={(e) =>
+															onChange(e.target.value.replace(/[^0-9]/g, ""))
+														}
 													/>
 												)}
 											/>
@@ -585,8 +588,16 @@ const AddNewProduct = () => {
 														id='price'
 														value={value}
 														onChange={(e) => {
-															setProduct({ ...product, selling_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-															onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+															setProduct({
+																...product,
+																selling_price: e.target.value.replace(
+																	/[^\d.]|\.(?=.*\.)/g,
+																	""
+																),
+															});
+															onChange(
+																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
+															);
 														}}
 													/>
 												)}
@@ -615,8 +626,16 @@ const AddNewProduct = () => {
 														id='low-price'
 														value={value}
 														onChange={(e) => {
-															setProduct({ ...product, discount_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-															onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+															setProduct({
+																...product,
+																discount_price: e.target.value.replace(
+																	/[^\d.]|\.(?=.*\.)/g,
+																	""
+																),
+															});
+															onChange(
+																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
+															);
 														}}
 													/>
 												)}
@@ -628,10 +647,10 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 										)}
 

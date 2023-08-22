@@ -146,7 +146,8 @@ const EditProductPage = () => {
 	// Get some methods form useDropZone
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
-			"image/*": ["jpg", "png"],
+			"image/jpeg": [],
+			"image/png": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -399,9 +400,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																		{
+																			paddingRight: "20px",
+																		},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -485,7 +486,7 @@ const EditProductPage = () => {
 											<div className='col-md-7 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-														subcategory[0]?.subcategory?.length === 0 ? (
+													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -495,9 +496,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -587,7 +588,9 @@ const EditProductPage = () => {
 															id='stock'
 															placeholder='اضف الكمية'
 															value={value}
-															onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+															onChange={(e) =>
+																onChange(e.target.value.replace(/[^0-9]/g, ""))
+															}
 														/>
 													)}
 												/>
@@ -630,8 +633,19 @@ const EditProductPage = () => {
 															id='price'
 															value={value}
 															onChange={(e) => {
-																setProduct({ ...product, selling_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																setProduct({
+																	...product,
+																	selling_price: e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	),
+																});
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																);
 															}}
 														/>
 													)}
@@ -661,8 +675,19 @@ const EditProductPage = () => {
 															id='low-price'
 															value={value}
 															onChange={(e) => {
-																setProduct({ ...product, discount_price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																setProduct({
+																	...product,
+																	discount_price: e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	),
+																});
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																);
 															}}
 														/>
 													)}
@@ -678,16 +703,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-														product?.selling_price === ""
+													product?.selling_price === ""
 														? "col-md-7 col-12"
 														: "d-none"
 												}>

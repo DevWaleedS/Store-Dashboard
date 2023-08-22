@@ -110,7 +110,10 @@ const CreatePage = () => {
 
 	const [images, setImages] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: "image/*",
+		accept: {
+			"image/jpeg": [],
+			"image/png": [],
+		},
 		onDrop: (acceptedFiles) => {
 			setImages(
 				acceptedFiles.map((file) =>

@@ -122,7 +122,8 @@ const EditUserDetails = () => {
 	// Get some methods form useDropZone
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
-			"image/*": [],
+			"image/jpeg": [],
+			"image/png": [],
 		},
 
 		onDrop: (acceptedFiles) => {
