@@ -210,8 +210,9 @@ const MainInformation = () => {
 		formData.append("city_id", city);
 		formData.append(
 			"store_address",
-			`${countryAddress} - ${cityAddress}` || ""
+			`${countryAddress}  -  ${cityAddress}` || ""
 		);
+
 		formData.append("store_email", storeEmail || "");
 
 		formData.append(
@@ -324,11 +325,9 @@ const MainInformation = () => {
 	};
 
 	const updateAll = (value) => {
+		console.log(value);
 		setWorkDays((prevState) => {
 			const newState = prevState.map((obj, index) => {
-				if (value === true) {
-					return { ...obj, status: "active", from: "", to: "" };
-				}
 				return {
 					...obj,
 					status: fetchedData?.data?.setting_store?.workDays?.[index]?.status,
@@ -940,10 +939,11 @@ const MainInformation = () => {
 													name='address'
 													id='address'
 													placeholder='قم بادخال عنوان المتجر '
-													value={`${countryAddress} - ${cityAddress}`}
+													value={`${countryAddress} -  ${cityAddress}`}
 													onChange={() => console.log("test")}
 													rows='3'
-													onResize='false'></textarea>
+													onResize='false'
+												/>
 											</div>
 										</div>
 										{settingErr?.storeAddress && (
