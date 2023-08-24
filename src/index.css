@@ -6392,7 +6392,14 @@ input:disabled {
 	color: #02466a;
 }
 
-.time-input {
+.choose-time{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+
+.choose-time .time-input {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -6401,6 +6408,42 @@ input:disabled {
 	height: 56px;
 	border-radius: 4px;
 	border: 1px solid rgb(173, 181, 185);
+}
+.choose-time .time-input input{
+	background-color: transparent;
+}
+
+.day-switch {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 105px;
+	height: 32px;
+	border-radius: 16px;
+	padding: 10px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+.day-switch span {
+	font-size: 14px !important;
+	color: #ffffff;
+	font-weight: 400;
+	font-family: "Tajawal", sans-serif;
+	letter-spacing: 0.14px;
+}
+.day-switch .circle {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background-color: #ffffff;
+	margin: 0;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+	background: url("./data/Icons/down-arrow.svg") no-repeat;
+	background-size: 100%;
+	cursor: pointer;
 }
 
 /* ---------------------------------------------------------------- */
@@ -6812,8 +6855,8 @@ input:disabled {
 	.add-user-form .form-body input#email {
 		padding-left: 17px;
 	}
-	.time-input {
-		width: 120px;
+	.choose-time .time-input {
+		width: 150px;
 		height: 48px;
 	}
 }
@@ -9217,6 +9260,9 @@ input:disabled {
 	.pm-am {
 		font-size: 16px !important;
 	}
+	.choose-time .time-input{
+		width: 120px;
+	}
 }
 
 @media (max-width: 576px) {
@@ -9324,6 +9370,16 @@ input:disabled {
 	}
 	.rdw-image-modal {
 		left: -124px;
+	}
+	.work-day{
+		min-height: auto !important;
+	}
+	.choose-time{
+		width: 100%;
+
+	}
+	.choose-time .time-input{
+		width: 100%;
 	}
 }
 @media (max-width: 420px) {
@@ -9483,35 +9539,4 @@ input:disabled {
 		width: 100%;
 	}
 }
-.day-switch {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: space-between;
-	width: 105px;
-	height: 32px;
-	border-radius: 16px;
-	padding: 10px;
-	cursor: pointer;
-	transition: all 0.3s;
-}
-.day-switch span {
-	font-size: 14px;
-	color: #ffffff;
-	font-weight: 400;
-	font-family: "Tajawal", sans-serif;
-	letter-spacing: 0.14px;
-}
-.day-switch .circle {
-	width: 16px;
-	height: 16px;
-	border-radius: 50%;
-	background-color: #ffffff;
-	margin: 0;
-}
 
-input[type="time"]::-webkit-calendar-picker-indicator {
-	background: url("./data/Icons/down-arrow.svg") no-repeat;
-	background-size: 100%;
-	cursor: pointer;
-}

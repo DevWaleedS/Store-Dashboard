@@ -54,7 +54,8 @@ const contentStyle = {
 	color: "#FFFFFF",
 	padding: "30px 80px 20px",
 	whiteSpace: "normal",
-	overflow: "auto",
+	overflowY: "auto",
+	overflowX: "hidden",
 };
 
 const MainInformation = () => {
@@ -388,36 +389,39 @@ const MainInformation = () => {
 								}}
 								checked={!openAlawys}
 								sx={{
-									width: "36px",
-									height: "22px",
-									padding: "0",
-									borderRadius: "20px",
+									width: "36px !important",
+									height: "22px !important",
+									padding: "0 !important",
+									borderRadius: "20px !important",
 									"& .MuiSwitch-track": {
-										width: "36px",
-										height: "22px",
+										width: "36px !important",
+										height: "22px !important",
 										opacity: 1,
 										backgroundColor: "rgba(0,0,0,.25)",
 										boxSizing: "border-box",
+										borderRadius: "20px !important",
 									},
 									"& .MuiSwitch-thumb": {
 										boxShadow: "none",
-										width: "16px",
-										height: "16px",
-										borderRadius: "50%",
-										transform: "translate(3px,3px)",
+										width: "16px !important",
+										height: "16px !important",
+										borderRadius: "50% !important",
+										transform: "translate(3px,3px) !important",
 										color: "#fff",
 									},
 
 									"&:hover": {
 										"& .MuiSwitch-thumb": {
-											boxShadow: "none",
+											boxShadow: "none !important",
 										},
 									},
 
 									"& .MuiSwitch-switchBase": {
-										padding: "0px",
+										padding: "0px !important",
+										top: "0px !important",
+										left:"0px !important",
 										"&.Mui-checked": {
-											transform: "translateX(12px)",
+											transform: "translateX(12px) !important",
 											color: "#fff",
 											"& + .MuiSwitch-track": {
 												opacity: 1,
@@ -432,7 +436,7 @@ const MainInformation = () => {
 						{workDays?.map((day, index) => (
 							<div
 								key={index}
-								className='d-flex flex-row align-items-center justify-content-between px-3 py-2 gap-3'
+								className='work-day d-flex flex-sm-row flex-column align-items-center justify-content-between px-3 py-2 gap-3'
 								style={{
 									minWidth: "max-content",
 									minHeight: "80px",
@@ -465,7 +469,7 @@ const MainInformation = () => {
 								</div>
 
 								{day?.status === "active" && (
-									<div className='d-flex flex-row align-items-center gap-3'>
+									<div className='choose-time'>
 										<div className='time-input'>
 											<input
 												value={day?.from}
