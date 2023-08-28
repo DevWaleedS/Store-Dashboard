@@ -240,13 +240,13 @@ const AddNewProduct = () => {
 								onSubmit={handleSubmit(addNewProduct)}>
 								<div className='form-body'>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-image'>
 												{" "}
 												صورة المنتج <span className='text-danger'>*</span>
 											</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<div {...getRootProps()}>
 												<div className='add-image-btn-box'>
 													<UploadIcon />
@@ -265,8 +265,8 @@ const AddNewProduct = () => {
 												</div>
 											)}
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.cover && (
 												<span className='fs-6 text-danger'>
 													{productError?.cover}
@@ -276,13 +276,13 @@ const AddNewProduct = () => {
 									</div>
 
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-name'>
 												{" "}
 												اسم المنتج <span className='text-danger'>*</span>
 											</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<input
 												type='text'
 												id='product-name'
@@ -293,8 +293,8 @@ const AddNewProduct = () => {
 												})}
 											/>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.name}
 												{errors?.name && errors.name.message}
@@ -302,13 +302,13 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
 												{" "}
 												وصف المنتج <span className='text-danger'>*</span>
 											</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<textarea
 												id='product-desc'
 												placeholder='  قم بكتابه واضح للمنتج'
@@ -317,8 +317,8 @@ const AddNewProduct = () => {
 													required: "حقل الوصف مطلوب",
 												})}></textarea>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.description}
 												{errors?.description && errors.description.message}
@@ -326,7 +326,7 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-category'>
 												{" "}
 												التصنيف الرئيسي<span className='text-danger'>
@@ -334,7 +334,7 @@ const AddNewProduct = () => {
 												</span>{" "}
 											</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												<Controller
 													name={"category_id"}
@@ -412,8 +412,8 @@ const AddNewProduct = () => {
 												/>
 											</FormControl>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.category_id}
 												{errors?.category_id && errors.category_id.message}
@@ -421,10 +421,10 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='sub-category'>التصنيف الفرعي</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
 												subcategory[0]?.subcategory.length === 0 ? (
@@ -504,8 +504,8 @@ const AddNewProduct = () => {
 												)}
 											</FormControl>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.subcategory_id && (
 												<span className='fs-6 text-danger'>
 													{productError?.subcategory_id}
@@ -514,13 +514,13 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
 												{" "}
 												المخزون <span className='text-danger'>*</span>
 											</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<Controller
 												name={"stock"}
 												control={control}
@@ -549,8 +549,8 @@ const AddNewProduct = () => {
 												)}
 											/>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.stock}
 												{errors?.stock && errors.stock.message}
@@ -559,13 +559,13 @@ const AddNewProduct = () => {
 									</div>
 
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
 												{" "}
 												السعر <span className='text-danger'>*</span>{" "}
 											</label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<Controller
 												name={"selling_price"}
 												control={control}
@@ -603,8 +603,8 @@ const AddNewProduct = () => {
 												)}
 											/>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.selling_price}
 												{errors?.selling_price && errors.selling_price.message}
@@ -612,10 +612,10 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='low-price'> السعر بعد الخصم </label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<Controller
 												name={"discount_price"}
 												control={control}
@@ -641,9 +641,9 @@ const AddNewProduct = () => {
 												)}
 											/>
 										</div>
-										<div className='col-md-3 col-12'></div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
 										{product?.discount_price && product?.selling_price && (
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
@@ -656,14 +656,14 @@ const AddNewProduct = () => {
 
 										{product?.discount_price &&
 											product?.selling_price === "" && (
-												<div className='col-md-7 col-12'>
+												<div className='col-lg-7 col-md-9 col-12'>
 													<span className='fs-6' style={{ color: "red" }}>
 														يرجي ادخال السعر الأساسي أولاّّ حتي تتمكن من ادخال
 														سعر الخصم
 													</span>
 												</div>
 											)}
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
@@ -675,18 +675,18 @@ const AddNewProduct = () => {
 									</div>
 
 									<div className='row mb-3'>
-										<div className='col-md-3 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='seo'> وصف محركات البحث SEO </label>
 										</div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<textarea
 												id='SEOdescription'
 												name='SEOdescription'
 												placeholder='يرجى كتابة وصف دقيق للمنتج حتى يمكنك استخدامه في عملية الترويج للمنتج'
 												{...register("SEOdescription", {})}></textarea>
 										</div>
-										<div className='col-md-3 col-12'></div>
-										<div className='col-md-7 col-12'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.SEOdescription}
 												{errors?.SEOdescription &&

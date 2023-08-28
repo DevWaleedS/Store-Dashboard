@@ -81,14 +81,14 @@ const SouqOtlobha = () => {
 				</div>
 				<div className='souqOtlobha-wrapper p-md-4'>
 					<div className='row mb-md-4 mb-3'>
-						<div className='col-md-6 col-12 mb-lg-0 mb-3'>
+						<div className='col-lg-6 col-12 mb-lg-0 mb-3'>
 							<div className='total-products'>
 								<span>{loading ? 0 : fetchedData?.data?.count_products}</span>
 								<span>عدد المنتجات التي تمت اضافتها</span>
 							</div>
 						</div>
-						<div className='col-md-6 col-12'>
-							<div className='btn-group d-flex gap-3 me-0 me-md-5'>
+						<div className='col-lg-6 col-12'>
+							<div className='btn-group d-flex gap-3 me-0 me-lg-5'>
 								<button
 									className='d-flex justify-content-center align-items-center'
 									onClick={() =>

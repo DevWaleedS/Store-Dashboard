@@ -135,7 +135,7 @@ const OrderDetails = () => {
 										</div>
 										<div className='order-details-data pt-md-4 pb-md-4'>
 											<div className='row d-flex justify-content-center  '>
-												<div className='col-md-3 col-12 mb-md-0 mb-3'>
+												<div className='col-lg-3 col-12 mb-lg-0 mb-3'>
 													<div className='order-head-row'>
 														<StatusIcon />
 														<span className='me-3'>الحالة</span>
@@ -146,7 +146,7 @@ const OrderDetails = () => {
 														</span>
 													</div>
 												</div>
-												<div className='col-md-3 col-12 mb-md-0 mb-3'>
+												<div className='col-lg-3 col-12 mb-lg-0 mb-3'>
 													<div className='order-head-row '>
 														<DateIcon className='date-icon' />
 														<span className='me-3'>تاريخ الطلب</span>
@@ -155,7 +155,7 @@ const OrderDetails = () => {
 														<span> 20/08/2022</span>
 													</div>
 												</div>
-												<div className='col-md-3 col-12 mb-md-0 mb-3'>
+												<div className='col-lg-3 col-12 mb-lg-0 mb-3'>
 													<div className='order-head-row'>
 														<WalletIcon />
 														<span className='me-3 price'>
@@ -179,7 +179,7 @@ const OrderDetails = () => {
 										</div>
 										<div className='order-details-data pt-md-4 pb-md-4'>
 											<div className='row d-flex flex-md-row flex-column justify-content-center'>
-												<div className='col-md-2 col-12 mb-md-0 mb-3'>
+												<div className='col-lg-2 col-12 mb-lg-0 mb-3'>
 													<div className='client-date'>
 														<div className='img mb-2'>
 															<img
@@ -200,7 +200,7 @@ const OrderDetails = () => {
 														</div>
 													</div>
 												</div>
-												<div className='col-md-10 col-12'>
+												<div className='col-lg-10 col-12'>
 													<div className='row mb-md-4 mb-3'>
 														<div className='col-md-6 col-12 mb-md-0 mb-3'>
 															<div className='info-box'>

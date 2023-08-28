@@ -249,7 +249,7 @@ const AddCoupon = () => {
 							<form onSubmit={handleSubmit(addNewCoupon)}>
 								<div className='form-body'>
 									<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='coupon-name' className='d-block mb-1'>
 												كود الكوبون<span className='text-danger'>*</span>
 											</label>
@@ -276,7 +276,7 @@ const AddCoupon = () => {
 												</span>
 											</div>
 										</div>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='uses-count' className='d-block mb-1'>
 												عدد مرات الاستخدام للجميع
 												<span className='text-danger'>*</span>
@@ -318,7 +318,7 @@ const AddCoupon = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3 d-flex justify-content-evenly align-items-end'>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='coupon-name ' className='d-block mb-1'>
 												نوع الخصم<span className='text-danger'>*</span>
 											</label>
@@ -405,7 +405,7 @@ const AddCoupon = () => {
 											</div>
 										</div>
 
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
 												عدد مرات الاستخدام للزبون الواحد
 												<span className='text-danger'>*</span>
@@ -448,7 +448,7 @@ const AddCoupon = () => {
 										</div>
 									</div>
 									<div className='row row mb-md-5 mb-3 d-flex justify-content-evenly'>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='coupon-name ' className='d-block mb-1'>
 												تاريخ الانتهاء<span className='text-danger'>*</span>
 											</label>
@@ -471,7 +471,7 @@ const AddCoupon = () => {
 											)}
 										</div>
 
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
 												شحن مجاني<span className='text-danger'>*</span>
 											</label>
@@ -525,7 +525,7 @@ const AddCoupon = () => {
 										</div>
 									</div>
 									<div className='row row mb-md-5 d-flex justify-content-evenly'>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='coupon-name ' className='d-block mb-1'>
 												الحد الأدنى من المشتريات
 												<span className='text-danger'>*</span>
@@ -563,7 +563,7 @@ const AddCoupon = () => {
 											</div>
 										</div>
 
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
 												استثناء المنتجات المخفضة
 												<span className='text-danger'>*</span>
@@ -621,7 +621,7 @@ const AddCoupon = () => {
 										</div>
 									</div>
 									<div className='row row mb-md-5 d-flex justify-content-evenly'>
-										<div className='col-md-5 col-12 mb-md-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<div className='row mb-md-4 mb-3 d-flex justify-content-evenly'>
 												<div className='col-12'>
 													<div className='row-title mb-2'>
@@ -900,7 +900,7 @@ const AddCoupon = () => {
 												</div>
 											)}
 										</div>
-										<div className='col-md-5 col-12 mb-md-0 mb-3 enable-switches'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3 enable-switches'>
 											<label htmlFor='user-count' className='d-block mb-1'>
 												الحالة<span className='text-danger'>*</span>
 											</label>
