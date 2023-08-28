@@ -12,7 +12,6 @@ import Checkbox from "@mui/material/Checkbox";
 import DeleteIcon from "../data/Icons/icon-24-delete.svg";
 import { ReactComponent as CheckedSquare } from "../data/Icons/icon-24-square checkmark.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-// import moment from "moment";
 import moment from "moment-with-locales-es6";
 
 const Notifications = () => {
@@ -47,7 +46,6 @@ const Notifications = () => {
 		const calcPassedDays = (date1, date2) =>
 			Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 		const currentDate = calcPassedDays(+new Date(), +new Date(date));
-		console.log(currentDate);
 
 		if (currentDate === 0)
 			return "،اليوم" + moment(date).locale("ar").format(" h:mm a");

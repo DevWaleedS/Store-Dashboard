@@ -25,7 +25,7 @@ import { useCookies } from "react-cookie";
 // import icons
 import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
-import moment from "moment";
+import moment from "moment-with-locales-es6";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -478,7 +478,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 															{row?.discount_type}
 														</TableCell>
 														<TableCell align='right'>
-															{moment(row?.expire_date).format("YYYY-MM-DD")}
+															{moment(row?.expire_date).format("DD/MM/YYYY")}
 														</TableCell>
 														<TableCell align='center'>
 															{row?.discount}
