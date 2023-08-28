@@ -2091,6 +2091,7 @@ nav.navigation {
 .rating-page .user-info {
 	background-color: #237eaecc;
 	padding: 20px;
+	max-width: 100%;
 	width: 249px;
 	height: 180px;
 	border-radius: 0px 8px 8px 0px;
@@ -2331,7 +2332,7 @@ nav.navigation {
 
 .video-preview {
 	width: 215px;
-	max-width: 215px;
+	max-width: 100%;
 	height: 100%;
 	max-height: 160px;
 	display: flex;
@@ -2391,7 +2392,6 @@ nav.navigation {
 	align-items: flex-start;
 	justify-content: space-between;
 	padding-top: 18px;
-	margin-right: -35px;
 }
 
 .academy-widget .course-details h5 {
@@ -3535,6 +3535,7 @@ textarea {
 .add-form-wrapper form label {
 	font-size: 20px;
 	font-weight: 500;
+	white-space: pre-wrap;
 }
 
 .add-form-wrapper form input,
@@ -4518,7 +4519,7 @@ input:disabled {
 	.order-data-row
 	span {
 	background: #cce4ff38;
-	width: 190px;
+	min-width: 190px;
 	height: 65px;
 	box-shadow: 0 0 5px 0px #eded;
 	display: flex;
@@ -4818,10 +4819,6 @@ input:disabled {
 	-moz-border-radius: 6px;
 	-ms-border-radius: 6px;
 	-o-border-radius: 6px;
-}
-
-.SupportDetails-page .issue-wrapper .issue-details-box .box.label-box {
-	width: 35%;
 }
 
 .SupportDetails-page .issue-wrapper .issue-details-box .box svg path {
@@ -5846,6 +5843,8 @@ input:disabled {
 /* souqOtlobha-page */
 
 .souqOtlobha-page .total-products {
+	display: flex;
+	flex-direction: row;
 	height: 60px;
 	width: 45px;
 	color: white;
@@ -5864,6 +5863,7 @@ input:disabled {
 }
 
 .souqOtlobha-page .total-products span:last-child {
+	flex: 1;
 	background-color: var(--second-500);
 	width: 370px;
 }
@@ -6635,9 +6635,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.rate-act-btn .margin-right-lg {
 		margin-right: 12px;
 	}
-	.academy-widget .course-bx {
-		margin-right: 26px;
-	}
 	.academy-page .btns-group-container button {
 		font-size: 20px;
 		font-weight: 400;
@@ -6656,11 +6653,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	/* Explain Details */
 	.explain-details-page .explain-title {
 		margin-right: 0;
-	}
-}
-@media (max-width: 1024px) {
-	.academy-widget .course-bx {
-		margin-right: 55px;
 	}
 }
 
@@ -6858,6 +6850,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.choose-time .time-input {
 		width: 150px;
 		height: 48px;
+	}
+	.souqOtlobha-page .total-products{
+		width: 100%;
+	}
+	.souqOtlobha-page .total-products span:first-child {
+		width: 70px;
+		font-size: 18px;
+	}
+	.souqOtlobha-page .total-products span:last-child {
+		width: 100%;
+		font-size: 18px;
+	}
+	.souqOtlobha-page .btn-group button:first-child{
+		flex: 1;
+	}
+	.souqOtlobha-page .btn-group button:last-child{
+		flex: 1;
 	}
 }
 
@@ -9398,7 +9407,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.academy-widget .watch-course-btn {
 		padding-top: 13px;
 		position: relative;
-		right: -45px;
 		width: 100%;
 	}
 	.academy-widget .watch-course-btn .btn-wrapper {
@@ -9445,7 +9453,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 	.academy-widget .course-bx {
 		justify-content: space-evenly;
-		margin-right: -7px;
 	}
 	.course-details {
 		position: relative;

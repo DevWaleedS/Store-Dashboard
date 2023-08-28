@@ -278,13 +278,13 @@ const EditProductPage = () => {
 									onSubmit={handleSubmit(updateProduct)}>
 									<div className='form-body'>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-image'>
 													{" "}
 													صورة المنتج<span className='text-danger'>*</span>
 												</label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<div {...getRootProps()}>
 													<div className='add-image-btn-box '>
 														<UploadIcon />
@@ -321,8 +321,8 @@ const EditProductPage = () => {
 													/>
 												</div>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												{productError?.cover && (
 													<span className='fs-6 text-danger'>
 														{productError?.cover}
@@ -332,12 +332,12 @@ const EditProductPage = () => {
 										</div>
 
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-name'>
 													اسم المنتج<span className='text-danger'>*</span>
 												</label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<input
 													name='name'
 													type='text'
@@ -348,8 +348,8 @@ const EditProductPage = () => {
 													})}
 												/>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.name}
 													{errors?.name && errors.name.message}
@@ -357,13 +357,13 @@ const EditProductPage = () => {
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
 													{" "}
 													وصف المنتح<span className='text-danger'>*</span>
 												</label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<textarea
 													name='description'
 													id='product-desc'
@@ -372,8 +372,8 @@ const EditProductPage = () => {
 														required: "حقل الوصف مطلوب",
 													})}></textarea>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.description}
 													{errors?.description && errors.description.message}
@@ -381,13 +381,13 @@ const EditProductPage = () => {
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
 													{" "}
 													التصنيف الرئيسي<span className='text-danger'>*</span>
 												</label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													<Controller
 														name={"category_id"}
@@ -471,8 +471,8 @@ const EditProductPage = () => {
 													/>
 												</FormControl>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.category_id}
 													{errors?.category_id && errors.category_id.message}
@@ -480,10 +480,10 @@ const EditProductPage = () => {
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='sub-category'>التصنيف الفرعي </label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
 													subcategory[0]?.subcategory?.length === 0 ? (
@@ -553,8 +553,8 @@ const EditProductPage = () => {
 													)}
 												</FormControl>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												{productError?.subcategory_id && (
 													<span className='fs-6 text-danger'>
 														{productError?.subcategory_id}
@@ -563,10 +563,10 @@ const EditProductPage = () => {
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='price'> المخزون </label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<Controller
 													name={"stock"}
 													control={control}
@@ -595,8 +595,8 @@ const EditProductPage = () => {
 													)}
 												/>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.stock}
 													{errors?.stock && errors.stock.message}
@@ -604,13 +604,13 @@ const EditProductPage = () => {
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='price'>
 													{" "}
 													السعر<span className='text-danger'>*</span>{" "}
 												</label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<Controller
 													name={"selling_price"}
 													control={control}
@@ -651,8 +651,8 @@ const EditProductPage = () => {
 													)}
 												/>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.selling_price}
 													{errors?.selling_price &&
@@ -661,10 +661,10 @@ const EditProductPage = () => {
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='low-price'> السعر بعد الخصم </label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<Controller
 													name={"discount_price"}
 													control={control}
@@ -693,11 +693,11 @@ const EditProductPage = () => {
 													)}
 												/>
 											</div>
-											<div className='col-md-3 col-12'></div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div
 												className={
 													product?.discount_price && product?.selling_price
-														? "col-md-7 col-12"
+														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
 												{Number(product?.selling_price) -
@@ -713,7 +713,7 @@ const EditProductPage = () => {
 												className={
 													product?.discount_price &&
 													product?.selling_price === ""
-														? "col-md-7 col-12"
+														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
 												<span className='fs-6' style={{ color: "red" }}>
@@ -722,7 +722,7 @@ const EditProductPage = () => {
 												</span>
 											</div>
 
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span
 													className='fs-6 text-danger'
 													style={{ whiteSpace: "normal" }}>
@@ -734,18 +734,18 @@ const EditProductPage = () => {
 										</div>
 
 										<div className='row mb-3'>
-											<div className='col-md-3 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='seo'> وصف محركات البحث SEO </label>
 											</div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<textarea
 													name='SEOdescription'
 													id='SEOdescription'
 													placeholder='يرجى كتابة وصف دقيق للمنتج حتى يمكنك استخدامه في عملية الترويج للمنتج'
 													{...register("SEOdescription", {})}></textarea>
 											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.SEOdescription}
 													{errors?.SEOdescription &&
