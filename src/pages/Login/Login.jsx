@@ -200,7 +200,7 @@ const Login = () => {
 
 									<h5>كلمة المرور</h5>
 									<input
-										style={{ direction: "ltr", textAlign: "right" }}
+										style={{ textAlign: "right" }}
 										autoComplete='off'
 										value={password}
 										placeholder='********'

@@ -131,7 +131,7 @@ const CreateNewPassword = () => {
 
 								<h5>كلمة المرور</h5>
 								<input
-									style={{ direction: "ltr", textAlign: "right" }}
+									style={{  textAlign: "right" }}
 									autoComplete='off'
 									value={password}
 									placeholder='********'
@@ -174,7 +174,7 @@ const CreateNewPassword = () => {
 
 								<h5>تأكيد كلمة المرور</h5>
 								<input
-									style={{ direction: "ltr", textAlign: "right" }}
+									style={{  textAlign: "right" }}
 									autoComplete='off'
 									value={confirmPassword}
 									placeholder='********'
