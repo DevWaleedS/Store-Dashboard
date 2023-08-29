@@ -143,7 +143,7 @@ const SupportDetails = () => {
 																	</div>
 
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>
+																		<span style={{ direction: "ltr" }}>
 																			{
 																				fetchedData?.data?.technicalSupports
 																					?.phonenumber
