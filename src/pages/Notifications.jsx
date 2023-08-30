@@ -48,9 +48,11 @@ const Notifications = () => {
 		const currentDate = calcPassedDays(+new Date(), +new Date(date));
 
 		if (currentDate === 0)
-			return "،اليوم" + moment(date).locale("ar").format(" h:mm a");
+			return "اليوم،" + moment(date).locale("ar").format(" h:mm a");
 		if (currentDate === 1)
-			return "،أمس" + moment(date).locale("ar").format(" h:mm a");
+			return "أمس،" + moment(date).locale("ar").format(" h:mm a");
+		if (currentDate === 2)
+			return "منذ يومان،" + moment(date).locale("ar").format(" h:mm a");
 		if (currentDate <= 7)
 			return (
 				`منذ ${currentDate} أيام،` + moment(date).locale("ar").format(" h:mm a")
