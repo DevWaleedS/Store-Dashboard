@@ -1411,7 +1411,7 @@ select {
 	border-radius: 20px;
 }
 .support-table .support-title {
-	max-width: 500px;
+	max-width: 250px;
 }
 
 .actions {
@@ -3119,7 +3119,7 @@ nav.navigation {
 .maintenance-modal-header {
 	background-color: var(--second-500);
 	color: var(--white-100);
-	padding: 20px;
+	padding: 1rem;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
@@ -3137,7 +3137,7 @@ nav.navigation {
 
 .maintenance-modal-body .modal-body-header .modal-desc {
 	white-space: normal;
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 400;
 	color: var(--black-300);
 }
@@ -3148,7 +3148,7 @@ nav.navigation {
 
 .modal-input-group label {
 	display: flex;
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 500;
 	margin-bottom: 8px;
 }
@@ -3179,7 +3179,7 @@ textarea {
 
 .maintenance-modal-footer {
 	background-color: var(--gray-100);
-	padding: 30px 0;
+	padding: 24px 0;
 	border-radius: 0 0 8px 8px;
 	-webkit-border-radius: 0 0 8px 8px;
 	-moz-border-radius: 0 0 8px 8px;
@@ -4871,6 +4871,10 @@ input:disabled {
 	color: var(--black-300);
 	resize: none;
 	box-shadow: 0 0 2px 0px var(--gray-100);
+}
+
+.SupportDetails-page .issue-content textarea:disabled{
+	background-color: #ffffff;
 }
 
 .SupportDetails-page .close-btn {
@@ -9264,7 +9268,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		top: 7px;
 	}
 	.support-table .support-title {
-		max-width: 240px;
+		max-width: 200px;
 	}
 	.pm-am {
 		font-size: 16px !important;

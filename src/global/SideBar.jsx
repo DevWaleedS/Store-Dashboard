@@ -168,7 +168,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						as='li'
 						className='sub-menu-link'
 						onClick={() => {
-							dispatch(OpenCelebrityMarketingModal());
+							// dispatch(OpenCelebrityMarketingModal());
 						}}>
 						<MenuItem>
 							<Shoping />
@@ -184,7 +184,7 @@ const SideBar = ({ open, closeSidebar }) => {
 							<span className='me-2'>الاشتراكات البريدية</span>
 						</MenuItem>
 					</NavLink>
-					<NavLink
+					{/*<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='MarketingCampaign'
 						onClick={() => closeSidebar()}>
@@ -192,7 +192,7 @@ const SideBar = ({ open, closeSidebar }) => {
 							<MarketingCampain />
 							<span className='me-2'>الحملة التسويقية</span>
 						</MenuItem>
-					</NavLink>
+					</NavLink>*/}
 				</SubMenu>
 				<NavLink
 					className='menu-link'
@@ -255,7 +255,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 
-					<NavLink
+					{/*<NavLink
 						className='sub-menu-link'
 						to='PackageUpgrade'
 						onClick={() => closeSidebar()}>
@@ -263,9 +263,9 @@ const SideBar = ({ open, closeSidebar }) => {
 							<SlRocket />
 							<span className='me-2'> ترقية الباقة</span>
 						</MenuItem>
-					</NavLink>
+					</NavLink>*/}
 
-					<NavLink
+					{/*<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='BranchesAndWarehouses'
 						onClick={() => closeSidebar()}>
@@ -273,8 +273,8 @@ const SideBar = ({ open, closeSidebar }) => {
 							<BranchesAndWarehouses />
 							<span className='me-2'>الفروع والمستودعات </span>
 						</MenuItem>
-					</NavLink>
-					<NavLink
+					</NavLink>*/}
+					{/*<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='BranchesAndWarehouses'
 						onClick={() => closeSidebar()}>
@@ -282,8 +282,8 @@ const SideBar = ({ open, closeSidebar }) => {
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> المحفظة والفواتير </span>
 						</MenuItem>
-					</NavLink>
-					<NavLink
+					</NavLink>*/}
+					{/*<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='BranchesAndWarehouses'
 						onClick={() => closeSidebar()}>
@@ -291,8 +291,8 @@ const SideBar = ({ open, closeSidebar }) => {
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> نشاط المتجر </span>
 						</MenuItem>
-					</NavLink>
-					<NavLink
+					</NavLink>*/}
+					{/*<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='BranchesAndWarehouses'
 						onClick={() => closeSidebar()}>
@@ -300,7 +300,7 @@ const SideBar = ({ open, closeSidebar }) => {
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> خيارات المتجر </span>
 						</MenuItem>
-					</NavLink>
+					</NavLink>*/}
 				</SubMenu>
 				<NavLink
 					className='menu-link'

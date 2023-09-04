@@ -10,7 +10,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 // import social icons
 import { ReactComponent as SnaChat } from "../data/Icons/icon-24-snapchat.svg";
-import { ReactComponent as Twitter } from "../data/Icons/icon-24-twitter.svg";
+import { ReactComponent as Twitter } from "../data/Icons/Twitter.svg";
 import { ReactComponent as Instagram } from "../data/Icons/icon-24-instagram.svg";
 import { ReactComponent as Youtube } from "../data/Icons/icon-24-youtube.svg";
 import { ReactComponent as Facebock } from "../data/Icons/icon-24-facebbock.svg";
@@ -200,7 +200,7 @@ const SocialPages = () => {
 								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
-											<Twitter />
+											<Twitter width="16"/>
 											<span className='me-2'> تويتر</span>
 										</label>
 									</div>

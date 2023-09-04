@@ -111,7 +111,7 @@ const PackageUpgrade = () => {
 									}}
 								/>
 							}
-							label='سنوي/6 شهور'
+							label='6 أشهر/12 شهر'
 						/>
 					</div>
 				</div>

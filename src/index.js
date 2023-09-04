@@ -42,12 +42,12 @@ import {
 	Management,
 	ShippingCompanies,
 	SocialPages,
-	PackageUpgrade,
+	//PackageUpgrade,
 	Support,
 	Template,
 	VerifyStore,
-	MarketingCampaign,
-	BranchesAndWarehouses,
+	//MarketingCampaign,
+	//BranchesAndWarehouses,
 	Notifications,
 	PlatformServices,
 	EvaluationThePlatform,
@@ -220,10 +220,10 @@ const router = createBrowserRouter([
 				path: "PostalSubscriptions",
 				element: <PostalSubscriptions />,
 			},
-			{
-				path: "MarketingCampaign",
-				element: <MarketingCampaign />,
-			},
+			// {
+			// 	path: "MarketingCampaign",
+			// 	element: <MarketingCampaign />,
+			// },
 
 			{
 				path: "Orders",
@@ -283,10 +283,10 @@ const router = createBrowserRouter([
 				element: <Rating />,
 			},
 
-			{
-				path: "BranchesAndWarehouses",
-				element: <BranchesAndWarehouses />,
-			},
+			// {
+			// 	path: "BranchesAndWarehouses",
+			// 	element: <BranchesAndWarehouses />,
+			// },
 
 			{
 				path: "Support",
@@ -356,10 +356,10 @@ const router = createBrowserRouter([
 				path: "SocialPages",
 				element: <SocialPages />,
 			},
-			{
-				path: "PackageUpgrade",
-				element: <PackageUpgrade />,
-			},
+			// {
+			// 	path: "PackageUpgrade",
+			// 	element: <PackageUpgrade />,
+			// },
 
 			{
 				path: "ShippingCompanies",
