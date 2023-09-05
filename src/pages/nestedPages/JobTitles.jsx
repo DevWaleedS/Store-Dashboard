@@ -35,6 +35,8 @@ const style = {
 };
 
 const JobTitles = () => {
+	//
+	const navigate = useNavigate();
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/roles"
 	);
@@ -46,8 +48,7 @@ const JobTitles = () => {
 		setDeleteReload,
 		setDeleteMethod,
 	} = DeleteStore;
-	//
-	const navigate = useNavigate();
+
 	// Delete single item
 	useEffect(() => {
 		if (deleteReload === true) {

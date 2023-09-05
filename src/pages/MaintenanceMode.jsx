@@ -22,16 +22,15 @@ import { LoadingContext } from "../Context/LoadingProvider";
 
 const style = {
 	position: "fixed",
-	top: "400px",
+	top: "56%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
 	width: 1024,
 	maxWidth: "90%",
-	borderRadius: 2,
+	borderRadius: 8,
 	backgroundColor: "#fff",
 	boxShadow: 24,
 	p: 0,
-	marginBottom: "200px",
 	"@media(max-width:768px)": {
 		top: "50%",
 	},
@@ -158,7 +157,7 @@ const MaintenanceModeModal = () => {
 							timeout: 500,
 						}}>
 						<Fade in={isOpenMaintenanceModeModal}>
-							<Box component={"div"} sx={style}>
+							<div style={style}>
 								<form onSubmit={handleSubmit(UpdateMaintenanceMode)}>
 									<div className='maintenance-modal-header d-flex justify-content-between align-items-center'>
 										<span> وضع الصيانة</span>
@@ -295,7 +294,7 @@ const MaintenanceModeModal = () => {
 										</div>
 									</div>
 								</form>
-							</Box>
+							</div>
 						</Fade>
 					</Modal>
 				</div>

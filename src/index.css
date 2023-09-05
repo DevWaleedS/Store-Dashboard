@@ -5586,7 +5586,7 @@ input:disabled {
 }
 
 .edit-job-title {
-	width: 85%;
+	width: 100%;
 	margin: 30px auto;
 	border-radius: 14px;
 	-webkit-border-radius: 14px;

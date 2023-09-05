@@ -195,7 +195,7 @@ const SeoWeight = () => {
 
 	// to update Seo values
 	const updateLink = () => {
-		setLoadingTitle("جاري تعديل ربط جوجل انليتكس");
+		setLoadingTitle("جاري تعديل رابط جوجل انليتكس");
 		resetDataError1();
 		let formData = new FormData();
 		formData.append("link", updateLinkValue);
@@ -429,7 +429,7 @@ const SeoWeight = () => {
 
 			<div className='seo-weight-edit-box mb-md-4 mb-3'>
 				<div className='title'>
-					<h4> ربط جوجل انليتكس Google Analytics </h4>
+					<h4> رابط جوجل انليتكس Google Analytics </h4>
 				</div>
 
 				{loading ? (
@@ -450,7 +450,7 @@ const SeoWeight = () => {
 											setUpdateLink(e.target.value);
 										}}
 										id='outlined-textarea'
-										placeholder=' نسخ رابط خاص بجوجل انليتكس'
+										placeholder=' نسخ رابط جوجل انليتكس'
 										onFocus={() => setPageLinkFocus(true)}
 										onBlur={() => setPageLinkFocus(true)}
 										required

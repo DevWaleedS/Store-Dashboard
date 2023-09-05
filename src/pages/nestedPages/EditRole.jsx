@@ -149,7 +149,7 @@ const EditRole = () => {
 								<div className='page-wrapper'>
 									<div className='page-header mb-md-5 mb-3'>
 										<div className='row'>
-											<div className='col-md-6 col-12 mb-md-0 mb-3'>
+											<div className='col-md-5 col-12 mb-md-0 mb-3'>
 												<span>{fetchedData?.data?.role?.name}</span>
 											</div>
 											<br />
@@ -157,7 +157,7 @@ const EditRole = () => {
 											{handleErrors && (
 												<span className='fs-6 text-danger'>{handleErrors}</span>
 											)}
-											<div className='col-md-6 col-12'>
+											<div className='col-md-7 col-12'>
 												<div className='search'>
 													<div className='row'>
 														<div className='col-md-8 col-12 mb-md-0 mb-2'>
