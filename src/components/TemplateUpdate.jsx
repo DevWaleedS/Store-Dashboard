@@ -584,7 +584,7 @@ const TemplateUpdate = () => {
 			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 				<div className='title'>
 					<h4>
-						البنرات الإعلانية (170 * 1110)
+						البنرات الإعلانية (245 * 1110)
 						<span>
 							{" "}
 							( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين

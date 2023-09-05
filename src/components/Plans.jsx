@@ -67,7 +67,7 @@ const Plans = ({ yearlyPlan }) => {
 										color: "#011723",
 									}}
 									className='text-center'>
-									{yearlyPlan ? "/سنويا" : "/شهريا"}
+									{yearlyPlan ? "/12 شهر " : "/6 أشهر"}
 								</h2>
 								<div
 									style={{

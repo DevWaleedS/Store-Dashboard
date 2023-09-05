@@ -13,6 +13,7 @@ const Support = () => {
 		"https://backend.atlbha.com/api/Store/technicalSupport"
 	);
 	const [search, setSearch] = useState("");
+
 	let Technicalsupports = fetchedData?.data?.Technicalsupports;
 	if (search !== "") {
 		Technicalsupports = fetchedData?.data?.Technicalsupports?.filter((item) =>

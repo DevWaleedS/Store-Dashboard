@@ -30,6 +30,7 @@ export { default as CourseVideoModal } from "./CourseVideoModal";
 export { default as FilterOperations } from "./FilterOperations";
 export { default as ProductBox } from "./ProductBox";
 export { default as SendReplayModal } from "./SendReplayModal";
+export { default as SendSupportReplayModal } from "./SendSupportReplayModal";
 export { default as VerifayStoreAlert } from "./VerifayStoreAlert";
 export { default as Plans } from "./Plans";
 export { default as PayPalFormWeight } from "./PayPalFormWeight";

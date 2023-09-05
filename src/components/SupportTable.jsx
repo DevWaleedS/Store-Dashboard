@@ -73,12 +73,14 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
+					اسم العميل
+				</TableCell>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					عنوان الرسالة
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					اسم العميل
+					محتوى الرسالة
 				</TableCell>
-
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الحاله
 				</TableCell>
@@ -412,14 +414,18 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 															</div>
 														</TableCell>
 														<TableCell align='center'>
+															{row?.store?.user?.name}
+														</TableCell>
+														<TableCell align='center'>
 															<div className='text-overflow support-title'>
 																{row?.title}
 															</div>
 														</TableCell>
 														<TableCell align='center'>
-															{row?.store?.user?.name}
+															<div className='text-overflow support-title'>
+																{row?.content}
+															</div>
 														</TableCell>
-
 														<TableCell align='center'>
 															<div className='sub-categories'>
 																<span
@@ -429,8 +435,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			row?.supportstatus === "منتهية"
 																				? "#3ae374"
 																				: row?.supportstatus === "غير منتهية "
-																				? "#ff9f1a"
-																				: "#d3d3d3",
+																					? "#ff9f1a"
+																					: "#d3d3d3",
 																		color: "#fff",
 																	}}>
 																	{row?.supportstatus === "منتهية" ? (
@@ -446,22 +452,12 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 														</TableCell>
 														<TableCell align='right'>
 															<div className='actions gap-0 d-flex justify-content-center'>
-																<span>
-																	<DeletteIcon
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("get");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?id[]=${row?.id}`
-																			);
-																		}}
-																		style={{
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
-																		}}></DeletteIcon>
+																<span
+																	style={{ cursor: "pointer" }}
+																	onClick={() =>{
+																		navigate(`supportDetails/${row?.id}`);
+																	}}>
+																	<ReportIcon />
 																</span>
 
 																<span>
@@ -511,12 +507,22 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																	/>
 																</span>
 
-																<span
-																	style={{ cursor: "pointer" }}
-																	onClick={() =>
-																		navigate(`supportDetails/${row?.id}`)
-																	}>
-																	<ReportIcon />
+																<span>
+																	<DeletteIcon
+																		onClick={() => {
+																			setActionDelete(
+																				"سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع"
+																			);
+																			setDeleteMethod("get");
+																			setUrl(
+																				`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?id[]=${row?.id}`
+																			);
+																		}}
+																		style={{
+																			cursor: "pointer",
+																			color: "red",
+																			fontSize: "1.2rem",
+																		}}></DeletteIcon>
 																</span>
 															</div>
 														</TableCell>

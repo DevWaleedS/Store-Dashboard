@@ -11,6 +11,13 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Context from "../../Context/context";
+import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
+import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
+import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
+import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
+import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
+import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
+import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
 
 const EvaluationThePlatform = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -82,7 +89,16 @@ const EvaluationThePlatform = () => {
 							قم بتقييم تجربة استخدامك لمنصة أطلبها
 						</div>
 						<div className=''>
-							<div className='d-flex flex-row align-items-center gap-4 '>
+							<div className='text-editor-icons'>
+								<BoldIcon />
+								<FormatTextRight className='me-3' />
+								<FormatTextLeft className='me-3' />
+								<FormatTextCenter className='me-3' />
+								<Attchment className='me-3' />
+								<FormatTextPointSqure className='me-3' />
+								<FormatTextPoint className='me-3' />
+							</div>
+							<div className='d-flex flex-row align-items-center'>
 								<textarea
 									resize='false'
 									value={commentText}

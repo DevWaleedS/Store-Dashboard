@@ -450,7 +450,7 @@ const SeoWeight = () => {
 											setUpdateLink(e.target.value);
 										}}
 										id='outlined-textarea'
-										placeholder=' توليد رابط خاص بجوجل انليتكس'
+										placeholder=' نسخ رابط خاص بجوجل انليتكس'
 										onFocus={() => setPageLinkFocus(true)}
 										onBlur={() => setPageLinkFocus(true)}
 										required

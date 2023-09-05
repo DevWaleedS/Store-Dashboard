@@ -26,6 +26,17 @@
 	box-shadow: 0 3px 6px #02466a0f !important;
 }
 
+.evaluationThePlatform .text-editor-icons {
+	background: var(--white-100);
+	border-radius: 6px;
+	border: 1px solid var(--gray-100);
+	padding: 18px;
+}
+
+.evaluationThePlatform .text-editor-icons svg {
+	cursor: pointer;
+}
+
 .preview-valuation {
 	text-align: right;
 	white-space: normal;

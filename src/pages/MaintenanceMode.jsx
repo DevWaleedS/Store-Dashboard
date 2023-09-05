@@ -22,7 +22,7 @@ import { LoadingContext } from "../Context/LoadingProvider";
 
 const style = {
 	position: "fixed",
-	top: "55%",
+	top: "400px",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
 	width: 1024,
@@ -257,7 +257,7 @@ const MaintenanceModeModal = () => {
 													</span>
 												</div>
 											</div>
-											<div className='col-12 mb-4'>
+											<div className='col-12'>
 												<div className='modal-input-group'>
 													<label htmlFor='maintenance-message'>
 														الرسالة النصية للعملاء
