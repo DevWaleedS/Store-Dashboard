@@ -176,6 +176,7 @@ const PlatformServices = () => {
 									<TagInput
 										className='store-activity-input w-100'
 										values={data?.activity}
+										disabled={true}
 									/>
 								</div>
 							</div>
@@ -246,7 +247,7 @@ const PlatformServices = () => {
 													<ListItemText primary={service?.name} />
 												</MenuItem>
 											))}
-											<MenuItem className='select-btn d-flex justify-content-center'>
+											<div className='select-btn d-flex justify-content-center' style={{ minHeight:"56px" }}>
 												<Button
 													className='button'
 													onClick={(e) => {
@@ -256,7 +257,7 @@ const PlatformServices = () => {
 													}}>
 													أختر
 												</Button>
-											</MenuItem>
+											</div>
 										</Select>
 									</FormControl>
 								</div>

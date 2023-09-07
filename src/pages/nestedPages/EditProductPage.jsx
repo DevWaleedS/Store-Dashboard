@@ -538,7 +538,7 @@ const EditProductPage = () => {
 																	</MenuItem>
 																)
 															)}
-															<MenuItem className='select-btn d-flex justify-content-center'>
+															<div className='select-btn d-flex justify-content-center' style={{ minHeight:"56px" }}>
 																<Button
 																	className='button'
 																	onClick={(e) => {
@@ -548,7 +548,7 @@ const EditProductPage = () => {
 																	}}>
 																	أختر
 																</Button>
-															</MenuItem>
+															</div>
 														</Select>
 													)}
 												</FormControl>

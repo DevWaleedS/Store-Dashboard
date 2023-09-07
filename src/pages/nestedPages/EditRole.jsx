@@ -175,7 +175,7 @@ const EditRole = () => {
 															/>
 														</div>
 														<div className='col-md-4 col-12'>
-															<button className='save-btn w-100' type='submit'>
+															<button className='save-btn w-100' type='submit' style={{ minWidth:'130px' }}>
 																حفظ واعتماد
 															</button>
 														</div>
