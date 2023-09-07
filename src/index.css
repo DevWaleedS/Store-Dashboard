@@ -6336,6 +6336,7 @@ input:disabled {
 
 /* Tag input .store-activity-input */
 .PlatformServices-page .delegate-request-form .store-activity-input {
+	background-color: #ffffff;
 	border: none;
 	padding: 0;
 	padding-right: 14px;
