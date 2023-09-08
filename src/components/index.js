@@ -38,3 +38,4 @@ export { default as MadaFormWeight } from "./MadaFormWeight";
 export { default as DelegateRequestAlert } from "./DelegateRequestAlert";
 export { default as DelegateTable } from "./DelegateTable";
 export { default as PostalSubscriptionsTable } from "./PostalSubscriptionsTable";
+export { default as TextEditor } from "./Textditor/TextEditor.jsx";

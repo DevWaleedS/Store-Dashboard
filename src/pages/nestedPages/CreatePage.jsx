@@ -26,6 +26,8 @@ import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.s
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { TextEditor } from "../../components";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Modal Style
 const style = {
@@ -61,6 +63,10 @@ const CreatePage = () => {
 	const [reload, setReload] = useState(false);
 	const [cookies] = useCookies(["access_token"]);
 
+	// To get the editor content
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue } = editorContent;
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -80,34 +86,22 @@ const CreatePage = () => {
 			seo_desc: "",
 		},
 	});
+
 	const [page, setPage] = useState({
 		tags: [],
 		pageCategory: [],
 		postCategory_id: "",
 	});
 	const itsPost = page?.pageCategory?.includes(1);
-	const [tag, setTag] = useState("");
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
 
+	// to create tags
+	const [tag, setTag] = useState("");
 	const addTags = () => {
 		setPage({ ...page, tags: [...page.tags, tag] });
 		setTag("");
 	};
 
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
-	};
-
+	// to upload images
 	const [images, setImages] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
@@ -124,6 +118,8 @@ const CreatePage = () => {
 			);
 		},
 	});
+
+	/* ------- ----------------- */
 
 	const files = acceptedFiles.map((file) => (
 		<li key={file.path}>
@@ -162,7 +158,7 @@ const CreatePage = () => {
 		let formData = new FormData();
 		formData.append("title", data?.title);
 		formData.append("page_desc", data?.page_desc);
-		formData.append("page_content", description?.htmlValue);
+		formData.append("page_content", editorValue);
 		formData.append("seo_title", data?.seo_title);
 		formData.append("seo_link", data?.seo_link);
 		formData.append("seo_desc", data?.seo_desc);
@@ -309,7 +305,8 @@ const CreatePage = () => {
 										<div className='col-12'>
 											<div className=''>
 												<div className='d-flex flex-row align-items-center gap-4 py-4'>
-													<Editor
+													{/* 
+											<Editor
 														className='text-black'
 														toolbarHidden={false}
 														editorState={description.editorState}
@@ -333,6 +330,10 @@ const CreatePage = () => {
 															},
 														}}
 													/>
+
+											*/}
+
+													<TextEditor />
 												</div>
 											</div>
 										</div>

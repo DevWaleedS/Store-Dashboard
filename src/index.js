@@ -101,6 +101,7 @@ import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificat
 import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
+import TextEditorProvider from "./Context/TextEditorProvider";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -407,7 +408,9 @@ root.render(
 						<NotificationProvider>
 							<LoadingProvider>
 								<DeleteProvider>
-									<RouterProvider router={router} />
+									<TextEditorProvider>
+										<RouterProvider router={router} />
+									</TextEditorProvider>
 								</DeleteProvider>
 							</LoadingProvider>
 						</NotificationProvider>
