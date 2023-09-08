@@ -48,11 +48,11 @@ const EvaluationThePlatform = () => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
 					setEvaluationError(res?.data?.message?.en?.comment_text?.[0]);
+					setEndActionTitle(res?.data?.message?.ar);
 				}
 			});
 	};
