@@ -64,7 +64,7 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 	onSelectAllClick: PropTypes.func.isRequired,
-	rowCount: PropTypes.number.isRequired,
+	rowCount: PropTypes.number,
 };
 
 function EnhancedTableToolbar(props) {

@@ -42,7 +42,7 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-	rowCount: PropTypes.number.isRequired,
+	rowCount: PropTypes.number,
 };
 
 export default function DelegateTable({ cityId }) {

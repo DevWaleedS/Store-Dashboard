@@ -19,6 +19,7 @@ const TextEditor = () => {
 		<div style={{ width: "100%" }}>
 			<CKEditor
 				editor={ClassicEditor}
+				config={{ language: "ar" }}
 				onChange={(event, editor) => {
 					const data = editor.getData();
 

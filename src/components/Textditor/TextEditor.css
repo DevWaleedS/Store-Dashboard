@@ -10,14 +10,7 @@
 	-ms-border-radius: 5px 5px 0 0 !important;
 	-o-border-radius: 5px 5px 0 0 !important;
 }
-.ck .ck-toolbar__items {
-	display: flex;
-	align-items: center !important;
-	flex-flow: row wrap !important;
-	flex-grow: 1 !important;
-	justify-content: flex-start !important;
-	flex-direction: row-reverse !important;
-}
+
 .ck .ck-content {
 	background-color: #fff;
 	border: 1px solid #d3d3d3 !important;
