@@ -22,6 +22,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { ReactComponent as LogOutIcon } from "../data/Icons/icon-24-sign out.svg";
 import { ReactComponent as UserIcon } from "../data/Icons/icon-24-client.svg";
 import { UserAuth } from "../Context/UserAuthorProvider";
+import Context from "../Context/context";
 
 const TopBar = ({ toggleSidebar }) => {
 	const theme = useTheme();
@@ -32,6 +33,10 @@ const TopBar = ({ toggleSidebar }) => {
 	// TO SET THE NAME AND IMAGE TO CONTEXT
 	const UserInfo = useContext(UserAuth);
 	const { userInfo, setUserInfo } = UserInfo;
+
+	// To change z-index of navbar when maintain mode is open
+	const Z_index = useContext(Context);
+	const { navbarZindex } = Z_index;
 
 	const NotificationStore = useContext(NotificationContext);
 	const { setEndActionTitle } = NotificationStore;
@@ -110,7 +115,9 @@ const TopBar = ({ toggleSidebar }) => {
 	};
 
 	return (
-		<Box className='top-bar' backgroundColor={colors.second[400]}>
+		<Box
+			className={` ${navbarZindex ? "top-bar zIndex" : "top-bar"} `}
+			backgroundColor={colors.second[400]}>
 			<nav className='navbar navbar-expand-lg ' dir='ltr'>
 				<div className='container'>
 					<div

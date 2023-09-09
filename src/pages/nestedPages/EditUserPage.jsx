@@ -88,6 +88,8 @@ const EditUserPage = () => {
 		status: "",
 	});
 	const [images, setImages] = useState([]);
+
+	// to set data that coming fro show api
 	useEffect(() => {
 		if (fetchedData?.data?.users) {
 			setUser({
@@ -95,6 +97,7 @@ const EditUserPage = () => {
 				name: fetchedData?.data?.users?.name,
 				user_name: fetchedData?.data?.users?.user_name,
 				role: fetchedData?.data?.users?.role?.name,
+
 				email: fetchedData?.data?.users?.email,
 				image: fetchedData?.data?.users?.image,
 				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")

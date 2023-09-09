@@ -50,7 +50,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 							<div className='video-hours '>
 								<RiTimerLine />
 								<span className='text me-2 align-self-center'>
-									{CustomDate(duration)} ساعة{" "}
+									{CustomDate(duration)} ساعة
 								</span>
 							</div>
 						</div>

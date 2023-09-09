@@ -22,7 +22,7 @@ import { LoadingContext } from "../Context/LoadingProvider";
 
 const style = {
 	position: "fixed",
-	top: "56%",
+	top: "50%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
 	width: 1024,
@@ -37,6 +37,10 @@ const style = {
 };
 
 const MaintenanceModeModal = () => {
+	// To change z-index of navbar when maintain mode is open
+	const Z_index = useContext(Context);
+	const { setNavbarZindex } = Z_index;
+
 	const [cookies] = useCookies(["access_token"]);
 	const { fetchedData, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/maintenance"
@@ -127,9 +131,10 @@ const MaintenanceModeModal = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					dispatch(closeMaintenanceModeModal());
 					setReload(!reload);
+					setNavbarZindex(false);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
+					setNavbarZindex(false);
 					setDataError({
 						...dataError,
 						title: res?.data?.message?.en?.title?.[0],
@@ -149,6 +154,7 @@ const MaintenanceModeModal = () => {
 						aria-describedby='transition-modal-description'
 						open={isOpenMaintenanceModeModal}
 						onClose={() => {
+							setNavbarZindex(false);
 							dispatch(closeMaintenanceModeModal());
 						}}
 						closeAfterTransition
@@ -163,6 +169,7 @@ const MaintenanceModeModal = () => {
 										<span> وضع الصيانة</span>
 										<AiOutlineCloseCircle
 											onClick={() => {
+												setNavbarZindex(false);
 												dispatch(closeMaintenanceModeModal());
 											}}
 										/>

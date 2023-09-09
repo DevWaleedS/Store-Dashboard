@@ -8,6 +8,7 @@ const ContextProvider = (props) => {
 	const [subCategories, setSubCategories] = useState([]);
 	const [productsData, setProductsData] = React.useState();
 	const [actionWarning, setActionWarning] = useState(false);
+	const [navbarZindex, setNavbarZindex] = useState(false);
 
 	useEffect(() => {
 		if (title) {
@@ -29,6 +30,8 @@ const ContextProvider = (props) => {
 		subCategories,
 		setProductsData,
 		productsData,
+		navbarZindex,
+		setNavbarZindex,
 	};
 
 	return <Context.Provider value={context}>{props.children}</Context.Provider>;

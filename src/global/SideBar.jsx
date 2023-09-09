@@ -35,9 +35,9 @@ import { ReactComponent as Verification } from "../data/Icons/icon-24-Verificati
 import { ReactComponent as BsCart } from "../data/Icons/icon-24-shopping_cart.svg";
 import { ReactComponent as Seo } from "../data/Icons/icon-24-seo.svg";
 import { ReactComponent as Evaluation } from "../data/Icons/evaluation.svg";
-import { SlRocket } from "react-icons/sl";
+
 import { FaCircle } from "react-icons/fa";
-import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -45,11 +45,16 @@ import { OpenCelebrityMarketingModal } from "../store/slices/CelebrityMarketingM
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
 import useFetch from "../Hooks/UseFetch";
+import Context from "../Context/context";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
 	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+
+	// To change z-index of navbar when maintain mode is open
+	const Z_index = useContext(Context);
+	const { setNavbarZindex } = Z_index;
 
 	/**
 	 * to set the domain name of store to local storage
@@ -180,7 +185,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						to='PostalSubscriptions'
 						onClick={() => closeSidebar()}>
 						<MenuItem>
-							<MarkEmailReadIcon style={{ fontSize:'24px' }} />
+							<MarkEmailReadIcon style={{ fontSize: "24px" }} />
 							<span className='me-2'>الاشتراكات البريدية</span>
 						</MenuItem>
 					</NavLink>
@@ -344,6 +349,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						as='li'
 						className='sub-menu-link'
 						onClick={() => {
+							setNavbarZindex(true);
 							dispatch(openMaintenanceModeModal());
 						}}>
 						<MenuItem>

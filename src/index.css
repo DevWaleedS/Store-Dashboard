@@ -421,6 +421,9 @@ textarea,
 	left: 0;
 	z-index: 9999;
 }
+.app .top-bar.zIndex {
+	z-index: 999;
+}
 
 .avatar-box {
 	width: 300px;
@@ -2384,14 +2387,15 @@ nav.navigation {
 	cursor: pointer;
 }
 .academy-widget {
-	height: 160px;
+	height: auto;
+	max-height: 160px;
+	overflow: hidden;
 }
 .academy-widget .course-bx {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	justify-content: space-between;
-	padding-top: 18px;
+	justify-content: flex-end;
 }
 
 .academy-widget .course-details h5 {
@@ -4663,8 +4667,9 @@ input:disabled {
 
 .course-details-page .course-image {
 	width: 100%;
-	height: 340px;
-	max-height: 340px;
+	height: auto;
+	max-height: 100%;
+	min-height: 340px;
 	overflow: hidden;
 	display: flex;
 	justify-content: center;
@@ -4873,7 +4878,7 @@ input:disabled {
 	box-shadow: 0 0 2px 0px var(--gray-100);
 }
 
-.SupportDetails-page .issue-content textarea:disabled{
+.SupportDetails-page .issue-content textarea:disabled {
 	background-color: #ffffff;
 }
 
@@ -6397,7 +6402,7 @@ input:disabled {
 	color: #02466a;
 }
 
-.choose-time{
+.choose-time {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -6414,7 +6419,7 @@ input:disabled {
 	border-radius: 4px;
 	border: 1px solid rgb(173, 181, 185);
 }
-.choose-time .time-input input{
+.choose-time .time-input input {
 	background-color: transparent;
 }
 
@@ -6856,7 +6861,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		width: 150px;
 		height: 48px;
 	}
-	.souqOtlobha-page .total-products{
+	.souqOtlobha-page .total-products {
 		width: 100%;
 	}
 	.souqOtlobha-page .total-products span:first-child {
@@ -6867,10 +6872,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		width: 100%;
 		font-size: 18px;
 	}
-	.souqOtlobha-page .btn-group button:first-child{
+	.souqOtlobha-page .btn-group button:first-child {
 		flex: 1;
 	}
-	.souqOtlobha-page .btn-group button:last-child{
+	.souqOtlobha-page .btn-group button:last-child {
 		flex: 1;
 	}
 }
@@ -9274,7 +9279,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.pm-am {
 		font-size: 16px !important;
 	}
-	.choose-time .time-input{
+	.choose-time .time-input {
 		width: 120px;
 	}
 }
@@ -9385,14 +9390,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.rdw-image-modal {
 		left: -124px;
 	}
-	.work-day{
+	.work-day {
 		min-height: auto !important;
 	}
-	.choose-time{
+	.choose-time {
 		width: 100%;
-
 	}
-	.choose-time .time-input{
+	.choose-time .time-input {
 		width: 100%;
 	}
 }
@@ -9551,4 +9555,3 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		width: 100%;
 	}
 }
-

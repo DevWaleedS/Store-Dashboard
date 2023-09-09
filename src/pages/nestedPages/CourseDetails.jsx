@@ -34,6 +34,8 @@ const CourseDetails = () => {
 		}
 	}, [fetchedData]);
 
+	console.log(fetchedData?.data?.course);
+
 	return (
 		<>
 			<Helmet>
@@ -109,7 +111,7 @@ const CourseDetails = () => {
 														({unit?.unitvideo})
 													</span>
 													<span className='course-time'>
-														({fetchedData?.data?.course?.durationCourse} دقيقة)
+														({unit.durationUnit} دقيقة)
 													</span>
 												</div>
 												<div className='action-icon'>
