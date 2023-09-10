@@ -249,7 +249,7 @@ const EditUserPage = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> تعديل بيانات المستخدم </h5>
-										<p> اضافة مستخدم لفريق إدارة المتجر </p>
+										<p> تعديل بيانات مستخدم في فريق إدارة المتجر </p>
 									</div>
 								</div>
 							</div>
