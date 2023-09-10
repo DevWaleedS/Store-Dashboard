@@ -378,6 +378,7 @@ const AddNewUser = () => {
 													},
 												})}
 											/>
+											
 										</div>
 										<div className='col-lg-2 col-12'></div>
 										<div className='col-lg-9 col-12'>

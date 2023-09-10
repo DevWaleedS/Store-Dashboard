@@ -179,7 +179,7 @@ const EditUserPage = () => {
 	};
 
 	const updateUser = (data) => {
-		setLoadingTitle("جاري تعديل المستخدم"); 
+		setLoadingTitle("جاري تعديل المستخدم");
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("_method", "PUT");
@@ -190,6 +190,7 @@ const EditUserPage = () => {
 		if (data?.password !== "") {
 			formData.append("password", data?.password);
 		}
+
 		formData.append(
 			"phonenumber",
 			data?.phonenumber?.startsWith("+966") ||
@@ -419,23 +420,26 @@ const EditUserPage = () => {
 														onClick={showPasswordToggle}>
 														{showPasswordIcon}
 													</div>
+
 													<input
 														name='password'
-														value={user?.password}
-														onChange={(e) => {
-															handleOnChange(e);
-														}}
 														type={passwordType}
 														id='password'
+														{...register("password", {
+															minLength: {
+																value: 8,
+																message:
+																	"يجب أن يكون طول نص كلمة المرور على الأقل 8 حروفٍ",
+															},
+														})}
 													/>
 												</div>
 												<div className='col-lg-2 col-12'></div>
 												<div className='col-lg-9 col-12'>
-													{userError?.password && (
-														<span className='fs-6 text-danger'>
-															{userError?.password}
-														</span>
-													)}
+													<span className='fs-6 text-danger'>
+														{userError?.password}
+														{errors?.password && errors.password.message}
+													</span>
 												</div>
 											</div>
 											<div className='row mb-lg-4 mb-3'>

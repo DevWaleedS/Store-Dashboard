@@ -387,7 +387,7 @@ const SeoWeight = () => {
 												htmlFor='shortLink'>
 												<span>رابط مختصر</span>
 												<span className='link me-2'>
-													(https://sample.utlopha.com){" "}
+													(https://home.atlbha.com){" "}
 												</span>
 											</label>
 										</div>
@@ -403,7 +403,7 @@ const SeoWeight = () => {
 												htmlFor='normalLink'>
 												<span> رابط باسم الصفحة</span>
 												<span className='link me-2'>
-													(الرئيسية//https://sample.utlopha.com){" "}
+													(الرئيسية/https://home.atlbha.com){" "}
 												</span>
 											</label>
 										</div>
