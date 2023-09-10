@@ -179,7 +179,7 @@ const EditUserPage = () => {
 	};
 
 	const updateUser = (data) => {
-		setLoadingTitle("جاري تعديل المستخدم");
+		setLoadingTitle("جاري تعديل المستخدم"); 
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("_method", "PUT");
@@ -187,7 +187,9 @@ const EditUserPage = () => {
 		formData.append("user_name", data?.user_name);
 		formData.append("role", data?.role);
 		formData.append("email", data?.email);
-
+		if (data?.password !== "") {
+			formData.append("password", data?.password);
+		}
 		formData.append(
 			"phonenumber",
 			data?.phonenumber?.startsWith("+966") ||
