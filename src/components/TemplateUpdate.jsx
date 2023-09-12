@@ -360,7 +360,7 @@ const TemplateUpdate = () => {
 													}}
 													src={
 														fetchedData?.data?.Homepages[0]?.slider1 ||
-														"https://placehold.co/1110x170"
+														"https://placehold.co/1110x440"
 													}
 													alt={fetchedData?.data?.Homepages[0]?.slider1}
 												/>
@@ -613,7 +613,7 @@ const TemplateUpdate = () => {
 													}}
 													src={
 														fetchedData?.data?.Homepages[0]?.banar1 ||
-														"https://placehold.co/1110x440"
+														"https://placehold.co/1110x245"
 													}
 													alt={fetchedData?.data?.Homepages[0]?.banar1}
 												/>
