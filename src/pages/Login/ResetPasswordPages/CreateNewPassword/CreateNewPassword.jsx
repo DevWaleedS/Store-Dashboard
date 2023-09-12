@@ -69,7 +69,12 @@ const CreateNewPassword = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setCookie("access_token", res?.data?.data?.token, { path: "/" });
-
+					if (
+						!resetPasswordToken ||
+						res?.data?.message?.en === "This password reset token is invalid."
+					) {
+						navigate("/RestorePassword");
+					}
 					if (rememberMe) {
 						//Set password and remember_me status from context
 						setUserInfoToUserAuthContext();
@@ -108,7 +113,7 @@ const CreateNewPassword = () => {
 				<div className='box-container-form'>
 					<LogoHeader />
 					<div className='all'>
-						<h2>قم بتسجيل الدخول الى حسابك</h2>
+						<h2>قم بانشاء كلمة مرور جديدة</h2>
 						<div className='box'>
 							<div className='password-field'>
 								{type === "password" ? (
@@ -131,7 +136,7 @@ const CreateNewPassword = () => {
 
 								<h5>كلمة المرور</h5>
 								<input
-									style={{  textAlign: "right" }}
+									style={{ textAlign: "right" }}
 									autoComplete='off'
 									value={password}
 									placeholder='********'
@@ -174,7 +179,7 @@ const CreateNewPassword = () => {
 
 								<h5>تأكيد كلمة المرور</h5>
 								<input
-									style={{  textAlign: "right" }}
+									style={{ textAlign: "right" }}
 									autoComplete='off'
 									value={confirmPassword}
 									placeholder='********'

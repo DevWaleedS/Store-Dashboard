@@ -79,7 +79,20 @@ const SendVerificationCode = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setResetPasswordToken(res?.data?.data?.token);
-					navigate("/CreateNewPassword");
+
+					if (res?.data?.message?.en === "not verified") {
+						setVerError(
+							".لم يتم التحقق! برجاء ادخال الكود بشكل صحيح أو قم باعاة الارسال مره أخري"
+						);
+					} else if (
+						res?.data?.message?.en === "This password reset token is invalid."
+					) {
+						setMessage(res?.data?.message?.ar);
+						navigate("/RestorePassword");
+					} else if (res?.data?.message?.en === "verified") {
+						setMessage(res?.data?.message?.ar);
+						navigate("/CreateNewPassword");
+					}
 				} else {
 					setVerError(res?.data?.message?.en?.code?.[0]);
 				}

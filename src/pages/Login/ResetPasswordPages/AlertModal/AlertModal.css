@@ -32,7 +32,7 @@
 	-moz-border-radius: 8px;
 	-ms-border-radius: 8px;
 	-o-border-radius: 8px;
-	z-index: 10;
+	z-index: 9999;
 	justify-content: center;
 }
 
