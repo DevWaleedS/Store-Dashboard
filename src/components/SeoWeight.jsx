@@ -315,7 +315,7 @@ const SeoWeight = () => {
 										name='index_page_description'
 										value={seoValue?.index_page_description}
 										onChange={HandleSeoValues}
-										placeholder='وصف الصفحة الرئيسية'
+										placeholder='وصف المتجر'
 										onFocus={() => setPageDescFocus(true)}
 										onBlur={() => setPageDescFocus(true)}
 										required
@@ -343,7 +343,7 @@ const SeoWeight = () => {
 												: "d-none"
 										}
 										style={{ color: "red", padding: "10px", fontSize: "1rem" }}>
-										يجب ان يكون وصف الصفحة احرف عربية او انجليزية
+										يجب ان يكون وصف المتجر احرف عربية او انجليزية
 									</p>
 								</div>
 							</div>
@@ -363,7 +363,7 @@ const SeoWeight = () => {
 									</span>
 								</div>
 							</div>
-
+							{/*
 							<div className='col-12 mb-5'>
 								<div className='input-bx'>
 									<FormLabel id='demo-radio-buttons-group-label'>
@@ -387,7 +387,7 @@ const SeoWeight = () => {
 												htmlFor='shortLink'>
 												<span>رابط مختصر</span>
 												<span className='link me-2'>
-													(https://home.atlbha.com){" "}
+													(https://atlbha.com){" "}
 												</span>
 											</label>
 										</div>
@@ -403,7 +403,7 @@ const SeoWeight = () => {
 												htmlFor='normalLink'>
 												<span> رابط باسم الصفحة</span>
 												<span className='link me-2'>
-													(الرئيسية/https://home.atlbha.com){" "}
+													(الرئيسية/https://atlbha.com){" "}
 												</span>
 											</label>
 										</div>
@@ -414,6 +414,7 @@ const SeoWeight = () => {
 									{dataError?.show_pages}
 								</span>
 							</div>
+							*/}
 
 							<div className='col-12 mb-5'>
 								<div className='btn-bx'>

@@ -10,6 +10,7 @@ export { default as Rating } from "./Rating";
 export { default as Report } from "./Report";
 export { default as Support } from "./Support";
 export { default as Template } from "./Template";
+export { default as PaintStore } from "./PaintStore";
 export { default as Customer } from "./Customer";
 export { default as RootLayOut } from "./RootLayout";
 export { default as Coupon } from "./Coupon";

@@ -104,33 +104,33 @@ const TemplateUpdate = () => {
 	};
 
 	// update logo function
-	const updateLogo = () => {
-		setLoadingTitle("جاري تعديل الشعار");
-		let formData = new FormData();
-		if (logo.length !== 0) {
-			formData.append("logo", logo[0]?.file);
-		}
-		axios
-			.post(`https://backend.atlbha.com/api/Store/logoUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Template");
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Template");
-					setReload(!reload);
-				}
-			});
-	};
+	// const updateLogo = () => {
+	// 	setLoadingTitle("جاري تعديل الشعار");
+	// 	let formData = new FormData();
+	// 	if (logo.length !== 0) {
+	// 		formData.append("logo", logo[0]?.file);
+	// 	}
+	// 	axios
+	// 		.post(`https://backend.atlbha.com/api/Store/logoUpdate`, formData, {
+	// 			headers: {
+	// 				"Content-Type": "multipart/form-data",
+	// 				Authorization: `Bearer ${cookies?.access_token}`,
+	// 			},
+	// 		})
+	// 		.then((res) => {
+	// 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
+	// 				setLoadingTitle("");
+	// 				setEndActionTitle(res?.data?.message?.ar);
+	// 				navigate("/Template");
+	// 				setReload(!reload);
+	// 			} else {
+	// 				setLoadingTitle("");
+	// 				setEndActionTitle(res?.data?.message?.ar);
+	// 				navigate("/Template");
+	// 				setReload(!reload);
+	// 			}
+	// 		});
+	// };
 	/** --------------------------------------------------------------------------------- */
 
 	// update banners function
@@ -242,92 +242,6 @@ const TemplateUpdate = () => {
 
 	return (
 		<Fragment>
-			{/** upload logo */}
-			<div className='seo-weight-edit-box template-edit-box mb-4'>
-				<div className='title'>
-					<h4>
-						الشعار{" "}
-						<span>
-							( تستطيع تغيير الشعار الذي يظهر في الهيدر في الصفحة الرئيسية )
-						</span>
-					</h4>
-				</div>
-
-				<FormControl variant='standard' className='py-4'>
-					<div className='row'>
-						<div className='col-12 p-4 '>
-							<div className='input-bx logo-box'>
-								{/** Upload Image  */}
-								<ImageUploading
-									value={logo}
-									onChange={onChange}
-									maxNumber={maxNumber}
-									dataURLKey='data_url'>
-									{({ onImageUpload, dragProps }) => (
-										// Ui For Upload Log
-										<Fragment>
-											{/** Preview Image Box */}
-											<div className='logo-preview-container'>
-												{loading ? (
-													<CircularLoading />
-												) : (
-													<>
-														{!logo[0] && (
-															<img
-																style={{
-																	objectFit: "contain",
-																	borderRadius: "inherit",
-																}}
-																className='w-100 h-100 logo-img-uploaded'
-																src={
-																	fetchedData?.data?.Homepages[0]?.logo ||
-																	LogoSvg
-																}
-																alt={fetchedData?.data?.Homepages[0]?.logo}
-															/>
-														)}
-														{logo[0] && (
-															<img
-																style={{
-																	objectFit: "contain",
-																	borderRadius: "inherit",
-																}}
-																src={logo[0]?.data_url}
-																alt=''
-																className='w-100 h-100 logo-img-uploaded'
-															/>
-														)}
-													</>
-												)}
-											</div>
-
-											{/** upload btn */}
-											<div className='upload-files-input'>
-												<button
-													className=' d-flex justify-content-between align-items-center w-100'
-													onClick={onImageUpload}
-													{...dragProps}>
-													<span> تحديث الشعار </span>
-													<MdFileUpload />
-												</button>
-											</div>
-										</Fragment>
-									)}
-								</ImageUploading>
-							</div>
-						</div>
-
-						<div className='col-12 p-4'>
-							<div className='btn-bx '>
-								<Button onClick={() => updateLogo()} variant='contained'>
-									حفظ
-								</Button>
-							</div>
-						</div>
-					</div>
-				</FormControl>
-			</div>
-
 			{/** upload sliders */}
 			<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 				<div className='title'>
@@ -404,7 +318,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث السلايدر </span>
+															{firstSlider?.[0]?.file ? <span>{firstSlider?.[0]?.file?.name}</span> : <span> تحديث السلايدر </span>}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -464,7 +378,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث السلايدر </span>
+															{secondSlider?.[0]?.file ? <span>{secondSlider?.[0]?.file?.name}</span> : <span> تحديث السلايدر </span>}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -524,7 +438,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث السلايدر </span>
+															{thirdSlider?.[0]?.file ? <span>{thirdSlider?.[0]?.file?.name}</span> : <span> تحديث السلايدر </span>}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -657,7 +571,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث البانر </span>
+															{firstBanner?.[0]?.file ? <span>{firstBanner?.[0]?.file?.name}</span> : <span> تحديث البانر </span>}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -717,7 +631,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث البانر </span>
+															{secondBanner?.[0]?.file ? <span>{secondBanner?.[0]?.file?.name}</span> : <span> تحديث البانر </span>}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -777,7 +691,7 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> تحديث البانر </span>
+															{thirdBanner?.[0]?.file ? <span>{thirdBanner?.[0]?.file?.name}</span> : <span> تحديث البانر </span>}
 															<MdFileUpload />
 														</button>
 													</div>

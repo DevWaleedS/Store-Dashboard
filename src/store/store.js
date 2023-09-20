@@ -22,6 +22,7 @@ import CommentsTableDataSlice from "./slices/CommentsTable-slice";
 import jobTitleDataSlice from "./slices/jobTitle-slice";
 import AddNewProductSlice from "./slices/AddNewProduct-slice";
 import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
+import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
 import DelegateRequestAlert from "./slices/DelegateRequestAlert-slice";
 import DelegateTableDataSlice from "./slices/DelagateTable-slice";
 import AddActivity from "./slices/AddActivity";
@@ -61,6 +62,7 @@ export const store = configureStore({
 		jobTitleData: jobTitleDataSlice,
 		AddNewProduct: AddNewProductSlice,
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
+		VerifyAfterMainModal:VerifyStoreAlertAfterMainModalSlice,
 		DelegateRequestAlert: DelegateRequestAlert,
 		DelegateTable: DelegateTableDataSlice,
 		AddActivity: AddActivity,

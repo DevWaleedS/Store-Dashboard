@@ -12,6 +12,8 @@ import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
 import { useCookies } from "react-cookie";
 import { LoadingContext } from "../Context/LoadingProvider";
+import { openVerifyAfterMainModal } from "../store/slices/VerifyStoreAlertAfterMainModal-slice";
+import { useDispatch } from "react-redux";
 
 // import ImageUploading library
 import ImageUploading from "react-images-uploading";
@@ -107,6 +109,7 @@ const MainInformation = () => {
 	const [domainNameFocus, setDomainNameFocus] = useState(false);
 	const [domainNameValidFocus, setDomainNameValidFocus] = useState(false);
 	const [validDomainName, setValidDomainName] = useState(false);
+	const dispatchVerifyAfterMainAlert = useDispatch(false);
 
 	// ---------------------------------------------------------------
 	const [defaultStoreLogo, setDefaultStoreLogo] = useState(DemoImage);
@@ -145,13 +148,13 @@ const MainInformation = () => {
 			setDomain([fetchedData?.data?.setting_store?.domain]);
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);
-			setStoreEmail(fetchedData?.data?.setting_store?.store_email);
+			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
 			setPhoneNumber(
-				fetchedData?.data?.setting_store?.phonenumber?.startsWith("+966")
-					? fetchedData?.data?.setting_store?.phonenumber.slice(4)
-					: fetchedData?.data?.setting_store?.phonenumber?.startsWith("00966")
-					? fetchedData?.data?.setting_store?.phonenumber.slice(5)
-					: fetchedData?.data?.setting_store?.phonenumber
+				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
+					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("00966")
+						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+						: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description);
 
@@ -252,9 +255,13 @@ const MainInformation = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
-					window.location.reload();
+					if(res?.data?.data?.storeSetting?.verification_status === "لم يتم الطلب"){
+						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
+					}else{
+						setEndActionTitle(res?.data?.message?.ar);
+						window.location.reload();
+					}
 				} else {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
@@ -419,7 +426,7 @@ const MainInformation = () => {
 									"& .MuiSwitch-switchBase": {
 										padding: "0px !important",
 										top: "0px !important",
-										left:"0px !important",
+										left: "0px !important",
 										"&.Mui-checked": {
 											transform: "translateX(12px) !important",
 											color: "#fff",
@@ -945,7 +952,6 @@ const MainInformation = () => {
 													value={`${countryAddress} -  ${cityAddress}`}
 													onChange={() => console.log("test")}
 													rows='3'
-													onResize='false'
 												/>
 											</div>
 										</div>
@@ -967,15 +973,18 @@ const MainInformation = () => {
 											<label
 												htmlFor='store_email'
 												className='setting_label d-block'>
-												البريد الالكتروني للمتجر
+												البريد الالكتروني
+												<span style={{ color:'red',fontSize:'14px',whiteSpace:'pre-line' }}> (اذا كنت ترغب في تريد تعديل البريد الالكتروني يرجى التواصل مع الدعم) </span>
 											</label>
 											<input
 												className='direction-ltr text-right store-email-input w-100'
 												name='store_email'
 												id='store_email'
-												placeholder='البريد الالكتروني للمتجر'
+												placeholder='البريد الالكتروني'
 												value={storeEmail}
 												onChange={(e) => setStoreEmail(e.target.value)}
+												disabled={true}
+												readOnly
 											/>
 										</div>
 										{settingErr?.storeEmail && (
@@ -996,7 +1005,8 @@ const MainInformation = () => {
 											<label
 												htmlFor='phonenumber'
 												className='setting_label d-block'>
-												رقم هاتف المتجر
+												رقم الهاتف 
+												<span style={{ color:'red',fontSize:'14px',whiteSpace:'pre-line' }}> (اذا كنت ترغب في تريد تعديل رقم الهاتف يرجى التواصل مع الدعم) </span>
 											</label>
 
 											<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -1005,7 +1015,7 @@ const MainInformation = () => {
 													className='direction-ltr text-right store-email-input w-100'
 													name='phonenumber'
 													id='phonenumber'
-													placeholder='رقم هاتف المتجر'
+													placeholder='رقم الهاتف'
 													value={phoneNumber}
 													onChange={(e) => setPhoneNumber(e.target.value)}
 													maxLength='9'
@@ -1014,6 +1024,8 @@ const MainInformation = () => {
 													aria-describedby='phoneNumber'
 													onFocus={() => setPhoneNumberFocus(true)}
 													onBlur={() => setPhoneNumberFocus(true)}
+													disabled={true}
+													readOnly
 												/>
 											</div>
 										</div>
@@ -1055,7 +1067,8 @@ const MainInformation = () => {
 												className='form-control store-desc'
 												placeholder='وصف المتجر'
 												rows='3'
-												onResize='false'></textarea>
+											>
+											</textarea>
 										</div>
 										{settingErr?.description && (
 											<span className='fs-6 w-100 text-danger'>

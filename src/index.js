@@ -52,6 +52,7 @@ import {
 	PlatformServices,
 	EvaluationThePlatform,
 	PostalSubscriptions,
+	PaintStore
 } from "./pages";
 // ---------------------------------------------------------------------------------------//
 
@@ -373,6 +374,10 @@ const router = createBrowserRouter([
 			{
 				path: "Template",
 				element: <Template />,
+			},
+			{
+				path: "PaintStore",
+				element: <PaintStore />,
 			},
 			{
 				path: "Report",

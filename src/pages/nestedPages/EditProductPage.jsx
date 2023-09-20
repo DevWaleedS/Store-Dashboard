@@ -9,6 +9,10 @@ import { useCookies } from "react-cookie";
 
 // import Dropzone Library
 import { useDropzone } from "react-dropzone";
+import { TagsInput } from "react-tag-input-component";
+import { useForm, Controller } from "react-hook-form";
+import { LoadingContext } from "../../Context/LoadingProvider";
+import ImageUploading from "react-images-uploading";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -22,9 +26,11 @@ import { Button } from "@mui/material";
 
 // icons and images
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { IoIosArrowDown } from "react-icons/io";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import { IoIosArrowDown,IoIosAddCircle } from "react-icons/io";
+import { BsPlayCircle } from "react-icons/bs";
+import { TiDeleteOutline } from "react-icons/ti";
+import CloseIcon from "@mui/icons-material/Close";
+
 
 const style = {
 	position: "fixed",
@@ -70,8 +76,22 @@ const EditProductPage = () => {
 		discount_price: "",
 		subcategory_id: [],
 		stock: "",
-		SEOdescription: "",
 	});
+	// to get multi images
+	const [multiImages, setMultiImages] = useState([]);
+	const emptyMultiImages = [];
+	for (let index = 0; index < 5 - multiImages.length; index++) {
+		emptyMultiImages.push(index);
+	}
+
+	const onChangeMultiImages = (imageList, addUpdateIndex) => {
+		setMultiImages(imageList);
+	};
+	const [SEOdescription, setSEOdescription] = useState([]);
+	const [url, setUrl] = useState("");
+	const closeVideoModal = () => {
+		setUrl("");
+	};
 	const {
 		register,
 		handleSubmit,
@@ -87,7 +107,6 @@ const EditProductPage = () => {
 			category_id: "",
 			discount_price: "",
 			stock: "",
-			SEOdescription: "",
 		},
 	});
 
@@ -104,8 +123,9 @@ const EditProductPage = () => {
 					(sub) => sub?.id
 				),
 				stock: fetchedData?.data?.product?.stock,
-				SEOdescription: fetchedData?.data?.product?.SEOdescription,
 			});
+			setSEOdescription(fetchedData?.data?.product?.SEOdescription.map((seo) => seo));
+			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
 		}
 	}, [fetchedData?.data?.product]);
 
@@ -124,6 +144,7 @@ const EditProductPage = () => {
 		subcategory_id: "",
 		stock: "",
 		SEOdescription: "",
+		images:[],
 	});
 
 	const resetCouponError = () => {
@@ -137,6 +158,7 @@ const EditProductPage = () => {
 			subcategory_id: "",
 			stock: "",
 			SEOdescription: "",
+			images:[],
 		});
 	};
 
@@ -206,12 +228,17 @@ const EditProductPage = () => {
 		formData.append("category_id", data?.category_id);
 		formData.append("discount_price", data?.discount_price || 0);
 		formData.append("stock", data?.stock);
-		formData.append("SEOdescription", data?.SEOdescription);
+		formData.append("SEOdescription", SEOdescription.join(","));
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
 		}
 		if (icon?.length !== 0) {
 			formData.append("cover", icon[0] || null);
+		}
+		if (multiImages.length !== 0) {
+			for (let i = 0; i < multiImages?.length; i++) {
+				formData.append([`images[${i}]`], multiImages[i]?.file || multiImages[i]?.image);
+			}
 		}
 		axios
 			.post(
@@ -239,13 +266,30 @@ const EditProductPage = () => {
 						selling_price: res?.data?.message?.en?.selling_price?.[0],
 						category_id: res?.data?.message?.en?.category_id?.[0],
 						discount_price: res?.data?.message?.en?.discount_price?.[0],
-
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
+						images:res?.data?.message?.en?.['images.0']?.[0],
 					});
 				}
 			});
+	};
+
+	const videoModal = () => {
+		return (
+			<>
+				<div
+					onClick={closeVideoModal}
+					className="video-modal"></div>
+				<div
+					className='video-url-content'>
+					<CloseIcon
+						onClick={closeVideoModal}
+					/>
+					<video src={url} controls />
+				</div>
+			</>
+		);
 	};
 
 	return (
@@ -253,6 +297,7 @@ const EditProductPage = () => {
 			<Helmet>
 				<title>لوحة تحكم أطلبها | تعديل منتج</title>
 			</Helmet>
+			{url !== "" && videoModal()}
 			<div className='add-category-form' open={true}>
 				<Modal
 					open={true}
@@ -274,63 +319,9 @@ const EditProductPage = () => {
 								<CircularLoading />
 							) : (
 								<form
-									className='form-h-full'
+									className='form-h-full add-new-product-form'
 									onSubmit={handleSubmit(updateProduct)}>
 									<div className='form-body'>
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='product-image'>
-													{" "}
-													صورة المنتج<span className='text-danger'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<div {...getRootProps()}>
-													<div className='add-image-btn-box '>
-														<UploadIcon />
-														<div className='add-image-btn'>
-															<label htmlFor='add-image'>
-																{" "}
-																اسحب الصورة هنا
-															</label>
-															<input
-																{...getInputProps()}
-																id='add-image'
-																disabled={
-																	fetchedData?.data?.is_import ? true : false
-																}
-															/>
-														</div>
-														<span>( سيتم قبول الصور jpeg & png )</span>
-													</div>
-												</div>
-
-												{/** preview banner here */}
-
-												<div className=' banners-preview-container'>
-													{bannersImage.length > 0 && (
-														<div className=' banners-preview-container'>
-															{bannersImage}
-														</div>
-													)}
-
-													<img
-														className='w-100 h-100'
-														src={fetchedData?.data?.product?.cover}
-														alt={fetchedData?.data?.product?.name}
-													/>
-												</div>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												{productError?.cover && (
-													<span className='fs-6 text-danger'>
-														{productError?.cover}
-													</span>
-												)}
-											</div>
-										</div>
-
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-name'>
@@ -367,7 +358,7 @@ const EditProductPage = () => {
 												<textarea
 													name='description'
 													id='product-desc'
-													placeholder='  قم بكتابه واضح للمنتج'
+													placeholder='قم بكتابة وصف واضح للمنتج'
 													{...register("description", {
 														required: "حقل الوصف مطلوب",
 													})}></textarea>
@@ -400,9 +391,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																	{
+																		paddingRight: "20px",
+																	},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -486,7 +477,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-													subcategory[0]?.subcategory?.length === 0 ? (
+														subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -496,9 +487,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -538,7 +529,7 @@ const EditProductPage = () => {
 																	</MenuItem>
 																)
 															)}
-															<div className='select-btn d-flex justify-content-center' style={{ minHeight:"56px" }}>
+															<div className='select-btn d-flex justify-content-center' style={{ minHeight: "56px" }}>
 																<Button
 																	className='button'
 																	onClick={(e) => {
@@ -703,16 +694,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-													product?.selling_price === ""
+														product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -732,17 +723,188 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='product-image'>
+													{" "}
+													صورة المنتج<span className='text-danger'>*</span>
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<div {...getRootProps()}>
+													<div className='add-image-btn-box '>
+														<UploadIcon />
+														<div className='add-image-btn'>
+															<label htmlFor='add-image'>
+																{" "}
+																اسحب الصورة هنا
+															</label>
+															<input
+																{...getInputProps()}
+																id='add-image'
+																disabled={
+																	fetchedData?.data?.is_import ? true : false
+																}
+															/>
+														</div>
+														<span>( سيتم قبول الصور jpeg & png )</span>
+													</div>
+												</div>
 
+												{/** preview banner here */}
+
+												<div className=' banners-preview-container'>
+													{bannersImage.length > 0 && (
+														<div className=' banners-preview-container'>
+															{bannersImage}
+														</div>
+													)}
+
+													<img
+														className='w-100 h-100'
+														src={fetchedData?.data?.product?.cover}
+														alt={fetchedData?.data?.product?.name}
+													/>
+												</div>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												{productError?.cover && (
+													<span className='fs-6 text-danger'>
+														{productError?.cover}
+													</span>
+												)}
+											</div>
+										</div>
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='product-images'>
+													الصور المتعددة او الفيديو
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<ImageUploading
+													value={multiImages}
+													onChange={onChangeMultiImages}
+													multiple
+													maxNumber={5}
+													dataURLKey='data_url'
+													acceptType={[
+														"jpg",
+														"png",
+														"jpeg",
+														"svg",
+														"gif",
+														"mp4",
+														"avi",
+														"mov",
+														"mkv",
+													]}
+													allowNonImageType={true}>
+													{({
+														imageList,
+														onImageUpload,
+														onImageRemoveAll,
+														onImageUpdate,
+														onImageRemove,
+														isDragging,
+														dragProps,
+													}) => (
+														// write your building UI
+														<div className='d-flex flex-row align-items-center gap-4'>
+															{imageList?.map((image, index) => {
+																const isVideo = image?.data_url?.includes(
+																	"video/mp4" ||
+																	"video/avi" ||
+																	"video/mov" ||
+																	"video/mkv"
+																);
+																if (isVideo) {
+																	return (
+																		<div
+																			key={index}
+																			className='add-product-images'>
+																			<video
+																				src={image.data_url || image?.image}
+																				poster={image.data_url || image?.image}
+																			/>
+
+																			<BsPlayCircle
+																				onClick={() => setUrl(image.data_url || image?.image)}
+																				className='play-video'
+																			/>
+
+																			<div className='delete-video-icon'>
+																				<TiDeleteOutline
+																					onClick={() => onImageRemove(index)}
+																					style={{
+																						fontSize: "1.2rem",
+																						color: "red",
+																					}}
+																				/>
+																			</div>
+																		</div>
+																	);
+																} else {
+																	return (
+																		<div
+																			key={index}
+																			className='add-product-images'>
+																			<img
+																				src={image.data_url || image?.image}
+																				alt='img'
+																			/>
+																			<div
+																				onClick={() => onImageRemove(index)}
+																				className='delete-icon'>
+																				<TiDeleteOutline
+																					style={{
+																						fontSize: "1.5rem",
+																						color: "red",
+																					}}></TiDeleteOutline>
+																			</div>
+																		</div>
+																	);
+																}
+															})}
+															{emptyMultiImages.map((image, idx) => {
+																return (
+																	<div
+																		key={idx}
+																		className='add-product-images'
+																		onClick={() => {
+																			onImageUpload();
+																		}}
+																	>
+																		<IoIosAddCircle className='add-icon' />
+																	</div>
+																);
+															})}
+														</div>
+													)}
+												</ImageUploading>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												{productError?.images && (
+													<span className='fs-6 text-danger'>
+														{productError?.images}
+													</span>
+												)}
+											</div>
+										</div>
 										<div className='row mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='seo'> وصف محركات البحث SEO </label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												<textarea
+												<TagsInput
+													classNames={'d-flex flex-row'}
+													value={SEOdescription}
+													onChange={setSEOdescription}
 													name='SEOdescription'
-													id='SEOdescription'
-													placeholder='يرجى كتابة وصف دقيق للمنتج حتى يمكنك استخدامه في عملية الترويج للمنتج'
-													{...register("SEOdescription", {})}></textarea>
+													placeHolder='وصف دقيق للمنتج'
+												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>

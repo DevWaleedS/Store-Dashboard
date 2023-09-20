@@ -15,7 +15,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 	const navigate = useNavigate();
 	return (
 		<div className='academy-widget'>
-			<div className='row h-100'>
+			<div className='row h-100 flex-grow-1'>
 				{/** video-preview */}
 				<div className='col-md-3 col-4'>
 					<div className='video-preview'>
