@@ -245,14 +245,9 @@ const AddNewProduct = () => {
 	const videoModal = () => {
 		return (
 			<>
-				<div
-					onClick={closeVideoModal}
-					className="video-modal"></div>
-				<div
-					className='video-url-content'>
-					<CloseIcon
-						onClick={closeVideoModal}
-					/>
+				<div onClick={closeVideoModal} className='video-modal'></div>
+				<div className='video-url-content'>
+					<CloseIcon onClick={closeVideoModal} />
 					<video src={url} controls />
 				</div>
 			</>
@@ -368,9 +363,9 @@ const AddNewProduct = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -438,7 +433,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-													subcategory[0]?.subcategory.length === 0 ? (
+												subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{ color: "#1dbbbe" }}>
@@ -449,9 +444,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+																{
+																	paddingRight: "20px",
+																},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -500,7 +495,9 @@ const AddNewProduct = () => {
 																<ListItemText primary={sub?.name} />
 															</MenuItem>
 														))}
-														<div className='select-btn d-flex justify-content-center' style={{ minHeight: "56px" }}>
+														<div
+															className='select-btn d-flex justify-content-center'
+															style={{ minHeight: "56px" }}>
 															<Button
 																className='button'
 																onClick={(e) => {
@@ -658,10 +655,10 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 										)}
 
@@ -760,9 +757,9 @@ const AddNewProduct = () => {
 														{imageList.map((image, index) => {
 															const isVideo = image?.data_url?.includes(
 																"video/mp4" ||
-																"video/avi" ||
-																"video/mov" ||
-																"video/mkv"
+																	"video/avi" ||
+																	"video/mov" ||
+																	"video/mkv"
 															);
 															if (isVideo) {
 																return (
@@ -795,10 +792,7 @@ const AddNewProduct = () => {
 																	<div
 																		key={index}
 																		className='add-product-images'>
-																		<img
-																			src={image.data_url}
-																			alt='img'
-																		/>
+																		<img src={image.data_url} alt='img' />
 																		<div
 																			onClick={() => onImageRemove(index)}
 																			className='delete-icon'>
@@ -819,8 +813,7 @@ const AddNewProduct = () => {
 																	className='add-product-images'
 																	onClick={() => {
 																		onImageUpload();
-																	}}
-																>
+																	}}>
 																	<IoIosAddCircle className='add-icon' />
 																</div>
 															);
@@ -841,15 +834,15 @@ const AddNewProduct = () => {
 
 									<div className='row mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='seo'> وصف محركات البحث SEO </label>
+											<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
 										</div>
-										<div className="col-lg-7 col-md-9 col-12">
+										<div className='col-lg-7 col-md-9 col-12'>
 											<TagsInput
-												classNames={'d-flex flex-row'}
+												classNames={"d-flex flex-row"}
 												value={SEOdescription}
 												onChange={setSEOdescription}
 												name='SEOdescription'
-												placeHolder='وصف دقيق للمنتج'
+												placeHolder=' اضافه كلمات مفتاحيه للمنتج '
 											/>
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>

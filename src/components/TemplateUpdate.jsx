@@ -269,13 +269,9 @@ const TemplateUpdate = () => {
 													style={{
 														borderRadius: "inherit",
 														width: "100%",
-														height: "100%",
 														maxWidth: "100%",
 													}}
-													src={
-														fetchedData?.data?.Homepages[0]?.slider1 ||
-														"https://placehold.co/1110x440"
-													}
+													src={"https://placehold.co/1110x440"}
 													alt={fetchedData?.data?.Homepages[0]?.slider1}
 												/>
 											)}
@@ -284,7 +280,7 @@ const TemplateUpdate = () => {
 													style={{
 														borderRadius: "inherit",
 														width: "100%",
-														height: "100%",
+
 														maxWidth: "100%",
 													}}
 													src={previewSlider[0]?.data_url}
@@ -318,7 +314,11 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															{firstSlider?.[0]?.file ? <span>{firstSlider?.[0]?.file?.name}</span> : <span> تحديث السلايدر </span>}
+															{firstSlider?.[0]?.file ? (
+																<span>{firstSlider?.[0]?.file?.name}</span>
+															) : (
+																<span> تحديث السلايدر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -378,7 +378,11 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															{secondSlider?.[0]?.file ? <span>{secondSlider?.[0]?.file?.name}</span> : <span> تحديث السلايدر </span>}
+															{secondSlider?.[0]?.file ? (
+																<span>{secondSlider?.[0]?.file?.name}</span>
+															) : (
+																<span> تحديث السلايدر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -438,7 +442,11 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															{thirdSlider?.[0]?.file ? <span>{thirdSlider?.[0]?.file?.name}</span> : <span> تحديث السلايدر </span>}
+															{thirdSlider?.[0]?.file ? (
+																<span>{thirdSlider?.[0]?.file?.name}</span>
+															) : (
+																<span> تحديث السلايدر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -522,13 +530,9 @@ const TemplateUpdate = () => {
 													style={{
 														borderRadius: "inherit",
 														width: "100%",
-														height: "100%",
 														maxWidth: "100%",
 													}}
-													src={
-														fetchedData?.data?.Homepages[0]?.banar1 ||
-														"https://placehold.co/1110x245"
-													}
+													src={"https://placehold.co/1110x440?text=1110 x 245"}
 													alt={fetchedData?.data?.Homepages[0]?.banar1}
 												/>
 											)}
@@ -537,7 +541,6 @@ const TemplateUpdate = () => {
 													style={{
 														borderRadius: "inherit",
 														width: "100%",
-														height: "100%",
 														maxWidth: "100%",
 													}}
 													src={previewBanner[0]?.data_url}
@@ -571,7 +574,11 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															{firstBanner?.[0]?.file ? <span>{firstBanner?.[0]?.file?.name}</span> : <span> تحديث البانر </span>}
+															{firstBanner?.[0]?.file ? (
+																<span>{firstBanner?.[0]?.file?.name}</span>
+															) : (
+																<span> تحديث البانر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -631,7 +638,11 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															{secondBanner?.[0]?.file ? <span>{secondBanner?.[0]?.file?.name}</span> : <span> تحديث البانر </span>}
+															{secondBanner?.[0]?.file ? (
+																<span>{secondBanner?.[0]?.file?.name}</span>
+															) : (
+																<span> تحديث البانر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -691,7 +702,11 @@ const TemplateUpdate = () => {
 															className=' d-flex justify-content-between align-items-center w-100'
 															onClick={onImageUpload}
 															{...dragProps}>
-															{thirdBanner?.[0]?.file ? <span>{thirdBanner?.[0]?.file?.name}</span> : <span> تحديث البانر </span>}
+															{thirdBanner?.[0]?.file ? (
+																<span>{thirdBanner?.[0]?.file?.name}</span>
+															) : (
+																<span> تحديث البانر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>

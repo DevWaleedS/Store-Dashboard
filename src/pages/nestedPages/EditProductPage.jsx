@@ -26,11 +26,10 @@ import { Button } from "@mui/material";
 
 // icons and images
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { IoIosArrowDown,IoIosAddCircle } from "react-icons/io";
+import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { BsPlayCircle } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 import CloseIcon from "@mui/icons-material/Close";
-
 
 const style = {
 	position: "fixed",
@@ -124,7 +123,9 @@ const EditProductPage = () => {
 				),
 				stock: fetchedData?.data?.product?.stock,
 			});
-			setSEOdescription(fetchedData?.data?.product?.SEOdescription.map((seo) => seo));
+			setSEOdescription(
+				fetchedData?.data?.product?.SEOdescription.map((seo) => seo)
+			);
 			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
 		}
 	}, [fetchedData?.data?.product]);
@@ -144,7 +145,7 @@ const EditProductPage = () => {
 		subcategory_id: "",
 		stock: "",
 		SEOdescription: "",
-		images:[],
+		images: [],
 	});
 
 	const resetCouponError = () => {
@@ -158,7 +159,7 @@ const EditProductPage = () => {
 			subcategory_id: "",
 			stock: "",
 			SEOdescription: "",
-			images:[],
+			images: [],
 		});
 	};
 
@@ -237,7 +238,10 @@ const EditProductPage = () => {
 		}
 		if (multiImages.length !== 0) {
 			for (let i = 0; i < multiImages?.length; i++) {
-				formData.append([`images[${i}]`], multiImages[i]?.file || multiImages[i]?.image);
+				formData.append(
+					[`images[${i}]`],
+					multiImages[i]?.file || multiImages[i]?.image
+				);
 			}
 		}
 		axios
@@ -269,7 +273,7 @@ const EditProductPage = () => {
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
-						images:res?.data?.message?.en?.['images.0']?.[0],
+						images: res?.data?.message?.en?.["images.0"]?.[0],
 					});
 				}
 			});
@@ -278,14 +282,9 @@ const EditProductPage = () => {
 	const videoModal = () => {
 		return (
 			<>
-				<div
-					onClick={closeVideoModal}
-					className="video-modal"></div>
-				<div
-					className='video-url-content'>
-					<CloseIcon
-						onClick={closeVideoModal}
-					/>
+				<div onClick={closeVideoModal} className='video-modal'></div>
+				<div className='video-url-content'>
+					<CloseIcon onClick={closeVideoModal} />
 					<video src={url} controls />
 				</div>
 			</>
@@ -391,9 +390,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																		{
+																			paddingRight: "20px",
+																		},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -477,7 +476,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-														subcategory[0]?.subcategory?.length === 0 ? (
+													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -487,9 +486,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -529,7 +528,9 @@ const EditProductPage = () => {
 																	</MenuItem>
 																)
 															)}
-															<div className='select-btn d-flex justify-content-center' style={{ minHeight: "56px" }}>
+															<div
+																className='select-btn d-flex justify-content-center'
+																style={{ minHeight: "56px" }}>
 																<Button
 																	className='button'
 																	onClick={(e) => {
@@ -694,16 +695,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-														product?.selling_price === ""
+													product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -815,9 +816,9 @@ const EditProductPage = () => {
 															{imageList?.map((image, index) => {
 																const isVideo = image?.data_url?.includes(
 																	"video/mp4" ||
-																	"video/avi" ||
-																	"video/mov" ||
-																	"video/mkv"
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
 																);
 																if (isVideo) {
 																	return (
@@ -830,7 +831,9 @@ const EditProductPage = () => {
 																			/>
 
 																			<BsPlayCircle
-																				onClick={() => setUrl(image.data_url || image?.image)}
+																				onClick={() =>
+																					setUrl(image.data_url || image?.image)
+																				}
 																				className='play-video'
 																			/>
 
@@ -874,8 +877,7 @@ const EditProductPage = () => {
 																		className='add-product-images'
 																		onClick={() => {
 																			onImageUpload();
-																		}}
-																	>
+																		}}>
 																		<IoIosAddCircle className='add-icon' />
 																	</div>
 																);
@@ -895,15 +897,15 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='seo'> وصف محركات البحث SEO </label>
+												<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<TagsInput
-													classNames={'d-flex flex-row'}
+													classNames={"d-flex flex-row"}
 													value={SEOdescription}
 													onChange={setSEOdescription}
 													name='SEOdescription'
-													placeHolder='وصف دقيق للمنتج'
+													placeHolder=' اضافه كلمات مفتاحيه للمنتج '
 												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
