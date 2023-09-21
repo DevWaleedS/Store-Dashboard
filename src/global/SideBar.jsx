@@ -19,6 +19,8 @@ import { ReactComponent as PagesIcon } from "../data/Icons/icon-24-pages.svg";
 import { ReactComponent as Academy } from "../data/Icons/icon-24-graduatioin.svg";
 import { ReactComponent as BranchesAndWarehouses } from "../data/Icons/icon-24-Company Branch.svg";
 import { ReactComponent as Template } from "../data/Icons/icon-24-template.svg";
+import { ReactComponent as Layout } from "../data/Icons/layout.svg";
+import { ReactComponent as Paint } from "../data/Icons/Paint.svg";
 import { ReactComponent as Info } from "../data/Icons/icon-24-info.svg";
 import { ReactComponent as Social } from "../data/Icons/icon-24-social.svg";
 import { ReactComponent as Support } from "../data/Icons/icon-24-support.svg";
@@ -226,15 +228,26 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> الأكاديمية</span>
 					</MenuItem>
 				</NavLink>
-				<NavLink
-					className='menu-link'
-					to='Template'
-					onClick={() => closeSidebar()}>
-					<MenuItem>
-						<Template />
-						<span className='me-2'> القالب</span>
-					</MenuItem>
-				</NavLink>
+				<SubMenu label='القالب' icon={<Template />} as='li'>
+					<NavLink
+						className='sub-menu-link'
+						to='Template'
+						onClick={() => closeSidebar()}>
+						<MenuItem>
+							<Layout />
+							<span className='me-2'>تنسيق القالب</span>
+						</MenuItem>
+					</NavLink>
+					<NavLink
+						className='sub-menu-link'
+						to='PaintStore'
+						onClick={() => closeSidebar()}>
+						<MenuItem>
+							<Paint />
+							<span className='me-2'>هوية المتجر</span>
+						</MenuItem>
+					</NavLink>
+				</SubMenu>
 				{/** Store Sub menu */}
 				<SubMenu label='بيانات المتجر' icon={<Info />} as='li'>
 					<Link

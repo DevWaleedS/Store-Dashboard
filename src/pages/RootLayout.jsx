@@ -15,6 +15,7 @@ import SideBar from "../global/SideBar";
 
 import VerifyStoreModal from "../components/VerifyStoreModal";
 import VerifayStoreAlert from "../components/VerifayStoreAlert";
+import VerifayStoreAfterMainInfoAlert from "../components/VerifayStoreAlertAfterMainInfo";
 import MaintenanceMode from "./MaintenanceMode";
 import CelebrityMarketingModal from "./CelebrityMarketingModal";
 import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
@@ -45,6 +46,9 @@ const RootLayout = () => {
 	);
 	const { isVerifyStoreAlertOpen } = useSelector(
 		(state) => state.VerifyStoreAlertModal
+	);
+	const { isVerifyAfterMainOpen } = useSelector(
+		(state) => state.VerifyAfterMainModal
 	);
 	const { isOpenCelebrityMarketingModal } = useSelector(
 		(state) => state.CelebrityMarketingModal
@@ -90,6 +94,7 @@ const RootLayout = () => {
 						{isOpenMaintenanceModeModal && <MaintenanceMode></MaintenanceMode>}
 						{isOpenVerifyModal && <VerifyStoreModal></VerifyStoreModal>}
 						{isVerifyStoreAlertOpen && <VerifayStoreAlert></VerifayStoreAlert>}
+						{isVerifyAfterMainOpen && <VerifayStoreAfterMainInfoAlert></VerifayStoreAfterMainInfoAlert>}
 						{isOpenCelebrityMarketingModal && (
 							<CelebrityMarketingModal></CelebrityMarketingModal>
 						)}

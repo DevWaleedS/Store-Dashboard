@@ -4,7 +4,7 @@ import "./LogoHeader.css";
 
 const LogoHeader = () => {
 	const NavigateToHomePage = () => {
-		window.open("http://home.atlbha.com", "_blank");
+		window.open("http://atlbha.com", "_blank");
 	};
 	return (
 		<>

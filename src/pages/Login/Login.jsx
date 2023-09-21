@@ -59,7 +59,7 @@ const Login = () => {
 	};
 
 	const NavigateToRegisterPage = () => {
-		window.location.href = "http://home.atlbha.com/register/merchant";
+		window.location.href = "http://atlbha.com/register/merchant";
 	};
 
 	//Set username, password and remember_me status from context

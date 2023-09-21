@@ -32,6 +32,7 @@ export { default as ProductBox } from "./ProductBox";
 export { default as SendReplayModal } from "./SendReplayModal";
 export { default as SendSupportReplayModal } from "./SendSupportReplayModal";
 export { default as VerifayStoreAlert } from "./VerifayStoreAlert";
+export { default as VerifayAfterMainInfoAlert } from "./VerifayStoreAlertAfterMainInfo";
 export { default as Plans } from "./Plans";
 export { default as PayPalFormWeight } from "./PayPalFormWeight";
 export { default as MadaFormWeight } from "./MadaFormWeight";
