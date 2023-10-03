@@ -21,9 +21,15 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { Button } from "@mui/material";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import TextareaCode from "../../components/TextareaCode/TextareaCode";
 
 // icons and images
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
+import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
+import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
+import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
+import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
+import { ReactComponent as FileIcon } from "../../data/Icons/upload file.svg";
 import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { BsPlayCircle } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -93,6 +99,10 @@ const AddNewProduct = () => {
 		subcategory_id: [],
 	});
 	const [SEOdescription, setSEOdescription] = useState([]);
+	const [instagram, setInstagram] = useState("");
+	const [snapchat, setSnapchat] = useState("");
+	const [twitter, setTwitter] = useState("");
+	const [tiktok, setTiktok] = useState("");
 	const [url, setUrl] = useState("");
 	const closeVideoModal = () => {
 		setUrl("");
@@ -119,6 +129,10 @@ const AddNewProduct = () => {
 		stock: "",
 		SEOdescription: "",
 		images: "",
+		snappixel: "",
+		twitterpixel: "",
+		tiktokpixel: "",
+		instapixel: "",
 	});
 
 	const resetCouponError = () => {
@@ -133,6 +147,10 @@ const AddNewProduct = () => {
 			stock: "",
 			SEOdescription: "",
 			images: "",
+			snappixel: "",
+			twitterpixel: "",
+			tiktokpixel: "",
+			instapixel: "",
 		});
 	};
 
@@ -201,6 +219,10 @@ const AddNewProduct = () => {
 		formData.append("discount_price", data?.discount_price);
 		formData.append("stock", data?.stock);
 		formData.append("SEOdescription", SEOdescription.join(","));
+		formData.append("snappixel", snapchat);
+		formData.append("twitterpixel", twitter);
+		formData.append("tiktokpixel", tiktok);
+		formData.append("instapixel", instagram);
 		formData.append("cover", icons[0]);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
@@ -237,6 +259,10 @@ const AddNewProduct = () => {
 						stock: res?.data?.message?.en?.stock?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
 						images: res?.data?.message?.en?.images?.[0],
+						snappixel: res?.data?.message?.en?.snappixel?.[0],
+						twitterpixel: res?.data?.message?.en?.twitterpixel?.[0],
+						tiktokpixel: res?.data?.message?.en?.tiktokpixel?.[0],
+						instapixel: res?.data?.message?.en?.instapixel?.[0],
 					});
 				}
 			});
@@ -253,6 +279,7 @@ const AddNewProduct = () => {
 			</>
 		);
 	};
+
 
 	return (
 		<>
@@ -363,9 +390,9 @@ const AddNewProduct = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -433,7 +460,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-												subcategory[0]?.subcategory.length === 0 ? (
+													subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{ color: "#1dbbbe" }}>
@@ -444,9 +471,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+															{
+																paddingRight: "20px",
+															},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -565,7 +592,6 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
-
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
@@ -655,10 +681,10 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 										)}
 
@@ -681,7 +707,6 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
-
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-image'>
@@ -717,7 +742,6 @@ const AddNewProduct = () => {
 											)}
 										</div>
 									</div>
-
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-images'>
@@ -757,9 +781,9 @@ const AddNewProduct = () => {
 														{imageList.map((image, index) => {
 															const isVideo = image?.data_url?.includes(
 																"video/mp4" ||
-																	"video/avi" ||
-																	"video/mov" ||
-																	"video/mkv"
+																"video/avi" ||
+																"video/mov" ||
+																"video/mkv"
 															);
 															if (isVideo) {
 																return (
@@ -831,8 +855,7 @@ const AddNewProduct = () => {
 											)}
 										</div>
 									</div>
-
-									<div className='row mb-3'>
+									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
 										</div>
@@ -851,6 +874,82 @@ const AddNewProduct = () => {
 												{productError?.SEOdescription}
 												{errors?.SEOdescription &&
 													errors.SEOdescription.message}
+											</span>
+										</div>
+									</div>
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label>
+												<SnapchatIcon className="ms-2" />
+												سناب بكسل
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className="input-pixel">
+												<TextareaCode value={snapchat} setValue={setSnapchat} placeholder="Snapchat Pixel Code" />
+											</div>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.snappixel}
+											</span>
+										</div>
+									</div>
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label>
+												<TiktokIcon className="ms-2" />
+												تيك توك بكسل
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className="input-pixel">
+												<TextareaCode value={tiktok} setValue={setTiktok} placeholder="Tiktok Pixel Code" />
+											</div>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.tiktokpixel}
+											</span>
+										</div>
+									</div>
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label>
+												<TwitterIcon className="ms-2" />
+												تويتر بكسل
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className="input-pixel">
+												<TextareaCode value={twitter} setValue={setTwitter} placeholder="Twitter Pixel Code" />
+											</div>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.twitterpixel}
+											</span>
+										</div>
+									</div>
+									<div className='row mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label>
+												<InstagramIcon className="ms-2" />
+												انستقرام بكسل
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className="input-pixel">
+												<TextareaCode value={instagram} setValue={setInstagram} placeholder="Instagram Pixel Code" />
+											</div>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.instapixel}
 											</span>
 										</div>
 									</div>
