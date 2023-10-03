@@ -10094,7 +10094,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.seo-store-page .data-container .social-media-inputs{
 		flex-direction: column;
 		align-items: stretch;
-		gap: 1rem;
+		gap: 0.5rem;
 	}
 }
 

@@ -34,7 +34,7 @@ const PaintStore = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [updateLinkValue, setUpdateLinkValue] = useState("");
-	const [metaTags, setMetaTags] = useState("");
+	// const [metaTags, setMetaTags] = useState("");
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
@@ -45,7 +45,7 @@ const PaintStore = () => {
 
 	const [dataError, setDataError] = useState({
 		updateLinkValue: "",
-		metaTags: "",
+		// metaTags: "",
 		keyWord: "",
 		snapchat: "",
 		twitter: "",
@@ -56,7 +56,7 @@ const PaintStore = () => {
 	const resetDataError = () => {
 		setDataError({
 			updateLinkValue: "",
-			metaTags: "",
+			// metaTags: "",
 			keyWord: "",
 			snapchat: "",
 			twitter: "",
@@ -67,7 +67,7 @@ const PaintStore = () => {
 
 	useEffect(() => {
 		setUpdateLinkValue(fetchedData?.data?.Seo?.[0]?.google_analytics);
-		setMetaTags(fetchedData?.data?.Seo?.[0]?.metatags || "");
+		// setMetaTags(fetchedData?.data?.Seo?.[0]?.metatags || "");
 		setSnapchat(fetchedData?.data?.Seo?.[0]?.snappixel || "");
 		setTwitter(fetchedData?.data?.Seo?.[0]?.twitterpixel || "");
 		setTiktok(fetchedData?.data?.Seo?.[0]?.tiktokpixel || "");
@@ -86,7 +86,7 @@ const PaintStore = () => {
 		setLoadingTitle("جاري تعديل تحسينات الSEO");
 		let formData = new FormData();
 		formData.append("google_analytics", updateLinkValue);
-		formData.append("metatags", metaTags);
+		// formData.append("metatags", metaTags);
 		formData.append("snappixel", snapchat);
 		formData.append("twitterpixel", twitter);
 		formData.append("tiktokpixel", tiktok);
@@ -110,7 +110,7 @@ const PaintStore = () => {
 					setDataError({
 						...dataError,
 						updateLinkValue: res?.data?.message?.en?.google_analytics?.[0],
-						metaTags: res?.data?.message?.en?.metatags?.[0],
+						// metaTags: res?.data?.message?.en?.metatags?.[0],
 						snapchat: res?.data?.message?.en?.snappixel?.[0],
 						twitter: res?.data?.message?.en?.twitterpixel?.[0],
 						tiktok: res?.data?.message?.en?.tiktokpixel?.[0],
@@ -181,18 +181,6 @@ const PaintStore = () => {
 									يجب ان يكون الرابط Valid URL
 								</p>
 								{dataError?.updateLinkValue && <span className="wrong-text">{dataError?.updateLinkValue}</span>}
-							</div>
-							<div className="inputs-group">
-								<div className="label">
-									<UploadFileIcon />
-									<label>Meta tags</label>
-								</div>
-								<div className="file-input-content">
-									<div className="file-wrapper">
-										<TextareaCode value={metaTags} setValue={setMetaTags} placeholder="Meta tags Codes ..." />
-									</div>
-								</div>
-								{dataError?.metaTags && <span className="wrong-text">{dataError?.metaTags}</span>}
 							</div>
 							<div className="inputs-group">
 								<div className="label">
