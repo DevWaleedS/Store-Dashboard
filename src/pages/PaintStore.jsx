@@ -14,14 +14,11 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 
 // import images
 import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as SearchIcon } from '../data/Icons/icon_24_search.svg';
 import { ReactComponent as Category } from '../data/Icons/icon-24-Category.svg';
 import { ReactComponent as Menuu } from '../data/Icons/menuu.svg';
 import { ReactComponent as Background } from '../data/Icons/background.svg';
 import { ReactComponent as Icons } from '../data/Icons/icons.svg';
 import { ReactComponent as Caaard } from '../data/Icons/caaard.svg';
-import { ReactComponent as Filter } from '../data/Icons/icon-24-filter.svg';
-import { ReactComponent as Buttons } from '../data/Icons/button.svg';
 import { ReactComponent as Footer } from '../data/Icons/footer.svg';
 import { ReactComponent as Border } from '../data/Icons/border.svg';
 import { ReactComponent as Border01 } from '../data/Icons/border01.svg';
@@ -40,28 +37,11 @@ const PaintStore = () => {
 		setExpanded(isExpanded ? panel : false);
 	};
 
-	const [search, setSearch] = useState({
-		searchBorder: "#e5e5e5",
-		searchBg: "#ffffff",
-	});
-	const [categoriesBg, setCategoriesBg] = useState("#02466a");
-	const [menuBg, setMenuBg] = useState("#1dbbbe");
+	const [primaryBg, setPrimaryBg] = useState("#e5e5e5");
+	const [secondaryBg, setSecondaryBg] = useState("#02466a");
+	const [headerBg, setHeaderBg] = useState("#1dbbbe");
 	const [layoutBg, setLayoutBg] = useState("#ffffff");
 	const [iconsBg, setIconsBg] = useState("#1dbbbe");
-	const [product, setProduct] = useState({
-		productBorder: "#ededed",
-		productBg: "#ffffff",
-	});
-	const [filters, setFilters] = useState({
-		filtersBorder: "#f0f0f0",
-		filtersBg: "#ffffff",
-	});
-	const [buttons, setButtons] = useState({
-		mainButtonBg: "#1dbbbe",
-		mainButtonBorder: "#1dbbbe",
-		subButtonBg: "#02466a",
-		subButtonBorder: "#02466a",
-	})
 	const [footer, setFooter] = useState({
 		footerBorder: "#ebebeb",
 		footerBg: "#ffffff",
@@ -69,25 +49,21 @@ const PaintStore = () => {
 
 	useEffect(() => {
 		if (fetchedData?.data?.Theme) {
-			setSearch({ ...search, searchBorder: fetchedData?.data?.Theme?.searchBorder, searchBg: fetchedData?.data?.Theme?.searchBg });
-			setCategoriesBg(fetchedData?.data?.Theme?.categoriesBg);
-			setMenuBg(fetchedData?.data?.Theme?.menuBg);
+			setPrimaryBg(fetchedData?.data?.Theme?.primaryBg);
+			setSecondaryBg(fetchedData?.data?.Theme?.secondaryBg);
+			setHeaderBg(fetchedData?.data?.Theme?.headerBg);
 			setLayoutBg(fetchedData?.data?.Theme?.layoutBg);
 			setIconsBg(fetchedData?.data?.Theme?.iconsBg);
-			setProduct({ ...search, productBorder: fetchedData?.data?.Theme?.productBorder, productBg: fetchedData?.data?.Theme?.productBg });
-			setFilters({ ...search, filtersBorder: fetchedData?.data?.Theme?.filtersBorder, filtersBg: fetchedData?.data?.Theme?.filtersBg });
-			setButtons({ ...search, mainButtonBg: fetchedData?.data?.Theme?.mainButtonBg, mainButtonBorder: fetchedData?.data?.Theme?.mainButtonBorder, subButtonBorder: fetchedData?.data?.Theme?.subButtonBorder, subButtonBg: fetchedData?.data?.Theme?.subButtonBg });
 			setFooter({ ...footer, footerBorder: fetchedData?.data?.Theme?.footerBorder, footerBg: fetchedData?.data?.Theme?.footerBg });
 		}
 	}, [fetchedData?.data?.Theme]);
 
-	const handleSearchUpdate = () => {
-		setLoadingTitle("جاري تعديل مربع البحث");
+	const handlePrimaryUpdate = () => {
+		setLoadingTitle("جاري تعديل اللون الأساسي");
 		let formData = new FormData();
-		formData.append("searchBorder", search?.searchBorder);
-		formData.append("searchBg", search?.searchBg);
+		formData.append("primaryBg", primaryBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeSearchUpdate`, formData, {
+			.post(`https://backend.atlbha.com/api/Store/themePrimaryUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies?.access_token}`,
@@ -104,12 +80,12 @@ const PaintStore = () => {
 			});
 	};
 
-	const handleCategoriesUpdate = () => {
-		setLoadingTitle("جاري تعديل التصنيفات");
+	const handleSecondaryUpdate = () => {
+		setLoadingTitle("جاري تعديل اللون الفرعي");
 		let formData = new FormData();
-		formData.append("categoriesBg", categoriesBg);
+		formData.append("secondaryBg", secondaryBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeCategoriesUpdate`, formData, {
+			.post(`https://backend.atlbha.com/api/Store/themeSecondaryUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies?.access_token}`,
@@ -126,12 +102,12 @@ const PaintStore = () => {
 			});
 	};
 
-	const handleMenuUpdate = () => {
-		setLoadingTitle("جاري تعديل القائمة العلوية");
+	const handleHeaderUpdate = () => {
+		setLoadingTitle(" (الهيدر) جاري تعديل القائمة العلوية");
 		let formData = new FormData();
-		formData.append("menuBg", menuBg);
+		formData.append("headerBg", headerBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeMenuUpdate`, formData, {
+			.post(`https://backend.atlbha.com/api/Store/themeHeaderUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies?.access_token}`,
@@ -192,77 +168,6 @@ const PaintStore = () => {
 			});
 	};
 
-	const handleProductUpdate = () => {
-		setLoadingTitle("جاري تعديل مربع المنتج");
-		let formData = new FormData();
-		formData.append("productBorder", product?.productBorder);
-		formData.append("productBg", product?.productBg);
-		axios
-			.post(`https://backend.atlbha.com/api/Store/themeProductUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-				}
-			});
-	};
-
-	const handleFiltersUpdate = () => {
-		setLoadingTitle("جاري تعديل الفرز والفلترة");
-		let formData = new FormData();
-		formData.append("filtersBorder", filters?.filtersBorder);
-		formData.append("filtersBg", filters?.filtersBg);
-		axios
-			.post(`https://backend.atlbha.com/api/Store/themeFilterUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-				}
-			});
-	};
-
-	const handleButtonsUpdate = () => {
-		setLoadingTitle("جاري تعديل الأزرار");
-		let formData = new FormData();
-		formData.append("mainButtonBorder", buttons?.mainButtonBorder);
-		formData.append("mainButtonBg", buttons?.mainButtonBg);
-		formData.append("subButtonBorder", buttons?.subButtonBorder);
-		formData.append("subButtonBg", buttons?.subButtonBg);
-		axios
-			.post(`https://backend.atlbha.com/api/Store/themeMainUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-				}
-			});
-	};
-
 	const handleFooterUpdate = () => {
 		setLoadingTitle("جاري تعديل القائمة السفلية ");
 		let formData = new FormData();
@@ -285,6 +190,30 @@ const PaintStore = () => {
 				}
 			});
 	};
+
+	const resetPrimaryColor = ()=>{
+		setPrimaryBg("#1dbbbe");
+	}
+
+	const resetSecondaryColor = ()=>{
+		setSecondaryBg("#02466a");
+	}
+
+	const resetHeaderColor = ()=>{
+		setHeaderBg("#1dbbbe");
+	}
+
+	const resetLayoutColor = ()=>{
+		setLayoutBg("#ffffff");
+	}
+
+	const resetIconsColor = ()=>{
+		setIconsBg("#1dbbbe");
+	}
+
+	const resetFooterColor = ()=>{
+		setFooter({ ...footer, footerBorder: "#ebebeb", footerBg: "#ffffff" });
+	}
 
 	const ClickIcon = ({fill}) => {
 		return (
@@ -336,38 +265,26 @@ const PaintStore = () => {
 									aria-controls="panel1bh-content"
 									id="panel1bh-header"
 								>
-									<SearchIcon className="icon" />
-									<h6>مربع البحث</h6>
-									<p>(يمكنك تغيير لون مربع البحث الموجود في أعلى الصفحة)</p>
+									<Caaard />
+									<h6>اللون الأساسي</h6>
+									<p>(يمكنك تغيير اللون الأساسي للقالب)</p>
 								</AccordionSummary>
 								<AccordionDetails>
-									<div className="content mb-4">
-										<div className="text">
-											<Border />
-											<span>لون الإطار</span>
-										</div>
-										<label htmlFor="search-border" className="picker" style={{ borderColor: search.searchBorder ? search.searchBorder : '#000000' }}>
-											<label htmlFor="search-border-picker">
-												<ClickIcon fill={search.searchBorder ? search.searchBorder !== '#ffffff' ? search.searchBorder : '#000000' : '#000000'}/>
-												<input id="search-border-picker" type="color" value={search.searchBorder} onChange={(e) => setSearch({ ...search, searchBorder: e.target.value })} />
-											</label>
-											<input style={{ color: search.searchBorder ? search.searchBorder !== '#ffffff' ? search.searchBorder : '#000000' : '#000000' }} id="search-border" type="text" value={search.searchBorder} onChange={(e) => setSearch({ ...search, searchBorder: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-										</label>
-									</div>
 									<div className="content mb-2">
 										<div className="text">
-											<Border01 />
-											<span>لون المربع</span>
+											<Caaard />
+											<span>اللون الأساسي</span>
 										</div>
-										<label htmlFor="search-bg" className="picker-bg" style={{ backgroundColor: search.searchBg, borderColor: search.searchBg ? search.searchBg : '#000000' }}>
-											<label htmlFor="search-bg-picker">
-												<ClickIcon fill={search.searchBg ? search.searchBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="search-bg-picker" type="color" value={search.searchBg} onChange={(e) => setSearch({ ...search, searchBg: e.target.value })} />
+										<label htmlFor="primary-bg" className="picker-bg" style={{ backgroundColor: primaryBg, borderColor: primaryBg ? primaryBg : '#000000' }}>
+											<label htmlFor="primary-bg-picker">
+												<ClickIcon fill={primaryBg ? primaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
+												<input id="primary-bg-picker" type="color" value={primaryBg} onChange={(e) => setPrimaryBg(e.target.value)} />
 											</label>
-											<input style={{ color: search.searchBg ? search.searchBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="search-bg" type="text" value={search.searchBg} onChange={(e) => setSearch({ ...search, searchBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
+											<input style={{ color: primaryBg ? primaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="primary-bg" type="text" value={primaryBg} onChange={(e) => setPrimaryBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) )} />
 										</label>
 									</div>
-									<button type="button" onClick={handleSearchUpdate}>حـفـظ</button>
+									<button className="reset" type="button" onClick={resetPrimaryColor}>اعادة اللون الإفتراضي</button>
+									<button type="button" onClick={handlePrimaryUpdate}>حـفـظ</button>
 								</AccordionDetails>
 							</Accordion>
 							<Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
@@ -377,24 +294,25 @@ const PaintStore = () => {
 									id="panel2bh-header"
 								>
 									<Category />
-									<h6>مربع التصنيفات</h6>
-									<p>(يمكنك تغيير لون مربع التصنيفات الموجود في أعلى الصفحة)</p>
+									<h6>اللون الفرعي</h6>
+									<p>(يمكنك تغيير اللون الفرعي للقالب)</p>
 								</AccordionSummary>
 								<AccordionDetails>
 									<div className="content mb-2">
 										<div className="text">
 											<Category />
-											<span>لون مربع التصنيفات</span>
+											<span>اللون الفرعي</span>
 										</div>
-										<label htmlFor="categories-bg" className="picker-bg" style={{ backgroundColor: categoriesBg, borderColor: categoriesBg ? categoriesBg : '#000000' }}>
-											<label htmlFor="categories-bg-picker">
-												<ClickIcon fill={categoriesBg ? categoriesBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="categories-bg-picker" type="color" value={categoriesBg} onChange={(e) => setCategoriesBg(e.target.value)} />
+										<label htmlFor="secondary-bg" className="picker-bg" style={{ backgroundColor: secondaryBg, borderColor: secondaryBg ? secondaryBg : '#000000' }}>
+											<label htmlFor="secondary-bg-picker">
+												<ClickIcon fill={secondaryBg ? secondaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
+												<input id="secondary-bg-picker" type="color" value={secondaryBg} onChange={(e) => setSecondaryBg(e.target.value)} />
 											</label>
-											<input style={{ color: categoriesBg ? categoriesBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="categories-bg" type="text" value={categoriesBg} onChange={(e) => setCategoriesBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
+											<input style={{ color: secondaryBg ? secondaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="secondary-bg" type="text" value={secondaryBg} onChange={(e) => setSecondaryBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
 										</label>
 									</div>
-									<button type="button" onClick={handleCategoriesUpdate}>حـفـظ</button>
+									<button className="reset" type="button" onClick={resetSecondaryColor}>اعادة اللون الإفتراضي</button>
+									<button type="button" onClick={handleSecondaryUpdate}>حـفـظ</button>
 								</AccordionDetails>
 							</Accordion>
 							<Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
@@ -404,24 +322,25 @@ const PaintStore = () => {
 									id="panel3bh-header"
 								>
 									<Menuu />
-									<h6>القائمة العلوية</h6>
-									<p>(يمكنك تغيير لون خلفية القائمة العلوية التي يوجد بها أسماء صفحات متجرك)</p>
+									<h6>خلفية الهيدر</h6>
+									<p>(يمكنك تغيير لون خلفية الهيدر أو القائمة العلوية التي يوجد بها أسماء صفحات متجرك)</p>
 								</AccordionSummary>
 								<AccordionDetails>
 									<div className="content mb-2">
 										<div className="text">
 											<Menuu />
-											<span>لون مربع القائمة العلوية</span>
+											<span>لون القائمة العلوية</span>
 										</div>
-										<label htmlFor="menu-bg" className="picker-bg" style={{ backgroundColor: menuBg, borderColor: menuBg ? menuBg : '#000000' }}>
+										<label htmlFor="menu-bg" className="picker-bg" style={{ backgroundColor: headerBg, borderColor: headerBg ? headerBg : '#000000' }}>
 											<label htmlFor="menu-bg-picker">
-											<ClickIcon fill={menuBg ? menuBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="menu-bg-picker" type="color" value={menuBg} onChange={(e) => setMenuBg(e.target.value)} />
+											<ClickIcon fill={headerBg ? headerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
+												<input id="menu-bg-picker" type="color" value={headerBg} onChange={(e) => setHeaderBg(e.target.value)} />
 											</label>
-											<input style={{ color: menuBg ? menuBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="menu-bg" type="text" value={menuBg} onChange={(e) => setMenuBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
+											<input style={{ color: headerBg ? headerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="menu-bg" type="text" value={headerBg} onChange={(e) => setHeaderBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
 										</label>
 									</div>
-									<button type="button" onClick={handleMenuUpdate}>حـفـظ</button>
+									<button className="reset" type="button" onClick={resetHeaderColor}>اعادة اللون الإفتراضي</button>
+									<button type="button" onClick={handleHeaderUpdate}>حـفـظ</button>
 								</AccordionDetails>
 							</Accordion>
 							<Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
@@ -448,6 +367,7 @@ const PaintStore = () => {
 											<input style={{ color: layoutBg ? layoutBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="layout-bg" type="text" value={layoutBg} onChange={(e) => setLayoutBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
 										</label>
 									</div>
+									<button className="reset" type="button" onClick={resetLayoutColor}>اعادة اللون الإفتراضي</button>
 									<button type="button" onClick={handleLayotUpdate}>حـفـظ</button>
 								</AccordionDetails>
 							</Accordion>
@@ -475,6 +395,7 @@ const PaintStore = () => {
 											<input style={{ color: iconsBg ? iconsBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="icons-bg" type="text" value={iconsBg} onChange={(e) => setIconsBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
 										</label>
 									</div>
+									<button className="reset" type="button" onClick={resetIconsColor}>اعادة اللون الإفتراضي</button>
 									<button type="button" onClick={handleIconUpdate}>حـفـظ</button>
 								</AccordionDetails>
 							</Accordion>
@@ -483,160 +404,6 @@ const PaintStore = () => {
 									expandIcon={<ExpandMoreIcon />}
 									aria-controls="panel6bh-content"
 									id="panel6bh-header"
-								>
-									<Caaard />
-									<h6>مربع المنتج</h6>
-									<p>(يمكنك تغيير لون مربع المنتجات في متجرك)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-4">
-										<div className="text">
-											<Border />
-											<span>لون الإطار</span>
-										</div>
-										<label htmlFor="product-border" className="picker" style={{ borderColor: product.productBorder ? product.productBorder : '#000000' }}>
-											<label htmlFor="product-border-picker">
-											<ClickIcon fill={product.productBorder ? product.productBorder !== '#ffffff' ? product.productBorder : '#000000' : '#000000'}/>
-												<input id="product-border-picker" type="color" value={product.productBorder} onChange={(e) => setProduct({ ...product, productBorder: e.target.value })} />
-											</label>
-											<input style={{ color: product.productBorder ? product.productBorder !== '#ffffff' ? product.productBorder : '#000000' : '#000000' }} id="product-border" type="text" value={product.productBorder} onChange={(e) => setProduct({ ...product, productBorder: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-										</label>
-									</div>
-									<div className="content mb-2">
-										<div className="text">
-											<Border01 />
-											<span>لون المربع</span>
-										</div>
-										<label htmlFor="product-bg" className="picker-bg" style={{ backgroundColor: product.productBg, borderColor: product.productBg ? product.productBg : '#000000' }}>
-											<label htmlFor="product-bg-picker">
-											<ClickIcon fill={product.productBg ? product.productBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="product-bg-picker" type="color" value={product.productBg} onChange={(e) => setProduct({ ...product, productBg: e.target.value })} />
-											</label>
-											<input style={{ color: product.productBg ? product.productBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="product-bg" type="text" value={product.productBg} onChange={(e) => setProduct({ ...product, productBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-										</label>
-									</div>
-									<button type="button" onClick={handleProductUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel7'} onChange={handleChange('panel7')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel7bh-content"
-									id="panel7bh-header"
-								>
-									<Filter className="icon" />
-									<h6>الفرز والفلترة</h6>
-									<p>(يمكنك تغيير لون القائمة الجانبية الخاصة بالفرز والفلترة)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-4">
-										<div className="text">
-											<Border />
-											<span>لون الإطار</span>
-										</div>
-										<label htmlFor="filter-border" className="picker" style={{ borderColor: filters.filtersBorder ? filters.filtersBorder : '#000000' }}>
-											<label htmlFor="filter-border-picker">
-											<ClickIcon fill={filters.filtersBorder ? filters.filtersBorder !== '#ffffff' ? filters.filtersBorder : '#000000' : '#000000'}/>
-												<input id="filter-border-picker" type="color" value={filters.filtersBorder} onChange={(e) => setFilters({ ...filters, filtersBorder: e.target.value })} />
-											</label>
-											<input style={{ color: filters.filtersBorder ? filters.filtersBorder !== '#ffffff' ? filters.filtersBorder : '#000000' : '#000000' }} id="filter-border" type="text" value={filters.filtersBorder} onChange={(e) => setFilters({ ...filters, filtersBorder: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-										</label>
-									</div>
-									<div className="content mb-2">
-										<div className="text">
-											<Border01 />
-											<span>لون المربع</span>
-										</div>
-										<label htmlFor="filter-bg" className="picker-bg" style={{ backgroundColor: filters.filtersBg, borderColor: filters.filtersBg ? filters.filtersBg : '#000000' }}>
-											<label htmlFor="filter-bg-picker">
-											<ClickIcon fill={filters.filtersBg ? filters.filtersBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="filter-bg-picker" type="color" value={filters.filtersBg} onChange={(e) => setFilters({ ...filters, filtersBg: e.target.value })} />
-											</label>
-											<input style={{ color: filters.filtersBg ? filters.filtersBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="filter-bg" type="text" value={filters.filtersBg} onChange={(e) => setFilters({ ...filters, filtersBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-										</label>
-									</div>
-									<button type="button" onClick={handleFiltersUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel8'} onChange={handleChange('panel8')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel8bh-content"
-									id="panel8bh-header"
-								>
-									<Buttons />
-									<h6>الأزرار</h6>
-									<p>(يمكنك تغيير لون الأزرار الرئيسية والثانوية)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="d-flex flex-row align-items-center gap-3 flex-wrap">
-										<div className="buttons">
-											<h6>الأزرار الرئيسية</h6>
-											<div className="content mb-4">
-												<div className="text">
-													<Border />
-													<span>لون الإطار</span>
-												</div>
-												<label htmlFor="filter-border" className="picker" style={{ borderColor: buttons.mainButtonBorder ? buttons.mainButtonBorder : '#000000' }}>
-													<label htmlFor="filter-border-picker">
-													<ClickIcon fill={buttons.mainButtonBorder ? buttons.mainButtonBorder !== '#ffffff' ? buttons.mainButtonBorder : '#000000' : '#000000'}/>
-														<input id="filter-border-picker" type="color" value={buttons.mainButtonBorder} onChange={(e) => setButtons({ ...buttons, mainButtonBorder: e.target.value })} />
-													</label>
-													<input style={{ color: buttons.mainButtonBorder ? buttons.mainButtonBorder !== '#ffffff' ? buttons.mainButtonBorder : '#000000' : '#000000' }} id="filter-border" type="text" value={buttons.mainButtonBorder} onChange={(e) => setButtons({ ...buttons, mainButtonBorder: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-												</label>
-											</div>
-											<div className="content mb-4">
-												<div className="text">
-													<Border01 />
-													<span>لون المربع</span>
-												</div>
-												<label htmlFor="filter-bg" className="picker-bg" style={{ backgroundColor: buttons.mainButtonBg, borderColor: buttons.mainButtonBg ? buttons.mainButtonBg : '#000000' }}>
-													<label htmlFor="filter-bg-picker">
-													<ClickIcon fill={buttons.mainButtonBg ? buttons.mainButtonBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-														<input id="filter-bg-picker" type="color" value={buttons.mainButtonBg} onChange={(e) => setButtons({ ...buttons, mainButtonBg: e.target.value })} />
-													</label>
-													<input style={{ color: buttons.mainButtonBg ? buttons.mainButtonBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="filter-bg" type="text" value={buttons.mainButtonBg} onChange={(e) => setButtons({ ...buttons, mainButtonBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-												</label>
-											</div>
-										</div>
-										<div className="buttons">
-											<h6>الأزرار الثانوية</h6>
-											<div className="content mb-4">
-												<div className="text">
-													<Border />
-													<span>لون الإطار</span>
-												</div>
-												<label htmlFor="filter-border" className="picker" style={{ borderColor: buttons.subButtonBorder ? buttons.subButtonBorder : '#000000' }}>
-													<label htmlFor="filter-border-picker">
-													<ClickIcon fill={buttons.subButtonBorder ? buttons.subButtonBorder !== '#ffffff' ? buttons.subButtonBorder : '#000000' : '#000000'}/>
-														<input id="filter-border-picker" type="color" value={buttons.subButtonBorder} onChange={(e) => setButtons({ ...buttons, subButtonBorder: e.target.value })} />
-													</label>
-													<input style={{ color: buttons.subButtonBorder ? buttons.subButtonBorder !== '#ffffff' ? buttons.subButtonBorder : '#000000' : '#000000' }} id="filter-border" type="text" value={buttons.subButtonBorder} onChange={(e) => setButtons({ ...buttons, subButtonBorder: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-												</label>
-											</div>
-											<div className="content mb-4">
-												<div className="text">
-													<Border01 />
-													<span>لون المربع</span>
-												</div>
-												<label htmlFor="filter-bg" className="picker-bg" style={{ backgroundColor: buttons.subButtonBg, borderColor: buttons.subButtonBg ? buttons.subButtonBg : '#000000' }}>
-													<label htmlFor="filter-bg-picker">
-													<ClickIcon fill={buttons.subButtonBg ? buttons.subButtonBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-														<input id="filter-bg-picker" type="color" value={buttons.subButtonBg} onChange={(e) => setButtons({ ...buttons, subButtonBg: e.target.value })} />
-													</label>
-													<input style={{ color: buttons.subButtonBg ? buttons.subButtonBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="filter-bg" type="text" value={buttons.subButtonBg} onChange={(e) => setButtons({ ...buttons, subButtonBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
-												</label>
-											</div>
-										</div>
-									</div>
-									<button type="button" onClick={handleButtonsUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel9'} onChange={handleChange('panel9')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel9bh-content"
-									id="panel9bh-header"
 								>
 									<Footer />
 									<h6>القائمة السفلية Footer</h6>
@@ -669,6 +436,7 @@ const PaintStore = () => {
 											<input style={{ color: footer.footerBg ? footer.footerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="footer-bg" type="text" value={footer.footerBg} onChange={(e) => setFooter({ ...footer, footerBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
 										</label>
 									</div>
+									<button className="reset" type="button" onClick={resetFooterColor}>اعادة اللون الإفتراضي</button>
 									<button type="button" onClick={handleFooterUpdate}>حـفـظ</button>
 								</AccordionDetails>
 							</Accordion>
