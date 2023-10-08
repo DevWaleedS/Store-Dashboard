@@ -281,7 +281,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-category'>
 													{" "}
-													التصنيف الرئيسي
+													النشاط أو التصنيف الرئيسي
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
@@ -301,7 +301,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='sub-category'>
 													{" "}
-													التصنيفات الفرعية{" "}
+													النشاطات أو التصنيفات الفرعية{" "}
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>

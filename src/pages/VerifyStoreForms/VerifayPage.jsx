@@ -11,6 +11,7 @@ import useFetch from "../../Hooks/UseFetch";
 import { useDispatch, useSelector } from "react-redux";
 import { openVerifyStoreAlertModal } from "../../store/slices/VerifyStoreAlertModal-slice";
 import { resetActivity } from "../../store/slices/AddActivity";
+import { resetSubActivity } from "../../store/slices/AddSubActivity";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -55,11 +56,13 @@ const VerifayPage = forwardRef((props, ref) => {
 	);
 
 	const { fetchedData: activities } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/activities"
+		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
+	
 	const { fetchedData: cities } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
+	
 	const [cookies] = useCookies(["access_token"]);
 
 	// to open verifay alert
@@ -69,9 +72,21 @@ const VerifayPage = forwardRef((props, ref) => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const { activity } = useSelector((state) => state.AddActivity);
+	const { subActivities } = useSelector((state) => state.AddSubActivity);
 
-	const selectedActivity = activities?.data?.activities?.filter((item) => {
+	const selectedActivity = activities?.data?.categories?.filter((item) => {
 		return activity?.some((ele) => {
+			return ele === item?.id;
+		});
+	});
+
+	const queryParams = selectedActivity?.map((sub) => `category_id[]=${sub?.id}`).join("&");
+	const { fetchedData: subActivitiesList } = useFetch(
+		`https://backend.atlbha.com/api/Store/selector/subcategories?${queryParams}`
+	);
+
+	const selectedSubActivities = subActivitiesList?.data?.categories?.filter((item) => {
+		return subActivities?.some((ele) => {
 			return ele === item?.id;
 		});
 	});
@@ -110,6 +125,7 @@ const VerifayPage = forwardRef((props, ref) => {
 			link: "",
 		});
 	};
+
 	// to set radio input
 	const [
 		openCommercialRegisterInputGroup,
@@ -193,6 +209,9 @@ const VerifayPage = forwardRef((props, ref) => {
 		for (let i = 0; i < activity?.length; i++) {
 			formData.append([`activity_id[${i}]`], activity[i]);
 		}
+		for (let i = 0; i < subActivities?.length; i++) {
+			formData.append([`subcategory_id[${i}]`], subActivities[i]);
+		}
 		axios
 			.post(
 				`https://backend.atlbha.com/api/Store/verification_update`,
@@ -211,6 +230,7 @@ const VerifayPage = forwardRef((props, ref) => {
 					setReload(!reload);
 					navigate("/");
 					dispatch(resetActivity());
+					dispatch(resetSubActivity());
 				} else {
 					setLoadingTitle("");
 					setDataErrors({
@@ -247,9 +267,9 @@ const VerifayPage = forwardRef((props, ref) => {
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
 						<div className='col-4 d-flex '>
-							<h5 className='label'>نوع النشاط</h5>
+							<h5 className='label'>نوع النشاط أو التصنيف الرئيسي</h5>
 						</div>
-						<div className='col-8 d-flex justify-content-start flex-wrap'>
+						<div className='col-8 d-flex justify-content-start flex-wrap gap-2'>
 							{selectedActivity?.map((activity, index) => (
 								<div
 									key={index}
@@ -261,12 +281,38 @@ const VerifayPage = forwardRef((props, ref) => {
 										height: "40px",
 										width: "max-content",
 										padding: "0 16px",
-										maxWidth: "120px",
+										maxWidth: "fit-content",
 										display: "flex",
 										justifyContent: "center",
 										alignItems: "center",
 									}}>
 									{activity?.name}
+								</div>
+							))}
+						</div>
+					</div>
+					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
+						<div className='col-4 d-flex '>
+							<h5 className='label'>نوع النشاط أو التصنيف الفرعي</h5>
+						</div>
+						<div className='col-8 d-flex justify-content-start flex-wrap gap-2'>
+							{selectedSubActivities?.map((sub, index) => (
+								<div
+									key={index}
+									style={{
+										backgroundColor: "#bfc3c5",
+										borderRadius: "18px",
+										fontSize: "16px",
+										fontWeight: "400",
+										height: "40px",
+										width: "max-content",
+										padding: "0 16px",
+										maxWidth: "fit-content",
+										display: "flex",
+										justifyContent: "center",
+										alignItems: "center",
+									}}>
+									{sub?.name}
 								</div>
 							))}
 						</div>

@@ -105,7 +105,7 @@ const FilterOperations = ({ showFilteringOptions }) => {
 					<label
 						className='d-block mb-1'
 						style={{ fontSize: "18px", fontWight: 500 }}>
-						التصنيف الرئيسي
+						النشاط أو التصنيف الرئيسي
 					</label>
 					<Select
 						sx={selectCategoriesStyles}
@@ -159,7 +159,7 @@ const FilterOperations = ({ showFilteringOptions }) => {
 					<label
 						className='d-block mb-1'
 						style={{ fontSize: "18px", fontWight: 500 }}>
-						التصنيف الفرعي
+						النشاط أو التصنيف الفرعي
 					</label>
 					<Select
 						open={openSubCategory}

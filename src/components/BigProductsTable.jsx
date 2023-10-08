@@ -67,7 +67,7 @@ function EnhancedTableHead(props) {
 					اسم المنتج
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					التصنيف
+					النشاط أو التصنيف
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					السعر

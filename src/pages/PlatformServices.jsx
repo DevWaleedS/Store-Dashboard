@@ -168,7 +168,7 @@ const PlatformServices = () => {
 							<div className='row align-items-center mb-md-4 mb-3'>
 								<div className='col-md-4 col-12 d-flex justify-content-md-center mb-md-0 mb-2'>
 									<label htmlFor='store-activity'>
-										نشاط المتجر
+										نشاط أو تصنيف المتجر
 										<span>(تلقائي)</span>
 									</label>
 								</div>

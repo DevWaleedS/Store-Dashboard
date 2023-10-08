@@ -46,7 +46,7 @@ const ProductsTableData = ({ productsDetails }) => {
 											width: "195px",
 											textAlign: "center",
 										}}>
-										التصنيف
+										النشاط أو التصنيف
 									</th>
 									<th scope='col' className=' text-center'>
 										السعر

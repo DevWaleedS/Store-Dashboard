@@ -362,7 +362,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-category'>
 												{" "}
-												التصنيف الرئيسي<span className='text-danger'>
+												النشاط أو التصنيف الرئيسي<span className='text-danger'>
 													*
 												</span>{" "}
 											</label>
@@ -372,7 +372,7 @@ const AddNewProduct = () => {
 												<Controller
 													name={"category_id"}
 													control={control}
-													rules={{ required: "حقل التصنيف الرئيسي مطلوب" }}
+													rules={{ required: "حقل النشاط أو التصنيف الرئيسي مطلوب" }}
 													render={({ field: { onChange, value } }) => (
 														<Select
 															name='category_id'
@@ -412,7 +412,7 @@ const AddNewProduct = () => {
 																if (product?.category_id === "" || !selected) {
 																	return (
 																		<p className='text-[#ADB5B9]'>
-																			اختر التصنيف
+																			اختر النشاط أو التصنيف
 																		</p>
 																	);
 																}
@@ -455,7 +455,7 @@ const AddNewProduct = () => {
 									</div>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='sub-category'>التصنيف الفرعي</label>
+											<label htmlFor='sub-category'>النشاط أو التصنيف الفرعي</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
@@ -464,7 +464,7 @@ const AddNewProduct = () => {
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{ color: "#1dbbbe" }}>
-														لا يوجد تصنيفات فرعية للتصنيف الرئيسي الذي اخترتة
+														لا يوجد نشاطات أو تصنيفات فرعية للتصنيف الرئيسي الذي اخترتة
 													</div>
 												) : (
 													<Select
@@ -496,7 +496,7 @@ const AddNewProduct = () => {
 														input={<OutlinedInput />}
 														renderValue={(selected) => {
 															if (product?.subcategory_id.length === 0) {
-																return "التصنيف الفرعي";
+																return "النشاط أو التصنيف الفرعي";
 															}
 															return selected.map((item) => {
 																const result =
