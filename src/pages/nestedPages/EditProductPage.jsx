@@ -408,7 +408,7 @@ const EditProductPage = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
 													{" "}
-													التصنيف الرئيسي<span className='text-danger'>*</span>
+													النشاط أو التصنيف الرئيسي<span className='text-danger'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -416,7 +416,7 @@ const EditProductPage = () => {
 													<Controller
 														name={"category_id"}
 														control={control}
-														rules={{ required: "حقل التصنيف الرئيسي مطلوب" }}
+														rules={{ required: "حقل النشاط أو التصنيف الرئيسي مطلوب" }}
 														render={({ field: { onChange, value } }) => (
 															<Select
 																value={value}
@@ -460,7 +460,7 @@ const EditProductPage = () => {
 																	) {
 																		return (
 																			<p className='text-[#ADB5B9]'>
-																				اختر التصنيف
+																				اختر النشاط أو التصنيف
 																			</p>
 																		);
 																	}
@@ -505,7 +505,7 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='sub-category'>التصنيف الفرعي </label>
+												<label htmlFor='sub-category'>النشاط أو التصنيف الفرعي</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
@@ -534,7 +534,7 @@ const EditProductPage = () => {
 															input={<OutlinedInput />}
 															renderValue={(selected) => {
 																if (product?.subcategory_id?.length === 0) {
-																	return "التصنيف الفرعي";
+																	return "النشاط أو التصنيف الفرعي";
 																}
 																return selected?.map((item) => {
 																	const result =

@@ -206,15 +206,15 @@ const ProductRefund = () => {
 											</div>
 
 											<div className='product-category'>
-												<h3 className='text-center mb-3'>تصنيفات المنتج</h3>
+												<h3 className='text-center mb-3'>نشاطات أو تصنيفات المنتج</h3>
 												<div className='main-category category mb-3'>
-													<div className='label mb-2'>التصنيف الرئيسي</div>
+													<div className='label mb-2'>النشاط أو التصنيف الرئيسي</div>
 													<div className='input'>
 														{fetchedData?.data?.products?.category?.name}
 													</div>
 												</div>
 												<div className='sub-category category'>
-													<div className='label mb-2'>التصنيفات الفرعية </div>
+													<div className='label mb-2'>النشاطات أو التصنيفات الفرعية </div>
 													<div className='d-flex align-items-center justify-content-start flex-wrap gap-3'>
 														{fetchedData?.data?.products?.subcategory
 															?.length === 0 ? (
@@ -223,7 +223,7 @@ const ProductRefund = () => {
 																style={{
 																	color: "#1dbbbe",
 																}}>
-																لا يوجد تصنيفات فرعية
+																لا يوجد نشاطات أو تصنيفات فرعية
 															</div>
 														) : (
 															fetchedData?.data?.products?.subcategory?.map(

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // import table images
 
 const initialValueState = {
-	activity: [],
+	activity: []
 };
 // slices
 const AddActivitySlice = createSlice({
@@ -14,9 +14,9 @@ const AddActivitySlice = createSlice({
 		},
 		resetActivity: (state) => {
 			state.activity = [];
-		},
+		}
 	},
 });
 
-export const { addActivity, resetActivity } = AddActivitySlice.actions;
+export const { addActivity, resetActivity} = AddActivitySlice.actions;
 export default AddActivitySlice.reducer;

@@ -261,7 +261,7 @@ const Notifications = () => {
 														<img
 															onClick={() => {
 																setActionDelete(
-																	"سيتم حذف التصنيف وهذة الخطوة غير قابلة للرجوع"
+																	"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
 																);
 																setDeleteMethod("get");
 																setUrl(

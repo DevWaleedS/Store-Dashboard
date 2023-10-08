@@ -95,7 +95,7 @@ const EditCategory = () => {
 
 	// update category function
 	const updateCategory = (data) => {
-		setLoadingTitle("جاري تعديل التصنيف");
+		setLoadingTitle("جاري تعديل النشاط أو التصنيف");
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("name", data?.name);
@@ -196,7 +196,7 @@ const EditCategory = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> تعديل تصنيف</h5>
-										<p>قم بتحديث التصنيف والمعلومات الضرورية من هنا</p>
+										<p>قم بتحديث النشاط أو التصنيف والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>
@@ -208,7 +208,7 @@ const EditCategory = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
 											<label htmlFor='add-icon'>
-												ايقونة التصنيف<span className='text-danger'>*</span>
+												ايقونة النشاط أو التصنيف<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
@@ -284,14 +284,14 @@ const EditCategory = () => {
 										<div className='col-md-3 col-12'>
 											<label htmlFor='category-name'>
 												{" "}
-												التصنيف الرئيسي<span className='text-danger'>*</span>
+												النشاط أو التصنيف الرئيسي<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
 											<input
 												type='text'
 												id='category-name'
-												placeholder='أدخل اسم التصنيف الرئيسي'
+												placeholder='أدخل اسم النشاط أو التصنيف الرئيسي'
 												name='name'
 												{...register("name", {
 													required: "حقل الاسم مطلوب",

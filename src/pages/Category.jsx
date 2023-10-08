@@ -50,7 +50,7 @@ const Category = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | التصنيفات</title>
+				<title>لوحة تحكم أطلبها | النشاطات أو التصنيفات</title>
 			</Helmet>
 			<div className='category p-lg-3'>
 				<div className='head-category'>
@@ -64,7 +64,7 @@ const Category = () => {
 									</Link>
 								</li>
 								<li className='breadcrumb-item active ' aria-current='page'>
-									التصنيفات
+								النشاطات أو التصنيفات
 								</li>
 							</ol>
 						</nav>
@@ -82,7 +82,7 @@ const Category = () => {
 										type='text'
 										name='search'
 										id='search'
-										placeholder='ابحث في التصنيفات'
+										placeholder='ابحث في النشاطات أو التصنيفات'
 									/>
 									<BsSearch />
 								</div>
@@ -122,7 +122,7 @@ const Category = () => {
 											inputProps={{ "aria-label": "Without label" }}
 											renderValue={(selected) => {
 												if (category_id === "") {
-													return <p className='text-[#ADB5B9]'>اختر التصنيف</p>;
+													return <p className='text-[#ADB5B9]'>اختر النشاط أو التصنيف</p>;
 												}
 												const result =
 													categories?.data?.categories?.filter(
@@ -166,7 +166,7 @@ const Category = () => {
 											navigate("AddCategory");
 										}}>
 										<MdAdd />
-										<span className='me-2'> اضافه تصنيف</span>
+										<span className='me-2'> اضافه نشاط أو تصنيف</span>
 									</button>
 								</div>
 							</div>

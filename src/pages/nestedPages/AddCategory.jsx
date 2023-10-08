@@ -86,7 +86,7 @@ const AddCategory = () => {
 
 	// to add new category
 	const handleCategory = (data) => {
-		setLoadingTitle("جاري حفظ التصنيف");
+		setLoadingTitle("جاري حفظ النشاط أو التصنيف");
 		resetCategoryError();
 		let formData = new FormData();
 		formData.append("name", data?.name);
@@ -152,7 +152,7 @@ const AddCategory = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> اضافة تصنيف</h5>
-										<p>قم بتحديث التصنيف والمعلومات الضرورية من هنا</p>
+										<p>قم بتحديث النشاط أو التصنيف والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>
@@ -163,7 +163,7 @@ const AddCategory = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
 											<label htmlFor='add-icon'>
-												ايقونة التصنيف<span className='text-danger'>*</span>
+												ايقونة النشاط أو التصنيف<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
@@ -232,7 +232,7 @@ const AddCategory = () => {
 										<div className='col-md-3 col-12'>
 											<label htmlFor='category-name'>
 												{" "}
-												التصنيف الرئيسي<span className='text-danger'>*</span>
+												النشاط أو التصنيف الرئيسي<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
@@ -240,7 +240,7 @@ const AddCategory = () => {
 												name='name'
 												type='text'
 												id='category-name'
-												placeholder=' أدخل اسم التصنيف الرئيسي'
+												placeholder=' أدخل اسم النشاط أو التصنيف الرئيسي'
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 													pattern: {

@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetActivity } from "../store/slices/AddActivity";
+import { resetSubActivity } from "../store/slices/AddSubActivity";
 
 // ICONS
 import howIcon from "../data/Icons/icon_24_home.svg";
@@ -78,6 +79,7 @@ const VerifyStore = () => {
 										onClick={() => {
 											setPage(1);
 											dispatch(resetActivity());
+											dispatch(resetSubActivity());
 										}}
 										style={cursor}
 										className={
@@ -85,7 +87,7 @@ const VerifyStore = () => {
 												? "store-type verify-tab-bx active"
 												: "store-type verify-tab-bx "
 										}>
-										<h5>نشاط المتجر</h5>
+										<h5>نشاط أو تصنيف المتجر</h5>
 									</div>
 								</div>
 								<div className='col-md-3 col-6'>
@@ -125,6 +127,7 @@ const VerifyStore = () => {
 										onClick={() => {
 											setPage(1);
 											dispatch(resetActivity());
+											dispatch(resetSubActivity());
 										}}>
 										السابق
 									</Button>

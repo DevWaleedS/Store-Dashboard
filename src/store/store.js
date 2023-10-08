@@ -26,6 +26,7 @@ import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterM
 import DelegateRequestAlert from "./slices/DelegateRequestAlert-slice";
 import DelegateTableDataSlice from "./slices/DelagateTable-slice";
 import AddActivity from "./slices/AddActivity";
+import AddSubActivity from "./slices/AddSubActivity";
 import AddSubCategorySlice from "./slices/AddSubCategory-slice";
 import MaintenanceModeModal from "./slices/MaintenanceModeModal";
 import CelebrityMarketingModal from "./slices/CelebrityMarketingModal";
@@ -66,6 +67,7 @@ export const store = configureStore({
 		DelegateRequestAlert: DelegateRequestAlert,
 		DelegateTable: DelegateTableDataSlice,
 		AddActivity: AddActivity,
+		AddSubActivity: AddSubActivity,
 		AddSubCategorySlice: AddSubCategorySlice,
 		MaintenanceModeModal: MaintenanceModeModal,
 		CelebrityMarketingModal: CelebrityMarketingModal,

@@ -64,7 +64,7 @@ const FormSearchWeight = ({
 					</div>
 
 					<div className='d-flex flex-column select-input input-box '>
-						<label htmlFor='form-select'> التصنيف</label>
+						<label htmlFor='form-select'> النشاط أو التصنيف</label>
 						<FormControl sx={{ width: "100%" }}>
 							<Select
 								name='category_id'
@@ -100,7 +100,7 @@ const FormSearchWeight = ({
 								inputProps={{ "aria-label": "Without label" }}
 								renderValue={(selected) => {
 									if (category_id === "") {
-										return <p className='text-[#ADB5B9]'>اختر التصنيف</p>;
+										return <p className='text-[#ADB5B9]'>اختر النشاط أو التصنيف</p>;
 									}
 									const result =
 										categories?.filter(
