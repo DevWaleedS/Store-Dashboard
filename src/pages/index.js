@@ -16,7 +16,6 @@ export { default as RootLayOut } from "./RootLayout";
 export { default as Coupon } from "./Coupon";
 export { default as Offers } from "./Offers";
 export { default as Carts } from "./Carts";
-export { default as Seo } from "./Seo";
 export { default as MarketingCampaign } from "./MarketingCampaign";
 export { default as VerifyStore } from "./VerifyStore";
 export { default as SocialPages } from "./SocialPages";

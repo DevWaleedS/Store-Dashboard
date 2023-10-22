@@ -37,7 +37,6 @@ import {
 	Products,
 	Rating,
 	Report,
-	Seo,
 	MainInformation,
 	Management,
 	ShippingCompanies,
@@ -53,7 +52,7 @@ import {
 	EvaluationThePlatform,
 	PostalSubscriptions,
 	PaintStore,
-	SEOStore
+	SEOStore,
 } from "./pages";
 // ---------------------------------------------------------------------------------------//
 
@@ -215,10 +214,6 @@ const router = createBrowserRouter([
 				element: <ClientData />,
 			},
 
-			{
-				path: "Seo",
-				element: <Seo />,
-			},
 			{
 				path: "PostalSubscriptions",
 				element: <PostalSubscriptions />,

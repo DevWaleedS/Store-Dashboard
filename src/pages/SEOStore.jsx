@@ -13,12 +13,12 @@ import TextareaCode from "../components/TextareaCode/TextareaCode";
 
 // import images
 import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as LinkIcon } from '../data/Icons/link.svg';
-import { ReactComponent as UploadFileIcon } from '../data/Icons/upload file.svg';
-import { ReactComponent as BlogIcon } from '../data/Icons/Blog.svg';
-import { ReactComponent as SnapchatIcon } from '../data/Icons/blue-snapchat.svg';
-import { ReactComponent as TwitterIcon } from '../data/Icons/blue-Xx.svg';
-import { ReactComponent as InstagramIcon } from '../data/Icons/blue-instagram.svg';
+import { ReactComponent as LinkIcon } from "../data/Icons/link.svg";
+import { ReactComponent as UploadFileIcon } from "../data/Icons/upload file.svg";
+import { ReactComponent as BlogIcon } from "../data/Icons/Blog.svg";
+import { ReactComponent as SnapchatIcon } from "../data/Icons/blue-snapchat.svg";
+import { ReactComponent as TwitterIcon } from "../data/Icons/blue-Xx.svg";
+import { ReactComponent as InstagramIcon } from "../data/Icons/blue-instagram.svg";
 import { ReactComponent as TiktokIcon } from "../data/Icons/blue-tiktok.svg";
 
 const LINK_REGEX =
@@ -72,9 +72,8 @@ const PaintStore = () => {
 		setTwitter(fetchedData?.data?.Seo?.[0]?.twitterpixel || "");
 		setTiktok(fetchedData?.data?.Seo?.[0]?.tiktokpixel || "");
 		setInstagram(fetchedData?.data?.Seo?.[0]?.instapixel || "");
-		setKeyWord(fetchedData?.data?.Seo?.[0]?.key_words?.map(key => key) || []);
+		setKeyWord(fetchedData?.data?.Seo?.[0]?.key_words?.map((key) => key) || []);
 	}, [fetchedData?.data?.Seo]);
-
 
 	useEffect(() => {
 		const storeLinkValidation = LINK_REGEX.test(updateLinkValue);
@@ -144,122 +143,154 @@ const PaintStore = () => {
 						</nav>
 					</div>
 				</div>
-				{
-					loading ?
-						<div className="data-container">
-							<CircularLoading />
-						</div>
-						:
-						<div className="data-container">
-							<div className="inputs-group">
-								<div className="label">
-									<LinkIcon />
-									<label>ربط جوجل أناليتكس Google Analytics</label>
-								</div>
-								<div className="input">
-									<input
-										type="text"
-										value={updateLinkValue}
-										onChange={(e) => { setUpdateLinkValue(e.target.value) }}
-										placeholder="https://analytics.google.com/analytics/web/#/report"
-										onFocus={() => setPageLinkFocus(true)}
-										onBlur={() => setPageLinkFocus(true)}
-										required
-										aria-invalid={validPageLink ? "false" : "true"}
-										aria-describedby='pageLink'
-									>
-									</input>
-								</div>
-								<p
-									id='pageDesc'
-									className={
-										pageLinkFocus && updateLinkValue && !validPageLink
-											? " d-block wrong-text "
-											: "d-none"
-									}
-									style={{ color: "red", padding: "10px", fontSize: "1rem" }}>
-									يجب ان يكون الرابط Valid URL
-								</p>
-								{dataError?.updateLinkValue && <span className="wrong-text">{dataError?.updateLinkValue}</span>}
+				{loading ? (
+					<div className='data-container'>
+						<CircularLoading />
+					</div>
+				) : (
+					<div className='data-container'>
+						{/* Google Analytics Link */}
+						<div className='inputs-group'>
+							<div className='label'>
+								<LinkIcon />
+								<label>ربط جوجل أناليتكس Google Analytics</label>
 							</div>
-							<div className="inputs-group">
-								<div className="label">
-									<BlogIcon />
-									<label>الكلمات المفتاحية</label>
+							<div className='input'>
+								<input
+									type='text'
+									value={updateLinkValue}
+									onChange={(e) => {
+										setUpdateLinkValue(e.target.value);
+									}}
+									placeholder='https://analytics.google.com/analytics/web/#/report'
+									onFocus={() => setPageLinkFocus(true)}
+									onBlur={() => setPageLinkFocus(true)}
+									required
+									aria-invalid={validPageLink ? "false" : "true"}
+									aria-describedby='pageLink'></input>
+							</div>
+							<p
+								id='pageDesc'
+								className={
+									pageLinkFocus && updateLinkValue && !validPageLink
+										? " d-block wrong-text "
+										: "d-none"
+								}
+								style={{ color: "red", padding: "10px", fontSize: "1rem" }}>
+								يجب ان يكون الرابط Valid URL
+							</p>
+							{dataError?.updateLinkValue && (
+								<span className='wrong-text'>{dataError?.updateLinkValue}</span>
+							)}
+						</div>
+						{/* Keywords */}
+						<div className='inputs-group'>
+							<div className='label'>
+								<BlogIcon />
+								<label>الكلمات المفتاحية</label>
+							</div>
+							<div className='input'>
+								<TagsInput
+									value={keyWord}
+									onChange={setKeyWord}
+									name='key_words'
+									classNames='key_words'
+									placeHolder='ضع الكلمة ثم اضغط enter'
+								/>
+							</div>
+							{dataError?.keyWord && (
+								<span className='wrong-text'>{dataError?.keyWord}</span>
+							)}
+						</div>
+
+						{/**/}
+						{/* Pixel code*/}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<SnapchatIcon />
+									<label>سناب بكسل</label>
 								</div>
-								<div className="input">
-									<TagsInput
-										value={keyWord}
-										onChange={setKeyWord}
-										name='key_words'
-										classNames="key_words"
-										placeHolder='الكلمات المفتاحية'
+								<div className='input'>
+									<TextareaCode
+										value={snapchat}
+										setValue={setSnapchat}
+										placeholder='Snapchat Pixel Codes ...'
 									/>
 								</div>
-								{dataError?.keyWord && <span className="wrong-text">{dataError?.keyWord}</span>}
 							</div>
-							<div className="d-flex flex-column gap-3">
-								<div className="social-media-inputs">
-									<div className="label">
-										<SnapchatIcon />
-										<label>سناب بكسل</label>
-									</div>
-									<div className="input">
-										<TextareaCode value={snapchat} setValue={setSnapchat} placeholder="Snapchat Pixel Codes ..." />
-									</div>
-								</div>
-								{dataError?.snapchat && <span className="wrong-text">{dataError?.snapchat}</span>}
-							</div>
-							<div className="d-flex flex-column gap-3">
-								<div className="social-media-inputs">
-									<div className="label">
-										<TiktokIcon />
-										<label>تيك توك بكسل</label>
-									</div>
-									<div className="input">
-										<TextareaCode value={tiktok} setValue={setTiktok} placeholder="Tiktok Pixel Codes ..." />
-									</div>
-								</div>
-								{dataError?.tiktok && <span className="wrong-text">{dataError?.tiktok}</span>}
-							</div>
-							<div className="d-flex flex-column gap-3">
-								<div className="social-media-inputs">
-									<div className="label">
-										<TwitterIcon />
-										<label>تويتر بكسل</label>
-									</div>
-									<div className="input">
-										<TextareaCode value={twitter} setValue={setTwitter} placeholder="Twitter Pixel Codes ..." />
-									</div>
-								</div>
-								{dataError?.twitter && <span className="wrong-text">{dataError?.twitter}</span>}
-							</div>
-							<div className="d-flex flex-column gap-3">
-								<div className="social-media-inputs mb-5">
-									<div className="label">
-										<InstagramIcon />
-										<label>انستجرام بكسل</label>
-									</div>
-									<div className="input">
-										<TextareaCode value={instagram} setValue={setInstagram} placeholder="Instagram Pixel Codes ..." />
-									</div>
-								</div>
-								{dataError?.instagram && <span className="wrong-text">{dataError?.instagram}</span>}
-							</div>
-							<div className='col-lg-6 col-12 mx-auto'>
-								<Button
-									variant='contained'
-									style={{
-										width: "100%",
-										height: "56px",
-										backgroundColor: "#1dbbbe",
-									}}
-									onClick={handleSEOUpdate}>
-									حفظ
-								</Button>
-							</div>
+							{dataError?.snapchat && (
+								<span className='wrong-text'>{dataError?.snapchat}</span>
+							)}
 						</div>
-				}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<TiktokIcon />
+									<label>تيك توك بكسل</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										value={tiktok}
+										setValue={setTiktok}
+										placeholder='Tiktok Pixel Codes ...'
+									/>
+								</div>
+							</div>
+							{dataError?.tiktok && (
+								<span className='wrong-text'>{dataError?.tiktok}</span>
+							)}
+						</div>
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<TwitterIcon />
+									<label>تويتر بكسل</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										value={twitter}
+										setValue={setTwitter}
+										placeholder='Twitter Pixel Codes ...'
+									/>
+								</div>
+							</div>
+							{dataError?.twitter && (
+								<span className='wrong-text'>{dataError?.twitter}</span>
+							)}
+						</div>
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs mb-5'>
+								<div className='label'>
+									<InstagramIcon />
+									<label>انستجرام بكسل</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										value={instagram}
+										setValue={setInstagram}
+										placeholder='Instagram Pixel Codes ...'
+									/>
+								</div>
+							</div>
+							{dataError?.instagram && (
+								<span className='wrong-text'>{dataError?.instagram}</span>
+							)}
+						</div>
+						<div className='col-lg-6 col-12 mx-auto'>
+							<Button
+								variant='contained'
+								style={{
+									width: "100%",
+									height: "56px",
+									backgroundColor: "#1dbbbe",
+								}}
+								onClick={handleSEOUpdate}>
+								حفظ
+							</Button>
+						</div>
+					</div>
+				)}
 			</section>
 		</>
 	);

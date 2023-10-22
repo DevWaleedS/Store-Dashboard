@@ -15,7 +15,6 @@ export { default as FilterSelect } from "./FilterSelect";
 export { default as BigProductsTable } from "./BigProductsTable";
 export { default as CouponTable } from "./CouponTable";
 export { default as CartsTables } from "./CartsTables";
-export { default as SeoWeight } from "./SeoWeight";
 export { default as RatingWeight } from "./RatingWeight";
 export { default as PagesTable } from "./PagesTable";
 export { default as AcademyWidget } from "./AcademyWidget";

@@ -307,7 +307,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
 													{fetchedData?.data?.product?.subcategory?.length ===
-														0 ? (
+													0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -391,9 +391,9 @@ const ShowImportEtlobhaProduct = () => {
 													سعر البيع<span className='text-danger'>*</span>
 												</label>
 												<br />
-												<span className="tax-text">(السعر يشمل الضريبة)</span>
 											</div>
 											<div className='col-md-7 col-12'>
+												<div className='tax-text'>السعر يشمل الضريبة</div>
 												<div
 													className='d-flex justify-content-center align-items-center'
 													style={{ background: "#FFF" }}>
@@ -423,8 +423,19 @@ const ShowImportEtlobhaProduct = () => {
 																id='price'
 																value={value}
 																onChange={(e) => {
-																	setProduct({ ...product, price: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																	onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																	setProduct({
+																		...product,
+																		price: e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		),
+																	});
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	);
 																}}
 															/>
 														)}
@@ -441,11 +452,11 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												{product?.price <
 													fetchedData?.data?.product?.purchasing_price && (
-														<span className='fs-6 text-danger'>
-															السعر يجب ان يكون اكبر من او يساوي (
-															{fetchedData?.data?.product?.purchasing_price})
-														</span>
-													)}
+													<span className='fs-6 text-danger'>
+														السعر يجب ان يكون اكبر من او يساوي (
+														{fetchedData?.data?.product?.purchasing_price})
+													</span>
+												)}
 											</div>
 
 											<div className='col-md-7 col-12'>

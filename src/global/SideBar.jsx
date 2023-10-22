@@ -13,11 +13,11 @@ import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
 import { ReactComponent as Products } from "../data/Icons/product-24.svg";
 import { ReactComponent as Orders } from "../data/Icons/icon-24-order.svg";
 import { ReactComponent as Marketing } from "../data/Icons/icon-24-marketing.svg";
-import { ReactComponent as MarketingCampain } from "../data/Icons/icon-24-marketing campain.svg";
+
 import { ReactComponent as Rating } from "../data/Icons/icon-24-ratings.svg";
 import { ReactComponent as PagesIcon } from "../data/Icons/icon-24-pages.svg";
 import { ReactComponent as Academy } from "../data/Icons/icon-24-graduatioin.svg";
-import { ReactComponent as BranchesAndWarehouses } from "../data/Icons/icon-24-Company Branch.svg";
+
 import { ReactComponent as Template } from "../data/Icons/icon-24-template.svg";
 import { ReactComponent as Layout } from "../data/Icons/layout.svg";
 import { ReactComponent as Paint } from "../data/Icons/Paint.svg";
@@ -35,7 +35,7 @@ import { ReactComponent as Delevray } from "../data/Icons/icon-24-delivery.svg";
 import { ReactComponent as Payment } from "../data/Icons/icon-24-payment Getway.svg";
 import { ReactComponent as Verification } from "../data/Icons/icon-24-Verification.svg";
 import { ReactComponent as BsCart } from "../data/Icons/icon-24-shopping_cart.svg";
-import { ReactComponent as Seo } from "../data/Icons/icon-24-seo.svg";
+
 import { ReactComponent as Evaluation } from "../data/Icons/evaluation.svg";
 
 import { FaCircle } from "react-icons/fa";
@@ -43,7 +43,6 @@ import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { OpenCelebrityMarketingModal } from "../store/slices/CelebrityMarketingModal";
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
 import useFetch from "../Hooks/UseFetch";
@@ -158,16 +157,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<MenuItem>
 							<BsCart />
 							<span className='me-2'> السلات المتروكة</span>
-						</MenuItem>
-					</NavLink>
-
-					<NavLink
-						className='sub-menu-link'
-						to='Seo'
-						onClick={() => closeSidebar()}>
-						<MenuItem>
-							<Seo />
-							<span className='me-2'> الكلمات المفتاحية</span>
 						</MenuItem>
 					</NavLink>
 

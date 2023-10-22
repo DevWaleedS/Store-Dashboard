@@ -84,7 +84,7 @@ const EditProductPage = () => {
 		snapchat: "",
 		twitter: "",
 		tiktok: "",
-		instagram: ""
+		instagram: "",
 	});
 	// to get multi images
 	const [multiImages, setMultiImages] = useState([]);
@@ -408,7 +408,8 @@ const EditProductPage = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
 													{" "}
-													النشاط أو التصنيف الرئيسي<span className='text-danger'>*</span>
+													النشاط أو التصنيف الرئيسي
+													<span className='text-danger'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -416,7 +417,9 @@ const EditProductPage = () => {
 													<Controller
 														name={"category_id"}
 														control={control}
-														rules={{ required: "حقل النشاط أو التصنيف الرئيسي مطلوب" }}
+														rules={{
+															required: "حقل النشاط أو التصنيف الرئيسي مطلوب",
+														}}
 														render={({ field: { onChange, value } }) => (
 															<Select
 																value={value}
@@ -424,9 +427,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																		{
+																			paddingRight: "20px",
+																		},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -505,12 +508,14 @@ const EditProductPage = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='sub-category'>النشاط أو التصنيف الفرعي</label>
+												<label htmlFor='sub-category'>
+													النشاط أو التصنيف الفرعي
+												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-														subcategory[0]?.subcategory?.length === 0 ? (
+													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -520,9 +525,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -635,9 +640,9 @@ const EditProductPage = () => {
 													{" "}
 													السعر<span className='text-danger'>*</span>{" "}
 												</label>
-												<span className="tax-text">(السعر يشمل الضريبة)</span>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>السعر يشمل الضريبة</div>
 												<Controller
 													name={"selling_price"}
 													control={control}
@@ -690,9 +695,9 @@ const EditProductPage = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 												<label htmlFor='low-price'> السعر بعد الخصم </label>
-												<span className="tax-text">(السعر يشمل الضريبة)</span>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>السعر يشمل الضريبة</div>
 												<Controller
 													name={"discount_price"}
 													control={control}
@@ -731,16 +736,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-														product?.selling_price === ""
+													product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -852,9 +857,9 @@ const EditProductPage = () => {
 															{imageList?.map((image, index) => {
 																const isVideo = image?.data_url?.includes(
 																	"video/mp4" ||
-																	"video/avi" ||
-																	"video/mov" ||
-																	"video/mkv"
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
 																);
 																if (isVideo) {
 																	return (
@@ -941,7 +946,7 @@ const EditProductPage = () => {
 													value={SEOdescription}
 													onChange={setSEOdescription}
 													name='SEOdescription'
-													placeHolder=' اضافه كلمات مفتاحيه للمنتج '
+													placeHolder='ضع الكلمة ثم اضغط enter'
 												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -956,13 +961,17 @@ const EditProductPage = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
-													<SnapchatIcon className="ms-2" />
+													<SnapchatIcon className='ms-2' />
 													سناب بكسل
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												<div className="input-pixel">
-													<TextareaCode value={snapchat} setValue={setSnapchat} placeholder="Twitter Pixel Code" />
+												<div className='input-pixel'>
+													<TextareaCode
+														value={snapchat}
+														setValue={setSnapchat}
+														placeholder='Twitter Pixel Code'
+													/>
 												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -975,13 +984,17 @@ const EditProductPage = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
-													<TiktokIcon className="ms-2" />
+													<TiktokIcon className='ms-2' />
 													تيك توك بكسل
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												<div className="input-pixel">
-													<TextareaCode value={tiktok} setValue={setTiktok} placeholder="Twitter Pixel Code" />
+												<div className='input-pixel'>
+													<TextareaCode
+														value={tiktok}
+														setValue={setTiktok}
+														placeholder='Twitter Pixel Code'
+													/>
 												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -994,13 +1007,17 @@ const EditProductPage = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
-													<TwitterIcon className="ms-2" />
+													<TwitterIcon className='ms-2' />
 													تويتر بكسل
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												<div className="input-pixel">
-													<TextareaCode value={twitter} setValue={setTwitter} placeholder="Twitter Pixel Code" />
+												<div className='input-pixel'>
+													<TextareaCode
+														value={twitter}
+														setValue={setTwitter}
+														placeholder='Twitter Pixel Code'
+													/>
 												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -1013,13 +1030,17 @@ const EditProductPage = () => {
 										<div className='row mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
-													<InstagramIcon className="ms-2" />
+													<InstagramIcon className='ms-2' />
 													انستقرام بكسل
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												<div className="input-pixel">
-													<TextareaCode value={instagram} setValue={setInstagram} placeholder="Instagram Pixel Code" />
+												<div className='input-pixel'>
+													<TextareaCode
+														value={instagram}
+														setValue={setInstagram}
+														placeholder='Instagram Pixel Code'
+													/>
 												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>

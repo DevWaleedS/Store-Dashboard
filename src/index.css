@@ -7103,7 +7103,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.inputs-group
 	.input
 	.rti--container
-	.rti--input {
+	.rti--input,
+.add-new-product-form .rti--container .rti--input {
 	width: fit-content;
 	height: 35px;
 	padding: 10px !important;
@@ -7111,6 +7112,24 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	border: 1px solid #d4d4d4;
 	border-radius: 15px;
 }
+.add-new-product-form .rti--container .rti--input {
+	background-color: #f2f2f2;
+	width: 213px;
+}
+
+.seo-store-page
+	.data-container
+	.inputs-group
+	.input
+	.rti--container
+	.rti--input::placeholder,
+.add-new-product-form .rti--container .rti--input::placeholder {
+	font-size: 17px;
+}
+.add-new-product-form .rti--container .rti--input::placeholder {
+	color: #505050;
+}
+
 .seo-store-page .data-container .inputs-group .input .rti--container .rti--tag {
 	width: fit-content;
 	height: 35px;
