@@ -12,16 +12,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
-import { TextField } from "@mui/material";
 
+import moment from "moment";
+import "rsuite/dist/rsuite.min.css";
+import useFetch from "../Hooks/UseFetch";
 import TablePagination from "./TablePagination";
+
 // Icons
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
 import { FiSearch } from "react-icons/fi";
-import DateRangePicker from "rsuite/DateRangePicker";
-import "rsuite/dist/rsuite.min.css";
-import moment from "moment";
-import useFetch from "../Hooks/UseFetch";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -59,7 +58,7 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					رقم الشحنة
+					رقم التتبع
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='right'>
 					اسم العميل
@@ -68,7 +67,7 @@ function EnhancedTableHead(props) {
 					حالة الطلب
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					الموقع
+					شركة الشحن
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الكمية
@@ -94,7 +93,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { dateValue, setDateValue, search, setSearch } = props;
+	const { search, setSearch } = props;
 
 	return (
 		<React.Fragment>
@@ -107,13 +106,11 @@ function EnhancedTableToolbar(props) {
 						</div>
 						<div className='search-input-box'>
 							<FiSearch />
-							<TextField
+							<input
+								type='text'
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
-								sx={{ paddingRight: "35px" }}
-								id='outlined-basic'
-								label='ابحث عن طريق رقم الشحنة'
-								variant='outlined'
+								placeholder='ابحث عن طريق رقم التتبع'
 							/>
 						</div>
 					</div>
@@ -216,12 +213,12 @@ export default function BigOrdersTable({
 		return arr;
 	};
 
-	function translateCityName(name) {
-		const unique = cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.name === name
-		);
-		return unique?.[0]?.name_ar;
-	}
+	// function translateCityName(name) {
+	// 	const unique = cities?.data?.cities?.data?.cities?.filter(
+	// 		(obj) => obj?.name === name
+	// 	);
+	// 	return unique?.[0]?.name_ar;
+	// }
 
 	return (
 		<Box sx={{ width: "100%" }}>
@@ -308,7 +305,7 @@ export default function BigOrdersTable({
 																		overflow: "hidden",
 																		textOverflow: "ellipsis",
 																	}}>
-																	{row?.user?.name}
+																	{`${row?.user?.name} ${row?.user?.user_name}`}
 																</span>
 															</div>
 														</TableCell>
@@ -324,7 +321,7 @@ export default function BigOrdersTable({
 																				? "#d4ebf7"
 																				: row?.status === "ملغي"
 																				? "#ffebeb"
-																				: row?.status === "جاري التجهيز"
+																				: row?.status === "جاهز"
 																				? "#ffecd1c7"
 																				: "#e8f8f8",
 																		color:
@@ -334,7 +331,7 @@ export default function BigOrdersTable({
 																				? "#0077ff"
 																				: row?.status === "ملغي"
 																				? "#ff7b7b"
-																				: row?.status === "جاري التجهيز"
+																				: row?.status === "جاهز"
 																				? "#ff9f1a"
 																				: "#46c7ca",
 																		borderRadius: "16px",
@@ -347,7 +344,7 @@ export default function BigOrdersTable({
 															</div>
 														</TableCell>
 														<TableCell align='center'>
-															{translateCityName(row?.OrderAddress?.city)}
+															{row?.shippingtypes?.name}
 														</TableCell>
 														<TableCell align='center'>
 															{row?.quantity}

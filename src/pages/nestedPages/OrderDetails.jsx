@@ -97,14 +97,14 @@ const OrderDetails = () => {
 		const unique = cities?.data?.cities?.data?.cities?.filter(
 			(obj) => obj?.province === name
 		);
-		return unique?.[0]?.provice_ar;
+		return unique?.[0]?.provice_ar || name;
 	}
 
 	function translateCityName(name) {
 		const unique = cities?.data?.cities?.data?.cities?.filter(
 			(obj) => obj?.name === name
 		);
-		return unique?.[0]?.name_ar;
+		return unique?.[0]?.name_ar || name;
 	}
 
 	const updateOrderStatus = (status) => {
@@ -112,7 +112,7 @@ const OrderDetails = () => {
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
-		if (status === "delivery_in_progress" || status === "canceled") {
+		if (status === "ready" || status === "canceled") {
 			formData.append(
 				"district",
 				shipping?.district && JSON.parse(shipping?.district)?.province
@@ -263,9 +263,8 @@ const OrderDetails = () => {
 													</div>
 													<div className='order-data-row'>
 														<span>
-															{Number(
-																fetchedData?.data?.orders?.total_price
-															).toFixed(2)}{" "}
+															{fetchedData?.data?.orders?.codprice +
+																fetchedData?.data?.orders?.total_price}{" "}
 															ر.س
 														</span>
 													</div>
@@ -294,7 +293,7 @@ const OrderDetails = () => {
 											{fetchedData?.data?.orders?.shipping?.shipping_id && (
 												<div className='box mb-4'>
 													<div className='order-head-row'>
-														<span className='me-3'>رقم الشحنة</span>
+														<span className='me-3'>رقم التتبع</span>
 													</div>
 													<div className='order-data-row'>
 														<span>
@@ -380,7 +379,7 @@ const OrderDetails = () => {
 																	</div>
 																</TableCell>
 																<TableCell align='center'>
-																	<span>{Number(row?.sum).toFixed(2)} ر.س</span>
+																	<span>{row?.sum} ر.س</span>
 																</TableCell>
 															</TableRow>
 														)
@@ -398,10 +397,7 @@ const OrderDetails = () => {
 															align='center'
 															style={{ borderBottom: "none" }}>
 															<span style={{ fontWeight: "500" }}>
-																{Number(
-																	fetchedData?.data?.orders?.subtotal
-																).toFixed(2)}{" "}
-																ر.س
+																{fetchedData?.data?.orders?.subtotal} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -418,10 +414,7 @@ const OrderDetails = () => {
 															align='center'
 															style={{ borderBottom: "none" }}>
 															<span style={{ fontWeight: "500" }}>
-																{Number(fetchedData?.data?.orders?.tax).toFixed(
-																	2
-																)}{" "}
-																ر.س
+																{fetchedData?.data?.orders?.tax} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -438,10 +431,7 @@ const OrderDetails = () => {
 															align='center'
 															style={{ borderBottom: "none" }}>
 															<span style={{ fontWeight: "500" }}>
-																{Number(
-																	fetchedData?.data?.orders?.shipping_price
-																).toFixed(2)}{" "}
-																ر.س
+																{fetchedData?.data?.orders?.shipping_price} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -460,10 +450,7 @@ const OrderDetails = () => {
 															align='center'
 															style={{ borderBottom: "none" }}>
 															<span style={{ fontWeight: "500" }}>
-																{Number(
-																	fetchedData?.data?.orders?.codprice
-																).toFixed(2)}{" "}
-																ر.س
+																{fetchedData?.data?.orders?.codprice} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -481,10 +468,7 @@ const OrderDetails = () => {
 																align='center'
 																style={{ borderBottom: "none" }}>
 																<span style={{ fontWeight: "500" }}>
-																	{Number(
-																		fetchedData?.data?.orders?.discount
-																	).toFixed(2)}{" "}
-																	ر.س
+																	{fetchedData?.data?.orders?.codprice} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
@@ -510,12 +494,8 @@ const OrderDetails = () => {
 																backgroundColor: "#e1e1e1",
 															}}>
 															<span style={{ fontWeight: "500" }}>
-																{(
-																	Number(
-																		fetchedData?.data?.orders?.total_price
-																	) +
-																	Number(fetchedData?.data?.orders?.codprice)
-																).toFixed(2)}{" "}
+																{fetchedData?.data?.orders?.codprice +
+																	fetchedData?.data?.orders?.total_price}
 																ر.س
 															</span>
 														</TableCell>
@@ -550,7 +530,7 @@ const OrderDetails = () => {
 															<div className='info-box'>
 																<Client className='client-icon' />
 																<span className=' text-overflow'>
-																	{fetchedData?.data?.orders?.user?.name}
+																	{`${fetchedData?.data?.orders?.user?.name} ${fetchedData?.data?.orders?.user?.user_name}`}
 																</span>
 															</div>
 														</div>
@@ -854,7 +834,7 @@ const OrderDetails = () => {
 													<input
 														type='text'
 														className='w-100 h-100'
-														placeholder='10'
+														placeholder='الوزن بالكيلو جرام '
 														name='name'
 														value={shipping?.weight}
 														onChange={(e) =>
@@ -916,38 +896,21 @@ const OrderDetails = () => {
 																style={{ cursor: "pointer" }}>
 																جديد
 															</li>
+
 															<li
-																onClick={() => updateOrderStatus("completed")}
+																onClick={() => updateOrderStatus("ready")}
 																style={{ cursor: "pointer" }}>
-																مكتمل
-															</li>
-															<li
-																onClick={() =>
-																	updateOrderStatus("delivery_in_progress")
-																}
-																style={{ cursor: "pointer" }}>
-																جاري التجهيز
+																جاهز
 																<span style={{ fontSize: "1rem" }}>
 																	{" "}
 																	(يرجى ملء بيانات الشحنة أولاً){" "}
 																</span>
 															</li>
-															<li
-																onClick={() => updateOrderStatus("ready")}
-																style={{ cursor: "pointer" }}>
-																جاهز
-															</li>
+
 															<li
 																onClick={() => updateOrderStatus("canceled")}
 																style={{ cursor: "pointer" }}>
 																ملغي
-															</li>
-															<li
-																onClick={() =>
-																	updateOrderStatus("not_completed")
-																}
-																style={{ cursor: "pointer" }}>
-																غير مكتمل
 															</li>
 														</ul>
 													</div>
