@@ -200,7 +200,7 @@ const AddNewProduct = () => {
 	const subcategory =
 		categories?.data?.categories?.filter(
 			(sub) => sub?.id === parseInt(product?.category_id)
-		) || "";
+		) || [];
 
 	/* UseEffects TO Handle memory leaks */
 	useEffect(() => {
@@ -247,7 +247,6 @@ const AddNewProduct = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],
 						cover: res?.data?.message?.en?.cover?.[0],
@@ -593,11 +592,12 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-lg-3 col-md-3 col-12'>
+										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
 												{" "}
 												السعر <span className='text-danger'>*</span>{" "}
 											</label>
+											<span className="tax-text">(السعر يشمل الضريبة)</span>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<Controller
@@ -646,8 +646,9 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
-										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='low-price'> السعر بعد الخصم </label>
+										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
+											<label htmlFor='low-price'>السعر بعد الخصم</label>
+											<span className="tax-text">(السعر يشمل الضريبة)</span>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<Controller

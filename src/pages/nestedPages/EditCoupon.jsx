@@ -291,20 +291,20 @@ const EditCoupon = () => {
 		formData.append("total_redemptions", data?.total_redemptions);
 		formData.append("user_redemptions", data?.user_redemptions);
 		formData.append("free_shipping", data?.free_shipping);
-		formData.append(
-			"exception_discount_product",
-			data?.exception_discount_product
-		);
+		// formData.append(
+		// 	"exception_discount_product",
+		// 	data?.exception_discount_product
+		// );
 
 		formData.append("coupon_apply", coupon_apply);
-		formData.append(
-			"select_category_id",
-			coupon_apply === "selected_category" ? select_category_id : ""
-		);
-		formData.append(
-			"select_payment_id",
-			coupon_apply === "selected_payment" ? select_payment_id : ""
-		);
+		// formData.append(
+		// 	"select_category_id",
+		// 	coupon_apply === "selected_category" ? select_category_id : ""
+		// );
+		// formData.append(
+		// 	"select_payment_id",
+		// 	coupon_apply === "selected_payment" ? select_payment_id : ""
+		// );
 
 		selectedProducts?.forEach((product, idx) => {
 			formData.append(
@@ -432,7 +432,7 @@ const EditCoupon = () => {
 														id='coupon-code'
 														placeholder='ادخل كود الكوبون'
 														name='code'
-														disabled={isEnable === "نشط" ? false : true}
+														// disabled={isEnable === "نشط" ? false : true}
 														{...register("code", {
 															required: "حقل الكود مطلوب",
 															pattern: {
@@ -476,7 +476,7 @@ const EditCoupon = () => {
 																id='uses-count'
 																placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
 																name='total_redemptions'
-																disabled={isEnable === "نشط" ? false : true}
+																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
 																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
 															/>
@@ -509,13 +509,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='discount_type'
-																disabled={isEnable === "نشط" ? false : true}>
+																// disabled={isEnable === "نشط" ? false : true}
+																>
 																<div className='radio-box'>
 																	<FormControlLabel
 																		value='percent'
 																		id='percent-price'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -532,7 +533,7 @@ const EditCoupon = () => {
 																		value='fixed'
 																		id='fixed-price'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -576,7 +577,7 @@ const EditCoupon = () => {
 																	id='add-ptice'
 																	placeholder=' ادخل المبلغ او الخصم'
 																	name='discount'
-																	disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	value={value}
 																	onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
 																/>
@@ -620,7 +621,7 @@ const EditCoupon = () => {
 																name='user_redemptions'
 																id='user-count'
 																placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
-																disabled={isEnable === "نشط" ? false : true}
+																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
 																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
 															/>
@@ -679,13 +680,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='free_shipping'
-																disabled={isEnable === "نشط" ? false : true}>
+																// disabled={isEnable === "نشط" ? false : true}
+																>
 																<div className='radio-box '>
 																	<FormControlLabel
 																		value={1}
 																		id='accept-free-shipping'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -700,7 +702,7 @@ const EditCoupon = () => {
 																		value={0}
 																		id='no-free-shipping'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -743,7 +745,7 @@ const EditCoupon = () => {
 																name='total_price'
 																id='add-ptice'
 																placeholder=' ادخل مبلغ الحد الأدني من المشتريات'
-																disabled={isEnable === "نشط" ? false : true}
+																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
 																onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
 															/>
@@ -757,7 +759,8 @@ const EditCoupon = () => {
 														</span>
 													</div>
 												</div>
-												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
+												<div className='col-lg-5 col-12 mb-lg-0 mb-3'></div>
+												{/*<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
 														استثناء المنتجات المخفضة
 														<span className='text-danger'>*</span>
@@ -775,13 +778,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='exception_discount_product'
-																disabled={isEnable === "نشط" ? false : true}>
+																// disabled={isEnable === "نشط" ? false : true}
+																>
 																<div className='radio-box '>
 																	<FormControlLabel
 																		value={1}
 																		id='accept-lower-product'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -796,7 +800,7 @@ const EditCoupon = () => {
 																		value={0}
 																		id='no-lower-product'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -815,7 +819,7 @@ const EditCoupon = () => {
 															{errors?.code && errors.code.message}
 														</span>
 													</div>
-												</div>
+																	</div>*/}
 											</div>
 											<div className='row mb-md-5 d-flex justify-content-evenly'>
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
@@ -829,7 +833,7 @@ const EditCoupon = () => {
 																<p>اختر واحد من الخيارات التالية</p>
 															</div>
 															<RadioGroup
-																disabled={isEnable === "نشط" ? false : true}
+																// disabled={isEnable === "نشط" ? false : true}
 																aria-labelledby='demo-controlled-radio-buttons-group'
 																name='coupon_apply'
 																value={coupon_apply}
@@ -841,7 +845,7 @@ const EditCoupon = () => {
 																		value='all'
 																		id='all'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -858,7 +862,7 @@ const EditCoupon = () => {
 																		value='selected_product'
 																		id='selected_product'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -870,12 +874,12 @@ const EditCoupon = () => {
 																		منتجات مختارة
 																	</label>
 																</div>
-																<div className='radio-box select-apply-offer'>
+																{/*<div className='radio-box select-apply-offer'>
 																	<FormControlLabel
 																		value='selected_category'
 																		id='selected_category'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -886,13 +890,13 @@ const EditCoupon = () => {
 																		htmlFor='selected_category'>
 																		تصنيفات مختارة
 																	</label>
-																</div>
+																	</div>
 																<div className='radio-box select-apply-offer'>
 																	<FormControlLabel
 																		value='selected_payment'
 																		id='selected_payment'
 																		control={<Radio />}
-																		disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -903,7 +907,7 @@ const EditCoupon = () => {
 																		htmlFor='selected_payment'>
 																		طرق دفع مختارة
 																	</label>
-																</div>
+																</div>*/}
 															</RadioGroup>
 															<div className='col-12'>
 																{couponError?.coupon_apply && (
@@ -922,7 +926,7 @@ const EditCoupon = () => {
 																	<SearchIcon className='search-icon' />
 																</div>
 																<input
-																	disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	style={{ paddingRight: "38px" }}
 																	value={searchTerm}
 																	onChange={handleSearch}
@@ -963,7 +967,7 @@ const EditCoupon = () => {
 														<div className='col-12 mb-4'>
 															<FormControl sx={{ m: 0, width: "100%" }}>
 																<Select
-																	disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	name='select_category_id'
 																	value={select_category_id}
 																	onChange={(e) => {
@@ -1037,7 +1041,7 @@ const EditCoupon = () => {
 														<div className='col-12 mb-4'>
 															<FormControl sx={{ m: 0, width: "100%" }}>
 																<Select
-																	disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	name='select_payment_id'
 																	value={select_payment_id}
 																	onChange={(e) => {
@@ -1117,7 +1121,7 @@ const EditCoupon = () => {
 															setIsEnable(!isEnable);
 														}}
 														checked={isEnable}
-														disabled={isEnable === "نشط" ? false : true}
+														// disabled={isEnable === "نشط" ? false : true}
 														sx={{
 															width: "50px",
 															"& .MuiSwitch-track": {

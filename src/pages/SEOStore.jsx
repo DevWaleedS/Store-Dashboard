@@ -91,7 +91,7 @@ const PaintStore = () => {
 		formData.append("twitterpixel", twitter);
 		formData.append("tiktokpixel", tiktok);
 		formData.append("instapixel", instagram);
-		formData.append("key_words", keyWord.join(" , "));
+		formData.append("key_words", keyWord.join(","));
 		axios
 			.post(`https://backend.atlbha.com/api/Store/updateSeo`, formData, {
 				headers: {

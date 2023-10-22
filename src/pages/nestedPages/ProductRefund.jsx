@@ -278,6 +278,8 @@ const ProductRefund = () => {
 												<div className='label selling-price-label mb-1'>
 													سعر البيع<span className='text-danger'>*</span>{" "}
 													<span>(قم بإضافة السعر الخاص بك)</span>
+													<br />
+													<p className="tax-text">(السعر يشمل الضريبة)</p>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex align-items-center p-2 gap-3'>

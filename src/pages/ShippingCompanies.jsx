@@ -98,6 +98,7 @@ const ShippingCompanies = () => {
 								<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
 									<StoreDataWidget
 										data={item?.name}
+										image={item?.image}
 										changeStatus={() => changeStatus(item?.id)}
 										checked={item?.status === "نشط" ? true : false}
 									/>

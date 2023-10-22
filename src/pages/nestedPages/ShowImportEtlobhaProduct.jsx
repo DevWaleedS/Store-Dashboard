@@ -390,6 +390,8 @@ const ShowImportEtlobhaProduct = () => {
 												<label htmlFor='price'>
 													سعر البيع<span className='text-danger'>*</span>
 												</label>
+												<br />
+												<span className="tax-text">(السعر يشمل الضريبة)</span>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div
