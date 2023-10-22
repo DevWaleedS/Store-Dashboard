@@ -76,8 +76,8 @@ const OrderDetails = () => {
 			city: "",
 			address: "",
 			weight: "",
-		})
-	}
+		});
+	};
 
 	function removeDuplicates(arr) {
 		const unique = arr?.filter((obj, index) => {
@@ -86,21 +86,24 @@ const OrderDetails = () => {
 		return unique;
 	}
 
-
 	const getCityFromProvince =
 		cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.province === (shipping?.district && JSON.parse(shipping?.district)?.province)
+			(obj) =>
+				obj?.province ===
+				(shipping?.district && JSON.parse(shipping?.district)?.province)
 		) || [];
 
 	function translateProvinceName(name) {
 		const unique = cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.province === name)
+			(obj) => obj?.province === name
+		);
 		return unique?.[0]?.provice_ar;
 	}
 
 	function translateCityName(name) {
 		const unique = cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.name === name)
+			(obj) => obj?.name === name
+		);
 		return unique?.[0]?.name_ar;
 	}
 
@@ -109,8 +112,11 @@ const OrderDetails = () => {
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
-		if (status === 'delivery_in_progress' || status === 'canceled') {
-			formData.append("district", (shipping?.district && JSON.parse(shipping?.district)?.province));
+		if (status === "delivery_in_progress" || status === "canceled") {
+			formData.append(
+				"district",
+				shipping?.district && JSON.parse(shipping?.district)?.province
+			);
 			formData.append("city", shipping?.city);
 			formData.append("street_address", shipping?.address);
 			formData.append("weight", shipping?.weight);
@@ -222,20 +228,18 @@ const OrderDetails = () => {
 							<div>
 								<div className='mb-md-5 mb-4'>
 									<div className='order-details-box '>
-										<div className='title mb-3'>
+										<div className='title mb-4'>
 											<h5>بيانات الطلب</h5>
 										</div>
 										<div className='order-details-data pt-md-4 pb-md-4'>
-											<div className='boxes'>
+											<div className='boxes mb-4'>
 												<div className='box'>
 													<div className='order-head-row'>
 														<StatusIcon />
 														<span className='me-3'>الحالة</span>
 													</div>
 													<div className='order-data-row'>
-														<span>
-															{fetchedData?.data?.orders?.status}
-														</span>
+														<span>{fetchedData?.data?.orders?.status}</span>
 													</div>
 												</div>
 												<div className='box'>
@@ -246,20 +250,23 @@ const OrderDetails = () => {
 
 													<div className='order-data-row'>
 														<span>
-															{moment(fetchedData?.data?.orders?.created_at).format("YYYY-MM-DD")}
+															{moment(
+																fetchedData?.data?.orders?.created_at
+															).format("DD-MM-YYYY")}
 														</span>
 													</div>
 												</div>
 												<div className='box'>
 													<div className='order-head-row'>
 														<WalletIcon />
-														<span className='me-3 price'>
-															إجمالي الطلب
-														</span>
+														<span className='me-3 price'>إجمالي الطلب</span>
 													</div>
 													<div className='order-data-row'>
 														<span>
-															{Number(fetchedData?.data?.orders?.total_price).toFixed(2)} ر.س
+															{Number(
+																fetchedData?.data?.orders?.total_price
+															).toFixed(2)}{" "}
+															ر.س
 														</span>
 													</div>
 												</div>
@@ -269,9 +276,7 @@ const OrderDetails = () => {
 														<span className='me-3'>كمية الطلب</span>
 													</div>
 													<div className='order-data-row'>
-														<span>
-															{fetchedData?.data?.orders?.quantity}
-														</span>
+														<span>{fetchedData?.data?.orders?.quantity}</span>
 													</div>
 												</div>
 												<div className='box'>
@@ -285,10 +290,11 @@ const OrderDetails = () => {
 													</div>
 												</div>
 											</div>
-											{fetchedData?.data?.orders?.shipping?.shipping_id &&
-												<div className='box mt-3'>
+
+											{fetchedData?.data?.orders?.shipping?.shipping_id && (
+												<div className='box mb-4'>
 													<div className='order-head-row'>
-														<span className='me-3'>رقم البوليصه</span>
+														<span className='me-3'>رقم الشحنة</span>
 													</div>
 													<div className='order-data-row'>
 														<span>
@@ -296,13 +302,18 @@ const OrderDetails = () => {
 														</span>
 													</div>
 												</div>
-											}
-											<div className='mt-3'>
+											)}
+
+											<div className=''>
 												<div className='order-head-row'>
 													<span className='me-3'>ملاحظات الطلب</span>
 												</div>
 												<div className='order-data-row'>
-													<span style={{ whiteSpace: 'normal', textAlign: 'center' }}>
+													<span
+														style={{
+															whiteSpace: "normal",
+															textAlign: "center",
+														}}>
 														{fetchedData?.data?.orders?.description}
 													</span>
 												</div>
@@ -312,76 +323,86 @@ const OrderDetails = () => {
 								</div>
 								<div className='mb-md-5 mb-4'>
 									<div className='order-details-box'>
-										<div className='title mb-3'>
+										<div className='title mb-4'>
 											<h5>تفاصيل المنتجات</h5>
 										</div>
 										<TableContainer>
-											<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+											<Table
+												sx={{ minWidth: 750 }}
+												aria-labelledby='tableTitle'>
 												<EnhancedTableHead />
 												<TableBody>
-													{fetchedData?.data?.orders?.orderItem?.map((row, index) => (
-														<TableRow hover tabIndex={-1} key={index}>
-															<TableCell
-																component='th'
-																id={index}
-																scope='row'
-																align='right'>
-																<div
-																	className='flex items-center'
-																	style={{
-																		display: "flex",
-																		justifyContent: "start",
-																		alignItems: "center",
-																		gap: "7px",
-																	}}>
-																	{(index + 1).toLocaleString("en-US", {
-																		minimumIntegerDigits: 2,
-																		useGrouping: false,
-																	})}
-																</div>
-															</TableCell>
-
-															<TableCell align='right'>
-																<div className="d-flex flex-row align-items-center">
-																	<img
-																		className='rounded-circle img_icons'
-																		src={row?.product?.cover}
-																		alt='client'
-																	/>
-																	<span
-																		className='me-3'
+													{fetchedData?.data?.orders?.orderItem?.map(
+														(row, index) => (
+															<TableRow hover tabIndex={-1} key={index}>
+																<TableCell
+																	component='th'
+																	id={index}
+																	scope='row'
+																	align='right'>
+																	<div
+																		className='flex items-center'
 																		style={{
-																			maxWidth: "100%",
-																			whiteSpace: "nowrap",
-																			overflow: "hidden",
-																			textOverflow: "ellipsis",
+																			display: "flex",
+																			justifyContent: "start",
+																			alignItems: "center",
+																			gap: "7px",
 																		}}>
-																		{row?.product?.name}
-																	</span>
-																</div>
-															</TableCell>
-															<TableCell align='right' sx={{ width: "90px" }}>
-																<div className='text-center'>
-																	<span>{row?.quantity}</span>
-																</div>
-															</TableCell>
-															<TableCell align='center'>
-																<span>{Number(row?.sum).toFixed(2)} ر.س</span>
-															</TableCell>
-														</TableRow>
-													))}
+																		{(index + 1).toLocaleString("en-US", {
+																			minimumIntegerDigits: 2,
+																			useGrouping: false,
+																		})}
+																	</div>
+																</TableCell>
+
+																<TableCell align='right'>
+																	<div className='d-flex flex-row align-items-center'>
+																		<img
+																			className='rounded-circle img_icons'
+																			src={row?.product?.cover}
+																			alt='client'
+																		/>
+																		<span
+																			className='me-3'
+																			style={{
+																				maxWidth: "100%",
+																				whiteSpace: "nowrap",
+																				overflow: "hidden",
+																				textOverflow: "ellipsis",
+																			}}>
+																			{row?.product?.name}
+																		</span>
+																	</div>
+																</TableCell>
+																<TableCell align='right' sx={{ width: "90px" }}>
+																	<div className='text-center'>
+																		<span>{row?.quantity}</span>
+																	</div>
+																</TableCell>
+																<TableCell align='center'>
+																	<span>{Number(row?.sum).toFixed(2)} ر.س</span>
+																</TableCell>
+															</TableRow>
+														)
+													)}
 													<TableRow>
 														<TableCell
 															colSpan={3}
 															component='th'
 															scope='row'
 															align='right'
-															style={{ borderBottom: 'none' }}
-														>
-															<span style={{ fontWeight: '700' }}>السعر</span>
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "700" }}>السعر</span>
 														</TableCell>
-														<TableCell align='center' style={{ borderBottom: 'none' }}>
-															<span style={{ fontWeight: '500' }}>{Number(fetchedData?.data?.orders?.subtotal).toFixed(2)} ر.س</span>
+														<TableCell
+															align='center'
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "500" }}>
+																{Number(
+																	fetchedData?.data?.orders?.subtotal
+																).toFixed(2)}{" "}
+																ر.س
+															</span>
 														</TableCell>
 													</TableRow>
 													<TableRow>
@@ -390,12 +411,18 @@ const OrderDetails = () => {
 															component='th'
 															scope='row'
 															align='right'
-															style={{ borderBottom: 'none' }}
-														>
-															<span style={{ fontWeight: '700' }}>الضريبة</span>
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "700" }}>الضريبة</span>
 														</TableCell>
-														<TableCell align='center' style={{ borderBottom: 'none' }}>
-															<span style={{ fontWeight: '500' }}>{Number(fetchedData?.data?.orders?.tax).toFixed(2)} ر.س</span>
+														<TableCell
+															align='center'
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "500" }}>
+																{Number(fetchedData?.data?.orders?.tax).toFixed(
+																	2
+																)}{" "}
+																ر.س
+															</span>
 														</TableCell>
 													</TableRow>
 													<TableRow>
@@ -404,12 +431,18 @@ const OrderDetails = () => {
 															component='th'
 															scope='row'
 															align='right'
-															style={{ borderBottom: 'none' }}
-														>
-															<span style={{ fontWeight: '700' }}>الشحن</span>
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "700" }}>الشحن</span>
 														</TableCell>
-														<TableCell align='center' style={{ borderBottom: 'none' }}>
-															<span style={{ fontWeight: '500' }}>{Number(fetchedData?.data?.orders?.shipping_price).toFixed(2)} ر.س</span>
+														<TableCell
+															align='center'
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "500" }}>
+																{Number(
+																	fetchedData?.data?.orders?.shipping_price
+																).toFixed(2)}{" "}
+																ر.س
+															</span>
 														</TableCell>
 													</TableRow>
 													<TableRow>
@@ -418,42 +451,73 @@ const OrderDetails = () => {
 															component='th'
 															scope='row'
 															align='right'
-															style={{ borderBottom: 'none' }}
-														>
-															<span style={{ fontWeight: '700' }}>الدفع عند الإستلام</span>
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "700" }}>
+																الدفع عند الإستلام
+															</span>
 														</TableCell>
-														<TableCell align='center' style={{ borderBottom: 'none' }}>
-															<span style={{ fontWeight: '500' }}>{Number(fetchedData?.data?.orders?.codprice).toFixed(2)} ر.س</span>
+														<TableCell
+															align='center'
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "500" }}>
+																{Number(
+																	fetchedData?.data?.orders?.codprice
+																).toFixed(2)}{" "}
+																ر.س
+															</span>
 														</TableCell>
 													</TableRow>
-													{fetchedData?.data?.orders?.discount !== 0 &&
+													{fetchedData?.data?.orders?.discount !== 0 && (
 														<TableRow>
 															<TableCell
 																colSpan={3}
 																component='th'
 																scope='row'
 																align='right'
-																style={{ borderBottom: 'none' }}
-															>
-																<span style={{ fontWeight: '700' }}>الخصم</span>
+																style={{ borderBottom: "none" }}>
+																<span style={{ fontWeight: "700" }}>الخصم</span>
 															</TableCell>
-															<TableCell align='center' style={{ borderBottom: 'none' }}>
-																<span style={{ fontWeight: '500' }}>{Number(fetchedData?.data?.orders?.discount).toFixed(2)} ر.س</span>
+															<TableCell
+																align='center'
+																style={{ borderBottom: "none" }}>
+																<span style={{ fontWeight: "500" }}>
+																	{Number(
+																		fetchedData?.data?.orders?.discount
+																	).toFixed(2)}{" "}
+																	ر.س
+																</span>
 															</TableCell>
 														</TableRow>
-													}
+													)}
 													<TableRow>
 														<TableCell
 															colSpan={3}
 															component='th'
 															scope='row'
 															align='right'
-															style={{ borderBottom: 'none', backgroundColor: '#e1e1e1' }}
-														>
-															<span style={{ fontWeight: '700' }}>الإجمالي</span>
+															style={{
+																borderBottom: "none",
+																backgroundColor: "#e1e1e1",
+															}}>
+															<span style={{ fontWeight: "700" }}>
+																الإجمالي
+															</span>
 														</TableCell>
-														<TableCell align='center' style={{ borderBottom: 'none', backgroundColor: '#e1e1e1' }}>
-															<span style={{ fontWeight: '500' }}>{(Number(fetchedData?.data?.orders?.total_price)+Number(fetchedData?.data?.orders?.codprice)).toFixed(2)} ر.س</span>
+														<TableCell
+															align='center'
+															style={{
+																borderBottom: "none",
+																backgroundColor: "#e1e1e1",
+															}}>
+															<span style={{ fontWeight: "500" }}>
+																{(
+																	Number(
+																		fetchedData?.data?.orders?.total_price
+																	) +
+																	Number(fetchedData?.data?.orders?.codprice)
+																).toFixed(2)}{" "}
+																ر.س
+															</span>
 														</TableCell>
 													</TableRow>
 												</TableBody>
@@ -463,7 +527,7 @@ const OrderDetails = () => {
 								</div>
 								<div className='mb-md-5 mb-4'>
 									<div className='order-details-box'>
-										<div className='title mb-3'>
+										<div className='title mb-4'>
 											<h5>بيانات العميل</h5>
 										</div>
 										<div className='order-details-data pt-md-4 pb-md-4'>
@@ -482,7 +546,7 @@ const OrderDetails = () => {
 												<div className='col-lg-10 col-12'>
 													<div className='row mb-md-4 mb-3'>
 														<div className='col-md-6 col-12 mb-3'>
-															<h6 className="mb-2">اسم العميل</h6>
+															<h6 className='mb-2'>اسم العميل</h6>
 															<div className='info-box'>
 																<Client className='client-icon' />
 																<span className=' text-overflow'>
@@ -491,18 +555,31 @@ const OrderDetails = () => {
 															</div>
 														</div>
 														<div className='col-md-6 col-12 mb-3'>
-															<h6 className="mb-2">رقم الهاتف</h6>
+															<h6 className='mb-2'>رقم الهاتف</h6>
 															<div className='info-box'>
 																<Phone />
 																<span style={{ direction: "ltr" }}>
-																	{fetchedData?.data?.orders?.user?.phonenumber}
+																	{fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
+																		"+966"
+																	)
+																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																				4
+																		  )
+																		: fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
+																				"00966"
+																		  )
+																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																				5
+																		  )
+																		: fetchedData?.data?.orders?.user
+																				?.phonenumber}
 																</span>
 															</div>
 														</div>
 													</div>
 													<div className='row'>
 														<div className='col-md-6 col-12 mb-3'>
-															<h6 className="mb-2">البريد الالكتروني</h6>
+															<h6 className='mb-2'>البريد الالكتروني</h6>
 															<div
 																className='info-box'
 																style={{
@@ -516,37 +593,50 @@ const OrderDetails = () => {
 															</div>
 														</div>
 														<div className='col-md-6 col-12 mb-3'>
-															<h6 className="mb-3">المنطقة</h6>
+															<h6 className='mb-3'>المنطقة</h6>
 															<div className='info-box'>
 																<span style={{ whiteSpace: "normal" }}>
-																	{translateProvinceName(fetchedData?.data?.orders?.OrderAddress?.district)}
+																	{translateProvinceName(
+																		fetchedData?.data?.orders?.OrderAddress
+																			?.district
+																	)}
 																</span>
 															</div>
 														</div>
 														<div className='col-md-6 col-12 mb-3'>
-															<h6 className="mb-3">المدينة</h6>
+															<h6 className='mb-3'>المدينة</h6>
 															<div className='info-box'>
 																<span style={{ whiteSpace: "normal" }}>
-																	{translateCityName(fetchedData?.data?.orders?.OrderAddress?.city)}
+																	{translateCityName(
+																		fetchedData?.data?.orders?.OrderAddress
+																			?.city
+																	)}
 																</span>
 															</div>
 														</div>
-														{fetchedData?.data?.orders?.OrderAddress?.postal_code &&
+														{fetchedData?.data?.orders?.OrderAddress
+															?.postal_code && (
 															<div className='col-md-6 col-12 mb-3'>
-																<h6 className="mb-3">الرمز البريدي</h6>
+																<h6 className='mb-3'>الرمز البريدي</h6>
 																<div className='info-box'>
 																	<span style={{ whiteSpace: "normal" }}>
-																		{fetchedData?.data?.orders?.OrderAddress?.postal_code}
+																		{
+																			fetchedData?.data?.orders?.OrderAddress
+																				?.postal_code
+																		}
 																	</span>
 																</div>
 															</div>
-														}
+														)}
 														<div className='col-12 mb-3'>
-															<h6 className="mb-3">العنوان</h6>
+															<h6 className='mb-3'>العنوان</h6>
 															<div className='info-box'>
 																<Location />
 																<span style={{ whiteSpace: "normal" }}>
-																	{fetchedData?.data?.orders?.OrderAddress?.street_address}
+																	{
+																		fetchedData?.data?.orders?.OrderAddress
+																			?.street_address
+																	}
 																</span>
 															</div>
 														</div>
@@ -559,16 +649,14 @@ const OrderDetails = () => {
 							</div>
 							<div className='mb-md-5 mb-4'>
 								<div className='order-details-box'>
-									<div className='title mb-3'>
+									<div className='title mb-5'>
 										<h5>اضافة بيانات الشحنة</h5>
 									</div>
 									<div className='px-md-3'>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
-													المنطقة<span className='text-danger'>
-														*
-													</span>
+													المنطقة<span className='text-danger'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
@@ -576,7 +664,10 @@ const OrderDetails = () => {
 													name='category_id'
 													value={shipping?.district}
 													onChange={(e) => {
-														setShipping({ ...shipping, district: e.target.value });
+														setShipping({
+															...shipping,
+															district: e.target.value,
+														});
 													}}
 													sx={{
 														fontSize: "18px",
@@ -584,9 +675,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-														{
-															paddingRight: "20px",
-														},
+															{
+																paddingRight: "20px",
+															},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -603,34 +694,33 @@ const OrderDetails = () => {
 													displayEmpty
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
-														if ((shipping?.district && JSON.parse(shipping?.district)?.province) === "") {
+														if (
+															(shipping?.district &&
+																JSON.parse(shipping?.district)?.province) === ""
+														) {
 															return (
-																<p className='text-[#ADB5B9]'>
-																	اختر المنطقة
-																</p>
+																<p className='text-[#ADB5B9]'>اختر المنطقة</p>
 															);
 														}
-														return selected && JSON.parse(selected)?.provice_ar
+														return selected && JSON.parse(selected)?.provice_ar;
 													}}>
-													{removeDuplicates(cities?.data?.cities?.data?.cities)?.map(
-														(district, index) => {
-															return (
-																<MenuItem
-																	key={index}
-																	className='souq_storge_category_filter_items'
-																	sx={{
-																		backgroundColor:
-																			"rgba(211, 211, 211, 1)",
-																		height: "3rem",
-																		"&:hover": {},
-																	}}
-																	value={JSON.stringify(district)}
-																>
-																	{district?.provice_ar}
-																</MenuItem>
-															);
-														}
-													)}
+													{removeDuplicates(
+														cities?.data?.cities?.data?.cities
+													)?.map((district, index) => {
+														return (
+															<MenuItem
+																key={index}
+																className='souq_storge_category_filter_items'
+																sx={{
+																	backgroundColor: "rgba(211, 211, 211, 1)",
+																	height: "3rem",
+																	"&:hover": {},
+																}}
+																value={JSON.stringify(district)}>
+																{district?.provice_ar}
+															</MenuItem>
+														);
+													})}
 												</Select>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -643,9 +733,7 @@ const OrderDetails = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
-													المدينة<span className='text-danger'>
-														*
-													</span>
+													المدينة<span className='text-danger'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
@@ -661,9 +749,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-														{
-															paddingRight: "20px",
-														},
+															{
+																paddingRight: "20px",
+															},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -682,9 +770,7 @@ const OrderDetails = () => {
 													renderValue={(selected) => {
 														if (shipping?.city === "") {
 															return (
-																<p className='text-[#ADB5B9]'>
-																	اختر المدينة
-																</p>
+																<p className='text-[#ADB5B9]'>اختر المدينة</p>
 															);
 														}
 														const result =
@@ -693,32 +779,26 @@ const OrderDetails = () => {
 															) || "";
 														return result[0]?.name_ar;
 													}}>
-													{getCityFromProvince?.map(
-														(city, index) => {
-															return (
-																<MenuItem
-																	key={index}
-																	className='souq_storge_category_filter_items'
-																	sx={{
-																		backgroundColor:
-																			"rgba(211, 211, 211, 1)",
-																		height: "3rem",
-																		"&:hover": {},
-																	}}
-																	value={city?.name}
-																>
-																	{city?.name_ar}
-																</MenuItem>
-															);
-														}
-													)}
+													{getCityFromProvince?.map((city, index) => {
+														return (
+															<MenuItem
+																key={index}
+																className='souq_storge_category_filter_items'
+																sx={{
+																	backgroundColor: "rgba(211, 211, 211, 1)",
+																	height: "3rem",
+																	"&:hover": {},
+																}}
+																value={city?.name}>
+																{city?.name_ar}
+															</MenuItem>
+														);
+													})}
 												</Select>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-9 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{error?.city}
-												</span>
+												<span className='fs-6 text-danger'>{error?.city}</span>
 											</div>
 										</div>
 										<div className='row mb-md-5 mb-3'>
@@ -733,8 +813,19 @@ const OrderDetails = () => {
 													placeholder='عنوان الشحنة'
 													name='name'
 													value={shipping?.address}
-													onChange={(e) => setShipping({ ...shipping, address: e.target.value })}
-													style={{ width: "100%", height: "56px", padding: "5px 1rem", backgroundColor: "#cce4ff38", boxShadow: "0 0 5px 0px #eded", }}
+													onChange={(e) =>
+														setShipping({
+															...shipping,
+															address: e.target.value,
+														})
+													}
+													style={{
+														width: "100%",
+														height: "56px",
+														padding: "5px 1rem",
+														backgroundColor: "#cce4ff38",
+														boxShadow: "0 0 5px 0px #eded",
+													}}
 												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -752,16 +843,26 @@ const OrderDetails = () => {
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
 												<div
-													className="d-flex flex-row align-items-center justify-content-between"
-													style={{ width: "100%", height: "56px", padding: "5px 1rem", backgroundColor: "#cce4ff38", boxShadow: "0 0 5px 0px #eded", }}
-												>
+													className='d-flex flex-row align-items-center justify-content-between'
+													style={{
+														width: "100%",
+														height: "56px",
+														padding: "5px 1rem",
+														backgroundColor: "#cce4ff38",
+														boxShadow: "0 0 5px 0px #eded",
+													}}>
 													<input
 														type='text'
-														className="w-100 h-100"
+														className='w-100 h-100'
 														placeholder='10'
 														name='name'
 														value={shipping?.weight}
-														onChange={(e) => setShipping({ ...shipping, weight: e.target.value })}
+														onChange={(e) =>
+															setShipping({
+																...shipping,
+																weight: e.target.value,
+															})
+														}
 														style={{ backgroundColor: "transparent" }}
 													/>
 													<span>kg</span>
@@ -779,7 +880,7 @@ const OrderDetails = () => {
 							</div>
 							<div className='mb-md-5 mb-4'>
 								<div className='order-details-box'>
-									<div className='title mb-3'>
+									<div className='title mb-4'>
 										<h5> خيارات الطلب</h5>
 									</div>
 									<div className='px-md-3'>
@@ -826,7 +927,10 @@ const OrderDetails = () => {
 																}
 																style={{ cursor: "pointer" }}>
 																جاري التجهيز
-																<span style={{ fontSize: '1rem' }}> (يرجى ملء بيانات الشحنة أولاً) </span>
+																<span style={{ fontSize: "1rem" }}>
+																	{" "}
+																	(يرجى ملء بيانات الشحنة أولاً){" "}
+																</span>
 															</li>
 															<li
 																onClick={() => updateOrderStatus("ready")}

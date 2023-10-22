@@ -59,7 +59,7 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					رقم البوليصه
+					رقم الشحنة
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='right'>
 					اسم العميل
@@ -112,7 +112,7 @@ function EnhancedTableToolbar(props) {
 								onChange={(e) => setSearch(e.target.value)}
 								sx={{ paddingRight: "35px" }}
 								id='outlined-basic'
-								label='ابحث عن طريق رقم البوليصه'
+								label='ابحث عن طريق رقم الشحنة'
 								variant='outlined'
 							/>
 						</div>
@@ -127,7 +127,14 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function BigOrdersTable({ data, loading, reload, setReload, search, setSearch }) {
+export default function BigOrdersTable({
+	data,
+	loading,
+	reload,
+	setReload,
+	search,
+	setSearch,
+}) {
 	// Use Navigate for navigate to order details page
 	const { fetchedData: cities } = useFetch(
 		`https://backend.atlbha.com/api/Store/getAllCity`
@@ -167,9 +174,9 @@ export default function BigOrdersTable({ data, loading, reload, setReload, searc
 		filterDataResult = filterData?.filter(
 			(item) =>
 				moment(item?.created_at).format("YYYY-MM-DD") >=
-				moment(dateValue[0]).format("YYYY-MM-DD") &&
+					moment(dateValue[0]).format("YYYY-MM-DD") &&
 				moment(item?.created_at).format("YYYY-MM-DD") <=
-				moment(dateValue[1]).format("YYYY-MM-DD")
+					moment(dateValue[1]).format("YYYY-MM-DD")
 		);
 	} else {
 		filterDataResult = filterData;
@@ -211,7 +218,8 @@ export default function BigOrdersTable({ data, loading, reload, setReload, searc
 
 	function translateCityName(name) {
 		const unique = cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.name === name)
+			(obj) => obj?.name === name
+		);
 		return unique?.[0]?.name_ar;
 	}
 
@@ -313,22 +321,22 @@ export default function BigOrdersTable({ data, loading, reload, setReload, searc
 																			row?.status === "مكتمل"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
-																					? "#d4ebf7"
-																					: row?.status === "ملغي"
-																						? "#ffebeb"
-																						: row?.status === "جاري التجهيز"
-																							? "#ffecd1c7"
-																							: "#e8f8f8",
+																				? "#d4ebf7"
+																				: row?.status === "ملغي"
+																				? "#ffebeb"
+																				: row?.status === "جاري التجهيز"
+																				? "#ffecd1c7"
+																				: "#e8f8f8",
 																		color:
 																			row?.status === "مكتمل"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
-																					? "#0077ff"
-																					: row?.status === "ملغي"
-																						? "#ff7b7b"
-																						: row?.status === "جاري التجهيز"
-																							? "#ff9f1a"
-																							: "#46c7ca",
+																				? "#0077ff"
+																				: row?.status === "ملغي"
+																				? "#ff7b7b"
+																				: row?.status === "جاري التجهيز"
+																				? "#ff9f1a"
+																				: "#46c7ca",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,
