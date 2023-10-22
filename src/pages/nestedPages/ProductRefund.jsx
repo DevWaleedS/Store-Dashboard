@@ -206,15 +206,21 @@ const ProductRefund = () => {
 											</div>
 
 											<div className='product-category'>
-												<h3 className='text-center mb-3'>نشاطات أو تصنيفات المنتج</h3>
+												<h3 className='text-center mb-3'>
+													نشاطات و تصنيفات المنتج
+												</h3>
 												<div className='main-category category mb-3'>
-													<div className='label mb-2'>النشاط أو التصنيف الرئيسي</div>
+													<div className='label mb-2'>
+														النشاط و التصنيف الرئيسي
+													</div>
 													<div className='input'>
 														{fetchedData?.data?.products?.category?.name}
 													</div>
 												</div>
 												<div className='sub-category category'>
-													<div className='label mb-2'>النشاطات أو التصنيفات الفرعية </div>
+													<div className='label mb-2'>
+														النشاطات و التصنيفات الفرعية{" "}
+													</div>
 													<div className='d-flex align-items-center justify-content-start flex-wrap gap-3'>
 														{fetchedData?.data?.products?.subcategory
 															?.length === 0 ? (
@@ -279,7 +285,7 @@ const ProductRefund = () => {
 													سعر البيع<span className='text-danger'>*</span>{" "}
 													<span>(قم بإضافة السعر الخاص بك)</span>
 													<br />
-													<p className="tax-text">(السعر يشمل الضريبة)</p>
+													<p className='tax-text'>(السعر يشمل الضريبة)</p>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex align-items-center p-2 gap-3'>
@@ -293,7 +299,14 @@ const ProductRefund = () => {
 																type='text'
 																name='price'
 																value={price}
-																onChange={(e) => setPrice(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																onChange={(e) =>
+																	setPrice(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	)
+																}
 															/>
 														</div>
 													</div>
@@ -304,7 +317,9 @@ const ProductRefund = () => {
 												</div>
 
 												{Number(price) <
-													Number(fetchedData?.data?.products?.purchasing_price) && (
+													Number(
+														fetchedData?.data?.products?.purchasing_price
+													) && (
 													<span className='fs-6 text-danger'>
 														السعر يجب ان يكون اكبر من او يساوي (
 														{fetchedData?.data?.products?.purchasing_price})

@@ -38,13 +38,13 @@ function EnhancedTableHead(props) {
 					ID
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a", minWidth: "300px" }}>
-					النشاط أو التصنيف الأساسي
+					النشاط و التصنيف الأساسي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					فرعي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					النشاطات أو التصنيفات الفرعية
+					النشاطات و التصنيفات الفرعية
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					نشر
@@ -86,7 +86,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع النشاطات أو التصنيفات وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع النشاطات و التصنيفات وهذة الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -100,7 +100,7 @@ function EnhancedTableToolbar(props) {
 							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم تعطيل جميع النشاطات أو التصنيفات التي قمت بتحديدهم"
+									"سيتم تعطيل جميع النشاطات و التصنيفات التي قمت بتحديدهم"
 								);
 								setActionTitle("changeStatus");
 							}}>

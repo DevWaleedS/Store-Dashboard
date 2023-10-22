@@ -109,7 +109,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Category />
-						<span className='me-2'> النشاطات أو التصنيفات</span>
+						<span className='me-2'> النشاطات و التصنيفات</span>
 					</MenuItem>
 				</NavLink>
 				<NavLink

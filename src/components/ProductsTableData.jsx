@@ -31,11 +31,9 @@ const ProductsTableData = ({ productsDetails }) => {
 						<table className='table  table-borderless products-table text-center'>
 							<thead>
 								<tr>
-									<th scope='col' className='pr-rad-right'></th>
-
 									<th
 										scope='col'
-										style={{ whiteSpace: "nowrap", width: "245px" }}>
+										style={{ whiteSpace: "nowrap", width: "240px" }}>
 										الاسم
 									</th>
 									<th
@@ -43,10 +41,10 @@ const ProductsTableData = ({ productsDetails }) => {
 										className=' text-center'
 										style={{
 											whiteSpace: "nowrap",
-											width: "195px",
+											width: "190px",
 											textAlign: "center",
 										}}>
-										النشاط أو التصنيف
+										التصنيف
 									</th>
 									<th scope='col' className=' text-center'>
 										السعر
@@ -63,28 +61,37 @@ const ProductsTableData = ({ productsDetails }) => {
 								{productsDetails?.map((product) => (
 									<React.Fragment key={product?.id}>
 										<tr>
+											{/* Product name */}
 											<td>
-												<div style={{ whiteSpace: "nowrap", width: "40px" }}>
-													<img
-														style={{ borderRadius: "50%", width: "100%" }}
-														className='rounded-circle img_icons'
-														src={product?.cover}
-														alt={product?.name}
-													/>
+												<div
+													style={{
+														width: "240px",
+														display: "flex",
+														justifyContent: "flex-start",
+														alignItems: "center",
+														gap: "4px",
+													}}>
+													{/* product cover*/}
+													<div style={{ whiteSpace: "nowrap", width: "40px" }}>
+														<img
+															style={{ borderRadius: "50%", width: "100%" }}
+															className='rounded-circle img_icons'
+															src={product?.cover}
+															alt=''
+														/>
+													</div>
+
+													{/* Product name */}
+													<div className='text-overflow'>{product?.name}</div>
 												</div>
 											</td>
 
-											<td style={{ whiteSpace: "nowrap", width: "245px" }}>
-												{" "}
-												{product?.name}
-											</td>
 											<td
 												style={{
 													whiteSpace: "nowrap",
-													width: "195px",
+													width: "190px",
 													textAlign: "center",
 												}}>
-												{" "}
 												{product?.category?.name}
 											</td>
 											<td> {product?.selling_price}</td>

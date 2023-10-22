@@ -503,17 +503,17 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																row?.discount_price !== 0 ? (
 																	<>
 																		<span class='me-1 d-block'>
-																			{row?.discount_price}
+																			{row?.discount_price} ر.س
 																		</span>
 
 																		<del
 																			class='original-price'
 																			style={{
-																				fontSize: "16px",
-																				fontWeight: " 500",
-																				color: "#99a2a7",
+																				fontSize: "13px",
+																				fontWeight: " 400",
+																				color: "#b3b3b3",
 																			}}>
-																			{row?.selling_price}
+																			{row?.selling_price} ر.س
 																		</del>
 																	</>
 																) : (

@@ -259,7 +259,7 @@ const ShowImportEtlobhaProduct = () => {
 										</div>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-desc'> وصف المنتح </label>
+												<label htmlFor='product-desc'> وصف المنتج </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<textarea
@@ -301,7 +301,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='sub-category'>
 													{" "}
-													النشاطات أو التصنيفات الفرعية{" "}
+													النشاطات و التصنيفات الفرعية{" "}
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
