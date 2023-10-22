@@ -171,20 +171,20 @@ const AddCoupon = () => {
 		formData.append("total_redemptions", data?.total_redemptions);
 		formData.append("user_redemptions", data?.user_redemptions);
 		formData.append("free_shipping", data?.free_shipping);
-		formData.append(
-			"exception_discount_product",
-			data?.exception_discount_product
-		);
+		// formData.append(
+		// 	"exception_discount_product",
+		// 	data?.exception_discount_product
+		// );
 
 		formData.append("coupon_apply", coupon_apply);
-		formData.append(
-			"select_category_id",
-			coupon_apply === "selected_category" ? select_category_id : ""
-		);
-		formData.append(
-			"select_payment_id",
-			coupon_apply === "selected_payment" ? select_payment_id : ""
-		);
+		// formData.append(
+		// 	"select_category_id",
+		// 	coupon_apply === "selected_category" ? select_category_id : ""
+		// );
+		// formData.append(
+		// 	"select_payment_id",
+		// 	coupon_apply === "selected_payment" ? select_payment_id : ""
+		// );
 		selectedProductIds.forEach((id, idx) =>
 			formData.append(
 				`select_product_id[${idx}]`,
@@ -562,8 +562,8 @@ const AddCoupon = () => {
 												</span>
 											</div>
 										</div>
-
-										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
+										<div className='col-lg-5 col-12 mb-lg-0 mb-3'></div>
+										{/*<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='user-count' className='d-block mb-1'>
 												استثناء المنتجات المخفضة
 												<span className='text-danger'>*</span>
@@ -618,7 +618,7 @@ const AddCoupon = () => {
 														errors.exception_discount_product.message}
 												</span>
 											</div>
-										</div>
+										</div>*/}
 									</div>
 									<div className='row row mb-md-5 d-flex justify-content-evenly'>
 										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
@@ -670,7 +670,7 @@ const AddCoupon = () => {
 																منتجات مختارة
 															</label>
 														</div>
-														<div className='radio-box select-apply-offer'>
+														{/*<div className='radio-box select-apply-offer'>
 															<FormControlLabel
 																value='selected_category'
 																id='selected_category'
@@ -685,7 +685,7 @@ const AddCoupon = () => {
 																htmlFor='selected_category'>
 																تصنيفات مختارة
 															</label>
-														</div>
+															</div>
 														<div className='radio-box select-apply-offer'>
 															<FormControlLabel
 																value='selected_payment'
@@ -701,7 +701,7 @@ const AddCoupon = () => {
 																htmlFor='selected_payment'>
 																طرق دفع مختارة
 															</label>
-														</div>
+														</div>*/}
 													</RadioGroup>
 													<div className='col-12'>
 														{couponError?.coupon_apply && (

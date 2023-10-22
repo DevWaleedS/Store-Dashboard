@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
@@ -13,6 +13,19 @@ const Orders = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/orders"
 	);
+
+	// to create search
+	const [search, setSearch] = useState("");
+	let orders = fetchedData?.data?.orders;
+
+	if (search !== "") {
+		orders = fetchedData?.data?.orders?.filter((order) =>
+			order?.shipping?.shipping_id?.toLowerCase()?.includes(search?.toLowerCase())
+		);
+	} else {
+		orders = fetchedData?.data?.orders;
+	}
+
 	return (
 		<>
 			<Helmet>
@@ -66,10 +79,12 @@ const Orders = () => {
 				{/** Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
-						data={fetchedData?.data?.orders}
+						data={orders}
 						loading={loading}
 						reload={reload}
 						setReload={setReload}
+						search={search}
+						setSearch={setSearch}
 					/>
 				</div>
 			</section>

@@ -12,13 +12,16 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
+import { TextField } from "@mui/material";
 
 import TablePagination from "./TablePagination";
 // Icons
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
+import { FiSearch } from "react-icons/fi";
 import DateRangePicker from "rsuite/DateRangePicker";
 import "rsuite/dist/rsuite.min.css";
 import moment from "moment";
+import useFetch from "../Hooks/UseFetch";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
@@ -56,13 +59,13 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					رقم الطلب
+					رقم البوليصه
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='right'>
-					الاسم
+					اسم العميل
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					الحالة
+					حالة الطلب
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الموقع
@@ -71,7 +74,7 @@ function EnhancedTableHead(props) {
 					الكمية
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='center'>
-					المجموع
+					اجمالي الطلب
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الاجراء
@@ -91,28 +94,27 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { dateValue, setDateValue } = props;
+	const { dateValue, setDateValue, search, setSearch } = props;
 
 	return (
 		<React.Fragment>
 			{/** Filter Section */}
 			<Toolbar>
-				<div className='row mb-0 filter-wrapper m-0 mt-4'>
+				<div className='row mb-0 filter-wrapper m-0 mt-4 order-toolbar'>
 					<div className='filter-row d-flex align-items-center justify-content-between mb-3'>
 						<div className='title-col'>
 							<h4>جدول الطلبات</h4>
 						</div>
-						<div className='w-100 d-flex flex-row align-items-center justify-content-end flex-sm-nowrap flex-wrap'>
-							<div className='orders-date-picker mw-100'>
-								<div className='date-picker'>
-									<DateRangePicker
-										value={dateValue}
-										onChange={setDateValue}
-										dir='rtl'
-										placeholder='اختر الفترة من - إلي'
-									/>
-								</div>
-							</div>
+						<div className='search-input-box'>
+							<FiSearch />
+							<TextField
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+								sx={{ paddingRight: "35px" }}
+								id='outlined-basic'
+								label='ابحث عن طريق رقم البوليصه'
+								variant='outlined'
+							/>
 						</div>
 					</div>
 				</div>
@@ -125,8 +127,11 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function BigOrdersTable({ data, loading, reload, setReload }) {
+export default function BigOrdersTable({ data, loading, reload, setReload, search, setSearch }) {
 	// Use Navigate for navigate to order details page
+	const { fetchedData: cities } = useFetch(
+		`https://backend.atlbha.com/api/Store/getAllCity`
+	);
 	const navigate = useNavigate();
 	const [order, setOrder] = React.useState("asc");
 	const [orderBy, setOrderBy] = React.useState("calories");
@@ -162,9 +167,9 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 		filterDataResult = filterData?.filter(
 			(item) =>
 				moment(item?.created_at).format("YYYY-MM-DD") >=
-					moment(dateValue[0]).format("YYYY-MM-DD") &&
+				moment(dateValue[0]).format("YYYY-MM-DD") &&
 				moment(item?.created_at).format("YYYY-MM-DD") <=
-					moment(dateValue[1]).format("YYYY-MM-DD")
+				moment(dateValue[1]).format("YYYY-MM-DD")
 		);
 	} else {
 		filterDataResult = filterData;
@@ -204,12 +209,18 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 		return arr;
 	};
 
+	function translateCityName(name) {
+		const unique = cities?.data?.cities?.data?.cities?.filter(
+			(obj) => obj?.name === name)
+		return unique?.[0]?.name_ar;
+	}
+
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
-					dateValue={dateValue}
-					setDateValue={setDateValue}
+					search={search}
+					setSearch={setSearch}
 					itemSelected={itemSelected}
 					setItemSelected={setItemSelected}
 					numSelected={selected.length}
@@ -272,7 +283,7 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 														</TableCell>
 
 														<TableCell align='right'>
-															{row?.order_number}
+															{row?.shipping?.shipping_id}
 														</TableCell>
 														<TableCell align='right'>
 															<div className='cate-prim'>
@@ -302,22 +313,22 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 																			row?.status === "مكتمل"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
-																				? "#d4ebf7"
-																				: row?.status === "ملغي"
-																				? "#ffebeb"
-																				: row?.status === "جاري التجهيز"
-																				? "#ffecd1c7"
-																				: "#e8f8f8",
+																					? "#d4ebf7"
+																					: row?.status === "ملغي"
+																						? "#ffebeb"
+																						: row?.status === "جاري التجهيز"
+																							? "#ffecd1c7"
+																							: "#e8f8f8",
 																		color:
 																			row?.status === "مكتمل"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
-																				? "#0077ff"
-																				: row?.status === "ملغي"
-																				? "#ff7b7b"
-																				: row?.status === "جاري التجهيز"
-																				? "#ff9f1a"
-																				: "#46c7ca",
+																					? "#0077ff"
+																					: row?.status === "ملغي"
+																						? "#ff7b7b"
+																						: row?.status === "جاري التجهيز"
+																							? "#ff9f1a"
+																							: "#46c7ca",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,
@@ -328,7 +339,7 @@ export default function BigOrdersTable({ data, loading, reload, setReload }) {
 															</div>
 														</TableCell>
 														<TableCell align='center'>
-															{row?.user?.city?.name}
+															{translateCityName(row?.OrderAddress?.city)}
 														</TableCell>
 														<TableCell align='center'>
 															{row?.quantity}

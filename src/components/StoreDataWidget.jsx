@@ -2,12 +2,13 @@ import React from 'react';
 import { Switch } from '@mui/material';
 
 
-const StoreDataWidget = ({ data, img, changeStatus, checked }) => {
+const StoreDataWidget = ({ data, image, changeStatus, checked }) => {
 	return (
 		<div className='data-widget'>
 			<div className='data'>
-				<h5> {data}</h5>
-				<div className='image-box'>{img}</div>
+				<div className='shipping-image-box'>
+					<img src={image} alt=''/>
+				</div>
 			</div>
 			<div className='switch-box'>
 				<Switch
