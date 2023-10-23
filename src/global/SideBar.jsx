@@ -180,6 +180,15 @@ const SideBar = ({ open, closeSidebar }) => {
 							<span className='me-2'>الاشتراكات البريدية</span>
 						</MenuItem>
 					</NavLink>
+					<NavLink
+						className='sub-menu-link'
+						to='SEOStore'
+						onClick={() => closeSidebar()}>
+						<MenuItem>
+							<FaCircle style={{ width: "14px" }} />
+							<span className='me-2'> SEO المتجر </span>
+						</MenuItem>
+					</NavLink>
 					{/*<NavLink
 						className='sub-menu-link disabled-menu-link'
 						to='MarketingCampaign'
@@ -375,15 +384,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> الإشعارات </span>
-						</MenuItem>
-					</NavLink>
-					<NavLink
-						className='sub-menu-link'
-						to='SEOStore'
-						onClick={() => closeSidebar()}>
-						<MenuItem>
-							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> SEO المتجر </span>
 						</MenuItem>
 					</NavLink>
 				</SubMenu>

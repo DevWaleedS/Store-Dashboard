@@ -41,6 +41,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
+import { AiFillCopy } from "react-icons/ai";
+import { AiFillCheckCircle } from "react-icons/ai";
+import { AiOutlineLink } from "react-icons/ai";
 
 const OrderDetails = () => {
 	const componentRef = useRef();
@@ -56,6 +59,7 @@ const OrderDetails = () => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const navigate = useNavigate();
+	const [copy, setCopy] = useState(false);
 	const [shipping, setShipping] = useState({
 		district: "",
 		city: "",
@@ -163,6 +167,45 @@ const OrderDetails = () => {
 				</TableRow>
 			</TableHead>
 		);
+	}
+
+	const printSticker = () => {
+		if (fetchedData?.data?.orders?.shippingtypes?.name === 'ساعي') {
+			axios
+				.get(`https://backend.atlbha.com/api/Store/PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`, {
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				})
+				.then((res) => {
+					if (res?.data?.success === true && res?.data?.data?.status === 200) {
+						setEndActionTitle(res?.data?.message?.ar);
+						setReload(!reload);
+					} else {
+						setReload(!reload);
+						setEndActionTitle(res?.data?.message?.ar);
+					}
+				});
+		} else {
+			axios
+				.get(`https://backend.atlbha.com/api/Store/PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`, {
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				})
+				.then((res) => {
+					if (res?.data?.success === true && res?.data?.data?.status === 200) {
+						setEndActionTitle(res?.data?.message?.ar);
+						setReload(!reload);
+					} else {
+						setReload(!reload);
+						setEndActionTitle(res?.data?.message?.ar);
+					}
+				});
+		}
+
 	}
 
 	return (
@@ -289,20 +332,46 @@ const OrderDetails = () => {
 													</div>
 												</div>
 											</div>
-
-											{fetchedData?.data?.orders?.shipping?.shipping_id && (
-												<div className='box mb-4'>
-													<div className='order-head-row'>
-														<span className='me-3'>رقم التتبع</span>
+											<div className="boxes mb-4">
+												{fetchedData?.data?.orders?.shipping?.track_id && (
+													<div className='box mb-4'>
+														<div className='order-head-row'>
+															<span className='me-3'>رقم التتبع</span>
+															<a style={{ display: 'block', fontSize: '1rem' }} href="https://google.com" target="_blank" rel="noreferrer"> ( يمكنك تتبع الشحنة من هنا <AiOutlineLink width={'20px'}/> ) </a>
+														</div>
+														<div className='order-data-row'>
+															<span style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px' }}>
+																{fetchedData?.data?.orders?.shipping?.track_id}
+																{copy ?
+																	<AiFillCheckCircle color="#1dbbbe" />
+																	:
+																	<AiFillCopy color="#1dbbbe" style={{ cursor: 'pointer' }}
+																		onClick={() => {
+																			setCopy(true);
+																			setTimeout(() => {
+																				navigator.clipboard.writeText(fetchedData?.data?.orders?.shipping?.track_id)
+																				setCopy(false);
+																			}, 1000);
+																		}}>
+																	</AiFillCopy>
+																}
+															</span>
+														</div>
 													</div>
-													<div className='order-data-row'>
-														<span>
-															{fetchedData?.data?.orders?.shipping?.shipping_id}
-														</span>
+												)}
+												{fetchedData?.data?.orders?.shipping?.shipping_id && (
+													<div className='box mb-4'>
+														<div className='order-head-row'>
+															<span className='me-3'>رقم البوليصة</span>
+														</div>
+														<div className='order-data-row'>
+															<span>
+																{fetchedData?.data?.orders?.shipping?.shipping_id}
+															</span>
+														</div>
 													</div>
-												</div>
-											)}
-
+												)}
+											</div>
 											<div className=''>
 												<div className='order-head-row'>
 													<span className='me-3'>ملاحظات الطلب</span>
@@ -543,15 +612,15 @@ const OrderDetails = () => {
 																		"+966"
 																	)
 																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
-																				4
-																		  )
+																			4
+																		)
 																		: fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
-																				"00966"
-																		  )
-																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																			"00966"
+																		)
+																			? fetchedData?.data?.orders?.user?.phonenumber?.slice(
 																				5
-																		  )
-																		: fetchedData?.data?.orders?.user
+																			)
+																			: fetchedData?.data?.orders?.user
 																				?.phonenumber}
 																</span>
 															</div>
@@ -596,18 +665,18 @@ const OrderDetails = () => {
 														</div>
 														{fetchedData?.data?.orders?.OrderAddress
 															?.postal_code && (
-															<div className='col-md-6 col-12 mb-3'>
-																<h6 className='mb-3'>الرمز البريدي</h6>
-																<div className='info-box'>
-																	<span style={{ whiteSpace: "normal" }}>
-																		{
-																			fetchedData?.data?.orders?.OrderAddress
-																				?.postal_code
-																		}
-																	</span>
+																<div className='col-md-6 col-12 mb-3'>
+																	<h6 className='mb-3'>الرمز البريدي</h6>
+																	<div className='info-box'>
+																		<span style={{ whiteSpace: "normal" }}>
+																			{
+																				fetchedData?.data?.orders?.OrderAddress
+																					?.postal_code
+																			}
+																		</span>
+																	</div>
 																</div>
-															</div>
-														)}
+															)}
 														<div className='col-12 mb-3'>
 															<h6 className='mb-3'>العنوان</h6>
 															<div className='info-box'>
@@ -655,9 +724,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+														{
+															paddingRight: "20px",
+														},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -729,9 +798,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+														{
+															paddingRight: "20px",
+														},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -900,11 +969,17 @@ const OrderDetails = () => {
 															<li
 																onClick={() => updateOrderStatus("ready")}
 																style={{ cursor: "pointer" }}>
-																جاهز
+																جاهز للشحن
 																<span style={{ fontSize: "1rem" }}>
 																	{" "}
 																	(يرجى ملء بيانات الشحنة أولاً){" "}
 																</span>
+															</li>
+
+															<li
+																onClick={() => updateOrderStatus("completed")}
+																style={{ cursor: "pointer" }}>
+																تم التوصيل
 															</li>
 
 															<li
@@ -921,7 +996,6 @@ const OrderDetails = () => {
 										<div className='order-action-box mb-3'>
 											<div className='action-title'>
 												<ListIcon className='list-icon' />
-
 												<span className='me-2'> طباعة الفاتورة</span>
 											</div>
 											<div className='action-icon'>
@@ -952,6 +1026,18 @@ const OrderDetails = () => {
 												</Pdf>
 											</div>
 										</div>
+										{fetchedData?.data?.orders?.shipping &&
+											<button disabled={fetchedData?.data?.orders?.shipping === null} style={{ cursor: 'pointer' }} onClick={() => printSticker()} className='order-action-box mb-3'>
+												<div className='action-title'>
+													<ListIcon className='list-icon' />
+													<span className='me-2'>طباعة ملصق الشحن</span>
+												</div>
+												<div
+													className='action-icon'>
+													<Print />
+												</div>
+											</button>
+										}
 										{/**
 											<div className='order-action-box mb-md-5'>
 										<div className='action-title'>

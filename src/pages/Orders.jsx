@@ -17,13 +17,18 @@ const Orders = () => {
 	// to create search
 	const [search, setSearch] = useState("");
 	let orders = fetchedData?.data?.orders;
+	let filterOrders = fetchedData?.data?.orders;
 
 	if (search !== "") {
 		orders = fetchedData?.data?.orders?.filter((order) =>
-			order?.shipping?.shipping_id?.toLowerCase()?.includes(search?.toLowerCase())
+			order?.shipping?.track_id?.toLowerCase()?.includes(search?.toLowerCase()) || order?.shippingtypes?.name?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
 		orders = fetchedData?.data?.orders;
+	}
+	
+	const filterHandel = () =>{
+		filterOrders = orders?.sort((a, b) => (a.id < b.id ? -1 : 1));
 	}
 
 	return (
@@ -79,12 +84,13 @@ const Orders = () => {
 				{/** Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
-						data={orders}
+						data={filterOrders}
 						loading={loading}
 						reload={reload}
 						setReload={setReload}
 						search={search}
 						setSearch={setSearch}
+						filterHandel={filterHandel}
 					/>
 				</div>
 			</section>

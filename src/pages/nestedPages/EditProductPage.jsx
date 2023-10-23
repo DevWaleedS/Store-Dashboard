@@ -384,7 +384,7 @@ const EditProductPage = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
 													{" "}
-													وصف المنتح<span className='text-danger'>*</span>
+													وصف المنتج<span className='text-danger'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -750,7 +750,7 @@ const EditProductPage = () => {
 														: "d-none"
 												}>
 												<span className='fs-6' style={{ color: "red" }}>
-													يرجي ادخال السعر الأساسي أولاّّ حتي تتمكن من ادخال سعر
+													يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر
 													الخصم
 												</span>
 											</div>

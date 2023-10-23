@@ -36,12 +36,18 @@ const TemplateUpdate = () => {
 	const [firstBanner, setFirstBanner] = useState([]);
 	const [secondBanner, setSecondBanner] = useState([]);
 	const [thirdBanner, setThirdBanner] = useState([]);
+	const [firstBannerName, setFirstBannerName] = useState("");
+	const [secondBannerName, setSecondBannerName] = useState("");
+	const [thirdBannerName, setThirdBannerName] = useState("");
 	const [previewBanner, setPreviewBanner] = useState("");
 
 	// Sliders Images
 	const [firstSlider, setFirstSlider] = useState([]);
 	const [secondSlider, setSecondSlider] = useState([]);
 	const [thirdSlider, setThirdSlider] = useState([]);
+	const [firstSliderName, setFirstSliderName] = useState("");
+	const [secondSliderName, setSecondSliderName] = useState("");
+	const [thirdSliderName, setThirdSliderName] = useState("");
 	const [previewSlider, setPreviewSlider] = useState("");
 
 	// banners status
@@ -73,23 +79,28 @@ const TemplateUpdate = () => {
 		setBannerStatus1(
 			fetchedData?.data?.Homepages[0]?.banarstatus1 === "active" ? true : false
 		);
+		setFirstBannerName(fetchedData?.data?.Homepages[0]?.banar1);
 		setBannerStatus2(
 			fetchedData?.data?.Homepages[0]?.banarstatus2 === "active" ? true : false
 		);
+		setSecondBannerName(fetchedData?.data?.Homepages[0]?.banar2);
 		setBannerStatus3(
 			fetchedData?.data?.Homepages[0]?.banarstatus3 === "active" ? true : false
 		);
-
+		setThirdBannerName(fetchedData?.data?.Homepages[0]?.banar3);
 		// set sliders status
 		setSlidersStatus1(
 			fetchedData?.data?.Homepages[0]?.sliderstatus1 === "active" ? true : false
 		);
+		setFirstSliderName(fetchedData?.data?.Homepages[0]?.slider1);
 		setSlidersStatus2(
 			fetchedData?.data?.Homepages[0]?.sliderstatus2 === "active" ? true : false
 		);
+		setSecondSliderName(fetchedData?.data?.Homepages[0]?.slider2);
 		setSlidersStatus3(
 			fetchedData?.data?.Homepages[0]?.sliderstatus3 === "active" ? true : false
 		);
+		setThirdSliderName(fetchedData?.data?.Homepages[0]?.slider3);
 	}, [fetchedData?.data?.Homepages]);
 
 	/** --------------------------------------------------------------------------------- */
@@ -316,9 +327,13 @@ const TemplateUpdate = () => {
 															{...dragProps}>
 															{firstSlider?.[0]?.file ? (
 																<span>{firstSlider?.[0]?.file?.name}</span>
-															) : (
-																<span> تحديث السلايدر </span>
-															)}
+															) :
+																firstSliderName ?
+																	<span>{firstSliderName.slice(51)}</span>
+																	:
+																	(
+																		<span> تحديث السلايدر </span>
+																	)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -380,7 +395,12 @@ const TemplateUpdate = () => {
 															{...dragProps}>
 															{secondSlider?.[0]?.file ? (
 																<span>{secondSlider?.[0]?.file?.name}</span>
-															) : (
+															) :
+																secondSliderName ?
+																	<span>{secondSliderName.slice(51)}</span>
+																	:
+															(
+																
 																<span> تحديث السلايدر </span>
 															)}
 															<MdFileUpload />
@@ -444,7 +464,11 @@ const TemplateUpdate = () => {
 															{...dragProps}>
 															{thirdSlider?.[0]?.file ? (
 																<span>{thirdSlider?.[0]?.file?.name}</span>
-															) : (
+															) :
+															thirdSliderName ?
+																	<span>{thirdSliderName.slice(51)}</span>
+																	:
+															 (
 																<span> تحديث السلايدر </span>
 															)}
 															<MdFileUpload />
@@ -576,7 +600,11 @@ const TemplateUpdate = () => {
 															{...dragProps}>
 															{firstBanner?.[0]?.file ? (
 																<span>{firstBanner?.[0]?.file?.name}</span>
-															) : (
+															) : 
+															firstBannerName ?
+																	<span>{firstBannerName.slice(51)}</span>
+																	:
+															(
 																<span> تحديث البانر </span>
 															)}
 															<MdFileUpload />
@@ -640,7 +668,11 @@ const TemplateUpdate = () => {
 															{...dragProps}>
 															{secondBanner?.[0]?.file ? (
 																<span>{secondBanner?.[0]?.file?.name}</span>
-															) : (
+															) :
+															secondBannerName ?
+																	<span>{secondBannerName.slice(51)}</span>
+																	:
+															(
 																<span> تحديث البانر </span>
 															)}
 															<MdFileUpload />
@@ -704,7 +736,11 @@ const TemplateUpdate = () => {
 															{...dragProps}>
 															{thirdBanner?.[0]?.file ? (
 																<span>{thirdBanner?.[0]?.file?.name}</span>
-															) : (
+															) : 
+															thirdBannerName ?
+																	<span>{thirdBannerName.slice(51)}</span>
+																	:
+															(
 																<span> تحديث البانر </span>
 															)}
 															<MdFileUpload />

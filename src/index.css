@@ -4546,7 +4546,7 @@ input:disabled {
 .order-details-body .order-details-box .order-details-data .boxes {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: flex-end;
 	flex-wrap: wrap;
 	gap: 1rem;
 }

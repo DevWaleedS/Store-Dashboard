@@ -25,7 +25,7 @@ const ProductsTableData = ({ productsDetails }) => {
 					style={{ minHeight: "400px" }}>
 					{productsDetails?.length === 0 ? (
 						<div className='d-flex justify-content-center align-items-center h-100'>
-							لا يوجد منتجات حتي الآن
+							لا يوجد منتجات حتى الآن
 						</div>
 					) : (
 						<table className='table  table-borderless products-table text-center'>

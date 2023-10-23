@@ -31,13 +31,12 @@ const OrdersTableData = ({ ordersDetails }) => {
 					style={{ minHeight: "400px" }}>
 					{ordersDetails?.length === 0 ? (
 						<div className='d-flex justify-content-center align-items-center h-100'>
-							لا يوجد طلبات حتي الآن
+							لا يوجد طلبات حتى الآن
 						</div>
 					) : (
 						<table className='table table-borderless orders-table text-center'>
 							<thead>
 								<tr>
-									<th scope='col' className='pr-rad-right'></th>
 									<th
 										scope='col'
 										style={{
@@ -55,12 +54,6 @@ const OrdersTableData = ({ ordersDetails }) => {
 									<th scope='col' className=' text-center'>
 										الحالة
 									</th>
-									<th
-										scope='col'
-										className=' text-center'
-										style={{ width: "120px" }}>
-										الموقع
-									</th>
 									<th scope='col' className=' text-center pr-rad-left'>
 										الاجراء
 									</th>
@@ -70,17 +63,6 @@ const OrdersTableData = ({ ordersDetails }) => {
 								{ordersDetails?.map((order) => (
 									<React.Fragment key={order?.id}>
 										<tr>
-											<td>
-												<div style={{ whiteSpace: "normal", width: "40px" }}>
-													<img
-														style={{ width: "100%" }}
-														className=' rounded-circle img_icons'
-														src={order?.user?.image}
-														alt={order?.user?.name}
-													/>
-												</div>
-											</td>
-
 											<td
 												className=' text-end pe-3 text-overflow'
 												style={{
@@ -94,39 +76,25 @@ const OrdersTableData = ({ ordersDetails }) => {
 												className='text-overflow'
 												style={{ whiteSpace: "nowrap", width: "200px" }}>
 												{" "}
-												{order?.user?.name}
+												{`${order?.user?.name} ${order?.user?.user_name}`}
 											</td>
 											<td>
 												<span
 													className='status text-overflow'
 													style={{
 														background:
-															order?.status === "مكتمل"
+															order?.status === "تم التوصيل"
 																? "#ebfcf1"
-																: order?.status === "قيد التنفيذ"
-																? "#0099FB1A"
-																: order?.status === "تم التنفيذ"
-																? "#3AE3741A"
-																: order?.status === "بانتظار الدفع"
-																? "#ffc5001c"
-																: order?.status === "قيد المراجعة"
-																? "#ffecd1c7"
-																: order?.status === "قيد التنفيذ"
-																? "#d8f9e3"
-																: order?.status === "جاري التوصيل"
+																: order?.status === "جاهز للشحن"
 																? "#b29eff36"
 																: order?.status === "جديد"
 																? "#d4ebf7"
 																: order?.status === "ملغي"
 																? "#ffebeb"
-																: "#46c7ca",
+																: "",
 													}}>
 													{order?.status}
 												</span>
-											</td>
-											<td className='text-overflow' style={{ width: "120px" }}>
-												{" "}
-												{order?.user?.city?.name}
 											</td>
 											<td className=' text-center action-icon'>
 												<div className='dropdown'>

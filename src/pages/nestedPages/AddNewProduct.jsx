@@ -695,7 +695,7 @@ const AddNewProduct = () => {
 											product?.selling_price === "" && (
 												<div className='col-lg-7 col-md-9 col-12'>
 													<span className='fs-6' style={{ color: "red" }}>
-														يرجي ادخال السعر الأساسي أولاّّ حتي تتمكن من ادخال
+														يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
 														سعر الخصم
 													</span>
 												</div>
