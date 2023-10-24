@@ -84,6 +84,7 @@ const AddNewProduct = () => {
 		mode: "onBlur",
 		defaultValues: {
 			name: "",
+			short_description:"",
 			description: "",
 			selling_price: "",
 			category_id: "",
@@ -99,6 +100,7 @@ const AddNewProduct = () => {
 		category_id: "",
 		subcategory_id: [],
 	});
+	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
 	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
 	const [robotLink, setRobotLink] = useState("");
 	const [SEOdescription, setSEOdescription] = useState([]);
@@ -140,6 +142,7 @@ const AddNewProduct = () => {
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
+		short_description:"",
 		description: "",
 		selling_price: "",
 		category_id: "",
@@ -160,6 +163,7 @@ const AddNewProduct = () => {
 		setProductError({
 			name: "",
 			cover: "",
+			short_description:"",
 			description: "",
 			selling_price: "",
 			category_id: "",
@@ -236,6 +240,7 @@ const AddNewProduct = () => {
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("name", data?.name);
+		formData.append("short_description", data?.short_description);
 		formData.append("description", data?.description);
 		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
@@ -274,6 +279,7 @@ const AddNewProduct = () => {
 					setLoadingTitle("");
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],
+						short_description: res?.data?.message?.en?.short_description?.[0],
 						cover: res?.data?.message?.en?.cover?.[0],
 						description: res?.data?.message?.en?.description?.[0],
 						selling_price: res?.data?.message?.en?.selling_price?.[0],
@@ -357,6 +363,52 @@ const AddNewProduct = () => {
 												{productError?.name}
 												{errors?.name && errors.name.message}
 											</span>
+										</div>
+									</div>
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label htmlFor='product-desc'>
+												وصف قصير للمنتج <span className='text-danger'>*</span>
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+										<Controller
+												name={"short_description"}
+												control={control}
+												rules={{
+													required: "حقل وصف قصير للمنتج مطلوب",
+												}}
+												render={({ field: { onChange, value } }) => (
+													<textarea
+														name='short_description'
+														placeholder='اكتب وصف قصير للمنتج لا يتعدي 100 حرف'
+														rows={5}
+														value={value}
+														onChange={(e) => {
+															if(e.target.value.length <= 100){
+																onChange(e.target.value.substring(0,100))
+																setShortDescriptionLength(false);
+															}else{
+																setShortDescriptionLength(true);
+															}
+															
+														}}
+													>
+													</textarea>
+												)}
+											/>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.short_description}
+												{errors?.short_description && errors.short_description.message}
+											</span>
+											{shortDescriptionLength && 
+												<span className='fs-6 text-danger'>
+													الوصف يجب إلا يتعدي 100 حرف
+												</span>
+												}
 										</div>
 									</div>
 									<div className='row mb-md-5 mb-3'>
