@@ -69,7 +69,6 @@ const TemplateUpdate = () => {
 		setCommentStatus(
 			fetchedData?.data?.Homepages[0]?.commentstatus === "active" ? true : false
 		);
-
 		// set client status
 		setClientStatus(
 			fetchedData?.data?.Homepages[0]?.clientstatus === "active" ? true : false
@@ -103,45 +102,6 @@ const TemplateUpdate = () => {
 		setThirdSliderName(fetchedData?.data?.Homepages[0]?.slider3);
 	}, [fetchedData?.data?.Homepages]);
 
-	/** --------------------------------------------------------------------------------- */
-
-	// Use state with ImageUploading library to set Logo
-	const [logo, setLogo] = React.useState([]);
-	// maxNumbers of files uploaded
-	const maxNumber = 2;
-	const onChange = (imageList, addUpdateIndex) => {
-		// data for submit
-		setLogo(imageList);
-	};
-
-	// update logo function
-	// const updateLogo = () => {
-	// 	setLoadingTitle("جاري تعديل الشعار");
-	// 	let formData = new FormData();
-	// 	if (logo.length !== 0) {
-	// 		formData.append("logo", logo[0]?.file);
-	// 	}
-	// 	axios
-	// 		.post(`https://backend.atlbha.com/api/Store/logoUpdate`, formData, {
-	// 			headers: {
-	// 				"Content-Type": "multipart/form-data",
-	// 				Authorization: `Bearer ${cookies?.access_token}`,
-	// 			},
-	// 		})
-	// 		.then((res) => {
-	// 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-	// 				setLoadingTitle("");
-	// 				setEndActionTitle(res?.data?.message?.ar);
-	// 				navigate("/Template");
-	// 				setReload(!reload);
-	// 			} else {
-	// 				setLoadingTitle("");
-	// 				setEndActionTitle(res?.data?.message?.ar);
-	// 				navigate("/Template");
-	// 				setReload(!reload);
-	// 			}
-	// 		});
-	// };
 	/** --------------------------------------------------------------------------------- */
 
 	// update banners function
@@ -275,18 +235,7 @@ const TemplateUpdate = () => {
 										<CircularLoading />
 									) : (
 										<>
-											{!firstSlider[0] && (
-												<img
-													style={{
-														borderRadius: "inherit",
-														width: "100%",
-														maxWidth: "100%",
-													}}
-													src={"https://placehold.co/1110x440"}
-													alt={fetchedData?.data?.Homepages[0]?.slider1}
-												/>
-											)}
-											{firstSlider[0] && (
+											{previewSlider[0] ? (
 												<img
 													style={{
 														borderRadius: "inherit",
@@ -295,7 +244,22 @@ const TemplateUpdate = () => {
 														maxWidth: "100%",
 													}}
 													src={previewSlider[0]?.data_url}
-													alt='preview-img'
+													alt=''
+												/>
+											) : (
+												<img
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+
+														maxWidth: "100%",
+													}}
+													src={
+														firstSliderName ||
+														secondSliderName ||
+														thirdSliderName
+													}
+													alt=''
 												/>
 											)}
 										</>
@@ -326,14 +290,26 @@ const TemplateUpdate = () => {
 															onClick={onImageUpload}
 															{...dragProps}>
 															{firstSlider?.[0]?.file ? (
-																<span>{firstSlider?.[0]?.file?.name}</span>
-															) :
-																firstSliderName ?
-																	<span>{firstSliderName.slice(51)}</span>
-																	:
-																	(
-																		<span> تحديث السلايدر </span>
-																	)}
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={URL.createObjectURL(
+																			firstSlider?.[0]?.file
+																		)}
+																		alt=''
+																		className='img-fluid'
+																	/>
+																</div>
+															) : firstSliderName ? (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={firstSliderName}
+																		alt=''
+																		className=' img-fluid'
+																	/>
+																</div>
+															) : (
+																<span> تحديث السلايدر </span>
+															)}
 															<MdFileUpload />
 														</button>
 													</div>
@@ -394,13 +370,24 @@ const TemplateUpdate = () => {
 															onClick={onImageUpload}
 															{...dragProps}>
 															{secondSlider?.[0]?.file ? (
-																<span>{secondSlider?.[0]?.file?.name}</span>
-															) :
-																secondSliderName ?
-																	<span>{secondSliderName.slice(51)}</span>
-																	:
-															(
-																
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={URL.createObjectURL(
+																			secondSlider?.[0]?.file
+																		)}
+																		alt=''
+																		className='img-fluid'
+																	/>
+																</div>
+															) : secondSliderName ? (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={secondSliderName}
+																		alt=''
+																		className=' img-fluid'
+																	/>
+																</div>
+															) : (
 																<span> تحديث السلايدر </span>
 															)}
 															<MdFileUpload />
@@ -463,12 +450,24 @@ const TemplateUpdate = () => {
 															onClick={onImageUpload}
 															{...dragProps}>
 															{thirdSlider?.[0]?.file ? (
-																<span>{thirdSlider?.[0]?.file?.name}</span>
-															) :
-															thirdSliderName ?
-																	<span>{thirdSliderName.slice(51)}</span>
-																	:
-															 (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={URL.createObjectURL(
+																			thirdSlider?.[0]?.file
+																		)}
+																		alt=''
+																		className='img-fluid'
+																	/>
+																</div>
+															) : thirdSliderName ? (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={thirdSliderName}
+																		alt=''
+																		className=' img-fluid'
+																	/>
+																</div>
+															) : (
 																<span> تحديث السلايدر </span>
 															)}
 															<MdFileUpload />
@@ -549,26 +548,31 @@ const TemplateUpdate = () => {
 										<CircularLoading />
 									) : (
 										<>
-											{!firstBanner[0] && (
+											{previewBanner[0] ? (
 												<img
 													style={{
 														borderRadius: "inherit",
 														width: "100%",
-														maxWidth: "100%",
-													}}
-													src={"https://placehold.co/1110x440?text=1110 x 245"}
-													alt={fetchedData?.data?.Homepages[0]?.banar1}
-												/>
-											)}
-											{firstBanner[0] && (
-												<img
-													style={{
-														borderRadius: "inherit",
-														width: "100%",
+
 														maxWidth: "100%",
 													}}
 													src={previewBanner[0]?.data_url}
-													alt='preview-img'
+													alt=''
+												/>
+											) : (
+												<img
+													style={{
+														borderRadius: "inherit",
+														width: "100%",
+
+														maxWidth: "100%",
+													}}
+													src={
+														firstBannerName ||
+														secondBannerName ||
+														thirdBannerName
+													}
+													alt=''
 												/>
 											)}
 										</>
@@ -599,12 +603,24 @@ const TemplateUpdate = () => {
 															onClick={onImageUpload}
 															{...dragProps}>
 															{firstBanner?.[0]?.file ? (
-																<span>{firstBanner?.[0]?.file?.name}</span>
-															) : 
-															firstBannerName ?
-																	<span>{firstBannerName.slice(51)}</span>
-																	:
-															(
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={URL.createObjectURL(
+																			firstBanner?.[0]?.file
+																		)}
+																		alt=''
+																		className='img-fluid'
+																	/>
+																</div>
+															) : firstBannerName ? (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={firstBannerName}
+																		alt=''
+																		className=' img-fluid'
+																	/>
+																</div>
+															) : (
 																<span> تحديث البانر </span>
 															)}
 															<MdFileUpload />
@@ -667,12 +683,24 @@ const TemplateUpdate = () => {
 															onClick={onImageUpload}
 															{...dragProps}>
 															{secondBanner?.[0]?.file ? (
-																<span>{secondBanner?.[0]?.file?.name}</span>
-															) :
-															secondBannerName ?
-																	<span>{secondBannerName.slice(51)}</span>
-																	:
-															(
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={URL.createObjectURL(
+																			secondBanner?.[0]?.file
+																		)}
+																		alt=''
+																		className='img-fluid'
+																	/>
+																</div>
+															) : secondBannerName ? (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={secondBannerName}
+																		alt=''
+																		className=' img-fluid'
+																	/>
+																</div>
+															) : (
 																<span> تحديث البانر </span>
 															)}
 															<MdFileUpload />
@@ -735,12 +763,24 @@ const TemplateUpdate = () => {
 															onClick={onImageUpload}
 															{...dragProps}>
 															{thirdBanner?.[0]?.file ? (
-																<span>{thirdBanner?.[0]?.file?.name}</span>
-															) : 
-															thirdBannerName ?
-																	<span>{thirdBannerName.slice(51)}</span>
-																	:
-															(
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={URL.createObjectURL(
+																			thirdBanner?.[0]?.file
+																		)}
+																		alt=''
+																		className='img-fluid'
+																	/>
+																</div>
+															) : thirdBannerName ? (
+																<div className='' style={{ width: "55px" }}>
+																	<img
+																		src={thirdBannerName}
+																		alt=''
+																		className=' img-fluid'
+																	/>
+																</div>
+															) : (
 																<span> تحديث البانر </span>
 															)}
 															<MdFileUpload />

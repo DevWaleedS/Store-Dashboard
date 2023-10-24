@@ -314,8 +314,9 @@ const EditPage = () => {
 												<div className='col-12 mt-3'>
 													<textarea
 														name='page_desc'
+														maxLength='100'
 														className='w-100 h-auto p-3'
-														placeholder='وصف الصفحة'
+														placeholder='اكتب وصف قصير للصفحة لا يتعدي 100 حرف'
 														rows={5}
 														{...register("page_desc", {
 															required: "حقل وصف الصفحة مطلوب",

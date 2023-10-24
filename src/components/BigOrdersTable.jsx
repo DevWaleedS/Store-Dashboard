@@ -12,46 +12,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
-
-import moment from "moment";
 import "rsuite/dist/rsuite.min.css";
-import useFetch from "../Hooks/UseFetch";
+
 import TablePagination from "./TablePagination";
 
 // Icons
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
 import { FiSearch } from "react-icons/fi";
-
-function descendingComparator(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
-}
-
-function getComparator(order, orderBy) {
-	return order === "desc"
-		? (a, b) => descendingComparator(a, b, orderBy)
-		: (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-	const stabilizedThis = array?.map((el, index) => [el, index]);
-	stabilizedThis?.sort((a, b) => {
-		const order = comparator(a[0], b[0]);
-		if (order !== 0) {
-			return order;
-		}
-		return a[1] - b[1];
-	});
-	return stabilizedThis?.map((el) => el[0]);
-}
+import { TbArrowsSort } from "react-icons/tb";
 
 function EnhancedTableHead(props) {
-	const { filterHandel } = props
+	const { filterHandel } = props;
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
@@ -65,7 +36,9 @@ function EnhancedTableHead(props) {
 					اسم العميل
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					<span style={{ cursor:'pointer' }} onClick={()=>filterHandel()}>حالة الطلب</span>
+					<span style={{ cursor: "pointer" }} onClick={() => filterHandel()}>
+						حالة الطلب <TbArrowsSort className='sort-icon' />
+					</span>
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					شركة الشحن
@@ -86,10 +59,7 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
 	onSelectAllClick: PropTypes.func,
-	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-	orderBy: PropTypes.string.isRequired,
 	rowCount: PropTypes.number,
 };
 
@@ -134,52 +104,18 @@ export default function BigOrdersTable({
 	setSearch,
 	filterHandel,
 }) {
-	// Use Navigate for navigate to order details page
-	// const { fetchedData: cities } = useFetch(
-	// 	`https://backend.atlbha.com/api/Store/getAllCity`
-	// );
 	const navigate = useNavigate();
-	const [order, setOrder] = React.useState("asc");
-	const [orderBy, setOrderBy] = React.useState("calories");
+
 	const [selected, setSelected] = React.useState([]);
+
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(8);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
 	const [anchorEl, setAnchorEl] = React.useState(null);
+
 	let filterData = data;
 	let filterDataResult = filterData;
 	const [itemSelected, setItemSelected] = useState("");
-	const [dateValue, setDateValue] = useState([]);
-
-	if (itemSelected === "new") {
-		filterData = data?.sort((a, b) =>
-			a?.created_at.localeCompare(b?.created_at)
-		);
-	} else if (itemSelected === "old") {
-		filterData = data?.sort((a, b) =>
-			b?.created_at.localeCompare(a?.created_at)
-		);
-	} else if (itemSelected === "location") {
-		filterData = data?.sort((a, b) =>
-			a?.user?.city?.name?.localeCompare(b?.user?.city?.name)
-		);
-	} else if (itemSelected === "status") {
-		filterData = data?.sort((a, b) => a?.status.localeCompare(b?.status));
-	} else {
-		filterData = data?.sort((a, b) => a?.id - b?.id);
-	}
-
-	if (dateValue?.length !== 0 && dateValue !== null) {
-		filterDataResult = filterData?.filter(
-			(item) =>
-				moment(item?.created_at).format("YYYY-MM-DD") >=
-				moment(dateValue[0]).format("YYYY-MM-DD") &&
-				moment(item?.created_at).format("YYYY-MM-DD") <=
-				moment(dateValue[1]).format("YYYY-MM-DD")
-		);
-	} else {
-		filterDataResult = filterData;
-	}
 
 	const open = Boolean(anchorEl);
 	const handleRowsClick = (event) => {
@@ -187,12 +123,6 @@ export default function BigOrdersTable({
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
-	};
-
-	const handleRequestSort = (property) => {
-		const isAsc = orderBy === property && order === "asc";
-		setOrder(isAsc ? "desc" : "asc");
-		setOrderBy(property);
 	};
 
 	const handleChangeRowsPerPage = (event) => {
@@ -215,12 +145,16 @@ export default function BigOrdersTable({
 		return arr;
 	};
 
-	// function translateCityName(name) {
-	// 	const unique = cities?.data?.cities?.data?.cities?.filter(
-	// 		(obj) => obj?.name === name
-	// 	);
-	// 	return unique?.[0]?.name_ar;
-	// }
+	// handle calc total price if codePrice is !== 0
+	const calcTotalPrice = (codprice, totalPrice) => {
+		const cashOnDelivery = codprice || 0;
+		const totalCartValue = parseFloat(totalPrice?.replace(/,/g, ""));
+
+		const totalValue = cashOnDelivery
+			? (totalCartValue + cashOnDelivery)?.toFixed(2)
+			: totalPrice;
+		return totalValue;
+	};
 
 	return (
 		<Box sx={{ width: "100%" }}>
@@ -237,9 +171,6 @@ export default function BigOrdersTable({
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 						<EnhancedTableHead
 							numSelected={selected.length}
-							order={order}
-							orderBy={orderBy}
-							onRequestSort={handleRequestSort}
 							rowCount={filterDataResult?.length}
 							filterHandel={filterHandel}
 						/>
@@ -260,7 +191,7 @@ export default function BigOrdersTable({
 											</TableCell>
 										</TableRow>
 									) : (
-										stableSort(filterDataResult, getComparator(order, orderBy))
+										filterDataResult
 											?.slice(
 												page * rowsPerPage,
 												page * rowsPerPage + rowsPerPage
@@ -321,22 +252,22 @@ export default function BigOrdersTable({
 																			row?.status === "تم التوصيل"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
-																					? "#d4ebf7"
-																					: row?.status === "ملغي"
-																						? "#ffebeb"
-																						: row?.status === "جاهز للشحن"
-																							? "#ffecd1c7"
-																							: "",
+																				? "#d4ebf7"
+																				: row?.status === "ملغي"
+																				? "#ffebeb"
+																				: row?.status === "جاهز للشحن"
+																				? "#ffecd1c7"
+																				: "",
 																		color:
 																			row?.status === "تم التوصيل"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
-																					? "#0077ff"
-																					: row?.status === "ملغي"
-																						? "#ff7b7b"
-																						: row?.status === "جاهز للشحن"
-																							? "#ff9f1a"
-																							: "",
+																				? "#0077ff"
+																				: row?.status === "ملغي"
+																				? "#ff7b7b"
+																				: row?.status === "جاهز للشحن"
+																				? "#ff9f1a"
+																				: "",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,
@@ -353,7 +284,8 @@ export default function BigOrdersTable({
 															{row?.quantity}
 														</TableCell>
 														<TableCell align='center'>
-															{row?.total_price} ر.س
+															{calcTotalPrice(row?.codprice, row?.total_price)}{" "}
+															ر.س
 														</TableCell>
 
 														<TableCell align='right'>

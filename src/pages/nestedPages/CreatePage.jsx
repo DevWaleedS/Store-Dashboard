@@ -295,7 +295,7 @@ const CreatePage = () => {
 											<textarea
 												name='page_desc'
 												className='w-100 h-auto p-3'
-												placeholder='وصف الصفحة'
+												placeholder='اكتب وصف قصير للصفحة لا يتعدي 100 حرف'
 												rows={5}
 												{...register("page_desc", {
 													required: "حقل وصف الصفحة مطلوب",

@@ -1396,14 +1396,14 @@ select {
 
 .sub-categories div {
 	min-width: 70px;
-	max-width: 118px;
+	max-width: 120px;
 	background-color: var(--gray-200);
 	padding: 5px 8px;
 	border-radius: 20px;
 	font-size: 16px;
 	font-weight: 500;
 	color: var(--black-500);
-	margin: 0 10px;
+	margin: 0 2px;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
@@ -2573,6 +2573,8 @@ nav.navigation {
 .template-edit-box .upload-files-input {
 	width: 100%;
 	max-width: 100%;
+	max-height: 55px;
+	overflow:hidden;
 	background: var(--gray-100);
 	border: 2px dashed var(--gray-300);
 	display: flex;

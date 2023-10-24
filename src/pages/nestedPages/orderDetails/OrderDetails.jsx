@@ -1,51 +1,55 @@
 import React, { useState, useContext, useRef, Fragment } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
-import Context from "../../Context/context";
+import Context from "../../../Context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import useFetch from "../../Hooks/UseFetch";
+import useFetch from "../../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import moment from "moment";
-import { IoIosArrowDown } from "react-icons/io";
 
 // to download order details as pdf file
 import Pdf from "react-to-pdf";
 
 // to print order details
 import ReactToPrint from "react-to-print";
+
 // Icons
-import { ReactComponent as StatusIcon } from "../../data/Icons/status.svg";
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import { ReactComponent as WalletIcon } from "../../data/Icons/icon-24-wallet.svg";
-import { ReactComponent as ArrowIcon } from "../../data/Icons/icon-30-arrwos back.svg";
-import { ReactComponent as Client } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg";
-import { ReactComponent as ArrowDown } from "../../data/Icons/icon-24-chevron_down.svg";
-import { ReactComponent as Print } from "../../data/Icons/icon-24-print.svg";
-import { ReactComponent as PDFIcon } from "../../data/Icons/pfd.svg";
-import { ReactComponent as Quantity } from "../../data/Icons/icon-24-Quantity.svg";
-// import { ReactComponent as DeleteIcon } from '../../data/Icons/icon-24-delete.svg';
-import { ReactComponent as ListIcon } from "../../data/Icons/icon-24-circlr.svg";
-import { AiOutlineSearch } from "react-icons/ai";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+import { ReactComponent as StatusIcon } from "../../../data/Icons/status.svg";
+import { ReactComponent as DateIcon } from "../../../data/Icons/icon-date.svg";
+import { ReactComponent as WalletIcon } from "../../../data/Icons/icon-24-wallet.svg";
+import { ReactComponent as ArrowIcon } from "../../../data/Icons/icon-30-arrwos back.svg";
+import { ReactComponent as Client } from "../../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Message } from "../../../data/Icons/icon-24-email.svg";
+import { ReactComponent as Phone } from "../../../data/Icons/icon-24- call.svg";
+import { ReactComponent as Location } from "../../../data/Icons/icon-24-pic map.svg";
+import { ReactComponent as ArrowDown } from "../../../data/Icons/icon-24-chevron_down.svg";
+import { ReactComponent as Print } from "../../../data/Icons/icon-24-print.svg";
+import { ReactComponent as PDFIcon } from "../../../data/Icons/pfd.svg";
+import { ReactComponent as Quantity } from "../../../data/Icons/icon-24-Quantity.svg";
+// import { ReactComponent as DeleteIcon } from '../../../data/Icons/icon-24-delete.svg';
+import { ReactComponent as ListIcon } from "../../../data/Icons/icon-24-circlr.svg";
+import { AiFillCopy, AiFillCheckCircle, AiOutlineSearch } from "react-icons/ai";
+import { BiLinkExternal } from "react-icons/bi";
+import { IoIosArrowDown } from "react-icons/io";
+
+// Table
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import { AiFillCopy } from "react-icons/ai";
-import { AiFillCheckCircle } from "react-icons/ai";
-import { AiOutlineLink } from "react-icons/ai";
 
 const OrderDetails = () => {
+	// to send the order sticker to preview and print sticker page
+	const previewStickerContext = useContext(Context);
+	const { setPreviewSticker } = previewStickerContext;
+	// -------------------------------------------------
+
 	const componentRef = useRef();
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -135,6 +139,7 @@ const OrderDetails = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
+
 					setReload(!reload);
 				} else {
 					setEndActionTitle("");
@@ -170,18 +175,29 @@ const OrderDetails = () => {
 	}
 
 	const printSticker = () => {
-		if (fetchedData?.data?.orders?.shippingtypes?.name === 'ساعي') {
+		if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
 			axios
-				.get(`https://backend.atlbha.com/api/Store/PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`, {
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
-					},
-				})
+				.get(
+					`https://backend.atlbha.com/api/Store/PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+							Authorization: `Bearer ${cookies?.access_token}`,
+						},
+					}
+				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
+						// navigate("preview-sticker");
+						// Open a new window with the HTML content
+						const newTab = window.open("", "_blank");
+						if (newTab) {
+							newTab.document.write(res?.data?.data?.Sticker?.data);
+							newTab.document.close();
+						} else {
+							console.error("Failed to open a new tab");
+						}
+						// setPreviewSticker(res?.data?.data?.Sticker?.data);
 					} else {
 						setReload(!reload);
 						setEndActionTitle(res?.data?.message?.ar);
@@ -189,24 +205,45 @@ const OrderDetails = () => {
 				});
 		} else {
 			axios
-				.get(`https://backend.atlbha.com/api/Store/PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`, {
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
-					},
-				})
+				.get(
+					`https://backend.atlbha.com/api/Store/PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+							Authorization: `Bearer ${cookies?.access_token}`,
+						},
+					}
+				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
+						// navigate("preview-sticker");
+						// setPreviewSticker(res?.data?.data?.Sticker?.data);
+						// Open a new window with the HTML content
+						// const newTab = window.open("", "_blank");
+						// if (newTab) {
+						// 	newTab.document.write(res?.data?.data?.Sticker?.data);
+						// 	newTab.document.close();
+						// } else {
+						// 	console.error("Failed to open a new tab");
+						// }
 					} else {
 						setReload(!reload);
 						setEndActionTitle(res?.data?.message?.ar);
 					}
 				});
 		}
+	};
 
-	}
+	// handle calc total price if codePrice is !== 0
+	const calcTotalPrice = (codprice, totalPrice) => {
+		const cashOnDelivery = codprice || 0;
+		const totalCartValue = parseFloat(totalPrice?.replace(/,/g, ""));
+
+		const totalValue = cashOnDelivery
+			? (totalCartValue + cashOnDelivery)?.toFixed(2)
+			: totalPrice;
+		return totalValue;
+	};
 
 	return (
 		<>
@@ -306,8 +343,10 @@ const OrderDetails = () => {
 													</div>
 													<div className='order-data-row'>
 														<span>
-															{fetchedData?.data?.orders?.codprice +
-																fetchedData?.data?.orders?.total_price}{" "}
+															{calcTotalPrice(
+																fetchedData?.data?.orders?.codprice,
+																fetchedData?.data?.orders?.total_price
+															)}{" "}
 															ر.س
 														</span>
 													</div>
@@ -332,29 +371,54 @@ const OrderDetails = () => {
 													</div>
 												</div>
 											</div>
-											<div className="boxes mb-4">
+											<div className='boxes mb-4'>
 												{fetchedData?.data?.orders?.shipping?.track_id && (
 													<div className='box mb-4'>
 														<div className='order-head-row'>
-															<span className='me-3'>رقم التتبع</span>
-															<a style={{ display: 'block', fontSize: '1rem' }} href="https://google.com" target="_blank" rel="noreferrer"> ( يمكنك تتبع الشحنة من هنا <AiOutlineLink width={'20px'}/> ) </a>
+															<span className='me-3 '>رقم التتبع</span>{" "}
+															<span
+																className='me-2'
+																style={{ display: "block", fontSize: "1rem" }}>
+																( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
+																<a
+																	href={fetchedData?.data?.orders?.trackingLink}
+																	target='_blank'
+																	rel='noreferrer'>
+																	<BiLinkExternal
+																		style={{ width: "16px", cursor: "pointer" }}
+																	/>
+																</a>
+																)
+															</span>
 														</div>
 														<div className='order-data-row'>
-															<span style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px' }}>
+															<span
+																style={{
+																	width: "100%",
+																	display: "flex",
+																	flexDirection: "row",
+																	alignItems: "center",
+																	justifyContent: "space-between",
+																	padding: "0 10px",
+																}}>
 																{fetchedData?.data?.orders?.shipping?.track_id}
-																{copy ?
-																	<AiFillCheckCircle color="#1dbbbe" />
-																	:
-																	<AiFillCopy color="#1dbbbe" style={{ cursor: 'pointer' }}
+																{copy ? (
+																	<AiFillCheckCircle color='#1dbbbe' />
+																) : (
+																	<AiFillCopy
+																		color='#1dbbbe'
+																		style={{ cursor: "pointer" }}
 																		onClick={() => {
 																			setCopy(true);
 																			setTimeout(() => {
-																				navigator.clipboard.writeText(fetchedData?.data?.orders?.shipping?.track_id)
+																				navigator.clipboard.writeText(
+																					fetchedData?.data?.orders?.shipping
+																						?.track_id
+																				);
 																				setCopy(false);
 																			}, 1000);
-																		}}>
-																	</AiFillCopy>
-																}
+																		}}></AiFillCopy>
+																)}
 															</span>
 														</div>
 													</div>
@@ -366,7 +430,10 @@ const OrderDetails = () => {
 														</div>
 														<div className='order-data-row'>
 															<span>
-																{fetchedData?.data?.orders?.shipping?.shipping_id}
+																{
+																	fetchedData?.data?.orders?.shipping
+																		?.shipping_id
+																}
 															</span>
 														</div>
 													</div>
@@ -563,8 +630,10 @@ const OrderDetails = () => {
 																backgroundColor: "#e1e1e1",
 															}}>
 															<span style={{ fontWeight: "500" }}>
-																{fetchedData?.data?.orders?.codprice +
-																	fetchedData?.data?.orders?.total_price}
+																{calcTotalPrice(
+																	fetchedData?.data?.orders?.codprice,
+																	fetchedData?.data?.orders?.total_price
+																)}{" "}
 																ر.س
 															</span>
 														</TableCell>
@@ -612,15 +681,15 @@ const OrderDetails = () => {
 																		"+966"
 																	)
 																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
-																			4
-																		)
+																				4
+																		  )
 																		: fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
-																			"00966"
-																		)
-																			? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																				"00966"
+																		  )
+																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
 																				5
-																			)
-																			: fetchedData?.data?.orders?.user
+																		  )
+																		: fetchedData?.data?.orders?.user
 																				?.phonenumber}
 																</span>
 															</div>
@@ -665,18 +734,18 @@ const OrderDetails = () => {
 														</div>
 														{fetchedData?.data?.orders?.OrderAddress
 															?.postal_code && (
-																<div className='col-md-6 col-12 mb-3'>
-																	<h6 className='mb-3'>الرمز البريدي</h6>
-																	<div className='info-box'>
-																		<span style={{ whiteSpace: "normal" }}>
-																			{
-																				fetchedData?.data?.orders?.OrderAddress
-																					?.postal_code
-																			}
-																		</span>
-																	</div>
+															<div className='col-md-6 col-12 mb-3'>
+																<h6 className='mb-3'>الرمز البريدي</h6>
+																<div className='info-box'>
+																	<span style={{ whiteSpace: "normal" }}>
+																		{
+																			fetchedData?.data?.orders?.OrderAddress
+																				?.postal_code
+																		}
+																	</span>
 																</div>
-															)}
+															</div>
+														)}
 														<div className='col-12 mb-3'>
 															<h6 className='mb-3'>العنوان</h6>
 															<div className='info-box'>
@@ -724,9 +793,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-														{
-															paddingRight: "20px",
-														},
+															{
+																paddingRight: "20px",
+															},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -798,9 +867,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-														{
-															paddingRight: "20px",
-														},
+															{
+																paddingRight: "20px",
+															},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -1026,18 +1095,21 @@ const OrderDetails = () => {
 												</Pdf>
 											</div>
 										</div>
-										{fetchedData?.data?.orders?.shipping &&
-											<button disabled={fetchedData?.data?.orders?.shipping === null} style={{ cursor: 'pointer' }} onClick={() => printSticker()} className='order-action-box mb-3'>
+										{fetchedData?.data?.orders?.shipping && (
+											<button
+												disabled={fetchedData?.data?.orders?.shipping === null}
+												style={{ cursor: "pointer" }}
+												onClick={() => printSticker()}
+												className='order-action-box mb-3'>
 												<div className='action-title'>
 													<ListIcon className='list-icon' />
 													<span className='me-2'>طباعة ملصق الشحن</span>
 												</div>
-												<div
-													className='action-icon'>
+												<div className='action-icon'>
 													<Print />
 												</div>
 											</button>
-										}
+										)}
 										{/**
 											<div className='order-action-box mb-md-5'>
 										<div className='action-title'>

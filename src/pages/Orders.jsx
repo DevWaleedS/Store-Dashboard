@@ -20,16 +20,22 @@ const Orders = () => {
 	let filterOrders = fetchedData?.data?.orders;
 
 	if (search !== "") {
-		orders = fetchedData?.data?.orders?.filter((order) =>
-			order?.shipping?.track_id?.toLowerCase()?.includes(search?.toLowerCase()) || order?.shippingtypes?.name?.toLowerCase()?.includes(search?.toLowerCase())
+		orders = fetchedData?.data?.orders?.filter(
+			(order) =>
+				order?.shipping?.track_id
+					?.toLowerCase()
+					?.includes(search?.toLowerCase()) ||
+				order?.shippingtypes?.name
+					?.toLowerCase()
+					?.includes(search?.toLowerCase())
 		);
 	} else {
 		orders = fetchedData?.data?.orders;
 	}
-	
-	const filterHandel = () =>{
+
+	const filterHandel = () => {
 		filterOrders = orders?.sort((a, b) => (a.id < b.id ? -1 : 1));
-	}
+	};
 
 	return (
 		<>

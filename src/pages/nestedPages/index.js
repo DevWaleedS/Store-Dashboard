@@ -10,7 +10,6 @@ export { default as AddNewUser } from "./AddNewUser";
 export { default as EditUserPage } from "./EditUserPage";
 export { default as CreateOffer } from "./CreateOffer";
 export { default as CreatePage } from "./CreatePage";
-export { default as OrderDetails } from "./OrderDetails";
 export { default as CourseDetails } from "./CourseDetails";
 export { default as ExplainDetails } from "./ExplainDetails";
 export { default as SupportDetails } from "./SupportDetails";

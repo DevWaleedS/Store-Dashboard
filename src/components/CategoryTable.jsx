@@ -492,9 +492,9 @@ export default function EnhancedTable({
 															{row?.countsubcategory}
 														</TableCell>
 
-														<TableCell align='center'>
+														<TableCell align='right'>
 															<div className='sub-categories'>
-																{row?.subcategory.slice(0, 3).map((tag) => {
+																{row?.subcategory.slice(0, 2).map((tag) => {
 																	return (
 																		<div
 																			key={tag?.id}
@@ -510,9 +510,14 @@ export default function EnhancedTable({
 																		</div>
 																	);
 																})}
-																{row?.subcategory?.length > 3 && (
+																{row?.subcategory?.length > 2 && (
 																	<div>
-																		<span>...</span>
+																		<Link
+																			to={`EditCategory/${row?.id}`}
+																			style={{ cursor: "pointer" }}
+																			title='المزيد من التصنيفات'>
+																			...
+																		</Link>
 																	</div>
 																)}
 															</div>

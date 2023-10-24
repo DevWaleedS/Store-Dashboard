@@ -25,7 +25,6 @@ import { NotificationContext } from "../Context/NotificationProvider";
 import { DeleteContext } from "../Context/DeleteProvider";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { useCookies } from "react-cookie";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 function descendingComparator(a, b, orderBy) {
 	if (b[orderBy] < a[orderBy]) {
