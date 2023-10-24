@@ -321,7 +321,9 @@ const EditPage = () => {
 														{...register("page_desc", {
 															required: "حقل وصف الصفحة مطلوب",
 														})}></textarea>
-													<div className='col-12'>
+													<div
+														className='col-12'
+														style={{ marginTop: "-13px" }}>
 														<span className='fs-6 text-danger'>
 															{pageError?.page_desc}
 															{errors?.page_desc && errors.page_desc.message}
