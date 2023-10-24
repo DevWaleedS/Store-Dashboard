@@ -707,7 +707,7 @@ const MainInformation = () => {
 												id='domain'
 												value={domain}
 												onChange={(e) => {
-													setDomain(e.target.value);
+													setDomain(e.target.value.replace(/[^A-Za-z]/g,''));
 													setDomainNameFocus(true);
 												}}
 												aria-describedby='domainName'
@@ -742,7 +742,7 @@ const MainInformation = () => {
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											يجب أن يكون الدومين باللغة الانجليزية فقط.-
+											يجب أن يكون الدومين حروف انجليزية فقط.-
 										</div>
 
 										{settingErr?.domain && (

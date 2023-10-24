@@ -154,7 +154,7 @@ const Notifications = () => {
 					<div className='row'>
 						{fetchedData?.data?.notifications.length === 0 ? (
 							<h4 className='d-flex justify-content-center align-items-center'>
-								لا يوجد اشعارات حتي هذه اللحظة!
+								لا يوجد اشعارات حتى هذه اللحظة!
 							</h4>
 						) : loading ? (
 							<CircularLoading />

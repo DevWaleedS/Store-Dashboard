@@ -51,6 +51,7 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
+	const { filterHandel } = props
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
@@ -64,7 +65,7 @@ function EnhancedTableHead(props) {
 					اسم العميل
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					حالة الطلب
+					<span style={{ cursor:'pointer' }} onClick={()=>filterHandel()}>حالة الطلب</span>
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					شركة الشحن
@@ -110,7 +111,7 @@ function EnhancedTableToolbar(props) {
 								type='text'
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
-								placeholder='ابحث عن طريق رقم التتبع'
+								placeholder=' ابحث عن طريق رقم التتبع أو اسم شركة الشحن'
 							/>
 						</div>
 					</div>
@@ -131,11 +132,12 @@ export default function BigOrdersTable({
 	setReload,
 	search,
 	setSearch,
+	filterHandel,
 }) {
 	// Use Navigate for navigate to order details page
-	const { fetchedData: cities } = useFetch(
-		`https://backend.atlbha.com/api/Store/getAllCity`
-	);
+	// const { fetchedData: cities } = useFetch(
+	// 	`https://backend.atlbha.com/api/Store/getAllCity`
+	// );
 	const navigate = useNavigate();
 	const [order, setOrder] = React.useState("asc");
 	const [orderBy, setOrderBy] = React.useState("calories");
@@ -171,9 +173,9 @@ export default function BigOrdersTable({
 		filterDataResult = filterData?.filter(
 			(item) =>
 				moment(item?.created_at).format("YYYY-MM-DD") >=
-					moment(dateValue[0]).format("YYYY-MM-DD") &&
+				moment(dateValue[0]).format("YYYY-MM-DD") &&
 				moment(item?.created_at).format("YYYY-MM-DD") <=
-					moment(dateValue[1]).format("YYYY-MM-DD")
+				moment(dateValue[1]).format("YYYY-MM-DD")
 		);
 	} else {
 		filterDataResult = filterData;
@@ -239,6 +241,7 @@ export default function BigOrdersTable({
 							orderBy={orderBy}
 							onRequestSort={handleRequestSort}
 							rowCount={filterDataResult?.length}
+							filterHandel={filterHandel}
 						/>
 
 						<TableBody>
@@ -288,7 +291,7 @@ export default function BigOrdersTable({
 														</TableCell>
 
 														<TableCell align='right'>
-															{row?.shipping?.shipping_id}
+															{row?.shipping?.track_id}
 														</TableCell>
 														<TableCell align='right'>
 															<div className='cate-prim'>
@@ -315,25 +318,25 @@ export default function BigOrdersTable({
 																	className='status d-flex justify-content-center align-items-center'
 																	style={{
 																		backgroundColor:
-																			row?.status === "مكتمل"
+																			row?.status === "تم التوصيل"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
-																				? "#d4ebf7"
-																				: row?.status === "ملغي"
-																				? "#ffebeb"
-																				: row?.status === "جاهز"
-																				? "#ffecd1c7"
-																				: "#e8f8f8",
+																					? "#d4ebf7"
+																					: row?.status === "ملغي"
+																						? "#ffebeb"
+																						: row?.status === "جاهز للشحن"
+																							? "#ffecd1c7"
+																							: "",
 																		color:
-																			row?.status === "مكتمل"
+																			row?.status === "تم التوصيل"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
-																				? "#0077ff"
-																				: row?.status === "ملغي"
-																				? "#ff7b7b"
-																				: row?.status === "جاهز"
-																				? "#ff9f1a"
-																				: "#46c7ca",
+																					? "#0077ff"
+																					: row?.status === "ملغي"
+																						? "#ff7b7b"
+																						: row?.status === "جاهز للشحن"
+																							? "#ff9f1a"
+																							: "",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,
