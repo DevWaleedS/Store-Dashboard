@@ -75,6 +75,7 @@ const EditProductPage = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const [product, setProduct] = useState({
 		name: "",
+		short_description: "",
 		description: "",
 		selling_price: "",
 		category_id: "",
@@ -96,6 +97,7 @@ const EditProductPage = () => {
 	const onChangeMultiImages = (imageList, addUpdateIndex) => {
 		setMultiImages(imageList);
 	};
+	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
 	const [SEOdescription, setSEOdescription] = useState([]);
 	const [url, setUrl] = useState("");
 	const [instagram, setInstagram] = useState("");
@@ -115,6 +117,7 @@ const EditProductPage = () => {
 		mode: "onBlur",
 		defaultValues: {
 			name: "",
+			short_description: "",
 			description: "",
 			selling_price: "",
 			category_id: "",
@@ -128,6 +131,7 @@ const EditProductPage = () => {
 			setProduct({
 				...product,
 				name: fetchedData?.data?.product?.name,
+				short_description: fetchedData?.data?.product?.short_description,
 				description: fetchedData?.data?.product?.description,
 				selling_price: fetchedData?.data?.product?.selling_price,
 				category_id: fetchedData?.data?.product?.category?.id,
@@ -156,6 +160,7 @@ const EditProductPage = () => {
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
+		short_description: "",
 		description: "",
 		selling_price: "",
 		category_id: "",
@@ -174,6 +179,7 @@ const EditProductPage = () => {
 		setProductError({
 			name: "",
 			cover: "",
+			short_description: "",
 			description: "",
 			selling_price: "",
 			category_id: "",
@@ -250,6 +256,7 @@ const EditProductPage = () => {
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("name", data?.name);
+		formData.append("short_description", data?.short_description);
 		formData.append("description", data?.description);
 		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
@@ -295,6 +302,7 @@ const EditProductPage = () => {
 					setLoadingTitle("");
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],
+						short_description: res?.data?.message?.en?.short_description?.[0],
 						cover: res?.data?.message?.en?.cover?.[0],
 						description: res?.data?.message?.en?.description?.[0],
 						selling_price: res?.data?.message?.en?.selling_price?.[0],
@@ -383,6 +391,52 @@ const EditProductPage = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
+													وصف قصير للمنتج <span className='text-danger'>*</span>
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<Controller
+													name={"short_description"}
+													control={control}
+													rules={{
+														required: "حقل وصف قصير للمنتج مطلوب",
+													}}
+													render={({ field: { onChange, value } }) => (
+														<textarea
+															name='short_description'
+															placeholder='اكتب وصف قصير للمنتج لا يتعدي 100 حرف'
+															rows={5}
+															value={value}
+															onChange={(e) => {
+																if (e.target.value.length <= 100) {
+																	onChange(e.target.value.substring(0, 100))
+																	setShortDescriptionLength(false);
+																} else {
+																	setShortDescriptionLength(true);
+																}
+
+															}}
+														>
+														</textarea>
+													)}
+												/>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.short_description}
+													{errors?.short_description && errors.short_description.message}
+												</span>
+												{shortDescriptionLength &&
+													<span className='fs-6 text-danger'>
+														الوصف يجب إلا يتعدي 100 حرف
+													</span>
+												}
+											</div>
+										</div>
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='product-desc'>
 													{" "}
 													وصف المنتج<span className='text-danger'>*</span>
 												</label>
@@ -427,9 +481,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																	{
+																		paddingRight: "20px",
+																	},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -515,7 +569,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-													subcategory[0]?.subcategory?.length === 0 ? (
+														subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -525,9 +579,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -736,16 +790,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-													product?.selling_price === ""
+														product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -857,9 +911,9 @@ const EditProductPage = () => {
 															{imageList?.map((image, index) => {
 																const isVideo = image?.data_url?.includes(
 																	"video/mp4" ||
-																		"video/avi" ||
-																		"video/mov" ||
-																		"video/mkv"
+																	"video/avi" ||
+																	"video/mov" ||
+																	"video/mkv"
 																);
 																if (isVideo) {
 																	return (

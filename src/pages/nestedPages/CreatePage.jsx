@@ -24,7 +24,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
 import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.svg";
 import { IoIosArrowDown } from "react-icons/io";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Modal Style
@@ -72,6 +72,7 @@ const CreatePage = () => {
 	const {
 		register,
 		handleSubmit,
+		control,
 		formState: { errors },
 	} = useForm({
 		mode: "onBlur",
@@ -90,10 +91,13 @@ const CreatePage = () => {
 	});
 	const itsPost = page?.pageCategory?.includes(1);
 	const [tag, setTag] = useState("");
+	const [descriptionLength, setDescriptionLength] = useState(false);
 	const [description, setDescription] = useState({
 		htmlValue: "",
 		editorState: EditorState.createEmpty(),
 	});
+
+	console.log(descriptionLength);
 
 	const addTags = () => {
 		setPage({ ...page, tags: [...page.tags, tag] });
@@ -292,19 +296,42 @@ const CreatePage = () => {
 											</div>
 										</div>
 										<div className='col-12 mt-3'>
-											<textarea
-												name='page_desc'
-												className='w-100 h-auto p-3'
-												placeholder='اكتب وصف قصير للصفحة لا يتعدي 100 حرف'
-												rows={5}
-												{...register("page_desc", {
+											<Controller
+												name={"page_desc"}
+												control={control}
+												rules={{
 													required: "حقل وصف الصفحة مطلوب",
-												})}></textarea>
+												}}
+												render={({ field: { onChange, value } }) => (
+													<textarea
+														name='page_desc'
+														className='w-100 h-auto p-3'
+														placeholder='اكتب وصف قصير للصفحة لا يتعدي 100 حرف'
+														rows={5}
+														value={value}
+														onChange={(e) => {
+															if(e.target.value.length <= 100){
+																onChange(e.target.value.substring(0,100))
+																setDescriptionLength(false);
+															}else{
+																setDescriptionLength(true);
+															}
+															
+														}}
+													>
+													</textarea>
+												)}
+											/>
 											<div className='col-12' style={{ marginTop: "-13px" }}>
 												<span className='fs-6 text-danger'>
 													{pageError?.page_desc}
 													{errors?.page_desc && errors.page_desc.message}
 												</span>
+												{descriptionLength && 
+												<span className='fs-6 text-danger'>
+													الوصف يجب إلا يتعدي 100 حرف
+												</span>
+												}
 											</div>
 										</div>
 									</div>
@@ -539,9 +566,9 @@ const CreatePage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																	{
+																		paddingRight: "20px",
+																	},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
