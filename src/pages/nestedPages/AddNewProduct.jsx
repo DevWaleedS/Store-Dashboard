@@ -25,11 +25,12 @@ import TextareaCode from "../../components/TextareaCode/TextareaCode";
 
 // icons and images
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
+import { ReactComponent as LinkIcon } from "../../data/Icons/link.svg";
 import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
 import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
 import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
 import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
-import { ReactComponent as FileIcon } from "../../data/Icons/upload file.svg";
+
 import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { BsPlayCircle } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -98,15 +99,33 @@ const AddNewProduct = () => {
 		category_id: "",
 		subcategory_id: [],
 	});
+	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
+	const [robotLink, setRobotLink] = useState("");
 	const [SEOdescription, setSEOdescription] = useState([]);
 	const [instagram, setInstagram] = useState("");
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
 	const [url, setUrl] = useState("");
+
+	// to handle close video privew
 	const closeVideoModal = () => {
 		setUrl("");
 	};
+
+	// to handle errors of Google Analytics Link
+	const LINK_REGEX =
+		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
+		useState(false);
+	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
+		useState(false);
+
+	useEffect(() => {
+		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
+		setValidGoogleAnalyticsLink(storeLinkValidation);
+	}, [googleAnalyticsLink]);
+
 	// to get multi images
 	const [multiImages, setMultiImages] = useState([]);
 	const emptyMultiImages = [];
@@ -127,6 +146,8 @@ const AddNewProduct = () => {
 		discount_price: "",
 		subcategory_id: "",
 		stock: "",
+		googleAnalyticsLink: "",
+		robotLink: "",
 		SEOdescription: "",
 		images: "",
 		snappixel: "",
@@ -145,6 +166,8 @@ const AddNewProduct = () => {
 			discount_price: "",
 			subcategory_id: "",
 			stock: "",
+			googleAnalyticsLink: "",
+			robotLink: "",
 			SEOdescription: "",
 			images: "",
 			snappixel: "",
@@ -218,6 +241,8 @@ const AddNewProduct = () => {
 		formData.append("category_id", data?.category_id);
 		formData.append("discount_price", data?.discount_price);
 		formData.append("stock", data?.stock);
+		formData.append("google_analytics", googleAnalyticsLink);
+		formData.append("robot_link", robotLink);
 		formData.append("SEOdescription", SEOdescription.join(","));
 		formData.append("snappixel", snapchat);
 		formData.append("twitterpixel", twitter);
@@ -256,6 +281,8 @@ const AddNewProduct = () => {
 						discount_price: res?.data?.message?.en?.discount_price?.[0],
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
+						googleAnalyticsLink: res?.data?.message?.en?.google_analytics?.[0],
+						robotLink: res?.data?.message?.en?.robot_link?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
 						images: res?.data?.message?.en?.images?.[0],
 						snappixel: res?.data?.message?.en?.snappixel?.[0],
@@ -858,6 +885,8 @@ const AddNewProduct = () => {
 											)}
 										</div>
 									</div>
+
+									{/* Key words */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
@@ -880,6 +909,85 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Google Analytics Link */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label>
+												<LinkIcon className='ms-2' />
+												ربط جوجل أناليتكس
+											</label>
+										</div>
+
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='input'>
+												<input
+													type='text'
+													style={{ textAlign: "left", direction: "ltr" }}
+													value={googleAnalyticsLink}
+													onChange={(e) => {
+														setGoogleAnalyticsLink(e.target.value);
+													}}
+													placeholder='https://analytics.google.com/analytics/web/#/report'
+													onFocus={() => setValidGoogleAnalyticsLinkFocus(true)}
+													onBlur={() => setValidGoogleAnalyticsLinkFocus(true)}
+													aria-invalid={
+														validGoogleAnalyticsLink ? "false" : "true"
+													}
+													aria-describedby='pageLink'></input>
+											</div>
+											<p
+												id='pageDesc'
+												className={
+													validGoogleAnalyticsLinkFocus &&
+													googleAnalyticsLink &&
+													!validGoogleAnalyticsLink
+														? " d-block wrong-text "
+														: "d-none"
+												}
+												style={{
+													color: "red",
+													padding: "10px",
+													fontSize: "1rem",
+												}}>
+												يجب ان يكون الرابط Valid URL
+											</p>
+											{productError?.googleAnalyticsLink && (
+												<span className='wrong-text'>
+													{productError?.googleAnalyticsLink}
+												</span>
+											)}
+										</div>
+									</div>
+
+									{/* Robots links */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label>إعدادات ملف Robots </label>
+										</div>
+
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='input'>
+												<textarea
+													style={{ textAlign: "left", direction: "ltr" }}
+													id='product-desc'
+													value={robotLink}
+													onChange={(e) => {
+														setRobotLink(e.target.value);
+													}}
+													placeholder='Sitemap: https://utlopha.sa/sitemap.xml User-agent: * Allow: / Disallow: /*<iframe Disallow: /*?currency='
+												/>
+											</div>
+
+											{productError?.robotsLink && (
+												<span className='wrong-text'>
+													{productError?.robotsLink}
+												</span>
+											)}
+										</div>
+									</div>
+
+									{/* */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label>
@@ -903,6 +1011,7 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label>

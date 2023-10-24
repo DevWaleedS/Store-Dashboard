@@ -14,49 +14,48 @@ import TextareaCode from "../components/TextareaCode/TextareaCode";
 // import images
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { ReactComponent as LinkIcon } from "../data/Icons/link.svg";
-import { ReactComponent as UploadFileIcon } from "../data/Icons/upload file.svg";
 import { ReactComponent as BlogIcon } from "../data/Icons/Blog.svg";
 import { ReactComponent as SnapchatIcon } from "../data/Icons/blue-snapchat.svg";
 import { ReactComponent as TwitterIcon } from "../data/Icons/blue-Xx.svg";
 import { ReactComponent as InstagramIcon } from "../data/Icons/blue-instagram.svg";
 import { ReactComponent as TiktokIcon } from "../data/Icons/blue-tiktok.svg";
 
-const LINK_REGEX =
-	/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/seo`
 	);
+
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [updateLinkValue, setUpdateLinkValue] = useState("");
-	// const [metaTags, setMetaTags] = useState("");
+	const [robotLink, setRobotLink] = useState("");
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
 	const [instagram, setInstagram] = useState("");
 	const [keyWord, setKeyWord] = useState([]);
+
+	// to handle errors
+	const LINK_REGEX =
+		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 	const [validPageLink, setValidPageLink] = useState(false);
 	const [pageLinkFocus, setPageLinkFocus] = useState(false);
-
 	const [dataError, setDataError] = useState({
 		updateLinkValue: "",
-		// metaTags: "",
+		robotLink: "",
 		keyWord: "",
 		snapchat: "",
 		twitter: "",
 		tiktok: "",
 		instagram: "",
 	});
-
 	const resetDataError = () => {
 		setDataError({
 			updateLinkValue: "",
-			// metaTags: "",
+			robotLink: "",
 			keyWord: "",
 			snapchat: "",
 			twitter: "",
@@ -64,10 +63,11 @@ const PaintStore = () => {
 			instagram: "",
 		});
 	};
+	// --------------------------------------------------------------
 
 	useEffect(() => {
 		setUpdateLinkValue(fetchedData?.data?.Seo?.[0]?.google_analytics);
-		// setMetaTags(fetchedData?.data?.Seo?.[0]?.metatags || "");
+		setRobotLink(fetchedData?.data?.Seo?.[0]?.robot_link || "");
 		setSnapchat(fetchedData?.data?.Seo?.[0]?.snappixel || "");
 		setTwitter(fetchedData?.data?.Seo?.[0]?.twitterpixel || "");
 		setTiktok(fetchedData?.data?.Seo?.[0]?.tiktokpixel || "");
@@ -85,7 +85,7 @@ const PaintStore = () => {
 		setLoadingTitle("جاري تعديل تحسينات الSEO");
 		let formData = new FormData();
 		formData.append("google_analytics", updateLinkValue);
-		// formData.append("metatags", metaTags);
+		formData.append("robot_link", robotLink);
 		formData.append("snappixel", snapchat);
 		formData.append("twitterpixel", twitter);
 		formData.append("tiktokpixel", tiktok);
@@ -109,7 +109,7 @@ const PaintStore = () => {
 					setDataError({
 						...dataError,
 						updateLinkValue: res?.data?.message?.en?.google_analytics?.[0],
-						// metaTags: res?.data?.message?.en?.metatags?.[0],
+						robotLink: res?.data?.message?.en?.robot_link?.[0],
 						snapchat: res?.data?.message?.en?.snappixel?.[0],
 						twitter: res?.data?.message?.en?.twitterpixel?.[0],
 						tiktok: res?.data?.message?.en?.tiktokpixel?.[0],
@@ -157,6 +157,7 @@ const PaintStore = () => {
 							</div>
 							<div className='input'>
 								<input
+									style={{ textAlign: "left", direction: "ltr" }}
 									type='text'
 									value={updateLinkValue}
 									onChange={(e) => {
@@ -181,6 +182,29 @@ const PaintStore = () => {
 							</p>
 							{dataError?.updateLinkValue && (
 								<span className='wrong-text'>{dataError?.updateLinkValue}</span>
+							)}
+						</div>
+
+						{/* Robots File  */}
+
+						<div className='inputs-group'>
+							<div className='label'>
+								<label> إعدادات ملف Robots </label>
+							</div>
+							<div className='input'>
+								<textarea
+									className='robot_link_text_area'
+									style={{ textAlign: "left", direction: "ltr" }}
+									value={robotLink}
+									onChange={(e) => {
+										setRobotLink(e.target.value);
+									}}
+									placeholder='Sitemap: https://utlopha.sa/sitemap.xml User-agent: * Allow: / Disallow: /*<iframe Disallow: /*?currency='
+								/>
+							</div>
+
+							{dataError?.robotLink && (
+								<span className='wrong-text'>{dataError?.robotLink}</span>
 							)}
 						</div>
 						{/* Keywords */}
