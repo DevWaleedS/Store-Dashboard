@@ -221,7 +221,7 @@ const ProductRefund = () => {
 													<div className='label mb-2'>
 														النشاطات و التصنيفات الفرعية{" "}
 													</div>
-													<div className='d-flex align-items-center justify-content-start flex-wrap gap-3'>
+													<div className='d-flex flex-wrap align-items-center justify-content-start flex-wrap gap-1'>
 														{fetchedData?.data?.products?.subcategory
 															?.length === 0 ? (
 															<div

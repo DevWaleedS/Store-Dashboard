@@ -493,34 +493,40 @@ export default function EnhancedTable({
 														</TableCell>
 
 														<TableCell align='right'>
-															<div className='sub-categories'>
-																{row?.subcategory.slice(0, 2).map((tag) => {
-																	return (
-																		<div
-																			key={tag?.id}
-																			style={{
-																				background:
-																					row?.store === null
-																						? "#FFFF"
-																						: "#dcdcdc",
-																			}}>
-																			<span className='w-100 text-center text-overflow'>
-																				{tag?.name}
-																			</span>
+															{row?.subcategory?.length === 0 ? (
+																<div className='w-100 text-center'>
+																	لا يوجد تصنيفات او نشاطات فرعية{" "}
+																</div>
+															) : (
+																<div className='sub-categories'>
+																	{row?.subcategory.slice(0, 2).map((tag) => {
+																		return (
+																			<div
+																				key={tag?.id}
+																				style={{
+																					background:
+																						row?.store === null
+																							? "#FFFF"
+																							: "#dcdcdc",
+																				}}>
+																				<span className='w-100 text-center text-overflow'>
+																					{tag?.name}
+																				</span>
+																			</div>
+																		);
+																	})}
+																	{row?.subcategory?.length > 2 && (
+																		<div>
+																			<Link
+																				to={`EditCategory/${row?.id}`}
+																				style={{ cursor: "pointer" }}
+																				title='المزيد من التصنيفات'>
+																				...
+																			</Link>
 																		</div>
-																	);
-																})}
-																{row?.subcategory?.length > 2 && (
-																	<div>
-																		<Link
-																			to={`EditCategory/${row?.id}`}
-																			style={{ cursor: "pointer" }}
-																			title='المزيد من التصنيفات'>
-																			...
-																		</Link>
-																	</div>
-																)}
-															</div>
+																	)}
+																</div>
+															)}
 														</TableCell>
 
 														<TableCell align='center'>

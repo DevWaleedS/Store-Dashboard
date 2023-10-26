@@ -314,7 +314,7 @@ const ShowImportEtlobhaProduct = () => {
 															(لا يوجد تصنيفات فرعية)
 														</div>
 													) : (
-														<div className='d-flex align-items-center justify-content-start gap-3'>
+														<div className='d-flex flex-wrap align-items-center justify-content-start gap-1'>
 															{fetchedData?.data?.product?.subcategory?.map(
 																(sub, index) => (
 																	<div key={index} className='tags'>
@@ -450,8 +450,10 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 											<div className='col-md-3 col-12'></div>
 											<div className='col-md-7 col-12'>
-												{product?.price <
-													fetchedData?.data?.product?.purchasing_price && (
+												{Number(product?.price) <
+													Number(
+														fetchedData?.data?.product?.purchasing_price
+													) && (
 													<span className='fs-6 text-danger'>
 														السعر يجب ان يكون اكبر من او يساوي (
 														{fetchedData?.data?.product?.purchasing_price})

@@ -58,11 +58,11 @@ const VerifayPage = forwardRef((props, ref) => {
 	const { fetchedData: activities } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
-	
+
 	const { fetchedData: cities } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
-	
+
 	const [cookies] = useCookies(["access_token"]);
 
 	// to open verifay alert
@@ -80,16 +80,20 @@ const VerifayPage = forwardRef((props, ref) => {
 		});
 	});
 
-	const queryParams = selectedActivity?.map((sub) => `category_id[]=${sub?.id}`).join("&");
+	const queryParams = selectedActivity
+		?.map((sub) => `category_id[]=${sub?.id}`)
+		.join("&");
 	const { fetchedData: subActivitiesList } = useFetch(
 		`https://backend.atlbha.com/api/Store/selector/subcategories?${queryParams}`
 	);
 
-	const selectedSubActivities = subActivitiesList?.data?.categories?.filter((item) => {
-		return subActivities?.some((ele) => {
-			return ele === item?.id;
-		});
-	});
+	const selectedSubActivities = subActivitiesList?.data?.categories?.filter(
+		(item) => {
+			return subActivities?.some((ele) => {
+				return ele === item?.id;
+			});
+		}
+	);
 
 	// to handle data
 	const [file, setFile] = useState([]);
@@ -269,7 +273,7 @@ const VerifayPage = forwardRef((props, ref) => {
 						<div className='col-4 d-flex '>
 							<h5 className='label'>نوع النشاط أو التصنيف الرئيسي</h5>
 						</div>
-						<div className='col-8 d-flex justify-content-start flex-wrap gap-2'>
+						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
 							{selectedActivity?.map((activity, index) => (
 								<div
 									key={index}
@@ -278,13 +282,11 @@ const VerifayPage = forwardRef((props, ref) => {
 										borderRadius: "18px",
 										fontSize: "16px",
 										fontWeight: "400",
-										height: "40px",
 										width: "max-content",
-										padding: "0 16px",
-										maxWidth: "fit-content",
-										display: "flex",
-										justifyContent: "center",
-										alignItems: "center",
+										padding: "6px 10px",
+										minWidth: "min-content",
+										maxWidth: "500",
+										whiteSpace: "pre-line",
 									}}>
 									{activity?.name}
 								</div>
@@ -295,7 +297,7 @@ const VerifayPage = forwardRef((props, ref) => {
 						<div className='col-4 d-flex '>
 							<h5 className='label'>نوع النشاط أو التصنيف الفرعي</h5>
 						</div>
-						<div className='col-8 d-flex justify-content-start flex-wrap gap-2'>
+						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
 							{selectedSubActivities?.map((sub, index) => (
 								<div
 									key={index}
@@ -304,13 +306,11 @@ const VerifayPage = forwardRef((props, ref) => {
 										borderRadius: "18px",
 										fontSize: "16px",
 										fontWeight: "400",
-										height: "40px",
 										width: "max-content",
-										padding: "0 16px",
-										maxWidth: "fit-content",
-										display: "flex",
-										justifyContent: "center",
-										alignItems: "center",
+										padding: "6px 10px",
+										minWidth: "min-content",
+										maxWidth: "500",
+										whiteSpace: "pre-line",
 									}}>
 									{sub?.name}
 								</div>

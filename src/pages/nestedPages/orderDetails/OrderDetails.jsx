@@ -1,4 +1,10 @@
-import React, { useState, useContext, useRef, Fragment, useEffect } from "react";
+import React, {
+	useState,
+	useContext,
+	useRef,
+	Fragment,
+	useEffect,
+} from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Context from "../../../Context/context";
@@ -112,9 +118,7 @@ const OrderDetails = () => {
 
 	const getCityFromProvince =
 		cities?.data?.cities?.data?.cities?.filter(
-			(obj) =>
-				obj?.province ===
-				(shipping?.district)
+			(obj) => obj?.province === shipping?.district
 		) || [];
 
 	function translateProvinceName(name) {
@@ -138,7 +142,7 @@ const OrderDetails = () => {
 		formData.append("_method", "PUT");
 		formData.append("status", status);
 		if (status === "ready" || status === "canceled") {
-			formData.append("district",shipping?.district);
+			formData.append("district", shipping?.district);
 			formData.append("city", shipping?.city);
 			formData.append("street_address", shipping?.address);
 			formData.append("weight", shipping?.weight);
@@ -189,6 +193,7 @@ const OrderDetails = () => {
 		);
 	}
 
+	// print sticker
 	const printSticker = () => {
 		setPrintError("");
 		if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
@@ -232,8 +237,11 @@ const OrderDetails = () => {
 				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						console.log();
-						window.open(`https://dashboard.go-tex.net/api${res?.data?.data?.Sticker?.data?.[0]}`, "_blank");
+						// this will open the sticker in new tap
+						window.open(
+							`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data?.[0]}`,
+							"_blank"
+						);
 					} else {
 						setReload(!reload);
 						setPrintError(res?.data?.message?.ar);
@@ -241,18 +249,19 @@ const OrderDetails = () => {
 				});
 		}
 	};
+	// ---------------------------
 
 	// handle calc total price if codePrice is !== 0
 	const calcTotalPrice = (codprice, totalPrice) => {
 		const cashOnDelivery = codprice || 0;
-		const totalCartValue = parseFloat(totalPrice?.replace(/,/g, ""));
+		const totalCartValue = totalPrice;
 
 		const totalValue = cashOnDelivery
 			? (totalCartValue + cashOnDelivery)?.toFixed(2)
 			: totalPrice;
 		return totalValue;
 	};
-
+	// -------------------------------------------------
 
 	return (
 		<>
@@ -692,15 +701,15 @@ const OrderDetails = () => {
 																		"+966"
 																	)
 																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
-																			4
-																		)
+																				4
+																		  )
 																		: fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
-																			"00966"
-																		)
-																			? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																				"00966"
+																		  )
+																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
 																				5
-																			)
-																			: fetchedData?.data?.orders?.user
+																		  )
+																		: fetchedData?.data?.orders?.user
 																				?.phonenumber}
 																</span>
 															</div>
@@ -745,18 +754,18 @@ const OrderDetails = () => {
 														</div>
 														{fetchedData?.data?.orders?.OrderAddress
 															?.postal_code && (
-																<div className='col-md-6 col-12 mb-3'>
-																	<h6 className='mb-3'>الرمز البريدي</h6>
-																	<div className='info-box'>
-																		<span style={{ whiteSpace: "normal" }}>
-																			{
-																				fetchedData?.data?.orders?.OrderAddress
-																					?.postal_code
-																			}
-																		</span>
-																	</div>
+															<div className='col-md-6 col-12 mb-3'>
+																<h6 className='mb-3'>الرمز البريدي</h6>
+																<div className='info-box'>
+																	<span style={{ whiteSpace: "normal" }}>
+																		{
+																			fetchedData?.data?.orders?.OrderAddress
+																				?.postal_code
+																		}
+																	</span>
 																</div>
-															)}
+															</div>
+														)}
 														<div className='col-12 mb-3'>
 															<h6 className='mb-3'>العنوان</h6>
 															<div className='info-box'>
@@ -804,9 +813,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-														{
-															paddingRight: "20px",
-														},
+															{
+																paddingRight: "20px",
+															},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -875,9 +884,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-														{
-															paddingRight: "20px",
-														},
+															{
+																paddingRight: "20px",
+															},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -1106,7 +1115,9 @@ const OrderDetails = () => {
 										{fetchedData?.data?.orders?.shipping && (
 											<>
 												<button
-													disabled={fetchedData?.data?.orders?.shipping === null}
+													disabled={
+														fetchedData?.data?.orders?.shipping === null
+													}
 													style={{ cursor: "pointer" }}
 													onClick={() => printSticker()}
 													className='order-action-box mb-3'>
@@ -1118,9 +1129,7 @@ const OrderDetails = () => {
 														<Print />
 													</div>
 												</button>
-												<span className='fs-6 text-danger'>
-													{printError}
-												</span>
+												<span className='fs-6 text-danger'>{printError}</span>
 											</>
 										)}
 										{/**

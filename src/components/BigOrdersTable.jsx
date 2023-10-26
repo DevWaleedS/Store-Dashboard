@@ -1,4 +1,7 @@
 import React, { Fragment, useState } from "react";
+import MenuItem from "@mui/material/MenuItem";
+
+import Select from "@mui/material/Select";
 
 import { useNavigate } from "react-router-dom";
 import CircularLoading from "../HelperComponents/CircularLoading";
@@ -19,7 +22,62 @@ import TablePagination from "./TablePagination";
 // Icons
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
 import { FiSearch } from "react-icons/fi";
-import { TbArrowsSort } from "react-icons/tb";
+import { IoIosArrowDown } from "react-icons/io";
+
+// filter orders by
+const filtersTypes = [
+	{ id: 1, ar_name: "شركة الشحن", en_name: "shipping_company" },
+	{ id: 2, ar_name: "حالة الطلب", en_name: "status" },
+	{ id: 3, ar_name: "كمية الطلب", en_name: "qty" },
+];
+
+const selectFilterStyles = {
+	width: "100%",
+	height: "100%",
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	fontSize: "18px",
+	fontWeight: "500",
+	backgroundColor: "aliceblue",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+
+	"& .MuiSelect-nativeInput": {
+		display: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "88%",
+	},
+};
+
+const menuItemStyles = {
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	backgroundColor: "aliceblue",
+	height: "3rem",
+	"&.Mui-selected": {
+		backgroundColor: "#d9f2f9",
+	},
+	"&.Mui-selected:hover ": {
+		backgroundColor: "#d9f2f9",
+	},
+	"&:hover ": {
+		backgroundColor: "#d9f2f9",
+	},
+};
 
 function EnhancedTableHead(props) {
 	return (
@@ -72,7 +130,8 @@ function EnhancedTableToolbar(props) {
 						<div className=''>
 							<h4>جدول الطلبات</h4>
 						</div>
-						<div className="w-100 d-flex flex-row align-items-center gap-3 flex-wrap">
+						<div className='w-100 d-flex flex-row align-items-center gap-3 flex-wrap justify-content-end'>
+							<div></div>
 							<div className='search-input-box'>
 								<FiSearch />
 								<input
@@ -83,18 +142,35 @@ function EnhancedTableToolbar(props) {
 								/>
 							</div>
 							<div className='select-input-box'>
-								<select
+								<Select
+									displayEmpty
+									sx={selectFilterStyles}
+									IconComponent={IoIosArrowDown}
 									value={select}
 									onChange={(e) => setSelect(e.target.value)}
-									className='form-select'
-									aria-label='Default select example'>
-									<option value='' defaultChecked>
+									inputProps={{ "aria-label": "Without label" }}
+									renderValue={(selected) => {
+										if (select === "") {
+											return <p style={{ color: "#02466a" }}> فرز حسب </p>;
+										}
+										const result =
+											filtersTypes?.filter(
+												(item) => item?.en_name === selected
+											) || "";
+										return result[0]?.ar_name;
+									}}>
+									<MenuItem sx={menuItemStyles} value=''>
 										الكل
-									</option>
-									<option value='shipping_company'>اسم الشركة</option>
-									<option value='status'>الحالة</option>
-									<option value='qty'>الكمية</option>
-								</select>
+									</MenuItem>
+									{filtersTypes?.map((item) => (
+										<MenuItem
+											sx={menuItemStyles}
+											key={item?.id}
+											value={item?.en_name}>
+											{item?.ar_name}
+										</MenuItem>
+									))}
+								</Select>
 							</div>
 						</div>
 					</div>
@@ -143,9 +219,7 @@ export default function BigOrdersTable({
 
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows =
-		page > 0
-			? Math.max(0, (1 + page) * rowsPerPage - data?.length)
-			: 0;
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
 
 	const allRows = () => {
 		const num = Math.ceil(data?.length / rowsPerPage);
@@ -159,7 +233,7 @@ export default function BigOrdersTable({
 	// handle calc total price if codePrice is !== 0
 	const calcTotalPrice = (codprice, totalPrice) => {
 		const cashOnDelivery = codprice || 0;
-		const totalCartValue = parseFloat(totalPrice?.replace(/,/g, ""));
+		const totalCartValue = totalPrice;
 
 		const totalValue = cashOnDelivery
 			? (totalCartValue + cashOnDelivery)?.toFixed(2)
@@ -264,22 +338,22 @@ export default function BigOrdersTable({
 																			row?.status === "تم التوصيل"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
-																					? "#d4ebf7"
-																					: row?.status === "ملغي"
-																						? "#ffebeb"
-																						: row?.status === "جاهز للشحن"
-																							? "#ffecd1c7"
-																							: "",
+																				? "#d4ebf7"
+																				: row?.status === "ملغي"
+																				? "#ffebeb"
+																				: row?.status === "جاهز للشحن"
+																				? "#ffecd1c7"
+																				: "",
 																		color:
 																			row?.status === "تم التوصيل"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
-																					? "#0077ff"
-																					: row?.status === "ملغي"
-																						? "#ff7b7b"
-																						: row?.status === "جاهز للشحن"
-																							? "#ff9f1a"
-																							: "",
+																				? "#0077ff"
+																				: row?.status === "ملغي"
+																				? "#ff7b7b"
+																				: row?.status === "جاهز للشحن"
+																				? "#ff9f1a"
+																				: "",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,

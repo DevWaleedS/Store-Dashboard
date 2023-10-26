@@ -100,7 +100,9 @@ const FormSearchWeight = ({
 								inputProps={{ "aria-label": "Without label" }}
 								renderValue={(selected) => {
 									if (category_id === "") {
-										return <p className='text-[#ADB5B9]'>اختر النشاط أو التصنيف</p>;
+										return (
+											<p style={{ color: "#ADB5B9" }}>اختر النشاط أو التصنيف</p>
+										);
 									}
 									const result =
 										categories?.filter(

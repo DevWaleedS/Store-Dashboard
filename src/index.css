@@ -2757,8 +2757,10 @@ nav.navigation {
 }
 
 .form-row {
-	background: #f4f5f7;
 	margin: 0;
+	overflow: hidden;
+	white-space: normal;
+	background: #f4f5f7;
 	border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -2809,7 +2811,7 @@ nav.navigation {
 .row-input-group {
 	position: relative;
 	min-height: 350px;
-	max-height: 400px;
+	max-height: max-content;
 	background: rgb(255, 255, 255);
 	border-radius: 8px;
 	z-index: 1;
@@ -3586,7 +3588,7 @@ textarea {
 }
 
 .add-form-wrapper form label {
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 500;
 	white-space: pre-wrap;
 }
@@ -3673,11 +3675,10 @@ textarea {
 
 /* EDIT IMPORT PRODUCTS */
 .add-form-wrapper form .sub-category .tags {
-	width: 134px;
-	height: 38px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	min-width: 134px;
+	max-width: 300px;
+	padding: 8px;
+	white-space: pre-line;
 	background: #eeeeef;
 	font-size: 18px;
 	font-weight: 400;
@@ -6306,18 +6307,20 @@ input:disabled {
 }
 
 .ProductRefund-wrapper .product-category .tags {
-	width: max-content;
-	padding: 0 10px;
-	height: 38px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	min-width: 130px;
+	max-width: 300px;
+	white-space: pre-line;
+	padding: 4px 8px;
 	background: #ffffff;
 	font-size: 18px;
 	font-weight: 400;
 	letter-spacing: 0px;
 	color: #67747b;
-	border-radius: 28px;
+	border-radius: 18px;
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	-ms-border-radius: 18px;
+	-o-border-radius: 18px;
 }
 
 .ProductRefund-wrapper .selling-price-label,
@@ -7277,7 +7280,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
-	flex: 2;
+	flex: 0.5;
 	padding: 0 16px;
 	gap: 8px;
 	width: 100%;
@@ -7299,18 +7302,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .order-toolbar .select-input-box {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	flex: 1;
-	padding: 0 16px;
-	gap: 8px;
-	width: 100%;
+	flex: 0.3;
 	height: 56px;
 	border: 1px solid var(--bs-white--100);
 	background-color: aliceblue;
 }
-.order-toolbar .select-input-box .form-select{
+.order-toolbar .select-input-box .form-select {
 	width: 100%;
 	height: 100% !important;
 	background-color: transparent;
@@ -7318,14 +7315,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	font-size: 18px;
 	border: none !important;
 }
-.tags-boxes{
+.tags-boxes {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 1rem;
 }
-.tags-boxes .tag{
+.tags-boxes .tag {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -7334,12 +7331,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	background-color: var(--gray-100);
 	border-radius: 6px;
 }
-.tags-boxes .tag span{
+.tags-boxes .tag span {
 	font-size: 1rem;
 	font-weight: 500;
 	line-height: 18px;
 }
-.tags-boxes .tag svg{
+.tags-boxes .tag svg {
 	width: 1rem;
 	height: 1rem;
 	cursor: pointer;
@@ -8202,7 +8199,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.order-toolbar .search-input-box {
 		height: 46px;
+		flex: 1;
 		flex: auto;
+	}
+	.order-toolbar .select-input-box {
+		flex: 1;
+		height: 46px;
 	}
 
 	/*order-details*/
@@ -8487,7 +8489,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.add-form-wrapper form label {
-		font-size: 18px;
+		font-size: 16px;
 		margin-bottom: 10px;
 	}
 
