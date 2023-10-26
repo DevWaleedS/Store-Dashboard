@@ -26,6 +26,7 @@ import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.s
 import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { CloseOutlined } from "@mui/icons-material";
 
 // Modal Style
 const style = {
@@ -97,12 +98,17 @@ const CreatePage = () => {
 		editorState: EditorState.createEmpty(),
 	});
 
-	console.log(descriptionLength);
-
 	const addTags = () => {
 		setPage({ ...page, tags: [...page.tags, tag] });
 		setTag("");
 	};
+
+	const updateTags = (i) => {
+		const newTags = page?.tags?.filter((tag, index) => (
+			index !== i
+		));
+		setPage({ ...page, tags: newTags });
+	}
 
 	const onEditorStateChange = (editorValue) => {
 		const editorStateInHtml = draftToHtml(
@@ -310,13 +316,13 @@ const CreatePage = () => {
 														rows={5}
 														value={value}
 														onChange={(e) => {
-															if(e.target.value.length <= 100){
-																onChange(e.target.value.substring(0,100))
+															if (e.target.value.length <= 100) {
+																onChange(e.target.value.substring(0, 100))
 																setDescriptionLength(false);
-															}else{
+															} else {
 																setDescriptionLength(true);
 															}
-															
+
 														}}
 													>
 													</textarea>
@@ -327,10 +333,10 @@ const CreatePage = () => {
 													{pageError?.page_desc}
 													{errors?.page_desc && errors.page_desc.message}
 												</span>
-												{descriptionLength && 
-												<span className='fs-6 text-danger'>
-													الوصف يجب إلا يتعدي 100 حرف
-												</span>
+												{descriptionLength &&
+													<span className='fs-6 text-danger'>
+														الوصف يجب إلا يتعدي 100 حرف
+													</span>
 												}
 											</div>
 										</div>
@@ -536,7 +542,14 @@ const CreatePage = () => {
 															/>
 														</div>
 														<div className='mt-2'>
-															<span>{page?.tags?.join(" , ")}</span>
+															<div className="tags-boxes">
+																{page?.tags?.map((tag, index) => (
+																	<div key={index} className="tag">
+																		<CloseOutlined onClick={() => updateTags(index)} />
+																		<span>{tag}</span>
+																	</div>
+																))}
+															</div>
 														</div>
 														{pageError?.tags && (
 															<div>
