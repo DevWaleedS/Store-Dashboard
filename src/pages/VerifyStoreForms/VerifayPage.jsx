@@ -456,7 +456,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									: "d-none"
 							}
 							style={{
-								top: dataErrors?.commercialregistertype ? "150px" : "130px",
+								top: dataErrors?.commercialregistertype ? "10px" : "10px",
 							}}>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
@@ -695,7 +695,7 @@ const VerifayPage = forwardRef((props, ref) => {
 									: " d-none "
 							}
 							style={{
-								top: dataErrors?.commercialregistertype ? "90px" : "70px",
+								top: dataErrors?.commercialregistertype ? "10px" : "10px",
 							}}>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>

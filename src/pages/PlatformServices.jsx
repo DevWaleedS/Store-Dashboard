@@ -14,7 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import { TagInput } from "evergreen-ui";
 import { Link } from "react-router-dom";
 import { DelegateRequestAlert } from "../components";
@@ -44,9 +44,6 @@ const PlatformServices = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-
-	// to handle open & close submenu
-	const [openServicesTypeMenu, setOpenServicesTypeMenu] = React.useState(false);
 
 	// to open DelegateRequestAlert
 	const dispatch = useDispatch(true);
@@ -235,10 +232,7 @@ const PlatformServices = () => {
 													return `${result[0]?.name} , `;
 												});
 											}}
-											open={openServicesTypeMenu}
-											onClick={() => {
-												setOpenServicesTypeMenu(true);
-											}}>
+										>
 											{services?.data?.services?.map((service, index) => (
 												<MenuItem key={index} value={service?.id}>
 													<Checkbox
@@ -247,17 +241,6 @@ const PlatformServices = () => {
 													<ListItemText primary={service?.name} />
 												</MenuItem>
 											))}
-											<div className='select-btn d-flex justify-content-center' style={{ minHeight:"56px" }}>
-												<Button
-													className='button'
-													onClick={(e) => {
-														e.stopPropagation();
-														e.preventDefault();
-														setOpenServicesTypeMenu(false);
-													}}>
-													أختر
-												</Button>
-											</div>
 										</Select>
 									</FormControl>
 								</div>

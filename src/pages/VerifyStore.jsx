@@ -112,7 +112,7 @@ const VerifyStore = () => {
 					<div className='row select-store-type form-row p-md-5 p-3'>
 						<form className='px-md-2 px-0'>
 							<div className='col-12'>
-								<div className='form'>
+								<div className={`form ${page === 1 ? 'activty' : 'verifay'}`}>
 									{page === 1 ? (
 										<ActivityType showErr={showErr} setShowErr={setShowErr} />
 									) : (
@@ -120,7 +120,7 @@ const VerifyStore = () => {
 									)}{" "}
 								</div>
 							</div>
-							<div className='col-12 d-flex justify-content-center align-items-center gap-md-5 gap-3'>
+							<div className='col-12 d-flex justify-content-center align-items-center gap-md-5 gap-3 mt-4'>
 								{page > 1 ? (
 									<Button
 										className='prev-btn'

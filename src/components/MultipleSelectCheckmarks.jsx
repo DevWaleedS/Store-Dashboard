@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addActivity } from "../store/slices/AddActivity";
 import { addSubActivity } from "../store/slices/AddSubActivity";
@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 // Icon
 import { IoIosArrowDown } from "react-icons/io";
 import useFetch from "../Hooks/UseFetch";
@@ -24,8 +24,6 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 		`https://backend.atlbha.com/api/Store/selector/subcategories?${queryParams}`
 	);
 	const dispatch = useDispatch();
-	const [openSelectInput, setOpenSelectInput] = React.useState(false);
-	const [openSubSelectInput, setOpenSubSelectInput] = React.useState(false);
 	return (
 		<>
 			<div className='row d-flex justify-content-between align-items-start mb-2 '>
@@ -73,28 +71,13 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 									return `${result[0]?.name} , `;
 								});
 							}}
-							open={openSelectInput}
-							onClick={() => {
-								setOpenSelectInput(true);
-							}}>
+							>
 							{fetchedData?.data?.categories?.map((act, index) => (
 								<MenuItem key={index} value={act?.id}>
 									<Checkbox checked={activity.indexOf(act?.id) > -1} />
 									<ListItemText primary={act?.name} />
 								</MenuItem>
 							))}
-							<MenuItem className='select-btn d-flex justify-content-center'>
-								<Button
-									className='button'
-									onClick={(e) => {
-										e.stopPropagation();
-										e.preventDefault();
-										setOpenSelectInput(false);
-										activity.length !== 0 && setShowErr(false);
-									}}>
-									أختر
-								</Button>
-							</MenuItem>
 						</Select>
 					</FormControl>
 					{showErr && (
@@ -149,28 +132,13 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 									return `${result?.[0]?.name} , `;
 								});
 							}}
-							open={openSubSelectInput}
-							onClick={() => {
-								setOpenSubSelectInput(true);
-							}}>
+						>
 							{subActivitiesList?.data?.categories?.map((sub, index) => (
 								<MenuItem key={index} value={sub?.id}>
 									<Checkbox checked={subActivities?.indexOf(sub?.id) > -1} />
 									<ListItemText primary={sub?.name} />
 								</MenuItem>
 							))}
-							<MenuItem className='select-btn d-flex justify-content-center'>
-								<Button
-									className='button'
-									onClick={(e) => {
-										e.stopPropagation();
-										e.preventDefault();
-										setOpenSubSelectInput(false);
-										subActivities?.length !== 0 && setShowErr(false);
-									}}>
-									أختر
-								</Button>
-							</MenuItem>
 						</Select>
 					</FormControl>
 				</div>

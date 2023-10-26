@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import useFetch from "../Hooks/UseFetch";
 import { IoIosArrowDown } from "react-icons/io";
 import { Checkbox, ListItemText } from "@mui/material";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 
 const selectMenuStyles = {
 	width: "100%",
@@ -47,7 +47,6 @@ const FilterOperations = ({ showFilteringOptions }) => {
 		"https://backend.atlbha.com/api/Store/selector/etlobahCategory"
 	);
 	const [mainCategory, setMainCategory] = React.useState("");
-	const [openSubCategory, setOpenSubCategory] = React.useState(false);
 	const [subCategory, setSubCategory] = React.useState([]);
 	const [resultData, setResultData] = React.useState();
 
@@ -162,13 +161,6 @@ const FilterOperations = ({ showFilteringOptions }) => {
 						النشاط أو التصنيف الفرعي
 					</label>
 					<Select
-						open={openSubCategory}
-						onClick={() => {
-							setOpenSubCategory(true);
-						}}
-						onClose={() => {
-							setOpenSubCategory(false);
-						}}
 						multiple
 						displayEmpty
 						IconComponent={(props) => (
@@ -205,17 +197,6 @@ const FilterOperations = ({ showFilteringOptions }) => {
 								<ListItemText primary={item?.name} />
 							</MenuItem>
 						))}
-						<div className='select-btn d-flex justify-content-center' style={{ minHeight:"56px" }}>
-							<Button
-								className='button'
-								onClick={(e) => {
-									e.stopPropagation();
-									e.preventDefault();
-									setOpenSubCategory(false);
-								}}>
-								أختر
-							</Button>
-						</div>
 					</Select>
 				</FormControl>
 			</div>

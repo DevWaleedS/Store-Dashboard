@@ -22,7 +22,6 @@ import { FiSearch } from "react-icons/fi";
 import { TbArrowsSort } from "react-icons/tb";
 
 function EnhancedTableHead(props) {
-	const { filterHandel } = props;
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
@@ -36,9 +35,7 @@ function EnhancedTableHead(props) {
 					اسم العميل
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					<span style={{ cursor: "pointer" }} onClick={() => filterHandel()}>
-						حالة الطلب <TbArrowsSort className='sort-icon' />
-					</span>
+					حالة الطلب
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					شركة الشحن
@@ -64,25 +61,41 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { search, setSearch } = props;
+	const { search, setSearch, select, setSelect } = props;
 
 	return (
 		<React.Fragment>
 			{/** Filter Section */}
 			<Toolbar>
 				<div className='row mb-0 filter-wrapper m-0 mt-4 order-toolbar'>
-					<div className='filter-row d-flex align-items-center justify-content-between mb-3'>
-						<div className='title-col'>
+					<div className='filter-row d-flex align-items-center gap-3 mb-3'>
+						<div className=''>
 							<h4>جدول الطلبات</h4>
 						</div>
-						<div className='search-input-box'>
-							<FiSearch />
-							<input
-								type='text'
-								value={search}
-								onChange={(e) => setSearch(e.target.value)}
-								placeholder=' ابحث عن طريق رقم التتبع أو اسم شركة الشحن'
-							/>
+						<div className="w-100 d-flex flex-row align-items-center gap-3 flex-wrap">
+							<div className='search-input-box'>
+								<FiSearch />
+								<input
+									type='text'
+									value={search}
+									onChange={(e) => setSearch(e.target.value)}
+									placeholder=' ابحث عن طريق رقم التتبع أو اسم شركة الشحن'
+								/>
+							</div>
+							<div className='select-input-box'>
+								<select
+									value={select}
+									onChange={(e) => setSelect(e.target.value)}
+									className='form-select'
+									aria-label='Default select example'>
+									<option value='' defaultChecked>
+										الكل
+									</option>
+									<option value='shipping_company'>اسم الشركة</option>
+									<option value='status'>الحالة</option>
+									<option value='qty'>الكمية</option>
+								</select>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -102,7 +115,8 @@ export default function BigOrdersTable({
 	setReload,
 	search,
 	setSearch,
-	filterHandel,
+	select,
+	setSelect,
 }) {
 	const navigate = useNavigate();
 
@@ -112,9 +126,6 @@ export default function BigOrdersTable({
 	const [rowsPerPage, setRowsPerPage] = React.useState(8);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
 	const [anchorEl, setAnchorEl] = React.useState(null);
-
-	let filterData = data;
-	let filterDataResult = filterData;
 	const [itemSelected, setItemSelected] = useState("");
 
 	const open = Boolean(anchorEl);
@@ -133,11 +144,11 @@ export default function BigOrdersTable({
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows =
 		page > 0
-			? Math.max(0, (1 + page) * rowsPerPage - filterDataResult?.length)
+			? Math.max(0, (1 + page) * rowsPerPage - data?.length)
 			: 0;
 
 	const allRows = () => {
-		const num = Math.ceil(filterDataResult?.length / rowsPerPage);
+		const num = Math.ceil(data?.length / rowsPerPage);
 		const arr = [];
 		for (let index = 0; index < num; index++) {
 			arr.push(index + 1);
@@ -165,14 +176,15 @@ export default function BigOrdersTable({
 					itemSelected={itemSelected}
 					setItemSelected={setItemSelected}
 					numSelected={selected.length}
-					rowCount={filterDataResult?.length}
+					rowCount={data?.length}
+					select={select}
+					setSelect={setSelect}
 				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 						<EnhancedTableHead
 							numSelected={selected.length}
-							rowCount={filterDataResult?.length}
-							filterHandel={filterHandel}
+							rowCount={data?.length}
 						/>
 
 						<TableBody>
@@ -184,14 +196,14 @@ export default function BigOrdersTable({
 								</TableRow>
 							) : (
 								<Fragment>
-									{filterDataResult?.length === 0 ? (
+									{data?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={8}>
 												<p className='text-center'>لاتوجد بيانات</p>
 											</TableCell>
 										</TableRow>
 									) : (
-										filterDataResult
+										data
 											?.slice(
 												page * rowsPerPage,
 												page * rowsPerPage + rowsPerPage
@@ -252,22 +264,22 @@ export default function BigOrdersTable({
 																			row?.status === "تم التوصيل"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
-																				? "#d4ebf7"
-																				: row?.status === "ملغي"
-																				? "#ffebeb"
-																				: row?.status === "جاهز للشحن"
-																				? "#ffecd1c7"
-																				: "",
+																					? "#d4ebf7"
+																					: row?.status === "ملغي"
+																						? "#ffebeb"
+																						: row?.status === "جاهز للشحن"
+																							? "#ffecd1c7"
+																							: "",
 																		color:
 																			row?.status === "تم التوصيل"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
-																				? "#0077ff"
-																				: row?.status === "ملغي"
-																				? "#ff7b7b"
-																				: row?.status === "جاهز للشحن"
-																				? "#ff9f1a"
-																				: "",
+																					? "#0077ff"
+																					: row?.status === "ملغي"
+																						? "#ff7b7b"
+																						: row?.status === "جاهز للشحن"
+																							? "#ff9f1a"
+																							: "",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,
@@ -318,7 +330,7 @@ export default function BigOrdersTable({
 					</Table>
 				</TableContainer>
 			</Paper>
-			{filterDataResult?.length !== 0 && !loading && (
+			{data?.length !== 0 && !loading && (
 				<TablePagination
 					rowsPerPagesCount={rowsPerPagesCount}
 					handleChangeRowsPerPage={handleChangeRowsPerPage}

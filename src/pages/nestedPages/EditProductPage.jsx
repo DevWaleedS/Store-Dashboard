@@ -23,7 +23,7 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 
 // icons and images
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
@@ -68,7 +68,6 @@ const EditProductPage = () => {
 	);
 
 	const [cookies] = useCookies(["access_token"]);
-	const [openSubCategory, setOpenSubCategory] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -632,10 +631,7 @@ const EditProductPage = () => {
 																	return `${result[0]?.name} , `;
 																});
 															}}
-															open={openSubCategory}
-															onClick={() => {
-																setOpenSubCategory(true);
-															}}>
+														>
 															{subcategory[0]?.subcategory?.map(
 																(sub, index) => (
 																	<MenuItem key={index} value={sub?.id}>
@@ -650,19 +646,6 @@ const EditProductPage = () => {
 																	</MenuItem>
 																)
 															)}
-															<div
-																className='select-btn d-flex justify-content-center'
-																style={{ minHeight: "56px" }}>
-																<Button
-																	className='button'
-																	onClick={(e) => {
-																		e.stopPropagation();
-																		e.preventDefault();
-																		setOpenSubCategory(false);
-																	}}>
-																	أختر
-																</Button>
-															</div>
 														</Select>
 													)}
 												</FormControl>

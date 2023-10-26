@@ -62,7 +62,7 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 
-				<TableCell align='center' sx={{ color: "#02466a", width: "350px" }}>
+				<TableCell align='center' sx={{ color: "#02466a", width: "300px" }}>
 					اسم المنتج
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
@@ -73,6 +73,9 @@ function EnhancedTableHead(props) {
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الكمية
+				</TableCell>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
+					مميز
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					نشر
@@ -293,6 +296,29 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 			});
 	};
 
+	// change special status
+	const changeSpecialStatus = (id) => {
+		axios
+			.get(
+				`https://backend.atlbha.com/api/Store/specialStatus/${id}`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				} else {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				}
+			});
+	};
+
 	useEffect(() => {
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
@@ -432,7 +458,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															sx={{
 																backgroundColor:
 																	row?.type === "importProduct" ||
-																	row?.is_import
+																		row?.is_import
 																		? "#dfe2aa"
 																		: "",
 															}}
@@ -473,7 +499,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																<div
 																	className='cate-prim d-flex align-items-center justify-content-start'
 																	style={{
-																		width: " 350px",
+																		width: " 300px",
 																		paddingRight: "30px",
 																	}}>
 																	<img
@@ -499,7 +525,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															</TableCell>
 															<TableCell align='center'>
 																{row?.discount_price &&
-																row?.discount_price !== 0 ? (
+																	row?.discount_price !== 0 ? (
 																	<>
 																		<span className='me-1 d-block'>
 																			{row?.discount_price} ر.س
@@ -520,6 +546,54 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																)}
 															</TableCell>
 															<TableCell align='center'>{row?.stock}</TableCell>
+															<TableCell align='center'>
+																<div
+																	className='form-check form-switch'
+																	style={{ margin: "0 auto" }}>
+																	<Switch
+																		onChange={() => changeSpecialStatus(row?.id)}
+																		checked={
+																			row?.special === "مميز" ? true : false
+																		}
+																		sx={{
+																			width: "50px",
+																			"& .MuiSwitch-track": {
+																				width: 26,
+																				height: 14,
+																				opacity: 1,
+																				backgroundColor: "rgba(0,0,0,.25)",
+																				boxSizing: "border-box",
+																			},
+																			"& .MuiSwitch-thumb": {
+																				boxShadow: "none",
+																				width: 10,
+																				height: 10,
+																				borderRadius: 5,
+																				transform: "translate(6px,6px)",
+																				color: "#fff",
+																			},
+
+																			"&:hover": {
+																				"& .MuiSwitch-thumb": {
+																					boxShadow: "none",
+																				},
+																			},
+
+																			"& .MuiSwitch-switchBase": {
+																				padding: 1,
+																				"&.Mui-checked": {
+																					transform: "translateX(11px)",
+																					color: "#fff",
+																					"& + .MuiSwitch-track": {
+																						opacity: 1,
+																						backgroundColor: "#3AE374",
+																					},
+																				},
+																			},
+																		}}
+																	/>
+																</div>
+															</TableCell>
 
 															<TableCell align='center'>
 																<div
@@ -575,7 +649,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																	<Link
 																		to={
 																			row?.type === "importProduct" ||
-																			row?.is_import
+																				row?.is_import
 																				? `ShowImportEtlobhaProduct/${row?.id}`
 																				: `EditProduct/${row?.id}`
 																		}
