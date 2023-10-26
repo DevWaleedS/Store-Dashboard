@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, Fragment } from "react";
+import React, { useState, useContext, useRef, Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Context from "../../../Context/context";
@@ -10,6 +10,7 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import moment from "moment";
+import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // to download order details as pdf file
 import Pdf from "react-to-pdf";
@@ -62,8 +63,11 @@ const OrderDetails = () => {
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
 	const navigate = useNavigate();
 	const [copy, setCopy] = useState(false);
+	const [printError, setPrintError] = useState("");
 	const [shipping, setShipping] = useState({
 		district: "",
 		city: "",
@@ -87,6 +91,18 @@ const OrderDetails = () => {
 		});
 	};
 
+	useEffect(() => {
+		if (fetchedData?.data?.orders?.shipping) {
+			setShipping({
+				...shipping,
+				district: fetchedData?.data?.orders?.shipping?.district,
+				city: fetchedData?.data?.orders?.shipping?.city,
+				address: fetchedData?.data?.orders?.shipping?.street_address,
+				weight: fetchedData?.data?.orders?.shipping?.weight,
+			});
+		}
+	}, [fetchedData?.data?.orders?.shipping]);
+
 	function removeDuplicates(arr) {
 		const unique = arr?.filter((obj, index) => {
 			return index === arr?.findIndex((o) => obj?.province === o?.province);
@@ -98,7 +114,7 @@ const OrderDetails = () => {
 		cities?.data?.cities?.data?.cities?.filter(
 			(obj) =>
 				obj?.province ===
-				(shipping?.district && JSON.parse(shipping?.district)?.province)
+				(shipping?.district)
 		) || [];
 
 	function translateProvinceName(name) {
@@ -116,15 +132,13 @@ const OrderDetails = () => {
 	}
 
 	const updateOrderStatus = (status) => {
+		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
 		if (status === "ready" || status === "canceled") {
-			formData.append(
-				"district",
-				shipping?.district && JSON.parse(shipping?.district)?.province
-			);
+			formData.append("district",shipping?.district);
 			formData.append("city", shipping?.city);
 			formData.append("street_address", shipping?.address);
 			formData.append("weight", shipping?.weight);
@@ -138,10 +152,11 @@ const OrderDetails = () => {
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-
 					setReload(!reload);
 				} else {
+					setLoadingTitle("");
 					setEndActionTitle("");
 					setError({
 						district: res?.data?.message?.en?.district?.[0],
@@ -175,6 +190,7 @@ const OrderDetails = () => {
 	}
 
 	const printSticker = () => {
+		setPrintError("");
 		if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
 			axios
 				.get(
@@ -200,7 +216,7 @@ const OrderDetails = () => {
 						// setPreviewSticker(res?.data?.data?.Sticker?.data);
 					} else {
 						setReload(!reload);
-						setEndActionTitle(res?.data?.message?.ar);
+						setPrintError(res?.data?.message?.ar);
 					}
 				});
 		} else {
@@ -216,19 +232,11 @@ const OrderDetails = () => {
 				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						// navigate("preview-sticker");
-						// setPreviewSticker(res?.data?.data?.Sticker?.data);
-						// Open a new window with the HTML content
-						// const newTab = window.open("", "_blank");
-						// if (newTab) {
-						// 	newTab.document.write(res?.data?.data?.Sticker?.data);
-						// 	newTab.document.close();
-						// } else {
-						// 	console.error("Failed to open a new tab");
-						// }
+						console.log();
+						window.open(`https://dashboard.go-tex.net/api${res?.data?.data?.Sticker?.data?.[0]}`, "_blank");
 					} else {
 						setReload(!reload);
-						setEndActionTitle(res?.data?.message?.ar);
+						setPrintError(res?.data?.message?.ar);
 					}
 				});
 		}
@@ -244,6 +252,7 @@ const OrderDetails = () => {
 			: totalPrice;
 		return totalValue;
 	};
+
 
 	return (
 		<>
@@ -276,7 +285,9 @@ const OrderDetails = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<ArrowIcon className='arrow-back-icon' />
+										<Link to='/Orders'>
+											<ArrowIcon className='arrow-back-icon' />
+										</Link>
 										<Link to='/Orders' className='me-2'>
 											جدول الطلبات
 										</Link>
@@ -681,15 +692,15 @@ const OrderDetails = () => {
 																		"+966"
 																	)
 																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
-																				4
-																		  )
+																			4
+																		)
 																		: fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
-																				"00966"
-																		  )
-																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																			"00966"
+																		)
+																			? fetchedData?.data?.orders?.user?.phonenumber?.slice(
 																				5
-																		  )
-																		: fetchedData?.data?.orders?.user
+																			)
+																			: fetchedData?.data?.orders?.user
 																				?.phonenumber}
 																</span>
 															</div>
@@ -734,18 +745,18 @@ const OrderDetails = () => {
 														</div>
 														{fetchedData?.data?.orders?.OrderAddress
 															?.postal_code && (
-															<div className='col-md-6 col-12 mb-3'>
-																<h6 className='mb-3'>الرمز البريدي</h6>
-																<div className='info-box'>
-																	<span style={{ whiteSpace: "normal" }}>
-																		{
-																			fetchedData?.data?.orders?.OrderAddress
-																				?.postal_code
-																		}
-																	</span>
+																<div className='col-md-6 col-12 mb-3'>
+																	<h6 className='mb-3'>الرمز البريدي</h6>
+																	<div className='info-box'>
+																		<span style={{ whiteSpace: "normal" }}>
+																			{
+																				fetchedData?.data?.orders?.OrderAddress
+																					?.postal_code
+																			}
+																		</span>
+																	</div>
 																</div>
-															</div>
-														)}
+															)}
 														<div className='col-12 mb-3'>
 															<h6 className='mb-3'>العنوان</h6>
 															<div className='info-box'>
@@ -779,7 +790,7 @@ const OrderDetails = () => {
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
 												<Select
-													name='category_id'
+													name='district'
 													value={shipping?.district}
 													onChange={(e) => {
 														setShipping({
@@ -793,9 +804,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+														{
+															paddingRight: "20px",
+														},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -812,15 +823,12 @@ const OrderDetails = () => {
 													displayEmpty
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
-														if (
-															(shipping?.district &&
-																JSON.parse(shipping?.district)?.province) === ""
-														) {
+														if (!selected) {
 															return (
 																<p className='text-[#ADB5B9]'>اختر المنطقة</p>
 															);
 														}
-														return selected && JSON.parse(selected)?.provice_ar;
+														return translateProvinceName(selected);
 													}}>
 													{removeDuplicates(
 														cities?.data?.cities?.data?.cities
@@ -834,7 +842,7 @@ const OrderDetails = () => {
 																	height: "3rem",
 																	"&:hover": {},
 																}}
-																value={JSON.stringify(district)}>
+																value={district?.province}>
 																{district?.provice_ar}
 															</MenuItem>
 														);
@@ -867,9 +875,9 @@ const OrderDetails = () => {
 														backgroundColor: "#cce4ff38",
 														boxShadow: "0 0 5px 0px #eded",
 														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+														{
+															paddingRight: "20px",
+														},
 														"& .MuiOutlinedInput-root": {
 															"& :hover": {
 																border: "none",
@@ -1096,19 +1104,24 @@ const OrderDetails = () => {
 											</div>
 										</div>
 										{fetchedData?.data?.orders?.shipping && (
-											<button
-												disabled={fetchedData?.data?.orders?.shipping === null}
-												style={{ cursor: "pointer" }}
-												onClick={() => printSticker()}
-												className='order-action-box mb-3'>
-												<div className='action-title'>
-													<ListIcon className='list-icon' />
-													<span className='me-2'>طباعة ملصق الشحن</span>
-												</div>
-												<div className='action-icon'>
-													<Print />
-												</div>
-											</button>
+											<>
+												<button
+													disabled={fetchedData?.data?.orders?.shipping === null}
+													style={{ cursor: "pointer" }}
+													onClick={() => printSticker()}
+													className='order-action-box mb-3'>
+													<div className='action-title'>
+														<ListIcon className='list-icon' />
+														<span className='me-2'>طباعة ملصق الشحن</span>
+													</div>
+													<div className='action-icon'>
+														<Print />
+													</div>
+												</button>
+												<span className='fs-6 text-danger'>
+													{printError}
+												</span>
+											</>
 										)}
 										{/**
 											<div className='order-action-box mb-md-5'>

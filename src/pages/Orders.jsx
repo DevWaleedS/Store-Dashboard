@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
@@ -17,6 +17,7 @@ const Orders = () => {
 	// to create search
 	const [search, setSearch] = useState("");
 	let orders = fetchedData?.data?.orders;
+	const [select, setSelect] = useState("");
 	let filterOrders = fetchedData?.data?.orders;
 
 	if (search !== "") {
@@ -33,9 +34,19 @@ const Orders = () => {
 		orders = fetchedData?.data?.orders;
 	}
 
-	const filterHandel = () => {
-		filterOrders = orders?.sort((a, b) => (a.id < b.id ? -1 : 1));
-	};
+	if (select === "shipping_company") {
+		filterOrders = orders?.sort((a, b) =>
+			a?.shippingtypes?.name?.localeCompare(b?.shippingtypes?.name)
+		);
+	} else if (select === "qty") {
+		filterOrders = orders?.sort((a, b) =>
+			a?.quantity.localeCompare(b?.quantity)
+		);
+	} else if (select === "status") {
+		filterOrders = orders?.sort((a, b) => a?.status.localeCompare(b?.status));
+	} else {
+		filterOrders = orders?.sort((a, b) => a?.id - b?.id);
+	}
 
 	return (
 		<>
@@ -96,7 +107,8 @@ const Orders = () => {
 						setReload={setReload}
 						search={search}
 						setSearch={setSearch}
-						filterHandel={filterHandel}
+						select={select}
+						setSelect={setSelect}
 					/>
 				</div>
 			</section>
