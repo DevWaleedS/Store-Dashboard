@@ -10,6 +10,7 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import moment from "moment";
+import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // to download order details as pdf file
 import Pdf from "react-to-pdf";
@@ -62,6 +63,8 @@ const OrderDetails = () => {
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
 	const navigate = useNavigate();
 	const [copy, setCopy] = useState(false);
 	const [printError, setPrintError] = useState("");
@@ -89,13 +92,15 @@ const OrderDetails = () => {
 	};
 
 	useEffect(() => {
-		setShipping({
-			...shipping,
-			district: "",
-			city: fetchedData?.data?.orders?.shipping?.city,
-			address: fetchedData?.data?.orders?.shipping?.street_address,
-			weight: fetchedData?.data?.orders?.shipping?.weight,
-		})
+		if (fetchedData?.data?.orders?.shipping) {
+			setShipping({
+				...shipping,
+				district: fetchedData?.data?.orders?.shipping?.district,
+				city: fetchedData?.data?.orders?.shipping?.city,
+				address: fetchedData?.data?.orders?.shipping?.street_address,
+				weight: fetchedData?.data?.orders?.shipping?.weight,
+			});
+		}
 	}, [fetchedData?.data?.orders?.shipping]);
 
 	function removeDuplicates(arr) {
@@ -109,7 +114,7 @@ const OrderDetails = () => {
 		cities?.data?.cities?.data?.cities?.filter(
 			(obj) =>
 				obj?.province ===
-				(shipping?.district && JSON.parse(shipping?.district)?.province)
+				(shipping?.district)
 		) || [];
 
 	function translateProvinceName(name) {
@@ -127,15 +132,13 @@ const OrderDetails = () => {
 	}
 
 	const updateOrderStatus = (status) => {
+		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
 		if (status === "ready" || status === "canceled") {
-			formData.append(
-				"district",
-				shipping?.district && JSON.parse(shipping?.district)?.province
-			);
+			formData.append("district",shipping?.district);
 			formData.append("city", shipping?.city);
 			formData.append("street_address", shipping?.address);
 			formData.append("weight", shipping?.weight);
@@ -149,10 +152,11 @@ const OrderDetails = () => {
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-
 					setReload(!reload);
 				} else {
+					setLoadingTitle("");
 					setEndActionTitle("");
 					setError({
 						district: res?.data?.message?.en?.district?.[0],
@@ -248,6 +252,7 @@ const OrderDetails = () => {
 			: totalPrice;
 		return totalValue;
 	};
+
 
 	return (
 		<>
@@ -785,7 +790,7 @@ const OrderDetails = () => {
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
 												<Select
-													name='category_id'
+													name='district'
 													value={shipping?.district}
 													onChange={(e) => {
 														setShipping({
@@ -818,15 +823,12 @@ const OrderDetails = () => {
 													displayEmpty
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
-														if (
-															(shipping?.district &&
-																JSON.parse(shipping?.district)?.province) === ""
-														) {
+														if (!selected) {
 															return (
 																<p className='text-[#ADB5B9]'>اختر المنطقة</p>
 															);
 														}
-														return selected && JSON.parse(selected)?.provice_ar;
+														return translateProvinceName(selected);
 													}}>
 													{removeDuplicates(
 														cities?.data?.cities?.data?.cities
@@ -840,7 +842,7 @@ const OrderDetails = () => {
 																	height: "3rem",
 																	"&:hover": {},
 																}}
-																value={JSON.stringify(district)}>
+																value={district?.province}>
 																{district?.provice_ar}
 															</MenuItem>
 														);
