@@ -249,6 +249,7 @@ const AddNewProduct = () => {
 		formData.append("category_id", data?.category_id);
 		formData.append("discount_price", data?.discount_price);
 		formData.append("stock", data?.stock);
+		formData.append("weight", data?.weight);
 		formData.append("google_analytics", googleAnalyticsLink);
 		formData.append("robot_link", robotLink);
 		formData.append("SEOdescription", SEOdescription.join(","));
@@ -290,6 +291,7 @@ const AddNewProduct = () => {
 						discount_price: res?.data?.message?.en?.discount_price?.[0],
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
+						weight: res?.data?.message?.en?.weight?.[0],
 						googleAnalyticsLink: res?.data?.message?.en?.google_analytics?.[0],
 						robotLink: res?.data?.message?.en?.robot_link?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
@@ -678,6 +680,9 @@ const AddNewProduct = () => {
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='tax-text'>
+												ضع الوزن التقديري للمنتج بالجرام
+											</div>
 											<Controller
 												name={"weight"}
 												control={control}
@@ -696,7 +701,7 @@ const AddNewProduct = () => {
 													<input
 														type='text'
 														id='weight'
-														placeholder=' ضع الوزن التقديري للمنتج بالجرام'
+														placeholder='1000 جرام'
 														name='weight'
 														value={value}
 														onChange={(e) =>
