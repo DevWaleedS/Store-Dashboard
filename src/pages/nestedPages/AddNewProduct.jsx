@@ -83,12 +83,13 @@ const AddNewProduct = () => {
 		mode: "onBlur",
 		defaultValues: {
 			name: "",
-			short_description:"",
+			short_description: "",
 			description: "",
 			selling_price: "",
 			category_id: "",
 			discount_price: "",
 			stock: "",
+			weight: "",
 			SEOdescription: "",
 		},
 	});
@@ -96,6 +97,7 @@ const AddNewProduct = () => {
 		selling_price: "",
 		discount_price: "",
 		stock: "",
+		weight: "",
 		category_id: "",
 		subcategory_id: [],
 	});
@@ -141,13 +143,14 @@ const AddNewProduct = () => {
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
-		short_description:"",
+		short_description: "",
 		description: "",
 		selling_price: "",
 		category_id: "",
 		discount_price: "",
 		subcategory_id: "",
 		stock: "",
+		weight: "",
 		googleAnalyticsLink: "",
 		robotLink: "",
 		SEOdescription: "",
@@ -162,13 +165,14 @@ const AddNewProduct = () => {
 		setProductError({
 			name: "",
 			cover: "",
-			short_description:"",
+			short_description: "",
 			description: "",
 			selling_price: "",
 			category_id: "",
 			discount_price: "",
 			subcategory_id: "",
 			stock: "",
+			weight: "",
 			googleAnalyticsLink: "",
 			robotLink: "",
 			SEOdescription: "",
@@ -338,6 +342,7 @@ const AddNewProduct = () => {
 								className='form-h-full add-new-product-form'
 								onSubmit={handleSubmit(addNewProduct)}>
 								<div className='form-body'>
+									{/* Product name  */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-name'>
@@ -364,6 +369,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Description */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
@@ -371,7 +378,7 @@ const AddNewProduct = () => {
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
-										<Controller
+											<Controller
 												name={"short_description"}
 												control={control}
 												rules={{
@@ -384,16 +391,13 @@ const AddNewProduct = () => {
 														rows={5}
 														value={value}
 														onChange={(e) => {
-															if(e.target.value.length <= 100){
-																onChange(e.target.value.substring(0,100))
+															if (e.target.value.length <= 100) {
+																onChange(e.target.value.substring(0, 100));
 																setShortDescriptionLength(false);
-															}else{
+															} else {
 																setShortDescriptionLength(true);
 															}
-															
-														}}
-													>
-													</textarea>
+														}}></textarea>
 												)}
 											/>
 										</div>
@@ -401,15 +405,18 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<span className='fs-6 text-danger'>
 												{productError?.short_description}
-												{errors?.short_description && errors.short_description.message}
+												{errors?.short_description &&
+													errors.short_description.message}
 											</span>
-											{shortDescriptionLength && 
+											{shortDescriptionLength && (
 												<span className='fs-6 text-danger'>
 													الوصف يجب إلا يتعدي 100 حرف
 												</span>
-												}
+											)}
 										</div>
 									</div>
+
+									{/* Description  */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
@@ -434,6 +441,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Main catagories */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-category'>
@@ -530,6 +539,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Sub catagories */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='sub-category'>
@@ -586,8 +597,7 @@ const AddNewProduct = () => {
 
 																return `${result[0]?.name} ,`;
 															});
-														}}
-													>
+														}}>
 														{subcategory[0]?.subcategory?.map((sub, index) => (
 															<MenuItem key={index} value={sub?.id}>
 																<Checkbox
@@ -612,6 +622,8 @@ const AddNewProduct = () => {
 											)}
 										</div>
 									</div>
+
+									{/* Stock */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
@@ -656,6 +668,54 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Weight */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label htmlFor='price'>
+												{" "}
+												الوزن <span className='text-danger'>*</span>
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<Controller
+												name={"weight"}
+												control={control}
+												rules={{
+													required: "حقل الوزن مطلوب",
+													pattern: {
+														value: /^[0-9]+$/i,
+														message: "يجب على الحقل الوزن أن يكون رقمًا",
+													},
+													min: {
+														value: 1,
+														message: "  المخزون يجب ان يكون اكبر من 0",
+													},
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														type='text'
+														id='weight'
+														placeholder=' ضع الوزن التقديري للمنتج بالجرام'
+														name='weight'
+														value={value}
+														onChange={(e) =>
+															onChange(e.target.value.replace(/[^0-9]/g, ""))
+														}
+													/>
+												)}
+											/>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.weight}
+												{errors?.weight && errors.weight.message}
+											</span>
+										</div>
+									</div>
+
+									{/* Selling price */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
@@ -709,6 +769,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Discount price */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 											<label htmlFor='low-price'>السعر بعد الخصم</label>
@@ -772,6 +834,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Product Cover image */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-image'>
@@ -807,6 +871,8 @@ const AddNewProduct = () => {
 											)}
 										</div>
 									</div>
+
+									{/* Multi Product Images */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-images'>
@@ -1022,7 +1088,7 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 
-									{/* */}
+									{/* Snap pixle */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label>
@@ -1047,6 +1113,7 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 
+									{/* Tikto pixle */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label>
@@ -1070,6 +1137,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Twitter pixle */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label>
@@ -1093,6 +1162,8 @@ const AddNewProduct = () => {
 											</span>
 										</div>
 									</div>
+
+									{/* Instagram pixle */}
 									<div className='row mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label>
@@ -1118,6 +1189,7 @@ const AddNewProduct = () => {
 									</div>
 								</div>
 
+								{/* Save and cancle buttons */}
 								<div className='form-footer'>
 									<div className='row d-flex justify-content-center align-items-center'>
 										<div className='col-lg-4 col-6'>

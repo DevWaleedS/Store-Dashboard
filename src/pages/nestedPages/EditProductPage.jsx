@@ -81,6 +81,7 @@ const EditProductPage = () => {
 		discount_price: "",
 		subcategory_id: [],
 		stock: "",
+		weight: "",
 		snapchat: "",
 		twitter: "",
 		tiktok: "",
@@ -139,6 +140,7 @@ const EditProductPage = () => {
 			category_id: "",
 			discount_price: "",
 			stock: "",
+			weight: "",
 		},
 	});
 
@@ -187,6 +189,7 @@ const EditProductPage = () => {
 		discount_price: "",
 		subcategory_id: "",
 		stock: "",
+		weight: "",
 		SEOdescription: "",
 		googleAnalyticsLink: "",
 		robotLink: "",
@@ -208,6 +211,7 @@ const EditProductPage = () => {
 			discount_price: "",
 			subcategory_id: "",
 			stock: "",
+			weight: "",
 			SEOdescription: "",
 			googleAnalyticsLink: "",
 			robotLink: "",
@@ -284,7 +288,7 @@ const EditProductPage = () => {
 		formData.append("description", data?.description);
 		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
-		formData.append("discount_price", data?.discount_price || 0);
+		formData.append("discount_price", data?.discount_price);
 		formData.append("stock", data?.stock);
 		formData.append("SEOdescription", SEOdescription.join(","));
 		formData.append("google_analytics", googleAnalyticsLink);
@@ -391,6 +395,7 @@ const EditProductPage = () => {
 									className='form-h-full add-new-product-form'
 									onSubmit={handleSubmit(updateProduct)}>
 									<div className='form-body'>
+										{/* Product name  */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-name'>
@@ -416,6 +421,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Description */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
@@ -437,15 +444,12 @@ const EditProductPage = () => {
 															value={value}
 															onChange={(e) => {
 																if (e.target.value.length <= 100) {
-																	onChange(e.target.value.substring(0, 100))
+																	onChange(e.target.value.substring(0, 100));
 																	setShortDescriptionLength(false);
 																} else {
 																	setShortDescriptionLength(true);
 																}
-
-															}}
-														>
-														</textarea>
+															}}></textarea>
 													)}
 												/>
 											</div>
@@ -453,15 +457,18 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<span className='fs-6 text-danger'>
 													{productError?.short_description}
-													{errors?.short_description && errors.short_description.message}
+													{errors?.short_description &&
+														errors.short_description.message}
 												</span>
-												{shortDescriptionLength &&
+												{shortDescriptionLength && (
 													<span className='fs-6 text-danger'>
 														الوصف يجب إلا يتعدي 100 حرف
 													</span>
-												}
+												)}
 											</div>
 										</div>
+
+										{/* Description  */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
@@ -486,6 +493,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Main catagories */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
@@ -509,9 +518,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																		{
+																			paddingRight: "20px",
+																		},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -588,6 +597,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Sub catagories */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='sub-category'>
@@ -597,7 +608,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-														subcategory[0]?.subcategory?.length === 0 ? (
+													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -607,9 +618,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -630,8 +641,7 @@ const EditProductPage = () => {
 																		) || product?.subcategory_id;
 																	return `${result[0]?.name} , `;
 																});
-															}}
-														>
+															}}>
 															{subcategory[0]?.subcategory?.map(
 																(sub, index) => (
 																	<MenuItem key={index} value={sub?.id}>
@@ -659,6 +669,8 @@ const EditProductPage = () => {
 												)}
 											</div>
 										</div>
+
+										{/* Stock */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='price'> المخزون </label>
@@ -700,6 +712,54 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Weight */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='price'>
+													{" "}
+													الوزن <span className='text-danger'>*</span>
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<Controller
+													name={"weight"}
+													control={control}
+													rules={{
+														required: "حقل الوزن مطلوب",
+														pattern: {
+															value: /^[0-9]+$/i,
+															message: "يجب على الحقل الوزن أن يكون رقمًا",
+														},
+														min: {
+															value: 1,
+															message: "  المخزون يجب ان يكون اكبر من 0",
+														},
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															type='text'
+															id='weight'
+															placeholder=' ضع الوزن التقديري للمنتج بالجرام'
+															name='weight'
+															value={value}
+															onChange={(e) =>
+																onChange(e.target.value.replace(/[^0-9]/g, ""))
+															}
+														/>
+													)}
+												/>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.weight}
+													{errors?.weight && errors.weight.message}
+												</span>
+											</div>
+										</div>
+
+										{/* Selling price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 												<label htmlFor='price'>
@@ -758,6 +818,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Discount price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 												<label htmlFor='low-price'> السعر بعد الخصم </label>
@@ -802,16 +864,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-														product?.selling_price === ""
+													product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -831,6 +893,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Product Cover image */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-image'>
@@ -884,6 +948,8 @@ const EditProductPage = () => {
 												)}
 											</div>
 										</div>
+
+										{/* Multi Product Images */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-images'>
@@ -923,9 +989,9 @@ const EditProductPage = () => {
 															{imageList?.map((image, index) => {
 																const isVideo = image?.data_url?.includes(
 																	"video/mp4" ||
-																	"video/avi" ||
-																	"video/mov" ||
-																	"video/mkv"
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
 																);
 																if (isVideo) {
 																	return (
@@ -1002,6 +1068,8 @@ const EditProductPage = () => {
 												)}
 											</div>
 										</div>
+
+										{/* Key words */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
@@ -1024,6 +1092,7 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
 										{/* Google Analytics Link */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
@@ -1105,6 +1174,7 @@ const EditProductPage = () => {
 											</div>
 										</div>
 
+										{/* Snap pixle */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
@@ -1128,6 +1198,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Tikto pixle */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
@@ -1151,6 +1223,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Twitter pixle */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
@@ -1174,6 +1248,8 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
+
+										{/* Instagram pixle */}
 										<div className='row mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
@@ -1198,6 +1274,8 @@ const EditProductPage = () => {
 											</div>
 										</div>
 									</div>
+
+									{/* Save and cancle buttons */}
 									<div className='form-footer'>
 										<div className='row d-flex justify-content-center align-items-center'>
 											<div className='col-lg-4 col-6'>
