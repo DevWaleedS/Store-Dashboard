@@ -71,21 +71,18 @@ const OrderDetails = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const navigate = useNavigate();
 	const [copy, setCopy] = useState(false);
 	const [printError, setPrintError] = useState("");
 	const [shipping, setShipping] = useState({
 		district: "",
 		city: "",
 		address: "",
-		weight: "",
 	});
 
 	const [error, setError] = useState({
 		district: "",
 		city: "",
 		address: "",
-		weight: "",
 	});
 
 	const resetError = () => {
@@ -93,7 +90,6 @@ const OrderDetails = () => {
 			district: "",
 			city: "",
 			address: "",
-			weight: "",
 		});
 	};
 
@@ -138,6 +134,7 @@ const OrderDetails = () => {
 	const updateOrderStatus = (status) => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
+
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
@@ -145,7 +142,6 @@ const OrderDetails = () => {
 			formData.append("district", shipping?.district);
 			formData.append("city", shipping?.city);
 			formData.append("street_address", shipping?.address);
-			formData.append("weight", shipping?.weight);
 		}
 		axios
 			.post(`https://backend.atlbha.com/api/Store/orders/${id}`, formData, {
@@ -161,7 +157,8 @@ const OrderDetails = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle("");
+
+					setEndActionTitle(res?.data?.message?.ar);
 					setError({
 						district: res?.data?.message?.en?.district?.[0],
 						city: res?.data?.message?.en?.city?.[0],
@@ -602,6 +599,7 @@ const OrderDetails = () => {
 																الدفع عند الإستلام
 															</span>
 														</TableCell>
+
 														<TableCell
 															align='center'
 															style={{ borderBottom: "none" }}>
@@ -610,6 +608,36 @@ const OrderDetails = () => {
 															</span>
 														</TableCell>
 													</TableRow>
+
+													{fetchedData?.data?.orders?.overweight !== 0 &&
+														fetchedData?.data?.orders?.overweight_price !==
+															0 && (
+															<TableRow>
+																<TableCell
+																	colSpan={3}
+																	component='th'
+																	scope='row'
+																	align='right'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "700" }}>
+																		تكلفة الوزن الزائد (
+																		{fetchedData?.data?.orders?.overweight} kg )
+																	</span>
+																</TableCell>
+
+																<TableCell
+																	align='center'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "500" }}>
+																		{
+																			fetchedData?.data?.orders
+																				?.overweight_price
+																		}{" "}
+																		ر.س
+																	</span>
+																</TableCell>
+															</TableRow>
+														)}
 													{fetchedData?.data?.orders?.discount !== 0 && (
 														<TableRow>
 															<TableCell
@@ -970,46 +998,6 @@ const OrderDetails = () => {
 												</span>
 											</div>
 										</div>
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='product-name'>
-													الوزن <span className='text-danger'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<div
-													className='d-flex flex-row align-items-center justify-content-between'
-													style={{
-														width: "100%",
-														height: "56px",
-														padding: "5px 1rem",
-														backgroundColor: "#cce4ff38",
-														boxShadow: "0 0 5px 0px #eded",
-													}}>
-													<input
-														type='text'
-														className='w-100 h-100'
-														placeholder='الوزن بالكيلو جرام '
-														name='name'
-														value={shipping?.weight}
-														onChange={(e) =>
-															setShipping({
-																...shipping,
-																weight: e.target.value,
-															})
-														}
-														style={{ backgroundColor: "transparent" }}
-													/>
-													<span>kg</span>
-												</div>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{error?.weight}
-												</span>
-											</div>
-										</div>
 									</div>
 								</div>
 							</div>
@@ -1054,12 +1042,29 @@ const OrderDetails = () => {
 
 															<li
 																onClick={() => updateOrderStatus("ready")}
-																style={{ cursor: "pointer" }}>
+																style={
+																	fetchedData?.data?.orders?.status ===
+																	"جاهز للشحن"
+																		? {
+																				pointerEvents: "none",
+																				opacity: "0.6",
+																				cursor: "not-allowed",
+																		  }
+																		: { cursor: "pointer" }
+																}>
 																جاهز للشحن
-																<span style={{ fontSize: "1rem" }}>
-																	{" "}
-																	(يرجى ملء بيانات الشحنة أولاً){" "}
-																</span>
+																{fetchedData?.data?.orders?.status ===
+																"جاهز للشحن" ? (
+																	<span style={{ fontSize: "1rem" }}>
+																		{" "}
+																		(تم تغيير حالة الطلب إلي جاهز للشحن من قبل ){" "}
+																	</span>
+																) : (
+																	<span style={{ fontSize: "1rem" }}>
+																		{" "}
+																		(يرجى ملء بيانات الشحنة أولاً){" "}
+																	</span>
+																)}
 															</li>
 
 															<li
