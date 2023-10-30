@@ -13,9 +13,22 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import useFetch from "../../Hooks/UseFetch";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+	ContentState,
+	EditorState,
+	convertFromHTML,
+	convertToRaw,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Table
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 // Datepicker
 import DatePicker from "react-datepicker";
@@ -28,7 +41,7 @@ import howIcon from "../../data/Icons/icon_24_home.svg";
 import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
 import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg";
-import { ReactComponent as Timer } from "../../data/Icons/icon-24-timer.svg";
+
 import { ReactComponent as Communication } from "../../data/Icons/ico - 24 - communication - send_outlined.svg";
 import { ReactComponent as Dollar } from "../../data/Icons/icon-24-dollar.svg";
 
@@ -79,29 +92,16 @@ const ClientData = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
 	const [openPercentMenu, setOpenPercentMenu] = useState(false);
 	const [free_shipping, setFree_shipping] = useState(true);
 	const [discount_type, setDiscount_type] = useState("percent");
-	const [discount_value, setDiscount_value] = useState();
-	const [discountPercentValue, setDiscountPercentValue] = useState();
-	const [discountFixedValue, setDiscountFixedValue] = useState();
-	const [discount_total, setDiscount_total] = useState();
+	const [discount_value, setDiscount_value] = useState(0);
+	const [discountPercentValue, setDiscountPercentValue] = useState(0);
+	const [discountFixedValue, setDiscountFixedValue] = useState(0);
+	const [discount_total, setDiscount_total] = useState(0);
 	const [discount_expire_date, setDiscount_expire_date] = useState("");
-
-	// errors
-	const [errors, setErrors] = useState({
-		messageErr: "",
-		discountValueErr: "",
-		discountExpireDateErr: "",
-	});
-	const resetError = () => {
-		setErrors({
-			message: "",
-			discount_value: "",
-			discount_expire_date: "",
-		});
-	};
-	// ---------------------------------------------------
+	// ----------------------------------------------------------------------
 
 	// to write the message
 	const [description, setDescription] = useState({
@@ -118,7 +118,71 @@ const ClientData = () => {
 			editorState: editorValue,
 		});
 	};
-	// -----------------------------------------------------------
+
+	// To set  discount_total
+	useEffect(() => {
+		if (cartDetails) {
+			setDiscount_total(cartDetails?.discount_total);
+			setDiscount_value(cartDetails?.discount_value);
+			setDiscount_type(cartDetails?.discount_type);
+			setFree_shipping(cartDetails?.free_shipping === "0" ? false : true);
+			setDescription({
+				...description,
+				editorState: EditorState.createWithContent(
+					ContentState.createFromBlockArray(
+						convertFromHTML(cartDetails?.message || "")
+					)
+				),
+			});
+			setDiscount_expire_date(
+				moment(cartDetails?.discount_expire_date, "YYYY-MM-DD").toDate()
+			);
+		}
+	}, [cartDetails]);
+
+	// to handle open discount_type inputs
+	useEffect(() => {
+		if (
+			cartDetails?.discount_type !== "" &&
+			cartDetails?.discount_total !== 0 &&
+			cartDetails?.discount_value !== 0
+		) {
+			setOpenPercentMenu(true);
+		} else {
+			setOpenPercentMenu(false);
+		}
+	}, [
+		cartDetails?.discount_type,
+		cartDetails?.discount_total,
+		cartDetails?.discount_value,
+	]);
+
+	// To Calc discount total if the discount value is percent
+	useEffect(() => {
+		if (cartDetails && discount_type === "percent") {
+			setDiscountPercentValue((discount_value / 100) * cartDetails?.total);
+		} else if (cartDetails && discount_type === "fixed") {
+			setDiscountFixedValue(cartDetails?.total - discount_value);
+		} else {
+			setDiscountPercentValue();
+			setDiscountFixedValue();
+		}
+	}, [cartDetails, discount_type, discount_value]);
+
+	// errors
+	const [errors, setErrors] = useState({
+		messageErr: "",
+		discountValueErr: "",
+		discountExpireDateErr: "",
+	});
+	const resetError = () => {
+		setErrors({
+			message: "",
+			discount_value: "",
+			discount_expire_date: "",
+		});
+	};
+	// -----------------------------------------------------------------------
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -131,8 +195,14 @@ const ClientData = () => {
 
 		let formData = new FormData();
 		formData.append("free_shipping", free_shipping === true ? 1 : 0);
-		formData.append("discount_type", discount_type);
-		formData.append("discount_value", discount_value);
+		if (openPercentMenu) {
+			formData.append("discount_type", discount_type);
+			formData.append("discount_value", discount_value);
+		} else {
+			formData.append("discount_type", "");
+			formData.append("discount_value", "");
+		}
+
 		formData.append("message", description?.htmlValue);
 		formData.append("discount_total", discount_total);
 		formData.append(
@@ -172,26 +242,37 @@ const ClientData = () => {
 			});
 	};
 
-	// To set  discount_total
-	useEffect(() => {
-		if (cartDetails) {
-			setDiscount_total(cartDetails?.discount_total);
-			setDiscount_value(cartDetails?.discount_value);
-		}
-	}, [cartDetails]);
+	function EnhancedTableHead() {
+		return (
+			<TableHead sx={{ backgroundColor: "#cce4ff38" }}>
+				<TableRow>
+					<TableCell align='right' sx={{ color: "#02466a" }}>
+						م
+					</TableCell>
+					<TableCell align='right' sx={{ color: "#02466a" }}>
+						المنتج
+					</TableCell>
+					<TableCell align='right' sx={{ color: "#02466a" }}>
+						الكمية
+					</TableCell>
+					<TableCell align='center' sx={{ color: "#02466a" }}>
+						الإجمالي
+					</TableCell>
+				</TableRow>
+			</TableHead>
+		);
+	}
 
-	// To Calc discount total if the discount value is percent
-	useEffect(() => {
-		if (cartDetails && discount_type === "percent") {
-			setDiscountPercentValue((discount_value / 100) * cartDetails?.total);
-		} else if (cartDetails && discount_type === "fixed") {
-			setDiscountFixedValue(cartDetails?.total - discount_value);
-		} else {
-			setDiscountPercentValue();
-			setDiscountFixedValue();
-		}
-	}, [cartDetails, discount_type, discount_value]);
-	// im using varible to handle
+	// handle calc total price if codePrice is !== 0
+	const calcTotalPrice = (codprice, totalPrice) => {
+		const cashOnDelivery = codprice || 0;
+		const totalCartValue = totalPrice;
+
+		const totalValue = cashOnDelivery
+			? (totalCartValue + cashOnDelivery)?.toFixed(2)
+			: totalPrice;
+		return totalValue;
+	};
 
 	return (
 		<>
@@ -249,6 +330,7 @@ const ClientData = () => {
 								<form onSubmit={handleSubmit}>
 									<div className='user-cart-data-wrapper'>
 										<div className='mb-md-5 mb-3'>
+											{/** client details */}
 											<div className='userData-container'>
 												<div className='container-title'>بيانات العميل</div>
 												<div className='container-body'>
@@ -258,7 +340,7 @@ const ClientData = () => {
 																<img
 																	className='img-fluid'
 																	src={cartDetails?.user?.image}
-																	alt={cartDetails?.user?.name}
+																	alt={""}
 																/>
 																<div className='text'>
 																	<div className='register-type mb-1'>
@@ -279,7 +361,7 @@ const ClientData = () => {
 															<div className='row mb-4 '>
 																<div className='col-12 col-md-5'>
 																	<div className='user-name '>
-																		{cartDetails?.user?.name}
+																		{`${cartDetails?.user?.name} ${cartDetails?.user?.lastname}`}
 																	</div>
 																</div>
 															</div>
@@ -311,6 +393,7 @@ const ClientData = () => {
 												</div>
 											</div>
 										</div>
+
 										{/** Products details */}
 										<div className='mb-md-5 mb-3'>
 											<div
@@ -318,107 +401,214 @@ const ClientData = () => {
 												style={{ borderBottom: "none" }}>
 												<div className='container-title d-flex justify-content-between align-items-center'>
 													<div className='tit-box'>
-														<span className=''>المنتجات</span>
+														<span> تفاصيل المنتجات</span>
 
 														<span className='product-count me-2'>
 															({cartDetails?.count} منتج)
 														</span>
 													</div>
-													<div className='active-discount-btn'>
-														<button>
-															<Timer />
-															<span className='me-2'>تفعيل خصم مؤقت</span>
-														</button>
-													</div>
 												</div>
 
-												<div className='header'>
-													<div className='row'>
-														<div className='col-5'>
-															<div className='product pe-2'>المنتج</div>
-														</div>
-														<div className='col-2'>
-															<div className='count text-center'>الكمية</div>
-														</div>
-														<div className='col-2'>
-															<div className='price text-center'>السعر</div>
-														</div>
-														<div className='col-3 d-flex justify-content-end'>
-															<div className='total text-center'>المجموع</div>
-														</div>
-													</div>
-												</div>
-												{cartDetails?.cartDetail?.map((item) => (
-													<div
-														className='container-body products-details'
-														key={item?.id}>
-														<div className='row mb-md-4 mb-3'>
-															<div className='col-5'>
-																<div className='d-flex align-content-center product pe-2'>
-																	<img
-																		className='img-fluid'
-																		style={{
-																			width: "36px",
-																			height: "36px",
-																			borderRadius: "50%",
-																		}}
-																		src={item?.product?.cover}
-																		alt={item?.product?.name}
-																	/>
-																	<span className='me-1 text-right text-overflow d-inline-block'>
-																		{item?.product?.name}{" "}
+												<TableContainer>
+													<Table
+														sx={{ minWidth: 750 }}
+														aria-labelledby='tableTitle'>
+														<EnhancedTableHead />
+														<TableBody>
+															{cartDetails?.cartDetail?.map((row, index) => (
+																<TableRow hover tabIndex={-1} key={index}>
+																	<TableCell
+																		component='th'
+																		id={index}
+																		scope='row'
+																		align='right'>
+																		<div
+																			className='flex items-center'
+																			style={{
+																				display: "flex",
+																				justifyContent: "start",
+																				alignItems: "center",
+																				gap: "7px",
+																			}}>
+																			{(index + 1).toLocaleString("en-US", {
+																				minimumIntegerDigits: 2,
+																				useGrouping: false,
+																			})}
+																		</div>
+																	</TableCell>
+
+																	<TableCell align='right'>
+																		<div className='d-flex flex-row align-items-center'>
+																			<img
+																				className='rounded-circle img_icons'
+																				src={row?.product?.cover}
+																				alt='client'
+																			/>
+																			<span
+																				className='me-3'
+																				style={{
+																					maxWidth: "100%",
+																					whiteSpace: "nowrap",
+																					overflow: "hidden",
+																					textOverflow: "ellipsis",
+																				}}>
+																				{row?.product?.name}
+																			</span>
+																		</div>
+																	</TableCell>
+																	<TableCell
+																		align='right'
+																		sx={{ width: "90px" }}>
+																		<div className='text-center'>
+																			<span>{row?.qty}</span>
+																		</div>
+																	</TableCell>
+																	<TableCell align='center'>
+																		<span>{row?.sum} ر.س</span>
+																	</TableCell>
+																</TableRow>
+															))}
+															<TableRow>
+																<TableCell
+																	colSpan={3}
+																	component='th'
+																	scope='row'
+																	align='right'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "700" }}>
+																		السعر
 																	</span>
-																</div>
-															</div>
-															<div className='col-2'>
-																<div className='count text-center'>
-																	{item?.qty}
-																</div>
-															</div>
-															<div className='col-2'>
-																<div className='price text-center'>
-																	{item?.price}
-																</div>
-															</div>
-															<div className='col-3 d-flex justify-content-end'>
-																<div className='total text-center'>
-																	{item?.sum} ر.س
-																</div>
-															</div>
-														</div>
-													</div>
-												))}
-											</div>
-											<div
-												className='overflow-hidden'
-												style={{
-													border: "1px solid #f4f2f2",
-													borderRadius: "0 0 6px 6px",
-												}}>
-												<div
-													className='row  d-flex justify-content-between align-items-center'
-													style={{
-														backgroundColor: "rgb(218 253 254 / 43%)",
-														padding: "10px",
-														paddingLeft: "20px",
-													}}>
-													<div className='col-5'></div>
-													<div className='col-2 d-flex flex-column justify-content-center align-content-center flex-wrap'>
-														<div
-															className='align-self-center total-of-orders'
-															style={{ fontWeight: "500" }}>
-															{cartDetails?.count}
-														</div>
-													</div>
-													<div className='col-2'></div>
-													<div className='col-3 d-flex flex-column justify-content-end'>
-														<div
-															className='align-self-end total-of-price'
-															style={{ fontWeight: "500" }}>
-															{cartDetails?.total} ر.س
-														</div>
-													</div>
-												</div>
+																</TableCell>
+																<TableCell
+																	align='center'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "500" }}>
+																		{fetchedData?.data?.cart?.subtotal} ر.س
+																	</span>
+																</TableCell>
+															</TableRow>
+															<TableRow>
+																<TableCell
+																	colSpan={3}
+																	component='th'
+																	scope='row'
+																	align='right'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "700" }}>
+																		الضريبة
+																	</span>
+																</TableCell>
+																<TableCell
+																	align='center'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "500" }}>
+																		{fetchedData?.data?.cart?.tax} ر.س
+																	</span>
+																</TableCell>
+															</TableRow>
+
+															<TableRow>
+																<TableCell
+																	colSpan={3}
+																	component='th'
+																	scope='row'
+																	align='right'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "700" }}>
+																		الشحن
+																	</span>
+																</TableCell>
+																<TableCell
+																	align='center'
+																	style={{ borderBottom: "none" }}>
+																	<span style={{ fontWeight: "500" }}>
+																		{fetchedData?.data?.cart?.shipping_price}{" "}
+																		ر.س
+																	</span>
+																</TableCell>
+															</TableRow>
+
+															{fetchedData?.data?.cart?.overweight !== 0 &&
+																fetchedData?.data?.cart?.overweight_price !==
+																	0 && (
+																	<TableRow>
+																		<TableCell
+																			colSpan={3}
+																			component='th'
+																			scope='row'
+																			align='right'
+																			style={{ borderBottom: "none" }}>
+																			<span style={{ fontWeight: "700" }}>
+																				تكلفة الوزن الزائد (
+																				{fetchedData?.data?.cart?.overweight} kg
+																				)
+																			</span>
+																		</TableCell>
+
+																		<TableCell
+																			align='center'
+																			style={{ borderBottom: "none" }}>
+																			<span style={{ fontWeight: "500" }}>
+																				{
+																					fetchedData?.data?.cart
+																						?.overweight_price
+																				}{" "}
+																				ر.س
+																			</span>
+																		</TableCell>
+																	</TableRow>
+																)}
+															{fetchedData?.data?.cart?.discount_value !==
+																0 && (
+																<TableRow>
+																	<TableCell
+																		colSpan={3}
+																		component='th'
+																		scope='row'
+																		align='right'
+																		style={{ borderBottom: "none" }}>
+																		<span style={{ fontWeight: "700" }}>
+																			الخصم
+																		</span>
+																	</TableCell>
+																	<TableCell
+																		align='center'
+																		style={{ borderBottom: "none" }}>
+																		<span style={{ fontWeight: "500" }}>
+																			{fetchedData?.data?.cart?.discount_value}{" "}
+																			ر.س
+																		</span>
+																	</TableCell>
+																</TableRow>
+															)}
+															<TableRow>
+																<TableCell
+																	colSpan={3}
+																	component='th'
+																	scope='row'
+																	align='right'
+																	style={{
+																		borderBottom: "none",
+																		backgroundColor: "#e1e1e1",
+																	}}>
+																	<span style={{ fontWeight: "700" }}>
+																		الإجمالي
+																	</span>
+																</TableCell>
+																<TableCell
+																	align='center'
+																	style={{
+																		borderBottom: "none",
+																		backgroundColor: "#e1e1e1",
+																	}}>
+																	<span style={{ fontWeight: "500" }}>
+																		{fetchedData?.data?.cart?.total} ر.س
+																	</span>
+																</TableCell>
+															</TableRow>
+														</TableBody>
+													</Table>
+												</TableContainer>
 											</div>
 										</div>
 										{/** Discount details */}
@@ -551,7 +741,6 @@ const ClientData = () => {
 																		value={discount_type}
 																		onClick={(e) => {
 																			setDiscount_type(e.target.value);
-																			console.log(e.target.value);
 																		}}>
 																		<div
 																			className='radio-box discount-radio-box'
@@ -747,7 +936,7 @@ const ClientData = () => {
 													<label htmlFor='user-name'>اسم العميل</label>
 													<input
 														disabled
-														value={cartDetails?.user?.name}
+														value={`${cartDetails?.user?.name} ${cartDetails?.user?.lastname}`}
 														onChange={() => console.log("")}
 														type='text'
 														name='user-name'
@@ -762,9 +951,13 @@ const ClientData = () => {
 														disabled
 														className='direction-ltr text-center'
 														value={
-															discount_type === "fixed"
-																? discountFixedValue
-																: cartDetails?.total - discountPercentValue
+															openPercentMenu
+																? discount_type === "fixed"
+																	? discountFixedValue
+																	: (
+																			cartDetails?.total - discountPercentValue
+																	  )?.toFixed(2)
+																: cartDetails?.total
 														}
 														type='text'
 														name='total-discount'

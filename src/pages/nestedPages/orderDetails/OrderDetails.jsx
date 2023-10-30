@@ -8,7 +8,7 @@ import React, {
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Context from "../../../Context/context";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import useFetch from "../../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
@@ -52,11 +52,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 const OrderDetails = () => {
-	// to send the order sticker to preview and print sticker page
-	const previewStickerContext = useContext(Context);
-	const { setPreviewSticker } = previewStickerContext;
-	// -------------------------------------------------
-
 	const componentRef = useRef();
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -588,26 +583,28 @@ const OrderDetails = () => {
 															</span>
 														</TableCell>
 													</TableRow>
-													<TableRow>
-														<TableCell
-															colSpan={3}
-															component='th'
-															scope='row'
-															align='right'
-															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "700" }}>
-																الدفع عند الإستلام
-															</span>
-														</TableCell>
+													{fetchedData?.data?.orders?.codprice !== 0 && (
+														<TableRow>
+															<TableCell
+																colSpan={3}
+																component='th'
+																scope='row'
+																align='right'
+																style={{ borderBottom: "none" }}>
+																<span style={{ fontWeight: "700" }}>
+																	الدفع عند الإستلام
+																</span>
+															</TableCell>
 
-														<TableCell
-															align='center'
-															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "500" }}>
-																{fetchedData?.data?.orders?.codprice} ر.س
-															</span>
-														</TableCell>
-													</TableRow>
+															<TableCell
+																align='center'
+																style={{ borderBottom: "none" }}>
+																<span style={{ fontWeight: "500" }}>
+																	{fetchedData?.data?.orders?.codprice} ر.س
+																</span>
+															</TableCell>
+														</TableRow>
+													)}
 
 													{fetchedData?.data?.orders?.overweight !== 0 &&
 														fetchedData?.data?.orders?.overweight_price !==
@@ -716,7 +713,7 @@ const OrderDetails = () => {
 															<div className='info-box'>
 																<Client className='client-icon' />
 																<span className=' text-overflow'>
-																	{`${fetchedData?.data?.orders?.user?.name} ${fetchedData?.data?.orders?.user?.user_name}`}
+																	{`${fetchedData?.data?.orders?.user?.name} ${fetchedData?.data?.orders?.user?.lastname}`}
 																</span>
 															</div>
 														</div>

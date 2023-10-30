@@ -325,7 +325,7 @@ export default function BigOrdersTable({
 																		overflow: "hidden",
 																		textOverflow: "ellipsis",
 																	}}>
-																	{`${row?.user?.name} ${row?.user?.user_name}`}
+																	{`${row?.user?.name} ${row?.user?.lastname}`}
 																</span>
 															</div>
 														</TableCell>

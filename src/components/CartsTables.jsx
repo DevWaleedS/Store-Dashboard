@@ -20,7 +20,6 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { TextField } from "@mui/material";
 
 import TablePagination from "./TablePagination";
 
@@ -29,7 +28,6 @@ import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg"
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { UserAuth } from "../Context/UserAuthorProvider";
 
 function EnhancedTableHead(props) {
 	return (
@@ -84,13 +82,12 @@ function EnhancedTableToolbar(props) {
 			}}>
 			<div className='search-input-box'>
 				<FiSearch />
-				<TextField
+				<input
+					type='text'
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					sx={{ paddingRight: "35px" }}
-					id='outlined-basic'
-					label='ابحث عن طريق اسم الزبون '
-					variant='outlined'
+					placeholder='ابحث عن طريق اسم الزبون '
+					className='w-100'
 				/>
 			</div>
 
