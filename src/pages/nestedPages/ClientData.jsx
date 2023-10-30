@@ -118,6 +118,7 @@ const ClientData = () => {
 			editorState: editorValue,
 		});
 	};
+	// ----------------------------------------------------------------------
 
 	// To set  discount_total
 	useEffect(() => {
@@ -558,7 +559,7 @@ const ClientData = () => {
 																		</TableCell>
 																	</TableRow>
 																)}
-															{fetchedData?.data?.cart?.discount_value !==
+															{fetchedData?.data?.cart?.discount_total !==
 																0 && (
 																<TableRow>
 																	<TableCell
@@ -575,7 +576,7 @@ const ClientData = () => {
 																		align='center'
 																		style={{ borderBottom: "none" }}>
 																		<span style={{ fontWeight: "500" }}>
-																			{fetchedData?.data?.cart?.discount_value}{" "}
+																			{fetchedData?.data?.cart?.discount_total}{" "}
 																			ر.س
 																		</span>
 																	</TableCell>
