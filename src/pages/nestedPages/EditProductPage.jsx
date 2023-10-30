@@ -175,6 +175,8 @@ const EditProductPage = () => {
 		}
 	}, [fetchedData?.data?.product]);
 
+	console.log(multiImages);
+
 	// To Handle Errors
 	useEffect(() => {
 		reset(product);
@@ -994,12 +996,16 @@ const EditProductPage = () => {
 														// write your building UI
 														<div className='d-flex flex-row align-items-center gap-4'>
 															{imageList?.map((image, index) => {
-																const isVideo = image?.data_url?.includes(
-																	"video/mp4" ||
-																		"video/avi" ||
-																		"video/mov" ||
-																		"video/mkv"
-																);
+																const isVideo =
+																	image?.data_url?.includes(
+																		"video/mp4" ||
+																			"video/avi" ||
+																			"video/mov" ||
+																			"video/mkv"
+																	) ||
+																	image?.image.includes(
+																		".mp4" || ".avi" || ".mov" || ".mkv"
+																	);
 																if (isVideo) {
 																	return (
 																		<div
@@ -1035,7 +1041,7 @@ const EditProductPage = () => {
 																			className='add-product-images'>
 																			<img
 																				src={image.data_url || image?.image}
-																				alt='img'
+																				alt=''
 																			/>
 																			<div
 																				onClick={() => onImageRemove(index)}

@@ -915,12 +915,13 @@ const AddNewProduct = () => {
 													// write your building UI
 													<div className='d-flex flex-row align-items-center gap-4'>
 														{imageList.map((image, index) => {
-															const isVideo = image?.data_url?.includes(
-																"video/mp4" ||
-																	"video/avi" ||
-																	"video/mov" ||
-																	"video/mkv"
-															);
+															const isVideo =
+																image?.data_url?.includes(
+																	"video/mp4" ||
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
+																) || image?.data_url?.endsWith(".mp4");
 															if (isVideo) {
 																return (
 																	<div
@@ -952,7 +953,7 @@ const AddNewProduct = () => {
 																	<div
 																		key={index}
 																		className='add-product-images'>
-																		<img src={image.data_url} alt='img' />
+																		<img src={image.data_url} alt='' />
 																		<div
 																			onClick={() => onImageRemove(index)}
 																			className='delete-icon'>
