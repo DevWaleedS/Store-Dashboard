@@ -1072,7 +1072,7 @@ const EditProductPage = () => {
 													)}
 												</ImageUploading>
 												<div className='tax-text' style={{ color: "red" }}>
-													الحد الأقصي للفيديو 2MB
+													الحد الأقصي 2MB
 												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
