@@ -963,6 +963,10 @@ const EditProductPage = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-images'>
 													الصور المتعددة او الفيديو
+													<br />
+													<div className='tax-text '>
+														(الحد الأقصي للصور أو الفيديو 2MB)
+													</div>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -1071,9 +1075,6 @@ const EditProductPage = () => {
 														</div>
 													)}
 												</ImageUploading>
-												<div className='tax-text' style={{ color: "red" }}>
-													الحد الأقصي 2MB
-												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
