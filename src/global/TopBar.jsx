@@ -131,7 +131,7 @@ const TopBar = ({ toggleSidebar }) => {
 									? localStorage.getItem("storeLogo")
 									: demoLogo
 							}
-							alt='logo'
+							alt=''
 						/>
 					</div>
 

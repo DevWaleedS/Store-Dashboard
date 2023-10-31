@@ -118,7 +118,7 @@ const VerifayPage = forwardRef((props, ref) => {
 		link: "",
 	});
 
-	const resetDataErrors = (uploadVerifyStoreOrder) => {
+	const resetDataErrors = () => {
 		setDataErrors({
 			name: "",
 			phonenumber: "",

@@ -8,10 +8,10 @@ import React, {
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Context from "../../../Context/context";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import useFetch from "../../../Hooks/UseFetch";
-import { Link } from "react-router-dom";
+
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -37,7 +37,6 @@ import { ReactComponent as ArrowDown } from "../../../data/Icons/icon-24-chevron
 import { ReactComponent as Print } from "../../../data/Icons/icon-24-print.svg";
 import { ReactComponent as PDFIcon } from "../../../data/Icons/pfd.svg";
 import { ReactComponent as Quantity } from "../../../data/Icons/icon-24-Quantity.svg";
-// import { ReactComponent as DeleteIcon } from '../../../data/Icons/icon-24-delete.svg';
 import { ReactComponent as ListIcon } from "../../../data/Icons/icon-24-circlr.svg";
 import { AiFillCopy, AiFillCheckCircle, AiOutlineSearch } from "react-icons/ai";
 import { BiLinkExternal } from "react-icons/bi";
@@ -53,7 +52,9 @@ import TableRow from "@mui/material/TableRow";
 
 const OrderDetails = () => {
 	const componentRef = useRef();
+
 	const { id } = useParams();
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/orders/${id}`
 	);
@@ -177,7 +178,7 @@ const OrderDetails = () => {
 					<TableCell align='right' sx={{ color: "#02466a" }}>
 						الكمية
 					</TableCell>
-					<TableCell align='center' sx={{ color: "#02466a" }}>
+					<TableCell align='right' sx={{ color: "#02466a" }}>
 						الإجمالي
 					</TableCell>
 				</TableRow>
@@ -470,8 +471,9 @@ const OrderDetails = () => {
 								</div>
 								<div className='mb-md-5 mb-4'>
 									<div className='order-details-box'>
-										<div className='title mb-4'>
+										<div className='title mb-4 d-flex justify-content-start  align-content-center '>
 											<h5>تفاصيل المنتجات</h5>
+											<h6>({fetchedData?.data?.orders?.totalCount} منتج)</h6>
 										</div>
 										<TableContainer>
 											<Table
@@ -512,7 +514,8 @@ const OrderDetails = () => {
 																		<span
 																			className='me-3'
 																			style={{
-																				maxWidth: "100%",
+																				minWidth: "400px",
+																				maxWidth: "550px",
 																				whiteSpace: "nowrap",
 																				overflow: "hidden",
 																				textOverflow: "ellipsis",
@@ -527,7 +530,9 @@ const OrderDetails = () => {
 																	</div>
 																</TableCell>
 																<TableCell align='center'>
-																	<span>{row?.sum} ر.س</span>
+																	<span className='table-price_span'>
+																		{row?.sum} ر.س
+																	</span>
 																</TableCell>
 															</TableRow>
 														)
@@ -544,7 +549,9 @@ const OrderDetails = () => {
 														<TableCell
 															align='center'
 															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "500" }}>
+															<span
+																className='table-price_span'
+																style={{ fontWeight: "500" }}>
 																{fetchedData?.data?.orders?.subtotal} ر.س
 															</span>
 														</TableCell>
@@ -561,7 +568,9 @@ const OrderDetails = () => {
 														<TableCell
 															align='center'
 															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "500" }}>
+															<span
+																className='table-price_span'
+																style={{ fontWeight: "500" }}>
 																{fetchedData?.data?.orders?.tax} ر.س
 															</span>
 														</TableCell>
@@ -578,7 +587,9 @@ const OrderDetails = () => {
 														<TableCell
 															align='center'
 															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "500" }}>
+															<span
+																className='table-price_span'
+																style={{ fontWeight: "500" }}>
 																{fetchedData?.data?.orders?.shipping_price} ر.س
 															</span>
 														</TableCell>
@@ -599,7 +610,9 @@ const OrderDetails = () => {
 															<TableCell
 																align='center'
 																style={{ borderBottom: "none" }}>
-																<span style={{ fontWeight: "500" }}>
+																<span
+																	className='table-price_span'
+																	style={{ fontWeight: "500" }}>
 																	{fetchedData?.data?.orders?.codprice} ر.س
 																</span>
 															</TableCell>
@@ -618,14 +631,17 @@ const OrderDetails = () => {
 																	style={{ borderBottom: "none" }}>
 																	<span style={{ fontWeight: "700" }}>
 																		تكلفة الوزن الزائد (
-																		{fetchedData?.data?.orders?.overweight} kg )
+																		{fetchedData?.data?.orders?.overweight}{" "}
+																		<span>kg</span>)
 																	</span>
 																</TableCell>
 
 																<TableCell
 																	align='center'
 																	style={{ borderBottom: "none" }}>
-																	<span style={{ fontWeight: "500" }}>
+																	<span
+																		className='table-price_span'
+																		style={{ fontWeight: "500" }}>
 																		{
 																			fetchedData?.data?.orders
 																				?.overweight_price
@@ -648,7 +664,9 @@ const OrderDetails = () => {
 															<TableCell
 																align='center'
 																style={{ borderBottom: "none" }}>
-																<span style={{ fontWeight: "500" }}>
+																<span
+																	className='table-price_span'
+																	style={{ fontWeight: "500" }}>
 																	{fetchedData?.data?.orders?.codprice} ر.س
 																</span>
 															</TableCell>
@@ -674,7 +692,9 @@ const OrderDetails = () => {
 																borderBottom: "none",
 																backgroundColor: "#e1e1e1",
 															}}>
-															<span style={{ fontWeight: "500" }}>
+															<span
+																className='table-price_span'
+																style={{ fontWeight: "500" }}>
 																{calcTotalPrice(
 																	fetchedData?.data?.orders?.codprice,
 																	fetchedData?.data?.orders?.total_price

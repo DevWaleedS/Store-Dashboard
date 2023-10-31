@@ -132,8 +132,6 @@ const LogInVerificationCode = () => {
 		};
 	}, []);
 
-	console.log(email);
-
 	return (
 		<>
 			<div className='verificationBox-box' dir='ltr'>

@@ -137,34 +137,33 @@ const VerifyStore = () => {
 													/>
 												</div>
 											</div>
-											)
-											: verificationStatus === "التوثيق مرفوض" ? (
-												<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
-													<p className='verify-message'>
-														مرحبا{" "}
-														{userInfo?.name === null
-															? userInfo?.user_name || "صديقي التاجر"
-															: userInfo?.name} {" "}
-															طلب توثيقك مرفوض
-													  	 الرجاء التوجه الى التوثيق لتعديل البيانات 
-													</p>
-													<div className='btns-box' style={{ width: "250px" }}>
-														<Link
-															to='/VerifyStore'
-															onClick={() => {
-																dispatch(closeVerifyModal());
-															}}>
-															التوثيق الأن
-														</Link>
-														<IoMdCloseCircleOutline
-															style={{ cursor: "pointer", fill: "#02466a" }}
-															fill='#02466a'
-															onClick={() => {
-																dispatch(closeVerifyModal());
-															}}
-														/>
-													</div>
+										) : verificationStatus === "التوثيق مرفوض" ? (
+											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+												<p className='verify-message'>
+													مرحبا{" "}
+													{userInfo?.name === null
+														? userInfo?.user_name || "صديقي التاجر"
+														: userInfo?.name}{" "}
+													طلب توثيقك مرفوض الرجاء التوجه الى التوثيق لتعديل
+													البيانات
+												</p>
+												<div className='btns-box' style={{ width: "250px" }}>
+													<Link
+														to='/VerifyStore'
+														onClick={() => {
+															dispatch(closeVerifyModal());
+														}}>
+														التوثيق الأن
+													</Link>
+													<IoMdCloseCircleOutline
+														style={{ cursor: "pointer", fill: "#02466a" }}
+														fill='#02466a'
+														onClick={() => {
+															dispatch(closeVerifyModal());
+														}}
+													/>
 												</div>
+											</div>
 										) : verificationStatus === "لم يتم الطلب" ? (
 											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
@@ -172,7 +171,8 @@ const VerifyStore = () => {
 													{userInfo?.name === null
 														? userInfo?.user_name || "صديقي التاجر"
 														: userInfo?.name}{" "}
-													المتجر الخاص بك غير مكتمل الرجاء اكمال البيانات الاساسية للمتجر
+													المتجر الخاص بك غير مكتمل الرجاء اكمال البيانات
+													الاساسية للمتجر
 												</p>
 												<div className='btns-box' style={{ width: "250px" }}>
 													<Link

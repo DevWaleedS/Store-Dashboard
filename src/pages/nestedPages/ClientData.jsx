@@ -136,7 +136,7 @@ const ClientData = () => {
 				),
 			});
 			setDiscount_expire_date(
-				moment(cartDetails?.discount_expire_date, "YYYY-MM-DD").toDate()
+				moment(cartDetails?.discount_expire_date, "YYYY-MM-DD").toDate() || ""
 			);
 		}
 	}, [cartDetails]);
@@ -256,24 +256,13 @@ const ClientData = () => {
 					<TableCell align='right' sx={{ color: "#02466a" }}>
 						الكمية
 					</TableCell>
-					<TableCell align='center' sx={{ color: "#02466a" }}>
+					<TableCell align='right' sx={{ color: "#02466a" }}>
 						الإجمالي
 					</TableCell>
 				</TableRow>
 			</TableHead>
 		);
 	}
-
-	// handle calc total price if codePrice is !== 0
-	const calcTotalPrice = (codprice, totalPrice) => {
-		const cashOnDelivery = codprice || 0;
-		const totalCartValue = totalPrice;
-
-		const totalValue = cashOnDelivery
-			? (totalCartValue + cashOnDelivery)?.toFixed(2)
-			: totalPrice;
-		return totalValue;
-	};
 
 	return (
 		<>
@@ -448,7 +437,8 @@ const ClientData = () => {
 																			<span
 																				className='me-3'
 																				style={{
-																					maxWidth: "100%",
+																					minWidth: "400px",
+																					maxWidth: "550px",
 																					whiteSpace: "nowrap",
 																					overflow: "hidden",
 																					textOverflow: "ellipsis",
@@ -465,7 +455,9 @@ const ClientData = () => {
 																		</div>
 																	</TableCell>
 																	<TableCell align='center'>
-																		<span>{row?.sum} ر.س</span>
+																		<span className='table-price_span'>
+																			{row?.sum} ر.س
+																		</span>
 																	</TableCell>
 																</TableRow>
 															))}
@@ -483,7 +475,9 @@ const ClientData = () => {
 																<TableCell
 																	align='center'
 																	style={{ borderBottom: "none" }}>
-																	<span style={{ fontWeight: "500" }}>
+																	<span
+																		className='table-price_span'
+																		style={{ fontWeight: "500" }}>
 																		{fetchedData?.data?.cart?.subtotal} ر.س
 																	</span>
 																</TableCell>
@@ -502,7 +496,9 @@ const ClientData = () => {
 																<TableCell
 																	align='center'
 																	style={{ borderBottom: "none" }}>
-																	<span style={{ fontWeight: "500" }}>
+																	<span
+																		className='table-price_span'
+																		style={{ fontWeight: "500" }}>
 																		{fetchedData?.data?.cart?.tax} ر.س
 																	</span>
 																</TableCell>
@@ -522,7 +518,9 @@ const ClientData = () => {
 																<TableCell
 																	align='center'
 																	style={{ borderBottom: "none" }}>
-																	<span style={{ fontWeight: "500" }}>
+																	<span
+																		className='table-price_span'
+																		style={{ fontWeight: "500" }}>
 																		{fetchedData?.data?.cart?.shipping_price}{" "}
 																		ر.س
 																	</span>
@@ -549,7 +547,9 @@ const ClientData = () => {
 																		<TableCell
 																			align='center'
 																			style={{ borderBottom: "none" }}>
-																			<span style={{ fontWeight: "500" }}>
+																			<span
+																				className='table-price_span'
+																				style={{ fontWeight: "500" }}>
 																				{
 																					fetchedData?.data?.cart
 																						?.overweight_price
@@ -575,7 +575,9 @@ const ClientData = () => {
 																	<TableCell
 																		align='center'
 																		style={{ borderBottom: "none" }}>
-																		<span style={{ fontWeight: "500" }}>
+																		<span
+																			className='table-price_span'
+																			style={{ fontWeight: "500" }}>
 																			{fetchedData?.data?.cart?.discount_total}{" "}
 																			ر.س
 																		</span>
@@ -602,7 +604,9 @@ const ClientData = () => {
 																		borderBottom: "none",
 																		backgroundColor: "#e1e1e1",
 																	}}>
-																	<span style={{ fontWeight: "500" }}>
+																	<span
+																		className='table-price_span'
+																		style={{ fontWeight: "500" }}>
 																		{fetchedData?.data?.cart?.total} ر.س
 																	</span>
 																</TableCell>
