@@ -1128,9 +1128,9 @@ const OrderDetails = () => {
 												<Pdf
 													targetRef={componentRef}
 													filename='report-details.pdf'
-													x={0.5}
-													y={0.5}
-													scale={0.6}>
+													x={0.3}
+													y={0.3}
+													scale={0.3}>
 													{({ toPdf }) => (
 														<PDFIcon className='pdf-icon' onClick={toPdf} />
 													)}
