@@ -21,14 +21,14 @@ import TablePagination from "./TablePagination";
 
 // Icons
 import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 
 // filter orders by
 const filtersTypes = [
 	{ id: 1, ar_name: "شركة الشحن", en_name: "shipping_company" },
 	{ id: 2, ar_name: "حالة الطلب", en_name: "status" },
-	{ id: 3, ar_name: "كمية الطلب", en_name: "qty" },
+	{ id: 3, ar_name: "كمية الطلب", en_name: "quantity" },
 ];
 
 const selectFilterStyles = {
@@ -40,9 +40,10 @@ const selectFilterStyles = {
 	fontSize: "18px",
 	fontWeight: "500",
 	backgroundColor: "aliceblue",
+	color: "#02466a",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
 		{
-			paddingRight: "20px",
+			paddingRight: "5px",
 		},
 
 	"& .MuiOutlinedInput-root": {
@@ -142,6 +143,7 @@ function EnhancedTableToolbar(props) {
 								/>
 							</div>
 							<div className='select-input-box'>
+								<FiFilter className='filter-icon' />
 								<Select
 									displayEmpty
 									sx={selectFilterStyles}
@@ -151,7 +153,7 @@ function EnhancedTableToolbar(props) {
 									inputProps={{ "aria-label": "Without label" }}
 									renderValue={(selected) => {
 										if (select === "") {
-											return <p style={{ color: "#02466a" }}> فرز حسب </p>;
+											return <p style={{ color: "#02466a" }}>فرز حسب</p>;
 										}
 										const result =
 											filtersTypes?.filter(

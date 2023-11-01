@@ -21,9 +21,6 @@ import { LoadingContext } from "../../../Context/LoadingProvider";
 // to download order details as pdf file
 import Pdf from "react-to-pdf";
 
-// to print order details
-import ReactToPrint from "react-to-print";
-
 // Icons
 import { ReactComponent as StatusIcon } from "../../../data/Icons/status.svg";
 import { ReactComponent as DateIcon } from "../../../data/Icons/icon-date.svg";
@@ -50,9 +47,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+// The Table title
+function EnhancedTableHead() {
+	return (
+		<TableHead sx={{ backgroundColor: "#cce4ff38" }}>
+			<TableRow>
+				<TableCell align='right' sx={{ color: "#02466a" }}>
+					م
+				</TableCell>
+				<TableCell align='right' sx={{ color: "#02466a" }}>
+					المنتج
+				</TableCell>
+				<TableCell align='right' sx={{ color: "#02466a" }}>
+					الكمية
+				</TableCell>
+				<TableCell align='right' sx={{ color: "#02466a" }}>
+					الإجمالي
+				</TableCell>
+			</TableRow>
+		</TableHead>
+	);
+}
+
 const OrderDetails = () => {
 	const componentRef = useRef();
-
 	const { id } = useParams();
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -67,6 +85,7 @@ const OrderDetails = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
 	const [copy, setCopy] = useState(false);
 	const [printError, setPrintError] = useState("");
 	const [shipping, setShipping] = useState({
@@ -75,12 +94,12 @@ const OrderDetails = () => {
 		address: "",
 	});
 
+	// Handle errors
 	const [error, setError] = useState({
 		district: "",
 		city: "",
 		address: "",
 	});
-
 	const resetError = () => {
 		setError({
 			district: "",
@@ -88,7 +107,9 @@ const OrderDetails = () => {
 			address: "",
 		});
 	};
+	// ----------------------------------------------------
 
+	// To handle the shipping information
 	useEffect(() => {
 		if (fetchedData?.data?.orders?.shipping) {
 			setShipping({
@@ -100,6 +121,7 @@ const OrderDetails = () => {
 			});
 		}
 	}, [fetchedData?.data?.orders?.shipping]);
+	// ----------------------------------------------------
 
 	function removeDuplicates(arr) {
 		const unique = arr?.filter((obj, index) => {
@@ -126,7 +148,9 @@ const OrderDetails = () => {
 		);
 		return unique?.[0]?.name_ar || name;
 	}
+	// -----------------------------------------------------
 
+	// To handle update order Status
 	const updateOrderStatus = (status) => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
@@ -153,7 +177,6 @@ const OrderDetails = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-
 					setEndActionTitle(res?.data?.message?.ar);
 					setError({
 						district: res?.data?.message?.en?.district?.[0],
@@ -164,27 +187,6 @@ const OrderDetails = () => {
 				}
 			});
 	};
-
-	function EnhancedTableHead() {
-		return (
-			<TableHead sx={{ backgroundColor: "#cce4ff38" }}>
-				<TableRow>
-					<TableCell align='right' sx={{ color: "#02466a" }}>
-						م
-					</TableCell>
-					<TableCell align='right' sx={{ color: "#02466a" }}>
-						المنتج
-					</TableCell>
-					<TableCell align='right' sx={{ color: "#02466a" }}>
-						الكمية
-					</TableCell>
-					<TableCell align='right' sx={{ color: "#02466a" }}>
-						الإجمالي
-					</TableCell>
-				</TableRow>
-			</TableHead>
-		);
-	}
 
 	// print sticker
 	const printSticker = () => {
@@ -202,8 +204,6 @@ const OrderDetails = () => {
 				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						// navigate("preview-sticker");
-						// Open a new window with the HTML content
 						const newTab = window.open("", "_blank");
 						if (newTab) {
 							newTab.document.write(res?.data?.data?.Sticker?.data);
@@ -211,7 +211,6 @@ const OrderDetails = () => {
 						} else {
 							console.error("Failed to open a new tab");
 						}
-						// setPreviewSticker(res?.data?.data?.Sticker?.data);
 					} else {
 						setReload(!reload);
 						setPrintError(res?.data?.message?.ar);
@@ -279,6 +278,7 @@ const OrderDetails = () => {
 						/>
 					</div>
 				</div>
+
 				<div className='head-category mb-5 pt-md-4'>
 					<div className='row '>
 						<div className='col-md-6 col-12'>
@@ -367,7 +367,7 @@ const OrderDetails = () => {
 												<div className='box'>
 													<div className='order-head-row'>
 														<Quantity />
-														<span className='me-3'>كمية الطلب</span>
+														<span className='me-3'> عدد المنتجات</span>
 													</div>
 													<div className='order-data-row'>
 														<span>{fetchedData?.data?.orders?.quantity}</span>
@@ -471,9 +471,22 @@ const OrderDetails = () => {
 								</div>
 								<div className='mb-md-5 mb-4'>
 									<div className='order-details-box'>
-										<div className='title mb-4 d-flex justify-content-start  align-content-center '>
+										<div className='title mb-4 d-flex justify-content-between  align-content-center  flex-wrap'>
 											<h5>تفاصيل المنتجات</h5>
-											<h6>({fetchedData?.data?.orders?.totalCount} منتج)</h6>
+											<div className='d-flex justify-content-between  align-content-center gap-1'>
+												<h6>عدد القطع:</h6>
+												<p style={{ fontSize: "14px", fontWight: "400" }}>
+													{fetchedData?.data?.orders?.totalCount === 1 && (
+														<>(قطعة واحده)</>
+													)}
+													{fetchedData?.data?.orders?.totalCount === 2 && (
+														<>(قطعتين)</>
+													)}
+													{fetchedData?.data?.orders?.totalCount > 2 && (
+														<>(fetchedData?.data?.orders?.totalCount قطعة)</>
+													)}
+												</p>
+											</div>
 										</div>
 										<TableContainer>
 											<Table
@@ -1094,6 +1107,11 @@ const OrderDetails = () => {
 																onClick={() => updateOrderStatus("canceled")}
 																style={{ cursor: "pointer" }}>
 																ملغي
+																<span
+																	style={{ fontSize: "1rem", color: "red" }}>
+																	{" "}
+																	(إلغاء الطلب بالكامل){" "}
+																</span>
 															</li>
 														</ul>
 													</div>
@@ -1101,21 +1119,6 @@ const OrderDetails = () => {
 											</div>
 										</div>
 
-										<div className='order-action-box mb-3'>
-											<div className='action-title'>
-												<ListIcon className='list-icon' />
-												<span className='me-2'> طباعة الفاتورة</span>
-											</div>
-											<div className='action-icon'>
-												<ReactToPrint
-													trigger={() => {
-														return <Print />;
-													}}
-													content={() => componentRef.current}
-													documentTitle='order-details-report'
-												/>
-											</div>
-										</div>
 										<div className='order-action-box mb-3'>
 											<div className='action-title'>
 												<ListIcon className='list-icon' />
@@ -1134,6 +1137,7 @@ const OrderDetails = () => {
 												</Pdf>
 											</div>
 										</div>
+
 										{fetchedData?.data?.orders?.shipping && (
 											<>
 												<button
@@ -1145,7 +1149,7 @@ const OrderDetails = () => {
 													className='order-action-box mb-3'>
 													<div className='action-title'>
 														<ListIcon className='list-icon' />
-														<span className='me-2'>طباعة ملصق الشحن</span>
+														<span className='me-2'>طباعة بوليصة الشحن</span>
 													</div>
 													<div className='action-icon'>
 														<Print />
@@ -1154,6 +1158,7 @@ const OrderDetails = () => {
 												<span className='fs-6 text-danger'>{printError}</span>
 											</>
 										)}
+
 										{/**
 											<div className='order-action-box mb-md-5'>
 										<div className='action-title'>

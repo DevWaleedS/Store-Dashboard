@@ -10,9 +10,6 @@ const ContextProvider = (props) => {
 	const [actionWarning, setActionWarning] = useState(false);
 	const [navbarZindex, setNavbarZindex] = useState(false);
 
-	// to send the order sticker to preview and print sticker page
-	const [previewSticker, setPreviewSticker] = useState(null);
-
 	useEffect(() => {
 		if (title) {
 			setTimeout(() => {
@@ -35,8 +32,6 @@ const ContextProvider = (props) => {
 		productsData,
 		navbarZindex,
 		setNavbarZindex,
-		previewSticker,
-		setPreviewSticker,
 	};
 
 	return <Context.Provider value={context}>{props.children}</Context.Provider>;

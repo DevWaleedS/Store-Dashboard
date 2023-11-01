@@ -102,10 +102,7 @@ import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPas
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 import TextEditorProvider from "./Context/TextEditorProvider";
-import {
-	OrderDetails,
-	PreviewAndPrintSticker,
-} from "./pages/nestedPages/orderDetails";
+import { OrderDetails } from "./pages/nestedPages/orderDetails";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -235,11 +232,7 @@ const router = createBrowserRouter([
 				path: "Orders/OrderDetails/:id",
 				element: <OrderDetails />,
 			},
-			// preview Order Sticker
-			{
-				path: "Orders/OrderDetails/:id/preview-sticker",
-				element: <PreviewAndPrintSticker />,
-			},
+
 			{
 				path: "Pages",
 				element: <Pages />,
