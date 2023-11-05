@@ -152,11 +152,13 @@ const MainInformation = () => {
 			setPhoneNumber(
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
-					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("00966")
-						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-						: fetchedData?.data?.setting_store?.user?.phonenumber
+					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
+							"00966"
+					  )
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
-			setDescriptionValue(fetchedData?.data?.setting_store?.description);
+			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
 			setOpenAlawys(
 				fetchedData?.data?.setting_store?.working_status === "active"
@@ -256,9 +258,12 @@ const MainInformation = () => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
 					setReload(!reload);
-					if(res?.data?.data?.storeSetting?.verification_status === "لم يتم الطلب"){
+					if (
+						res?.data?.data?.storeSetting?.verification_status ===
+						"لم يتم الطلب"
+					) {
 						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
-					}else{
+					} else {
 						setEndActionTitle(res?.data?.message?.ar);
 						window.location.reload();
 					}
@@ -707,7 +712,7 @@ const MainInformation = () => {
 												id='domain'
 												value={domain}
 												onChange={(e) => {
-													setDomain(e.target.value.replace(/[^A-Za-z]/g,''));
+													setDomain(e.target.value.replace(/[^A-Za-z]/g, ""));
 													setDomainNameFocus(true);
 												}}
 												aria-describedby='domainName'
@@ -974,7 +979,16 @@ const MainInformation = () => {
 												htmlFor='store_email'
 												className='setting_label d-block'>
 												البريد الالكتروني
-												<span style={{ color:'red',fontSize:'14px',whiteSpace:'pre-line' }}> (اذا كنت ترغب في تريد تعديل البريد الالكتروني يرجى التواصل مع الدعم) </span>
+												<span
+													style={{
+														color: "red",
+														fontSize: "14px",
+														whiteSpace: "pre-line",
+													}}>
+													{" "}
+													(اذا كنت ترغب في تريد تعديل البريد الالكتروني يرجى
+													التواصل مع الدعم){" "}
+												</span>
 											</label>
 											<input
 												className='direction-ltr text-right store-email-input w-100'
@@ -1005,8 +1019,17 @@ const MainInformation = () => {
 											<label
 												htmlFor='phonenumber'
 												className='setting_label d-block'>
-												رقم الهاتف 
-												<span style={{ color:'red',fontSize:'14px',whiteSpace:'pre-line' }}> (اذا كنت ترغب في تريد تعديل رقم الهاتف يرجى التواصل مع الدعم) </span>
+												رقم الهاتف
+												<span
+													style={{
+														color: "red",
+														fontSize: "14px",
+														whiteSpace: "pre-line",
+													}}>
+													{" "}
+													(اذا كنت ترغب في تريد تعديل رقم الهاتف يرجى التواصل مع
+													الدعم){" "}
+												</span>
 											</label>
 
 											<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -1066,9 +1089,7 @@ const MainInformation = () => {
 												onChange={(e) => setDescriptionValue(e.target.value)}
 												className='form-control store-desc'
 												placeholder='وصف المتجر'
-												rows='3'
-											>
-											</textarea>
+												rows='3'></textarea>
 										</div>
 										{settingErr?.description && (
 											<span className='fs-6 w-100 text-danger'>

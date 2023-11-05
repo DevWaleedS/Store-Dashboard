@@ -118,11 +118,9 @@ const EditPage = () => {
 	};
 
 	const updateTags = (i) => {
-		const newTags = page?.tags?.filter((tag, index) => (
-			index !== i
-		));
+		const newTags = page?.tags?.filter((tag, index) => index !== i);
 		setPage({ ...page, tags: newTags });
-	}
+	};
 
 	const onEditorStateChange = (editorValue) => {
 		const editorStateInHtml = draftToHtml(
@@ -337,27 +335,26 @@ const EditPage = () => {
 																value={value}
 																onChange={(e) => {
 																	if (e.target.value.length <= 100) {
-																		onChange(e.target.value.substring(0, 100))
+																		onChange(e.target.value.substring(0, 100));
 																		setDescriptionLength(false);
 																	} else {
 																		setDescriptionLength(true);
 																	}
-
-																}}
-															>
-															</textarea>
+																}}></textarea>
 														)}
 													/>
-													<div className='col-12' style={{ marginTop: "-13px" }}>
+													<div
+														className='col-12'
+														style={{ marginTop: "-13px" }}>
 														<span className='fs-6 text-danger'>
 															{pageError?.page_desc}
 															{errors?.page_desc && errors.page_desc.message}
 														</span>
-														{descriptionLength &&
+														{descriptionLength && (
 															<span className='fs-6 text-danger'>
 																الوصف يجب إلا يتعدي 100 حرف
 															</span>
-														}
+														)}
 													</div>
 												</div>
 											</div>
@@ -581,10 +578,12 @@ const EditPage = () => {
 																	/>
 																</div>
 																<div className='mt-2'>
-																	<div className="tags-boxes">
+																	<div className='tags-boxes'>
 																		{page?.tags?.map((tag, index) => (
-																			<div key={index} className="tag">
-																				<CloseOutlined onClick={() => updateTags(index)} />
+																			<div key={index} className='tag'>
+																				<CloseOutlined
+																					onClick={() => updateTags(index)}
+																				/>
 																				<span>{tag}</span>
 																			</div>
 																		))}
@@ -618,9 +617,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																				{
+																					paddingRight: "20px",
+																				},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
