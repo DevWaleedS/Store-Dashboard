@@ -194,7 +194,7 @@ const TopBar = ({ toggleSidebar }) => {
 												className=''
 												onClick={() => navigate("/Notifications")}>
 												<div
-													className='dropdown-item d-flex justify-content-end align-items-center'
+													className='dropdown-item d-flex justify-content-end align-items-center text-overflow '
 													to='UserDetails'>
 													<div className='me-2'>
 														<span className='user-name'>

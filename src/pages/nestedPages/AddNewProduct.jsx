@@ -681,7 +681,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div className='tax-text'>
-												ضع الوزن التقديري للمنتج بالجرام
+												ضع الوزن التقريبي للمنتج بالجرام
 											</div>
 											<Controller
 												name={"weight"}

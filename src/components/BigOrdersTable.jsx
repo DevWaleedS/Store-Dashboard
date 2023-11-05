@@ -345,7 +345,7 @@ export default function BigOrdersTable({
 																				? "#ffebeb"
 																				: row?.status === "جاهز للشحن"
 																				? "#ffecd1c7"
-																				: "",
+																				: "#9df1ba",
 																		color:
 																			row?.status === "تم التوصيل"
 																				? "##9df1ba"
@@ -355,7 +355,7 @@ export default function BigOrdersTable({
 																				? "#ff7b7b"
 																				: row?.status === "جاهز للشحن"
 																				? "#ff9f1a"
-																				: "",
+																				: "#07b543",
 																		borderRadius: "16px",
 																		padding: "5px 25px",
 																		fontWeight: 500,

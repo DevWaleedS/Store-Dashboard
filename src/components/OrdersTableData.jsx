@@ -91,7 +91,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 																? "#d4ebf7"
 																: order?.status === "ملغي"
 																? "#ffebeb"
-																: "",
+																: "#9df1ba",
 													}}>
 													{order?.status}
 												</span>
