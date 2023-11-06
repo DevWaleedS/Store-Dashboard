@@ -7,14 +7,15 @@ import Modal from "@mui/material/Modal";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { closeModal } from "../store/slices/VideoModal-slice";
 
+// Style the modal
 const style = {
 	position: "absolute",
 	top: "55%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: 700,
+	width: 800,
 	maxWidth: "90%",
-	borderRadius: 5,
+	borderRadius: 1,
 };
 
 const CourseVideoModal = () => {
@@ -37,12 +38,13 @@ const CourseVideoModal = () => {
 				<Box component={"div"} sx={style} className='explain-courses-modal'>
 					<div className='close-icon-video-modal'>
 						<AiOutlineCloseCircle
-							style={{ cursor: "pointer", color: "#FFF" }}
+							style={{ cursor: "pointer", color: "#000" }}
 							onClick={() => {
 								dispatch(closeModal());
 							}}
 						/>
 					</div>
+
 					<video className='video-modal' controls>
 						<source
 							src={

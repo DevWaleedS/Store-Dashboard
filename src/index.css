@@ -2033,8 +2033,7 @@ nav.navigation {
 
 .close-icon-video-modal {
 	position: absolute;
-	left: 35px;
-	top: 18px;
+	left: 6px;
 	z-index: 1;
 }
 
@@ -6693,30 +6692,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .add-new-product-form .input-pixel textarea {
 	border: none !important;
-}
-/* .add-new-product-form .file-input input[type="file"]{
-	display: none;
-}
-.add-new-product-form .file-input label{
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	gap: 5px;
-	cursor: pointer;
-} */
-
-.video-modal {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #000000;
-	opacity: 0.5;
-	z-index: 9999;
 }
 
 .video-url-content {

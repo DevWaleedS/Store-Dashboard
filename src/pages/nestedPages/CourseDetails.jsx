@@ -7,6 +7,7 @@ import useFetch from "../../Hooks/UseFetch";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../store/slices/VideoModal-slice";
 import CourseVideoModal from "../../components/CourseVideoModal";
+
 // ICONS
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -33,8 +34,6 @@ const CourseDetails = () => {
 			setCourseDetails(fetchedData?.data?.course);
 		}
 	}, [fetchedData]);
-
-	console.log(fetchedData?.data?.course);
 
 	return (
 		<>
@@ -68,6 +67,8 @@ const CourseDetails = () => {
 						</div>
 					</div>
 				</div>
+
+				{/* Course image */}
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-12'>
 						<div className='course-image'>
@@ -79,6 +80,8 @@ const CourseDetails = () => {
 						</div>
 					</div>
 				</div>
+
+				{/* Course details info */}
 				<div className='row mb-5'>
 					{loading ? (
 						<div
