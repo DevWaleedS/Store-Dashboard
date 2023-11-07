@@ -22,7 +22,7 @@ const CreateNewPassword = () => {
 	};
 
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
-	const { email, resetPasswordToken } = ResetPasswordInfo;
+	const { userPhoneNumber, resetPasswordToken } = ResetPasswordInfo;
 	const [cookies, setCookie] = useCookies(["access_token"]);
 
 	// to set remember me
@@ -62,7 +62,7 @@ const CreateNewPassword = () => {
 		const formData = new FormData();
 		formData.append("password", password);
 		formData.append("password_confirmation", confirmPassword);
-		formData.append("user_name", email);
+		formData.append("phonenumber", userPhoneNumber);
 		formData.append("token", resetPasswordToken);
 		axios
 			.post("https://backend.atlbha.com/api/password/reset-password", formData)

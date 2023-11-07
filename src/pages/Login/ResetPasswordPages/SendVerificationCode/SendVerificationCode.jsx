@@ -18,7 +18,7 @@ const SendVerificationCode = () => {
 
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
 	const {
-		email,
+		userPhoneNumber,
 		disapledBtn,
 		resendButtonDisabled,
 		setResendButtonDisabled,
@@ -71,7 +71,7 @@ const SendVerificationCode = () => {
 	const verifyCode = () => {
 		setVerError("");
 		const formData = new FormData();
-		formData.append("user_name", email);
+		formData.append("phonenumber", userPhoneNumber);
 		formData.append("code", codeValue);
 
 		axios
@@ -103,7 +103,7 @@ const SendVerificationCode = () => {
 	const reSendVerificationCodeByPhone = () => {
 		setErrMessage("");
 		const formData = new FormData();
-		formData.append("user_name", email);
+		formData.append("phonenumber", userPhoneNumber);
 		axios
 			.post("https://backend.atlbha.com/api/password/create", formData)
 			.then((res) => {
@@ -123,7 +123,7 @@ const SendVerificationCode = () => {
 	const reSendVerificationCodeByEmail = () => {
 		setErrCodeByEmail("");
 		const formData = new FormData();
-		formData.append("user_name", email);
+		formData.append("user_name", localStorage.getItem("userEmail"));
 
 		axios
 			.post("https://backend.atlbha.com/api/password/create-by-email", formData)
@@ -192,7 +192,7 @@ const SendVerificationCode = () => {
 								<span>
 									<SvgRepeat style={{ width: "20px", marginLeft: "3px" }} />
 								</span>
-								اعد ارسال الكود
+								اعد ارسال الكود عبر رقم الجوال
 								<span className={`${disapledBtn ? "d-inline" : "d-none"}`}>
 									{" "}
 									{countdown === 0 ? " " : countdown}{" "}
