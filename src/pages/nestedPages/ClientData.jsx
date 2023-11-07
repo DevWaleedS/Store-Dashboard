@@ -135,9 +135,6 @@ const ClientData = () => {
 					)
 				),
 			});
-			setDiscount_expire_date(
-				moment(cartDetails?.discount_expire_date, "YYYY-MM-DD").toDate() || ""
-			);
 		}
 	}, [cartDetails]);
 
