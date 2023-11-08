@@ -78,20 +78,30 @@ const OrdersTableData = ({ ordersDetails }) => {
 												{" "}
 												{`${order?.user?.name} ${order?.user?.user_name}`}
 											</td>
-											<td>
+											<td className=' d-flex justify-content-center align-items-center'>
 												<span
 													className='status text-overflow'
 													style={{
-														background:
+														backgroundColor:
 															order?.status === "تم التوصيل"
 																? "#ebfcf1"
-																: order?.status === "جاهز للشحن"
-																? "#b29eff36"
 																: order?.status === "جديد"
 																? "#d4ebf7"
 																: order?.status === "ملغي"
 																? "#ffebeb"
+																: order?.status === "جاهز للشحن"
+																? "#ffecd1c7"
 																: "#9df1ba",
+														color:
+															order?.status === "تم التوصيل"
+																? "##9df1ba"
+																: order?.status === "جديد"
+																? "#0077ff"
+																: order?.status === "ملغي"
+																? "#ff7b7b"
+																: order?.status === "جاهز للشحن"
+																? "#ff9f1a"
+																: "#07b543",
 													}}>
 													{order?.status}
 												</span>

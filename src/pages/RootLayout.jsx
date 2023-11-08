@@ -10,7 +10,7 @@ import { DeleteContext } from "../Context/DeleteProvider";
 import { theme } from "../Theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Outlet, ScrollRestoration } from "react-router-dom";
-import TopBar from "../global/TopBar";
+import TopBar from "../global/TopBar/TopBar";
 import SideBar from "../global/SideBar";
 
 import VerifyStoreModal from "../components/VerifyStoreModal";
@@ -94,7 +94,9 @@ const RootLayout = () => {
 						{isOpenMaintenanceModeModal && <MaintenanceMode></MaintenanceMode>}
 						{isOpenVerifyModal && <VerifyStoreModal></VerifyStoreModal>}
 						{isVerifyStoreAlertOpen && <VerifayStoreAlert></VerifayStoreAlert>}
-						{isVerifyAfterMainOpen && <VerifayStoreAfterMainInfoAlert></VerifayStoreAfterMainInfoAlert>}
+						{isVerifyAfterMainOpen && (
+							<VerifayStoreAfterMainInfoAlert></VerifayStoreAfterMainInfoAlert>
+						)}
 						{isOpenCelebrityMarketingModal && (
 							<CelebrityMarketingModal></CelebrityMarketingModal>
 						)}

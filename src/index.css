@@ -1165,11 +1165,16 @@ table,
 }
 
 .table > tbody .status {
-	white-space: nowrap;
-	border-radius: 10px;
-	padding: 5px 10px;
-	font-size: 16px;
-	font-weight: 500;
+   
+    border-radius: 10px;
+    padding: 2px 0;
+    font-size: 16px;
+    font-weight: 500;
+    width: 70px;
+    max-width: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-icon svg {
