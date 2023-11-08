@@ -3,6 +3,7 @@ import React, { useState } from "react";
 export const ResetPasswordContext = React.createContext();
 
 const ResetPasswordProvider = (props) => {
+	const [email, setEmail] = useState(null);
 	const [userPhoneNumber, setUserPhoneNumber] = useState(null);
 	const [resetPasswordToken, setResetPasswordToken] = useState(null);
 	const [resendButtonDisabled, setResendButtonDisabled] = useState(false);
@@ -11,6 +12,8 @@ const ResetPasswordProvider = (props) => {
 	const [message, setMessage] = useState("");
 
 	const context = {
+		email,
+		setEmail,
 		userPhoneNumber,
 		setUserPhoneNumber,
 		resetPasswordToken,

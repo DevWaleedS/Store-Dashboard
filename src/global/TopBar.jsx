@@ -1,28 +1,65 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useFetch from "../Hooks/UseFetch";
+
+// Helper component ( Loader Component )
 import CircularLoading from "../HelperComponents/CircularLoading";
+
+// Third party
 import axios from "axios";
-import { NotificationContext } from "../Context/NotificationProvider";
+import useFetch from "../Hooks/UseFetch";
 import { useCookies } from "react-cookie";
 
+// Context
+import Context from "../Context/context";
+import { UserAuth } from "../Context/UserAuthorProvider";
+
 // MUI
-import { Box, useTheme } from "@mui/material";
+import { Box, styled, useTheme } from "@mui/material";
 import { tokens } from "../Theme";
 import { Avatar } from "@mui/material";
+import Badge from "@mui/material/Badge";
 
 // images and icons
-import notification from "../data/Icons/icon-Notification.svg";
 import demoLogo from "../data/Icons/logo.png";
-
-// Icons
-import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineSearch } from "react-icons/ai";
 import MenuIcon from "@mui/icons-material/Menu";
-import { ReactComponent as LogOutIcon } from "../data/Icons/icon-24-sign out.svg";
+import { AiOutlineSearch } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
+import { MdNotifications } from "react-icons/md";
 import { ReactComponent as UserIcon } from "../data/Icons/icon-24-client.svg";
-import { UserAuth } from "../Context/UserAuthorProvider";
-import Context from "../Context/context";
+import { ReactComponent as LogOutIcon } from "../data/Icons/icon-24-sign out.svg";
+
+// NotificationSound
+import notificationSound from "../data/notificationSound/out-of-nowhere-message-tone.mp3";
+
+// Style dot active on avatar image
+const StyledBadge = styled(Badge)(({ theme }) => ({
+	"& .MuiBadge-badge": {
+		backgroundColor: "#44b700",
+		color: "#44b700",
+		boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+		"&::after": {
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: "100%",
+			height: "100%",
+			borderRadius: "50%",
+			animation: "ripple 1.2s infinite ease-in-out",
+			border: "1px solid currentColor",
+			content: '""',
+		},
+	},
+	"@keyframes ripple": {
+		"0%": {
+			transform: "scale(.8)",
+			opacity: 1,
+		},
+		"100%": {
+			transform: "scale(2.4)",
+			opacity: 0,
+		},
+	},
+}));
 
 const TopBar = ({ toggleSidebar }) => {
 	const theme = useTheme();
@@ -38,10 +75,6 @@ const TopBar = ({ toggleSidebar }) => {
 	const Z_index = useContext(Context);
 	const { navbarZindex } = Z_index;
 
-	const NotificationStore = useContext(NotificationContext);
-	const { setEndActionTitle } = NotificationStore;
-
-	// to get notification
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);
@@ -67,6 +100,56 @@ const TopBar = ({ toggleSidebar }) => {
 		}
 	}, [profile]);
 
+	// handle play notification sound if the fetchedData?.data?.count_of_notifications is !== 0
+	const Sound = new Audio(notificationSound);
+
+	// Function to play the notification sound
+	function playNotificationSound() {
+		Sound.play().catch((error) => {
+			console.error("Failed to play the notification sound:", error);
+		});
+	}
+
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (
+				!document.hasFocus() ||
+				fetchedData?.data?.count_of_notifications !== 0
+			) {
+				playNotificationSound();
+			}
+		}, 1000);
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [fetchedData?.data?.count_of_notifications]);
+
+	// Mark a notification as read
+	const markNotificationAsRead = (e) => {
+		if (fetchedData?.data?.count_of_notifications === 0) return;
+
+		const queryParams = fetchedData?.data?.notifications
+			?.map((not) => `id[]=${not?.id}`)
+			.join("&");
+		axios
+			.get(
+				`https://backend.atlbha.com/api/Store/NotificationRead?${queryParams}`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setReload(!reload);
+				} else {
+					setReload(!reload);
+				}
+			});
+	};
+
 	// Delete Notification
 	const deleteNotifications = () => {
 		const queryParams = fetchedData?.data?.notifications
@@ -84,14 +167,13 @@ const TopBar = ({ toggleSidebar }) => {
 			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
 				}
 			});
 	};
+	// ------------------------------------------
 
 	// To log out from dashboard!
 	const logOut = () => {
@@ -162,8 +244,25 @@ const TopBar = ({ toggleSidebar }) => {
 								<div
 									className='nav-link dropdown'
 									data-bs-toggle='dropdown'
-									aria-expanded='false'>
-									<img src={notification} alt='notification' />
+									aria-expanded='false'
+									onClick={() => {
+										markNotificationAsRead();
+									}}>
+									<Badge
+										max={50}
+										badgeContent={fetchedData?.data?.count_of_notifications}
+										sx={{
+											"& .MuiBadge-badge": {
+												backgroundColor: "#ffc06a",
+												border: "1px solid #fff",
+												color: "#fff",
+											},
+										}}>
+										<MdNotifications
+											title='الاشعارات'
+											style={{ width: "24px", height: "24px", fill: "#03476a" }}
+										/>
+									</Badge>
 								</div>
 
 								<ul className='dropdown-menu notification-dropdown'>
@@ -192,7 +291,9 @@ const TopBar = ({ toggleSidebar }) => {
 											<li
 												key={index}
 												className=''
-												onClick={() => navigate("/Notifications")}>
+												onClick={() => {
+													navigate("/Notifications");
+												}}>
 												<div
 													className='dropdown-item d-flex justify-content-end align-items-center text-overflow '
 													to='UserDetails'>
@@ -238,10 +339,17 @@ const TopBar = ({ toggleSidebar }) => {
 										</div>
 
 										{/** avatar img  */}
-										<Avatar
-											alt='avatarImage'
-											src={profile?.data?.users?.image || userInfo?.user_image}
-										/>
+										<StyledBadge
+											overlap='circular'
+											anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+											variant='dot'>
+											<Avatar
+												alt='avatarImage'
+												src={
+													profile?.data?.users?.image || userInfo?.user_image
+												}
+											/>
+										</StyledBadge>
 									</Box>
 									<ul className='dropdown-menu user-info-dropdown'>
 										<li className=''>
