@@ -7275,8 +7275,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	font-size: 18px;
 }
 
-.carts-page .search-input-box input::placeholder {
-	color: #02466a82;
+.carts-page .search-input-box input::placeholder,
+.order-toolbar .search-input-box input::placeholder, 
+.coupon-form .add-category .input-box input::placeholder {
+	color: #02466ac4;
 }
 
 .order-toolbar .search-input-box svg {
