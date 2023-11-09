@@ -1282,14 +1282,14 @@ table,
 .input-box input {
 	position: relative;
 	font-size: 20px;
-	padding: 0 32px;
+	padding: 0 35px;
 }
 
 .input-box svg {
 	position: absolute;
 	right: 10px;
 	top: 20px;
-	color: #02466a;
+	color: var(--gray-300);
 	z-index: 1;
 }
 
@@ -2305,7 +2305,7 @@ nav.navigation {
 	background-color: transparent;
 }
 .pages-search-bx input::placeholder {
-	color: #02466a82;
+	color: var(--primary-300);
 }
 
 .pages-search-bx svg,
@@ -7276,12 +7276,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .carts-page .search-input-box input::placeholder,
-.order-toolbar .search-input-box input::placeholder, 
+.order-toolbar .search-input-box input::placeholder,
 .coupon-form .add-category .input-box input::placeholder {
-	color: #02466ac4;
+	color: var(--primary-300);
 }
 
-.order-toolbar .search-input-box svg {
+.order-toolbar .search-input-box svg,
+.coupon-form .add-category .input-box svg.search-icon {
 	color: var(--primary-400);
 }
 
