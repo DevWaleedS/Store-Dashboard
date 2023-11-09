@@ -39,22 +39,36 @@ const OrdersTableData = ({ ordersDetails }) => {
 								<tr>
 									<th
 										scope='col'
+										className='pr-rad-right '
 										style={{
-											whiteSpace: "nowrap",
 											width: "85px",
+											color: "#52575D",
 											textAlign: "center",
+											background: "#E6F5F6",
+											whiteSpace: "nowrap",
 										}}>
 										رقم الطلب
 									</th>
 									<th
 										scope='col'
-										style={{ whiteSpace: "nowrap", width: "200px" }}>
+										style={{
+											whiteSpace: "nowrap",
+											width: "200px",
+											background: "#E6F5F6",
+											color: "#52575D",
+										}}>
 										الاسم
 									</th>
-									<th scope='col' className=' text-center'>
+									<th
+										scope='col'
+										className=' text-center'
+										style={{ background: "#E6F5F6", color: "#52575D" }}>
 										الحالة
 									</th>
-									<th scope='col' className=' text-center pr-rad-left'>
+									<th
+										scope='col'
+										className=' text-center pr-rad-left'
+										style={{ background: "#E6F5F6", color: "#52575D" }}>
 										الاجراء
 									</th>
 								</tr>
@@ -73,14 +87,30 @@ const OrdersTableData = ({ ordersDetails }) => {
 												{order?.order_number}
 											</td>
 											<td
-												className='text-overflow'
-												style={{ whiteSpace: "nowrap", width: "200px" }}>
-												{" "}
-												{`${order?.user?.name} ${order?.user?.user_name}`}
+												style={{
+													whiteSpace: "nowrap",
+													width: "200px",
+												}}>
+												<div className='d-flex justify-content-start align-items-center gap-2'>
+													<div style={{ whiteSpace: "nowrap", width: "40px" }}>
+														<img
+															style={{ borderRadius: "50%", width: "100%" }}
+															className='rounded-circle img_icons'
+															src={order?.user?.image}
+															alt=''
+														/>
+													</div>
+													<div
+														style={{
+															whiteSpace: "nowrap",
+															overflow: "hidden",
+															textOverflow: "ellipsis",
+														}}>{`${order?.user?.name} ${order?.user?.user_name}`}</div>
+												</div>
 											</td>
 											<td className=' d-flex justify-content-center align-items-center'>
 												<span
-													className='status text-overflow'
+													className='status'
 													style={{
 														backgroundColor:
 															order?.status === "تم التوصيل"

@@ -487,9 +487,9 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 															{row?.total_price}
 														</TableCell>
 														<TableCell align='center'>
-															<span
+															<div
 																align='center'
-																className='status'
+																className='status '
 																style={{
 																	backgroundColor:
 																		row?.status === "نشط"
@@ -499,12 +499,13 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																		row?.status === "نشط"
 																			? "#3ae374"
 																			: "#a7a7a7",
+																	width: "100px",
+																	fontWeight: 400,
+																	margin: "0 auto",
 																	borderRadius: "16px",
-																	padding: "5px 25px",
-																	fontWeight: 500,
 																}}>
 																{row?.status}
-															</span>
+															</div>
 														</TableCell>
 
 														<TableCell align='right'>

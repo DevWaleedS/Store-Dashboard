@@ -33,7 +33,13 @@ const ProductsTableData = ({ productsDetails }) => {
 								<tr>
 									<th
 										scope='col'
-										style={{ whiteSpace: "nowrap", width: "240px" }}>
+										className='pr-rad-right '
+										style={{
+											whiteSpace: "nowrap",
+											width: "240px",
+											background: "#E6F5F6",
+											color: "#52575D",
+										}}>
 										الاسم
 									</th>
 									<th
@@ -43,16 +49,26 @@ const ProductsTableData = ({ productsDetails }) => {
 											whiteSpace: "nowrap",
 											width: "190px",
 											textAlign: "center",
+											background: "#E6F5F6",
+											color: "#52575D",
 										}}>
 										التصنيف
 									</th>
-									<th scope='col' className=' text-center'>
+									<th
+										scope='col'
+										className=' text-center'
+										style={{ background: "#E6F5F6", color: "#52575D" }}>
 										السعر
 									</th>
 									<th
 										scope='col'
 										className=' text-center pr-rad-left'
-										style={{ whiteSpace: "nowrap", width: "90px" }}>
+										style={{
+											whiteSpace: "nowrap",
+											width: "90px",
+											background: "#E6F5F6",
+											color: "#52575D",
+										}}>
 										اجمالي المبيعات
 									</th>
 								</tr>
@@ -69,7 +85,7 @@ const ProductsTableData = ({ productsDetails }) => {
 														display: "flex",
 														justifyContent: "flex-start",
 														alignItems: "center",
-														gap: "4px",
+														gap: "0.5rem",
 													}}>
 													{/* product cover*/}
 													<div style={{ whiteSpace: "nowrap", width: "40px" }}>
@@ -82,7 +98,14 @@ const ProductsTableData = ({ productsDetails }) => {
 													</div>
 
 													{/* Product name */}
-													<div className='text-overflow'>{product?.name}</div>
+													<div
+														style={{
+															whiteSpace: "nowrap",
+															overflow: "hidden",
+															textOverflow: "ellipsis",
+														}}>
+														{product?.name}
+													</div>
 												</div>
 											</td>
 
