@@ -1,12 +1,76 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 import { CouponTable } from "../components";
+import { Link, useNavigate } from "react-router-dom";
+
 // iCONS
-import howIcon from "../data/Icons/icon_24_home.svg";
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
+import { FiFilter } from "react-icons/fi";
+import { IoIosArrowDown } from "react-icons/io";
+import howIcon from "../data/Icons/icon_24_home.svg";
+
+//Mui
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+
+// filter Coupon by
+const filtersTypes = [
+	{ id: 1, ar_name: "نوع الكوبون", en_name: "type" },
+	{ id: 2, ar_name: "الحالة", en_name: "status" },
+	{ id: 3, ar_name: "تاريخ الانتهاء", en_name: "date" },
+];
+
+const selectFilterStyles = {
+	width: "100%",
+	height: "100%",
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	fontSize: "18px",
+	fontWeight: "500",
+	backgroundColor: "aliceblue",
+	color: "#02466a",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "35px",
+		},
+
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+
+	"& .MuiSelect-nativeInput": {
+		display: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "88%",
+	},
+};
+
+const menuItemStyles = {
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	backgroundColor: "aliceblue",
+	height: "3rem",
+	"&.Mui-selected": {
+		backgroundColor: "#d9f2f9",
+	},
+	"&.Mui-selected:hover ": {
+		backgroundColor: "#d9f2f9",
+	},
+	"&:hover ": {
+		backgroundColor: "#d9f2f9",
+	},
+};
 
 const Coupon = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -54,7 +118,7 @@ const Coupon = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -82,22 +146,44 @@ const Coupon = () => {
 										id='search'
 										placeholder=' ابحث عن طريق اسم الكوبون '
 									/>
-									<BsSearch />
+									<BsSearch className='search-icon' />
 								</div>
 
+								{/**/}
+
 								<div className='select-input input-box '>
-									<select
-										value={select}
-										onChange={(e) => setSelect(e.target.value)}
-										className='form-select'
-										aria-label='Default select example'>
-										<option value='' defaultChecked>
-											الكل
-										</option>
-										<option value='type'>نوع الكوبون</option>
-										<option value='status'>الحالة</option>
-										<option value='date'>تاريخ الانتهاء</option>
-									</select>
+									<FormControl sx={{ width: "100%" }}>
+										<FiFilter className='filter-icon' />
+										<Select
+											displayEmpty
+											value={select}
+											onChange={(e) => setSelect(e.target.value)}
+											sx={selectFilterStyles}
+											IconComponent={IoIosArrowDown}
+											inputProps={{ "aria-label": "Without label" }}
+											renderValue={(selected) => {
+												if (select === "") {
+													return <p style={{ color: "#02466a" }}>فرز حسب</p>;
+												}
+												const result =
+													filtersTypes?.filter(
+														(item) => item?.en_name === selected
+													) || "";
+												return result[0]?.ar_name;
+											}}>
+											<MenuItem sx={menuItemStyles} value=''>
+												الكل
+											</MenuItem>
+											{filtersTypes?.map((item) => (
+												<MenuItem
+													sx={menuItemStyles}
+													key={item?.id}
+													value={item?.en_name}>
+													{item?.ar_name}
+												</MenuItem>
+											))}
+										</Select>
+									</FormControl>
 								</div>
 
 								<div className='add-category-bt-box'>

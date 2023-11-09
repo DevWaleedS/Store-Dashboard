@@ -20,7 +20,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 				<div className='col-md-3 col-4'>
 					<div className='video-preview'>
 						<div className='img-wrapper'>
-							<img className='img-fluid' src={image} alt={name} />
+							<img className='img-fluid' src={image} alt={""} loading="lazy" />
 							<div className='play-video-icon'>
 								<BsPlayCircle
 									onClick={() => {

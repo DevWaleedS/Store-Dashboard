@@ -142,31 +142,41 @@ const MainInformation = () => {
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		if (fetchedData?.data?.setting_store) {
-			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
-			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
-			setDomain([fetchedData?.data?.setting_store?.domain]);
-			setCountry([fetchedData?.data?.setting_store?.country?.id]);
-			setCity([fetchedData?.data?.setting_store?.city?.id]);
-			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
-			setPhoneNumber(
-				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
-					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-							"00966"
-					  )
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-					: fetchedData?.data?.setting_store?.user?.phonenumber
-			);
-			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
+		const debounce = setTimeout(() => {
+			if (fetchedData?.data?.setting_store) {
+				setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
+				setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
+				setDomain([fetchedData?.data?.setting_store?.domain]);
+				setCountry([fetchedData?.data?.setting_store?.country?.id]);
+				setCity([fetchedData?.data?.setting_store?.city?.id]);
+				setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
+				setPhoneNumber(
+					fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
+						"+966"
+					)
+						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
+						: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
+								"00966"
+						  )
+						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+						: fetchedData?.data?.setting_store?.user?.phonenumber
+				);
+				setDescriptionValue(
+					fetchedData?.data?.setting_store?.description || ""
+				);
 
-			setOpenAlawys(
-				fetchedData?.data?.setting_store?.working_status === "active"
-					? true
-					: false
-			);
-			setWorkDays(fetchedData?.data?.setting_store?.workDays);
-		}
+				setOpenAlawys(
+					fetchedData?.data?.setting_store?.working_status === "active"
+						? true
+						: false
+				);
+				setWorkDays(fetchedData?.data?.setting_store?.workDays);
+			}
+		}, 1000);
+
+		return () => {
+			clearTimeout(debounce);
+		};
 	}, [fetchedData?.data?.setting_store]);
 
 	// ---------------------------
@@ -544,7 +554,7 @@ const MainInformation = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

@@ -123,7 +123,7 @@ const CreateRole = () => {
 										<nav aria-label='breadcrumb'>
 											<ol className='breadcrumb'>
 												<li className='breadcrumb-item'>
-													<img src={arrowBack} alt='' />
+													<img src={arrowBack} alt='' loading='lazy' />
 													<Link to='/Management/JobTitles' className='me-2'>
 														الأدوار الوظيفية
 													</Link>

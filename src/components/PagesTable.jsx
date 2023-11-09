@@ -496,7 +496,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																<Link
 																	to={`EditPage/${row?.id}`}
 																	style={{ cursor: "pointer" }}>
-																	<img src={editIcon} alt='editIcon' />
+																	<img src={editIcon} alt='' loading='lazy' />
 																</Link>
 																<span>
 																	<DeletteIcon

@@ -61,19 +61,20 @@ const RootLayout = () => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (
-			verificationStoreStatus === "لم يتم الطلب" ||
-			verificationStoreStatus === "جاري التوثيق" ||
-			verificationStoreStatus === "طلب جديد"
-		) {
-			const debounce = setTimeout(() => {
+		const debounce = setTimeout(() => {
+			if (
+				verificationStoreStatus === "لم يتم الطلب" ||
+				verificationStoreStatus === "جاري التوثيق" ||
+				verificationStoreStatus === "طلب جديد" ||
+				verificationStoreStatus === "التوثيق مرفوض"
+			) {
 				dispatchVerifyModal(openVerifyModal());
-			}, 100);
+			}
+		}, 100);
 
-			return () => {
-				clearTimeout(debounce);
-			};
-		}
+		return () => {
+			clearTimeout(debounce);
+		};
 	}, [verificationStoreStatus]);
 
 	return (

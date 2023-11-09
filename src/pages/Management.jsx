@@ -55,7 +55,7 @@ const Management = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={howIcon} alt='' />
+										<img src={howIcon} alt='' loading='lazy' />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

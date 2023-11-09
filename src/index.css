@@ -205,7 +205,6 @@ svg:not(:root) {
 	/*-- box shadow --*/
 	--bx-shadow: 0 0 20px 0px var(--gray-100);
 }
-
 /*-------------------------------------------------------------- */
 
 /* Reset some styles  */
@@ -1165,16 +1164,15 @@ table,
 }
 
 .table > tbody .status {
-   
-    border-radius: 10px;
-    padding: 2px 0;
-    font-size: 16px;
-    font-weight: 500;
-    width: 70px;
-    max-width: 92px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	border-radius: 10px;
+	padding: 2px 0;
+	font-size: 16px;
+	font-weight: 500;
+	width: 70px;
+	max-width: 92px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .action-icon svg {
@@ -1262,8 +1260,8 @@ table,
 /* add category form */
 .add-category {
 	background: #ededed38;
-	padding: 25px 16px;
-	width: 98%;
+	padding: 28px 16px;
+	width: 99%;
 	margin: 0 auto;
 	border-radius: 6px;
 	-webkit-border-radius: 6px;
@@ -1291,7 +1289,8 @@ table,
 	position: absolute;
 	right: 10px;
 	top: 20px;
-	color: var(--gray-300);
+	color: #02466a;
+	z-index: 1;
 }
 
 .input-box input,
@@ -1653,9 +1652,9 @@ nav.navigation {
 
 /* ------------------------------------------------------------------------------------ */
 /* Coupon page */
-.coupon-form .add-category {
+.coupon-form .add-category,
+.pages-page .add-category {
 	background-color: #d9f2f9;
-	padding: 30px 16px;
 }
 
 .coupon-form .add-category .search-input {
@@ -2265,13 +2264,13 @@ nav.navigation {
 
 /* Pages styles */
 .add-page-btn {
-	width: 220px;
+	width: 100%;
 }
 
 .add-page-btn button {
 	background-color: #237eae !important;
 	color: var(--white-100);
-	width: 198px;
+	width: 100%;
 	font: 500 20px/28px "Tajawal";
 	max-width: 100%;
 	height: 56px;
@@ -2283,48 +2282,41 @@ nav.navigation {
 	-o-border-radius: 6px;
 }
 
-.pages-search-bx .MuiFormControl-root {
+.pages-search-bx {
+	background-color: aliceblue;
 	width: 100%;
+	height: 56px;
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	gap: 8px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+	padding: 0 10px;
+}
+.pages-search-bx input {
+	all: unset;
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+}
+.pages-search-bx input::placeholder {
+	color: #02466a82;
 }
 
-.pages-search-bx .MuiOutlinedInput-notchedOutline {
-	border: 1px solid var(--gray-100) !important;
-}
-
-.pages-search-bx .MuiInputBase-root {
-	padding-right: 10px;
-	height: 60px;
-}
-
-.pages-search-bx .MuiInputBase-root svg {
+.pages-search-bx svg,
+.pages-filters-bx .MuiFormControl-root svg {
 	color: var(--primary-400);
 }
-
-.pages-filters-bx label {
+.pages-filters-bx .MuiFormControl-root svg.filter-icon {
 	position: absolute;
-	z-index: 1;
-	top: 16px;
+	top: 20px;
 	right: 10px;
-	width: 30px;
-}
-
-.pages-filters-bx label svg {
-	width: 25px;
-	height: 25px;
-}
-
-.pages-filters-bx label svg polygon {
-	stroke: var(--primary-300);
-}
-
-.pages-filters-bx .form-select {
-	position: relative;
-	background-color: var(--white-500);
-	border: 1px solid var(--gray-100) !important;
-	padding-right: 40px !important;
-	height: 60px;
-	color: var(--primary-300);
-	cursor: pointer;
+	z-index: 1;
 }
 
 /* ----------------------------------------------------------------------------------- */
@@ -7299,8 +7291,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	background-color: aliceblue;
 }
 
-.order-toolbar .select-input-box .filter-icon {
+.order-toolbar .select-input-box .filter-icon,
+.input-box svg.filter-icon {
 	color: #02466a;
+	z-index: 1;
 }
 .order-toolbar .select-input-box .form-select {
 	width: 100%;
@@ -8332,12 +8326,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		height: 18px;
 	}
 
-	/* products-page */
-	.products .add-category {
-		width: 100%;
-		padding: 0;
-	}
-
 	.products .input-group .search-input {
 		width: 100%;
 	}
@@ -8735,7 +8723,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	/* category */
 	.add-category {
 		width: 100%;
-		padding: 0;
+		padding: 16px 12px;
 	}
 
 	.add-category .input-group {
@@ -8759,6 +8747,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.input-box svg {
 		font-size: 18px;
 		top: 15px;
+	}
+
+	.input-box svg.filter-icon {
+		top: 20px;
 	}
 
 	.select-input.input-box {
@@ -8980,10 +8972,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.create-offer-form-wrapper .MuiFormControl-root .MuiInputBase-root {
 		height: 45px !important;
-	}
-
-	.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
-		padding-right: 15px !important;
 	}
 
 	.create-offer-form-wrapper .form-body .date-icon {
@@ -9220,7 +9208,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	/* add-page */
 	.add-page-btn {
-		width: 170px;
+		width: 100%;
 		height: 48px;
 	}
 
@@ -10058,11 +10046,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		padding: 16px 20px;
 	}
 
-	/* coupons-page */
-	.coupon-form .add-category {
-		padding: 16px 20px;
-	}
-
 	.coupon-form .add-category .search-input {
 		width: 100%;
 	}
@@ -10112,11 +10095,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		width: 100%;
 		font-size: 18px;
 		text-align: center;
-	}
-
-	/* customer-page */
-	.customer-page .add-category {
-		padding: 16px 20px;
 	}
 
 	.customer-page .add-category .search-input {

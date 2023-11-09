@@ -54,7 +54,7 @@ const VerifyStore = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -112,7 +112,7 @@ const VerifyStore = () => {
 					<div className='row select-store-type form-row p-md-5 p-3'>
 						<form className='px-md-2 px-0'>
 							<div className='col-12'>
-								<div className={`form ${page === 1 ? 'activty' : 'verifay'}`}>
+								<div className={`form ${page === 1 ? "activty" : "verifay"}`}>
 									{page === 1 ? (
 										<ActivityType showErr={showErr} setShowErr={setShowErr} />
 									) : (

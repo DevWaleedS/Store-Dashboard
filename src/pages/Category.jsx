@@ -3,15 +3,18 @@ import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
+
 // iCONS
 import howIcon from "../data/Icons/icon_24_home.svg";
-//
+import { IoIosArrowDown } from "react-icons/io";
+
 import { CategoryTable } from "../components";
 import useFetch from "../Hooks/UseFetch";
+
+//Mui
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { IoIosArrowDown } from "react-icons/io";
 
 const Category = () => {
 	// to get all  data from server
@@ -58,7 +61,7 @@ const Category = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

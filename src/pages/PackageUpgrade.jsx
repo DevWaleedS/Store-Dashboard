@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 // icons
-import howIcon from '../data/Icons/icon_24_home.svg';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { Plans } from '../components';
+import howIcon from "../data/Icons/icon_24_home.svg";
+import { AiOutlineSearch } from "react-icons/ai";
+import { Plans } from "../components";
 
 const PackageUpgrade = () => {
 	const [yearlyPlan, setYearlyPlan] = useState(false);
@@ -24,7 +24,13 @@ const PackageUpgrade = () => {
 						<div className='search-icon'>
 							<AiOutlineSearch color='#02466A' />
 						</div>
-						<input type='text' name='search' id='search' className='input' placeholder='أدخل كلمة البحث' />
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='input'
+							placeholder='أدخل كلمة البحث'
+						/>
 					</div>
 				</div>
 				<div className='head-category mb-5'>
@@ -32,7 +38,7 @@ const PackageUpgrade = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -52,12 +58,12 @@ const PackageUpgrade = () => {
 					<div className='d-flex justify-content-center align-items-center '>
 						<FormControlLabel
 							sx={{
-								width: 'maxContent ',
-								'& .MuiFormControlLabel-label ': {
-									alignSelf: 'end',
-									fontSize: '20px',
-									letterSpacing: '0.2px',
-									color: ' #011723',
+								width: "maxContent ",
+								"& .MuiFormControlLabel-label ": {
+									alignSelf: "end",
+									fontSize: "20px",
+									letterSpacing: "0.2px",
+									color: " #011723",
 									marginLeft: 1,
 								},
 							}}
@@ -67,44 +73,44 @@ const PackageUpgrade = () => {
 									defaultChecked
 									onClick={() => setYearlyPlan(!yearlyPlan)}
 									sx={{
-										'& .MuiSwitch-track': {
+										"& .MuiSwitch-track": {
 											width: 36,
 											height: 22,
 											opacity: 1,
-											backgroundColor: 'rgba(0,0,0,.25)',
-											boxSizing: 'border-box',
+											backgroundColor: "rgba(0,0,0,.25)",
+											boxSizing: "border-box",
 											borderRadius: 20,
 										},
-										'& .MuiSwitch-thumb': {
-											boxShadow: 'none',
-											backgroundColor: '#EBEBEB',
+										"& .MuiSwitch-thumb": {
+											boxShadow: "none",
+											backgroundColor: "#EBEBEB",
 											width: 16,
 											height: 16,
 											borderRadius: 4,
-											transform: 'translate(6px,7px)',
+											transform: "translate(6px,7px)",
 										},
-										'&:hover': {
-											'& .MuiSwitch-thumb': {
-												boxShadow: 'none',
+										"&:hover": {
+											"& .MuiSwitch-thumb": {
+												boxShadow: "none",
 											},
 										},
 
-										'& .MuiSwitch-switchBase': {
-											'&:hover': {
-												boxShadow: 'none',
-												backgroundColor: 'none',
+										"& .MuiSwitch-switchBase": {
+											"&:hover": {
+												boxShadow: "none",
+												backgroundColor: "none",
 											},
 											padding: 1,
-											'&.Mui-checked': {
-												transform: 'translateX(12px)',
-												color: '#fff',
-												'& + .MuiSwitch-track': {
+											"&.Mui-checked": {
+												transform: "translateX(12px)",
+												color: "#fff",
+												"& + .MuiSwitch-track": {
 													opacity: 1,
-													backgroundColor: '#3AE374',
+													backgroundColor: "#3AE374",
 												},
-												'&:hover': {
-													boxShadow: 'none',
-													backgroundColor: 'none',
+												"&:hover": {
+													boxShadow: "none",
+													backgroundColor: "none",
 												},
 											},
 										},

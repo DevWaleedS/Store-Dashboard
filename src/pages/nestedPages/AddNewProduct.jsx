@@ -957,7 +957,11 @@ const AddNewProduct = () => {
 																	<div
 																		key={index}
 																		className='add-product-images'>
-																		<img src={image.data_url} alt='' />
+																		<img
+																			src={image.data_url}
+																			alt=''
+																			lazy={true}
+																		/>
 																		<div
 																			onClick={() => onImageRemove(index)}
 																			className='delete-icon'>

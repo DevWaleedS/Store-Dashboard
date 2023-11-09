@@ -6,12 +6,14 @@ import { PostalSubscriptionsTable } from "../components";
 // iCONS
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { BsSearch } from "react-icons/bs";
-// Export File 
+// Export File
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
 const PostalSubscriptions = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch("https://backend.atlbha.com/api/Store/subsicriptions");
+	const { fetchedData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/subsicriptions"
+	);
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
@@ -52,7 +54,7 @@ const PostalSubscriptions = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -83,9 +85,7 @@ const PostalSubscriptions = () => {
 									<BsSearch />
 								</div>
 								<div className='add-category-bt-box'>
-									<button
-										className='add-cat-btn'
-										onClick={exportToCSV}>
+									<button className='add-cat-btn' onClick={exportToCSV}>
 										<span className='me-2'>تصدير</span>
 									</button>
 								</div>

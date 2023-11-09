@@ -175,7 +175,10 @@ const EditRole = () => {
 															/>
 														</div>
 														<div className='col-md-4 col-12'>
-															<button className='save-btn w-100' type='submit' style={{ minWidth:'130px' }}>
+															<button
+																className='save-btn w-100'
+																type='submit'
+																style={{ minWidth: "130px" }}>
 																حفظ واعتماد
 															</button>
 														</div>
@@ -189,7 +192,7 @@ const EditRole = () => {
 										<nav aria-label='breadcrumb'>
 											<ol className='breadcrumb'>
 												<li className='breadcrumb-item'>
-													<img src={arrowBack} alt='' />
+													<img src={arrowBack} alt='' loading='lazy' />
 													<Link to='/Management/JobTitles' className='me-2'>
 														الأدوار الوظيفية
 													</Link>

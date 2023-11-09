@@ -253,7 +253,7 @@ const OfferDetails = () => {
 										<ol className='breadcrumb'>
 											<li className='breadcrumb-item'>
 												<Link to='/' className='me-2'>
-													<img src={howIcon} alt='' />
+													<img src={howIcon} alt='' loading='lazy' />
 													<span className='me-2'> الرئيسية</span>
 												</Link>
 											</li>

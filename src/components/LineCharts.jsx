@@ -41,7 +41,7 @@ const LineCharts = ({
 				setSales_weekly(arrayOfWeeklySales);
 				setSales_monthly(arrayOfMonthlySales);
 			}
-		}, 1000);
+		}, 100);
 
 		return () => {
 			clearTimeout(debounce);

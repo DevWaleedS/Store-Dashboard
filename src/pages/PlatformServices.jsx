@@ -114,7 +114,7 @@ const PlatformServices = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={howIcon} alt='' />
+										<img src={howIcon} alt='' loading='lazy' />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>
@@ -231,8 +231,7 @@ const PlatformServices = () => {
 													);
 													return `${result[0]?.name} , `;
 												});
-											}}
-										>
+											}}>
 											{services?.data?.services?.map((service, index) => (
 												<MenuItem key={index} value={service?.id}>
 													<Checkbox

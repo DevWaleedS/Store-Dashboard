@@ -1,11 +1,9 @@
-import React from 'react';
+import React from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
-import howIcon from '../data/Icons/icon_24_home.svg';
+import { Link } from "react-router-dom";
+import howIcon from "../data/Icons/icon_24_home.svg";
 
-
-import { CreateOffer } from './nestedPages';
-
+import { CreateOffer } from "./nestedPages";
 
 const BranchesAndWarehouses = () => {
 	return (
@@ -19,7 +17,7 @@ const BranchesAndWarehouses = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -34,9 +32,7 @@ const BranchesAndWarehouses = () => {
 				</div>
 
 				<div className='row'>
-					<div className='postponed-page-title'>
-						مؤجلة
-					</div>
+					<div className='postponed-page-title'>مؤجلة</div>
 				</div>
 				{/** Create offers form 
 				<CreateOffer />

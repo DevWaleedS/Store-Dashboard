@@ -471,7 +471,7 @@ export default function EnhancedTable({
 																		border:
 																			row?.store === null
 																				? "1px solid #cfcdcd"
-																				: "	border: 1px solid #ddd;",
+																				: "1px solid #ddd",
 																	}}
 																	src={row?.icon}
 																	alt={row?.name}

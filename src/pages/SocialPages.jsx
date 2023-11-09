@@ -147,7 +147,7 @@ const SocialPages = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -200,7 +200,7 @@ const SocialPages = () => {
 								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
-											<Twitter width="16"/>
+											<Twitter width='16' />
 											<span className='me-2'> تويتر</span>
 										</label>
 									</div>

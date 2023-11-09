@@ -5,23 +5,23 @@ import { useCookies } from "react-cookie";
 import useFetch from "../Hooks/UseFetch";
 import axios from "axios";
 import Context from "../Context/context";
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { LoadingContext } from "../Context/LoadingProvider";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // import images
 import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as Category } from '../data/Icons/icon-24-Category.svg';
-import { ReactComponent as Menuu } from '../data/Icons/menuu.svg';
-import { ReactComponent as Background } from '../data/Icons/background.svg';
-import { ReactComponent as Icons } from '../data/Icons/icons.svg';
-import { ReactComponent as Caaard } from '../data/Icons/caaard.svg';
-import { ReactComponent as Footer } from '../data/Icons/footer.svg';
-import { ReactComponent as Border } from '../data/Icons/border.svg';
-import { ReactComponent as Border01 } from '../data/Icons/border01.svg';
+import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
+import { ReactComponent as Menuu } from "../data/Icons/menuu.svg";
+import { ReactComponent as Background } from "../data/Icons/background.svg";
+import { ReactComponent as Icons } from "../data/Icons/icons.svg";
+import { ReactComponent as Caaard } from "../data/Icons/caaard.svg";
+import { ReactComponent as Footer } from "../data/Icons/footer.svg";
+import { ReactComponent as Border } from "../data/Icons/border.svg";
+import { ReactComponent as Border01 } from "../data/Icons/border01.svg";
 
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -54,7 +54,11 @@ const PaintStore = () => {
 			setHeaderBg(fetchedData?.data?.Theme?.headerBg);
 			setLayoutBg(fetchedData?.data?.Theme?.layoutBg);
 			setIconsBg(fetchedData?.data?.Theme?.iconsBg);
-			setFooter({ ...footer, footerBorder: fetchedData?.data?.Theme?.footerBorder, footerBg: fetchedData?.data?.Theme?.footerBg });
+			setFooter({
+				...footer,
+				footerBorder: fetchedData?.data?.Theme?.footerBorder,
+				footerBg: fetchedData?.data?.Theme?.footerBg,
+			});
 		}
 	}, [fetchedData?.data?.Theme]);
 
@@ -63,12 +67,16 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("primaryBg", primaryBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themePrimaryUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/themePrimaryUpdate`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -85,12 +93,16 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("secondaryBg", secondaryBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeSecondaryUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/themeSecondaryUpdate`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -107,12 +119,16 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("headerBg", headerBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeHeaderUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/themeHeaderUpdate`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -129,12 +145,16 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("layoutBg", layoutBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeLayoutUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/themeLayoutUpdate`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -174,12 +194,16 @@ const PaintStore = () => {
 		formData.append("footerBorder", footer?.footerBorder);
 		formData.append("footerBg", footer?.footerBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeFooterUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/themeFooterUpdate`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -191,43 +215,59 @@ const PaintStore = () => {
 			});
 	};
 
-	const resetPrimaryColor = ()=>{
+	const resetPrimaryColor = () => {
 		setPrimaryBg("#1dbbbe");
-	}
+	};
 
-	const resetSecondaryColor = ()=>{
+	const resetSecondaryColor = () => {
 		setSecondaryBg("#02466a");
-	}
+	};
 
-	const resetHeaderColor = ()=>{
+	const resetHeaderColor = () => {
 		setHeaderBg("#1dbbbe");
-	}
+	};
 
-	const resetLayoutColor = ()=>{
+	const resetLayoutColor = () => {
 		setLayoutBg("#ffffff");
-	}
+	};
 
-	const resetIconsColor = ()=>{
+	const resetIconsColor = () => {
 		setIconsBg("#1dbbbe");
-	}
+	};
 
-	const resetFooterColor = ()=>{
+	const resetFooterColor = () => {
 		setFooter({ ...footer, footerBorder: "#ebebeb", footerBg: "#ffffff" });
-	}
+	};
 
-	const ClickIcon = ({fill}) => {
+	const ClickIcon = ({ fill }) => {
 		return (
-			<svg id="click" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-				<rect id="Rectangle_140" data-name="Rectangle 140" width="24" height="24" fill="rgba(255,255,255,0)" />
-				<g id="Page-1" transform="translate(1 4)">
-					<g id="icon-27-one-finger-click" transform="translate(5)">
-						<path id="one-finger-click" d="M9.474,0V2.2h.551V0ZM13,1.419,11.288,2.805l.347.428,1.712-1.386L13,1.419Zm1.1,3.709-2.146-.5-.124.537,2.146.5.124-.537Zm-8.586.537,2.146-.5-.124-.537-2.146.5.124.537Zm.634-3.818L7.864,3.233l.347-.428L6.5,1.419l-.347.428Zm6.9,15.225a4.213,4.213,0,0,0,4.131-4.13h0v-3.3a.826.826,0,1,0-1.652,0v.274h-.551V8.54a.826.826,0,1,0-1.652,0v.823h-.551V7.989a.826.826,0,1,0-1.652,0V9.913h-.551V4.133a.826.826,0,1,0-1.652,0v6.22C7.79,9.142,6.3,7.809,5.686,8.424s.944,2.261,3.1,5.886c.971,1.633,2.2,2.763,4.269,2.763Zm4.682-4.13a4.681,4.681,0,0,1-4.681,4.681,5.313,5.313,0,0,1-4.769-3.069c-1.8-3.274-4.1-5.422-3-6.516.783-.783,2.012-.032,3.089.975h0V4.135a1.377,1.377,0,1,1,2.754,0V6.883a1.379,1.379,0,0,1,2.118.622,1.376,1.376,0,0,1,2.288,1.03v.007a1.379,1.379,0,0,1,2.2,1.1v3.3Z" transform="translate(-5)" fill={fill} fill-rule="evenodd" />
+			<svg
+				id='click'
+				xmlns='http://www.w3.org/2000/svg'
+				width='24'
+				height='24'
+				viewBox='0 0 24 24'>
+				<rect
+					id='Rectangle_140'
+					data-name='Rectangle 140'
+					width='24'
+					height='24'
+					fill='rgba(255,255,255,0)'
+				/>
+				<g id='Page-1' transform='translate(1 4)'>
+					<g id='icon-27-one-finger-click' transform='translate(5)'>
+						<path
+							id='one-finger-click'
+							d='M9.474,0V2.2h.551V0ZM13,1.419,11.288,2.805l.347.428,1.712-1.386L13,1.419Zm1.1,3.709-2.146-.5-.124.537,2.146.5.124-.537Zm-8.586.537,2.146-.5-.124-.537-2.146.5.124.537Zm.634-3.818L7.864,3.233l.347-.428L6.5,1.419l-.347.428Zm6.9,15.225a4.213,4.213,0,0,0,4.131-4.13h0v-3.3a.826.826,0,1,0-1.652,0v.274h-.551V8.54a.826.826,0,1,0-1.652,0v.823h-.551V7.989a.826.826,0,1,0-1.652,0V9.913h-.551V4.133a.826.826,0,1,0-1.652,0v6.22C7.79,9.142,6.3,7.809,5.686,8.424s.944,2.261,3.1,5.886c.971,1.633,2.2,2.763,4.269,2.763Zm4.682-4.13a4.681,4.681,0,0,1-4.681,4.681,5.313,5.313,0,0,1-4.769-3.069c-1.8-3.274-4.1-5.422-3-6.516.783-.783,2.012-.032,3.089.975h0V4.135a1.377,1.377,0,1,1,2.754,0V6.883a1.379,1.379,0,0,1,2.118.622,1.376,1.376,0,0,1,2.288,1.03v.007a1.379,1.379,0,0,1,2.2,1.1v3.3Z'
+							transform='translate(-5)'
+							fill={fill}
+							fill-rule='evenodd'
+						/>
 					</g>
 				</g>
 			</svg>
-
-		)
-	}
+		);
+	};
 
 	return (
 		<>
@@ -240,7 +280,7 @@ const PaintStore = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' />
+									<img src={howIcon} alt='' loading='lazy' />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -252,196 +292,514 @@ const PaintStore = () => {
 						</nav>
 					</div>
 				</div>
-				{
-					loading ?
-						<div className="data-container">
-							<CircularLoading />
-						</div>
-						:
-						<div className="data-container">
-							<Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel1bh-content"
-									id="panel1bh-header"
-								>
-									<Caaard />
-									<h6>اللون الأساسي</h6>
-									<p>(يمكنك تغيير اللون الأساسي للقالب)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-2">
-										<div className="text">
-											<Caaard />
-											<span>اللون الأساسي</span>
-										</div>
-										<label htmlFor="primary-bg" className="picker-bg" style={{ backgroundColor: primaryBg, borderColor: primaryBg ? primaryBg : '#000000' }}>
-											<label htmlFor="primary-bg-picker">
-												<ClickIcon fill={primaryBg ? primaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="primary-bg-picker" type="color" value={primaryBg} onChange={(e) => setPrimaryBg(e.target.value)} />
-											</label>
-											<input style={{ color: primaryBg ? primaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="primary-bg" type="text" value={primaryBg} onChange={(e) => setPrimaryBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) )} />
-										</label>
+				{loading ? (
+					<div className='data-container'>
+						<CircularLoading />
+					</div>
+				) : (
+					<div className='data-container'>
+						<Accordion
+							expanded={expanded === "panel1"}
+							onChange={handleChange("panel1")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel1bh-content'
+								id='panel1bh-header'>
+								<Caaard />
+								<h6>اللون الأساسي</h6>
+								<p>(يمكنك تغيير اللون الأساسي للقالب)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-2'>
+									<div className='text'>
+										<Caaard />
+										<span>اللون الأساسي</span>
 									</div>
-									<button className="reset" type="button" onClick={resetPrimaryColor}>اعادة اللون الإفتراضي</button>
-									<button type="button" onClick={handlePrimaryUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel2bh-content"
-									id="panel2bh-header"
-								>
-									<Category />
-									<h6>اللون الفرعي</h6>
-									<p>(يمكنك تغيير اللون الفرعي للقالب)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-2">
-										<div className="text">
-											<Category />
-											<span>اللون الفرعي</span>
-										</div>
-										<label htmlFor="secondary-bg" className="picker-bg" style={{ backgroundColor: secondaryBg, borderColor: secondaryBg ? secondaryBg : '#000000' }}>
-											<label htmlFor="secondary-bg-picker">
-												<ClickIcon fill={secondaryBg ? secondaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="secondary-bg-picker" type="color" value={secondaryBg} onChange={(e) => setSecondaryBg(e.target.value)} />
-											</label>
-											<input style={{ color: secondaryBg ? secondaryBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="secondary-bg" type="text" value={secondaryBg} onChange={(e) => setSecondaryBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
+									<label
+										htmlFor='primary-bg'
+										className='picker-bg'
+										style={{
+											backgroundColor: primaryBg,
+											borderColor: primaryBg ? primaryBg : "#000000",
+										}}>
+										<label htmlFor='primary-bg-picker'>
+											<ClickIcon
+												fill={
+													primaryBg
+														? primaryBg !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='primary-bg-picker'
+												type='color'
+												value={primaryBg}
+												onChange={(e) => setPrimaryBg(e.target.value)}
+											/>
 										</label>
+										<input
+											style={{
+												color: primaryBg
+													? primaryBg !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='primary-bg'
+											type='text'
+											value={primaryBg}
+											onChange={(e) =>
+												setPrimaryBg(
+													e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7)
+												)
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetPrimaryColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handlePrimaryUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+						<Accordion
+							expanded={expanded === "panel2"}
+							onChange={handleChange("panel2")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel2bh-content'
+								id='panel2bh-header'>
+								<Category />
+								<h6>اللون الفرعي</h6>
+								<p>(يمكنك تغيير اللون الفرعي للقالب)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-2'>
+									<div className='text'>
+										<Category />
+										<span>اللون الفرعي</span>
 									</div>
-									<button className="reset" type="button" onClick={resetSecondaryColor}>اعادة اللون الإفتراضي</button>
-									<button type="button" onClick={handleSecondaryUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel3bh-content"
-									id="panel3bh-header"
-								>
-									<Menuu />
-									<h6>خلفية الهيدر</h6>
-									<p>(يمكنك تغيير لون خلفية الهيدر أو القائمة العلوية التي يوجد بها أسماء صفحات متجرك)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-2">
-										<div className="text">
-											<Menuu />
-											<span>لون القائمة العلوية</span>
-										</div>
-										<label htmlFor="menu-bg" className="picker-bg" style={{ backgroundColor: headerBg, borderColor: headerBg ? headerBg : '#000000' }}>
-											<label htmlFor="menu-bg-picker">
-											<ClickIcon fill={headerBg ? headerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="menu-bg-picker" type="color" value={headerBg} onChange={(e) => setHeaderBg(e.target.value)} />
-											</label>
-											<input style={{ color: headerBg ? headerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="menu-bg" type="text" value={headerBg} onChange={(e) => setHeaderBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
+									<label
+										htmlFor='secondary-bg'
+										className='picker-bg'
+										style={{
+											backgroundColor: secondaryBg,
+											borderColor: secondaryBg ? secondaryBg : "#000000",
+										}}>
+										<label htmlFor='secondary-bg-picker'>
+											<ClickIcon
+												fill={
+													secondaryBg
+														? secondaryBg !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='secondary-bg-picker'
+												type='color'
+												value={secondaryBg}
+												onChange={(e) => setSecondaryBg(e.target.value)}
+											/>
 										</label>
+										<input
+											style={{
+												color: secondaryBg
+													? secondaryBg !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='secondary-bg'
+											type='text'
+											value={secondaryBg}
+											onChange={(e) =>
+												setSecondaryBg(
+													e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7)
+												)
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetSecondaryColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handleSecondaryUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+						<Accordion
+							expanded={expanded === "panel3"}
+							onChange={handleChange("panel3")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel3bh-content'
+								id='panel3bh-header'>
+								<Menuu />
+								<h6>خلفية الهيدر</h6>
+								<p>
+									(يمكنك تغيير لون خلفية الهيدر أو القائمة العلوية التي يوجد بها
+									أسماء صفحات متجرك)
+								</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-2'>
+									<div className='text'>
+										<Menuu />
+										<span>لون القائمة العلوية</span>
 									</div>
-									<button className="reset" type="button" onClick={resetHeaderColor}>اعادة اللون الإفتراضي</button>
-									<button type="button" onClick={handleHeaderUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel4bh-content"
-									id="panel4bh-header"
-								>
-									<Background />
-									<h6>الخلفية</h6>
-									<p>(يمكنك تغيير لون الخلفية على جميع واجهات متجرك)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-2">
-										<div className="text">
-											<Background />
-											<span>لون الخلفية</span>
-										</div>
-										<label htmlFor="layout-bg" className="picker-bg" style={{ backgroundColor: layoutBg, borderColor: layoutBg ? layoutBg : '#000000' }}>
-											<label htmlFor="layout-bg-picker">
-											<ClickIcon fill={layoutBg ? layoutBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="layout-bg-picker" type="color" value={layoutBg} onChange={(e) => setLayoutBg(e.target.value)} />
-											</label>
-											<input style={{ color: layoutBg ? layoutBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="layout-bg" type="text" value={layoutBg} onChange={(e) => setLayoutBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
+									<label
+										htmlFor='menu-bg'
+										className='picker-bg'
+										style={{
+											backgroundColor: headerBg,
+											borderColor: headerBg ? headerBg : "#000000",
+										}}>
+										<label htmlFor='menu-bg-picker'>
+											<ClickIcon
+												fill={
+													headerBg
+														? headerBg !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='menu-bg-picker'
+												type='color'
+												value={headerBg}
+												onChange={(e) => setHeaderBg(e.target.value)}
+											/>
 										</label>
+										<input
+											style={{
+												color: headerBg
+													? headerBg !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='menu-bg'
+											type='text'
+											value={headerBg}
+											onChange={(e) =>
+												setHeaderBg(
+													e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7)
+												)
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetHeaderColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handleHeaderUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+						<Accordion
+							expanded={expanded === "panel4"}
+							onChange={handleChange("panel4")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel4bh-content'
+								id='panel4bh-header'>
+								<Background />
+								<h6>الخلفية</h6>
+								<p>(يمكنك تغيير لون الخلفية على جميع واجهات متجرك)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-2'>
+									<div className='text'>
+										<Background />
+										<span>لون الخلفية</span>
 									</div>
-									<button className="reset" type="button" onClick={resetLayoutColor}>اعادة اللون الإفتراضي</button>
-									<button type="button" onClick={handleLayotUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel5bh-content"
-									id="panel5bh-header"
-								>
-									<Icons />
-									<h6>الأيقونات</h6>
-									<p>(يمكنك تغيير لون جميع الأيقونات الموجودة في متجرك)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-2">
-										<div className="text">
-											<Icons />
-											<span>لون الأيقونات</span>
-										</div>
-										<label htmlFor="icons-bg" className="picker-bg" style={{ backgroundColor: iconsBg, borderColor: iconsBg ? iconsBg : '#000000' }}>
-											<label htmlFor="icons-bg-picker">
-											<ClickIcon fill={iconsBg ? iconsBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="icons-bg-picker" type="color" value={iconsBg} onChange={(e) => setIconsBg(e.target.value)} />
-											</label>
-											<input style={{ color: iconsBg ? iconsBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="icons-bg" type="text" value={iconsBg} onChange={(e) => setIconsBg(e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7))} />
+									<label
+										htmlFor='layout-bg'
+										className='picker-bg'
+										style={{
+											backgroundColor: layoutBg,
+											borderColor: layoutBg ? layoutBg : "#000000",
+										}}>
+										<label htmlFor='layout-bg-picker'>
+											<ClickIcon
+												fill={
+													layoutBg
+														? layoutBg !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='layout-bg-picker'
+												type='color'
+												value={layoutBg}
+												onChange={(e) => setLayoutBg(e.target.value)}
+											/>
 										</label>
+										<input
+											style={{
+												color: layoutBg
+													? layoutBg !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='layout-bg'
+											type='text'
+											value={layoutBg}
+											onChange={(e) =>
+												setLayoutBg(
+													e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7)
+												)
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetLayoutColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handleLayotUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+						<Accordion
+							expanded={expanded === "panel5"}
+							onChange={handleChange("panel5")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel5bh-content'
+								id='panel5bh-header'>
+								<Icons />
+								<h6>الأيقونات</h6>
+								<p>(يمكنك تغيير لون جميع الأيقونات الموجودة في متجرك)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-2'>
+									<div className='text'>
+										<Icons />
+										<span>لون الأيقونات</span>
 									</div>
-									<button className="reset" type="button" onClick={resetIconsColor}>اعادة اللون الإفتراضي</button>
-									<button type="button" onClick={handleIconUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-							<Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
-								<AccordionSummary
-									expandIcon={<ExpandMoreIcon />}
-									aria-controls="panel6bh-content"
-									id="panel6bh-header"
-								>
-									<Footer />
-									<h6>القائمة السفلية Footer</h6>
-									<p>(يمكنك تغيير لون المربع الموجود في أسفل متجرك)</p>
-								</AccordionSummary>
-								<AccordionDetails>
-									<div className="content mb-4">
-										<div className="text">
-											<Border />
-											<span>لون الإطار</span>
-										</div>
-										<label htmlFor="footer-border" className="picker" style={{ borderColor: footer.footerBorder ? footer.footerBorder : '#000000' }}>
-											<label htmlFor="footer-border-picker">
-											<ClickIcon fill={footer.footerBorder ? footer.footerBorder !== '#ffffff' ? footer.footerBorder : '#000000' : '#000000'}/>
-												<input id="footer-border-picker" type="color" value={footer.footerBorder} onChange={(e) => setFooter({ ...footer, footerBorder: e.target.value })} />
-											</label>
-											<input style={{ color: footer.footerBorder ? footer.footerBorder !== '#ffffff' ? footer.footerBorder : '#000000' : '#000000' }} id="footer-border" type="text" value={footer.footerBorder} onChange={(e) => setFooter({ ...footer, footerBorder: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
+									<label
+										htmlFor='icons-bg'
+										className='picker-bg'
+										style={{
+											backgroundColor: iconsBg,
+											borderColor: iconsBg ? iconsBg : "#000000",
+										}}>
+										<label htmlFor='icons-bg-picker'>
+											<ClickIcon
+												fill={
+													iconsBg
+														? iconsBg !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='icons-bg-picker'
+												type='color'
+												value={iconsBg}
+												onChange={(e) => setIconsBg(e.target.value)}
+											/>
 										</label>
+										<input
+											style={{
+												color: iconsBg
+													? iconsBg !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='icons-bg'
+											type='text'
+											value={iconsBg}
+											onChange={(e) =>
+												setIconsBg(
+													e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7)
+												)
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetIconsColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handleIconUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+						<Accordion
+							expanded={expanded === "panel6"}
+							onChange={handleChange("panel6")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel6bh-content'
+								id='panel6bh-header'>
+								<Footer />
+								<h6>القائمة السفلية Footer</h6>
+								<p>(يمكنك تغيير لون المربع الموجود في أسفل متجرك)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-4'>
+									<div className='text'>
+										<Border />
+										<span>لون الإطار</span>
 									</div>
-									<div className="content mb-2">
-										<div className="text">
-											<Border01 />
-											<span>لون المربع</span>
-										</div>
-										<label htmlFor="footer-bg" className="picker-bg" style={{ backgroundColor: footer.footerBg, borderColor: footer.footerBg ? footer.footerBg : '#000000' }}>
-											<label htmlFor="footer-bg-picker">
-											<ClickIcon fill={footer.footerBg ? footer.footerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000'}/>
-												<input id="footer-bg-picker" type="color" value={footer.footerBg} onChange={(e) => setFooter({ ...footer, footerBg: e.target.value })} />
-											</label>
-											<input style={{ color: footer.footerBg ? footer.footerBg !== '#ffffff' ? '#ffffff' : '#000000' : '#000000' }} id="footer-bg" type="text" value={footer.footerBg} onChange={(e) => setFooter({ ...footer, footerBg: e.target.value.replace(/[^#A-Fa-f0-9]/g, "").slice(0, 7) })} />
+									<label
+										htmlFor='footer-border'
+										className='picker'
+										style={{
+											borderColor: footer.footerBorder
+												? footer.footerBorder
+												: "#000000",
+										}}>
+										<label htmlFor='footer-border-picker'>
+											<ClickIcon
+												fill={
+													footer.footerBorder
+														? footer.footerBorder !== "#ffffff"
+															? footer.footerBorder
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='footer-border-picker'
+												type='color'
+												value={footer.footerBorder}
+												onChange={(e) =>
+													setFooter({ ...footer, footerBorder: e.target.value })
+												}
+											/>
 										</label>
+										<input
+											style={{
+												color: footer.footerBorder
+													? footer.footerBorder !== "#ffffff"
+														? footer.footerBorder
+														: "#000000"
+													: "#000000",
+											}}
+											id='footer-border'
+											type='text'
+											value={footer.footerBorder}
+											onChange={(e) =>
+												setFooter({
+													...footer,
+													footerBorder: e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7),
+												})
+											}
+										/>
+									</label>
+								</div>
+								<div className='content mb-2'>
+									<div className='text'>
+										<Border01 />
+										<span>لون المربع</span>
 									</div>
-									<button className="reset" type="button" onClick={resetFooterColor}>اعادة اللون الإفتراضي</button>
-									<button type="button" onClick={handleFooterUpdate}>حـفـظ</button>
-								</AccordionDetails>
-							</Accordion>
-						</div>
-				}
+									<label
+										htmlFor='footer-bg'
+										className='picker-bg'
+										style={{
+											backgroundColor: footer.footerBg,
+											borderColor: footer.footerBg
+												? footer.footerBg
+												: "#000000",
+										}}>
+										<label htmlFor='footer-bg-picker'>
+											<ClickIcon
+												fill={
+													footer.footerBg
+														? footer.footerBg !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='footer-bg-picker'
+												type='color'
+												value={footer.footerBg}
+												onChange={(e) =>
+													setFooter({ ...footer, footerBg: e.target.value })
+												}
+											/>
+										</label>
+										<input
+											style={{
+												color: footer.footerBg
+													? footer.footerBg !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='footer-bg'
+											type='text'
+											value={footer.footerBg}
+											onChange={(e) =>
+												setFooter({
+													...footer,
+													footerBg: e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7),
+												})
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetFooterColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handleFooterUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+					</div>
+				)}
 			</section>
 		</>
 	);

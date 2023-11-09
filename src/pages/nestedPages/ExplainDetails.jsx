@@ -47,7 +47,7 @@ const ExplainDetails = () => {
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
 										<Link to='/' className='me-2'>
-											<img src={arrowBack} alt='' />
+											<img src={arrowBack} alt='' loading='lazy' />
 											<span className='me-2'> الرئيسية</span>
 										</Link>
 									</li>

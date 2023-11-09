@@ -1,13 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // MUI
 import Badge from "@mui/material/Badge";
 
 // icons
 import { MdNotifications } from "react-icons/md";
-
-// NotificationSound
-import notificationSound from "../../../data/notificationSound/out-of-nowhere-message-tone.mp3";
 
 // Third Party
 import axios from "axios";
@@ -23,32 +20,6 @@ const Notifications = () => {
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);
 	// ---------------------------------------------------------
-
-	// handle play notification sound if the fetchedData?.data?.count_of_notifications is !== 0
-	const Sound = new Audio(notificationSound);
-
-	// Function to play the notification sound
-	function playNotificationSound() {
-		Sound.play().catch((error) => {
-			console.error("Failed to play the notification sound:", error);
-		});
-	}
-
-	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (
-				!document.hasFocus() ||
-				fetchedData?.data?.count_of_notifications !== 0
-			) {
-				playNotificationSound();
-			}
-		}, 2000);
-		return () => {
-			clearTimeout(debounce);
-		};
-	}, [fetchedData?.data?.count_of_notifications]);
-
-	// ---------------------------------------------------------------
 
 	// Mark a notification as read
 	const markNotificationAsRead = (e) => {

@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
-import arrowBack from '../data/Icons/icon-30-arrwos back.svg';
-import TemplateUpdate from '../components/TemplateUpdate';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { Link } from "react-router-dom";
+import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+import TemplateUpdate from "../components/TemplateUpdate";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Template = () => {
 	return (
@@ -17,7 +17,13 @@ const Template = () => {
 						<div className='search-icon'>
 							<AiOutlineSearch color='#02466A' />
 						</div>
-						<input type='text' name='search' id='search' className='input' placeholder='أدخل كلمة البحث' />
+						<input
+							type='text'
+							name='search'
+							id='search'
+							className='input'
+							placeholder='أدخل كلمة البحث'
+						/>
 					</div>
 				</div>
 				<div className='head-category mb-md-4 mb-3'>
@@ -26,7 +32,7 @@ const Template = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={arrowBack} alt='' />
+										<img src={arrowBack} alt='' loading='lazy' />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

@@ -313,32 +313,32 @@ const CreateOffer = () => {
 			offer?.offer_type === "fixed_amount"
 				? offer?.fixed_offer_apply
 				: offer?.offer_type === "percent"
-					? offer?.offer_apply
-					: ""
+				? offer?.offer_apply
+				: ""
 		);
 		formData.append(
 			"offer_type_minimum",
 			offer?.offer_type === "fixed_amount"
 				? data?.fixed_offer_type_minimum
 				: offer?.offer_type === "percent"
-					? data?.offer_type_minimum
-					: ""
+				? data?.offer_type_minimum
+				: ""
 		);
 		formData.append(
 			"offer_amount_minimum",
 			offer?.offer_type === "fixed_amount"
 				? offer?.fixed_offer_amount_minimum
 				: offer?.offer_type === "percent"
-					? offer?.offer_amount_minimum
-					: ""
+				? offer?.offer_amount_minimum
+				: ""
 		);
 		formData.append(
 			"coupon_status",
 			offer?.offer_type === "fixed_amount"
 				? fixedCouponStatus
 				: offer?.offer_type === "percent"
-					? couponStatus
-					: ""
+				? couponStatus
+				: ""
 		);
 		formData.append(
 			"discount_value_offer3",
@@ -419,7 +419,7 @@ const CreateOffer = () => {
 										<ol className='breadcrumb'>
 											<li className='breadcrumb-item'>
 												<Link to='/' className='me-2'>
-													<img src={howIcon} alt='' />
+													<img src={howIcon} alt='' loading='lazy' />
 													<span className='me-2'> الرئيسية</span>
 												</Link>
 											</li>
@@ -589,8 +589,8 @@ const CreateOffer = () => {
 															return selected === "store_website"
 																? "موقع المتجر"
 																: selected === "store_application"
-																	? "تطبيق الموقع"
-																	: "موقع و تطبيق المتجر";
+																? "تطبيق الموقع"
+																: "موقع و تطبيق المتجر";
 														}}>
 														<MenuItem value='store_website'>
 															<LaptopIcon />
@@ -723,7 +723,11 @@ const CreateOffer = () => {
 																id='count'
 																placeholder='0'
 																value={value}
-																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
 															/>
 														)}
 													/>
@@ -848,9 +852,9 @@ const CreateOffer = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																				{
+																					paddingRight: "20px",
+																				},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -965,7 +969,11 @@ const CreateOffer = () => {
 																id='count'
 																placeholder='0'
 																value={value}
-																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
 															/>
 														)}
 													/>
@@ -1086,9 +1094,9 @@ const CreateOffer = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																				{
+																					paddingRight: "20px",
+																				},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -1225,13 +1233,22 @@ const CreateOffer = () => {
 																									"يجب أن تكون نسبة الخصم أقل من 100",
 																							},
 																						}}
-																						render={({ field: { onChange, value } }) => (
+																						render={({
+																							field: { onChange, value },
+																						}) => (
 																							<input
 																								name='discount_percent'
 																								type='text'
 																								placeholder='0'
 																								value={value}
-																								onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																								onChange={(e) =>
+																									onChange(
+																										e.target.value.replace(
+																											/[^0-9]/g,
+																											""
+																										)
+																									)
+																								}
 																							/>
 																						)}
 																					/>
@@ -1315,7 +1332,14 @@ const CreateOffer = () => {
 																			type='text'
 																			placeholder='0'
 																			value={value}
-																			onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																			onChange={(e) =>
+																				onChange(
+																					e.target.value.replace(
+																						/[^\d.]|\.(?=.*\.)/g,
+																						""
+																					)
+																				)
+																			}
 																		/>
 																	)}
 																/>
@@ -1370,7 +1394,7 @@ const CreateOffer = () => {
 															<label
 																className={
 																	offer?.fixed_offer_apply ===
-																		"selected_product"
+																	"selected_product"
 																		? "active me-3"
 																		: " me-3"
 																}
@@ -1387,7 +1411,7 @@ const CreateOffer = () => {
 															<label
 																className={
 																	offer?.fixed_offer_apply ===
-																		"selected_category"
+																	"selected_category"
 																		? "active me-3"
 																		: " me-3"
 																}
@@ -1404,7 +1428,7 @@ const CreateOffer = () => {
 															<label
 																className={
 																	offer?.fixed_offer_apply ===
-																		"selected_payment"
+																	"selected_payment"
 																		? "active me-3"
 																		: " me-3"
 																}
@@ -1483,9 +1507,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -1556,9 +1580,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -1663,7 +1687,9 @@ const CreateOffer = () => {
 																			<Controller
 																				name={"fixed_offer_amount_minimum"}
 																				control={control}
-																				render={({ field: { onChange, value } }) => (
+																				render={({
+																					field: { onChange, value },
+																				}) => (
 																					<input
 																						name='fixed_offer_amount_minimum'
 																						value={
@@ -1672,12 +1698,26 @@ const CreateOffer = () => {
 																								: offer?.fixed_offer_amount_minimum
 																						}
 																						onChange={(e) => {
-																							setOffer({ ...offer, fixed_offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																							onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																							setOffer({
+																								...offer,
+																								fixed_offer_amount_minimum:
+																									e.target.value.replace(
+																										/[^\d.]|\.(?=.*\.)/g,
+																										""
+																									),
+																							});
+																							onChange(
+																								e.target.value.replace(
+																									/[^\d.]|\.(?=.*\.)/g,
+																									""
+																								)
+																							);
 																						}}
 																						type='text'
 																						placeholder='0'
-																						disabled={value !== "purchase_amount"}
+																						disabled={
+																							value !== "purchase_amount"
+																						}
 																					/>
 																				)}
 																			/>
@@ -1717,7 +1757,9 @@ const CreateOffer = () => {
 																		<Controller
 																			name={"fixed_offer_amount_minimum"}
 																			control={control}
-																			render={({ field: { onChange, value } }) => (
+																			render={({
+																				field: { onChange, value },
+																			}) => (
 																				<input
 																					name='fixed_offer_amount_minimum'
 																					value={
@@ -1726,12 +1768,26 @@ const CreateOffer = () => {
 																							: offer?.fixed_offer_amount_minimum
 																					}
 																					onChange={(e) => {
-																						setOffer({ ...offer, fixed_offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																						onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																						setOffer({
+																							...offer,
+																							fixed_offer_amount_minimum:
+																								e.target.value.replace(
+																									/[^\d.]|\.(?=.*\.)/g,
+																									""
+																								),
+																						});
+																						onChange(
+																							e.target.value.replace(
+																								/[^\d.]|\.(?=.*\.)/g,
+																								""
+																							)
+																						);
 																					}}
 																					type='text'
 																					placeholder='0'
-																					disabled={value !== "product_quantity"}
+																					disabled={
+																						value !== "product_quantity"
+																					}
 																				/>
 																			)}
 																		/>
@@ -1825,7 +1881,11 @@ const CreateOffer = () => {
 																			type='text'
 																			placeholder='0'
 																			value={value}
-																			onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																			onChange={(e) =>
+																				onChange(
+																					e.target.value.replace(/[^0-9]/g, "")
+																				)
+																			}
 																		/>
 																	)}
 																/>
@@ -1876,7 +1936,14 @@ const CreateOffer = () => {
 																			type='text'
 																			placeholder='0'
 																			value={value}
-																			onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																			onChange={(e) =>
+																				onChange(
+																					e.target.value.replace(
+																						/[^\d.]|\.(?=.*\.)/g,
+																						""
+																					)
+																				)
+																			}
 																		/>
 																	)}
 																/>
@@ -2041,9 +2108,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -2114,9 +2181,9 @@ const CreateOffer = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -2222,7 +2289,9 @@ const CreateOffer = () => {
 																			<Controller
 																				name={"offer_amount_minimum"}
 																				control={control}
-																				render={({ field: { onChange, value } }) => (
+																				render={({
+																					field: { onChange, value },
+																				}) => (
 																					<input
 																						name='offer_amount_minimum'
 																						value={
@@ -2231,12 +2300,26 @@ const CreateOffer = () => {
 																								: offer?.offer_amount_minimum
 																						}
 																						onChange={(e) => {
-																							setOffer({ ...offer, offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																							onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																							setOffer({
+																								...offer,
+																								offer_amount_minimum:
+																									e.target.value.replace(
+																										/[^\d.]|\.(?=.*\.)/g,
+																										""
+																									),
+																							});
+																							onChange(
+																								e.target.value.replace(
+																									/[^\d.]|\.(?=.*\.)/g,
+																									""
+																								)
+																							);
 																						}}
 																						type='text'
 																						placeholder='0'
-																						disabled={value !== "purchase_amount"}
+																						disabled={
+																							value !== "purchase_amount"
+																						}
 																					/>
 																				)}
 																			/>
@@ -2276,7 +2359,9 @@ const CreateOffer = () => {
 																		<Controller
 																			name={"offer_amount_minimum"}
 																			control={control}
-																			render={({ field: { onChange, value } }) => (
+																			render={({
+																				field: { onChange, value },
+																			}) => (
 																				<input
 																					name='offer_amount_minimum'
 																					value={
@@ -2285,12 +2370,26 @@ const CreateOffer = () => {
 																							: offer?.offer_amount_minimum
 																					}
 																					onChange={(e) => {
-																						setOffer({ ...offer, offer_amount_minimum: e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, '') });
-																						onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''));
+																						setOffer({
+																							...offer,
+																							offer_amount_minimum:
+																								e.target.value.replace(
+																									/[^\d.]|\.(?=.*\.)/g,
+																									""
+																								),
+																						});
+																						onChange(
+																							e.target.value.replace(
+																								/[^\d.]|\.(?=.*\.)/g,
+																								""
+																							)
+																						);
 																					}}
 																					type='text'
 																					placeholder='0'
-																					disabled={value !== "product_quantity"}
+																					disabled={
+																						value !== "product_quantity"
+																					}
 																				/>
 																			)}
 																		/>

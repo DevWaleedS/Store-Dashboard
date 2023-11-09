@@ -2,12 +2,75 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
-import { Button, InputAdornment, TextField } from "@mui/material";
+
+// ICONS
 import { MdAdd } from "react-icons/md";
-import { BiSearch } from "react-icons/bi";
-import { GrFormFilter } from "react-icons/gr";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+import { BsSearch } from "react-icons/bs";
+import { FiFilter } from "react-icons/fi";
+import { IoIosArrowDown } from "react-icons/io";
 import PagesTable from "../components/PagesTable";
+import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+
+//Mui
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import { Button } from "@mui/material";
+
+// filter Pages by
+const filtersTypes = [
+	{ id: 2, ar_name: "الحالة", en_name: "status" },
+	{ id: 3, ar_name: "تاريخ الانشاء", en_name: "date" },
+];
+
+const selectFilterStyles = {
+	width: "100%",
+	height: "56px",
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	fontSize: "18px",
+	fontWeight: "500",
+	backgroundColor: "aliceblue",
+	color: "#02466a",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "35px",
+		},
+
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+
+	"& .MuiSelect-nativeInput": {
+		display: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "90%",
+	},
+};
+
+const menuItemStyles = {
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	backgroundColor: "aliceblue",
+	height: "3rem",
+	"&.Mui-selected": {
+		backgroundColor: "#d9f2f9",
+	},
+	"&.Mui-selected:hover ": {
+		backgroundColor: "#d9f2f9",
+	},
+	"&:hover ": {
+		backgroundColor: "#d9f2f9",
+	},
+};
 
 const Pages = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -48,7 +111,7 @@ const Pages = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={arrowBack} alt='' />
+										<img src={arrowBack} alt='' loading='lazy' />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>
@@ -59,57 +122,75 @@ const Pages = () => {
 								</ol>
 							</nav>
 						</div>
-						<div className='col-md-6 col-12 d-flex justify-content-end'>
-							<div className='add-page-btn'>
-								<Button
-									variant='contained'
-									onClick={() => {
-										navigate("AddPage");
-									}}>
-									<MdAdd />
-									<span className='me-2'>انشاء صفحة</span>
-								</Button>
-							</div>
-						</div>
 					</div>
 				</div>
 
-				<div className='row mb-md-4 mb-3'>
-					<div className='col-md-8 col-12 mb-md-0 mb-3'>
+				<div className='row mb-md-4 mb-3 add-category'>
+					<div className='col-md-6 col-12 mb-md-0 mb-3'>
 						<div className='pages-search-bx'>
-							<TextField
+							<BsSearch className='search-icon' />
+							<input
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
-								id='filled-textarea'
-								placeholder='ابحث عن صفحة'
-								InputProps={{
-									startAdornment: (
-										<InputAdornment position='start'>
-											<BiSearch />
-										</InputAdornment>
-									),
-								}}
+								type='text'
+								name='search'
+								id='search'
+								placeholder='ابحث عن  طريق اسم الصفحة'
 							/>
 						</div>
 					</div>
 
-					<div className='col-md-4 col-12'>
+					<div className='col-md-3 col-12 mb-md-0 mb-3'>
 						<div className='pages-filters-bx'>
-							<label htmlFor=''>
-								<GrFormFilter />
-							</label>
-							<select
-								value={select}
-								onChange={(e) => setSelect(e.target.value)}
-								className='form-select'
-								aria-label='Default select example'>
-								<option value=''>فرز حسب</option>
-								<option value='date'>تاريخ الانشاء</option>
-								<option value='status'>الحالة</option>
-							</select>
+							<FormControl sx={{ width: "100%", position: "relative" }}>
+								<FiFilter className='filter-icon' />
+								<Select
+									displayEmpty
+									value={select}
+									onChange={(e) => setSelect(e.target.value)}
+									sx={selectFilterStyles}
+									IconComponent={IoIosArrowDown}
+									inputProps={{ "aria-label": "Without label" }}
+									renderValue={(selected) => {
+										if (select === "") {
+											return <p style={{ color: "#02466a" }}>فرز حسب</p>;
+										}
+										const result =
+											filtersTypes?.filter(
+												(item) => item?.en_name === selected
+											) || "";
+										return result[0]?.ar_name;
+									}}>
+									<MenuItem sx={menuItemStyles} value=''>
+										الكل
+									</MenuItem>
+									{filtersTypes?.map((item) => (
+										<MenuItem
+											sx={menuItemStyles}
+											key={item?.id}
+											value={item?.en_name}>
+											{item?.ar_name}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</div>
+					</div>
+
+					<div className='col-md-3 col-12 '>
+						<div className='add-page-btn'>
+							<Button
+								variant='contained'
+								onClick={() => {
+									navigate("AddPage");
+								}}>
+								<MdAdd />
+								<span className='me-2'>انشاء صفحة</span>
+							</Button>
 						</div>
 					</div>
 				</div>
+
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable

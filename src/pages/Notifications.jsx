@@ -211,7 +211,11 @@ const Notifications = () => {
 													);
 													setActionTitle("Delete");
 												}}>
-												<img src={DeleteIcon} alt='delete-icon' />
+												<img
+													src={DeleteIcon}
+													alt='delete-icon'
+													loading='lazy'
+												/>
 												<h6 className='' style={{ color: "#FF3838" }}>
 													حذف
 												</h6>
