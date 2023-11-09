@@ -1282,7 +1282,7 @@ table,
 .input-box input {
 	position: relative;
 	font-size: 20px;
-	padding: 0 40px;
+	padding: 0 32px;
 }
 
 .input-box svg {
