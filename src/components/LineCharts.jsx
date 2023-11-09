@@ -12,40 +12,34 @@ const LineCharts = ({
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (array_sales_daily && array_sales_monthly && array_sales_weekly) {
-				// TO Convert the object of array_sales_daily to array
-				const dailySales = Object.entries(array_sales_daily);
-				const weeklySales = Object.entries(array_sales_weekly);
-				const monthlySales = Object.entries(array_sales_monthly);
-				// create empty array
-				const arrayOfDaysSales = [];
-				const arrayOfWeeklySales = [];
-				const arrayOfMonthlySales = [];
-				// for of looping to get all days and sales from dailySales array
-				for (const [days, sales] of dailySales) {
-					// push this data into new array
-					arrayOfDaysSales.push({ name: days, sales: Number(sales) });
-				}
-
-				for (const [weeks, sales] of weeklySales) {
-					// push this data into new array
-					arrayOfWeeklySales.push({ name: weeks, sales: Number(sales) });
-				}
-
-				for (const [month, sales] of monthlySales) {
-					// push this data into new array
-					arrayOfMonthlySales.push({ name: month, sales: Number(sales) });
-				}
-				setSales_daily(arrayOfDaysSales);
-				setSales_weekly(arrayOfWeeklySales);
-				setSales_monthly(arrayOfMonthlySales);
+		if (array_sales_daily && array_sales_monthly && array_sales_weekly) {
+			// TO Convert the object of array_sales_daily to array
+			const dailySales = Object.entries(array_sales_daily);
+			const weeklySales = Object.entries(array_sales_weekly);
+			const monthlySales = Object.entries(array_sales_monthly);
+			// create empty array
+			const arrayOfDaysSales = [];
+			const arrayOfWeeklySales = [];
+			const arrayOfMonthlySales = [];
+			// for of looping to get all days and sales from dailySales array
+			for (const [days, sales] of dailySales) {
+				// push this data into new array
+				arrayOfDaysSales.push({ name: days, sales: Number(sales) });
 			}
-		}, 100);
 
-		return () => {
-			clearTimeout(debounce);
-		};
+			for (const [weeks, sales] of weeklySales) {
+				// push this data into new array
+				arrayOfWeeklySales.push({ name: weeks, sales: Number(sales) });
+			}
+
+			for (const [month, sales] of monthlySales) {
+				// push this data into new array
+				arrayOfMonthlySales.push({ name: month, sales: Number(sales) });
+			}
+			setSales_daily(arrayOfDaysSales);
+			setSales_weekly(arrayOfWeeklySales);
+			setSales_monthly(arrayOfMonthlySales);
+		}
 	}, [array_sales_daily, array_sales_weekly, array_sales_monthly]);
 
 	return (
