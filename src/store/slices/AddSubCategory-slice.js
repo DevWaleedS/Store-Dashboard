@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 // import table images
 
 const initialValueState = {
@@ -6,7 +6,7 @@ const initialValueState = {
 };
 // slices
 const AddSubCategorySlice = createSlice({
-	name: 'AddSubCategory',
+	name: "AddSubCategory",
 	initialState: initialValueState,
 	reducers: {
 		openAddSubCategory: (state, action) => {
@@ -18,5 +18,6 @@ const AddSubCategorySlice = createSlice({
 	},
 });
 
-export const { openAddSubCategory, closeAddSubCategory } = AddSubCategorySlice.actions;
+export const { openAddSubCategory, closeAddSubCategory } =
+	AddSubCategorySlice.actions;
 export default AddSubCategorySlice.reducer;
