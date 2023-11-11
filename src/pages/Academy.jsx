@@ -1,9 +1,14 @@
 import React, { useState } from "react";
+
+// Third Party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+
+// Icons
 import { BiSearch } from "react-icons/bi";
-import { InputAdornment, TextField } from "@mui/material";
+import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+
+// Components
 import Explain from "./Explain";
 import CoursesTraining from "./CoursesTraining";
 
@@ -44,33 +49,29 @@ const Academy = () => {
 						<div className='col-md-6 col-12 d-flex justify-content-end'>
 							<div className='pages-search-bx w-100'>
 								{togglePage === 1 ? (
-									<TextField
-										value={searchCourses}
-										onChange={(e) => setSearchCourses(e.target.value)}
-										id='filled-textarea'
-										placeholder='ابحث عن دورة معينة'
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position='start'>
-													<BiSearch />
-												</InputAdornment>
-											),
-										}}
-									/>
+									<div className='pages-search-bx'>
+										<BiSearch className='search-icon' />
+										<input
+											value={searchCourses}
+											onChange={(e) => setSearchCourses(e.target.value)}
+											type='text'
+											name='search'
+											id='search'
+											placeholder='ابحث عن دورة معينة'
+										/>
+									</div>
 								) : (
-									<TextField
-										value={searchExplain}
-										onChange={(e) => setSearchExplain(e.target.value)}
-										id='filled-textarea'
-										placeholder='ابحث عن شرح معينة'
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position='start'>
-													<BiSearch />
-												</InputAdornment>
-											),
-										}}
-									/>
+									<div className='pages-search-bx'>
+										<BiSearch className='search-icon' />
+										<input
+											value={searchExplain}
+											onChange={(e) => setSearchExplain(e.target.value)}
+											type='text'
+											name='search'
+											id='search'
+											placeholder='ابحث عن شرح معينة'
+										/>
+									</div>
 								)}
 							</div>
 						</div>

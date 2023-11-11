@@ -4,7 +4,8 @@ import Details from "../components/Details";
 import TopSection from "../components/TopSection";
 import LineCharts from "../components/LineCharts";
 import useFetch from "../Hooks/UseFetch";
-import { OrdersTableData, PieCharts, ProductsTableData } from "../components";
+import { PieCharts } from "../components";
+import { OrdersTableData, ProductsTableData } from "../components/Tables";
 
 const Home = () => {
 	const { fetchedData, loading } = useFetch(

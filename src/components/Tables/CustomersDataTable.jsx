@@ -1,32 +1,38 @@
 import React, { Fragment, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import axios from "axios";
 
-import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
+//Third party
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
+import { NotificationContext } from "../../Context/NotificationProvider";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
+import Paper from "@mui/material/Paper";
+import Tooltip from "@mui/material/Tooltip";
+import Toolbar from "@mui/material/Toolbar";
+import TableRow from "@mui/material/TableRow";
+import Checkbox from "@mui/material/Checkbox";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import TablePagination from "./TablePagination";
+import TableContainer from "@mui/material/TableContainer";
+
+// Components
+import { TablePagination } from "./TablePagination";
+import GetDateOnly from "../../HelperComponents/GetDateOnly";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // import icons
-import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
-import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import GetDateOnly from "../HelperComponents/GetDateOnly";
-import { UserAuth } from "../Context/UserAuthorProvider";
+import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-report.svg";
+import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
+
 function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
@@ -59,10 +65,7 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
 	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-	orderBy: PropTypes.string.isRequired,
 	rowCount: PropTypes.number,
 };
 
@@ -194,7 +197,10 @@ export default function CustomersDataTable({
 		NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
+	//
 	const [selected, setSelected] = React.useState([]);
+
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
@@ -207,6 +213,20 @@ export default function CustomersDataTable({
 		setAnchorEl(null);
 	};
 
+	// Handle pagination
+	// Avoid a layout jump when reaching the last page with empty rows.
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
+	const allRows = () => {
+		const num = Math.ceil(fetchedData?.length / rowsPerPage);
+		const arr = [];
+		for (let index = 0; index < num; index++) {
+			arr.push(index + 1);
+		}
+		return arr;
+	};
+
+	// HANDLE SELECT ALL ITEMS
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelected = fetchedData?.map((n) => n.id);
@@ -215,6 +235,33 @@ export default function CustomersDataTable({
 		}
 		setSelected([]);
 	};
+	const handleClick = (event, id) => {
+		const selectedIndex = selected.indexOf(id);
+		let newSelected = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
+		}
+
+		setSelected(newSelected);
+	};
+
+	const isSelected = (id) => selected.indexOf(id) !== -1;
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
+	// -----------------------------------------
+
 	// Delete single item
 	const deleteItem = (id) => {
 		axios
@@ -262,44 +309,7 @@ export default function CustomersDataTable({
 			setConfirm(false);
 		}
 	}, [confirm]);
-
-	const handleClick = (event, id) => {
-		const selectedIndex = selected.indexOf(id);
-		let newSelected = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
-	};
-
-	const isSelected = (id) => selected.indexOf(id) !== -1;
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(fetchedData?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
+	// ------------------------------------------------
 
 	return (
 		<Box sx={{ width: "100%" }}>

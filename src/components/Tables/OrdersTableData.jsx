@@ -3,10 +3,10 @@ import { BsArrowLeft } from "react-icons/bs";
 
 import { Link, useNavigate } from "react-router-dom";
 
-// ICons
-import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
-import { ReactComponent as DeleteIcon } from "../data/Icons/icon-24-delete.svg";
+// Icons
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-actions-info_outined.svg";
 
 const OrdersTableData = ({ ordersDetails }) => {
 	const navigate = useNavigate();
@@ -45,7 +45,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 											color: "#52575D",
 											textAlign: "center",
 											background: "#E6F5F6",
-											whiteSpace: "nowrap",
+											whiteSpace: "normal",
 										}}>
 										رقم الطلب
 									</th>

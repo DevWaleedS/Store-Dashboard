@@ -4763,21 +4763,18 @@ input:disabled {
 /* course-details-page */
 
 .course-details-page .course-image {
-	width: 100%;
-	height: auto;
-	max-height: 100%;
-	min-height: 340px;
+	width: 60%;
 	overflow: hidden;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	align-content: center;
 	border: 1px solid #e7e5e5;
-	border-radius: 9px;
-	-webkit-border-radius: 9px;
-	-moz-border-radius: 9px;
-	-ms-border-radius: 9px;
-	-o-border-radius: 9px;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
 }
 
 .course-details-page .course-image img {
@@ -9427,8 +9424,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.course-details-page .course-image {
-		height: 170px;
-		max-height: 170px;
+		width: 100%;
 		border-radius: 4px;
 		-webkit-border-radius: 4px;
 		-moz-border-radius: 4px;

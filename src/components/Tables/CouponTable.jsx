@@ -1,59 +1,39 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+
+// Third party
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import moment from "moment-with-locales-es6";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
+import Paper from "@mui/material/Paper";
+import Switch from "@mui/material/Switch";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Checkbox from "@mui/material/Checkbox";
+import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Switch from "@mui/material/Switch";
-import TablePagination from "./TablePagination";
-import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
-import { DeleteContext } from "../Context/DeleteProvider";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { useCookies } from "react-cookie";
+import TableContainer from "@mui/material/TableContainer";
+
+// Components
+import { TablePagination } from "./TablePagination";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Context
+import Context from "../../Context/context";
+import { DeleteContext } from "../../Context/DeleteProvider";
+import { NotificationContext } from "../../Context/NotificationProvider";
 
 // import icons
-import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
-import moment from "moment-with-locales-es6";
-
-function descendingComparator(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
-}
-
-function getComparator(order, orderBy) {
-	return order === "desc"
-		? (a, b) => descendingComparator(a, b, orderBy)
-		: (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-	const stabilizedThis = array?.map((el, index) => [el, index]);
-	stabilizedThis?.sort((a, b) => {
-		const order = comparator(a[0], b[0]);
-		if (order !== 0) {
-			return order;
-		}
-		return a[1] - b[1];
-	});
-	return stabilizedThis?.map((el) => el[0]);
-}
+import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-report.svg";
 
 function EnhancedTableHead(props) {
 	return (
@@ -90,10 +70,7 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
 	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-	orderBy: PropTypes.string.isRequired,
 	rowCount: PropTypes.number,
 };
 
@@ -219,8 +196,6 @@ EnhancedTableToolbar.propTypes = {
 
 export default function CouponTable({ data, loading, reload, setReload }) {
 	const [cookies] = useCookies(["access_token"]);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -234,16 +209,37 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 		setDeleteReload,
 		setDeleteMethod,
 	} = DeleteStore;
-	const [order, setOrder] = React.useState("asc");
-	const [orderBy, setOrderBy] = React.useState("calories");
+
+	// Handel pagination
+	const [page, setPage] = useState(0);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
+
 	const handleRowsClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
+
+	// Avoid a layout jump when reaching the last page with empty rows.
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
+
+	const allRows = () => {
+		const num = Math.ceil(data?.length / rowsPerPage);
+		const arr = [];
+		for (let index = 0; index < num; index++) {
+			arr.push(index + 1);
+		}
+		return arr;
 	};
 
 	/** --------------------------------------------------- */
@@ -258,11 +254,27 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 		setSelected([]);
 	};
 
-	const handleRequestSort = (property) => {
-		const isAsc = orderBy === property && order === "asc";
-		setOrder(isAsc ? "desc" : "asc");
-		setOrderBy(property);
+	const handleClick = (event, id) => {
+		const selectedIndex = selected.indexOf(id);
+		let newSelected = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
+		}
+
+		setSelected(newSelected);
 	};
+	const isSelected = (id) => selected.indexOf(id) !== -1;
+	// -----------------------------------------------------------
 
 	// Delete single item
 	useEffect(() => {
@@ -347,46 +359,6 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 		}
 	}, [confirm]);
 
-	const handleClick = (event, id) => {
-		const selectedIndex = selected.indexOf(id);
-		let newSelected = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
-	};
-
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
-
-	const isSelected = (id) => selected.indexOf(id) !== -1;
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
@@ -399,10 +371,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 						<EnhancedTableHead
 							numSelected={selected.length}
-							order={order}
-							orderBy={orderBy}
 							onSelectAllClick={handleSelectAllClick}
-							onRequestSort={handleRequestSort}
 							rowCount={data?.length}
 						/>
 
@@ -422,7 +391,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 											</TableCell>
 										</TableRow>
 									) : (
-										stableSort(data, getComparator(order, orderBy))
+										data
 											?.slice(
 												page * rowsPerPage,
 												page * rowsPerPage + rowsPerPage

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
-import { CustomersDataTable } from "../components";
+import { CustomersDataTable } from "../components/Tables";
 import { AddCustomer } from "./nestedPages";
 import { useDispatch } from "react-redux";
 

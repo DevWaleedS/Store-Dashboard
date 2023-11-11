@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import useFetch from "../Hooks/UseFetch";
-import { CouponTable } from "../components";
+
 import { Link, useNavigate } from "react-router-dom";
 
 // iCONS
@@ -15,6 +15,7 @@ import howIcon from "../data/Icons/icon_24_home.svg";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import { CouponTable } from "../components/Tables";
 
 // filter Coupon by
 const filtersTypes = [

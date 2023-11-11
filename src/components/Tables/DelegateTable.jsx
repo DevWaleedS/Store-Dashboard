@@ -1,16 +1,24 @@
 import React from "react";
-import useFetch from "../Hooks/UseFetch";
-import CircularLoading from "../HelperComponents/CircularLoading";
+
+// Third party
+import useFetch from "../../Hooks/UseFetch";
+
+// Components
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// REDUX
 import { useSelector } from "react-redux";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
+import Paper from "@mui/material/Paper";
+import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import TableContainer from "@mui/material/TableContainer";
 
 // import icons
 import { IoMdStar } from "react-icons/io";

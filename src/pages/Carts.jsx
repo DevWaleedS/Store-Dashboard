@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { CartsTables } from "../components";
 
 // icons
 import howIcon from "../data/Icons/icon_24_home.svg";
 // custom hooks to get data from server
 import useFetch from "../Hooks/UseFetch";
+import { CartsTables } from "../components/Tables";
 
 const Carts = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(

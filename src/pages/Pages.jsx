@@ -8,7 +8,6 @@ import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
-import PagesTable from "../components/PagesTable";
 import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
 
 //Mui
@@ -16,6 +15,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { Button } from "@mui/material";
+
+// Components
+import { PagesTable } from "../components/Tables";
 
 // filter Pages by
 const filtersTypes = [
@@ -194,9 +196,9 @@ const Pages = () => {
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable
-							data={filterPages}
-							loading={loading}
 							reload={reload}
+							loading={loading}
+							data={filterPages}
 							setReload={setReload}
 						/>
 					</div>

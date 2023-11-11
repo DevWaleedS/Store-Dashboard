@@ -1,28 +1,31 @@
 import React, { Fragment, useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
 
-import Select from "@mui/material/Select";
-
+// Third party
+import "rsuite/dist/rsuite.min.css";
 import { useNavigate } from "react-router-dom";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
+import Select from "@mui/material/Select";
+import Toolbar from "@mui/material/Toolbar";
+import MenuItem from "@mui/material/MenuItem";
+import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import "rsuite/dist/rsuite.min.css";
-
-import TablePagination from "./TablePagination";
+import TableContainer from "@mui/material/TableContainer";
 
 // Icons
-import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-actions-info_outined.svg";
+import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-actions-info_outined.svg";
 import { FiSearch, FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
+
+// Components
+import { TablePagination } from "./TablePagination";
 
 // filter orders by
 const filtersTypes = [
@@ -31,6 +34,7 @@ const filtersTypes = [
 	{ id: 3, ar_name: "كمية الطلب", en_name: "quantity" },
 ];
 
+// Style The MUI Select
 const selectFilterStyles = {
 	width: "100%",
 	height: "100%",
@@ -79,7 +83,7 @@ const menuItemStyles = {
 		backgroundColor: "#d9f2f9",
 	},
 };
-
+// ----------------------------------------------------------------------
 function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
@@ -199,13 +203,13 @@ export default function BigOrdersTable({
 	const navigate = useNavigate();
 
 	const [selected, setSelected] = React.useState([]);
-
-	const [page, setPage] = React.useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(8);
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [itemSelected, setItemSelected] = useState("");
 
+	// To handle table pagination
+	const [page, setPage] = React.useState(0);
+	const rowsPerPagesCount = [10, 20, 30, 50, 100];
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [rowsPerPage, setRowsPerPage] = React.useState(8);
 	const open = Boolean(anchorEl);
 	const handleRowsClick = (event) => {
 		setAnchorEl(event.currentTarget);

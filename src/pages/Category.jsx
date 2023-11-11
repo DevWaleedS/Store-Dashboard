@@ -8,13 +8,13 @@ import { BsSearch } from "react-icons/bs";
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { IoIosArrowDown } from "react-icons/io";
 
-import { CategoryTable } from "../components";
 import useFetch from "../Hooks/UseFetch";
 
 //Mui
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { CategoryTable } from "../components/Tables";
 
 const Category = () => {
 	// to get all  data from server

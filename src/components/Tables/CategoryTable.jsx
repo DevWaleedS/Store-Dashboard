@@ -1,31 +1,38 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
+
+// Third part
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import axios from "axios";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
+import Switch from "@mui/material/Switch";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Switch from "@mui/material/Switch";
-//
-import TablePagination from "./TablePagination";
-import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
-import { DeleteContext } from "../Context/DeleteProvider";
+import TableContainer from "@mui/material/TableContainer";
+
+//Components
+import { TablePagination } from "./TablePagination";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Context
+import Context from "../../Context/context";
+import { DeleteContext } from "../../Context/DeleteProvider";
+import { NotificationContext } from "../../Context/NotificationProvider";
 
 // ICONS
-import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
-import editIcon from "../data/Icons/editt 2.svg";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import editIcon from "../../data/Icons/editt 2.svg";
+import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
 
 function EnhancedTableHead(props) {
 	return (

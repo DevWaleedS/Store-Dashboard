@@ -1,7 +1,11 @@
 import * as React from "react";
+
+// ICONS
 import { BsArrowLeft } from "react-icons/bs";
 
+// third party
 import { useNavigate } from "react-router-dom";
+
 const ProductsTableData = ({ productsDetails }) => {
 	const navigate = useNavigate();
 
@@ -39,6 +43,8 @@ const ProductsTableData = ({ productsDetails }) => {
 											width: "240px",
 											background: "#E6F5F6",
 											color: "#52575D",
+											textAlign: "right",
+											paddingRight: "60px",
 										}}>
 										الاسم
 									</th>
@@ -64,7 +70,7 @@ const ProductsTableData = ({ productsDetails }) => {
 										scope='col'
 										className=' text-center pr-rad-left'
 										style={{
-											whiteSpace: "nowrap",
+											whiteSpace: "normal",
 											width: "90px",
 											background: "#E6F5F6",
 											color: "#52575D",

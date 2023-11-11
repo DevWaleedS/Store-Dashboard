@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
 import { BiSearch } from "react-icons/bi";
-import { SupportTable } from "../components";
+
 import useFetch from "../Hooks/UseFetch";
+import SupportTable from "../components/Tables/SupportTable";
 
 const Support = () => {
 	// to get all  data from server

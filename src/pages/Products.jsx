@@ -2,11 +2,7 @@ import React, { useState, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
-import {
-	BigProductsTable,
-	DropCSVFiles,
-	FormSearchWeight,
-} from "../components";
+import { DropCSVFiles, FormSearchWeight } from "../components";
 import { MdAdd } from "react-icons/md";
 import AddProductFromStore from "./nestedPages/AddProductFromStore";
 import axios from "axios";
@@ -15,6 +11,7 @@ import Context from "../Context/context";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import { LoadingContext } from "../Context/LoadingProvider";
+import { BigProductsTable } from "../components/Tables";
 
 const Products = () => {
 	const [cookies] = useCookies(["access_token"]);

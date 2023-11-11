@@ -1,75 +1,56 @@
-import React, { useState, useContext, useEffect, Fragment } from "react";
+import React, { Fragment, useEffect, useState, useContext } from "react";
+
+// Third party
 import axios from "axios";
+import moment from "moment";
+import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
+// Context
+import Context from "../../Context/context";
+import { DeleteContext } from "../../Context/DeleteProvider";
+import { NotificationContext } from "../../Context/NotificationProvider";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
+import Paper from "@mui/material/Paper";
+import Switch from "@mui/material/Switch";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import { alpha } from "@mui/material/styles";
+import TableRow from "@mui/material/TableRow";
+import Checkbox from "@mui/material/Checkbox";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Switch from "@mui/material/Switch";
-import TablePagination from "./TablePagination";
-// import icons
-import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
-import { ReactComponent as EditIcon } from "../data/Icons/icon-24-edit.svg";
-import { Link } from "react-router-dom";
-import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
-import { DeleteContext } from "../Context/DeleteProvider";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { useCookies } from "react-cookie";
+import TableContainer from "@mui/material/TableContainer";
 
-function descendingComparator(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
-}
+// Components
+import { TablePagination } from "./TablePagination";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
-function getComparator(order, orderBy) {
-	return order === "desc"
-		? (a, b) => descendingComparator(a, b, orderBy)
-		: (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-	const stabilizedThis = array?.map((el, index) => [el, index]);
-	stabilizedThis?.sort((a, b) => {
-		const order = comparator(a[0], b[0]);
-		if (order !== 0) {
-			return order;
-		}
-		return a[1] - b[1];
-	});
-	return stabilizedThis?.map((el) => el[0]);
-}
+// Import Icons
+import editIcon from "../../data/Icons/editt 2.svg";
+import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
 
 function EnhancedTableHead(props) {
 	return (
-		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
+		<TableHead sx={{ backgroundColor: "#c6e1f0" }}>
 			<TableRow>
-				<TableCell align='center' sx={{ color: "#02466a", width: "120px" }}>
+				<TableCell align='left' sx={{ color: "#02466a", width: "80px" }}>
 					م
 				</TableCell>
-
-				<TableCell align='right' sx={{ color: "#02466a" }}>
-					اسم المستخدم
+				<TableCell align='center' sx={{ color: "#02466a" }}>
+					العنوان
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					البريد الالكتروني
+					الناشر
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					المستوي
+					تاريخ النشر
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الحالة
@@ -84,10 +65,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
+
 	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-	orderBy: PropTypes.string.isRequired,
+
 	rowCount: PropTypes.number,
 };
 
@@ -95,12 +75,19 @@ function EnhancedTableToolbar(props) {
 	const { numSelected, rowCount, onSelectAllClick } = props;
 	const NotificationStore = useContext(NotificationContext);
 	const { setNotificationTitle, setActionTitle } = NotificationStore;
+
 	return (
 		<Toolbar
 			sx={{
 				pl: { sm: 2 },
 				pr: { xs: 1, sm: 1 },
-
+				...(numSelected > 0 && {
+					bgcolor: (theme) =>
+						alpha(
+							theme.palette.primary.main,
+							theme.palette.action.activatedOpacity
+						),
+				}),
 				display: "flex",
 				justifyContent: "space-between",
 				flexDirection: "row-reverse",
@@ -113,7 +100,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع المستخدمين وهذةالخظوة غير قابلة للرجوع"
+									"سيتم حذف جميع الصفحات وهذة الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -127,7 +114,7 @@ function EnhancedTableToolbar(props) {
 							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم تغيبر حالة جميع المستخدمين التي قمت بتحديدهم"
+									"سيتم تغيبر حالة جميع الصفحات التي قمت بتحديدهم"
 								);
 								setActionTitle("changeStatus");
 							}}>
@@ -176,7 +163,7 @@ function EnhancedTableToolbar(props) {
 				)}
 			</div>
 
-			<div className=' d-flex align-items-center flex-row-reverse pe-0'>
+			<div className=' d-flex align-items-center flex-row-reverse'>
 				<h2
 					className='h4'
 					style={{
@@ -211,14 +198,11 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function UserAndManagementTable({
-	data,
-	loading,
-	reload,
-	setReload,
-}) {
+// Start Pages Table
+export default function PagesTable({ data, loading, reload, setReload }) {
 	const [cookies] = useCookies(["access_token"]);
-
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -232,13 +216,12 @@ export default function UserAndManagementTable({
 		setDeleteReload,
 		setDeleteMethod,
 	} = DeleteStore;
-	const [order, setOrder] = useState("asc");
-	const [orderBy, setOrderBy] = useState("calories");
-	const [selected, setSelected] = useState([]);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
+
+	const [selected, setSelected] = React.useState([]);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
 	const [anchorEl, setAnchorEl] = React.useState(null);
+
+	// Handle Pagination
 	const open = Boolean(anchorEl);
 	const handleRowsClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -247,12 +230,25 @@ export default function UserAndManagementTable({
 		setAnchorEl(null);
 	};
 
-	const handleRequestSort = (property) => {
-		const isAsc = orderBy === property && order === "asc";
-		setOrder(isAsc ? "desc" : "asc");
-		setOrderBy(property);
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
 	};
 
+	// Avoid a layout jump when reaching the last page with empty rows.
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
+	const allRows = () => {
+		const num = Math.ceil(data?.length / rowsPerPage);
+		const arr = [];
+		for (let index = 0; index < num; index++) {
+			arr.push(index + 1);
+		}
+		return arr;
+	};
+	// ---------------------------------------------
+
+	// Handle Select all Items
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelected = data?.map((n) => n.id);
@@ -261,6 +257,29 @@ export default function UserAndManagementTable({
 		}
 		setSelected([]);
 	};
+	const handleClick = (event, id) => {
+		const selectedIndex = selected.indexOf(id);
+		let newSelected = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
+		}
+
+		setSelected(newSelected);
+	};
+
+	const isSelected = (id) => selected.indexOf(id) !== -1;
+
+	// ---------------------------------------------------
 
 	// Delete single item
 	useEffect(() => {
@@ -270,36 +289,13 @@ export default function UserAndManagementTable({
 		setDeleteReload(false);
 	}, [deleteReload]);
 
-	// change category status
-	const changeUserStatus = (id) => {
-		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/userchangeSatusall?id[]=${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
-					},
-				}
-			)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				}
-			});
-	};
-
 	// Delete all items and Change all status
 	useEffect(() => {
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
 				.get(
-					`https://backend.atlbha.com/api/Store/userdeleteall?${queryParams}`,
+					`https://backend.atlbha.com/api/Store/pagedeleteall?${queryParams}`,
 					{
 						headers: {
 							"Content-Type": "application/json",
@@ -323,7 +319,7 @@ export default function UserAndManagementTable({
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
 				.get(
-					`https://backend.atlbha.com/api/Store/userchangeSatusall?${queryParams}`,
+					`https://backend.atlbha.com/api/Store/pagechangeSatusall?${queryParams}`,
 					{
 						headers: {
 							"Content-Type": "application/json",
@@ -344,44 +340,32 @@ export default function UserAndManagementTable({
 			setConfirm(false);
 		}
 	}, [confirm]);
+	// -------------------------------------------------------
 
-	const handleClick = (event, id) => {
-		const selectedIndex = selected.indexOf(id);
-		let newSelected = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
+	// change category status
+	const changePageStatus = (id) => {
+		axios
+			.post(
+				`https://backend.atlbha.com/api/Store/changePageStatus/${id}`,
+				null,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				} else {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				}
+			});
 	};
-	const isSelected = (id) => selected.indexOf(id) !== -1;
 
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
@@ -394,13 +378,9 @@ export default function UserAndManagementTable({
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 						<EnhancedTableHead
 							numSelected={selected.length}
-							order={order}
-							orderBy={orderBy}
 							onSelectAllClick={handleSelectAllClick}
-							onRequestSort={handleRequestSort}
 							rowCount={data?.length}
 						/>
-
 						<TableBody>
 							{loading ? (
 								<TableRow>
@@ -417,15 +397,14 @@ export default function UserAndManagementTable({
 											</TableCell>
 										</TableRow>
 									) : (
-										stableSort(data, getComparator(order, orderBy))
+										data
 											?.slice(
 												page * rowsPerPage,
 												page * rowsPerPage + rowsPerPage
 											)
 											?.map((row, index) => {
-												const isItemSelected = isSelected(row.id);
+												const isItemSelected = isSelected(row?.id);
 												const labelId = `enhanced-table-checkbox-${index}`;
-
 												return (
 													<TableRow
 														hover
@@ -468,72 +447,43 @@ export default function UserAndManagementTable({
 																})}
 															</div>
 														</TableCell>
-
-														<TableCell align='right'>{row?.name}</TableCell>
-														<TableCell align='center'>{row?.email}</TableCell>
+														<TableCell align='center'>{row?.title}</TableCell>
 														<TableCell align='center'>
-															{row?.role?.name}
+															{row?.user?.name}
 														</TableCell>
 														<TableCell align='center'>
-															<Switch
-																onChange={() => changeUserStatus(row?.id)}
-																checked={row?.status === "نشط" ? true : false}
-																sx={{
-																	width: "50px",
-																	"& .MuiSwitch-track": {
-																		width: 26,
-																		height: 14,
-																		opacity: 1,
-																		backgroundColor: "rgba(0,0,0,.25)",
-																		boxSizing: "border-box",
-																	},
-																	"& .MuiSwitch-thumb": {
-																		boxShadow: "none",
-																		width: 10,
-																		height: 10,
-																		borderRadius: 5,
-																		transform: "translate(6px,6px)",
-																		color: "#fff",
-																	},
-
-																	"&:hover": {
-																		"& .MuiSwitch-thumb": {
-																			boxShadow: "none",
-																		},
-																	},
-
-																	"& .MuiSwitch-switchBase": {
-																		padding: 1,
-																		"&.Mui-checked": {
-																			transform: "translateX(11px)",
-																			color: "#fff",
-																			"& + .MuiSwitch-track": {
-																				opacity: 1,
-																				backgroundColor: "#3AE374",
-																			},
-																		},
-																	},
-																}}
-															/>
+															{moment(row?.created_at).format("YYYY-MM-DD")}
 														</TableCell>
-
-														<TableCell align='right'>
-															<div className='actions d-flex justify-content-evenly'>
-																<Link to={`info/${row.id}`}>
-																	<ReportIcon />
-																</Link>
-																<Link to={`user/${row.id}`}>
-																	<EditIcon />
+														<TableCell align='center'>
+															<span
+																align='center'
+																className='status'
+																style={{
+																	backgroundColor: row.bgColor,
+																	color: row.color,
+																	borderRadius: "16px",
+																	padding: "5px 25px",
+																	fontWeight: 500,
+																}}>
+																{row?.status}
+															</span>
+														</TableCell>
+														<TableCell align='center'>
+															<div className='actions d-flex align-items-center justify-content-evenly'>
+																<Link
+																	to={`EditPage/${row?.id}`}
+																	style={{ cursor: "pointer" }}>
+																	<img src={editIcon} alt='' loading='lazy' />
 																</Link>
 																<span>
 																	<DeletteIcon
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف المستخدم وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
 																			);
-																			setDeleteMethod("get");
+																			setDeleteMethod("delete");
 																			setUrl(
-																				`https://backend.atlbha.com/api/Store/userdeleteall?id[]=${row?.id}`
+																				`https://backend.atlbha.com/api/Store/page/${row?.id}`
 																			);
 																		}}
 																		style={{
@@ -542,12 +492,55 @@ export default function UserAndManagementTable({
 																			fontSize: "1.2rem",
 																		}}></DeletteIcon>
 																</span>
+																<Switch
+																	onChange={() => changePageStatus(row?.id)}
+																	checked={
+																		row?.status === "تم النشر" ? true : false
+																	}
+																	sx={{
+																		width: "50px",
+																		"& .MuiSwitch-track": {
+																			width: 26,
+																			height: 14,
+																			opacity: 1,
+																			backgroundColor: "rgba(0,0,0,.25)",
+																			boxSizing: "border-box",
+																		},
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
+																			width: 10,
+																			height: 10,
+																			borderRadius: 5,
+																			transform: "translate(6px,6px)",
+																			color: "#fff",
+																		},
+
+																		"&:hover": {
+																			"& .MuiSwitch-thumb": {
+																				boxShadow: "none",
+																			},
+																		},
+
+																		"& .MuiSwitch-switchBase": {
+																			padding: 1,
+																			"&.Mui-checked": {
+																				transform: "translateX(11px)",
+																				color: "#fff",
+																				"& + .MuiSwitch-track": {
+																					opacity: 1,
+																					backgroundColor: "#3AE374",
+																				},
+																			},
+																		},
+																	}}
+																/>
 															</div>
 														</TableCell>
 													</TableRow>
 												);
 											})
 									)}
+
 									{emptyRows > 0 && (
 										<TableRow
 											style={{

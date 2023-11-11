@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 // MUI
-import { DataBox, BigOrdersTable } from "../components";
+import { DataBox } from "../components";
 
 // Icons
 import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
 import { AiOutlineSearch } from "react-icons/ai";
+import { BigOrdersTable } from "../components/Tables";
 
 const Orders = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(

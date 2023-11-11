@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Button } from "@mui/material";
-import { UserAndManagementTable } from "../components";
+import { UserAndManagementTable } from "../components/Tables";
 
 const Management = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(

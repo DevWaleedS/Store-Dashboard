@@ -9,8 +9,9 @@ import Select from "@mui/material/Select";
 // ICONS
 import howIcon from "../../data/Icons/icon_24_home.svg";
 import { IoIosArrowDown } from "react-icons/io";
-import { DelegateTable } from "../../components";
+
 import { AiOutlineSearch } from "react-icons/ai";
+import { DelegateTable } from "../../components/Tables";
 
 const Delegate = () => {
 	const { fetchedData } = useFetch(

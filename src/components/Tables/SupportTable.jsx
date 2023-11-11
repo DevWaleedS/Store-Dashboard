@@ -1,71 +1,43 @@
 import React, { Fragment, useEffect, useContext } from "react";
+
+// Third party
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
-import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
-import { DeleteContext } from "../Context/DeleteProvider";
+
+// Context
+import Context from "../../Context/context";
+import { DeleteContext } from "../../Context/DeleteProvider";
+import { NotificationContext } from "../../Context/NotificationProvider";
+
+// MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
+import { Switch } from "@mui/material";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
+import Tooltip from "@mui/material/Tooltip";
+import Toolbar from "@mui/material/Toolbar";
+import Checkbox from "@mui/material/Checkbox";
+import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+import TableContainer from "@mui/material/TableContainer";
 
-import TablePagination from "./TablePagination";
+// Components
+import { TablePagination } from "./TablePagination";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // ICons
 import { GoCheck } from "react-icons/go";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { ReactComponent as ReportIcon } from "../data/Icons/icon-24-report.svg";
-import { ReactComponent as DeletteIcon } from "../data/Icons/icon-24-delete.svg";
-import { ReactComponent as DeadLineIcon } from "../data/Icons/icon-24-deadline.svg";
-import { ReactComponent as HourGleass } from "../data/Icons/icon-24-hourgleass_half.svg";
-import { UserAuth } from "../Context/UserAuthorProvider";
-import { Switch } from "@mui/material";
-
-function descendingComparator(a, b, orderBy) {
-	if (b[orderBy] < a[orderBy]) {
-		return -1;
-	}
-	if (b[orderBy] > a[orderBy]) {
-		return 1;
-	}
-	return 0;
-}
-
-function getComparator(order, orderBy) {
-	return order === "desc"
-		? (a, b) => descendingComparator(a, b, orderBy)
-		: (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-	const stabilizedThis = array?.map((el, index) => [el, index]);
-	stabilizedThis?.sort((a, b) => {
-		const order = comparator(a[0], b[0]);
-		if (order !== 0) {
-			return order;
-		}
-		return a[1] - b[1];
-	});
-	return stabilizedThis?.map((el) => el[0]);
-}
+import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-report.svg";
+import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { ReactComponent as DeadLineIcon } from "../../data/Icons/icon-24-deadline.svg";
+import { ReactComponent as HourGleass } from "../../data/Icons/icon-24-hourgleass_half.svg";
 
 function EnhancedTableHead(props) {
-	const { order, orderBy, onRequestSort } = props;
-	const createSortHandler = (property) => (event) => {
-		onRequestSort(event, property);
-	};
-
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
@@ -94,10 +66,9 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
-	onRequestSort: PropTypes.func.isRequired,
+
 	onSelectAllClick: PropTypes.func.isRequired,
-	order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-	orderBy: PropTypes.string.isRequired,
+
 	rowCount: PropTypes.number,
 };
 
@@ -191,14 +162,15 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		setDeleteReload,
 		setDeleteMethod,
 	} = DeleteStore;
-	const [order, setOrder] = React.useState("asc");
-	const [orderBy, setOrderBy] = React.useState("calories");
+
 	const [selected, setSelected] = React.useState([]);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
 	const [anchorEl, setAnchorEl] = React.useState(null);
+
+	// Handle pagination
 	const open = Boolean(anchorEl);
 	const handleRowsClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -207,13 +179,26 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		setAnchorEl(null);
 	};
 
-	const handleRequestSort = (property) => {
-		const isAsc = orderBy === property && order === "asc";
-		setOrder(isAsc ? "desc" : "asc");
-		setOrderBy(property);
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
 	};
 
-	//
+	// Avoid a layout jump when reaching the last page with empty rows.
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
+
+	const allRows = () => {
+		const num = Math.ceil(fetchedData?.length / rowsPerPage);
+		const arr = [];
+		for (let index = 0; index < num; index++) {
+			arr.push(index + 1);
+		}
+		return arr;
+	};
+	// ---------------------------------------------------------------
+
+	// Handle select all Items
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelected = fetchedData?.map((n) => n.id);
@@ -223,7 +208,28 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		setSelected([]);
 	};
 
-	//
+	const handleClick = (event, id) => {
+		const selectedIndex = selected.indexOf(id);
+		let newSelected = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
+		}
+
+		setSelected(newSelected);
+	};
+	const isSelected = (name) => selected.indexOf(name) !== -1;
+	//---------------------------------------
+
 	// Delete single item
 	useEffect(() => {
 		if (deleteReload === true) {
@@ -259,6 +265,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 			setConfirm(false);
 		}
 	}, [confirm]);
+	// --------------------------------------------
 
 	// change Message status
 	const changeStatus = (id) => {
@@ -283,49 +290,6 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 			});
 	};
 
-	const handleClick = (event, id) => {
-		const selectedIndex = selected.indexOf(id);
-		let newSelected = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
-	};
-	const isSelected = (name) => selected.indexOf(name) !== -1;
-
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-	};
-
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
-
-	const allRows = () => {
-		const num = Math.ceil(fetchedData?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
-
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
@@ -338,10 +302,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 						<EnhancedTableHead
 							numSelected={selected.length}
-							order={order}
-							orderBy={orderBy}
 							onSelectAllClick={handleSelectAllClick}
-							onRequestSort={handleRequestSort}
 							rowCount={fetchedData?.length}
 						/>
 
@@ -361,7 +322,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 											</TableCell>
 										</TableRow>
 									) : (
-										stableSort(fetchedData, getComparator(order, orderBy))
+										fetchedData
 											?.slice(
 												page * rowsPerPage,
 												page * rowsPerPage + rowsPerPage
@@ -435,8 +396,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			row?.supportstatus === "منتهية"
 																				? "#3ae374"
 																				: row?.supportstatus === "غير منتهية "
-																					? "#ff9f1a"
-																					: "#d3d3d3",
+																				? "#ff9f1a"
+																				: "#d3d3d3",
 																		color: "#fff",
 																	}}>
 																	{row?.supportstatus === "منتهية" ? (
@@ -454,7 +415,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 															<div className='actions gap-0 d-flex justify-content-center'>
 																<span
 																	style={{ cursor: "pointer" }}
-																	onClick={() =>{
+																	onClick={() => {
 																		navigate(`supportDetails/${row?.id}`);
 																	}}>
 																	<ReportIcon />
