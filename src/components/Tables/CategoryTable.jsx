@@ -506,24 +506,52 @@ export default function EnhancedTable({
 																</div>
 															) : (
 																<div className='sub-categories'>
-																	{row?.subcategory.slice(0, 2).map((tag) => {
-																		return (
-																			<div
-																				key={tag?.id}
-																				style={{
-																					background:
-																						row?.store === null
-																							? "#FFFF"
-																							: "#dcdcdc",
-																				}}>
-																				<span className='w-100 text-center text-overflow'>
-																					{tag?.name}
-																				</span>
-																			</div>
-																		);
-																	})}
+																	{row?.subcategory?.length <= 2
+																		? row?.subcategory?.map((tag) => {
+																				return (
+																					<div
+																						key={tag?.id}
+																						style={{
+																							background:
+																								row?.store === null
+																									? "#FFFF"
+																									: "#dcdcdc",
+																							minWidth: "50%",
+																						}}>
+																						<span className='w-100 text-center text-overflow'>
+																							{tag?.name}
+																						</span>
+																					</div>
+																				);
+																		  })
+																		: row?.subcategory
+																				.slice(0, 2)
+																				.map((tag) => {
+																					return (
+																						<div
+																							key={tag?.id}
+																							style={{
+																								background:
+																									row?.store === null
+																										? "#FFFF"
+																										: "#dcdcdc",
+																							}}>
+																							<span className='w-100 text-center text-overflow'>
+																								{tag?.name}
+																							</span>
+																						</div>
+																					);
+																				})}
+
 																	{row?.subcategory?.length > 2 && (
-																		<div>
+																		<div
+																			style={{
+																				background:
+																					row?.store === null
+																						? "#FFFF"
+																						: "#dcdcdc",
+																				minWidth: "max-content",
+																			}}>
 																			<Link
 																				to={`EditCategory/${row?.id}`}
 																				style={{ cursor: "pointer" }}
