@@ -45,19 +45,11 @@ const VerifyStore = () => {
 	const dispatch = useDispatch(false);
 
 	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (fetchedData?.data?.stores) {
-				setVerificationStatus(
-					fetchedData?.data?.stores?.map(
-						(store) => store?.verification_status
-					)[0]
-				);
-			}
-		}, 1000);
-
-		return () => {
-			clearTimeout(debounce);
-		};
+		if (fetchedData?.data?.stores) {
+			setVerificationStatus(
+				fetchedData?.data?.stores?.map((store) => store?.verification_status)[0]
+			);
+		}
 	}, [fetchedData?.data?.stores]);
 
 	return (

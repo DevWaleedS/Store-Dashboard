@@ -152,7 +152,9 @@ const AddCategory = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> اضافة تصنيف</h5>
-										<p>قم بتحديث النشاط أو التصنيف والمعلومات الضرورية من هنا</p>
+										<p>
+											قم بتحديث النشاط أو التصنيف والمعلومات الضرورية من هنا
+										</p>
 									</div>
 								</div>
 							</div>
@@ -163,7 +165,8 @@ const AddCategory = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
 											<label htmlFor='add-icon'>
-												ايقونة النشاط أو التصنيف<span className='text-danger'>*</span>
+												ايقونة النشاط أو التصنيف
+												<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
@@ -209,11 +212,7 @@ const AddCategory = () => {
 											{icons[0] && (
 												<div className='banners-preview-container'>
 													<div className='banner-preview'>
-														<img
-															src={icons[0]?.data_url}
-															alt=''
-															style={{ objectFit: "cover" }}
-														/>
+														<img src={icons[0]?.data_url} alt='' />
 													</div>
 												</div>
 											)}
@@ -232,7 +231,8 @@ const AddCategory = () => {
 										<div className='col-md-3 col-12'>
 											<label htmlFor='category-name'>
 												{" "}
-												النشاط أو التصنيف الرئيسي<span className='text-danger'>*</span>
+												النشاط أو التصنيف الرئيسي
+												<span className='text-danger'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
