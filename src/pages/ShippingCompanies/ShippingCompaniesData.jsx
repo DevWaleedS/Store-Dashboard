@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch } from "@mui/material";
 
-const StoreDataWidget = ({ data, image, changeStatus, checked }) => {
+const ShippingCompaniesData = ({ data, image, changeStatus, checked }) => {
 	return (
 		<div className='data-widget'>
 			<div className='data'>
@@ -62,4 +62,4 @@ const StoreDataWidget = ({ data, image, changeStatus, checked }) => {
 	);
 };
 
-export default StoreDataWidget;
+export default ShippingCompaniesData;

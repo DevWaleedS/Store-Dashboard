@@ -1,15 +1,19 @@
 import React, { useContext } from "react";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import useFetch from "../Hooks/UseFetch";
-import { useCookies } from "react-cookie";
-import Context from "../Context/context";
-import { Switch } from "@mui/material";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
+// CONTEXT
+import Context from "../Context/context";
+
+// MUI
+import { Switch } from "@mui/material";
 
 // components
-import MadaFormWeight from "../components/MadaFormWeight";
-import PayPalFormWeight from "../components/PayPalFormWeight";
+import useFetch from "../Hooks/UseFetch";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // import images
@@ -166,26 +170,6 @@ const PaymentGetways = () => {
 									</div>
 								</div>
 							))}
-
-							<div className='payment-form' style={{ height: "550px" }}>
-								{fetchedData?.data?.paymenttypes.map(
-									(item) => item?.name
-								)[0] === "paypal" &&
-								fetchedData?.data?.paymenttypes.map(
-									(item) => item?.status
-								)[0] === "نشط" ? (
-									<PayPalFormWeight />
-								) : fetchedData?.data?.paymenttypes.map(
-										(item) => item?.name
-								  )[1] === "mada" &&
-								  fetchedData?.data?.paymenttypes.map(
-										(item) => item?.status
-								  )[1] === "نشط" ? (
-									<MadaFormWeight />
-								) : (
-									""
-								)}
-							</div>
 						</div>
 					</div>
 				)}

@@ -28,7 +28,7 @@ import MaintenanceMode from "./MaintenanceMode";
 import { VerifyStoreModal } from "../components/Modal";
 import { VerifayStoreAlert } from "../components/Modal";
 import { VerifayAfterMainInfoAlert } from "../components/Modal";
-// import CelebrityMarketingModal from "./CelebrityMarketingModal";
+
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import DeleteOneModal from "../components/DeleteOneModal/DeleteOneModal";
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
@@ -70,9 +70,6 @@ const RootLayout = () => {
 	// Open Verify After Main
 	const { isVerifyAfterMainOpen } = useSelector(
 		(state) => state.VerifyAfterMainModal
-	);
-	const { isOpenCelebrityMarketingModal } = useSelector(
-		(state) => state.CelebrityMarketingModal
 	);
 
 	const dispatch = useDispatch(false);
@@ -120,12 +117,6 @@ const RootLayout = () => {
 						{isOpenMaintenanceModeModal && <MaintenanceMode />}
 						{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
 
-						{/* This modal is hidden currently 
-						
-						{isOpenCelebrityMarketingModal && (
-							<CelebrityMarketingModal></CelebrityMarketingModal>
-						)}
-					*/}
 						<main className='content'>
 							<div className='row'>
 								<div className='sidebar-col'>

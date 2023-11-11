@@ -1,11 +1,17 @@
 import React from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
-import TemplateUpdate from "../components/TemplateUpdate";
-import { AiOutlineSearch } from "react-icons/ai";
 
-const Template = () => {
+// ICONS
+import { AiOutlineSearch } from "react-icons/ai";
+import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
+
+// COMPONENTS
+import TemplateUpdate from "./TemplateUpdate";
+
+const TemplateSetting = () => {
 	return (
 		<>
 			<Helmet>
@@ -45,6 +51,8 @@ const Template = () => {
 						</div>
 					</div>
 				</div>
+
+				{/* Template Update Setting*/}
 				<div className='row'>
 					<div className='template-widgets-wrapper'>
 						<div className='widget-bx mb-md-4 mb-3'>
@@ -57,4 +65,4 @@ const Template = () => {
 	);
 };
 
-export default Template;
+export default TemplateSetting;

@@ -1,12 +1,18 @@
 import React, { useState } from "react";
+
+// Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { openProductHintModal } from "../store/slices/ImportProductHintModal";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { IoIosArrowDown } from "react-icons/io";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { openProductHintModal } from "../../store/slices/ImportProductHintModal";
+
+// MUI
+import Select from "@mui/material/Select";
+import { FormControl } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 
 const FormSearchWeight = ({
 	type,

@@ -1,16 +1,22 @@
 import React, { useContext } from "react";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import useFetch from "../Hooks/UseFetch";
-import Context from "../Context/context";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import StoreDataWidget from "../components/StoreDataWidget";
+import { useCookies } from "react-cookie";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+import ShippingCompaniesData from "./ShippingCompaniesData";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Context
+import Context from "../../Context/context";
 
 // ICONS
-import howIcon from "../data/Icons/icon_24_home.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import howIcon from "../../data/Icons/icon_24_home.svg";
 
 const ShippingCompanies = () => {
 	// to get all  data from server
@@ -85,6 +91,7 @@ const ShippingCompanies = () => {
 					</div>
 				</div>
 
+				{/* Shipping Companies Data Components */}
 				<div className='data-container'>
 					<div className='row'>
 						{loading ? (
@@ -96,7 +103,7 @@ const ShippingCompanies = () => {
 						) : (
 							fetchedData?.data?.shippingtypes.map((item) => (
 								<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
-									<StoreDataWidget
+									<ShippingCompaniesData
 										data={item?.name}
 										image={item?.image}
 										changeStatus={() => changeStatus(item?.id)}

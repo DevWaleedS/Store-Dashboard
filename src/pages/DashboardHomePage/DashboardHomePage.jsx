@@ -2,15 +2,19 @@ import React, { Fragment } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";
-import useFetch from "../Hooks/UseFetch";
+import useFetch from "../../Hooks/UseFetch";
 
 // Components
-import Details from "../components/Details";
-import TopSection from "../components/TopSection";
-import { PieCharts, LineCharts } from "../components/Charts";
-import { OrdersTableData, ProductsTableData } from "../components/Tables";
+import TopSection from "../../components/TopSection";
+// Charts
+import { PieCharts, LineCharts } from "../../components/Charts";
+// Summery Tables
+import { OrdersTableData, ProductsTableData } from "../../components/Tables";
 
-const Home = () => {
+// DashboardSummeryDetails
+import DashboardSummeryDetails from "./DashboardSummeryDetails";
+
+const DashboardHomePage = () => {
 	const { fetchedData, loading } = useFetch(
 		"https://backend.atlbha.com/api/Store/index"
 	);
@@ -24,9 +28,12 @@ const Home = () => {
 				<TopSection />
 			</section>
 
-			{/** DETAILS SECTION */}
+			{/** Dashboard Summery Details */}
 			<section className='details-section mb-3'>
-				<Details summeryDetails={fetchedData?.data} loading={loading} />
+				<DashboardSummeryDetails
+					summeryDetails={fetchedData?.data}
+					loading={loading}
+				/>
 			</section>
 
 			{/**  CHARTS SECTION */}
@@ -60,4 +67,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default DashboardHomePage;

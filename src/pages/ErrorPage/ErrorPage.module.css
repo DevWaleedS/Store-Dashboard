@@ -1,0 +1,8 @@
+.error_page {
+	background-color: var(--bs-secondary-bg);
+}
+
+.error_page section a {
+	font-size: 22px;
+	color: var(--second-500);
+}

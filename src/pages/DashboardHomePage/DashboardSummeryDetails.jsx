@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
-import { ReactComponent as Visit } from "../data/Icons/icon-24-invisible.svg";
-import { ReactComponent as User } from "../data/Icons/icon-24-user.svg";
-import { ReactComponent as Sales } from "../data/Icons/icon-32-sales.svg";
-import { ReactComponent as Product } from "../data/Icons/icon-32-product.svg";
 
-const Details = ({ summeryDetails, loading }) => {
+// ICONS
+import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Sales } from "../../data/Icons/icon-32-sales.svg";
+import { ReactComponent as Visit } from "../../data/Icons/icon-24-invisible.svg";
+import { ReactComponent as Product } from "../../data/Icons/icon-32-product.svg";
+
+const DashboardSummeryDetails = ({ summeryDetails, loading }) => {
 	const details = [
 		{
 			id: 1,
@@ -71,4 +73,4 @@ const Details = ({ summeryDetails, loading }) => {
 	);
 };
 
-export default Details;
+export default DashboardSummeryDetails;

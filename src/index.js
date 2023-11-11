@@ -29,21 +29,15 @@ import {
 	Carts,
 	Category,
 	Coupon,
-	ErrorPage,
-	Home,
 	Offers,
 	Pages,
 	PaymentGetways,
-	Products,
-	Rating,
 	Report,
 	MainInformation,
 	Management,
-	ShippingCompanies,
 	SocialPages,
 	//PackageUpgrade,
 	Support,
-	Template,
 	VerifyStore,
 	//MarketingCampaign,
 	//BranchesAndWarehouses,
@@ -54,6 +48,15 @@ import {
 	PaintStore,
 	SEOStore,
 } from "./pages";
+
+import { Rating } from "./pages/Rating";
+import { Orders } from "./pages/Orders";
+import { Academy } from "./pages/Academy";
+import { Products } from "./pages/Products";
+import { ErrorPage } from "./pages/ErrorPage";
+import { TemplateSetting } from "./pages/TemplateSetting";
+import { ShippingCompanies } from "./pages/ShippingCompanies";
+import { DashboardHomePage } from "./pages/DashboardHomePage";
 // ---------------------------------------------------------------------------------------//
 
 // Import Nested Pages
@@ -85,8 +88,6 @@ import {
 	// OfferDetails,
 } from "./pages/nestedPages";
 
-import { Orders } from "./pages/Orders";
-import { Academy } from "./pages/Academy";
 // ---------------------------------------------------------------------------------------//
 
 // IMPORT ALL Context Providers
@@ -99,7 +100,6 @@ import NotificationProvider from "./Context/NotificationProvider";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 
 // Nested Pages
-
 import { SouqOtlobha } from "./pages/nestedPages/SouqOtlbha";
 import { OrderDetails } from "./pages/nestedPages/orderDetails";
 
@@ -144,8 +144,8 @@ const router = createBrowserRouter([
 		errorElement: <ErrorPage />,
 
 		children: [
-			{ index: true, element: <Home /> },
-			{ path: "Home", element: <Home /> },
+			{ index: true, element: <DashboardHomePage /> },
+			{ path: "Home", element: <DashboardHomePage /> },
 			/**--------------------------------------------------------------------------- */
 
 			/**--------------------------------------------------------------------------- */
@@ -375,7 +375,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "Template",
-				element: <Template />,
+				element: <TemplateSetting />,
 			},
 			{
 				path: "PaintStore",

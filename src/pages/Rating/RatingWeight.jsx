@@ -1,24 +1,33 @@
 import React, { Fragment, useEffect, useContext } from "react";
+
+// Redux
 import { useDispatch } from "react-redux";
-import Switch from "@mui/material/Switch";
-import { openReplyModal } from "../store/slices/ReplyModal-slice";
-import { Avatar, Button } from "@mui/material";
+import { openReplyModal } from "../../store/slices/ReplyModal-slice";
 
-// IMPORT ICONS
-import { MdOutlineTimer } from "react-icons/md";
-import { FcCheckmark } from "react-icons/fc";
-import { BiHide } from "react-icons/bi";
-import { ReactComponent as StoreIcon } from "../data/Icons/icon-24-store.svg";
-import { ReactComponent as StarIcon } from "../data/Icons/icon-20-star.svg";
-import { ReactComponent as HalfStarIcon } from "../data/Icons/icon-20-star_half.svg";
-import { ReactComponent as DeleteIcon } from "../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReplayIcon } from "../data/Icons/icon-24-repley.svg";
+// Context
+import Context from "../../Context/context";
+import { DeleteContext } from "../../Context/DeleteProvider";
 
-import CircularLoading from "../HelperComponents/CircularLoading";
+// Third party
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import Context from "../Context/context";
-import { DeleteContext } from "../Context/DeleteProvider";
+
+// MUI
+import Switch from "@mui/material/Switch";
+import { Avatar, Button } from "@mui/material";
+
+// ICONS
+import { BiHide } from "react-icons/bi";
+import { FcCheckmark } from "react-icons/fc";
+import { MdOutlineTimer } from "react-icons/md";
+import { ReactComponent as StoreIcon } from "../../data/Icons/icon-24-store.svg";
+import { ReactComponent as StarIcon } from "../../data/Icons/icon-20-star.svg";
+import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { ReactComponent as ReplayIcon } from "../../data/Icons/icon-24-repley.svg";
+import { ReactComponent as HalfStarIcon } from "../../data/Icons/icon-20-star_half.svg";
+
+// Components
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // IMPORT IMAGES
 const RatingWeight = ({

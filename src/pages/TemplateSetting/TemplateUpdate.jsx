@@ -1,24 +1,27 @@
 import React, { useContext, useState, Fragment, useEffect } from "react";
-import axios from "axios";
-import Context from "../Context/context";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import Button from "@mui/material/Button";
-import useFetch from "../Hooks/UseFetch";
 
-// import ImageUploading library
+// Third party
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { Link, useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 
-// IMPORT ICONS
-import { MdFileUpload } from "react-icons/md";
-import { BsArrowLeft } from "react-icons/bs";
+// MUI
+import Button from "@mui/material/Button";
 import { FormControl, Switch } from "@mui/material";
-import LogoSvg from "../data/Icons/logo svg.svg";
-import { ReactComponent as CommentIcon } from "../data/Icons/icon-32-comment.svg";
-import { ReactComponent as Client } from "../data/Icons/icon-24-ratings.svg";
-import { Link } from "react-router-dom";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { LoadingContext } from "../Context/LoadingProvider";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+//  ICONS
+import { BsArrowLeft } from "react-icons/bs";
+import { MdFileUpload } from "react-icons/md";
+import { ReactComponent as CommentIcon } from "../../data/Icons/icon-32-comment.svg";
 
 const TemplateUpdate = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(

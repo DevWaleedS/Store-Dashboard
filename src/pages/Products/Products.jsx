@@ -5,21 +5,21 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
 import * as FileSaver from "file-saver";
-import useFetch from "../Hooks/UseFetch";
+import useFetch from "../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import { BigProductsTable } from "../components/Tables";
-import { DropCSVFiles, FormSearchWeight } from "../components";
+import { DropCSVFiles, FormSearchWeight } from "./index";
+import { BigProductsTable } from "../../components/Tables";
 
 // Icons
 import { MdAdd } from "react-icons/md";
 import { useCookies } from "react-cookie";
 
-// Components
-import Context from "../Context/context";
-import { LoadingContext } from "../Context/LoadingProvider";
-import AddProductFromStore from "./nestedPages/AddProductFromStore";
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+import AddProductFromStore from "../nestedPages/AddProductFromStore";
 
 const Products = () => {
 	const [cookies] = useCookies(["access_token"]);

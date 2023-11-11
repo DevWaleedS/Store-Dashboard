@@ -1,16 +1,22 @@
 import React from "react";
+
+// Redux
 import { useSelector, useDispatch } from "react-redux";
 import { addActivity } from "../store/slices/AddActivity";
 import { addSubActivity } from "../store/slices/AddSubActivity";
-import OutlinedInput from "@mui/material/OutlinedInput";
+
+// MUI
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
-import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
-// import { Button } from "@mui/material";
+import OutlinedInput from "@mui/material/OutlinedInput";
+
 // Icon
 import { IoIosArrowDown } from "react-icons/io";
+
+// Third Party
 import useFetch from "../Hooks/UseFetch";
 
 export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
@@ -39,9 +45,9 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 								backgroundColor: "#fff",
 								fontSize: "18px",
 								"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-								{
-									paddingRight: "20px",
-								},
+									{
+										paddingRight: "20px",
+									},
 								"& .MuiOutlinedInput-root": {
 									"& :hover": {
 										border: "none",
@@ -62,7 +68,11 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 							input={<OutlinedInput />}
 							renderValue={(selected) => {
 								if (activity?.length === 0) {
-									return <span style={{ color: "#011723" }}>نشاط أو تصنيف المتجر الرئيسي</span>;
+									return (
+										<span style={{ color: "#011723" }}>
+											نشاط أو تصنيف المتجر الرئيسي
+										</span>
+									);
 								}
 								return selected?.map((item) => {
 									const result = fetchedData?.data?.categories?.filter(
@@ -70,8 +80,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 									);
 									return `${result[0]?.name} , `;
 								});
-							}}
-							>
+							}}>
 							{fetchedData?.data?.categories?.map((act, index) => (
 								<MenuItem key={index} value={act?.id}>
 									<Checkbox checked={activity.indexOf(act?.id) > -1} />
@@ -100,9 +109,9 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 								backgroundColor: "#fff",
 								fontSize: "18px",
 								"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-								{
-									paddingRight: "20px",
-								},
+									{
+										paddingRight: "20px",
+									},
 								"& .MuiOutlinedInput-root": {
 									"& :hover": {
 										border: "none",
@@ -123,7 +132,11 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 							input={<OutlinedInput />}
 							renderValue={(selected) => {
 								if (subActivities?.length === 0) {
-									return <span style={{ color: "#011723" }}>نشاط أو تصنيف المتجر الفرعي</span>;
+									return (
+										<span style={{ color: "#011723" }}>
+											نشاط أو تصنيف المتجر الفرعي
+										</span>
+									);
 								}
 								return selected?.map((item) => {
 									const result = subActivitiesList?.data?.categories?.filter(
@@ -131,8 +144,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 									);
 									return `${result?.[0]?.name} , `;
 								});
-							}}
-						>
+							}}>
 							{subActivitiesList?.data?.categories?.map((sub, index) => (
 								<MenuItem key={index} value={sub?.id}>
 									<Checkbox checked={subActivities?.indexOf(sub?.id) > -1} />

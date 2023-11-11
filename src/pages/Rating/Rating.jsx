@@ -1,26 +1,31 @@
 import React, { useContext, useState } from "react";
-import { Helmet } from "react-helmet";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 
-// Import link from react router dom
+// Third Party
+import axios from "axios";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
-// Import icons
-import howIcon from "../data/Icons/icon_24_home.svg";
+// MUI
+import Switch from "@mui/material/Switch";
+import { Menu, MenuItem } from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
+// Icons
+import { AiOutlineSearch } from "react-icons/ai";
+import howIcon from "../../data/Icons/icon_24_home.svg";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
 	MdOutlineArrowBackIosNew,
 	MdOutlineArrowForwardIos,
 } from "react-icons/md";
-import RatingWeight from "../components/RatingWeight";
 
-import { AiOutlineSearch } from "react-icons/ai";
-import { SendReplayModal } from "../components/Modal";
-import useFetch from "../Hooks/UseFetch";
-import axios from "axios";
-import Context from "../Context/context";
-import { Menu, MenuItem } from "@mui/material";
+// CONTEXT
+import Context from "../../Context/context";
+
+// Components
+import RatingWeight from "./RatingWeight";
+import useFetch from "../../Hooks/UseFetch";
+import { SendReplayModal } from "../../components/Modal";
 
 const Rating = () => {
 	const contextStore = useContext(Context);
