@@ -34,7 +34,7 @@ import DeleteOneModal from "../components/DeleteOneModal/DeleteOneModal";
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
 import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
 
-// PrivateRoute (Login Author)
+// PrivateRoute (Login Authenticating)
 import PrivateRoute from "./Login/PrivateRoute/PrivateRoute";
 
 const RootLayout = () => {

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
-import { MdAdd } from "react-icons/md";
-import { BsSearch } from "react-icons/bs";
 
 // iCONS
-import howIcon from "../data/Icons/icon_24_home.svg";
+import { MdAdd } from "react-icons/md";
+import { BsSearch } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
+import howIcon from "../data/Icons/icon_24_home.svg";
 
 import useFetch from "../Hooks/UseFetch";
 
