@@ -1,14 +1,22 @@
 import * as React from "react";
-import Context from "../Context/context";
-import OutlinedInput from "@mui/material/OutlinedInput";
+
+// Context
+import Context from "../../../../Context/context";
+
+// Third party
+import useFetch from "../../../../Hooks/UseFetch";
+
+// MUI
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import useFetch from "../Hooks/UseFetch";
-import { IoIosArrowDown } from "react-icons/io";
 import { Checkbox, ListItemText } from "@mui/material";
-// import { Button } from "@mui/material";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
+// Icons
+import { IoIosArrowDown } from "react-icons/io";
+
+// Select styles
 const selectMenuStyles = {
 	width: "100%",
 	"& .MuiOutlinedInput-root": {
@@ -39,7 +47,7 @@ const selectCategoriesStyles = {
 	},
 };
 
-const FilterOperations = ({ showFilteringOptions }) => {
+const ProductsFilterOperations = ({ showFilteringOptions }) => {
 	const { fetchedData } = useFetch(
 		"https://backend.atlbha.com/api/Store/etlobhaShow"
 	);
@@ -209,4 +217,4 @@ const FilterOperations = ({ showFilteringOptions }) => {
 	);
 };
 
-export default FilterOperations;
+export default ProductsFilterOperations;

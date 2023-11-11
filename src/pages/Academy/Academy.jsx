@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 // Icons
 import { BiSearch } from "react-icons/bi";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 
 // Components
 import Explain from "./Explain";

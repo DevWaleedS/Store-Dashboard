@@ -1,29 +1,40 @@
 import React, { useEffect, useState, useContext } from "react";
+
+// Third party
+import axios from "axios";
 import { Helmet } from "react-helmet";
 import useFetch from "../Hooks/UseFetch";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import Context from "../Context/context";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
+// Redux
+import { useDispatch } from "react-redux";
 import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
-import OutlinedInput from "@mui/material/OutlinedInput";
+
+// Components
+import { DelegateRequestAlert } from "../components/Modal";
+import CircularLoading from "../HelperComponents/CircularLoading";
+
+// Context
+import Context from "../Context/context";
+import { LoadingContext } from "../Context/LoadingProvider";
+
+// MUI
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
-import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
-// import { Button } from "@mui/material";
+import OutlinedInput from "@mui/material/OutlinedInput";
+
+// Tags INPUT LIBRARY
 import { TagInput } from "evergreen-ui";
-import { Link } from "react-router-dom";
-import { DelegateRequestAlert } from "../components";
 
 // ICONS
+import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
 import howIcon from "../data/Icons/icon_24_home.svg";
-import { IoIosArrowDown } from "react-icons/io";
-import { LoadingContext } from "../Context/LoadingProvider";
 
 const PlatformServices = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(

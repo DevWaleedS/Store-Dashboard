@@ -1,58 +1,80 @@
 import React, { useContext, useEffect } from "react";
+
+// REDUX
 import { useSelector, useDispatch } from "react-redux";
 import { StoreVerificationThunk } from "../store/Thunk/storeVerificationThunk";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
 
+// Context
 import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
 import { LoadingContext } from "../Context/LoadingProvider";
 import { DeleteContext } from "../Context/DeleteProvider";
+import { NotificationContext } from "../Context/NotificationProvider";
+
+// MUI
 import { theme } from "../Theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+
+// Third part
+import { useCookies } from "react-cookie";
 import { Outlet, ScrollRestoration } from "react-router-dom";
+
+// top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
 import SideBar from "../global/SideBar";
 
-import VerifyStoreModal from "../components/VerifyStoreModal";
-import VerifayStoreAlert from "../components/VerifayStoreAlert";
-import VerifayStoreAfterMainInfoAlert from "../components/VerifayStoreAlertAfterMainInfo";
+// App Modal
 import MaintenanceMode from "./MaintenanceMode";
-import CelebrityMarketingModal from "./CelebrityMarketingModal";
-import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
+import { VerifyStoreModal } from "../components/Modal";
+import { VerifayStoreAlert } from "../components/Modal";
+import { VerifayAfterMainInfoAlert } from "../components/Modal";
+// import CelebrityMarketingModal from "./CelebrityMarketingModal";
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import DeleteOneModal from "../components/DeleteOneModal/DeleteOneModal";
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
-import { useCookies } from "react-cookie";
+import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
 
+// PrivateRoute (Login Author)
 import PrivateRoute from "./Login/PrivateRoute/PrivateRoute";
 
 const RootLayout = () => {
 	const [cookies] = useCookies(["access_token"]);
+	// To open and close side bar in mobile screen
 	const [openSidebar, setOpenSidebar] = React.useState(false);
+
+	// Context That open app Modal
 	const contextStore = useContext(Context);
-	const NotificationStore = useContext(NotificationContext);
-	const LoadingStore = useContext(LoadingContext);
-	const DeleteStore = useContext(DeleteContext);
 	const { title } = contextStore;
+	const DeleteStore = useContext(DeleteContext);
+	const LoadingStore = useContext(LoadingContext);
+	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
 	const { loadingTitle } = LoadingStore;
 	const { actionDelete } = DeleteStore;
+
+	// To handle Open Verify Modal
 	const { isOpenVerifyModal, verificationStoreStatus } = useSelector(
 		(state) => state.VerifyModal
 	);
 
+	// Open Maintenance Mode Modal
 	const { isOpenMaintenanceModeModal } = useSelector(
 		(state) => state.MaintenanceModeModal
 	);
+
+	// Open Verify Store Modal
 	const { isVerifyStoreAlertOpen } = useSelector(
 		(state) => state.VerifyStoreAlertModal
 	);
+
+	// Open Verify After Main
 	const { isVerifyAfterMainOpen } = useSelector(
 		(state) => state.VerifyAfterMainModal
 	);
 	const { isOpenCelebrityMarketingModal } = useSelector(
 		(state) => state.CelebrityMarketingModal
 	);
+
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
 
@@ -60,6 +82,7 @@ const RootLayout = () => {
 		dispatch(StoreVerificationThunk(cookies?.access_token));
 	}, [dispatch]);
 
+	// This is modal verification Store Status message That is display after dashboard is open
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (
@@ -88,19 +111,21 @@ const RootLayout = () => {
 							}}
 						/>
 
-						{title && <ActionCompleteComp></ActionCompleteComp>}
-						{notificationTitle && <DeleteModal></DeleteModal>}
-						{actionDelete && <DeleteOneModal></DeleteOneModal>}
-						{loadingTitle && <LoadingRequest></LoadingRequest>}
-						{isOpenMaintenanceModeModal && <MaintenanceMode></MaintenanceMode>}
-						{isOpenVerifyModal && <VerifyStoreModal></VerifyStoreModal>}
-						{isVerifyStoreAlertOpen && <VerifayStoreAlert></VerifayStoreAlert>}
-						{isVerifyAfterMainOpen && (
-							<VerifayStoreAfterMainInfoAlert></VerifayStoreAfterMainInfoAlert>
-						)}
+						{title && <ActionCompleteComp />}
+						{actionDelete && <DeleteOneModal />}
+						{loadingTitle && <LoadingRequest />}
+						{notificationTitle && <DeleteModal />}
+						{isOpenVerifyModal && <VerifyStoreModal />}
+						{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
+						{isOpenMaintenanceModeModal && <MaintenanceMode />}
+						{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
+
+						{/* This modal is hidden currently 
+						
 						{isOpenCelebrityMarketingModal && (
 							<CelebrityMarketingModal></CelebrityMarketingModal>
 						)}
+					*/}
 						<main className='content'>
 							<div className='row'>
 								<div className='sidebar-col'>

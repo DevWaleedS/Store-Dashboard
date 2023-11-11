@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
-import { ReactComponent as CheckMark } from "../data/Icons/icon-24- true.svg";
-import { ReactComponent as FileIcon } from "../data/Icons/icon-24- uncomplete order.svg";
-import { ReactComponent as PageIcon } from "../data/Icons/icon-3.svg";
-import { ReactComponent as Product } from "../data/Icons/icon-32-product.svg";
 
-const DataBox = ({
+// ICONS
+import { ReactComponent as PageIcon } from "../../../data/Icons/icon-3.svg";
+import { ReactComponent as CheckMark } from "../../../data/Icons/icon-24- true.svg";
+import { ReactComponent as Product } from "../../../data/Icons/icon-32-product.svg";
+import { ReactComponent as FileIcon } from "../../../data/Icons/icon-24- uncomplete order.svg";
+
+const OrdersQuickDetails = ({
 	loading,
 	new_order,
 	completed,
@@ -71,4 +73,4 @@ const DataBox = ({
 	);
 };
 
-export default DataBox;
+export default OrdersQuickDetails;

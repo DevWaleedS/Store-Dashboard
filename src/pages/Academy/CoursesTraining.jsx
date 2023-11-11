@@ -1,9 +1,13 @@
 import React, { Fragment, useState } from "react";
-import AcademyWidget from "../components/AcademyWidget";
-import useFetch from "../Hooks/UseFetch";
-import CircularLoading from "../HelperComponents/CircularLoading";
 
-// Import icons
+// Thirty Party
+import useFetch from "../../Hooks/UseFetch";
+
+// Components
+import AcademyWidget from "./AcademyWidget";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Icons
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
 	MdOutlineArrowBackIosNew,
@@ -78,11 +82,11 @@ const CoursesTraining = ({ searchCourses }) => {
 						<div className='widget-bx mb-md-4 mb-3' key={course?.id}>
 							<AcademyWidget
 								id={course?.id}
+								url={course?.url}
 								name={course?.name}
 								image={course?.image}
 								count={course?.count}
 								duration={course?.duration}
-								url={course?.url}
 							/>
 						</div>
 					))

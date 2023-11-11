@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import ReactDom from "react-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { closeVerifyAfterMainModal } from "../store/slices/VerifyStoreAlertAfterMainModal-slice";
+import { closeVerifyStoreAlertModal } from "../../store/slices/VerifyStoreAlertModal-slice";
 import { useNavigate } from "react-router-dom";
 
 // MUI
@@ -30,29 +30,28 @@ const contentStyle = {
 	padding: "110px 45px",
 };
 
-const VerifayAfterMainInfoAlert = () => {
+const VerifyAlert = () => {
 	const navigate = useNavigate();
-	const { isVerifyAfterMainOpen } = useSelector(
-		(state) => state.VerifyAfterMainModal
+	const { isVerifyStoreAlertOpen } = useSelector(
+		(state) => state.VerifyStoreAlertModal
 	);
 	const dispatch = useDispatch(false);
 
 	return (
-		<div className='add-category-form' open={isVerifyAfterMainOpen}>
+		<div className='add-category-form' open={isVerifyStoreAlertOpen}>
 			<Modal
-				open={isVerifyAfterMainOpen}
+				open={isVerifyStoreAlertOpen}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='store-alert-body text-center' style={contentStyle}>
-						<p>تم حفظ البيانات بنجاح</p>
-						<p className='text-bold'>يرجى اكمال بيانات التوثيق</p>
+						<p>جاري مراجعة طلب التوثيق في أقل من 24 ساعة </p>
 					</div>
 					<div className='store-alert-footer d-flex justify-between '>
 						<button
 							onClick={() => {
-								navigate("/VerifyStore");
-								dispatch(closeVerifyAfterMainModal());
+								navigate("/");
+								dispatch(closeVerifyStoreAlertModal());
 							}}
 							style={{
 								color: "#fff",
@@ -63,7 +62,7 @@ const VerifayAfterMainInfoAlert = () => {
 								borderRadius: " 0 0 16px 16px",
 							}}
 							className='w-100'>
-							التوجه إلى الصفحة التوثيق
+							التوجه إلى الصفحة الرئيسية
 						</button>
 					</div>
 				</Box>
@@ -72,15 +71,15 @@ const VerifayAfterMainInfoAlert = () => {
 	);
 };
 
-const VerifayStoreAfterMainInfoAlert = () => {
+const VerifayStoreAlert = () => {
 	return (
 		<Fragment>
 			{ReactDom.createPortal(
-				<VerifayAfterMainInfoAlert />,
+				<VerifyAlert />,
 				document.getElementById("verifay_store_Alert")
 			)}
 		</Fragment>
 	);
 };
 
-export default VerifayStoreAfterMainInfoAlert;
+export default VerifayStoreAlert;

@@ -17,10 +17,12 @@ const LineCharts = ({
 			const dailySales = Object.entries(array_sales_daily);
 			const weeklySales = Object.entries(array_sales_weekly);
 			const monthlySales = Object.entries(array_sales_monthly);
+
 			// create empty array
 			const arrayOfDaysSales = [];
 			const arrayOfWeeklySales = [];
 			const arrayOfMonthlySales = [];
+
 			// for of looping to get all days and sales from dailySales array
 			for (const [days, sales] of dailySales) {
 				// push this data into new array

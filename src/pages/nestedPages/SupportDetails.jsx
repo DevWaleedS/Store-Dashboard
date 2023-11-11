@@ -1,32 +1,38 @@
 import React from "react";
+
+// Third Party
 import { Helmet } from "react-helmet";
 import useFetch from "../../Hooks/UseFetch";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import GetDateOnly from "../../HelperComponents/GetDateOnly";
+
+// Redux
 import { useDispatch } from "react-redux";
 import { openReplyModal } from "../../store/slices/ReplyModal-slice";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 
 // ICONS
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
 import { ReactComponent as StatusIcon } from "../../data/Icons/status.svg";
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
+import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
 import { ReactComponent as Client } from "../../data/Icons/icon-24-user.svg";
 import { ReactComponent as Customer } from "../../data/Icons/icon-support.svg";
-import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import { ReactComponent as ReplayIcon } from "../../data/Icons/icon-24-repley.svg";
 import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
-import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
+import { ReactComponent as ReplayIcon } from "../../data/Icons/icon-24-repley.svg";
 import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
-import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
 import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
+import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
+import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
 import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
-import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
 
-import { SendSupportReplayModal } from "../../components";
+// Components
+import GetDateOnly from "../../HelperComponents/GetDateOnly";
+import { SendSupportReplayModal } from "../../components/Modal";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Modal Style
 const style = {
@@ -131,7 +137,8 @@ const SupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span className='text-center text-overflow'>
 																			{
-																				fetchedData?.data?.technicalSupports?.name
+																				fetchedData?.data?.technicalSupports
+																					?.name
 																			}
 																		</span>
 																	</div>
@@ -218,7 +225,7 @@ const SupportDetails = () => {
 
 										<div className='issue-content mb-3'>
 											<div className='col-12 mb-3'>
-												<div className="d-flex flex-row align-items-center justify-content-between">
+												<div className='d-flex flex-row align-items-center justify-content-between'>
 													<h4 className='issue-title'>محتوي الرسالة</h4>
 													<Button
 														variant='outlined'
@@ -251,9 +258,9 @@ const SupportDetails = () => {
 													disabled={true}
 													name='page-content-input'
 													id='page-content-input'
-													value={fetchedData?.data?.technicalSupports?.content}
-												>
-												</textarea>
+													value={
+														fetchedData?.data?.technicalSupports?.content
+													}></textarea>
 											</div>
 										</div>
 

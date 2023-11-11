@@ -1,21 +1,27 @@
 import React, { useState, useContext } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import Context from "../../Context/context";
-import useFetch from "../../Hooks/UseFetch";
+import useFetch from "../../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
+
+// Context
+import Context from "../../../Context/context";
+
+// MUI
 import { Menu, MenuItem } from "@mui/material";
 
 // COMPONENTS
-import { FilterOperations, ProductBox } from "../../components";
+import { SouqOtlbhaProducts, ProductsFilterOperations } from "./index";
 
 // ICONS
-import { ReactComponent as FilterIcon } from "../../data/Icons/icon-24-filter.svg";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
 	MdOutlineArrowBackIosNew,
 	MdOutlineArrowForwardIos,
 } from "react-icons/md";
+import { ReactComponent as FilterIcon } from "../../../data/Icons/icon-24-filter.svg";
 
 const SouqOtlobha = () => {
 	const navigate = useNavigate();
@@ -108,10 +114,12 @@ const SouqOtlobha = () => {
 						</div>
 					</div>
 					<div className='mb-md-5 mb-3'>
-						<FilterOperations showFilteringOptions={showFilteringOptions} />
+						<ProductsFilterOperations
+							showFilteringOptions={showFilteringOptions}
+						/>
 					</div>
 					<div className='mb-3'>
-						<ProductBox
+						<SouqOtlbhaProducts
 							data={productsData}
 							loading={loading}
 							page={page}

@@ -1,10 +1,16 @@
 import React, { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
-import { BsStarFill } from "react-icons/bs";
-import { ReactComponent as CurrencyIcon } from "../data/Icons/icon-24-Currency.svg";
-import CircularLoading from "../HelperComponents/CircularLoading";
 
-const ProductBox = ({ data, loading, page, rowsPerPage }) => {
+// Third party
+import { useNavigate } from "react-router-dom";
+
+// Components
+import CircularLoading from "../../../../HelperComponents/CircularLoading";
+
+// Icons
+import { BsStarFill } from "react-icons/bs";
+import { ReactComponent as CurrencyIcon } from "../../../../data/Icons/icon-24-Currency.svg";
+
+const SouqOtlbhaProducts = ({ data, loading, page, rowsPerPage }) => {
 	const navigate = useNavigate();
 	return loading ? (
 		<CircularLoading />
@@ -106,4 +112,4 @@ const ProductBox = ({ data, loading, page, rowsPerPage }) => {
 	);
 };
 
-export default ProductBox;
+export default SouqOtlbhaProducts;

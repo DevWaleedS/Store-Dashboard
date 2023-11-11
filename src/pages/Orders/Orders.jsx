@@ -1,14 +1,17 @@
 import React, { useState } from "react";
+
+// Third paerty
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import useFetch from "../Hooks/UseFetch";
-// MUI
-import { DataBox } from "../components";
+import useFetch from "../../Hooks/UseFetch";
+
+// Components
+import { OrdersQuickDetails } from "./index";
+import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-import { BigOrdersTable } from "../components/Tables";
+import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 
 const Orders = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -87,9 +90,10 @@ const Orders = () => {
 					</div>
 				</div>
 
+				{/* Orders Quick Details */}
 				<div className='data-boxes'>
 					<div className='row'>
-						<DataBox
+						<OrdersQuickDetails
 							loading={loading}
 							new_order={fetchedData?.data?.new}
 							completed={fetchedData?.data?.completed}
@@ -99,6 +103,7 @@ const Orders = () => {
 						/>
 					</div>
 				</div>
+
 				{/** Orders table */}
 				<div className='tables'>
 					<BigOrdersTable

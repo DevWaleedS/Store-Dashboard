@@ -1,46 +1,52 @@
 import React, { useState, useContext } from "react";
-import { Helmet } from "react-helmet";
-import useFetch from "../../Hooks/UseFetch";
-import { useDispatch } from "react-redux";
-import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
-import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import moment from "moment";
-import Context from "../../Context/context";
-import axios from "axios";
 
-// MUI
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import { FormControlLabel } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import FormGroup from "@mui/material/FormGroup";
-import Checkbox from "@mui/material/Checkbox";
+// Third party
+import axios from "axios";
+import moment from "moment";
+import { Helmet } from "react-helmet";
+import { useCookies } from "react-cookie";
+import useFetch from "../../Hooks/UseFetch";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 
 // Datepicker
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+// Redux
+import { useDispatch } from "react-redux";
+import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// MUI
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Radio from "@mui/material/Radio";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+import MenuItem from "@mui/material/MenuItem";
+import FormGroup from "@mui/material/FormGroup";
+import { FormControlLabel } from "@mui/material";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+
 // ICONS
+import { IoIosArrowDown } from "react-icons/io";
 import howIcon from "../../data/Icons/icon_24_home.svg";
-import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import { ReactComponent as OffersIcon } from "../../data/Icons/icon-24-offer.svg";
+import { ReactComponent as Dollar } from "../../data/Icons/icon-6.svg";
+import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as GiftIcon } from "../../data/Icons/icon-offer gift.svg";
+import { ReactComponent as OffersIcon } from "../../data/Icons/icon-24-offer.svg";
+import { ReactComponent as LaptopIcon } from "../../data/Icons/laptop-icon-24.svg";
+import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
+import { ReactComponent as MobileIcon } from "../../data/Icons/mobile-icon-24.svg";
+import { ReactComponent as Quantity } from "../../data/Icons/icon-24-Quantity.svg";
+import { ReactComponent as MultiDevices } from "../../data/Icons/laptop icon-24.svg";
 import { ReactComponent as ArrowIcon } from "../../data/Icons/icon-30-arrwos back.svg";
 import { ReactComponent as ArrowIconDown } from "../../data/Icons/icon-24-chevron_down.svg";
-import { ReactComponent as Quantity } from "../../data/Icons/icon-24-Quantity.svg";
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import { ReactComponent as MultiDevices } from "../../data/Icons/laptop icon-24.svg";
-import { ReactComponent as MobileIcon } from "../../data/Icons/mobile-icon-24.svg";
-import { ReactComponent as LaptopIcon } from "../../data/Icons/laptop-icon-24.svg";
-import { ReactComponent as Dollar } from "../../data/Icons/icon-6.svg";
-import { IoIosArrowDown } from "react-icons/io";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Modal Style
 const style = {

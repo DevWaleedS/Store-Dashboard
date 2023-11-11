@@ -1,9 +1,8 @@
 export { default as Home } from "./Home";
 export { default as ErrorPage } from "./ErrorPage";
-export { default as Academy } from "./Academy";
 export { default as Category } from "./Category";
 export { default as CelebrityMarketingModal } from "./CelebrityMarketingModal";
-export { default as Orders } from "./Orders";
+
 export { default as Pages } from "./Pages";
 export { default as Products } from "./Products";
 export { default as Rating } from "./Rating";
@@ -24,8 +23,7 @@ export { default as PaymentGetways } from "./PaymentGetways";
 export { default as MainInformation } from "./MainInformation";
 export { default as MaintenanceMode } from "./MaintenanceMode";
 export { default as Management } from "./Management";
-export { default as Explain } from "./Explain";
-export { default as CoursesTraining } from "./CoursesTraining";
+
 export { default as BranchesAndWarehouses } from "./BranchesAndWarehouses";
 export { default as PackageUpgrade } from "./PackageUpgrade";
 export { default as Notifications } from "./Notifications";

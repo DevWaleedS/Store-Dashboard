@@ -1,11 +1,15 @@
 import React from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { closeModal } from "../../store/slices/VideoModal-slice";
+
+// Icons
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { closeModal } from "../store/slices/VideoModal-slice";
 
 // Style the modal
 const style = {

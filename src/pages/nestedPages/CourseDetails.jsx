@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
 
-// MUI
+// Third party
+import { Helmet } from "react-helmet";
+import useFetch from "../../Hooks/UseFetch";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
+// Redux
 import { useDispatch } from "react-redux";
 import { openModal } from "../../store/slices/VideoModal-slice";
-import CourseVideoModal from "../../components/CourseVideoModal";
 
 // ICONS
+import { BiPlayCircle } from "react-icons/bi";
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
+import { ReactComponent as PDFIcon } from "../../data/Icons/pfd.svg";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import { ReactComponent as ArrowDown } from "../../data/Icons/icon-24-chevron_down.svg";
-import { ReactComponent as PDFIcon } from "../../data/Icons/pfd.svg";
-import { BiPlayCircle } from "react-icons/bi";
+
+// Components
+import { CourseVideoModal } from "../../components/Modal";
 
 const CourseDetails = () => {
 	const { id } = useParams();

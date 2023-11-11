@@ -1,17 +1,25 @@
 import React, { useState, useContext } from "react";
-import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
-import useFetch from "../Hooks/UseFetch";
-import { DropCSVFiles, FormSearchWeight } from "../components";
-import { MdAdd } from "react-icons/md";
-import AddProductFromStore from "./nestedPages/AddProductFromStore";
+
+// Third Party
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import Context from "../Context/context";
-import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-import { LoadingContext } from "../Context/LoadingProvider";
+import { Helmet } from "react-helmet";
+import * as FileSaver from "file-saver";
+import useFetch from "../Hooks/UseFetch";
+import { useNavigate } from "react-router-dom";
+
+// Components
 import { BigProductsTable } from "../components/Tables";
+import { DropCSVFiles, FormSearchWeight } from "../components";
+
+// Icons
+import { MdAdd } from "react-icons/md";
+import { useCookies } from "react-cookie";
+
+// Components
+import Context from "../Context/context";
+import { LoadingContext } from "../Context/LoadingProvider";
+import AddProductFromStore from "./nestedPages/AddProductFromStore";
 
 const Products = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -19,21 +27,27 @@ const Products = () => {
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/product"
 	);
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
+
 	const navigate = useNavigate();
-	const [search, setSearch] = useState("");
-	const [category_id, setCategory_id] = useState("");
 	const [file, setFile] = useState("");
+	const [search, setSearch] = useState("");
+
+	// Context
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
 	const [fileError, setFileError] = useState("");
+	const [category_id, setCategory_id] = useState("");
+
 	const handleFile = (file) => {
 		setFile(file[0]);
 	};

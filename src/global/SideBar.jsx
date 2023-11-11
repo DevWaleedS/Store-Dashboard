@@ -35,17 +35,19 @@ import { ReactComponent as Delevray } from "../data/Icons/icon-24-delivery.svg";
 import { ReactComponent as Payment } from "../data/Icons/icon-24-payment Getway.svg";
 import { ReactComponent as Verification } from "../data/Icons/icon-24-Verification.svg";
 import { ReactComponent as BsCart } from "../data/Icons/icon-24-shopping_cart.svg";
-
 import { ReactComponent as Evaluation } from "../data/Icons/evaluation.svg";
-
 import { FaCircle } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
+import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
+
+// Third party
 import useFetch from "../Hooks/UseFetch";
+
+// Context
 import Context from "../Context/context";
 
 const SideBar = ({ open, closeSidebar }) => {
@@ -160,17 +162,17 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 
-					<Link
+					<a
+						href='https://celebrity.sa/'
+						target='_blank'
+						rel='noreferrer'
 						as='li'
-						className='sub-menu-link'
-						onClick={() => {
-							// dispatch(OpenCelebrityMarketingModal());
-						}}>
+						className='sub-menu-link'>
 						<MenuItem>
 							<Shoping />
 							<span className='me-2'>التسويق عبر المشاهير</span>
 						</MenuItem>
-					</Link>
+					</a>
 					<NavLink
 						className='sub-menu-link'
 						to='PostalSubscriptions'

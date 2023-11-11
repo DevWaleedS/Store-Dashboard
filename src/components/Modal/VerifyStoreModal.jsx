@@ -1,19 +1,28 @@
 import React, { useState, useEffect, Fragment, useContext } from "react";
-import ReactDom from "react-dom";
-import useFetch from "../Hooks/UseFetch";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { closeVerifyModal } from "../store/slices/VerifyStoreModal-slice";
+// Third party
+import ReactDom from "react-dom";
 import { Link } from "react-router-dom";
+import useFetch from "../../Hooks/UseFetch";
+
+// MUI
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 
 // icons
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import { ReactComponent as Verification } from "../data/Icons/icon-24-Verification.svg";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { UserAuth } from "../Context/UserAuthorProvider";
+import { ReactComponent as Verification } from "../../data/Icons/icon-24-Verification.svg";
+
+// Context
+import { UserAuth } from "../../Context/UserAuthorProvider";
+
+// Components
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // styles
 const style = {

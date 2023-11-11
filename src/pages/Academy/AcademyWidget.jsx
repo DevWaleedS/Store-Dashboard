@@ -1,15 +1,16 @@
 import React from "react";
+
+// Mui
 import { Button } from "@mui/material";
 
-// Icnos
-import { BsPlayCircle } from "react-icons/bs";
-import { BsPlayBtn } from "react-icons/bs";
+// Icons
 import { RiTimerLine } from "react-icons/ri";
 import { AiOutlineEye } from "react-icons/ai";
+import { BsPlayCircle, BsPlayBtn } from "react-icons/bs";
 
-// IMPORT IMAGES
+// Third Party
 import { useNavigate } from "react-router-dom";
-import CustomDate from "../HelperComponents/CustomDate";
+import CustomDate from "../../HelperComponents/CustomDate";
 
 const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 	const navigate = useNavigate();
@@ -20,7 +21,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 				<div className='col-md-3 col-4'>
 					<div className='video-preview'>
 						<div className='img-wrapper'>
-							<img className='img-fluid' src={image} alt={""} loading="lazy" />
+							<img className='img-fluid' src={image} alt={""} loading='lazy' />
 							<div className='play-video-icon'>
 								<BsPlayCircle
 									onClick={() => {

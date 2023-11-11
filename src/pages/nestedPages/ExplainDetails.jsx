@@ -5,21 +5,21 @@ import useFetch from "../../Hooks/UseFetch";
 
 // MUI
 import { useDispatch } from "react-redux";
-import { openModal } from "../../store/slices/VideoModal-slice";
-import CourseVideoModal from "../../components/CourseVideoModal";
+// import { openModal } from "../../store/slices/VideoModal-slice";
+// import CourseVideoModal from "../../components/CourseVideoModal";
 // ICONS
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-import { ReactComponent as ArrowDown } from "../../data/Icons/icon-24-chevron_down.svg";
-import { ReactComponent as PDFIcon } from "../../data/Icons/pfd.svg";
-import { BiPlayCircle } from "react-icons/bi";
+// import { ReactComponent as ArrowDown } from "../../data/Icons/icon-24-chevron_down.svg";
+// import { ReactComponent as PDFIcon } from "../../data/Icons/pfd.svg";
+// import { BiPlayCircle } from "react-icons/bi";
 
 const ExplainDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
 	// to open video modal
-	const dispatch = useDispatch(false);
+	// const dispatch = useDispatch(false);
 
 	// to get all  data from server
 	const { fetchedData, loading } = useFetch(

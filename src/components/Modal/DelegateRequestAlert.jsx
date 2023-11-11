@@ -1,43 +1,42 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { closeDelegateRequestAlert } from '../store/slices/DelegateRequestAlert-slice';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { closeDelegateRequestAlert } from "../../store/slices/DelegateRequestAlert-slice";
+import { useNavigate } from "react-router-dom";
 
 // ICONS
-import { TbAlertCircle } from 'react-icons/tb';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { TbAlertCircle } from "react-icons/tb";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 // MUI
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
 	width: 755,
-	maxWidth: '90%',
-	bgcolor: '#fff',
-	border: '1px solid #707070',
-	borderRadius: '16px',
+	maxWidth: "90%",
+	bgcolor: "#fff",
+	border: "1px solid #707070",
+	borderRadius: "16px",
 	boxShadow: 24,
 };
 
 const contentStyle = {
-	fontSize: '20px',
+	fontSize: "20px",
 	fontWight: 400,
-	letterSpacing: '0.2px',
-	color: '#242424',
-	padding: '35px 25px 100px',
-	whiteSpace: 'normal',
+	letterSpacing: "0.2px",
+	color: "#242424",
+	padding: "35px 25px 100px",
+	whiteSpace: "normal",
 };
 
 const DelegateRequestAlert = () => {
 	const { isOpen } = useSelector((state) => state.DelegateRequestAlert);
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
-
 
 	return (
 		<div className='add-category-form' open={isOpen}>

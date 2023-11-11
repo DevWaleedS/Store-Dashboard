@@ -1,10 +1,13 @@
 import React, { Fragment } from "react";
+
+// Third Party
 import { Helmet } from "react-helmet";
+import useFetch from "../Hooks/UseFetch";
+
+// Components
 import Details from "../components/Details";
 import TopSection from "../components/TopSection";
-import LineCharts from "../components/LineCharts";
-import useFetch from "../Hooks/UseFetch";
-import { PieCharts } from "../components";
+import { PieCharts, LineCharts } from "../components/Charts";
 import { OrdersTableData, ProductsTableData } from "../components/Tables";
 
 const Home = () => {

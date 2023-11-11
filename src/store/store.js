@@ -5,33 +5,33 @@ import salesProductsDataSlice from "./slices/Products-sales-slice";
 import CategoriesTablesDataSlice from "./slices/CategoryData-slice";
 import ordersDetails from "./slices/OdersDetails-slice";
 import BigOrdersTableDataSlice from "./slices/BigOrdersTableData-slice";
-import BigProductsTableDataSlice from "./slices/BigProductsTableData-slice";
 import CouponTableDataSlice from "./slices/CouponTableData-slice";
 import CartsTablesDataSlice from "./slices/CartsTableData-slice";
 import VideoModalSlice from "./slices/VideoModal-slice";
 import PagesTableDataSlice from "./slices/PagesTable-slice";
+import customerDataModalSlice from "./slices/CustomerDataModal-slice";
+import AddActivity from "./slices/AddActivity";
+import AddSubActivity from "./slices/AddSubActivity";
+import AddNewUserSlice from "./slices/AddNewUser-slice";
+import jobTitleDataSlice from "./slices/jobTitle-slice";
+import ReplyModalSlice from "./slices/ReplyModal-slice";
+import AddNewProductSlice from "./slices/AddNewProduct-slice";
+import AddSubCategorySlice from "./slices/AddSubCategory-slice";
+import MaintenanceModeModal from "./slices/MaintenanceModeModal";
+import DelegateTableDataSlice from "./slices/DelagateTable-slice";
+import CommentsTableDataSlice from "./slices/CommentsTable-slice";
+import EditCategoryPageSlice from "./slices/EditCategoryPage-slice";
+import ImportProductHintModal from "./slices/ImportProductHintModal";
+import CelebrityMarketingModal from "./slices/CelebrityMarketingModal";
 import VerifyStoreModalSlice from "./slices/VerifyStoreModal-slice";
 import supportTablesDataSlice from "./slices/SupportTableData-slice";
 import CustomerTableDataSlice from "./slices/CustomerTableData-slice";
-import ManagementTableDataSlice from "./slices/UserAndManagementTable-slice.js";
-import customerDataModalSlice from "./slices/CustomerDataModal-slice";
-import EditProductPageModalSlice from "./slices/EditProductPage-slice";
-import EditCategoryPageSlice from "./slices/EditCategoryPage-slice";
-import AddNewUserSlice from "./slices/AddNewUser-slice";
-import CommentsTableDataSlice from "./slices/CommentsTable-slice";
-import jobTitleDataSlice from "./slices/jobTitle-slice";
-import AddNewProductSlice from "./slices/AddNewProduct-slice";
-import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
-import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
 import DelegateRequestAlert from "./slices/DelegateRequestAlert-slice";
-import DelegateTableDataSlice from "./slices/DelagateTable-slice";
-import AddActivity from "./slices/AddActivity";
-import AddSubActivity from "./slices/AddSubActivity";
-import AddSubCategorySlice from "./slices/AddSubCategory-slice";
-import MaintenanceModeModal from "./slices/MaintenanceModeModal";
-import CelebrityMarketingModal from "./slices/CelebrityMarketingModal";
-import ImportProductHintModal from "./slices/ImportProductHintModal";
-import ReplyModalSlice from "./slices/ReplyModal-slice";
+import EditProductPageModalSlice from "./slices/EditProductPage-slice";
+import BigProductsTableDataSlice from "./slices/BigProductsTableData-slice";
+import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
+import ManagementTableDataSlice from "./slices/UserAndManagementTable-slice.js";
+import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
 
 // store
 export const store = configureStore({
@@ -63,7 +63,7 @@ export const store = configureStore({
 		jobTitleData: jobTitleDataSlice,
 		AddNewProduct: AddNewProductSlice,
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
-		VerifyAfterMainModal:VerifyStoreAlertAfterMainModalSlice,
+		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
 		DelegateRequestAlert: DelegateRequestAlert,
 		DelegateTable: DelegateTableDataSlice,
 		AddActivity: AddActivity,

@@ -25,7 +25,7 @@ export { default as EditProductPage } from "./EditProductPage";
 export { default as ShowImportEtlobhaProduct } from "./ShowImportEtlobhaProduct";
 export { default as UserDetails } from "./UserDetails";
 export { default as EditUserDetails } from "./EditUserDetails";
-export { default as SouqOtlobha } from "./SouqOtlobha";
+
 export { default as ProductRefund } from "./ProductRefund";
 export { default as Delegate } from "./Delegate";
 export { default as EditPage } from "./EditPage";

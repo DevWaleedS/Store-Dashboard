@@ -21,17 +21,17 @@ import RootLayout from "./pages/RootLayout";
 
 // Import All Pages to create routes
 import { Login } from "./pages/Login";
-// import { RestorePassword } from "./pages/Login/re";
+
+// INDEX CSS FILE
+import "./index.css";
 
 import {
-	Academy,
 	Carts,
 	Category,
 	Coupon,
 	ErrorPage,
 	Home,
 	Offers,
-	Orders,
 	Pages,
 	PaymentGetways,
 	Products,
@@ -76,7 +76,6 @@ import {
 	AddNewUser,
 	UserDetails,
 	EditUserDetails,
-	SouqOtlobha,
 	ProductRefund,
 	Delegate,
 	// CreateOffer,
@@ -85,24 +84,30 @@ import {
 	ExplainDetails,
 	// OfferDetails,
 } from "./pages/nestedPages";
+
+import { Orders } from "./pages/Orders";
+import { Academy } from "./pages/Academy";
 // ---------------------------------------------------------------------------------------//
 
-// INDEX CSS FILE
-import "./index.css";
-
 // IMPORT ALL Context Providers
-import ContextProvider from "./Context/ContextProvider";
-import NotificationProvider from "./Context/NotificationProvider";
-import LoadingProvider from "./Context/LoadingProvider";
 import DeleteProvider from "./Context/DeleteProvider";
-import UserAuthorProvider from "./Context/UserAuthorProvider";
-import { RestorePassword } from "./pages/Login/ResetPasswordPages/RestorePassword";
-import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
-import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
-import ResetPasswordProvider from "./Context/ResetPasswordProvider";
-import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
+import LoadingProvider from "./Context/LoadingProvider";
+import ContextProvider from "./Context/ContextProvider";
 import TextEditorProvider from "./Context/TextEditorProvider";
+import UserAuthorProvider from "./Context/UserAuthorProvider";
+import NotificationProvider from "./Context/NotificationProvider";
+import ResetPasswordProvider from "./Context/ResetPasswordProvider";
+
+// Nested Pages
+
+import { SouqOtlobha } from "./pages/nestedPages/SouqOtlbha";
 import { OrderDetails } from "./pages/nestedPages/orderDetails";
+
+// Login and reset password  pages
+import { RestorePassword } from "./pages/Login/ResetPasswordPages/RestorePassword";
+import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
+import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
+import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 
 /**
  * ----------------------------------------------------------------------------------------------

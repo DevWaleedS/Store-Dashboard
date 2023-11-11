@@ -16,7 +16,7 @@ import {
 import RatingWeight from "../components/RatingWeight";
 
 import { AiOutlineSearch } from "react-icons/ai";
-import { SendReplayModal } from "../components";
+import { SendReplayModal } from "../components/Modal";
 import useFetch from "../Hooks/UseFetch";
 import axios from "axios";
 import Context from "../Context/context";

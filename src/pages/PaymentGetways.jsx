@@ -10,12 +10,11 @@ import { Link } from "react-router-dom";
 // components
 import MadaFormWeight from "../components/MadaFormWeight";
 import PayPalFormWeight from "../components/PayPalFormWeight";
+import CircularLoading from "../HelperComponents/CircularLoading";
 
 // import images
-import CircularLoading from "../HelperComponents/CircularLoading";
-import howIcon from "../data/Icons/icon_24_home.svg";
 import { AiOutlineSearch } from "react-icons/ai";
-import { UserAuth } from "../Context/UserAuthorProvider";
+import howIcon from "../data/Icons/icon_24_home.svg";
 
 const PaymentGetways = () => {
 	// to get all  data from server

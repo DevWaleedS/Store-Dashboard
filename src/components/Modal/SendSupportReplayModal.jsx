@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import Context from "../Context/context";
+import Context from "../../Context/context";
 import { useDispatch, useSelector } from "react-redux";
-import { closeReplyModal } from "../store/slices/ReplyModal-slice";
-
+import { closeReplyModal } from "../../store/slices/ReplyModal-slice";
+import { useNavigate } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
@@ -49,12 +49,13 @@ const contentStyles = {
 	color: "#011723",
 };
 
-const SendReplayModal = ({ commentDetails, reload, setReload }) => {
+const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
 	const dispatch = useDispatch(false);
+	const navigate = useNavigate();
 
 	const [description, setDescription] = useState({
 		htmlValue: "",
@@ -72,6 +73,12 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 		});
 	};
 
+	const resetsMessage = () => {
+		setDescription({
+			htmlValue: "",
+		});
+	};
+
 	// Handle errors
 	const [messageError, serMessageError] = useState("");
 
@@ -79,23 +86,29 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 	const sendReplayComment = () => {
 		serMessageError("");
 		let formData = new FormData();
-		formData.append("comment_text", description?.htmlValue);
-		formData.append("comment_id", commentDetails?.id);
+		formData.append("replay_text", description?.htmlValue);
+		formData.append("technical_support_id", supportDetails?.id);
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/replaycomment`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
-				},
-			})
+			.post(
+				`https://backend.atlbha.com/api/Store/replayTechnicalSupport`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
 					dispatch(closeReplyModal());
 					setReload(!reload);
+					resetsMessage();
+					navigate("Support");
 				} else {
-					serMessageError(res?.data?.message?.en?.comment_text?.[0]);
+					serMessageError(res?.data?.message?.en?.replay_text?.[0]);
 				}
 			});
 	};
@@ -121,7 +134,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 									className='d-flex justify-content-start align-items-center mb-4 px-3'>
 									إلى :
 									<span style={{ color: "#67747B", marginRight: "14px" }}>
-										{commentDetails?.user?.email}{" "}
+										{supportDetails?.user?.email}
 									</span>
 								</p>
 
@@ -150,19 +163,9 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 													style={{
 														fontSize: "20px",
 														fontWeight: "500",
-														color: "#011723",
+														color: "#a1a1a1",
 													}}>
-													{" "}
-													شكراً أسيل{" "}
-												</p>
-												<p
-													style={{
-														fontSize: "20px",
-														fontWeight: "500",
-														color: "#011723",
-													}}>
-													{" "}
-													سعداء بتسوقك من متجرنا{" "}
+													نحن سعداء بتواصلك معنا ي {supportDetails?.user?.name}
 												</p>
 											</div>
 										}
@@ -204,7 +207,10 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 							<span className=''>ارسال</span>
 						</button>
 						<button
-							onClick={() => dispatch(closeReplyModal())}
+							onClick={() => {
+								dispatch(closeReplyModal());
+								resetsMessage();
+							}}
 							style={{
 								color: "#02466A",
 								fontSize: "24px",
@@ -224,4 +230,4 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 	);
 };
 
-export default SendReplayModal;
+export default SendSupportReplayModal;
