@@ -1,24 +1,30 @@
 import React, { useState, useRef } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+
+// MUI
+import { Button } from "@mui/material";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
-import { resetActivity } from "../store/slices/AddActivity";
-import { resetSubActivity } from "../store/slices/AddSubActivity";
+import { resetActivity } from "../../store/slices/AddActivity";
+import { resetSubActivity } from "../../store/slices/AddSubActivity";
 
 // ICONS
-import howIcon from "../data/Icons/icon_24_home.svg";
+import howIcon from "../../data/Icons/icon_24_home.svg";
 
-//components
-import VerifayPage from "./VerifyStoreForms/VerifayPage";
+// Components
 import ActivityType from "./VerifyStoreForms/ActivityType";
+import VerifyFormPage from "./VerifyStoreForms/VerifyFormPage";
 
 const cursor = {
 	cursor: "pointer",
 };
 
 const VerifyStore = () => {
-	const verifayPageRef = useRef(null);
+	const VerifyFormPageRef = useRef(null);
 	const dispatch = useDispatch(true);
 	const { activity } = useSelector((state) => state.AddActivity);
 	const [showErr, setShowErr] = useState(false);
@@ -39,8 +45,8 @@ const VerifyStore = () => {
 
 	// Function in the parent component that will be triggered by the child component
 	const handleChildButtonClick = () => {
-		if (verifayPageRef.current) {
-			verifayPageRef.current.uploadVerifyStoreOrder();
+		if (VerifyFormPageRef.current) {
+			VerifyFormPageRef.current.uploadVerifyStoreOrder();
 		}
 	};
 	return (
@@ -116,7 +122,7 @@ const VerifyStore = () => {
 									{page === 1 ? (
 										<ActivityType showErr={showErr} setShowErr={setShowErr} />
 									) : (
-										<VerifayPage ref={verifayPageRef} />
+										<VerifyFormPage ref={VerifyFormPageRef} />
 									)}{" "}
 								</div>
 							</div>

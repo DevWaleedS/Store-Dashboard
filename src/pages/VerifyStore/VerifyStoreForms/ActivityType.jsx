@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
-import MultipleSelectCheckmarks from "../../components/MultipleSelectCheckmarks";
+
+// Multi select Components
+import MultipleSelectCheckmarks from "../../../components/MultipleSelectCheckmarks";
 
 const ActivityType = ({ setShowErr, showErr }) => {
 	return (

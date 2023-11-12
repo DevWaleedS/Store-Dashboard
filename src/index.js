@@ -38,7 +38,6 @@ import {
 	SocialPages,
 	//PackageUpgrade,
 	Support,
-	VerifyStore,
 	//MarketingCampaign,
 	//BranchesAndWarehouses,
 	Notifications,
@@ -54,6 +53,7 @@ import { Orders } from "./pages/Orders";
 import { Academy } from "./pages/Academy";
 import { Products } from "./pages/Products";
 import { ErrorPage } from "./pages/ErrorPage";
+import { VerifyStore } from "./pages/VerifyStore";
 import { TemplateSetting } from "./pages/TemplateSetting";
 import { ShippingCompanies } from "./pages/ShippingCompanies";
 import { DashboardHomePage } from "./pages/DashboardHomePage";

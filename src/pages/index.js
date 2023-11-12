@@ -9,7 +9,6 @@ export { default as Category } from "./Category";
 export { default as RootLayOut } from "./RootLayout";
 export { default as Management } from "./Management";
 export { default as PaintStore } from "./PaintStore";
-export { default as VerifyStore } from "./VerifyStore";
 export { default as SocialPages } from "./SocialPages";
 export { default as Notifications } from "./Notifications";
 export { default as PackageUpgrade } from "./PackageUpgrade";

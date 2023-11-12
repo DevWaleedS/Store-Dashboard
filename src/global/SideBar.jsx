@@ -79,6 +79,7 @@ const SideBar = ({ open, closeSidebar }) => {
 			<Menu>
 				{verificationStoreStatus === "تم التوثيق" ? (
 					<a
+						as='li'
 						className='menu-link'
 						href={`https://template.atlbha.com/${domain}`}
 						target='_blank'
@@ -163,10 +164,10 @@ const SideBar = ({ open, closeSidebar }) => {
 					</NavLink>
 
 					<a
+						as='li'
 						href='https://celebrity.sa/'
 						target='_blank'
 						rel='noreferrer'
-						as='li'
 						className='sub-menu-link'>
 						<MenuItem>
 							<Shoping />

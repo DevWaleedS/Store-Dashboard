@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import AddActivity from "./slices/AddActivity";
+import AddSubActivity from "./slices/AddSubActivity";
 import VideoModalSlice from "./slices/VideoModal-slice";
 import ReplyModalSlice from "./slices/ReplyModal-slice";
 import AddSubCategorySlice from "./slices/AddSubCategory-slice";
@@ -17,8 +19,10 @@ export const store = configureStore({
 			serializableCheck: false,
 		}),
 	reducer: {
+		AddActivity: AddActivity,
 		ReplyModal: ReplyModalSlice,
 		VideoModal: VideoModalSlice,
+		AddSubActivity: AddSubActivity,
 		VerifyModal: VerifyStoreModalSlice,
 		AddSubCategorySlice: AddSubCategorySlice,
 		MaintenanceModeModal: MaintenanceModeModal,

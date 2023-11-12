@@ -6,32 +6,39 @@ import React, {
 	forwardRef,
 	useImperativeHandle,
 } from "react";
-import useFetch from "../../Hooks/UseFetch";
+
+// Components
+import useFetch from "../../../Hooks/UseFetch";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
+// Context
+import { LoadingContext } from "../../../Context/LoadingProvider";
+
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { openVerifyStoreAlertModal } from "../../store/slices/VerifyStoreAlertModal-slice";
-import { resetActivity } from "../../store/slices/AddActivity";
-import { resetSubActivity } from "../../store/slices/AddSubActivity";
+import { resetActivity } from "../../../store/slices/AddActivity";
+import { resetSubActivity } from "../../../store/slices/AddSubActivity";
+import { openVerifyStoreAlertModal } from "../../../store/slices/VerifyStoreAlertModal-slice";
 
+// third party
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-// import Dropzone Library
 import { useDropzone } from "react-dropzone";
+import { useNavigate } from "react-router-dom";
+
+// MUI
+import Radio from "@mui/material/Radio";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // ICONS
-import { ReactComponent as WebsiteIcon } from "../../data/Icons/website.svg";
-import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-upload_outlined.svg";
 import { IoIosArrowDown } from "react-icons/io";
-import CircularLoading from "../../HelperComponents/CircularLoading";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import { ReactComponent as WebsiteIcon } from "../../../data/Icons/website.svg";
+import { ReactComponent as UploadIcon } from "../../../data/Icons/icon-24-upload_outlined.svg";
 
 const inputStyle = {
 	width: "100%",
@@ -44,7 +51,7 @@ const inputStyle = {
 	fontWeight: "400",
 };
 
-const VerifayPage = forwardRef((props, ref) => {
+const VerifyFormPage = forwardRef((props, ref) => {
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
 	 *  ------------------------------------------------- */
@@ -65,7 +72,7 @@ const VerifayPage = forwardRef((props, ref) => {
 
 	const [cookies] = useCookies(["access_token"]);
 
-	// to open verifay alert
+	// to open verify alert
 	const dispatchVerifyAlert = useDispatch(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -888,4 +895,4 @@ const VerifayPage = forwardRef((props, ref) => {
 	);
 });
 
-export default VerifayPage;
+export default VerifyFormPage;
