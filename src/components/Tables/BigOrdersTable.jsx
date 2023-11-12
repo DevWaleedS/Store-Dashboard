@@ -412,18 +412,18 @@ export default function BigOrdersTable({
 			</Paper>
 			{data?.length !== 0 && !loading && (
 				<TablePagination
-				open={open}
-				page={page}
-				allRows={allRows}
-				setPage={setPage}
-				data={data?.length}
-				rowsPerPage={rowsPerPage}
-				anchorEl={anchorEl}
-				handleClose={handleClose}
-				handleRowsClick={handleRowsClick}
-				rowsPerPagesCount={rowsPerPagesCount}
+					open={open}
+					page={page}
+					allRows={allRows}
+					setPage={setPage}
+					data={data?.length}
+					rowsPerPage={rowsPerPage}
+					anchorEl={anchorEl}
+					handleClose={handleClose}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
 					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					/>
+				/>
 			)}
 		</Box>
 	);

@@ -105,7 +105,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 															whiteSpace: "nowrap",
 															overflow: "hidden",
 															textOverflow: "ellipsis",
-														}}>{`${order?.user?.name} ${order?.user?.user_name}`}</div>
+														}}>{`${order?.user?.name} ${order?.user?.lastname}`}</div>
 												</div>
 											</td>
 											<td className=' d-flex justify-content-center align-items-center'>
