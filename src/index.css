@@ -1405,7 +1405,7 @@ select {
 
 .sub-categories div {
 	min-width: 100px;
-	max-width: 180px;
+	max-width: 160px;
 	background-color: var(--gray-200);
 	padding: 5px 8px;
 	border-radius: 20px;

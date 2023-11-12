@@ -9,15 +9,17 @@ import {
 	MdOutlineArrowForwardIos,
 } from "react-icons/md";
 const TablePagination = ({
-	rowsPerPagesCount,
-	handleChangeRowsPerPage,
-	handleRowsClick,
+	data,
 	open,
-	anchorEl,
-	handleClose,
 	page,
 	setPage,
 	allRows,
+	anchorEl,
+	rowsPerPage,
+	handleClose,
+	handleRowsClick,
+	rowsPerPagesCount,
+	handleChangeRowsPerPage,
 }) => {
 	return (
 		<div className='d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
@@ -34,28 +36,56 @@ const TablePagination = ({
 					}}
 				/>
 				<div className='d-flex flex-row-reverse gap-2'>
-					{allRows()?.map((item, itemIdx) => {
-						return (
-							<div
-								key={itemIdx}
-								className='d-flex justify-content-center align-items-center'
-								style={{
-									width: "1.7rem",
-									height: "1.9rem",
-									cursor: "pointer",
-									fontWight: "500",
-									lineHeight: "1.7rem",
-									borderRadius: "10px",
-									backgroundColor: item === page + 1 && "#508FF4",
-									color: item === page + 1 && "#fff",
-								}}
-								onClick={() => {
-									setPage(itemIdx);
-								}}>
-								{item}
-							</div>
-						);
+					{allRows().map((item, itemIdx) => {
+						if (
+							(itemIdx < 1 || (itemIdx >= page - 1 && itemIdx <= page + 1)) &&
+							(Math.ceil(data) <= 3 ||
+								(Math.ceil(data) > 3 && itemIdx < allRows()?.length - 1))
+						) {
+							return (
+								<div
+									key={itemIdx}
+									className='d-flex justify-content-center align-items-center'
+									style={{
+										width: "1.7rem",
+										height: "1.9rem",
+										cursor: "pointer",
+										fontWight: "500",
+										lineHeight: "1.7rem",
+										borderRadius: "10px",
+										backgroundColor: item === page + 1 && "#508FF4",
+										color: item === page + 1 && "#fff",
+									}}
+									onClick={() => {
+										setPage(itemIdx);
+									}}>
+									{item}
+								</div>
+							);
+						}
+						return null;
 					})}
+					{Math.ceil(data / rowsPerPage) > 3 && <div>...</div>}
+					{Math.ceil(data / rowsPerPage) > 1 && (
+						<div
+							className='d-flex justify-content-center align-items-center'
+							style={{
+								width: "1.7rem",
+								height: "1.9rem",
+								cursor: "pointer",
+								fontWight: "500",
+								lineHeight: "1.7rem",
+								borderRadius: "10px",
+								backgroundColor:
+									Math.ceil(data / rowsPerPage) === page + 1 && "#508FF4",
+								color: Math.ceil(data / rowsPerPage) === page + 1 && "#fff",
+							}}
+							onClick={() => {
+								setPage(Math.ceil(data / rowsPerPage) - 1);
+							}}>
+							{Math.ceil(data / rowsPerPage)}
+						</div>
+					)}
 				</div>
 				<MdOutlineArrowBackIosNew
 					style={{ visibility: page !== 1 && "hidden", cursor: "pointer" }}

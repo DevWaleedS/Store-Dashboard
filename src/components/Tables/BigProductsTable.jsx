@@ -662,15 +662,17 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 			</Paper>
 			{data?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
-					open={open}
-					handleClose={handleClose}
 					page={page}
+					open={open}
 					setPage={setPage}
 					allRows={allRows}
+					anchorEl={anchorEl}
+					data={data?.length}
+					rowsPerPage={rowsPerPage}
+					handleClose={handleClose}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
+					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>

@@ -108,29 +108,63 @@ const CoursesTraining = ({ searchCourses }) => {
 							}}
 						/>
 						<div className='d-flex flex-row-reverse gap-2'>
-							{allRows()?.map((item, itemIdx) => {
-								return (
-									<div
-										key={itemIdx}
-										className='d-flex justify-content-center align-items-center'
-										style={{
-											width: "1.7rem",
-											height: "1.9rem",
-											cursor: "pointer",
-											fontWight: "500",
-											lineHeight: "1.7rem",
-											borderRadius: "10px",
-											backgroundColor: item === page + 1 && "#508FF4",
-											color: item === page + 1 && "#fff",
-										}}
-										onClick={() => {
-											setPage(itemIdx);
-										}}>
-										{item}
-									</div>
-								);
+							{allRows().map((item, itemIdx) => {
+								if (
+									(itemIdx < 1 ||
+										(itemIdx >= page - 1 && itemIdx <= page + 1)) &&
+									(Math.ceil(courses?.length) <= 3 ||
+										(Math.ceil(courses?.length) > 3 &&
+											itemIdx < allRows()?.length - 1))
+								) {
+									return (
+										<div
+											key={itemIdx}
+											className='d-flex justify-content-center align-items-center'
+											style={{
+												width: "1.7rem",
+												height: "1.9rem",
+												cursor: "pointer",
+												fontWight: "500",
+												lineHeight: "1.7rem",
+												borderRadius: "10px",
+												backgroundColor: item === page + 1 && "#508FF4",
+												color: item === page + 1 && "#fff",
+											}}
+											onClick={() => {
+												setPage(itemIdx);
+											}}>
+											{item}
+										</div>
+									);
+								}
+								return null;
 							})}
+							{Math.ceil(courses?.length / rowsPerPage) > 3 && <div>...</div>}
+							{Math.ceil(courses?.length / rowsPerPage) > 1 && (
+								<div
+									className='d-flex justify-content-center align-items-center'
+									style={{
+										width: "1.7rem",
+										height: "1.9rem",
+										cursor: "pointer",
+										fontWight: "500",
+										lineHeight: "1.7rem",
+										borderRadius: "10px",
+										backgroundColor:
+											Math.ceil(courses?.length / rowsPerPage) === page + 1 &&
+											"#508FF4",
+										color:
+											Math.ceil(courses?.length / rowsPerPage) === page + 1 &&
+											"#fff",
+									}}
+									onClick={() => {
+										setPage(Math.ceil(courses?.length / rowsPerPage) - 1);
+									}}>
+									{Math.ceil(courses?.length / rowsPerPage)}
+								</div>
+							)}
 						</div>
+
 						<MdOutlineArrowBackIosNew
 							style={{
 								visibility: page === 0 && "hidden",

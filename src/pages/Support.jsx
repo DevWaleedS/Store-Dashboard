@@ -1,10 +1,14 @@
-import { InputAdornment, TextField } from "@mui/material";
-import { Helmet } from "react-helmet";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
-import { BiSearch } from "react-icons/bi";
 
+// Third party
+import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
+
+// Icons
+import { BiSearch } from "react-icons/bi";
+import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+
+// Components
 import useFetch from "../Hooks/UseFetch";
 import SupportTable from "../components/Tables/SupportTable";
 
@@ -50,19 +54,15 @@ const Support = () => {
 				</div>
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-md-6 col-12 d-flex justify-content-end'>
-						<div className='pages-search-bx w-100'>
-							<TextField
+						<div className='pages-search-bx'>
+							<BiSearch className='search-icon' />
+							<input
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
-								id='filled-textarea'
-								placeholder='ابحث عن رسالة '
-								InputProps={{
-									startAdornment: (
-										<InputAdornment position='start'>
-											<BiSearch />
-										</InputAdornment>
-									),
-								}}
+								type='text'
+								name='search'
+								id='search'
+								placeholder='ابحث عن  طريق رسالة'
 							/>
 						</div>
 					</div>

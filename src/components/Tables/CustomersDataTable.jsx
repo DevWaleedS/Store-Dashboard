@@ -469,6 +469,8 @@ export default function CustomersDataTable({
 				page={page}
 				setPage={setPage}
 				allRows={allRows}
+				data={fetchedData?.length}
+				rowsPerPage={rowsPerPage}
 			/>
 		</Box>
 	);

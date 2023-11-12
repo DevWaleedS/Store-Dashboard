@@ -536,15 +536,17 @@ export default function UserAndManagementTable({
 			</Paper>
 			{data?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
 					open={open}
-					handleClose={handleClose}
 					page={page}
+					anchorEl={anchorEl}
 					setPage={setPage}
 					allRows={allRows}
+					data={data?.length}
+					handleClose={handleClose}
+					rowsPerPage={rowsPerPage}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
+					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>

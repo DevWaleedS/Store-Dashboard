@@ -507,15 +507,17 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 			</Paper>
 			{fetchedData?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
 					open={open}
-					handleClose={handleClose}
 					page={page}
 					setPage={setPage}
 					allRows={allRows}
+					anchorEl={anchorEl}
+					handleClose={handleClose}
+					rowsPerPage={rowsPerPage}
+					data={fetchedData?.length}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
+					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>

@@ -670,15 +670,17 @@ export default function EnhancedTable({
 			</Paper>
 			{fetchedData?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
 					open={open}
-					handleClose={handleClose}
 					page={page}
 					setPage={setPage}
 					allRows={allRows}
+					anchorEl={anchorEl}
+					handleClose={handleClose}
+					data={fetchedData?.length}
+					rowsPerPage={rowsPerPage}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
+					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>

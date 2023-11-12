@@ -385,6 +385,8 @@ export default function PostalSubscriptionsTable({
 					page={page}
 					setPage={setPage}
 					allRows={allRows}
+					data={data?.length}
+					rowsPerPage={rowsPerPage}
 				/>
 			)}
 		</Box>

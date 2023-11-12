@@ -418,15 +418,17 @@ export default function CartsTables({
 			</Paper>
 			{cartsData?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
 					open={open}
-					handleClose={handleClose}
 					page={page}
 					setPage={setPage}
 					allRows={allRows}
+					anchorEl={anchorEl}
+					data={cartsData?.length}
+					rowsPerPage={rowsPerPage}
+					handleClose={handleClose}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
+					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>

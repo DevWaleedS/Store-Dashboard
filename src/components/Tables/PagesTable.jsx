@@ -557,15 +557,17 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 			</Paper>
 			{data?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
 					open={open}
-					handleClose={handleClose}
 					page={page}
 					setPage={setPage}
 					allRows={allRows}
+					data={data?.length}
+					anchorEl={anchorEl}
+					handleClose={handleClose}
+					rowsPerPage={rowsPerPage}
+					handleRowsClick={handleRowsClick}
+					rowsPerPagesCount={rowsPerPagesCount}
+					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>
