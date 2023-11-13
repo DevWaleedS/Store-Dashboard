@@ -107,11 +107,11 @@ const Report = () => {
 							</div>
 						</div>
 						<div className='col-lg-6 col-md-6 col-sm-12 d-flex justify-content-end'>
-							<div className='add-page-btn '>
+							<div className='print-report-btn-box'>
 								<ReactToPrint
 									trigger={() => {
 										return (
-											<Button variant='contained'>
+											<Button className='print-report-btn' variant='contained'>
 												<PrintIcon />
 												<span className='me-1'> طباعه التقرير</span>
 											</Button>

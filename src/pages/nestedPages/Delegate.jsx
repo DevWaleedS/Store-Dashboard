@@ -1,16 +1,21 @@
 import React from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
+import useFetch from "../../Hooks/UseFetch";
+
+// MUI
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 
 // ICONS
-import howIcon from "../../data/Icons/icon_24_home.svg";
 import { IoIosArrowDown } from "react-icons/io";
-
 import { AiOutlineSearch } from "react-icons/ai";
+import howIcon from "../../data/Icons/icon_24_home.svg";
+
+// Components
 import { DelegateTable } from "../../components/Tables";
 
 const Delegate = () => {

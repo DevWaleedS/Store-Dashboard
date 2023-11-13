@@ -229,7 +229,7 @@ const PlatformServices = () => {
 											}
 											input={<OutlinedInput />}
 											renderValue={(selected) => {
-												if (data?.services.length === 0) {
+												if (data?.services?.length === 0) {
 													return (
 														<span style={{ color: "#011723" }}>
 															اختر خدمة أو أكثر

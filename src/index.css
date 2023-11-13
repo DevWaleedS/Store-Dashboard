@@ -3368,7 +3368,7 @@ textarea {
 }
 
 /* Reports Page Style */
-.reports-page .add-page-btn button {
+.reports-page button.print-report-btn {
 	width: 200px;
 	height: 60px;
 	border-radius: 8px;
@@ -3379,7 +3379,7 @@ textarea {
 	-o-border-radius: 8px;
 }
 
-.reports-page .add-page-btn button svg path {
+.reports-page button.print-report-btn svg path {
 	fill: #fff;
 }
 
@@ -9557,11 +9557,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	/* reports-page */
-	.reports-page .add-page-btn {
+	.reports-page .print-report-btn-box {
 		width: 100%;
 	}
 
-	.reports-page .add-page-btn button {
+	.reports-page .print-report-btn-box button {
 		width: 100%;
 		height: 100%;
 	}

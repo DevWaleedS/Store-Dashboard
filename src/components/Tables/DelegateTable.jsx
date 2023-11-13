@@ -65,7 +65,7 @@ export default function DelegateTable({ cityId }) {
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-						<EnhancedTableHead rowCount={rows.length} />
+						<EnhancedTableHead rowCount={rows?.length} />
 						<TableBody>
 							{cityId === "" ? (
 								<TableCell className='text-center' colSpan={5}>
@@ -102,7 +102,7 @@ export default function DelegateTable({ cityId }) {
 												<img
 													src={row?.image}
 													alt='img'
-													className=' rounded-circle'
+													className='img_icons rounded-circle'
 												/>
 												<span className='me-3'>{row?.name}</span>
 											</div>
