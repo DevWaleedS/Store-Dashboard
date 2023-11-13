@@ -146,146 +146,158 @@ const Notifications = () => {
 						/>
 					</div>
 				</div>
-				<div className='row mb-md-4 mb-3'>
-					<h4 className='page-title'>الاشعارات</h4>
-				</div>
 
-				<div className='notifications-table'>
-					<div className='row'>
-						{fetchedData?.data?.notifications.length === 0 ? (
-							<h4 className='d-flex justify-content-center align-items-center'>
+				{loading ? (
+					<section
+						style={{ height: "70vh" }}
+						className='d-flex justify-content-center align-items-center'>
+						<CircularLoading />
+					</section>
+				) : (
+					<>
+						{fetchedData?.data?.notifications?.length === 0 ? (
+							<h4
+								style={{ height: "70vh" }}
+								className='d-flex justify-content-center align-items-center'>
 								لا يوجد اشعارات حتى هذه اللحظة!
 							</h4>
-						) : loading ? (
-							<CircularLoading />
 						) : (
-							<div className='table_wrapper'>
-								<div className='d-flex flex-row align-items-center gap-5'>
-									<div className='d-flex flex-row align-items-center gap-3'>
-										<Checkbox
-											checkedIcon={<CheckedSquare />}
-											sx={{
-												pr: "0",
-												color: "#011723",
-												"& .MuiSvgIcon-root": {
-													color: "#011723",
-												},
-											}}
-											indeterminate={
-												selected.length > 0 &&
-												selected.length <
-													fetchedData?.data?.notifications?.length
-											}
-											checked={
-												fetchedData?.data?.notifications?.length > 0 &&
-												selected.length ===
-													fetchedData?.data?.notifications?.length
-											}
-											onChange={handleSelectAllClick}
-											inputProps={{
-												"aria-label": "select all desserts",
-											}}
-										/>
-										<label
-											className='md:text-[18px] text-[16px]'
-											style={{ color: "#011723" }}
-											htmlFor='all'>
-											تحديد الكل
-										</label>
-									</div>
-
-									<div className='d-flex flex-row justify-content-center align-items-center gap-2'>
-										{selected.length > 0 && (
-											<div
-												className='d-flex flex-row justify-content-center align-items-center gap-2 cursor-pointer'
-												style={{
-													width: "110px",
-													height: "40px",
-													backgroundColor: "#FF38381A",
-													borderRadius: "20px",
-													cursor: "pointer",
-												}}
-												onClick={() => {
-													setNotificationTitle(
-														"سيتم حذف جميع الاشعارات وهذةالخظوة غير قابلة للرجوع"
-													);
-													setActionTitle("Delete");
-												}}>
-												<img
-													src={DeleteIcon}
-													alt='delete-icon'
-													loading='lazy'
-												/>
-												<h6 className='' style={{ color: "#FF3838" }}>
-													حذف
-												</h6>
-											</div>
-										)}
-									</div>
+							<>
+								<div className='row mb-md-4 mb-3'>
+									<h4 className='page-title'>الاشعارات</h4>
 								</div>
-								<div className='d-flex flex-col gap-4 flex-wrap mt-3 flex '>
-									{fetchedData?.data?.notifications?.map((not, index) => {
-										const isItemSelected = isSelected(not.id);
-										return (
-											<div
-												key={index}
-												style={{ boxShadow: "3px 3px 6px #00000005" }}
-												className='bg-white w-100 d-flex flex-md-row flex-col align-md-items-center align-items-start justify-content-between gap-2 px-md-4 py-md-3 py-3 px-2'>
-												<div className='w-100 d-flex flex-row align-items-center gap-md-4 gap-2'>
+
+								<div className='notifications-table'>
+									<div className='row'>
+										<div className='table_wrapper'>
+											<div className='d-flex flex-row align-items-center gap-5'>
+												<div className='d-flex flex-row align-items-center gap-3'>
 													<Checkbox
 														checkedIcon={<CheckedSquare />}
 														sx={{
-															color: "#1DBBBE",
+															pr: "0",
+															color: "#011723",
 															"& .MuiSvgIcon-root": {
-																color: "#ADB5B9",
+																color: "#011723",
 															},
 														}}
-														checked={isItemSelected}
-														onClick={(event) => handleClick(event, not.id)}
+														indeterminate={
+															selected.length > 0 &&
+															selected.length <
+																fetchedData?.data?.notifications?.length
+														}
+														checked={
+															fetchedData?.data?.notifications?.length > 0 &&
+															selected.length ===
+																fetchedData?.data?.notifications?.length
+														}
+														onChange={handleSelectAllClick}
 													/>
-													<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
-														<div className='flex flex-col gap-1'>
-															<h2 className='notifications-title'>
-																{not?.message}
-															</h2>
-															<p className='notification-user-name '>
-																{not?.user[0]?.name}
-															</p>
-														</div>
-													</div>
+													<label
+														className='md:text-[18px] text-[16px]'
+														style={{ color: "#011723" }}
+														htmlFor='all'>
+														تحديد الكل
+													</label>
 												</div>
-												<div className=' w-100 h-100 d-flex flex-md-row flex-column align-items-md-center align-items-end justify-content-end gap-md-5 gap-2'>
-													<div className=''>
-														<p className='notification-time'>
-															{formatDate(not.created_at)}
-														</p>
-													</div>
 
-													<div className='d-flex flex-row align-items-center '>
-														<img
-															onClick={() => {
-																setActionDelete(
-																	"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
-																);
-																setDeleteMethod("get");
-																setUrl(
-																	`https://backend.atlbha.com/api/Store/NotificationDelete/${not?.id}`
-																);
+												<div className='d-flex flex-row justify-content-center align-items-center gap-2'>
+													{selected.length > 0 && (
+														<div
+															className='d-flex flex-row justify-content-center align-items-center gap-2 cursor-pointer'
+															style={{
+																width: "110px",
+																height: "40px",
+																backgroundColor: "#FF38381A",
+																borderRadius: "20px",
+																cursor: "pointer",
 															}}
-															src={DeleteIcon}
-															alt='delete-icon'
-															style={{ cursor: "pointer" }}
-														/>
-													</div>
+															onClick={() => {
+																setNotificationTitle(
+																	"سيتم حذف جميع الاشعارات وهذةالخظوة غير قابلة للرجوع"
+																);
+																setActionTitle("Delete");
+															}}>
+															<img
+																src={DeleteIcon}
+																alt='delete-icon'
+																loading='lazy'
+															/>
+															<h6 className='' style={{ color: "#FF3838" }}>
+																حذف
+															</h6>
+														</div>
+													)}
 												</div>
 											</div>
-										);
-									})}
+											<div className='d-flex flex-col gap-4 flex-wrap mt-3 flex '>
+												{fetchedData?.data?.notifications?.map((not, index) => {
+													const isItemSelected = isSelected(not.id);
+													return (
+														<div
+															key={index}
+															style={{ boxShadow: "3px 3px 6px #00000005" }}
+															className='bg-white w-100 d-flex flex-md-row flex-col align-md-items-center align-items-start justify-content-between gap-2 px-md-4 py-md-3 py-3 px-2'>
+															<div className='w-100 d-flex flex-row align-items-center gap-md-4 gap-2'>
+																<Checkbox
+																	checkedIcon={<CheckedSquare />}
+																	sx={{
+																		color: "#1DBBBE",
+																		"& .MuiSvgIcon-root": {
+																			color: "#ADB5B9",
+																		},
+																	}}
+																	checked={isItemSelected}
+																	onClick={(event) =>
+																		handleClick(event, not.id)
+																	}
+																/>
+																<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
+																	<div className='flex flex-col gap-1'>
+																		<h2 className='notifications-title'>
+																			{not?.message}
+																		</h2>
+																		<p className='notification-user-name '>
+																			{not?.user[0]?.name}
+																		</p>
+																	</div>
+																</div>
+															</div>
+															<div className=' w-100 h-100 d-flex flex-md-row flex-column align-items-md-center align-items-end justify-content-end gap-md-5 gap-2'>
+																<div className=''>
+																	<p className='notification-time'>
+																		{formatDate(not.created_at)}
+																	</p>
+																</div>
+
+																<div className='d-flex flex-row align-items-center '>
+																	<img
+																		onClick={() => {
+																			setActionDelete(
+																				"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
+																			);
+																			setDeleteMethod("get");
+																			setUrl(
+																				`https://backend.atlbha.com/api/Store/NotificationDelete/${not?.id}`
+																			);
+																		}}
+																		src={DeleteIcon}
+																		alt='delete-icon'
+																		style={{ cursor: "pointer" }}
+																	/>
+																</div>
+															</div>
+														</div>
+													);
+												})}
+											</div>
+										</div>
+									</div>
 								</div>
-							</div>
+							</>
 						)}
-					</div>
-				</div>
+					</>
+				)}
 			</section>
 		</>
 	);

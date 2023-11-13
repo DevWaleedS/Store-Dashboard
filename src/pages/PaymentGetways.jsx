@@ -95,16 +95,16 @@ const PaymentGetways = () => {
 					</div>
 				</div>
 
-				{loading ? (
-					<div
-						className='d-flex justify-content-center align-items-center'
-						style={{ height: "200px" }}>
-						<CircularLoading />
-					</div>
-				) : (
-					<div className='data-container'>
-						<div className='row'>
-							{fetchedData?.data?.paymenttypes.map((item) => (
+				<div className='data-container'>
+					<div className='row'>
+						{loading ? (
+							<div
+								style={{ minHeight: "250px" }}
+								className='d-flex justify-content-center align-items-center'>
+								<CircularLoading />
+							</div>
+						) : (
+							fetchedData?.data?.paymenttypes?.map((item) => (
 								<div className='col-xl-3 col-6' key={item.id}>
 									<div className='data-widget'>
 										<div className='data'>
@@ -169,10 +169,10 @@ const PaymentGetways = () => {
 										</div>
 									</div>
 								</div>
-							))}
-						</div>
+							))
+						)}
 					</div>
-				)}
+				</div>
 			</section>
 		</>
 	);

@@ -97,11 +97,11 @@ const ShippingCompanies = () => {
 						{loading ? (
 							<div
 								className='d-flex justify-content-center align-items-center'
-								style={{ height: "200px" }}>
+								style={{ minHeight: "250px" }}>
 								<CircularLoading />
 							</div>
 						) : (
-							fetchedData?.data?.shippingtypes.map((item) => (
+							fetchedData?.data?.shippingtypes?.map((item) => (
 								<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
 									<ShippingCompaniesData
 										data={item?.name}

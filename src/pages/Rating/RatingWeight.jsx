@@ -54,9 +54,8 @@ const RatingWeight = ({
 
 	// to add rating icon to jsx
 	const MAX_RATING = 5;
-
 	const renderStars = (rating) => {
-		const fullStars = Math.floor(rating);
+		const fullStars = Math?.floor(rating);
 
 		const hasHalfStar = rating - fullStars >= 0.5;
 		const stars = [];
@@ -73,6 +72,7 @@ const RatingWeight = ({
 
 		return stars;
 	};
+	// --------------------------------
 
 	// Delete single item
 	useEffect(() => {
