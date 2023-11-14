@@ -9,8 +9,8 @@ import { BiSearch } from "react-icons/bi";
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 
 // Components
-import Explain from "./Explain";
-import CoursesTraining from "./CoursesTraining";
+import Explain from "./Explains/Explain";
+import CoursesTraining from "./Courses/CoursesTraining";
 
 const Academy = () => {
 	// Use state to the next button

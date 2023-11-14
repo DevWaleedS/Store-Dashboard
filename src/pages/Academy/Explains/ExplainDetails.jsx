@@ -1,38 +1,36 @@
 import React, { useState, useEffect } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
 
-// MUI
-import { useDispatch } from "react-redux";
-// import { openModal } from "../../store/slices/VideoModal-slice";
-// import CourseVideoModal from "../../components/CourseVideoModal";
+// Components
+import useFetch from "../../../Hooks/UseFetch";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
 // ICONS
-import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
-import CircularLoading from "../../HelperComponents/CircularLoading";
-// import { ReactComponent as ArrowDown } from "../../data/Icons/icon-24-chevron_down.svg";
-// import { ReactComponent as PDFIcon } from "../../data/Icons/pfd.svg";
-// import { BiPlayCircle } from "react-icons/bi";
+import arrowBack from "../../../data/Icons/icon-30-arrwos back.svg";
 
 const ExplainDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-
-	// to open video modal
-	// const dispatch = useDispatch(false);
 
 	// to get all  data from server
 	const { fetchedData, loading } = useFetch(
 		`https://backend.atlbha.com/api/Store/explainVideos/${id} `
 	);
 
-	//to store all details on state
-	const [explainDetails, setExplainDetails] = useState();
+	// This code to handle get the src from youtube iframe src
+	const [videoUrl, setVideoUrl] = useState(null);
 	useEffect(() => {
-		if (fetchedData) {
-			setExplainDetails(fetchedData?.data?.explainvideos);
-		}
-	}, [fetchedData]);
+		const parser = new DOMParser();
+		const doc = parser?.parseFromString(
+			fetchedData?.data?.explainvideos?.video,
+			"text/html"
+		);
+		const iframeSrc = doc?.querySelector("iframe")?.getAttribute("src");
+		setVideoUrl(iframeSrc);
+	}, [fetchedData?.data?.explainvideos?.video]);
 
 	return (
 		<>
@@ -77,15 +75,17 @@ const ExplainDetails = () => {
 					) : (
 						<div className='course-actions'>
 							<div className='course-name explain-title mb-4'>
-								<h4>{explainDetails?.title}</h4>
+								<h4>{fetchedData?.data?.explainvideos?.title}</h4>
 							</div>
 
 							<div className='col-12 mb-4 d-flex justify-content-center align-items-center'>
 								<div className='explain-video'>
-									<video
-										controls
-										poster={explainDetails?.thumbnail}
-										src={explainDetails?.video}
+									<iframe
+										width='100%'
+										height='100%'
+										src={videoUrl}
+										allowFullScreen
+										title={fetchedData?.data?.explainvideos?.title}
 									/>
 								</div>
 							</div>

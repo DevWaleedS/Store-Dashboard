@@ -50,7 +50,12 @@ import {
 
 import { Rating } from "./pages/Rating";
 import { Orders } from "./pages/Orders";
+
+// Academy Component
 import { Academy } from "./pages/Academy";
+import { CourseDetails } from "./pages/Academy/Courses";
+import { ExplainDetails } from "./pages/Academy/Explains";
+
 import { Products } from "./pages/Products";
 import { ErrorPage } from "./pages/ErrorPage";
 import { VerifyStore } from "./pages/VerifyStore";
@@ -61,8 +66,6 @@ import { DashboardHomePage } from "./pages/DashboardHomePage";
 
 // Import Nested Pages
 import {
-	CourseDetails,
-	SupportDetails,
 	AddCoupon,
 	EditCoupon,
 	ClientData,
@@ -84,7 +87,7 @@ import {
 	// CreateOffer,
 	CreatePage,
 	EditPage,
-	ExplainDetails,
+	SupportDetails,
 	// OfferDetails,
 } from "./pages/nestedPages";
 

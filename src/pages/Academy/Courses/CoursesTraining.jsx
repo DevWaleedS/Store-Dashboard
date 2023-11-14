@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from "react";
 
 // Thirty Party
-import useFetch from "../../Hooks/UseFetch";
+import useFetch from "../../../Hooks/UseFetch";
 
 // Components
-import AcademyWidget from "./AcademyWidget";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import AcademyWidget from "../AcademyWidget";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Icons
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";

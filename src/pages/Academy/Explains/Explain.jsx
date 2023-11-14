@@ -2,10 +2,10 @@ import React from "react";
 
 //Third party
 import { useNavigate } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
+import useFetch from "../../../Hooks/UseFetch";
 
 // Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // icons
 import { BsPlayCircle } from "react-icons/bs";
