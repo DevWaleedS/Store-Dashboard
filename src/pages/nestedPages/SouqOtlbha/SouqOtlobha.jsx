@@ -94,7 +94,7 @@ const SouqOtlobha = () => {
 							</div>
 						</div>
 						<div className='col-lg-6 col-12'>
-							<div className='btn-group d-flex gap-3 me-0 me-lg-5'>
+							<div className='btn-group d-flex gap-4 me-0 me-lg-5'>
 								<button
 									className='d-flex justify-content-center align-items-center'
 									onClick={() =>

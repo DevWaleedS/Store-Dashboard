@@ -5,21 +5,28 @@ import React, {
 	Fragment,
 	useEffect,
 } from "react";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import Context from "../../../Context/context";
-import { Link, useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import useFetch from "../../../Hooks/UseFetch";
 
-import CircularLoading from "../../../HelperComponents/CircularLoading";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+// Third party
+import axios from "axios";
 import moment from "moment";
+import { Helmet } from "react-helmet";
+import { useCookies } from "react-cookie";
+import { Link, useParams } from "react-router-dom";
+
+// Context
+import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
+// Components
+import useFetch from "../../../Hooks/UseFetch";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
+// MUI
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 // to download order details as pdf file
-import Pdf from "react-to-pdf";
+import { usePDF } from "react-to-pdf";
 
 // Icons
 import { ReactComponent as StatusIcon } from "../../../data/Icons/status.svg";
@@ -70,17 +77,15 @@ function EnhancedTableHead() {
 }
 
 const OrderDetails = () => {
-	const componentRef = useRef();
 	const { id } = useParams();
-
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/orders/${id}`
 	);
 	const { fetchedData: cities } = useFetch(
 		`https://backend.atlbha.com/api/Store/getAllCity`
 	);
-	const [cookies] = useCookies(["access_token"]);
 
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -150,6 +155,18 @@ const OrderDetails = () => {
 	}
 	// -----------------------------------------------------
 
+	// handle calc total price if codePrice is !== 0
+	const calcTotalPrice = (codprice, totalPrice) => {
+		const cashOnDelivery = codprice || 0;
+		const totalCartValue = totalPrice;
+
+		const totalValue = cashOnDelivery
+			? (totalCartValue + cashOnDelivery)?.toFixed(2)
+			: totalPrice;
+		return totalValue;
+	};
+	// -------------------------------------------------
+
 	// To handle update order Status
 	const updateOrderStatus = (status) => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
@@ -187,10 +204,12 @@ const OrderDetails = () => {
 				}
 			});
 	};
+	// -------------------------------------------------
 
-	// print sticker
+	// Handle print sticker Function
 	const printSticker = () => {
 		setPrintError("");
+
 		if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
 			axios
 				.get(
@@ -241,29 +260,18 @@ const OrderDetails = () => {
 				});
 		}
 	};
-	// ---------------------------
-
-	// handle calc total price if codePrice is !== 0
-	const calcTotalPrice = (codprice, totalPrice) => {
-		const cashOnDelivery = codprice || 0;
-		const totalCartValue = totalPrice;
-
-		const totalValue = cashOnDelivery
-			? (totalCartValue + cashOnDelivery)?.toFixed(2)
-			: totalPrice;
-		return totalValue;
-	};
 	// -------------------------------------------------
+
+	// Handle print this page as pdf file
+	const { toPDF, targetRef } = usePDF({ filename: "order-details-report.pdf" });
 
 	return (
 		<>
 			<Helmet>
 				<title>لوحة تحكم أطلبها | تفاصيل الطلب</title>
 			</Helmet>
-			<section
-				className='order-details-page orders-pages p-md-3'
-				id='report'
-				ref={componentRef}>
+
+			<section className='order-details-page orders-pages p-md-3' id='report'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
 						<div className='search-icon'>
@@ -279,196 +287,202 @@ const OrderDetails = () => {
 					</div>
 				</div>
 
-				<div className='head-category mb-5 pt-md-4'>
-					<div className='row '>
-						<div className='col-md-6 col-12'>
-							<h3>تفاصيل الطلب</h3>
-							{/** breadcrumb */}
-							<nav aria-label='breadcrumb'>
-								<ol className='breadcrumb'>
-									<li className='breadcrumb-item'>
-										<Link to='/Orders'>
-											<ArrowIcon className='arrow-back-icon' />
-										</Link>
-										<Link to='/Orders' className='me-2'>
-											جدول الطلبات
-										</Link>
-									</li>
-									<li className='breadcrumb-item active ' aria-current='page'>
-										تفاصيل الطلب
-									</li>
-								</ol>
-							</nav>
-						</div>
-						<div className='col-md-6 col-12 d-flex justify-content-md-end justify-content-center'>
-							<div className='order-number'>
-								<div className='title'>
-									<h5>رقم الطلب</h5>
-								</div>
-								<div className='number'>
-									{loading ? 0 : fetchedData?.data?.orders?.order_number}
+				<section ref={targetRef}>
+					{/* Order Details Header */}
+					<div className='head-category mb-5 pt-md-4'>
+						<div className='row '>
+							<div className='col-md-6 col-12'>
+								<h3>تفاصيل الطلب</h3>
+								{/** breadcrumb */}
+								<nav aria-label='breadcrumb'>
+									<ol className='breadcrumb'>
+										<li className='breadcrumb-item'>
+											<Link to='/Orders'>
+												<ArrowIcon className='arrow-back-icon' />
+											</Link>
+											<Link to='/Orders' className='me-2'>
+												جدول الطلبات
+											</Link>
+										</li>
+										<li className='breadcrumb-item active ' aria-current='page'>
+											تفاصيل الطلب
+										</li>
+									</ol>
+								</nav>
+							</div>
+							<div className='col-md-5 col-12 d-flex justify-content-md-end justify-content-center'>
+								<div className='order-number'>
+									<div className='title'>
+										<h5>رقم الطلب</h5>
+									</div>
+									<div className='number'>
+										{loading ? 0 : fetchedData?.data?.orders?.order_number}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div className='order-details-body'>
+					{/* order-details-body */}
 					{loading ? (
-						<CircularLoading />
+						<section>
+							<CircularLoading />
+						</section>
 					) : (
-						<>
-							<div>
-								<div className='mb-md-5 mb-4'>
-									<div className='order-details-box '>
-										<div className='title mb-4'>
-											<h5>بيانات الطلب</h5>
-										</div>
-										<div className='order-details-data pt-md-4 pb-md-4'>
-											<div className='boxes mb-4'>
-												<div className='box'>
-													<div className='order-head-row'>
-														<StatusIcon />
-														<span className='me-3'>الحالة</span>
-													</div>
-													<div className='order-data-row'>
-														<span>{fetchedData?.data?.orders?.status}</span>
-													</div>
-												</div>
-												<div className='box'>
-													<div className='order-head-row'>
-														<DateIcon className='date-icon' />
-														<span className='me-3'>تاريخ الطلب</span>
-													</div>
-
-													<div className='order-data-row'>
-														<span>
-															{moment(
-																fetchedData?.data?.orders?.created_at
-															).format("DD-MM-YYYY")}
-														</span>
-													</div>
-												</div>
-												<div className='box'>
-													<div className='order-head-row'>
-														<WalletIcon />
-														<span className='me-3 price'>إجمالي الطلب</span>
-													</div>
-													<div className='order-data-row'>
-														<span>
-															{calcTotalPrice(
-																fetchedData?.data?.orders?.codprice,
-																fetchedData?.data?.orders?.total_price
-															)}{" "}
-															ر.س
-														</span>
-													</div>
-												</div>
-												<div className='box'>
-													<div className='order-head-row'>
-														<Quantity />
-														<span className='me-3'> عدد المنتجات</span>
-													</div>
-													<div className='order-data-row'>
-														<span>{fetchedData?.data?.orders?.quantity}</span>
-													</div>
-												</div>
-												<div className='box'>
-													<div className='order-head-row'>
-														<span className='me-3'>شركة الشحن</span>
-													</div>
-													<div className='order-data-row'>
-														<span>
-															{fetchedData?.data?.orders?.shippingtypes?.name}
-														</span>
-													</div>
-												</div>
-											</div>
-											<div className='boxes mb-4'>
-												{fetchedData?.data?.orders?.shipping?.track_id && (
-													<div className='box mb-4'>
-														<div className='order-head-row'>
-															<span className='me-3 '>رقم التتبع</span>{" "}
-															<span
-																className='me-2'
-																style={{ display: "block", fontSize: "1rem" }}>
-																( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
-																<a
-																	href={fetchedData?.data?.orders?.trackingLink}
-																	target='_blank'
-																	rel='noreferrer'>
-																	<BiLinkExternal
-																		style={{ width: "16px", cursor: "pointer" }}
-																	/>
-																</a>
-																)
-															</span>
-														</div>
-														<div className='order-data-row'>
-															<span
-																style={{
-																	width: "100%",
-																	display: "flex",
-																	flexDirection: "row",
-																	alignItems: "center",
-																	justifyContent: "space-between",
-																	padding: "0 10px",
-																}}>
-																{fetchedData?.data?.orders?.shipping?.track_id}
-																{copy ? (
-																	<AiFillCheckCircle color='#1dbbbe' />
-																) : (
-																	<AiFillCopy
-																		color='#1dbbbe'
-																		style={{ cursor: "pointer" }}
-																		onClick={() => {
-																			setCopy(true);
-																			setTimeout(() => {
-																				navigator.clipboard.writeText(
-																					fetchedData?.data?.orders?.shipping
-																						?.track_id
-																				);
-																				setCopy(false);
-																			}, 1000);
-																		}}></AiFillCopy>
-																)}
-															</span>
-														</div>
-													</div>
-												)}
-												{fetchedData?.data?.orders?.shipping?.shipping_id && (
-													<div className='box mb-4'>
-														<div className='order-head-row'>
-															<span className='me-3'>رقم البوليصة</span>
-														</div>
-														<div className='order-data-row'>
-															<span>
-																{
-																	fetchedData?.data?.orders?.shipping
-																		?.shipping_id
-																}
-															</span>
-														</div>
-													</div>
-												)}
-											</div>
-											<div className=''>
+						<section className='order-details-body'>
+							<div className='mb-md-5 mb-4'>
+								<div className='order-details-box '>
+									<div className='title mb-4'>
+										<h5>بيانات الطلب</h5>
+									</div>
+									<div className='order-details-data pt-md-4 pb-md-4'>
+										<div className='boxes mb-4'>
+											<div className='box'>
 												<div className='order-head-row'>
-													<span className='me-3'>ملاحظات الطلب</span>
+													<StatusIcon />
+													<span className='me-3'>الحالة</span>
 												</div>
 												<div className='order-data-row'>
-													<span
-														style={{
-															whiteSpace: "normal",
-															textAlign: "center",
-														}}>
-														{fetchedData?.data?.orders?.description}
+													<span>{fetchedData?.data?.orders?.status}</span>
+												</div>
+											</div>
+											<div className='box'>
+												<div className='order-head-row'>
+													<DateIcon className='date-icon' />
+													<span className='me-3'>تاريخ الطلب</span>
+												</div>
+
+												<div className='order-data-row'>
+													<span>
+														{moment(
+															fetchedData?.data?.orders?.created_at
+														).format("DD-MM-YYYY")}
+													</span>
+												</div>
+											</div>
+											<div className='box'>
+												<div className='order-head-row'>
+													<WalletIcon />
+													<span className='me-3 price'>إجمالي الطلب</span>
+												</div>
+												<div className='order-data-row'>
+													<span>
+														{calcTotalPrice(
+															fetchedData?.data?.orders?.codprice,
+															fetchedData?.data?.orders?.total_price
+														)}{" "}
+														ر.س
+													</span>
+												</div>
+											</div>
+											<div className='box'>
+												<div className='order-head-row'>
+													<Quantity />
+													<span className='me-3'> عدد المنتجات</span>
+												</div>
+												<div className='order-data-row'>
+													<span>{fetchedData?.data?.orders?.quantity}</span>
+												</div>
+											</div>
+											<div className='box'>
+												<div className='order-head-row'>
+													<span className='me-3'>شركة الشحن</span>
+												</div>
+												<div className='order-data-row'>
+													<span>
+														{fetchedData?.data?.orders?.shippingtypes?.name}
 													</span>
 												</div>
 											</div>
 										</div>
+										<div className='boxes mb-4'>
+											{fetchedData?.data?.orders?.shipping?.track_id && (
+												<div className='box mb-4'>
+													<div className='order-head-row'>
+														<span className='me-3 '>رقم التتبع</span>{" "}
+														<span
+															className='me-2'
+															style={{
+																display: "block",
+																fontSize: "1rem",
+															}}>
+															( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
+															<a
+																href={fetchedData?.data?.orders?.trackingLink}
+																target='_blank'
+																rel='noreferrer'>
+																<BiLinkExternal
+																	style={{
+																		width: "16px",
+																		cursor: "pointer",
+																	}}
+																/>
+															</a>
+															)
+														</span>
+													</div>
+													<div className='order-data-row'>
+														<span
+															style={{
+																width: "100%",
+																display: "flex",
+																flexDirection: "row",
+																alignItems: "center",
+																justifyContent: "space-between",
+																padding: "0 10px",
+															}}>
+															{fetchedData?.data?.orders?.shipping?.track_id}
+															{copy ? (
+																<AiFillCheckCircle color='#1dbbbe' />
+															) : (
+																<AiFillCopy
+																	color='#1dbbbe'
+																	style={{ cursor: "pointer" }}
+																	onClick={() => {
+																		setCopy(true);
+																		setTimeout(() => {
+																			navigator.clipboard.writeText(
+																				fetchedData?.data?.orders?.shipping
+																					?.track_id
+																			);
+																			setCopy(false);
+																		}, 1000);
+																	}}></AiFillCopy>
+															)}
+														</span>
+													</div>
+												</div>
+											)}
+											{fetchedData?.data?.orders?.shipping?.shipping_id && (
+												<div className='box mb-4'>
+													<div className='order-head-row'>
+														<span className='me-3'>رقم البوليصة</span>
+													</div>
+													<div className='order-data-row'>
+														<span>
+															{fetchedData?.data?.orders?.shipping?.shipping_id}
+														</span>
+													</div>
+												</div>
+											)}
+										</div>
+										<div className=''>
+											<div className='order-head-row'>
+												<span className='me-3'>ملاحظات الطلب</span>
+											</div>
+											<div className='order-data-row'>
+												<span
+													style={{
+														whiteSpace: "normal",
+														textAlign: "center",
+													}}>
+													{fetchedData?.data?.orders?.description}
+												</span>
+											</div>
+										</div>
 									</div>
 								</div>
+
 								<div className='mb-md-5 mb-4'>
 									<div className='order-details-box'>
 										<div className='title mb-4 d-flex justify-content-between  align-content-center  flex-wrap'>
@@ -934,7 +948,10 @@ const OrderDetails = () => {
 													name='category_id'
 													value={shipping?.city}
 													onChange={(e) => {
-														setShipping({ ...shipping, city: e.target.value });
+														setShipping({
+															...shipping,
+															city: e.target.value,
+														});
 													}}
 													sx={{
 														fontSize: "18px",
@@ -1031,135 +1048,128 @@ const OrderDetails = () => {
 									</div>
 								</div>
 							</div>
-							<div className='mb-md-5 mb-4'>
-								<div className='order-details-box'>
-									<div className='title mb-4'>
-										<h5> خيارات الطلب</h5>
-									</div>
-									<div className='px-md-3'>
-										<div
-											className='order-action-box accordion-box mb-3'
-											id='accordionExample'>
-											<div className='accordion-item w-100'>
-												<button
-													className='accordion-button  text-end '
-													type='button'
-													data-bs-toggle='collapse'
-													data-bs-target='#collapseOne'
-													aria-expanded='true'
-													aria-controls='collapseOne'>
-													<div className='action-title w-100'>
-														<ListIcon className='list-icon' />
-														<span className='me-2'> تعديل حالة الطلب</span>
-													</div>
-													<div className='action-icon'>
-														<ArrowDown />
-													</div>
-												</button>
+						</section>
+					)}
+				</section>
 
-												<div
-													id='collapseOne'
-													className='accordion-collapse collapse '
-													aria-labelledby='headingOne'
-													data-bs-parent='#accordionExample'>
-													<div className='accordion-body'>
-														<ul className='select-status p-0'>
-															<li
-																onClick={() => updateOrderStatus("new")}
-																style={{ cursor: "pointer" }}>
-																جديد
-															</li>
-
-															<li
-																onClick={() => updateOrderStatus("ready")}
-																style={
-																	fetchedData?.data?.orders?.status ===
-																	"جاهز للشحن"
-																		? {
-																				pointerEvents: "none",
-																				opacity: "0.6",
-																				cursor: "not-allowed",
-																		  }
-																		: { cursor: "pointer" }
-																}>
-																جاهز للشحن
-																{fetchedData?.data?.orders?.status ===
-																"جاهز للشحن" ? (
-																	<span style={{ fontSize: "1rem" }}>
-																		{" "}
-																		(تم تغيير حالة الطلب إلي جاهز للشحن من قبل ){" "}
-																	</span>
-																) : (
-																	<span style={{ fontSize: "1rem" }}>
-																		{" "}
-																		(يرجى ملء بيانات الشحنة أولاً){" "}
-																	</span>
-																)}
-															</li>
-
-															<li
-																onClick={() => updateOrderStatus("completed")}
-																style={{ cursor: "pointer" }}>
-																تم التوصيل
-															</li>
-
-															<li
-																onClick={() => updateOrderStatus("canceled")}
-																style={{ cursor: "pointer" }}>
-																ملغي
-																<span
-																	style={{ fontSize: "1rem", color: "red" }}>
-																	{" "}
-																	(إلغاء الطلب بالكامل){" "}
-																</span>
-															</li>
-														</ul>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<div className='order-action-box mb-3'>
-											<div className='action-title'>
+				{/* Order options */}
+				<section className={`${loading ? "d-none" : "order-details-body"}`}>
+					<div className='mb-md-5 mb-4'>
+						<div className='order-details-box'>
+							<div className='title mb-4'>
+								<h5> خيارات الطلب</h5>
+							</div>
+							<div className='px-md-3'>
+								<div
+									className='order-action-box accordion-box mb-3'
+									id='accordionExample'>
+									<div className='accordion-item w-100'>
+										<button
+											className='accordion-button  text-end '
+											type='button'
+											data-bs-toggle='collapse'
+											data-bs-target='#collapseOne'
+											aria-expanded='true'
+											aria-controls='collapseOne'>
+											<div className='action-title w-100'>
 												<ListIcon className='list-icon' />
-												<span className='me-2'> تصدير الطلب</span>
+												<span className='me-2'> تعديل حالة الطلب</span>
 											</div>
 											<div className='action-icon'>
-												<Pdf
-													targetRef={componentRef}
-													filename='report-details.pdf'
-													x={0.4}
-													y={0.4}
-													scale={0.4}>
-													{({ toPdf }) => (
-														<PDFIcon className='pdf-icon' onClick={toPdf} />
-													)}
-												</Pdf>
+												<ArrowDown />
+											</div>
+										</button>
+
+										<div
+											id='collapseOne'
+											className='accordion-collapse collapse '
+											aria-labelledby='headingOne'
+											data-bs-parent='#accordionExample'>
+											<div className='accordion-body'>
+												<ul className='select-status p-0'>
+													<li
+														onClick={() => updateOrderStatus("new")}
+														style={{ cursor: "pointer" }}>
+														جديد
+													</li>
+
+													<li
+														onClick={() => updateOrderStatus("ready")}
+														style={
+															fetchedData?.data?.orders?.status === "جاهز للشحن"
+																? {
+																		pointerEvents: "none",
+																		opacity: "0.6",
+																		cursor: "not-allowed",
+																  }
+																: { cursor: "pointer" }
+														}>
+														جاهز للشحن
+														{fetchedData?.data?.orders?.status ===
+														"جاهز للشحن" ? (
+															<span style={{ fontSize: "1rem" }}>
+																{" "}
+																(تم تغيير حالة الطلب إلي جاهز للشحن من قبل ){" "}
+															</span>
+														) : (
+															<span style={{ fontSize: "1rem" }}>
+																{" "}
+																(يرجى ملء بيانات الشحنة أولاً){" "}
+															</span>
+														)}
+													</li>
+
+													<li
+														onClick={() => updateOrderStatus("completed")}
+														style={{ cursor: "pointer" }}>
+														تم التوصيل
+													</li>
+
+													<li
+														onClick={() => updateOrderStatus("canceled")}
+														style={{ cursor: "pointer" }}>
+														ملغي
+														<span style={{ fontSize: "1rem", color: "red" }}>
+															{" "}
+															(إلغاء الطلب بالكامل){" "}
+														</span>
+													</li>
+												</ul>
 											</div>
 										</div>
+									</div>
+								</div>
 
-										{fetchedData?.data?.orders?.shipping && (
-											<>
-												<button
-													disabled={
-														fetchedData?.data?.orders?.shipping === null
-													}
-													style={{ cursor: "pointer" }}
-													onClick={() => printSticker()}
-													className='order-action-box mb-3'>
-													<div className='action-title'>
-														<ListIcon className='list-icon' />
-														<span className='me-2'>طباعة بوليصة الشحن</span>
-													</div>
-													<div className='action-icon'>
-														<Print />
-													</div>
-												</button>
-												<span className='fs-6 text-danger'>{printError}</span>
-											</>
-										)}
+								<div className='order-action-box mb-3'>
+									<div className='action-title'>
+										<ListIcon className='list-icon' />
+										<span className='me-2'> تصدير الطلب</span>
+									</div>
+									<div className='action-icon'>
+										<PDFIcon className='pdf-icon' onClick={() => toPDF()} />
+									</div>
+								</div>
 
-										{/**
+								{fetchedData?.data?.orders?.shipping && (
+									<>
+										<button
+											disabled={fetchedData?.data?.orders?.shipping === null}
+											style={{ cursor: "pointer" }}
+											onClick={() => printSticker()}
+											className='order-action-box mb-3'>
+											<div className='action-title'>
+												<ListIcon className='list-icon' />
+												<span className='me-2'>طباعة بوليصة الشحن</span>
+											</div>
+											<div className='action-icon'>
+												<Print />
+											</div>
+										</button>
+										<span className='fs-6 text-danger'>{printError}</span>
+									</>
+								)}
+
+								{/**
 											<div className='order-action-box mb-md-5'>
 										<div className='action-title'>
 											<ListIcon className='list-icon' />
@@ -1175,12 +1185,10 @@ const OrderDetails = () => {
 										</div>
 									</div>
 									*/}
-									</div>
-								</div>
 							</div>
-						</>
-					)}
-				</div>
+						</div>
+					</div>
+				</section>
 			</section>
 		</>
 	);

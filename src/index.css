@@ -4505,7 +4505,9 @@ input:disabled {
 	font-size: 29px;
 	margin-bottom: 1rem;
 }
-
+.order-details-page .head-category .order-number {
+	margin-left: 20px;
+}
 .order-details-page .head-category .order-number .title h5 {
 	font-size: 20px;
 	font-weight: 400;
@@ -6015,7 +6017,7 @@ input:disabled {
 }
 
 .souqOtlobha-page .btn-group button:last-child {
-	width: 216px;
+	width: 290px;
 	background-color: #b6be34;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -6033,7 +6035,7 @@ input:disabled {
 .apply-btn {
 	background-color: var(--second-500);
 	color: white;
-	width: 218px;
+	width: 100%;
 	height: 56px;
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
@@ -8215,7 +8217,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.order-details-page .head-category h3 {
 		font-size: 24px;
 	}
-
+	.order-details-page .head-category .order-number {
+		margin-left: 0;
+	}
 	.order-details-page .order-number {
 		display: flex;
 		flex-direction: column;
@@ -10563,7 +10567,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.apply-btn {
-		width: 175px;
+		width: 100%;
 	}
 
 	.input-bx.banners-box.first-one,
