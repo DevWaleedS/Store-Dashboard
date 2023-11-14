@@ -1,5 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
+
+// third party
+import moment from "moment";
 import { Helmet } from "react-helmet";
+
+// MUI
 import { Button } from "@mui/material";
 
 // TO print this page
@@ -11,16 +16,16 @@ import useFetch from "../Hooks/UseFetch";
 // Date picker component
 import DateRangePicker from "rsuite/DateRangePicker";
 import "rsuite/dist/rsuite.min.css";
-// Moment
-import moment from "moment";
 
 // import icons and images
+import { AiOutlineSearch } from "react-icons/ai";
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { ReactComponent as PrintIcon } from "../data/Icons/icon-24-print.svg";
-import { ReactComponent as WalletIcon } from "../data/Icons/icon-24-wallet.svg";
 import { ReactComponent as ClientsIcon } from "../data/Icons/icon-24-user.svg";
+import { ReactComponent as WalletIcon } from "../data/Icons/icon-24-wallet.svg";
+
+// Pages Components
 import { CustomersReports, SalesReports } from "./nestedPages";
-import { AiOutlineSearch } from "react-icons/ai";
 
 const Report = () => {
 	const componentRef = useRef();

@@ -3368,6 +3368,8 @@ textarea {
 }
 
 /* Reports Page Style */
+
+
 .reports-page button.print-report-btn {
 	width: 200px;
 	height: 60px;
@@ -3487,6 +3489,79 @@ textarea {
 .customers-BarChart .recharts-text {
 	font-size: 16px;
 	font-weight: 400;
+}
+
+@media print {
+	.sales-reports-data,
+.customers-reports-data {
+	width: 80%;
+	background: var(--bs-white);
+	border-radius: 10px;
+
+	direction: rtl;
+}
+
+.sales-reports-data .report-head,
+.customers-reports-data .report-head {
+	
+	padding: 20px;
+}
+
+.sales-reports-data .report-body,
+.customers-reports-data .report-body {
+	padding: 50px 20px;
+}
+
+.sales-reports-data .total-wrapper h6,
+.sales-reports-data .total-wrapper h5 {
+	font-size: 18px;
+	font-weight: 500;
+	color: var(--black-500);
+}
+
+.sales-reports-data .total-wrapper .report_numbers {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.sales-reports-data .report-footer {
+	padding: 20px;
+	background-color: #f4f5f7;
+}
+
+.sales-reports-data .report-footer h5 {
+	font-weight: 600;
+}
+
+/* customers-BarChart */
+.customers-BarChart {
+	height: 300px;
+	width: 80%;
+	margin-right: 150px;
+}
+
+.report-body h5 {
+	margin-right: 190px;
+	margin-bottom: -10px;
+	font-size: 20px;
+}
+
+.customers-BarChart .recharts-legend-item-text {
+	font-size: 16px;
+	margin-right: 5px;
+	margin-left: 16px;
+	font-weight: 500;
+}
+
+.customers-BarChart .recharts-legend-item svg {
+	width: 16px;
+}
+
+.customers-BarChart .recharts-text {
+	font-size: 16px;
+	font-weight: 400;
+}
 }
 
 /* -------------------------------------------------------------------------------------------------------------------------------- */
