@@ -18,6 +18,7 @@ import { ReactComponent as ArrowDown } from "../../../data/Icons/icon-24-chevron
 import useFetch from "../../../Hooks/UseFetch";
 import { CourseVideoModal } from "../../../components/Modal";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
+import VideoOfCourseDuration from "../VideoOfCourseDuration/VideoOfCourseDuration";
 
 const CourseDetails = () => {
 	const { id } = useParams();
@@ -93,7 +94,7 @@ const CourseDetails = () => {
 						{/* Course details info */}
 						<div className='row mb-5'>
 							<div className='course-actions'>
-								<div className='course-name mb-4'>
+								<div className='course-name mb-1'>
 									<h4>{fetchedData?.data?.course?.name} </h4>
 								</div>
 
@@ -111,12 +112,28 @@ const CourseDetails = () => {
 													aria-expanded='true'
 													aria-controls={`collapse${unit?.id}`}>
 													<div className='action-title w-100'>
-														<span className='unite-name'> {unit?.title}</span>
+														<span className='unite-name'>
+															{" "}
+															{unit?.title} :{" "}
+														</span>
 														<span className='course-count'>
-															({unit?.unitvideo})
+															(
+															{unit?.unitvideo === 0 ||
+															unit?.unitvideo === "null"
+																? `لا يوجد دروس`
+																: unit?.unitvideo === 1
+																? `درس واحد`
+																: unit?.unitvideo === 2
+																? `درسين`
+																: `${unit?.unitvideo} درس`}
+															)
 														</span>
 														<span className='course-time'>
-															({unit.durationUnit} دقيقة)
+															(
+															<VideoOfCourseDuration
+																duration={unit.durationUnit}
+															/>
+															)
 														</span>
 													</div>
 													<div className='action-icon'>

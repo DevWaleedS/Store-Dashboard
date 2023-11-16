@@ -86,7 +86,7 @@ const CoursesTraining = ({ searchCourses }) => {
 								name={course?.name}
 								image={course?.image}
 								count={course?.count}
-								duration={course?.duration}
+								duration={course?.durationCourse}
 							/>
 						</div>
 					))

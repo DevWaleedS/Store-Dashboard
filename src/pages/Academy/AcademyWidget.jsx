@@ -10,7 +10,9 @@ import { BsPlayCircle, BsPlayBtn } from "react-icons/bs";
 
 // Third Party
 import { useNavigate } from "react-router-dom";
-import CustomDate from "../../HelperComponents/CustomDate";
+
+// Components
+import VideoOfCourseDuration from "./VideoOfCourseDuration/VideoOfCourseDuration";
 
 const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 	const navigate = useNavigate();
@@ -51,7 +53,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 							<div className='video-hours '>
 								<RiTimerLine />
 								<span className='text me-2 align-self-center'>
-									{CustomDate(duration)} ساعة
+									<VideoOfCourseDuration duration={duration} />
 								</span>
 							</div>
 						</div>
