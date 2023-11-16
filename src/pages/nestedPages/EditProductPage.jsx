@@ -233,6 +233,7 @@ const EditProductPage = () => {
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
+			"image/jpg": [],
 			"image/png": [],
 		},
 
@@ -928,7 +929,10 @@ const EditProductPage = () => {
 																}
 															/>
 														</div>
-														<span>( سيتم قبول الصور jpeg & png )</span>
+														<span>( سيتم قبول الصور jpeg & png & jpg )</span>
+														<div className='tax-text '>
+															(الحد الأقصي للصورة 2MB)
+														</div>
 													</div>
 												</div>
 
@@ -965,7 +969,7 @@ const EditProductPage = () => {
 													الصور المتعددة او الفيديو
 													<br />
 													<div className='tax-text '>
-														(الحد الأقصي للصور أو الفيديو 2MB)
+														(الحد الأقصي للصورة أو الفيديو 2MB)
 													</div>
 												</label>
 											</div>
@@ -1007,7 +1011,7 @@ const EditProductPage = () => {
 																			"video/mov" ||
 																			"video/mkv"
 																	) ||
-																	image?.image.includes(
+																	image?.image?.includes(
 																		".mp4" || ".avi" || ".mov" || ".mkv"
 																	);
 																if (isVideo) {

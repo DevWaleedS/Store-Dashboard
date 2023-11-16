@@ -5,6 +5,7 @@ import Context from "../../Context/context";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import useFetch from "../../Hooks/UseFetch";
+
 // import Dropzone Library
 import { useDropzone } from "react-dropzone";
 import { useForm, Controller } from "react-hook-form";
@@ -190,6 +191,7 @@ const AddNewProduct = () => {
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
+			"image/jpg": [],
 			"image/png": [],
 		},
 
@@ -856,7 +858,11 @@ const AddNewProduct = () => {
 														<label htmlFor='add-image'> اسحب الصورة هنا</label>
 														<input {...getInputProps()} id='add-image' />
 													</div>
-													<span>( سيتم قبول الصور jpeg & png )</span>
+													<span>( سيتم قبول الصور jpeg & png & jpg )</span>
+
+													<div className='tax-text '>
+														(الحد الأقصي للصورة 2MB)
+													</div>
 												</div>
 											</div>
 
@@ -884,7 +890,7 @@ const AddNewProduct = () => {
 												الصور المتعددة او الفيديو
 												<br />
 												<div className='tax-text '>
-													(الحد الأقصي للصور أو الفيديو 2MB)
+													(الحد الأقصي للصورة أو الفيديو 2MB)
 												</div>
 											</label>
 										</div>
