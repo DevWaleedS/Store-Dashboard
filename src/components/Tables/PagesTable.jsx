@@ -114,7 +114,7 @@ function EnhancedTableToolbar(props) {
 							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم تغيبر حالة جميع الصفحات التي قمت بتحديدهم"
+									"سيتم تغيير حالة جميع الصفحات التي قمت بتحديدهم"
 								);
 								setActionTitle("changeStatus");
 							}}>

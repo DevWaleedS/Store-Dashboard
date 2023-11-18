@@ -102,44 +102,6 @@ const AddNewProduct = () => {
 		category_id: "",
 		subcategory_id: [],
 	});
-	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
-	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
-	const [robotLink, setRobotLink] = useState("");
-	const [SEOdescription, setSEOdescription] = useState([]);
-	const [instagram, setInstagram] = useState("");
-	const [snapchat, setSnapchat] = useState("");
-	const [twitter, setTwitter] = useState("");
-	const [tiktok, setTiktok] = useState("");
-	const [url, setUrl] = useState("");
-
-	// to handle close video privew
-	const closeVideoModal = () => {
-		setUrl("");
-	};
-
-	// to handle errors of Google Analytics Link
-	const LINK_REGEX =
-		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
-		useState(false);
-	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
-		useState(false);
-
-	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
-		setValidGoogleAnalyticsLink(storeLinkValidation);
-	}, [googleAnalyticsLink]);
-
-	// to get multi images
-	const [multiImages, setMultiImages] = useState([]);
-	const emptyMultiImages = [];
-	for (let index = 0; index < 5 - multiImages.length; index++) {
-		emptyMultiImages.push(index);
-	}
-
-	const onChangeMultiImages = (imageList, addUpdateIndex) => {
-		setMultiImages(imageList);
-	};
 
 	const [productError, setProductError] = useState({
 		name: "",
@@ -184,6 +146,71 @@ const AddNewProduct = () => {
 			instapixel: "",
 		});
 	};
+	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
+	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
+	const [robotLink, setRobotLink] = useState("");
+	const [SEOdescription, setSEOdescription] = useState([]);
+	const [instagram, setInstagram] = useState("");
+	const [snapchat, setSnapchat] = useState("");
+	const [twitter, setTwitter] = useState("");
+	const [tiktok, setTiktok] = useState("");
+	const [url, setUrl] = useState("");
+
+	// to handle close video privew
+	const closeVideoModal = () => {
+		setUrl("");
+	};
+
+	// to handle errors of Google Analytics Link
+	const LINK_REGEX =
+		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
+		useState(false);
+	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
+		useState(false);
+
+	useEffect(() => {
+		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
+		setValidGoogleAnalyticsLink(storeLinkValidation);
+	}, [googleAnalyticsLink]);
+
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	// to get multi images
+	const [multiImages, setMultiImages] = useState([]);
+	const emptyMultiImages = [];
+	for (let index = 0; index < 5 - multiImages.length; index++) {
+		emptyMultiImages.push(index);
+	}
+
+	const onChangeMultiImages = (imageList, addUpdateIndex) => {
+		// Check the size for each image in the list
+		const isSizeValid = imageList.every(
+			(image) => image.file.size <= maxFileSize
+		);
+
+		// Check if this file is video
+		const isVideo = imageList.every((image) =>
+			image.file.type.startsWith("video/")
+		);
+
+		if (!isSizeValid) {
+			setProductError({
+				...productError,
+				images: isVideo
+					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
+					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+			});
+			setMultiImages([]);
+		} else {
+			setProductError({
+				...productError,
+				images: null,
+			});
+			setMultiImages(imageList);
+		}
+	};
+	// --------------------------------------------
 
 	// Use state with useDropzone library to set banners
 	const [icons, setIcons] = React.useState([]);
@@ -196,13 +223,27 @@ const AddNewProduct = () => {
 		},
 
 		onDrop: (acceptedFiles) => {
-			setIcons(
-				acceptedFiles.map((banners) =>
-					Object.assign(banners, {
-						preview: URL.createObjectURL(banners),
-					})
-				)
-			);
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					setProductError({
+						...productError,
+						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setProductError({
+						...productError,
+						cover: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setIcons(updatedIcons?.filter((icon) => icon !== null));
 		},
 	});
 

@@ -98,7 +98,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع المنتجات وهذةالخظوة غير قابلة للرجوع"
+									"سيتم حذف جميع المنتجات وهذةالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -112,7 +112,7 @@ function EnhancedTableToolbar(props) {
 							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم تغيبر حالة جميع المنتجات التي قمت بتحديدهم"
+									"سيتم تغيير حالة جميع المنتجات التي قمت بتحديدهم"
 								);
 								setActionTitle("changeStatus");
 							}}>

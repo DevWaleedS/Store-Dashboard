@@ -87,16 +87,8 @@ const EditProductPage = () => {
 		tiktok: "",
 		instagram: "",
 	});
-	// to get multi images
-	const [multiImages, setMultiImages] = useState([]);
-	const emptyMultiImages = [];
-	for (let index = 0; index < 5 - multiImages.length; index++) {
-		emptyMultiImages.push(index);
-	}
 
-	const onChangeMultiImages = (imageList, addUpdateIndex) => {
-		setMultiImages(imageList);
-	};
+	// --------------------------------------------
 	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
 	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
 	const [robotLink, setRobotLink] = useState("");
@@ -106,23 +98,6 @@ const EditProductPage = () => {
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
-
-	const closeVideoModal = () => {
-		setUrl("");
-	};
-
-	// to handle errors of Google Analytics Link
-	const LINK_REGEX =
-		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
-		useState(false);
-	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
-		useState(false);
-
-	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
-		setValidGoogleAnalyticsLink(storeLinkValidation);
-	}, [googleAnalyticsLink]);
 
 	const {
 		register,
@@ -144,44 +119,7 @@ const EditProductPage = () => {
 		},
 	});
 
-	useEffect(() => {
-		if (fetchedData?.data?.product) {
-			setProduct({
-				...product,
-				name: fetchedData?.data?.product?.name,
-				short_description: fetchedData?.data?.product?.short_description,
-				description: fetchedData?.data?.product?.description,
-				selling_price: fetchedData?.data?.product?.selling_price,
-				category_id: fetchedData?.data?.product?.category?.id,
-				discount_price: fetchedData?.data?.product?.discount_price,
-				subcategory_id: fetchedData?.data?.product?.subcategory?.map(
-					(sub) => sub?.id
-				),
-				stock: fetchedData?.data?.product?.stock,
-				weight: fetchedData?.data?.product?.weight,
-			});
-			setGoogleAnalyticsLink(
-				fetchedData?.data?.product?.google_analytics || ""
-			);
-			setRobotLink(fetchedData?.data?.product?.robot_link || "");
-			setSnapchat(fetchedData?.data?.product?.snappixel || "");
-			setTwitter(fetchedData?.data?.product?.twitterpixel || "");
-			setTiktok(fetchedData?.data?.product?.tiktokpixel || "");
-			setInstagram(fetchedData?.data?.product?.instapixel || "");
-			setSEOdescription(
-				fetchedData?.data?.product?.SEOdescription.map((seo) => seo)
-			);
-			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
-		}
-	}, [fetchedData?.data?.product]);
-
-	console.log(multiImages);
-
-	// To Handle Errors
-	useEffect(() => {
-		reset(product);
-	}, [product, reset]);
-
+	// Handle Errors
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
@@ -226,9 +164,102 @@ const EditProductPage = () => {
 		});
 	};
 
+	// ---------------------------------------------------
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+
+	// to get multi images
+	const [multiImages, setMultiImages] = useState([]);
+	const emptyMultiImages = [];
+	for (let index = 0; index < 5 - multiImages.length; index++) {
+		emptyMultiImages.push(index);
+	}
+
+	const onChangeMultiImages = (imageList, addUpdateIndex) => {
+		// Check the size for each image in the list
+		const isSizeValid = imageList.every(
+			(image) => image.file.size <= maxFileSize
+		);
+
+		// Check if this file is video
+		const isVideo = imageList.every((image) =>
+			image.file.type.startsWith("video/")
+		);
+
+		if (!isSizeValid) {
+			setProductError({
+				...productError,
+				images: isVideo
+					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
+					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+			});
+			setMultiImages([]);
+		} else {
+			setProductError({
+				...productError,
+				images: null,
+			});
+			setMultiImages(imageList);
+		}
+	};
+
+	// Video modal
+	const closeVideoModal = () => {
+		setUrl("");
+	};
+
+	// to handle errors of Google Analytics Link
+	const LINK_REGEX =
+		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
+		useState(false);
+	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
+		useState(false);
+
+	useEffect(() => {
+		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
+		setValidGoogleAnalyticsLink(storeLinkValidation);
+	}, [googleAnalyticsLink]);
+
+	// To get All Product info from api
+	useEffect(() => {
+		if (fetchedData?.data?.product) {
+			setProduct({
+				...product,
+				name: fetchedData?.data?.product?.name,
+				short_description: fetchedData?.data?.product?.short_description,
+				description: fetchedData?.data?.product?.description,
+				selling_price: fetchedData?.data?.product?.selling_price,
+				category_id: fetchedData?.data?.product?.category?.id,
+				discount_price: fetchedData?.data?.product?.discount_price,
+				subcategory_id: fetchedData?.data?.product?.subcategory?.map(
+					(sub) => sub?.id
+				),
+				stock: fetchedData?.data?.product?.stock,
+				weight: fetchedData?.data?.product?.weight,
+			});
+			setGoogleAnalyticsLink(
+				fetchedData?.data?.product?.google_analytics || ""
+			);
+			setRobotLink(fetchedData?.data?.product?.robot_link || "");
+			setSnapchat(fetchedData?.data?.product?.snappixel || "");
+			setTwitter(fetchedData?.data?.product?.twitterpixel || "");
+			setTiktok(fetchedData?.data?.product?.tiktokpixel || "");
+			setInstagram(fetchedData?.data?.product?.instapixel || "");
+			setSEOdescription(
+				fetchedData?.data?.product?.SEOdescription.map((seo) => seo)
+			);
+			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
+		}
+	}, [fetchedData?.data?.product]);
+
+	// To Handle Errors
+	useEffect(() => {
+		reset(product);
+	}, [product, reset]);
+
 	// Use state with useDropzone library to set banners
 	const [icon, setIcon] = React.useState([]);
-
 	// Get some methods form useDropZone
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
@@ -238,13 +269,27 @@ const EditProductPage = () => {
 		},
 
 		onDrop: (acceptedFiles) => {
-			setIcon(
-				acceptedFiles?.map((banners) =>
-					Object.assign(banners, {
-						preview: URL.createObjectURL(banners),
-					})
-				)
-			);
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					setProductError({
+						...productError,
+						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setProductError({
+						...productError,
+						cover: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setIcon(updatedIcons?.filter((icon) => icon !== null));
 		},
 	});
 

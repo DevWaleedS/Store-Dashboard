@@ -96,7 +96,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع الكوبونات وهذةالخظوة غير قابلة للرجوع"
+									"سيتم حذف جميع الكوبونات وهذةالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>

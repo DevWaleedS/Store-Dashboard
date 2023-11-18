@@ -1,13 +1,24 @@
 import React, { useContext, useState } from "react";
-import { Helmet } from "react-helmet";
+
+// third party
 import axios from "axios";
-import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Components
 import AddSubCategory from "./AddSubCategory";
+
+// Redux
 import { useDispatch } from "react-redux";
 import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -16,8 +27,6 @@ import Modal from "@mui/material/Modal";
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
 import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useForm } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Modal style
 const style = {
@@ -70,11 +79,26 @@ const AddCategory = () => {
 		icon: "",
 	});
 
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+
 	// Use state with useDropzone library to set banners
 	const [icons, setIcons] = React.useState([]);
 	const onChange = (imageList, addUpdateIndex) => {
-		// data for submit
-		setIcons(imageList);
+		// Check image size before updating state
+		const isSizeValid = imageList.every(
+			(image) => image.file.size <= maxFileSize
+		);
+
+		if (!isSizeValid) {
+			setCategoryError({
+				...categoryError,
+				icon: " حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+			});
+		} else {
+			setIcons(imageList);
+			setCategoryError({ ...categoryError, icon: null });
+		}
 	};
 
 	const resetCategoryError = () => {
@@ -202,7 +226,12 @@ const AddCategory = () => {
 																			اسحب الصورة هنا
 																		</label>
 																	</div>
-																	<span>( سيتم قبول الصور jpeg & png )</span>
+																	<span>
+																		( سيتم قبول الصور jpeg & png & jpg)
+																	</span>
+																	<div className='tax-text '>
+																		(الحد الأقصي للصورة 2MB)
+																	</div>
 																</div>
 															</div>
 														</div>
