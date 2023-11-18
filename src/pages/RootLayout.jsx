@@ -17,6 +17,8 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 
 // Third part
 import { useCookies } from "react-cookie";
+
+import { ToastContainer } from "react-toastify";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
@@ -108,6 +110,19 @@ const RootLayout = () => {
 							}}
 						/>
 
+						<ToastContainer
+							rtl
+							draggable
+							closeOnClick
+							pauseOnHover
+							autoClose={5000}
+							pauseOnFocusLoss
+							newestOnTop={false}
+							position='top-left'
+							hideProgressBar={false}
+							style={{ fontSize: "14px", color: "#000" }}
+						/>
+
 						{title && <ActionCompleteComp />}
 						{actionDelete && <DeleteOneModal />}
 						{loadingTitle && <LoadingRequest />}
@@ -116,7 +131,6 @@ const RootLayout = () => {
 						{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
 						{isOpenMaintenanceModeModal && <MaintenanceMode />}
 						{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
-
 						<main className='content'>
 							<div className='row'>
 								<div className='sidebar-col'>

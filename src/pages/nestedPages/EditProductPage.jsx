@@ -1,19 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import useFetch from "../../Hooks/UseFetch";
-import Context from "../../Context/context";
-import { useNavigate, useParams } from "react-router-dom";
-import CircularLoading from "../../HelperComponents/CircularLoading";
-import { useCookies } from "react-cookie";
 
-// import Dropzone Library
+// Third party
+import axios from "axios";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
-import { TagsInput } from "react-tag-input-component";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
 import ImageUploading from "react-images-uploading";
+import { TagsInput } from "react-tag-input-component";
+import { useNavigate, useParams } from "react-router-dom";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 import TextareaCode from "../../components/TextareaCode/TextareaCode";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// MUI
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -23,19 +29,19 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-// import { Button } from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
 
 // icons and images
-import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { ReactComponent as LinkIcon } from "../../data/Icons/link.svg";
-import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
-import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
-import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
-import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
-import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { BsPlayCircle } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 import CloseIcon from "@mui/icons-material/Close";
+import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
+import { ReactComponent as LinkIcon } from "../../data/Icons/link.svg";
+import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
+import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
+import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
+import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
+import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
 
 const style = {
 	position: "fixed",
@@ -91,13 +97,15 @@ const EditProductPage = () => {
 	// --------------------------------------------
 	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
 	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
-	const [robotLink, setRobotLink] = useState("");
 	const [SEOdescription, setSEOdescription] = useState([]);
-	const [url, setUrl] = useState("");
+	const [multiImages, setMultiImages] = useState([]);
+	const [icon, setIcon] = React.useState([]);
+	const [robotLink, setRobotLink] = useState("");
 	const [instagram, setInstagram] = useState("");
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
+	const [url, setUrl] = useState("");
 
 	const {
 		register,
@@ -118,6 +126,60 @@ const EditProductPage = () => {
 			weight: "",
 		},
 	});
+
+	const handleOnChange = (e) => {
+		const { name, value } = e.target;
+		setProduct((prevProduct) => {
+			return { ...prevProduct, [name]: value };
+		});
+	};
+
+	// To get All Product info from api
+	useEffect(() => {
+		if (fetchedData?.data?.product) {
+			setProduct({
+				...product,
+				name: fetchedData?.data?.product?.name,
+				short_description: fetchedData?.data?.product?.short_description,
+				description: fetchedData?.data?.product?.description,
+				selling_price: fetchedData?.data?.product?.selling_price,
+				category_id: fetchedData?.data?.product?.category?.id,
+				discount_price: fetchedData?.data?.product?.discount_price,
+				subcategory_id: fetchedData?.data?.product?.subcategory?.map(
+					(sub) => sub?.id
+				),
+				stock: fetchedData?.data?.product?.stock,
+				weight: fetchedData?.data?.product?.weight,
+			});
+			setGoogleAnalyticsLink(
+				fetchedData?.data?.product?.google_analytics || ""
+			);
+			setRobotLink(fetchedData?.data?.product?.robot_link || "");
+			setSnapchat(fetchedData?.data?.product?.snappixel || "");
+			setTwitter(fetchedData?.data?.product?.twitterpixel || "");
+			setTiktok(fetchedData?.data?.product?.tiktokpixel || "");
+			setInstagram(fetchedData?.data?.product?.instapixel || "");
+			setSEOdescription(
+				fetchedData?.data?.product?.SEOdescription.map((seo) => seo)
+			);
+			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
+		}
+	}, [fetchedData?.data?.product]);
+
+	// to handle errors of Google Analytics Link
+	const LINK_REGEX =
+		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
+		useState(false);
+	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
+		useState(false);
+
+	useEffect(() => {
+		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
+		setValidGoogleAnalyticsLink(storeLinkValidation);
+	}, [googleAnalyticsLink]);
+
+	// ---------------------------------------------
 
 	// Handle Errors
 	const [productError, setProductError] = useState({
@@ -164,12 +226,16 @@ const EditProductPage = () => {
 		});
 	};
 
+	// To Handle Errors
+	useEffect(() => {
+		reset(product);
+	}, [product, reset]);
+
 	// ---------------------------------------------------
 	// handle images size
 	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 
 	// to get multi images
-	const [multiImages, setMultiImages] = useState([]);
 	const emptyMultiImages = [];
 	for (let index = 0; index < 5 - multiImages.length; index++) {
 		emptyMultiImages.push(index);
@@ -187,6 +253,14 @@ const EditProductPage = () => {
 		);
 
 		if (!isSizeValid) {
+			toast.warning(
+				isVideo
+					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
+					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+				{
+					theme: "light",
+				}
+			);
 			setProductError({
 				...productError,
 				images: isVideo
@@ -203,63 +277,6 @@ const EditProductPage = () => {
 		}
 	};
 
-	// Video modal
-	const closeVideoModal = () => {
-		setUrl("");
-	};
-
-	// to handle errors of Google Analytics Link
-	const LINK_REGEX =
-		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
-		useState(false);
-	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
-		useState(false);
-
-	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
-		setValidGoogleAnalyticsLink(storeLinkValidation);
-	}, [googleAnalyticsLink]);
-
-	// To get All Product info from api
-	useEffect(() => {
-		if (fetchedData?.data?.product) {
-			setProduct({
-				...product,
-				name: fetchedData?.data?.product?.name,
-				short_description: fetchedData?.data?.product?.short_description,
-				description: fetchedData?.data?.product?.description,
-				selling_price: fetchedData?.data?.product?.selling_price,
-				category_id: fetchedData?.data?.product?.category?.id,
-				discount_price: fetchedData?.data?.product?.discount_price,
-				subcategory_id: fetchedData?.data?.product?.subcategory?.map(
-					(sub) => sub?.id
-				),
-				stock: fetchedData?.data?.product?.stock,
-				weight: fetchedData?.data?.product?.weight,
-			});
-			setGoogleAnalyticsLink(
-				fetchedData?.data?.product?.google_analytics || ""
-			);
-			setRobotLink(fetchedData?.data?.product?.robot_link || "");
-			setSnapchat(fetchedData?.data?.product?.snappixel || "");
-			setTwitter(fetchedData?.data?.product?.twitterpixel || "");
-			setTiktok(fetchedData?.data?.product?.tiktokpixel || "");
-			setInstagram(fetchedData?.data?.product?.instapixel || "");
-			setSEOdescription(
-				fetchedData?.data?.product?.SEOdescription.map((seo) => seo)
-			);
-			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
-		}
-	}, [fetchedData?.data?.product]);
-
-	// To Handle Errors
-	useEffect(() => {
-		reset(product);
-	}, [product, reset]);
-
-	// Use state with useDropzone library to set banners
-	const [icon, setIcon] = React.useState([]);
 	// Get some methods form useDropZone
 	const { getRootProps, getInputProps } = useDropzone({
 		accept: {
@@ -273,6 +290,9 @@ const EditProductPage = () => {
 				const isSizeValid = file.size <= maxFileSize;
 
 				if (!isSizeValid) {
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
 					setProductError({
 						...productError,
 						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
@@ -314,19 +334,16 @@ const EditProductPage = () => {
 		// Make sure to revoke the data uris to avoid memory leaks, will run on unmount
 		return () => icon.forEach((banner) => URL.revokeObjectURL(banner.preview));
 	}, []);
+	// -------------------------------------------------
 
-	const handleOnChange = (e) => {
-		const { name, value } = e.target;
-		setProduct((prevProduct) => {
-			return { ...prevProduct, [name]: value };
-		});
-	};
-
+	// Handle select Subcategory Array
 	const subcategory =
 		categories?.data?.categories?.filter(
 			(sub) => sub?.id === parseInt(product?.category_id)
 		) || [];
+	// ---------------------------------------
 
+	// Update the current product
 	const updateProduct = (data) => {
 		setLoadingTitle("جاري تعديل المنتج");
 		resetCouponError();
@@ -400,8 +417,70 @@ const EditProductPage = () => {
 						tiktokpixel: res?.data?.message?.en?.tiktokpixel?.[0],
 						instapixel: res?.data?.message?.en?.instapixel?.[0],
 					});
+
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.short_description?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.cover?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.description?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.selling_price?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.category_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount_price?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.subcategory_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.stock?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.weight?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.google_analytics?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.robot_link?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.SEOdescription?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.images?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.snappixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.twitterpixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.tiktokpixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.instapixel?.[0], {
+						theme: "light",
+					});
 				}
 			});
+	};
+	// --------------------------------------
+
+	// Video modal
+	const closeVideoModal = () => {
+		setUrl("");
 	};
 
 	const videoModal = () => {

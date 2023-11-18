@@ -1,41 +1,45 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import useFetch from "../../Hooks/UseFetch";
 
-// import Dropzone Library
+// Third party
+import axios from "axios";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
-import { useForm, Controller } from "react-hook-form";
-import { TagsInput } from "react-tag-input-component";
+import { useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
-//
+import { TagsInput } from "react-tag-input-component";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import { useForm, Controller } from "react-hook-form";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-// import { Button } from "@mui/material";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import OutlinedInput from "@mui/material/OutlinedInput";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
 import TextareaCode from "../../components/TextareaCode/TextareaCode";
 
 // icons and images
-import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { ReactComponent as LinkIcon } from "../../data/Icons/link.svg";
-import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
-import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
-import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
-import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
-
-import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { BsPlayCircle } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 import CloseIcon from "@mui/icons-material/Close";
+import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
+import { ReactComponent as LinkIcon } from "../../data/Icons/link.svg";
+import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
+import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
+import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
+import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
+import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
 
 const style = {
 	position: "fixed",
@@ -195,6 +199,12 @@ const AddNewProduct = () => {
 		);
 
 		if (!isSizeValid) {
+			toast.warning(
+				isVideo
+					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
+					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+				{ theme: "light" }
+			);
 			setProductError({
 				...productError,
 				images: isVideo
@@ -227,6 +237,9 @@ const AddNewProduct = () => {
 				const isSizeValid = file.size <= maxFileSize;
 
 				if (!isSizeValid) {
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
 					setProductError({
 						...productError,
 						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
@@ -343,6 +356,61 @@ const AddNewProduct = () => {
 						twitterpixel: res?.data?.message?.en?.twitterpixel?.[0],
 						tiktokpixel: res?.data?.message?.en?.tiktokpixel?.[0],
 						instapixel: res?.data?.message?.en?.instapixel?.[0],
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.short_description?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.cover?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.description?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.selling_price?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.category_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount_price?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.subcategory_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.stock?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.weight?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.google_analytics?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.robot_link?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.SEOdescription?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.images?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.snappixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.twitterpixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.tiktokpixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.instapixel?.[0], {
+						theme: "light",
 					});
 				}
 			});
