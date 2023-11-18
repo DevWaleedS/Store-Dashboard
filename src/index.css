@@ -4636,6 +4636,7 @@ input:disabled {
 }
 .order-details-body .order-details-box .order-details-data .order-head-row {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	padding-bottom: 8px;
 }
@@ -4925,7 +4926,7 @@ input:disabled {
 	-ms-border-radius: 6px;
 	-o-border-radius: 6px;
 }
-.video-course-close-icon{
+.video-course-close-icon {
 	position: absolute;
 	right: 5px;
 	top: -30px;
