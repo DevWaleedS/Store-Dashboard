@@ -110,6 +110,7 @@ const RootLayout = () => {
 							}}
 						/>
 
+						{/* This is Toast Library to Handle errors modal in dashboard*/}
 						<ToastContainer
 							rtl
 							draggable
@@ -117,8 +118,8 @@ const RootLayout = () => {
 							pauseOnHover
 							autoClose={5000}
 							pauseOnFocusLoss
-							newestOnTop={false}
 							position='top-left'
+							newestOnTop={false}
 							hideProgressBar={false}
 							style={{ fontSize: "14px", color: "#000" }}
 						/>
