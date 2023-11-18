@@ -1,10 +1,9 @@
+import React, { useState, useEffect } from "react";
 
-import React, { useState, useEffect } from 'react';
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
-import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-
-import { BsArrowDown, BsArrowUp } from 'react-icons/bs';
+import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 
 const PieCharts = ({ fetchedData }) => {
 	const [sales_monthly, setSales_monthly] = useState();
@@ -13,26 +12,22 @@ const PieCharts = ({ fetchedData }) => {
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (fetchedData) {
-				function formatNumber(number) {
-					if (number >= 1000) {
-						const suffixes = ['', 'K', 'M', 'B', 'T'];
-						const suffixIndex = Math.floor(Math.log10(number) / 3);
-						const shortNumber = (number / Math.pow(1000, suffixIndex))?.toFixed(0);
-						return shortNumber + suffixes[suffixIndex];
-					}
-					return number?.toString();
+		if (fetchedData) {
+			function formatNumber(number) {
+				if (number >= 1000) {
+					const suffixes = ["", "K", "M", "B", "T"];
+					const suffixIndex = Math.floor(Math.log10(number) / 3);
+					const shortNumber = (number / Math.pow(1000, suffixIndex))?.toFixed(
+						0
+					);
+					return shortNumber + suffixes[suffixIndex];
 				}
-				setSales_monthly(formatNumber(fetchedData?.data?.sales_monthly));
-				setSales_weekly(formatNumber(fetchedData?.data?.sales_weekly));
-				setSales_avg(formatNumber(fetchedData?.data?.sales_avg));
+				return number?.toString();
 			}
-		}, 1000);
-
-		return () => {
-			clearTimeout(debounce);
-		};
+			setSales_monthly(formatNumber(fetchedData?.data?.sales_monthly));
+			setSales_weekly(formatNumber(fetchedData?.data?.sales_weekly));
+			setSales_avg(formatNumber(fetchedData?.data?.sales_avg));
+		}
 	}, [fetchedData]);
 
 	return (
@@ -51,12 +46,12 @@ const PieCharts = ({ fetchedData }) => {
 						<CircularProgressbar
 							value={fetchedData?.data?.sales_percent || 0}
 							text={`${fetchedData?.data?.sales_percent?.toFixed(0) || 0}%`}
-							background={'#f5fbff'}
+							background={"#f5fbff"}
 							// some style
 							styles={buildStyles({
-								textColor: '#000',
-								trailColor: '#f5fbff',
-								backgroundColor: '#f5fbff',
+								textColor: "#000",
+								trailColor: "#f5fbff",
+								backgroundColor: "#f5fbff",
 							})}
 						/>
 					</div>
@@ -71,7 +66,11 @@ const PieCharts = ({ fetchedData }) => {
 											{sales_monthly || 0}
 											<span className='currency'>ر.س</span>
 										</p>
-										{fetchedData?.data?.sales_monthly_compare === 1 ? <BsArrowUp /> : <BsArrowDown className='red' />}
+										{fetchedData?.data?.sales_monthly_compare === 1 ? (
+											<BsArrowUp />
+										) : (
+											<BsArrowDown className='red' />
+										)}
 									</div>
 								</div>
 							</div>
@@ -83,7 +82,11 @@ const PieCharts = ({ fetchedData }) => {
 											{sales_weekly || 0}
 											<span className='currency'>ر.س</span>
 										</p>
-										{fetchedData?.data?.sales_weekly_compare === 1 ? <BsArrowUp /> : <BsArrowDown className='red' />}
+										{fetchedData?.data?.sales_weekly_compare === 1 ? (
+											<BsArrowUp />
+										) : (
+											<BsArrowDown className='red' />
+										)}
 									</div>
 								</div>
 							</div>
@@ -95,7 +98,11 @@ const PieCharts = ({ fetchedData }) => {
 											{sales_avg || 0}
 											<span className='currency'>ر.س</span>
 										</p>
-										{fetchedData?.data?.sales_avg_compare === 1 ? <BsArrowUp /> : <BsArrowDown className='red' />}
+										{fetchedData?.data?.sales_avg_compare === 1 ? (
+											<BsArrowUp />
+										) : (
+											<BsArrowDown className='red' />
+										)}
 									</div>
 								</div>
 							</div>

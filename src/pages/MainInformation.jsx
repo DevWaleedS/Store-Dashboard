@@ -1,36 +1,43 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import Context from "../Context/context";
-import useFetch from "../Hooks/UseFetch";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Switch from "@mui/material/Switch";
 import { useCookies } from "react-cookie";
+import ImageUploading from "react-images-uploading";
+
+// MUI
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import Select from "@mui/material/Select";
+import Switch from "@mui/material/Switch";
+import MenuItem from "@mui/material/MenuItem";
+
+// Context
+import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
+
+// Redux
 import { openVerifyAfterMainModal } from "../store/slices/VerifyStoreAlertAfterMainModal-slice";
 import { useDispatch } from "react-redux";
 
-// import ImageUploading library
-import ImageUploading from "react-images-uploading";
+// Components
+import useFetch from "../Hooks/UseFetch";
+import CircularLoading from "../HelperComponents/CircularLoading";
 
 // IMPORT ICON
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { IoIosArrowDown } from "react-icons/io";
-import howIcon from "../data/Icons/icon_24_home.svg";
 import { MdFileUpload } from "react-icons/md";
-import DemoImage from "../data/Icons/demo-logo.png";
-import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg";
-import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
-import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
-import { ReactComponent as Address } from "../data/Icons/address.svg";
-import { ReactComponent as Timer } from "../data/Icons/timer.svg";
+import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
+import howIcon from "../data/Icons/icon_24_home.svg";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { ReactComponent as Timer } from "../data/Icons/timer.svg";
+import { ReactComponent as Address } from "../data/Icons/address.svg";
+import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
+import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg";
+import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
 
 const style = {
 	position: "absolute",
@@ -93,10 +100,6 @@ const MainInformation = () => {
 	const { fetchedData: citiesList } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
-	// to get the user profile info
-	// const { fetchedData: profile } = useFetch(
-	// 	"https://backend.atlbha.com/api/Store/profile"
-	// );
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
@@ -112,8 +115,8 @@ const MainInformation = () => {
 	const dispatchVerifyAfterMainAlert = useDispatch(false);
 
 	// ---------------------------------------------------------------
-	const [defaultStoreLogo, setDefaultStoreLogo] = useState(DemoImage);
-	const [defaultStoreIcon, setDefaultStoreIcon] = useState(DemoImage);
+	const [defaultStoreLogo, setDefaultStoreLogo] = useState("");
+	const [defaultStoreIcon, setDefaultStoreIcon] = useState("");
 	const [storeLogo, setStoreLogo] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
 	const [domain, setDomain] = useState("");
@@ -142,41 +145,31 @@ const MainInformation = () => {
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (fetchedData?.data?.setting_store) {
-				setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
-				setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
-				setDomain([fetchedData?.data?.setting_store?.domain]);
-				setCountry([fetchedData?.data?.setting_store?.country?.id]);
-				setCity([fetchedData?.data?.setting_store?.city?.id]);
-				setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
-				setPhoneNumber(
-					fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-						"+966"
-					)
-						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
-						: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-								"00966"
-						  )
-						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-						: fetchedData?.data?.setting_store?.user?.phonenumber
-				);
-				setDescriptionValue(
-					fetchedData?.data?.setting_store?.description || ""
-				);
+		if (fetchedData?.data?.setting_store) {
+			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
+			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
+			setDomain([fetchedData?.data?.setting_store?.domain]);
+			setCountry([fetchedData?.data?.setting_store?.country?.id]);
+			setCity([fetchedData?.data?.setting_store?.city?.id]);
+			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
+			setPhoneNumber(
+				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
+					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
+							"00966"
+					  )
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.user?.phonenumber
+			);
+			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
-				setOpenAlawys(
-					fetchedData?.data?.setting_store?.working_status === "active"
-						? true
-						: false
-				);
-				setWorkDays(fetchedData?.data?.setting_store?.workDays);
-			}
-		}, 1000);
-
-		return () => {
-			clearTimeout(debounce);
-		};
+			setOpenAlawys(
+				fetchedData?.data?.setting_store?.working_status === "active"
+					? true
+					: false
+			);
+			setWorkDays(fetchedData?.data?.setting_store?.workDays);
+		}
 	}, [fetchedData?.data?.setting_store]);
 
 	// ---------------------------
