@@ -5505,12 +5505,14 @@ input:disabled {
 }
 
 .add-user-form .form-body input {
-	padding: 20px 50px;
+	padding: 8px 50px;
 }
-
+.add-user-form .form-body input[name="phonenumber"] {
+	padding-left: 94px;
+}
 .add-user-form .form-body .Country_Key {
 	position: absolute;
-	left: 20px;
+	left: 65px;
 	top: 13px;
 	direction: ltr;
 }
@@ -7885,6 +7887,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 @media (max-width: 768px) {
+	.add-user-form .form-body input[name="phonenumber"] {
+	padding-left: 50px;
+	font-size: 16px;
+}
 	.add-user-form .form-body .Country_Key {
 		top: 11px;
 		left: 30px;

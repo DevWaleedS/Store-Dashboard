@@ -1,15 +1,10 @@
-import React, {
-	useState,
-	useContext,
-	useRef,
-	Fragment,
-	useEffect,
-} from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 // Third party
 import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
 
@@ -29,22 +24,22 @@ import MenuItem from "@mui/material/MenuItem";
 import { usePDF } from "react-to-pdf";
 
 // Icons
-import { ReactComponent as StatusIcon } from "../../../data/Icons/status.svg";
-import { ReactComponent as DateIcon } from "../../../data/Icons/icon-date.svg";
-import { ReactComponent as WalletIcon } from "../../../data/Icons/icon-24-wallet.svg";
-import { ReactComponent as ArrowIcon } from "../../../data/Icons/icon-30-arrwos back.svg";
-import { ReactComponent as Client } from "../../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Message } from "../../../data/Icons/icon-24-email.svg";
-import { ReactComponent as Phone } from "../../../data/Icons/icon-24- call.svg";
-import { ReactComponent as Location } from "../../../data/Icons/icon-24-pic map.svg";
-import { ReactComponent as ArrowDown } from "../../../data/Icons/icon-24-chevron_down.svg";
-import { ReactComponent as Print } from "../../../data/Icons/icon-24-print.svg";
-import { ReactComponent as PDFIcon } from "../../../data/Icons/pfd.svg";
-import { ReactComponent as Quantity } from "../../../data/Icons/icon-24-Quantity.svg";
-import { ReactComponent as ListIcon } from "../../../data/Icons/icon-24-circlr.svg";
-import { AiFillCopy, AiFillCheckCircle, AiOutlineSearch } from "react-icons/ai";
 import { BiLinkExternal } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
+import { ReactComponent as PDFIcon } from "../../../data/Icons/pfd.svg";
+import { ReactComponent as StatusIcon } from "../../../data/Icons/status.svg";
+import { ReactComponent as DateIcon } from "../../../data/Icons/icon-date.svg";
+import { ReactComponent as Client } from "../../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Phone } from "../../../data/Icons/icon-24- call.svg";
+import { ReactComponent as Print } from "../../../data/Icons/icon-24-print.svg";
+import { AiFillCopy, AiFillCheckCircle, AiOutlineSearch } from "react-icons/ai";
+import { ReactComponent as Message } from "../../../data/Icons/icon-24-email.svg";
+import { ReactComponent as ListIcon } from "../../../data/Icons/icon-24-circlr.svg";
+import { ReactComponent as Location } from "../../../data/Icons/icon-24-pic map.svg";
+import { ReactComponent as Quantity } from "../../../data/Icons/icon-24-Quantity.svg";
+import { ReactComponent as WalletIcon } from "../../../data/Icons/icon-24-wallet.svg";
+import { ReactComponent as ArrowDown } from "../../../data/Icons/icon-24-chevron_down.svg";
+import { ReactComponent as ArrowIcon } from "../../../data/Icons/icon-30-arrwos back.svg";
 
 // Table
 import Table from "@mui/material/Table";
@@ -194,12 +189,27 @@ const OrderDetails = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					setError({
 						district: res?.data?.message?.en?.district?.[0],
 						city: res?.data?.message?.en?.city?.[0],
 						address: res?.data?.message?.en?.street_address?.[0],
 						weight: res?.data?.message?.en?.weight?.[0],
+					});
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.district?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.city?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.street_address?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.weight?.[0], {
+						theme: "light",
 					});
 				}
 			});

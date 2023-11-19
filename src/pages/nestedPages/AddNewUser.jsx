@@ -33,6 +33,7 @@ import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
 import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
 
+// Page Style
 const style = {
 	position: "fixed",
 	top: "80px",
@@ -53,6 +54,37 @@ const style = {
 		paddingBottom: 0,
 	},
 };
+
+// Mui Select Style
+const selectStyle = {
+	fontSize: "18px",
+	backgroundColor: "#ededed",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon.MuiSelect-iconOutlined": {
+		right: "96%",
+	},
+	"& .MuiSelect-nativeInput": {
+		display: "none",
+	},
+};
+
+// Select User Status
+const userStatusArray = [
+	{ id: 1, nameAr: "مفعل", nameEn: "active" },
+	{ id: 2, nameAr: "غير مفعل", nameEn: "not_active" },
+];
+
 const AddNewUser = () => {
 	const { fetchedData: roles } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/roles"
@@ -344,35 +376,21 @@ const AddNewUser = () => {
 															onChange={(e) => {
 																onChange(e);
 															}}
-															sx={{
-																fontSize: "18px",
-																backgroundColor: "#ededed",
-																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
-																"& .MuiOutlinedInput-root": {
-																	"& :hover": {
-																		border: "none",
-																	},
-																},
-																"& .MuiOutlinedInput-notchedOutline": {
-																	border: "none",
-																},
-																"& .MuiSelect-icon.MuiSelect-iconOutlined": {
-																	right: "96%",
-																},
-																"& .MuiSelect-nativeInput": {
-																	display: "none",
-																},
-															}}
+															sx={selectStyle}
 															IconComponent={IoIosArrowDown}
 															displayEmpty
 															inputProps={{ "aria-label": "Without label" }}
 															renderValue={(selected) => {
-																if (!selected) {
+																if (
+																	!selected ||
+																	roles?.data?.roles?.length === 0
+																) {
 																	return (
-																		<p className='text-[#ADB5B9]'>
+																		<p
+																			style={{
+																				color: "#ADB5B9",
+																				fontSize: "16px",
+																			}}>
 																			اختر الدور الوظيفي
 																		</p>
 																	);
@@ -553,23 +571,63 @@ const AddNewUser = () => {
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
-											<Controller
-												name={"status"}
-												control={control}
-												rules={{ required: "حقل الحالة مطلوب" }}
-												render={({ field: { onChange, value } }) => (
-													<select
-														className='form-select'
-														id='status'
-														value={value}
-														onChange={onChange}>
-														<option selected value='active'>
-															مفعل
-														</option>
-														<option value='not_active'>غير مفعل</option>
-													</select>
-												)}
-											/>
+											<FormControl sx={{ m: 0, width: "100%" }}>
+												<Controller
+													name={"status"}
+													control={control}
+													rules={{ required: "حقل الحالة مطلوب" }}
+													render={({ field: { onChange, value } }) => (
+														<Select
+															name='status'
+															value={value}
+															onChange={(e) => {
+																onChange(e);
+															}}
+															sx={selectStyle}
+															IconComponent={IoIosArrowDown}
+															displayEmpty
+															inputProps={{ "aria-label": "Without label" }}
+															renderValue={(selected) => {
+																if (
+																	value === "" ||
+																	userStatusArray?.length === 0
+																) {
+																	return (
+																		<p
+																			style={{
+																				color: "#ADB5B9",
+																				fontSize: "16px",
+																			}}>
+																			اختر الحالة
+																		</p>
+																	);
+																}
+
+																const result =
+																	userStatusArray?.filter(
+																		(item) => item?.nameEn === selected
+																	) || "";
+																return result[0]?.nameAr;
+															}}>
+															{userStatusArray?.map((item, index) => {
+																return (
+																	<MenuItem
+																		key={index}
+																		className='souq_storge_category_filter_items'
+																		sx={{
+																			backgroundColor: "#fff",
+																			height: "3rem",
+																			"&:hover": {},
+																		}}
+																		value={item?.nameEn}>
+																		{item?.nameAr}
+																	</MenuItem>
+																);
+															})}
+														</Select>
+													)}
+												/>
+											</FormControl>
 										</div>
 										<div className='col-lg-2 col-12'></div>
 										<div className='col-lg-9 col-12'>
