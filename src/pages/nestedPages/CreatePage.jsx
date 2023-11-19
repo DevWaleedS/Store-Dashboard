@@ -1,32 +1,40 @@
 import React, { useContext, useState } from "react";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import { useCookies } from "react-cookie";
-import useFetch from "../../Hooks/UseFetch";
+import draftToHtml from "draftjs-to-html";
+import { Editor } from "react-draft-wysiwyg";
 import { useDropzone } from "react-dropzone";
+import { useNavigate } from "react-router-dom";
+import { EditorState, convertToRaw } from "draft-js";
+import { useForm, Controller } from "react-hook-form";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Checkbox } from "@mui/material";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import FormGroup from "@mui/material/FormGroup";
+import FormControl from "@mui/material/FormControl";
+import { CloseOutlined } from "@mui/icons-material";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // ICONS
+import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
 import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.svg";
-import { IoIosArrowDown } from "react-icons/io";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
-import { CloseOutlined } from "@mui/icons-material";
+import { toast } from "react-toastify";
 
 // Modal Style
 const style = {
@@ -90,59 +98,6 @@ const CreatePage = () => {
 		pageCategory: [],
 		postCategory_id: "",
 	});
-	const itsPost = page?.pageCategory?.includes(1);
-	const [tag, setTag] = useState("");
-	const [descriptionLength, setDescriptionLength] = useState(false);
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
-
-	const addTags = () => {
-		setPage({ ...page, tags: [...page.tags, tag] });
-		setTag("");
-	};
-
-	const updateTags = (i) => {
-		const newTags = page?.tags?.filter((tag, index) => (
-			index !== i
-		));
-		setPage({ ...page, tags: newTags });
-	}
-
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
-	};
-
-	const [images, setImages] = useState([]);
-	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: {
-			"image/jpeg": [],
-			"image/png": [],
-		},
-		onDrop: (acceptedFiles) => {
-			setImages(
-				acceptedFiles.map((file) =>
-					Object.assign(file, {
-						preview: URL.createObjectURL(file),
-					})
-				)
-			);
-		},
-	});
-
-	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>
-			{file.path} - {file.size} bytes
-		</li>
-	));
 
 	const [pageError, setPageError] = useState({
 		title: "",
@@ -152,6 +107,7 @@ const CreatePage = () => {
 		seo_link: "",
 		seo_desc: "",
 		tags: "",
+		images: "",
 	});
 
 	const resetCouponError = () => {
@@ -163,13 +119,93 @@ const CreatePage = () => {
 			seo_link: "",
 			seo_desc: "",
 			tags: "",
+			images: "",
 		});
 	};
 
+	const itsPost = page?.pageCategory?.includes(1);
+	const [tag, setTag] = useState("");
+	const [descriptionLength, setDescriptionLength] = useState(false);
+	const [description, setDescription] = useState({
+		htmlValue: "",
+		editorState: EditorState.createEmpty(),
+	});
+	// ----------------------------------------------------------------------
+
+	// Add and edit TAGS
+	const addTags = () => {
+		setPage({ ...page, tags: [...page.tags, tag] });
+		setTag("");
+	};
+
+	const updateTags = (i) => {
+		const newTags = page?.tags?.filter((tag, index) => index !== i);
+		setPage({ ...page, tags: newTags });
+	};
+	// ----------------------------------------------------------------------
+
+	const onEditorStateChange = (editorValue) => {
+		const editorStateInHtml = draftToHtml(
+			convertToRaw(editorValue.getCurrentContent())
+		);
+
+		setDescription({
+			htmlValue: editorStateInHtml,
+			editorState: editorValue,
+		});
+	};
+	// ----------------------------------------------------------------------
+
+	// Add Post image
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const [images, setImages] = useState([]);
+	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+		accept: {
+			"image/jpeg": [],
+			"image/jpg": [],
+			"image/png": [],
+		},
+
+		onDrop: (acceptedFiles) => {
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
+					setImages([]);
+					setPageError({
+						...pageError,
+						images: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setPageError({
+						...pageError,
+						images: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setImages(updatedIcons?.filter((image) => image !== null));
+		},
+	});
+
+	const files = acceptedFiles.map((file) => (
+		<li key={file.path}>{file.path}</li>
+	));
+	// ----------------------------------------------------------------------
+
+	// On change page values
 	const handleOnChange = (e) => {
 		setPage({ ...page, [e.target.name]: e.target.value });
 	};
 
+	// Handle create new page
 	const handlePage = (data) => {
 		resetCouponError();
 		let formData = new FormData();
@@ -214,6 +250,32 @@ const CreatePage = () => {
 							seo_link: res?.data?.message?.en?.seo_link?.[0],
 							seo_desc: res?.data?.message?.en?.seo_desc?.[0],
 							tags: res?.data?.message?.en?.tags?.[0],
+							images: res?.data?.message?.en?.image?.[0],
+						});
+
+						toast.error(res?.data?.message?.en?.title?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.page_desc?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.page_content?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.seo_title?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.seo_link?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.seo_desc?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.tags?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.image?.[0], {
+							theme: "light",
 						});
 					}
 				});
@@ -234,7 +296,7 @@ const CreatePage = () => {
 						setReload(!reload);
 					} else {
 						setLoadingTitle("");
-						setReload(!reload);
+
 						setPageError({
 							title: res?.data?.message?.en?.title?.[0],
 							page_desc: res?.data?.message?.en?.page_desc?.[0],
@@ -243,6 +305,32 @@ const CreatePage = () => {
 							seo_link: res?.data?.message?.en?.seo_link?.[0],
 							seo_desc: res?.data?.message?.en?.seo_desc?.[0],
 							tags: res?.data?.message?.en?.tags?.[0],
+							images: res?.data?.message?.en?.image?.[0],
+						});
+
+						toast.error(res?.data?.message?.en?.title?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.page_desc?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.page_content?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.seo_title?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.seo_link?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.seo_desc?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.tags?.[0], {
+							theme: "light",
+						});
+						toast.error(res?.data?.message?.en?.image?.[0], {
+							theme: "light",
 						});
 					}
 				});
@@ -290,7 +378,8 @@ const CreatePage = () => {
 													required: " حقل العنوان مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "يجب أن يكون العنوان عبارة عن نصاّّ",
+														message:
+															"يجب أن يكون العنوان عبارة عن نصاّّ ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 													},
 												})}
 											/>
@@ -317,15 +406,12 @@ const CreatePage = () => {
 														value={value}
 														onChange={(e) => {
 															if (e.target.value.length <= 100) {
-																onChange(e.target.value.substring(0, 100))
+																onChange(e.target.value.substring(0, 100));
 																setDescriptionLength(false);
 															} else {
 																setDescriptionLength(true);
 															}
-
-														}}
-													>
-													</textarea>
+														}}></textarea>
 												)}
 											/>
 											<div className='col-12' style={{ marginTop: "-13px" }}>
@@ -333,11 +419,11 @@ const CreatePage = () => {
 													{pageError?.page_desc}
 													{errors?.page_desc && errors.page_desc.message}
 												</span>
-												{descriptionLength &&
+												{descriptionLength && (
 													<span className='fs-6 text-danger'>
 														الوصف يجب إلا يتعدي 100 حرف
 													</span>
-												}
+												)}
 											</div>
 										</div>
 									</div>
@@ -542,10 +628,12 @@ const CreatePage = () => {
 															/>
 														</div>
 														<div className='mt-2'>
-															<div className="tags-boxes">
+															<div className='tags-boxes'>
 																{page?.tags?.map((tag, index) => (
-																	<div key={index} className="tag">
-																		<CloseOutlined onClick={() => updateTags(index)} />
+																	<div key={index} className='tag'>
+																		<CloseOutlined
+																			onClick={() => updateTags(index)}
+																		/>
 																		<span>{tag}</span>
 																	</div>
 																))}
@@ -579,9 +667,9 @@ const CreatePage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																		{
+																			paddingRight: "20px",
+																		},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -660,7 +748,11 @@ const CreatePage = () => {
 															)}
 
 															<span
-																style={{ fontSize: "16px", color: "#1dbbbe" }}>
+																style={{
+																	fontSize: "16px",
+																	color: "#1dbbbe",
+																	cursor: "pointer",
+																}}>
 																استعراض
 															</span>
 															{files?.length !== 0 && (
@@ -671,6 +763,11 @@ const CreatePage = () => {
 																</ul>
 															)}
 														</div>
+													</div>
+													<div className='col-12'>
+														<span className='fs-6 text-danger'>
+															{pageError?.images}
+														</span>
 													</div>
 												</div>
 											</>

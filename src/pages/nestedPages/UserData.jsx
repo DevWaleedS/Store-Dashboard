@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../../Hooks/UseFetch";
 import { useNavigate, useParams } from "react-router-dom";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // icons
-
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
 
 const style = {

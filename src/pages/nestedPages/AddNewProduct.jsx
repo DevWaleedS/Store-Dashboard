@@ -17,12 +17,12 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useForm, Controller } from "react-hook-form";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import { useForm, Controller } from "react-hook-form";
+import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Components
@@ -244,6 +244,7 @@ const AddNewProduct = () => {
 						...productError,
 						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
 					});
+					setIcons([]);
 				} else {
 					setProductError({
 						...productError,
@@ -261,7 +262,7 @@ const AddNewProduct = () => {
 	});
 
 	// get banners
-	const bannersImage = icons.map((banner) => (
+	const bannersImage = icons?.map((banner) => (
 		<div key={banner.name}>
 			<div className='banner-preview' key={banner.path}>
 				<img
@@ -466,9 +467,9 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<input
 												type='text'
+												name='name'
 												id='product-name'
 												placeholder=' اسم المنتج'
-												name='name'
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
 												})}
@@ -540,11 +541,12 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<textarea
 												id='product-desc'
-												placeholder='قم بكتابة وصف واضح للمنتج'
 												name='description'
+												placeholder='قم بكتابة وصف واضح للمنتج'
 												{...register("description", {
 													required: "حقل الوصف مطلوب",
-												})}></textarea>
+												})}
+											/>
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>

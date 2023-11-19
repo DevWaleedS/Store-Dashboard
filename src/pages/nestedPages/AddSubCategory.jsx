@@ -1,6 +1,9 @@
 import React, { useState, useContext } from "react";
+
+// Context
 import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 

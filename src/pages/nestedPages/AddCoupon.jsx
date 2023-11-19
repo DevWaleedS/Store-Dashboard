@@ -1,35 +1,41 @@
 import React, { useContext, useState } from "react";
-import useFetch from "../../Hooks/UseFetch";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { Helmet } from "react-helmet";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+
+// Context
+import Context from "../../Context/context";
+import { useForm, Controller } from "react-hook-form";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Radio from "@mui/material/Radio";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import RadioGroup from "@mui/material/RadioGroup";
 import { FormControlLabel, Switch } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 
 // Datepicker
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 // icons
+import { IoIosArrowDown } from "react-icons/io";
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import { IoIosArrowDown } from "react-icons/io";
+import { toast } from "react-toastify";
 
 // Modal Style
-import moment from "moment";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
-
 const style = {
 	position: "fixed",
 	top: "80px",
@@ -220,6 +226,30 @@ const AddCoupon = () => {
 						coupon_apply: res?.data?.message?.en?.coupon_apply?.[0],
 					});
 					setStartDateError(res?.data?.message?.en?.expire_date?.[0]);
+
+					toast.error(res?.data?.message?.en?.code?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount_type?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.total_redemptions?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.user_redemptions?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.coupon_apply?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.expire_date?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -304,7 +334,9 @@ const AddCoupon = () => {
 														placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
 														name='total_redemptions'
 														value={value}
-														onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+														onChange={(e) =>
+															onChange(e.target.value.replace(/[^0-9]/g, ""))
+														}
 													/>
 												)}
 											/>
@@ -392,7 +424,14 @@ const AddCoupon = () => {
 															placeholder={"ادخل المبلغ او النسبة"}
 															name='discount'
 															value={value}
-															onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+															onChange={(e) =>
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																)
+															}
 														/>
 													)}
 												/>
@@ -434,7 +473,9 @@ const AddCoupon = () => {
 														placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
 														name='user_redemptions'
 														value={value}
-														onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+														onChange={(e) =>
+															onChange(e.target.value.replace(/[^0-9]/g, ""))
+														}
 													/>
 												)}
 											/>
@@ -551,7 +592,11 @@ const AddCoupon = () => {
 														placeholder='ادخل مبلغ الحد الأدني من المشتريات'
 														name='total_price'
 														value={value}
-														onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+														onChange={(e) =>
+															onChange(
+																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
+															)
+														}
 													/>
 												)}
 											/>
@@ -767,9 +812,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -839,9 +884,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",

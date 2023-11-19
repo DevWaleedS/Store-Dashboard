@@ -1,31 +1,38 @@
 import React, { useState, useContext } from "react";
+
+// Third party
+import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+
+// Components
 import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-import { useCookies } from "react-cookie";
+
+// Context
 import Context from "../../Context/context";
-import axios from "axios";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import TableRow from "@mui/material/TableRow";
+import Checkbox from "@mui/material/Checkbox";
+import TableBody from "@mui/material/TableBody";
 import FormGroup from "@mui/material/FormGroup";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableContainer from "@mui/material/TableContainer";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // ICONS
-import { ReactComponent as StarIcon } from "../../data/Icons/icon-20-star.svg";
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
-import { useForm } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import { ReactComponent as StarIcon } from "../../data/Icons/icon-20-star.svg";
 
 // Modal Style
 const style = {
@@ -95,6 +102,9 @@ const CreateRole = () => {
 				} else {
 					setLoadingTitle("");
 					setHandleErrors(res?.data?.message?.en?.role_name[0]);
+					toast.error(res?.data?.message?.en?.role_name[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -159,7 +169,8 @@ const CreateRole = () => {
 														required: "حقل إسم الدور مطلوب",
 														pattern: {
 															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-															message: "يجب أن يكون اسم الدور عبارة عن نصاّّ",
+															message:
+																" يجب أن يكون اسم الدور عبارة عن نصاّّ ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 														},
 													})}
 												/>

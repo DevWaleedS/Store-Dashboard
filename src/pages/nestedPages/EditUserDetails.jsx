@@ -1,24 +1,31 @@
 import React, { useState, useEffect, useContext } from "react";
+
+// Third party
+import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
+import { useDropzone } from "react-dropzone";
+import { Link, useNavigate } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
+import { UserAuth } from "../../Context/UserAuthorProvider";
+
+// Components
 import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-import axios from "axios";
-import Context from "../../Context/context";
-import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-// import Dropzone Library
-import { useDropzone } from "react-dropzone";
-
 // icons
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
 import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-upload_outlined.svg";
-import { useForm } from "react-hook-form";
-import { UserAuth } from "../../Context/UserAuthorProvider";
 
 const style = {
 	position: "fixed",
@@ -83,84 +90,8 @@ const EditUserDetails = () => {
 		},
 	});
 
-	useEffect(() => {
-		if (fetchedData?.data?.users) {
-			setUser({
-				...user,
-				name: fetchedData?.data?.users?.name,
-				user_name: fetchedData?.data?.users?.user_name,
-				email: fetchedData?.data?.users?.email,
-				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
-					? fetchedData?.data?.users?.phonenumber?.slice(4)
-					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
-					? fetchedData?.data?.users?.phonenumber.slice(5)
-					: fetchedData?.data?.users?.phonenumber,
-			});
-		}
-	}, [fetchedData?.data?.users]);
-
-	useEffect(() => {
-		reset(user);
-	}, [user, reset]);
-
-	// Use state with useDropzone library to set banners
-	const [userImage, setUserImage] = React.useState([]);
-
-	const files = userImage.map((file) => (
-		<li
-			key={file.path}
-			style={{
-				width: "100%",
-				overflow: "hidden",
-				whiteSpace: "nowrap",
-				textOverflow: "ellipsis",
-			}}>
-			{file.path} - {file.size} bytes
-		</li>
-	));
-
-	// Get some methods form useDropZone
-	const { getRootProps, getInputProps } = useDropzone({
-		accept: {
-			"image/jpeg": [],
-			"image/png": [],
-		},
-
-		onDrop: (acceptedFiles) => {
-			setUserImage(
-				acceptedFiles.map((image) =>
-					Object.assign(image, {
-						preview: URL.createObjectURL(image),
-					})
-				)
-			);
-		},
-	});
-
-	// get banners
-	const bannersImage = userImage.map((image) => (
-		<div key={image.name}>
-			<img
-				key={image.path}
-				src={image.preview}
-				alt='upload banner'
-				// Revoke data uri after image is loaded
-				onLoad={() => {
-					URL.revokeObjectURL(image.preview);
-				}}
-			/>
-		</div>
-	));
-
-	/* UseEffects TO Handle memory leaks */
-	useEffect(() => {
-		// Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-		return () =>
-			userImage.forEach((image) => URL.revokeObjectURL(image.preview));
-	}, []);
-
+	// -----------------------------------------------
 	// TO HANDLE ERRORS
-
 	const [dataError, setDataError] = useState({
 		name: "",
 		user_name: "",
@@ -181,6 +112,100 @@ const EditUserDetails = () => {
 			image: "",
 		});
 	};
+
+	useEffect(() => {
+		if (fetchedData?.data?.users) {
+			setUser({
+				...user,
+				name: fetchedData?.data?.users?.name,
+				user_name: fetchedData?.data?.users?.user_name,
+				email: fetchedData?.data?.users?.email,
+				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
+					? fetchedData?.data?.users?.phonenumber?.slice(4)
+					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
+					? fetchedData?.data?.users?.phonenumber.slice(5)
+					: fetchedData?.data?.users?.phonenumber,
+			});
+		}
+	}, [fetchedData?.data?.users]);
+
+	useEffect(() => {
+		reset(user);
+	}, [user, reset]);
+
+	// ----------------------------------------------------
+
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	// Use state with useDropzone library to set banners
+	const [userImage, setUserImage] = React.useState([]);
+
+	// Get some methods form useDropZone
+	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+		accept: {
+			"image/jpeg": [],
+			"image/png": [],
+			"image/jpg": [],
+		},
+
+		onDrop: (acceptedFiles) => {
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					setUserImage([]);
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
+					setDataError({
+						...dataError,
+						image: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setDataError({
+						...dataError,
+						image: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setUserImage(updatedIcons?.filter((image) => image !== null));
+		},
+	});
+
+	const files = acceptedFiles?.map((file) => (
+		<li
+			key={file?.path}
+			style={{
+				width: "100%",
+				overflow: "hidden",
+				whiteSpace: "nowrap",
+				textOverflow: "ellipsis",
+			}}>
+			{file?.path}
+		</li>
+	));
+	// -----------------------------------------------------
+
+	// get banners
+	const bannersImage = acceptedFiles?.map((image) => (
+		<div key={image.name}>
+			<img
+				key={image.path}
+				src={image.preview}
+				alt='upload banner'
+				// Revoke data uri after image is loaded
+				onLoad={() => {
+					URL.revokeObjectURL(image.preview);
+				}}
+			/>
+		</div>
+	));
+	// ---------------------------------------------------------------------------------
 
 	const updateUser = (data) => {
 		resetDataError();
@@ -222,6 +247,24 @@ const EditUserDetails = () => {
 						confirm_password: res?.data?.message?.en?.confirm_password?.[0],
 						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
 						image: res?.data?.message?.en?.image?.[0],
+					});
+					toast.error(res?.data?.message?.en?.user_name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.email?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.password?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.confirm_password?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.image?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -424,7 +467,10 @@ const EditUserDetails = () => {
 												<label
 													className='d-block mb-2'
 													htmlFor='upload-user-image'>
-													الصورة الشخصية
+													الصورة الشخصية{" "}
+													<span className='tax-text '>
+														(الحد الأقصي للصورة 2MB)
+													</span>
 												</label>
 												<div
 													{...getRootProps({
@@ -436,7 +482,15 @@ const EditUserDetails = () => {
 														id='upload-user-image'
 														name='upload-user-image'
 													/>
-													<ul style={{ width: "80%" }}>{files}</ul>
+
+													{files?.length !== 0 ? (
+														<ul style={{ width: "80%" }}>{files}</ul>
+													) : (
+														<p className='helper' style={{ fontSize: "16px" }}>
+															اختر صورة PNG أو JPG فقط{" "}
+														</p>
+													)}
+
 													<span className='upload-icon'>
 														<UploadIcon />
 													</span>

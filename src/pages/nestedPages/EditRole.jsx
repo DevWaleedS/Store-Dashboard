@@ -1,32 +1,39 @@
 import React, { useState, useContext } from "react";
+
+// Third party
+import axios from "axios";
+import { useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
 import { Link, useNavigate, useParams } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Components
 import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-import { useCookies } from "react-cookie";
-import Context from "../../Context/context";
-import axios from "axios";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import TableRow from "@mui/material/TableRow";
+import FormGroup from "@mui/material/FormGroup";
+import TableCell from "@mui/material/TableCell";
+import TableBody from "@mui/material/TableBody";
+import TableHead from "@mui/material/TableHead";
+import TableContainer from "@mui/material/TableContainer";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // ICONS
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
 import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Modal Style
 const style = {
@@ -126,6 +133,9 @@ const EditRole = () => {
 				} else {
 					setLoadingTitle("");
 					setHandleErrors(res?.data?.message?.en?.role_name[0]);
+					toast.error(res?.data?.message?.en?.role_name[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -230,7 +240,8 @@ const EditRole = () => {
 															required: "حقل إسم الدور مطلوب",
 															pattern: {
 																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "يجب أن يكون اسم الدور عبارة عن نصاّّ",
+																message:
+																	" يجب أن يكون اسم الدور عبارة عن نصاّّ ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 															},
 														})}
 													/>

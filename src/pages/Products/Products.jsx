@@ -19,7 +19,9 @@ import { useCookies } from "react-cookie";
 // Context
 import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import AddProductFromStore from "../nestedPages/AddProductFromStore";
+
+// Components
+import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 
 const Products = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -188,8 +190,8 @@ const Products = () => {
 					/>
 				</div>
 
-				{/** Add Product Form store page*/}
-				<AddProductFromStore />
+				{/** Add Product Form store page Modal*/}
+				<AddProductFromStoreModal />
 				{/** Add new Product */}
 			</div>
 		</>

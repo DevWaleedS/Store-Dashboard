@@ -1,29 +1,36 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import useFetch from "../../Hooks/UseFetch";
-import Context from "../../Context/context";
-import { useNavigate, useParams } from "react-router-dom";
-import CircularLoading from "../../HelperComponents/CircularLoading";
-import { useCookies } from "react-cookie";
 
-// import Dropzone Library
+// Third party
+import axios from "axios";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 
 // icons
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
-import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
-import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoIosArrowDown } from "react-icons/io";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
 
 const style = {
 	position: "fixed",
@@ -87,7 +94,89 @@ const EditUserPage = () => {
 		image: "",
 		status: "",
 	});
+	// --------------------------------------------------------------------------
+	// Handle Errors
+	const [userError, setUserError] = useState({
+		name: "",
+		user_name: "",
+		role: "",
+		email: "",
+		password: "",
+		phonenumber: "",
+		image: "",
+		status: "",
+	});
+	const resetCouponError = () => {
+		setUserError({
+			name: "",
+			user_name: "",
+			role: "",
+			email: "",
+			password: "",
+			phonenumber: "",
+			image: "",
+			status: "",
+		});
+	};
+
+	// Show and hidden password function
+	const [passwordType, setPasswordType] = useState("password");
+	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
+	const showPasswordToggle = () => {
+		if (passwordType === "password") {
+			setPasswordType("text");
+			setShowPasswordIcon(<AiOutlineEyeInvisible />);
+		} else {
+			setPasswordType("password");
+			setShowPasswordIcon(<Password />);
+		}
+	};
+	// ------------------------------------------------------------------
+
+	//  use dropzone to get personal image
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 	const [images, setImages] = useState([]);
+	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+		accept: {
+			"image/jpeg": [],
+			"image/png": [],
+			"image/jpg": [],
+		},
+
+		onDrop: (acceptedFiles) => {
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					setImages([]);
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
+					setUserError({
+						...userError,
+						image: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setUserError({
+						...userError,
+						image: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setImages(updatedIcons?.filter((icon) => icon !== null));
+		},
+	});
+
+	const files = acceptedFiles.map((file) => (
+		<li key={file.path}>{file.path}</li>
+	));
+	// ---------------------------------------------------------------------
 
 	// to set data that coming fro show api
 	useEffect(() => {
@@ -115,69 +204,9 @@ const EditUserPage = () => {
 	useEffect(() => {
 		reset(user);
 	}, [user, reset]);
+	// -------------------------------------------------------------------
 
-	// Show and hidden password function
-	const [passwordType, setPasswordType] = useState("password");
-	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
-	const [userError, setUserError] = useState({
-		name: "",
-		user_name: "",
-		role: "",
-		email: "",
-		password: "",
-		phonenumber: "",
-		image: "",
-		status: "",
-	});
-	const resetCouponError = () => {
-		setUserError({
-			name: "",
-			user_name: "",
-			role: "",
-			email: "",
-			password: "",
-			phonenumber: "",
-			image: "",
-			status: "",
-		});
-	};
-	const showPasswordToggle = () => {
-		if (passwordType === "password") {
-			setPasswordType("text");
-			setShowPasswordIcon(<AiOutlineEyeInvisible />);
-		} else {
-			setPasswordType("password");
-			setShowPasswordIcon(<Password />);
-		}
-	};
-
-	//  use dropzone to get personal image
-	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-		accept: {
-			"image/jpeg": [],
-			"image/png": [],
-		},
-		onDrop: (acceptedFiles) => {
-			setImages(
-				acceptedFiles.map((file) =>
-					Object.assign(file, {
-						preview: URL.createObjectURL(file),
-					})
-				)
-			);
-		},
-	});
-
-	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>
-			{file.path} - {file.size} bytes
-		</li>
-	));
-
-	const handleOnChange = (e) => {
-		setUser({ ...user, [e.target.name]: e.target.value });
-	};
-
+	// Handle Update User Info
 	const updateUser = (data) => {
 		setLoadingTitle("جاري تعديل المستخدم");
 		resetCouponError();
@@ -230,6 +259,30 @@ const EditUserPage = () => {
 						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
 						image: res?.data?.message?.en?.image?.[0],
 						status: res?.data?.message?.en?.status?.[0],
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.user_name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.role?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.email?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.password?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.image?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.status?.[0], {
+						theme: "light",
 					});
 				}
 			});

@@ -1,14 +1,20 @@
 import React from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // icons
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 
 const style = {
 	position: "absolute",

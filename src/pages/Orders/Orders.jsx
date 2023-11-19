@@ -38,7 +38,9 @@ const Orders = () => {
 		orders = fetchedData?.data?.orders;
 	}
 
-	if (select === "shipping_company") {
+	if (select === "") {
+		filterOrders = orders;
+	} else if (select === "shipping_company") {
 		filterOrders = orders?.sort((a, b) =>
 			a?.shippingtypes?.name?.localeCompare(b?.shippingtypes?.name)
 		);

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 // third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import useFetch from "../../Hooks/UseFetch";
@@ -93,6 +94,10 @@ const EditCategory = () => {
 		);
 
 		if (!isSizeValid) {
+			setIcons([]);
+			toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+				theme: "light",
+			});
 			setCategoryError({
 				...categoryError,
 				icon: " حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
@@ -151,11 +156,20 @@ const EditCategory = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					setCategoryError({
 						...categoryError,
 						name: res?.data?.message?.en?.name?.[0],
-						icon: res?.data?.message?.en?.icon?.[0],
+						icon: res?.res?.data?.message?.en?.name?.[0],
+					});
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -313,7 +327,8 @@ const EditCategory = () => {
 													required: "حقل الاسم مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "الاسم يجب أن يكون نصاً",
+														message:
+															"الاسم يجب أن يكون نصاً ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 													},
 												})}
 											/>

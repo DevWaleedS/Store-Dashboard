@@ -1,17 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import Context from "../../Context/context";
-import { useNavigate, useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import useFetch from "../../Hooks/UseFetch";
-import { useDropzone } from "react-dropzone";
-import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// MUI
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import { Checkbox } from "@mui/material";
+// Third party
+import axios from "axios";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
+import draftToHtml from "draftjs-to-html";
+import { useDropzone } from "react-dropzone";
 import { Editor } from "react-draft-wysiwyg";
 import {
 	EditorState,
@@ -19,21 +14,33 @@ import {
 	ContentState,
 	convertFromHTML,
 } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// MUI
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { Checkbox } from "@mui/material";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import FormGroup from "@mui/material/FormGroup";
+import { CloseOutlined } from "@mui/icons-material";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // ICONS
+import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
 import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.svg";
-import { IoIosArrowDown } from "react-icons/io";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
-import { CloseOutlined } from "@mui/icons-material";
 
 // Modal Style
 const style = {
@@ -112,6 +119,7 @@ const EditPage = () => {
 		editorState: EditorState.createEmpty(),
 	});
 
+	// ---------------------------------------------------------
 	const addTags = () => {
 		setPage({ ...page, tags: [...page?.tags, tag] });
 		setTag("");
@@ -121,6 +129,7 @@ const EditPage = () => {
 		const newTags = page?.tags?.filter((tag, index) => index !== i);
 		setPage({ ...page, tags: newTags });
 	};
+	// ------------------------------------------------------
 
 	const onEditorStateChange = (editorValue) => {
 		const editorStateInHtml = draftToHtml(
@@ -140,6 +149,7 @@ const EditPage = () => {
 		seo_link: "",
 		seo_desc: "",
 		tags: "",
+		images: "",
 	});
 
 	const resetCouponError = () => {
@@ -151,6 +161,7 @@ const EditPage = () => {
 			seo_link: "",
 			seo_desc: "",
 			tags: "",
+			images: "",
 		});
 	};
 
@@ -184,21 +195,44 @@ const EditPage = () => {
 		reset(page);
 	}, [page, reset]);
 
-	const [images, setImages] = useState([]);
+	// -------------------------------------------------
 
+	// Add Post image
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const [images, setImages] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
+			"image/jpg": [],
 			"image/png": [],
 		},
+
 		onDrop: (acceptedFiles) => {
-			setImages(
-				acceptedFiles.map((file) =>
-					Object.assign(file, {
-						preview: URL.createObjectURL(file),
-					})
-				)
-			);
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
+					setImages([]);
+					setPageError({
+						...pageError,
+						images: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setPageError({
+						...pageError,
+						images: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setImages(updatedIcons?.filter((image) => image !== null));
 		},
 	});
 
@@ -257,6 +291,32 @@ const EditPage = () => {
 						seo_link: res?.data?.message?.en?.seo_link?.[0],
 						seo_desc: res?.data?.message?.en?.seo_desc?.[0],
 						tags: res?.data?.message?.en?.tags?.[0],
+						images: res?.data?.message?.en?.image?.[0],
+					});
+
+					toast.error(res?.data?.message?.en?.title?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.page_desc?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.page_content?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.seo_title?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.seo_link?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.seo_desc?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.tags?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.image?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -308,7 +368,8 @@ const EditPage = () => {
 															required: " حقل العنوان مطلوب",
 															pattern: {
 																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																message: "يجب أن يكون العنوان عبارة عن نصاً",
+																message:
+																	"يجب أن يكون العنوان عبارة عن نصاً ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 															},
 														})}
 													/>
@@ -707,6 +768,7 @@ const EditPage = () => {
 																		style={{
 																			fontSize: "16px",
 																			color: "#1dbbbe",
+																			cursor: "pointer",
 																		}}>
 																		{" "}
 																		استعراض
@@ -730,6 +792,11 @@ const EditPage = () => {
 																	alt='img-page'
 																/>
 															)}
+															<div className='col-12'>
+																<span className='fs-6 text-danger'>
+																	{pageError?.images}
+																</span>
+															</div>
 														</div>
 													</>
 												)}

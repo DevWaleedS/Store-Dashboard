@@ -1,17 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import Context from "../../Context/context";
+
+// Third Party
 import axios from "axios";
-import { useCookies } from "react-cookie";
-
-// MUI
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-
-import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import useFetch from "../../Hooks/UseFetch";
+import { Helmet } from "react-helmet";
+import { useCookies } from "react-cookie";
+import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 import {
 	ContentState,
@@ -19,8 +13,19 @@ import {
 	convertFromHTML,
 	convertToRaw,
 } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import { Link, useNavigate, useParams } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
+
+// MUI
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
 
 // Table
 import Table from "@mui/material/Table";
@@ -35,15 +40,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 // ICONS
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import CircularLoading from "../../HelperComponents/CircularLoading";
 import howIcon from "../../data/Icons/icon_24_home.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg";
-
-import { ReactComponent as Communication } from "../../data/Icons/ico - 24 - communication - send_outlined.svg";
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
 import { ReactComponent as Dollar } from "../../data/Icons/icon-24-dollar.svg";
+import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg";
+import { ReactComponent as Communication } from "../../data/Icons/ico - 24 - communication - send_outlined.svg";
+import { toast } from "react-toastify";
 
 // Modal Style
 const style = {
@@ -235,6 +240,16 @@ const ClientData = () => {
 						discountValueErr: res?.data?.message?.en?.discount_value?.[0],
 						discountExpireDateErr:
 							res?.data?.message?.en?.discount_expire_date?.[0],
+					});
+
+					toast.error(res?.data?.message?.en?.message?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount_value?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount_expire_date?.[0], {
+						theme: "light",
 					});
 				}
 			});

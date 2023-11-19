@@ -1,18 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Helmet } from "react-helmet";
+// Third party
 import axios from "axios";
-import useFetch from "../../Hooks/UseFetch";
-import Context from "../../Context/context";
-import { useNavigate, useParams } from "react-router-dom";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+import { useNavigate, useParams } from "react-router-dom";
 
+// Context
+import Context from "../../../Context/context";
+
+// Components
+import useFetch from "../../../Hooks/UseFetch";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // icons and images
-import { ReactComponent as CurrencyIcon } from "../../data/Icons/icon-24-Currency.svg";
 import { Controller, useForm } from "react-hook-form";
+import { ReactComponent as CurrencyIcon } from "../../../data/Icons/icon-24-Currency.svg";
 
 const style = {
 	position: "fixed",
@@ -72,23 +79,6 @@ const ShowImportEtlobhaProduct = () => {
 			stock: "",
 		},
 	});
-	/**
-	 * --------------------------------------------------------------------
-	 * to set data that coming from api
-	 * --------------------------------------------------------------------
-	 */
-
-	useEffect(() => {
-		if (fetchedData?.data?.product) {
-			setProduct({
-				...product,
-				name: fetchedData?.data?.product?.name,
-				description: fetchedData?.data?.product?.description,
-				price: fetchedData?.data?.product?.selling_price,
-				stock: fetchedData?.data?.product?.stock,
-			});
-		}
-	}, [fetchedData?.data?.product]);
 
 	/**
 	 * --------------------------------------------------------------------
@@ -129,6 +119,24 @@ const ShowImportEtlobhaProduct = () => {
 			SEOdescription: "",
 		});
 	};
+	/**
+	 * --------------------------------------------------------------------
+	 * to set data that coming from api
+	 * --------------------------------------------------------------------
+	 */
+
+	useEffect(() => {
+		if (fetchedData?.data?.product) {
+			setProduct({
+				...product,
+				name: fetchedData?.data?.product?.name,
+				description: fetchedData?.data?.product?.description,
+				price: fetchedData?.data?.product?.selling_price,
+				stock: fetchedData?.data?.product?.stock,
+			});
+		}
+	}, [fetchedData?.data?.product]);
+
 	/**
 	 * --------------------------------------------------------------------
 	 * images
@@ -172,6 +180,9 @@ const ShowImportEtlobhaProduct = () => {
 				} else {
 					setProductError({
 						price: res?.data?.message?.en?.price?.[0],
+					});
+					toast.error(res?.data?.message?.en?.price?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -459,13 +470,10 @@ const ShowImportEtlobhaProduct = () => {
 														{fetchedData?.data?.product?.purchasing_price})
 													</span>
 												)}
-											</div>
 
-											<div className='col-md-7 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.price}
+												<div className='fs-6 text-danger'>
 													{errors?.price && errors.price.message}
-												</span>
+												</div>
 											</div>
 										</div>
 									</div>

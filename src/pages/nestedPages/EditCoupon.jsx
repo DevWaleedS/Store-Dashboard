@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import useFetch from "../../Hooks/UseFetch";
-import Context from "../../Context/context";
+import moment from "moment";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Datepicker
 import DatePicker from "react-datepicker";
@@ -14,20 +25,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import { FormControlLabel, Switch } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import { FormControlLabel, Switch } from "@mui/material";
 
 // icons
+import { IoIosArrowDown } from "react-icons/io";
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import { IoIosArrowDown } from "react-icons/io";
-import { useCookies } from "react-cookie";
-import moment from "moment";
-import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Modal Style
 const style = {
@@ -219,12 +226,12 @@ const EditCoupon = () => {
 			fetchedData?.data?.Coupons?.coupon_apply === "selected_product"
 				? "selected_product"
 				: fetchedData?.data?.Coupons?.coupon_apply === "selected_category"
-					? "selected_category"
-					: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
-						? "selected_payment"
-						: fetchedData?.data?.Coupons?.coupon_apply === "all"
-							? "all"
-							: null
+				? "selected_category"
+				: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
+				? "selected_payment"
+				: fetchedData?.data?.Coupons?.coupon_apply === "all"
+				? "all"
+				: null
 		);
 
 		setSelectedProducts(
@@ -344,6 +351,30 @@ const EditCoupon = () => {
 						coupon_apply: res?.data?.message?.en?.coupon_apply?.[0],
 					});
 					setStartDateError(res?.data?.message?.en?.expire_date?.[0]);
+
+					toast.error(res?.data?.message?.en?.code?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount_type?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.discount?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.total_redemptions?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.user_redemptions?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.coupon_apply?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.expire_date?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -392,9 +423,9 @@ const EditCoupon = () => {
 													</button>
 												</Fragment>
 											) : moment(
-												fetchedData?.data?.Coupons?.expire_date,
-												"YYYY-MM-DD"
-											).toDate() < currentDate ? (
+													fetchedData?.data?.Coupons?.expire_date,
+													"YYYY-MM-DD"
+											  ).toDate() < currentDate ? (
 												<Fragment>
 													<div className='coupon-status disabled'>منتهي</div>
 
@@ -478,7 +509,11 @@ const EditCoupon = () => {
 																name='total_redemptions'
 																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
-																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
 															/>
 														)}
 													/>
@@ -510,7 +545,7 @@ const EditCoupon = () => {
 																onChange={onChange}
 																name='discount_type'
 																// disabled={isEnable === "نشط" ? false : true}
-																>
+															>
 																<div className='radio-box'>
 																	<FormControlLabel
 																		value='percent'
@@ -579,7 +614,14 @@ const EditCoupon = () => {
 																	name='discount'
 																	// disabled={isEnable === "نشط" ? false : true}
 																	value={value}
-																	onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																	onChange={(e) =>
+																		onChange(
+																			e.target.value.replace(
+																				/[^\d.]|\.(?=.*\.)/g,
+																				""
+																			)
+																		)
+																	}
 																/>
 															)}
 														/>
@@ -623,7 +665,11 @@ const EditCoupon = () => {
 																placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
 																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
-																onChange={(e) => onChange(e.target.value.replace(/[^0-9]/g, ''))}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
 															/>
 														)}
 													/>
@@ -681,7 +727,7 @@ const EditCoupon = () => {
 																onChange={onChange}
 																name='free_shipping'
 																// disabled={isEnable === "نشط" ? false : true}
-																>
+															>
 																<div className='radio-box '>
 																	<FormControlLabel
 																		value={1}
@@ -747,7 +793,14 @@ const EditCoupon = () => {
 																placeholder=' ادخل مبلغ الحد الأدني من المشتريات'
 																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
-																onChange={(e) => onChange(e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ''))}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	)
+																}
 															/>
 														)}
 													/>
@@ -976,9 +1029,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																			{
+																				paddingRight: "20px",
+																			},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",
@@ -1050,9 +1103,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																			{
+																				paddingRight: "20px",
+																			},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",

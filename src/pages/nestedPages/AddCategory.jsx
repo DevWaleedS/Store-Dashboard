@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 // third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -24,9 +25,9 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // ICONS
+import { AiOutlinePlus } from "react-icons/ai";
 import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
 import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { AiOutlinePlus } from "react-icons/ai";
 
 // Modal style
 const style = {
@@ -91,10 +92,14 @@ const AddCategory = () => {
 		);
 
 		if (!isSizeValid) {
+			toast.warning(" حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+				theme: "light",
+			});
 			setCategoryError({
 				...categoryError,
 				icon: " حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
 			});
+			setIcons([]);
 		} else {
 			setIcons(imageList);
 			setCategoryError({ ...categoryError, icon: null });
@@ -142,6 +147,12 @@ const AddCategory = () => {
 						...categoryError,
 						name: res?.data?.message?.en?.name?.[0],
 						icon: res?.data?.message?.en?.icon?.[0],
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.icon?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -274,7 +285,8 @@ const AddCategory = () => {
 													required: "حقل الاسم مطلوب",
 													pattern: {
 														value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-														message: "الاسم يجب أن يكون نصاً",
+														message:
+															"الاسم يجب أن يكون نصاً ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 													},
 												})}
 											/>

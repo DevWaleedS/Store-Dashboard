@@ -1,7 +1,11 @@
 import React from "react";
+
+// Third party
 import { useNavigate } from "react-router-dom";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
-import { closeProductHintModal } from "../../store/slices/ImportProductHintModal";
+import { closeProductHintModal } from "../../../store/slices/ImportProductHintModal";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -39,7 +43,7 @@ const contentStyles = {
 	color: "#011723",
 };
 
-const AddProductFromStore = () => {
+const AddProductFromStoreModal = () => {
 	const { isOpenProductHintModal } = useSelector(
 		(state) => state.ImportProductHintModal
 	);
@@ -113,4 +117,4 @@ const AddProductFromStore = () => {
 	);
 };
 
-export default AddProductFromStore;
+export default AddProductFromStoreModal;

@@ -1,8 +1,14 @@
 import React, { useContext, useEffect } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
+
+// Context
 import { DeleteContext } from "../../Context/DeleteProvider";
+
+// Components
+import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // MUI

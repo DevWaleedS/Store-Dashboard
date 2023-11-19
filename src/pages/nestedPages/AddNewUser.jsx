@@ -1,27 +1,37 @@
 import React, { useContext, useState } from "react";
-import { Helmet } from "react-helmet";
+
+// Third party
 import axios from "axios";
-import Context from "../../Context/context";
-import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
+// Context
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
 // import Dropzone Library
 import { useDropzone } from "react-dropzone";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-// icons
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
-import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
 
-import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { IoIosArrowDown } from "react-icons/io";
+// Components
 import useFetch from "../../Hooks/UseFetch";
+
+// icons
+import { IoIosArrowDown } from "react-icons/io";
 import { useForm, Controller } from "react-hook-form";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
+import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
+import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
 
 const style = {
 	position: "fixed",
@@ -101,7 +111,6 @@ const AddNewUser = () => {
 	// Show and hidden password function
 	const [passwordType, setPasswordType] = useState("password");
 	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
-
 	const showPasswordToggle = () => {
 		if (passwordType === "password") {
 			setPasswordType("text");
@@ -111,28 +120,49 @@ const AddNewUser = () => {
 			setShowPasswordIcon(<Password />);
 		}
 	};
+	// -------------------------------------------------
 
 	//  use dropzone to get personal image
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
 			"image/png": [],
+			"image/jpg": [],
 		},
+
 		onDrop: (acceptedFiles) => {
-			setImages(
-				acceptedFiles.map((file) =>
-					Object.assign(file, {
-						preview: URL.createObjectURL(file),
-					})
-				)
-			);
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+
+				if (!isSizeValid) {
+					setImages([]);
+					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+						theme: "light",
+					});
+					setUserError({
+						...userError,
+						image: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+					});
+				} else {
+					setUserError({
+						...userError,
+						image: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setImages(updatedIcons?.filter((icon) => icon !== null));
 		},
 	});
 
 	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>
-			{file.path} - {file.size} bytes
-		</li>
+		<li key={file.path}>{file.path}</li>
 	));
 
 	const addNewUser = (data) => {
@@ -169,7 +199,7 @@ const AddNewUser = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
+
 					setUserError({
 						name: res?.data?.message?.en?.name?.[0],
 						user_name: res?.data?.message?.en?.user_name?.[0],
@@ -179,6 +209,30 @@ const AddNewUser = () => {
 						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
 						image: res?.data?.message?.en?.image?.[0],
 						status: res?.data?.message?.en?.status?.[0],
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.user_name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.user_type?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.email?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.password?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.image?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.status?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -378,7 +432,6 @@ const AddNewUser = () => {
 													},
 												})}
 											/>
-											
 										</div>
 										<div className='col-lg-2 col-12'></div>
 										<div className='col-lg-9 col-12'>
@@ -459,6 +512,7 @@ const AddNewUser = () => {
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='personal-image' className=''>
 												الصورة الشخصية<span className='text-danger'>*</span>
+												<div className='tax-text'>(الحد الأقصي للصورة 2MB)</div>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -472,11 +526,12 @@ const AddNewUser = () => {
 													id='personal-image'
 													name='personal-image'
 												/>
-												{files.length <= 0 ? (
-													<p className='helper'>اختر صورة PNG أو JPG فقط </p>
-												) : (
-													<p className='d-none'>اختر صورة PNG أو JPG فقط </p>
-												)}
+												<p
+													className={` ${
+														files?.length === 0 ? "helper" : "d-none"
+													}`}>
+													اختر صورة PNG أو JPG فقط{" "}
+												</p>
 
 												<span> استعراض</span>
 												<ul>{files}</ul>
