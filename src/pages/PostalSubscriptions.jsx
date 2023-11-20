@@ -1,26 +1,31 @@
 import React, { useState } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
+
+// Components
 import useFetch from "../Hooks/UseFetch";
 import { PostalSubscriptionsTable } from "../components/Tables";
-// iCONS
+
+// Icons
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { BsSearch } from "react-icons/bs";
+
 // Export File
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
 const PostalSubscriptions = () => {
+	const [search, setSearch] = useState("");
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/subsicriptions"
 	);
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
-	const [search, setSearch] = useState("");
+
+	// Handle Search
 	let subsicriptions = fetchedData?.data?.subsicriptions;
 
 	if (search !== "") {
@@ -31,6 +36,7 @@ const PostalSubscriptions = () => {
 		subsicriptions = fetchedData?.data?.subsicriptions;
 	}
 
+	// Export To CSV
 	const exportToCSV = () => {
 		const ws = XLSX.utils.json_to_sheet(
 			subsicriptions?.map((item) => ({
@@ -43,6 +49,9 @@ const PostalSubscriptions = () => {
 		FileSaver.saveAs(data, "subscriptions_emails" + fileExtension);
 	};
 
+	const handleSubmit = (event) => {
+		event.preventDefault();
+	};
 	return (
 		<>
 			<Helmet>
@@ -97,10 +106,10 @@ const PostalSubscriptions = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<PostalSubscriptionsTable
-							data={subsicriptions}
-							loading={loading}
 							reload={reload}
+							loading={loading}
 							setReload={setReload}
+							data={subsicriptions}
 						/>
 					</div>
 				</div>

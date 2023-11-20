@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
-import FormControlLabel from "@mui/material/FormControlLabel";
+// MUI
 import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
-// icons
-import howIcon from "../data/Icons/icon_24_home.svg";
-import { AiOutlineSearch } from "react-icons/ai";
+// Components
+
 import { Plans } from "../components";
+
+// Icons
+import { AiOutlineSearch } from "react-icons/ai";
+import howIcon from "../data/Icons/icon_24_home.svg";
 
 const PackageUpgrade = () => {
 	const [yearlyPlan, setYearlyPlan] = useState(false);

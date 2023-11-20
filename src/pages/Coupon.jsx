@@ -1,17 +1,18 @@
 import React, { useState } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import useFetch from "../Hooks/UseFetch";
-
 import { Link, useNavigate } from "react-router-dom";
 
-// iCONS
+// Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 import howIcon from "../data/Icons/icon_24_home.svg";
 
-//Mui
+//MUI
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -78,14 +79,14 @@ const Coupon = () => {
 		"https://backend.atlbha.com/api/Store/coupons"
 	);
 	const navigate = useNavigate();
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
+
 	const [search, setSearch] = useState("");
-	let coupons = fetchedData?.data?.coupons;
 	const [select, setSelect] = useState("");
+
+	let coupons = fetchedData?.data?.coupons;
 	let filterCoupons = fetchedData?.data?.coupons;
 
+	// Search
 	if (search !== "") {
 		coupons = fetchedData?.data?.coupons?.filter((item) =>
 			item?.code?.toLowerCase()?.includes(search?.toLowerCase())
@@ -93,7 +94,9 @@ const Coupon = () => {
 	} else {
 		coupons = fetchedData?.data?.coupons;
 	}
+	// -------------------------------------------------------------------------------
 
+	// filter by
 	if (select === "type") {
 		filterCoupons = coupons?.sort((a, b) =>
 			a?.discount_type.localeCompare(b?.discount_type)
@@ -105,8 +108,14 @@ const Coupon = () => {
 	} else if (select === "status") {
 		filterCoupons = coupons?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
-		filterCoupons = coupons?.sort((a, b) => a?.id - b?.id);
+		filterCoupons = fetchedData?.data?.coupons;
 	}
+	// -------------------------------------------------------------------------------
+
+	//
+	const handleSubmit = (event) => {
+		event.preventDefault();
+	};
 
 	return (
 		<>
@@ -172,9 +181,6 @@ const Coupon = () => {
 													) || "";
 												return result[0]?.ar_name;
 											}}>
-											<MenuItem sx={menuItemStyles} value=''>
-												الكل
-											</MenuItem>
 											{filtersTypes?.map((item) => (
 												<MenuItem
 													sx={menuItemStyles}

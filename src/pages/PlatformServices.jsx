@@ -4,9 +4,9 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import useFetch from "../Hooks/UseFetch";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -48,9 +48,8 @@ const PlatformServices = () => {
 		activity: [],
 		services: [],
 	});
-	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 
+	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -59,6 +58,7 @@ const PlatformServices = () => {
 	// to open DelegateRequestAlert
 	const dispatch = useDispatch(true);
 
+	// To get Activity and store name
 	useEffect(() => {
 		setData({
 			...data,
@@ -67,8 +67,9 @@ const PlatformServices = () => {
 				(active) => active?.name
 			),
 		});
-	}, [fetchedData?.data?.stores]);
+	}, [fetchedData]);
 
+	// Send Request Order
 	const requestOrder = () => {
 		setLoadingTitle("جاري ارسال الطلب");
 		let formData = new FormData();
@@ -84,16 +85,15 @@ const PlatformServices = () => {
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setReload(!reload);
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/PlatformServices");
-					setReload(!reload);
 					setData({ ...data, services: [] });
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/PlatformServices");
-					setReload(!reload);
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
 					setData({ ...data, services: [] });
 				}
 			});

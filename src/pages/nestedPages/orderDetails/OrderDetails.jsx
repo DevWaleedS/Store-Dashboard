@@ -241,8 +241,10 @@ const OrderDetails = () => {
 							console.error("Failed to open a new tab");
 						}
 					} else {
-						setReload(!reload);
 						setPrintError(res?.data?.message?.ar);
+						toast.error(res?.data?.message?.ar, {
+							theme: "light",
+						});
 					}
 				});
 		} else {
@@ -264,8 +266,10 @@ const OrderDetails = () => {
 							"_blank"
 						);
 					} else {
-						setReload(!reload);
 						setPrintError(res?.data?.message?.ar);
+						toast.error(res?.data?.message?.ar, {
+							theme: "light",
+						});
 					}
 				});
 		}

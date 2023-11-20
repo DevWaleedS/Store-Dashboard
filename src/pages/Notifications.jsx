@@ -1,18 +1,28 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Helmet } from "react-helmet";
-import useFetch from "../Hooks/UseFetch";
+
+// Third party
 import axios from "axios";
-import Context from "../Context/context";
-import { NotificationContext } from "../Context/NotificationProvider";
-import { DeleteContext } from "../Context/DeleteProvider";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
-// Icons
+import moment from "moment-with-locales-es6";
+
+// Components
+import useFetch from "../Hooks/UseFetch";
+import CircularLoading from "../HelperComponents/CircularLoading";
+
+// Context
+import Context from "../Context/context";
+import { DeleteContext } from "../Context/DeleteProvider";
+import { NotificationContext } from "../Context/NotificationProvider";
+
+// MUI
 import Checkbox from "@mui/material/Checkbox";
+
+// Icons
+import { AiOutlineSearch } from "react-icons/ai";
 import DeleteIcon from "../data/Icons/icon-24-delete.svg";
 import { ReactComponent as CheckedSquare } from "../data/Icons/icon-24-square checkmark.svg";
-import { AiOutlineSearch } from "react-icons/ai";
-import moment from "moment-with-locales-es6";
 
 const Notifications = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -61,6 +71,7 @@ const Notifications = () => {
 		return moment(date).locale("ar").format("D MMMM YYYY, h:mm a");
 	};
 	// -----------------------------------------------------------------
+
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -89,6 +100,7 @@ const Notifications = () => {
 		}
 		setSelected([]);
 	};
+	// -------------------------------------------------------------------------
 
 	// Delete single item
 	useEffect(() => {
@@ -117,8 +129,9 @@ const Notifications = () => {
 						setEndActionTitle(res?.data?.message?.ar);
 						setReload(!reload);
 					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
+						toast.error(res?.data?.message?.ar, {
+							theme: "light",
+						});
 					}
 				});
 			setActionTitle(null);

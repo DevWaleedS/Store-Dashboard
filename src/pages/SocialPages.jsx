@@ -1,22 +1,31 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import axios from "axios";
-import useFetch from "../Hooks/UseFetch";
-import { useCookies } from "react-cookie";
-import Context from "../Context/context";
-import { Link } from "react-router-dom";
-import howIcon from "../data/Icons/icon_24_home.svg";
-import { AiOutlineSearch } from "react-icons/ai";
 
-// import social icons
-import { ReactComponent as SnaChat } from "../data/Icons/icon-24-snapchat.svg";
+// Third party
+import axios from "axios";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
+// Context
+import Context from "../Context/context";
+import { LoadingContext } from "../Context/LoadingProvider";
+
+// Components
+import useFetch from "../Hooks/UseFetch";
+import CircularLoading from "../HelperComponents/CircularLoading";
+
+// Icons
+import { AiOutlineSearch } from "react-icons/ai";
+import howIcon from "../data/Icons/icon_24_home.svg";
 import { ReactComponent as Twitter } from "../data/Icons/Twitter.svg";
+import { ReactComponent as SnaChat } from "../data/Icons/icon-24-snapchat.svg";
 import { ReactComponent as Instagram } from "../data/Icons/icon-24-instagram.svg";
 import { ReactComponent as Youtube } from "../data/Icons/icon-24-youtube.svg";
 import { ReactComponent as Facebock } from "../data/Icons/icon-24-facebbock.svg";
-import CircularLoading from "../HelperComponents/CircularLoading";
+
+// MUI
 import { Button } from "@mui/material";
-import { LoadingContext } from "../Context/LoadingProvider";
 
 const SocialPages = () => {
 	// to get all  data from server
@@ -37,6 +46,7 @@ const SocialPages = () => {
 		instegram: "",
 	});
 
+	// To handle all errors
 	const [error, setError] = useState({
 		snapchat: "",
 		facebook: "",
@@ -54,6 +64,7 @@ const SocialPages = () => {
 			instegram: "",
 		});
 	};
+
 	// to set values to inputs
 	const handleSocialLinks = (e) => {
 		const { name, value } = e.target;
@@ -73,13 +84,7 @@ const SocialPages = () => {
 			youtube: fetchedData?.data?.youtube,
 			instegram: fetchedData?.data?.instegram,
 		});
-	}, [
-		fetchedData?.data?.snapchat,
-		fetchedData?.data?.facebook,
-		fetchedData?.data?.twiter,
-		fetchedData?.data?.youtube,
-		fetchedData?.data?.instegram,
-	]);
+	}, [fetchedData]);
 
 	// to update Seo values
 	const updateSocialMedia = () => {
@@ -110,13 +115,28 @@ const SocialPages = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
+
 					setError({
 						snapchat: res?.data?.message?.en?.snapchat?.[0],
 						facebook: res?.data?.message?.en?.facebook?.[0],
 						twiter: res?.data?.message?.en?.twiter?.[0],
 						youtube: res?.data?.message?.en?.youtube?.[0],
 						instegram: res?.data?.message?.en?.instegram?.[0],
+					});
+					toast.error(res?.data?.message?.en?.snapchat?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.facebook?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.twiter?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.youtube?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.instegram?.[0], {
+						theme: "light",
 					});
 				}
 			});

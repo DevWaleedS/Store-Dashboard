@@ -81,8 +81,11 @@ const Pages = () => {
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
+
 	let pages = fetchedData?.data?.pages;
 	let filterPages = fetchedData?.data?.pages;
+
+	// Search
 	if (search !== "") {
 		pages = fetchedData?.data?.pages?.filter((item) =>
 			item?.title?.toLowerCase()?.includes(search?.toLowerCase())
@@ -91,6 +94,7 @@ const Pages = () => {
 		pages = fetchedData?.data?.pages;
 	}
 
+	// Filter By
 	if (select === "date") {
 		filterPages = pages?.sort((a, b) =>
 			a?.created_at.localeCompare(b?.created_at)
@@ -98,7 +102,7 @@ const Pages = () => {
 	} else if (select === "status") {
 		filterPages = pages?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
-		filterPages = pages?.sort((a, b) => a?.id - b?.id);
+		filterPages = fetchedData?.data?.pages;
 	}
 
 	return (
@@ -128,6 +132,7 @@ const Pages = () => {
 				</div>
 
 				<div className='row mb-md-4 mb-3 add-category'>
+					{/* Search Input  */}
 					<div className='col-md-6 col-12 mb-md-0 mb-3'>
 						<div className='pages-search-bx'>
 							<BsSearch className='search-icon' />
@@ -142,6 +147,7 @@ const Pages = () => {
 						</div>
 					</div>
 
+					{/* Filter Select */}
 					<div className='col-md-3 col-12 mb-md-0 mb-3'>
 						<div className='pages-filters-bx'>
 							<FormControl sx={{ width: "100%", position: "relative" }}>
@@ -163,9 +169,6 @@ const Pages = () => {
 											) || "";
 										return result[0]?.ar_name;
 									}}>
-									<MenuItem sx={menuItemStyles} value=''>
-										الكل
-									</MenuItem>
 									{filtersTypes?.map((item) => (
 										<MenuItem
 											sx={menuItemStyles}

@@ -38,6 +38,7 @@ import { ReactComponent as Address } from "../data/Icons/address.svg";
 import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
 import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg";
 import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
+import { toast } from "react-toastify";
 
 const style = {
 	position: "absolute",
@@ -186,18 +187,61 @@ const MainInformation = () => {
 			storeAddress: "",
 		});
 	};
+	// ----------------------------------------------
 
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 	// to upload the store logo
 	const onChangeStoreLogo = (imageList, addUpdateIndex) => {
-		// data for submit
-		setStoreLogo(imageList);
+		// Check the size for each image in the list
+		const isSizeValid = imageList.every(
+			(image) => image.file.size <= maxFileSize
+		);
+
+		if (!isSizeValid) {
+			toast.warning("حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.", {
+				theme: "light",
+			});
+			setSettingErr({
+				...settingErr,
+				logo: "حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.",
+			});
+			setStoreLogo([]);
+		} else {
+			setSettingErr({
+				...settingErr,
+				logo: null,
+			});
+			setStoreLogo(imageList);
+		}
 	};
 
 	// to upload the store icon
 	const onChangeSelectIcon = (imageList, addUpdateIndex) => {
-		// data for submit
-		setStoreIcon(imageList);
+		// Check the size for each image in the list
+		const isSizeValid = imageList.every(
+			(image) => image.file.size <= maxFileSize
+		);
+
+		if (!isSizeValid) {
+			toast.warning("حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.", {
+				theme: "light",
+			});
+			setSettingErr({
+				...settingErr,
+				icon: "حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.",
+			});
+			setStoreIcon([]);
+		} else {
+			setSettingErr({
+				...settingErr,
+				icon: null,
+			});
+			setStoreIcon(imageList);
+		}
 	};
+
+	// ------------------------------------------------------------------
 
 	// to update UpdateMaintenanceMode values
 	const settingsStoreUpdate = () => {
@@ -272,7 +316,7 @@ const MainInformation = () => {
 					}
 				} else {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					setSettingErr({
 						logo: res?.data?.message?.en?.logo,
 						icon: res?.data?.message?.en?.icon,
@@ -284,9 +328,41 @@ const MainInformation = () => {
 						phoneNumber: res?.data?.message?.en?.phonenumber?.[0],
 						description: res?.data?.message?.en?.description?.[0],
 					});
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.logo, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.icon, {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.domain?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.country_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.city_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.store_address?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.store_email?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.description?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
+	// ------------------------------------------------------------------
 
 	// TO HANDLE VALIDATION USER PHONE NUMBER
 	useEffect(() => {
@@ -299,6 +375,7 @@ const MainInformation = () => {
 		const domainNameValidation = USER_REGEX.test(domain);
 		setValidDomainName(domainNameValidation);
 	}, [domain]);
+	// ------------------------------------------------------------------
 
 	const updateState = (index) => {
 		setWorkDays((prevState) => {
@@ -619,10 +696,7 @@ const MainInformation = () => {
 														{settingErr?.logo && (
 															<>
 																<span className='fs-6 w-100 text-danger'>
-																	{settingErr?.logo[0]}
-																</span>
-																<span className='fs-6 w-100 text-danger'>
-																	{settingErr?.logo[1]}
+																	{settingErr?.logo}
 																</span>
 															</>
 														)}
@@ -688,10 +762,7 @@ const MainInformation = () => {
 										{settingErr?.icon && (
 											<div className='d-flex flex-wrap'>
 												<span className='fs-6 w-100 text-danger'>
-													{settingErr?.icon[0]}
-												</span>
-												<span className='fs-6 w-100 text-danger'>
-													{settingErr?.icon[1]}
+													{settingErr?.icon}
 												</span>
 											</div>
 										)}

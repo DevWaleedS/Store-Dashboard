@@ -1,24 +1,33 @@
 import React, { useState, useEffect, useContext } from "react";
+
+// Third party
+import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
+// Components
 import useFetch from "../Hooks/UseFetch";
-import axios from "axios";
-import Context from "../Context/context";
-import { LoadingContext } from "../Context/LoadingProvider";
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { TagsInput } from "react-tag-input-component";
-import Button from "@mui/material/Button";
 import TextareaCode from "../components/TextareaCode/TextareaCode";
 
-// import images
+// Context
+import Context from "../Context/context";
+import { LoadingContext } from "../Context/LoadingProvider";
+
+// MUI
+import Button from "@mui/material/Button";
+import { TagsInput } from "react-tag-input-component";
+
+// Icons
 import howIcon from "../data/Icons/icon_24_home.svg";
 import { ReactComponent as LinkIcon } from "../data/Icons/link.svg";
 import { ReactComponent as BlogIcon } from "../data/Icons/Blog.svg";
-import { ReactComponent as SnapchatIcon } from "../data/Icons/blue-snapchat.svg";
 import { ReactComponent as TwitterIcon } from "../data/Icons/blue-Xx.svg";
-import { ReactComponent as InstagramIcon } from "../data/Icons/blue-instagram.svg";
 import { ReactComponent as TiktokIcon } from "../data/Icons/blue-tiktok.svg";
+import { ReactComponent as SnapchatIcon } from "../data/Icons/blue-snapchat.svg";
+import { ReactComponent as InstagramIcon } from "../data/Icons/blue-instagram.svg";
 
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -105,7 +114,7 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setReload(!reload);
+
 					setDataError({
 						...dataError,
 						updateLinkValue: res?.data?.message?.en?.google_analytics?.[0],
@@ -115,6 +124,27 @@ const PaintStore = () => {
 						tiktok: res?.data?.message?.en?.tiktokpixel?.[0],
 						instagram: res?.data?.message?.en?.instapixel?.[0],
 						keyWord: res?.data?.message?.en?.key_words?.[0],
+					});
+					toast.error(res?.data?.message?.en?.google_analytics?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.robot_link?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.snappixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.twitterpixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.tiktokpixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.instapixel?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.key_words?.[0], {
+						theme: "light",
 					});
 				}
 			});

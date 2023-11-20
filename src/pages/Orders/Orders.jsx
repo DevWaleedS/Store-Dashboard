@@ -24,6 +24,7 @@ const Orders = () => {
 	const [select, setSelect] = useState("");
 	let filterOrders = fetchedData?.data?.orders;
 
+	// Search
 	if (search !== "") {
 		orders = fetchedData?.data?.orders?.filter(
 			(order) =>
@@ -38,9 +39,7 @@ const Orders = () => {
 		orders = fetchedData?.data?.orders;
 	}
 
-	if (select === "") {
-		filterOrders = orders;
-	} else if (select === "shipping_company") {
+	if (select === "shipping_company") {
 		filterOrders = orders?.sort((a, b) =>
 			a?.shippingtypes?.name?.localeCompare(b?.shippingtypes?.name)
 		);
@@ -51,7 +50,7 @@ const Orders = () => {
 	} else if (select === "status") {
 		filterOrders = orders?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
-		filterOrders = orders?.sort((a, b) => a?.id - b?.id);
+		filterOrders = fetchedData?.data?.orders;
 	}
 
 	return (

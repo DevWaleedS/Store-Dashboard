@@ -1,18 +1,23 @@
 import React, { useState } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
 
-// Icons and Image
-import howIcon from "../data/Icons/icon_24_home.svg";
+// Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
+import howIcon from "../data/Icons/icon_24_home.svg";
+
 // MUI
+import { Button } from "@mui/material";
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Button } from "@mui/material";
+
+// Components
+import useFetch from "../Hooks/UseFetch";
 import { UserAndManagementTable } from "../components/Tables";
 
 const Management = () => {

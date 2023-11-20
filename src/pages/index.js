@@ -16,7 +16,5 @@ export { default as PaymentGetways } from "./PaymentGetways";
 export { default as MainInformation } from "./MainInformation";
 export { default as MaintenanceMode } from "./MaintenanceMode";
 export { default as PlatformServices } from "./PlatformServices";
-export { default as MarketingCampaign } from "./MarketingCampaign";
 export { default as PostalSubscriptions } from "./PostalSubscriptions";
-export { default as BranchesAndWarehouses } from "./BranchesAndWarehouses";
 export { default as EvaluationThePlatform } from "./EvaluationThePlatform/EvaluationThePlatform";

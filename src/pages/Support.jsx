@@ -13,13 +13,16 @@ import useFetch from "../Hooks/UseFetch";
 import SupportTable from "../components/Tables/SupportTable";
 
 const Support = () => {
+	const [search, setSearch] = useState("");
+
 	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/technicalSupport"
 	);
-	const [search, setSearch] = useState("");
 
+	// Handle search
 	let Technicalsupports = fetchedData?.data?.Technicalsupports;
+
 	if (search !== "") {
 		Technicalsupports = fetchedData?.data?.Technicalsupports?.filter((item) =>
 			item?.title?.toLowerCase()?.includes(search?.toLowerCase())
@@ -52,6 +55,7 @@ const Support = () => {
 						</div>
 					</div>
 				</div>
+				{/* Search Input */}
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-md-6 col-12 d-flex justify-content-end'>
 						<div className='pages-search-bx'>
@@ -67,6 +71,8 @@ const Support = () => {
 						</div>
 					</div>
 				</div>
+				{/* Support Table */}
+
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable

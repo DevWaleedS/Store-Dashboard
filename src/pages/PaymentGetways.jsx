@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -27,7 +28,6 @@ const PaymentGetways = () => {
 	);
 
 	const [cookies] = useCookies(["access_token"]);
-
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -48,8 +48,9 @@ const PaymentGetways = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
 				}
 			});
 	};

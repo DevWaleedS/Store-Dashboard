@@ -1,27 +1,36 @@
 import React, { useState, useEffect, useContext } from "react";
+
+// Third party
+import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
+// components
 import useFetch from "../Hooks/UseFetch";
-import axios from "axios";
+import CircularLoading from "../HelperComponents/CircularLoading";
+
+// context
 import Context from "../Context/context";
+import { LoadingContext } from "../Context/LoadingProvider";
+
+// MUI
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { LoadingContext } from "../Context/LoadingProvider";
-import CircularLoading from "../HelperComponents/CircularLoading";
 
 // import images
 import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
 import { ReactComponent as Menuu } from "../data/Icons/menuu.svg";
-import { ReactComponent as Background } from "../data/Icons/background.svg";
 import { ReactComponent as Icons } from "../data/Icons/icons.svg";
 import { ReactComponent as Caaard } from "../data/Icons/caaard.svg";
 import { ReactComponent as Footer } from "../data/Icons/footer.svg";
 import { ReactComponent as Border } from "../data/Icons/border.svg";
 import { ReactComponent as Border01 } from "../data/Icons/border01.svg";
+import { ReactComponent as Background } from "../data/Icons/background.svg";
+import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
+import { toast } from "react-toastify";
 
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -62,8 +71,10 @@ const PaintStore = () => {
 		}
 	}, [fetchedData?.data?.Theme]);
 
+	// Handle Primary
 	const handlePrimaryUpdate = () => {
 		setLoadingTitle("جاري تعديل اللون الأساسي");
+
 		let formData = new FormData();
 		formData.append("primaryBg", primaryBg);
 		axios
@@ -84,6 +95,12 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.primaryBg?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -110,6 +127,12 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.secondaryBg?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -136,6 +159,12 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.headerBg?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -162,6 +191,12 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.layoutBg?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -184,6 +219,12 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.iconsBg?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -211,6 +252,15 @@ const PaintStore = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.footerBorder?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.footerBg?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};

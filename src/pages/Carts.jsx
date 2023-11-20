@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
-// icons
+// Icons
 import howIcon from "../data/Icons/icon_24_home.svg";
-// custom hooks to get data from server
+
+// Components
 import useFetch from "../Hooks/UseFetch";
 import { CartsTables } from "../components/Tables";
 

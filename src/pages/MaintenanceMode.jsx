@@ -1,24 +1,32 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
-import ReactDom from "react-dom";
+// Third party
 import axios from "axios";
+import ReactDom from "react-dom";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
+
+// Context
 import Context from "../Context/context";
+import { LoadingContext } from "../Context/LoadingProvider";
+
+// Components
 import useFetch from "../Hooks/UseFetch";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
 
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
+// MUI
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
+import Backdrop from "@mui/material/Backdrop";
 import { Button, Switch } from "@mui/material";
-import { useCookies } from "react-cookie";
 
-// Import ICONS
-import { ReactComponent as TextIcon } from "../data/Icons/icon-24-format text right.svg";
+// Icons
 import { RiText } from "react-icons/ri";
-import { useForm } from "react-hook-form";
-import { LoadingContext } from "../Context/LoadingProvider";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { ReactComponent as TextIcon } from "../data/Icons/icon-24-format text right.svg";
 
 const style = {
 	position: "fixed",
@@ -139,6 +147,15 @@ const MaintenanceModeModal = () => {
 						...dataError,
 						title: res?.data?.message?.en?.title?.[0],
 						message: res?.data?.message?.en?.message?.[0],
+					});
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.title?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.message?.[0], {
+						theme: "light",
 					});
 				}
 			});

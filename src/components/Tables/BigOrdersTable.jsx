@@ -29,9 +29,9 @@ import { TablePagination } from "./TablePagination";
 
 // filter orders by
 const filtersTypes = [
-	{ id: 1, ar_name: "شركة الشحن", en_name: "shipping_company" },
-	{ id: 2, ar_name: "حالة الطلب", en_name: "status" },
-	{ id: 3, ar_name: "كمية الطلب", en_name: "quantity" },
+	{ id: 3, ar_name: "حالة الطلب", en_name: "status" },
+	{ id: 4, ar_name: "كمية الطلب", en_name: "quantity" },
+	{ id: 2, ar_name: "شركة الشحن", en_name: "shipping_company" },
 ];
 
 // Style The MUI Select
@@ -165,9 +165,6 @@ function EnhancedTableToolbar(props) {
 											) || "";
 										return result[0]?.ar_name;
 									}}>
-									<MenuItem sx={menuItemStyles} value=''>
-										الكل
-									</MenuItem>
 									{filtersTypes?.map((item) => (
 										<MenuItem
 											sx={menuItemStyles}

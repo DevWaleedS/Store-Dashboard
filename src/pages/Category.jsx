@@ -25,15 +25,14 @@ const Category = () => {
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
 
+	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [category_id, setCategory_id] = useState("");
-	const navigate = useNavigate();
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
+
 	let categoriesResult = fetchedData?.data?.categories;
 	let filterCategories = categoriesResult;
 
+	// Search
 	if (search !== "") {
 		categoriesResult = fetchedData?.data?.categories?.filter((item) =>
 			item?.name.includes(search)
@@ -42,13 +41,19 @@ const Category = () => {
 		categoriesResult = fetchedData?.data?.categories;
 	}
 
+	// Filter by
 	if (category_id !== "") {
 		filterCategories = categoriesResult?.filter(
 			(item) => item?.id === category_id
 		);
 	} else {
-		filterCategories = categoriesResult;
+		filterCategories = fetchedData?.data?.categories;
 	}
+	// ----------------------------------------------------
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+	};
 
 	return (
 		<>

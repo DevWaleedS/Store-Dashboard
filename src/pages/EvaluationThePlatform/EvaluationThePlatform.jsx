@@ -1,23 +1,29 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import howIcon from "../../data/Icons/icon_24_home.svg";
-import UserImage from "../../data/Icons/user-img.png";
+import React, { useState, useContext } from "react";
 
-import "./EvaluationThePlatform.css";
-import { Helmet } from "react-helmet";
-
-import { useContext } from "react";
-import { LoadingContext } from "../../Context/LoadingProvider";
+// Third party
 import axios from "axios";
+import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+
+// Context
 import Context from "../../Context/context";
-import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
-import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
-import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
-import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
-import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
-import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
+import { LoadingContext } from "../../Context/LoadingProvider";
+
+// Icons
+import UserImage from "../../data/Icons/user-img.png";
+import howIcon from "../../data/Icons/icon_24_home.svg";
 import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
+import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
+import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
+import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
+import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
+import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
+import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
+
+// Css Styles
+import "./EvaluationThePlatform.css";
 
 const EvaluationThePlatform = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -53,6 +59,12 @@ const EvaluationThePlatform = () => {
 					setLoadingTitle("");
 					setEvaluationError(res?.data?.message?.en?.comment_text?.[0]);
 					setEndActionTitle(res?.data?.message?.ar);
+					toast.error(res?.data?.message?.en?.comment_text?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
 				}
 			});
 	};

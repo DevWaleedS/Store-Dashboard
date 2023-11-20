@@ -36,24 +36,18 @@ const Report = () => {
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (dateValue?.length !== 0 && dateValue !== null) {
-				setUrl(
-					`https://backend.atlbha.com/api/Store/reports?startDate=${moment(
-						dateValue[0]
-					).format("YYYY-MM-DD")}&endDate=${moment(dateValue[1]).format(
-						"YYYY-MM-DD"
-					)}`
-				);
-				console.log(url);
-			} else {
-				console.log("data not found");
-			}
-		}, 1000);
-
-		return () => {
-			clearTimeout(debounce);
-		};
+		if (dateValue?.length !== 0 && dateValue !== null) {
+			setUrl(
+				`https://backend.atlbha.com/api/Store/reports?startDate=${moment(
+					dateValue[0]
+				).format("YYYY-MM-DD")}&endDate=${moment(dateValue[1]).format(
+					"YYYY-MM-DD"
+				)}`
+			);
+			console.log(url);
+		} else {
+			console.log("data not found");
+		}
 	}, [dateValue]);
 
 	// add url after add the date
