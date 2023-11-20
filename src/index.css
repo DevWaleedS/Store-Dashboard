@@ -32,6 +32,11 @@ body {
 	overflow-x: hidden !important;
 }
 
+body:has(.MuiPopover-root) {
+	overflow: auto !important;
+	padding-right: 0 !important;
+}
+
 svg:not(:root) {
 	overflow: visible !important;
 }
@@ -1537,7 +1542,7 @@ nav.navigation {
 }
 
 .products .mange-file {
-	width: 98%;
+	width: 99%;
 	margin: 0 auto;
 	padding: 25px 16px;
 }
@@ -7888,9 +7893,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 @media (max-width: 768px) {
 	.add-user-form .form-body input[name="phonenumber"] {
-	padding-left: 50px;
-	font-size: 16px;
-}
+		padding-left: 50px;
+		font-size: 16px;
+	}
 	.add-user-form .form-body .Country_Key {
 		top: 11px;
 		left: 30px;

@@ -53,20 +53,45 @@ const ProductRefund = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`
 	);
-	const [open, setOpen] = React.useState(true);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [price, setPrice] = React.useState();
-	const [priceError, setPriceError] = React.useState("");
+
+	const [open, setOpen] = useState(true);
 	const [imagesPreview, setImagesPreview] = useState();
 	const [isActive, setIsActive] = useState(null);
+
+	// Handle product info
+	const [productInfo, setProductInfo] = useState({
+		id: id,
+		price: "",
+		qty: "",
+	});
+
+	// Handle Errors
+	const [productErrors, setProductErrors] = useState({
+		price: "",
+		qty: "",
+	});
+
+	const resetProductErrors = () => {
+		setProductErrors({
+			price: "",
+			qty: "",
+		});
+	};
 
 	// To Get All Info About Product
 	useEffect(() => {
 		if (fetchedData?.data?.products) {
-			setPrice(fetchedData?.data?.products?.selling_price);
+			setProductInfo({
+				...productInfo,
+
+				price: fetchedData?.data?.products?.selling_price,
+				qty: fetchedData?.data?.products?.qty,
+			});
+
 			setImagesPreview(fetchedData?.data?.products?.cover);
 		}
 	}, [fetchedData?.data?.products]);
@@ -74,11 +99,12 @@ const ProductRefund = () => {
 
 	// Handle Import Product
 	const importProduct = () => {
-		setPriceError("");
+		resetProductErrors();
 		setLoadingTitle("جاري استيراد المنتج");
 		let formData = new FormData();
-		formData.append("product_id", id);
-		formData.append("price", price);
+		formData.append("product_id", productInfo?.id);
+		formData.append("price", productInfo?.price);
+		formData.append("qty", productInfo?.qty);
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/importproduct`, formData, {
@@ -95,11 +121,19 @@ const ProductRefund = () => {
 					setReload(!reload);
 				} else {
 					setLoadingTitle("");
-					setPriceError(res?.data?.message?.en?.price[0]);
+					setProductErrors({
+						...productErrors,
+						price: res?.data?.message?.en?.price?.[0],
+						qty: res?.data?.message?.ar,
+					});
 
-					toast.error(res?.data?.message?.en?.price[0], {
+					toast.error(res?.data?.message?.en?.price?.[0], {
 						theme: "light",
 					});
+					toast.error(res?.data?.message?.en?.qty?.[0], {
+						theme: "light",
+					});
+
 					toast.error(res?.data?.message?.ar, {
 						theme: "light",
 					});
@@ -267,6 +301,7 @@ const ProductRefund = () => {
 										<div
 											className='col-md-6 col-12'
 											style={{ alignSelf: "end" }}>
+											{/* purchasing_price */}
 											<div className='product-price mb-3'>
 												<div className='label mb-1'>سعر الشراء</div>
 												<div className='input d-flex justify-content-center align-items-center'>
@@ -282,24 +317,8 @@ const ProductRefund = () => {
 													</div>
 												</div>
 											</div>
-											<div className='product-price mb-3'>
-												<div className='label mb-1'> الكمية في المخزن</div>
-												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='price-icon d-flex  p-2 gap-3'>
-														<CurrencyIcon className='invisible ' />
-														<div
-															className='price w-100 d-flex justify-content-center align-items-center'
-															style={{ color: "#67747B" }}>
-															{fetchedData?.data?.products?.stock}
-														</div>
-													</div>
 
-													<div className='currency d-flex justify-content-center align-items-center invisible '>
-														ر.س
-													</div>
-												</div>
-											</div>
-
+											{/* Selling Price */}
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
 													سعر البيع<span className='text-danger'>*</span>{" "}
@@ -318,14 +337,15 @@ const ProductRefund = () => {
 																}}
 																type='text'
 																name='price'
-																value={price}
+																value={productInfo?.price}
 																onChange={(e) =>
-																	setPrice(
-																		e.target.value.replace(
+																	setProductInfo({
+																		...productInfo,
+																		price: e.target.value.replace(
 																			/[^\d.]|\.(?=.*\.)/g,
 																			""
-																		)
-																	)
+																		),
+																	})
 																}
 															/>
 														</div>
@@ -336,7 +356,7 @@ const ProductRefund = () => {
 													</div>
 												</div>
 
-												{Number(price) <
+												{Number(productInfo?.price) <
 													Number(
 														fetchedData?.data?.products?.purchasing_price
 													) && (
@@ -347,6 +367,72 @@ const ProductRefund = () => {
 												)}
 											</div>
 
+											{/* Stock */}
+											<div className='product-price mb-3'>
+												<div className='label mb-1'> الكمية في المخزون</div>
+												<div className='input d-flex justify-content-center align-items-center'>
+													<div className='price-icon d-flex  p-2 gap-3'>
+														<CurrencyIcon className='invisible ' />
+														<div
+															className='price w-100 d-flex justify-content-center align-items-center'
+															style={{ color: "#67747B" }}>
+															{fetchedData?.data?.products?.stock}
+														</div>
+													</div>
+
+													<div className='currency d-flex justify-content-center align-items-center invisible '>
+														ر.س
+													</div>
+												</div>
+											</div>
+
+											{/* Selling Price */}
+											<div className='product-price mb-3'>
+												<div className='label selling-price-label mb-1'>
+													الكمية المراد استيرادها من المنتج
+													<span className='text-danger'>*</span>{" "}
+													<span>(قم بإضافة الكمية الخاص بك)</span>
+												</div>
+												<div className='input d-flex justify-content-center align-items-center'>
+													<div className='price-icon d-flex align-items-center p-2 gap-3'>
+														<CurrencyIcon className='invisible ' />
+														<div className='price w-100 d-flex justify-content-center align-items-center'>
+															<input
+																className='text-center'
+																style={{
+																	direction: "ltr",
+																}}
+																type='text'
+																name='qty'
+																placeholder={fetchedData?.data?.products?.stock}
+																value={productInfo?.qty}
+																onChange={(e) =>
+																	setProductInfo({
+																		...productInfo,
+																		qty: e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		),
+																	})
+																}
+															/>
+														</div>
+													</div>
+
+													<div className='currency d-flex justify-content-center align-items-center invisible '>
+														ر.س
+													</div>
+												</div>
+
+												{Number(productInfo?.qty) >
+													Number(fetchedData?.data?.products?.stock) && (
+													<span className='fs-6 text-danger'>
+														الكمية المطلوبة غير متوفرة
+													</span>
+												)}
+											</div>
+
+											{/* About This product */}
 											<div className='product-price'>
 												<div className='label about-product-label mb-2'>
 													نبذة عن المنتج
