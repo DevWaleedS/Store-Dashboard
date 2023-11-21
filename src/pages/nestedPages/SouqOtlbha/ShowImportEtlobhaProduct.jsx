@@ -58,6 +58,7 @@ const ShowImportEtlobhaProduct = () => {
 	const [product, setProduct] = useState({
 		name: "",
 		description: "",
+		short_description: "",
 		selling_price: "",
 		discount_price: "",
 		price: "",
@@ -76,6 +77,7 @@ const ShowImportEtlobhaProduct = () => {
 		defaultValues: {
 			name: "",
 			description: "",
+			short_description: "",
 			selling_price: "",
 			price: "",
 			qty: "",
@@ -96,7 +98,7 @@ const ShowImportEtlobhaProduct = () => {
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
-		description: "",
+
 		price: "",
 		qty: "",
 		selling_price: "",
@@ -112,7 +114,7 @@ const ShowImportEtlobhaProduct = () => {
 		setProductError({
 			name: "",
 			cover: "",
-			description: "",
+
 			selling_price: "",
 			price: "",
 			qty: "",
@@ -136,7 +138,10 @@ const ShowImportEtlobhaProduct = () => {
 				...product,
 				name: fetchedData?.data?.product?.name,
 				description: fetchedData?.data?.product?.description,
+				short_description: fetchedData?.data?.product?.short_description,
 				price: fetchedData?.data?.product?.selling_price,
+
+				stock: fetchedData?.data?.product?.stock,
 				qty: fetchedData?.data?.product?.stock,
 			});
 		}
@@ -234,73 +239,92 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-image'> صورة المنتج</label>
 											</div>
+											{/** preview banner here */}
 											<div className='col-md-7 col-12'>
-												{/** preview banner here */}
 												<div
-													className=' banners-preview-container import-product-PreviewImage'
+													className='banners-preview-container import-product-PreviewImage'
 													style={{
-														height: "200px",
-														width: "200px",
+														height: "220px",
+														width: "220px",
 													}}>
 													<img
+														alt={""}
+														loading={"lazy"}
 														className='w-100 h-100'
 														src={fetchedData?.data?.product?.cover}
-														alt={fetchedData?.data?.product?.name}
 													/>
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
-												{productError?.cover && (
-													<span className='fs-6 text-danger'>
-														{productError?.cover}
-													</span>
-												)}
-											</div>
 										</div>
 
+										{/* Product name */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-name'> اسم المنتج </label>
 											</div>
+
 											<div className='col-md-7 col-12'>
-												<input
-													disabled={true}
-													name='name'
-													type='text'
-													id='product-name'
-													placeholder=' اسم المنتج'
-													{...register("name")}
-												/>
+												<div
+													className='d-flex justify-content-center align-items-start'
+													style={{
+														background: "#eeeeef",
+														border: "1px solid #a7a7a71a",
+														height: "48px",
+													}}>
+													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+														{fetchedData?.data?.product?.name}
+													</div>
+												</div>
 											</div>
+
 											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.name}
-													{errors?.name && errors.name.message}
-												</span>
-											</div>
 										</div>
+
+										{/* Product description */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-desc'> وصف المنتج </label>
 											</div>
 											<div className='col-md-7 col-12'>
-												<textarea
-													disabled={true}
-													name='description'
-													id='product-desc'
-													placeholder='  قم بكتابه واضح للمنتج'
-													{...register("description")}></textarea>
+												<div
+													className='d-flex justify-content-center align-items-start'
+													style={{
+														background: "#eeeeef",
+														border: "1px solid #a7a7a71a",
+														height: "140px",
+													}}>
+													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+														{fetchedData?.data?.product?.description}
+													</div>
+												</div>
+											</div>
+
+											<div className='col-md-3 col-12'></div>
+										</div>
+
+										{/* Short description */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-md-3 col-12'>
+												<label htmlFor='product-desc'>وصف قصير للمنتج</label>
+											</div>
+											<div className='col-md-7 col-12'>
+												<div
+													className='d-flex justify-content-center align-items-start'
+													style={{
+														background: "#eeeeef",
+														border: "1px solid #a7a7a71a",
+														height: "140px",
+													}}>
+													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+														{fetchedData?.data?.product?.short_description}
+													</div>
+												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.description}
-													{errors?.description && errors.description.message}
-												</span>
-											</div>
 										</div>
+
+										{/* Main category */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-category'>
@@ -309,18 +333,23 @@ const ShowImportEtlobhaProduct = () => {
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
-												<div className='main-category category mb-3'>
-													<input
-														className='input'
-														type='text'
-														value={fetchedData?.data?.product?.category?.name}
-														onChange={() => console.log("")}
-														disabled={true}
-													/>
+												<div
+													className='d-flex justify-content-center align-items-start'
+													style={{
+														background: "#eeeeef",
+														border: "1px solid #a7a7a71a",
+														height: "48px",
+													}}>
+													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+														{fetchedData?.data?.product?.category?.name}
+													</div>
 												</div>
 											</div>
+
 											<div className='col-md-3 col-12'></div>
 										</div>
+
+										{/* sub category */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='sub-category'>
@@ -478,12 +507,34 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Stock */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
+												<label htmlFor='price'>الكمية في المخزون </label>
+											</div>
+
+											<div className='col-md-7 col-12'>
+												<div
+													className='d-flex justify-content-center align-items-center'
+													style={{
+														background: "#eeeeef",
+														border: "1px solid #a7a7a71a",
+														height: "48px",
+													}}>
+													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
+														{fetchedData?.data?.product?.stock}
+													</div>
+												</div>
+											</div>
+											<div className='col-md-3 col-12'></div>
+										</div>
+
+										{/* Stock */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-md-3 col-12'>
 												<label htmlFor='price'>
 													{" "}
-													الكمية في المخزون{" "}
-													<span className='text-danger'>*</span>
+													الكمية التي قمت باستيرادها{" "}
 												</label>
 											</div>
+
 											<div className='col-md-7 col-12'>
 												<div className='tax-text'>
 													يمكنك تعديل الكمية التي قمت باستيرادها{" "}
@@ -511,7 +562,7 @@ const ShowImportEtlobhaProduct = () => {
 																style={{
 																	background: "#FFF",
 																	height: "48px",
-																	borderRadius: "none",
+																	borderRadius: "0",
 																}}
 																name={"qty"}
 																type='text'

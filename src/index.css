@@ -3757,6 +3757,9 @@ textarea {
 .add-form-wrapper form .sub-category .tags {
 	min-width: 134px;
 	max-width: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	padding: 8px;
 	white-space: pre-line;
 	background: #eeeeef;

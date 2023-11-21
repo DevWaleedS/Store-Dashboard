@@ -152,8 +152,8 @@ const AddNewProduct = () => {
 	};
 	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
 	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
-	const [robotLink, setRobotLink] = useState("");
 	const [SEOdescription, setSEOdescription] = useState([]);
+	const [robotLink, setRobotLink] = useState("");
 	const [instagram, setInstagram] = useState("");
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
@@ -416,6 +416,8 @@ const AddNewProduct = () => {
 				}
 			});
 	};
+
+	console.log(SEOdescription?.length);
 
 	const videoModal = () => {
 		return (
