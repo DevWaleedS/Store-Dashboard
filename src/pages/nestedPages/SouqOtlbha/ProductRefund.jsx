@@ -59,7 +59,7 @@ const ProductRefund = () => {
 	const { setLoadingTitle } = LoadingStore;
 
 	const [open, setOpen] = useState(true);
-	const [imagesPreview, setImagesPreview] = useState();
+	const [imagesPreview, setImagesPreview] = useState([]);
 	const [isActive, setIsActive] = useState(null);
 
 	// Handle product info
@@ -193,6 +193,7 @@ const ProductRefund = () => {
 														</div>
 													) : (
 														<img
+															loading={"lazy"}
 															src={imagesPreview}
 															alt='product'
 															className='img-fluid'
@@ -404,7 +405,7 @@ const ProductRefund = () => {
 																}}
 																type='text'
 																name='qty'
-																placeholder={fetchedData?.data?.products?.stock}
+																placeholder='حدد الكمية الخاص بك'
 																value={productInfo?.qty}
 																onChange={(e) =>
 																	setProductInfo({

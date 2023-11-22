@@ -20,6 +20,7 @@ import Modal from "@mui/material/Modal";
 
 // icons and images
 import { Controller, useForm } from "react-hook-form";
+import PlayVideo from "../../../data/Icons/video-play.svg";
 import { ReactComponent as CurrencyIcon } from "../../../data/Icons/icon-24-Currency.svg";
 
 const style = {
@@ -55,6 +56,8 @@ const ShowImportEtlobhaProduct = () => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
+	const [imagesPreview, setImagesPreview] = useState();
+	const [isActive, setIsActive] = useState(null);
 	const [product, setProduct] = useState({
 		name: "",
 		description: "",
@@ -80,8 +83,8 @@ const ShowImportEtlobhaProduct = () => {
 			short_description: "",
 			selling_price: "",
 			price: "",
-			qty: "",
 			stock: "",
+			qty: "",
 		},
 	});
 
@@ -98,7 +101,6 @@ const ShowImportEtlobhaProduct = () => {
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
-
 		price: "",
 		qty: "",
 		selling_price: "",
@@ -126,40 +128,26 @@ const ShowImportEtlobhaProduct = () => {
 			SEOdescription: "",
 		});
 	};
+
 	/**
 	 * --------------------------------------------------------------------
 	 * to set data that coming from api
 	 * --------------------------------------------------------------------
 	 */
-
 	useEffect(() => {
 		if (fetchedData?.data?.product) {
 			setProduct({
 				...product,
+
 				name: fetchedData?.data?.product?.name,
 				description: fetchedData?.data?.product?.description,
 				short_description: fetchedData?.data?.product?.short_description,
 				price: fetchedData?.data?.product?.selling_price,
-
-				stock: fetchedData?.data?.product?.stock,
 				qty: fetchedData?.data?.product?.stock,
 			});
+			setImagesPreview(fetchedData?.data?.product?.cover);
 		}
 	}, [fetchedData?.data?.product]);
-
-	/**
-	 * --------------------------------------------------------------------
-	 * images
-	 * --------------------------------------------------------------------
-	 */
-	// Use state with useDropzone library to set banners
-	const [icon, setIcon] = React.useState([]);
-
-	/* UseEffects TO Handle memory leaks */
-	useEffect(() => {
-		// Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-		return () => icon.forEach((banner) => URL.revokeObjectURL(banner.preview));
-	}, []);
 
 	/**
 	 * --------------------------------------------------------------------
@@ -237,26 +225,111 @@ const ShowImportEtlobhaProduct = () => {
 									<div className='form-body'>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-image'> صورة المنتج</label>
+												<label htmlFor='product-image'>
+													{" "}
+													الصورة الرئيسية للمنتج
+												</label>
 											</div>
 											{/** preview banner here */}
 											<div className='col-md-7 col-12'>
-												<div
-													className='banners-preview-container import-product-PreviewImage'
-													style={{
-														height: "220px",
-														width: "220px",
-													}}>
-													<img
-														alt={""}
-														loading={"lazy"}
-														className='w-100 h-100'
-														src={fetchedData?.data?.product?.cover}
-													/>
+												<div className='import-product-main-image'>
+													{imagesPreview?.includes(
+														".mp4" || ".avi" || ".mov" || ".mkv"
+													) ? (
+														<div className='wrapper'>
+															<video
+																src={imagesPreview}
+																className='img-fluid'
+																autoPlay
+																controls
+															/>
+														</div>
+													) : (
+														<div className='wrapper'>
+															<img
+																loading={"lazy"}
+																src={imagesPreview}
+																className='img-fluid'
+																alt={""}
+															/>
+														</div>
+													)}
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
 										</div>
+
+										{/* Multi images */}
+										{fetchedData?.data?.product?.images?.length !== 0 && (
+											<div className='row mb-md-5 mb-3'>
+												<div className='col-md-3 col-12'>
+													<label htmlFor='product-name'>
+														الصور المتعددة او الفيديو{" "}
+													</label>
+												</div>
+
+												<div className='col-md-7 col-12 '>
+													<div className='d-flex justify-content-start align-items-center gap-2 import-product-multi-images'>
+														{fetchedData?.data?.product?.images?.map(
+															(item, index) => {
+																const isVideo = item?.image.includes(
+																	".mp4" || ".avi" || ".mov" || ".mkv"
+																);
+																const handleClick = () => {
+																	setImagesPreview(item?.image);
+																	setIsActive(index);
+																};
+
+																if (isVideo) {
+																	return (
+																		<div
+																			key={index}
+																			onClick={handleClick}
+																			className={`video_wrapper ${
+																				isActive === index ? "active" : ""
+																			}`}>
+																			<video
+																				onClick={() => {
+																					setImagesPreview(item?.image);
+																				}}
+																				style={{
+																					cursor: "pointer",
+																				}}
+																				poster={PlayVideo}
+																				src={item?.image}
+																				className='img-fluid'
+																			/>
+																		</div>
+																	);
+																} else {
+																	return (
+																		<div
+																			key={index}
+																			onClick={handleClick}
+																			className={`${
+																				isActive === index ? "active" : ""
+																			}`}>
+																			<img
+																				style={{
+																					cursor: "pointer",
+																					objectFit: "contain",
+																				}}
+																				onClick={() => {
+																					setImagesPreview(item?.image);
+																				}}
+																				src={item?.image}
+																				alt={item?.image}
+																				className='img-fluid'
+																			/>
+																		</div>
+																	);
+																}
+															}
+														)}
+													</div>
+												</div>
+											</div>
+										)}
 
 										{/* Product name */}
 										<div className='row mb-md-5 mb-3'>
@@ -266,13 +339,16 @@ const ShowImportEtlobhaProduct = () => {
 
 											<div className='col-md-7 col-12'>
 												<div
-													className='d-flex justify-content-center align-items-start'
+													className='d-flex justify-content-center align-items-center'
 													style={{
 														background: "#eeeeef",
 														border: "1px solid #a7a7a71a",
 														height: "48px",
+														overflowY: "auto",
 													}}>
-													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+													<div
+														style={{ whiteSpace: "normal" }}
+														className='price w-100 d-flex justify-content-start align-items-start p-2'>
 														{fetchedData?.data?.product?.name}
 													</div>
 												</div>
@@ -293,8 +369,11 @@ const ShowImportEtlobhaProduct = () => {
 														background: "#eeeeef",
 														border: "1px solid #a7a7a71a",
 														height: "140px",
+														overflowY: "auto",
 													}}>
-													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+													<div
+														style={{ whiteSpace: "normal" }}
+														className='price w-100 d-flex justify-content-start align-items-start p-2'>
 														{fetchedData?.data?.product?.description}
 													</div>
 												</div>
@@ -316,7 +395,9 @@ const ShowImportEtlobhaProduct = () => {
 														border: "1px solid #a7a7a71a",
 														height: "140px",
 													}}>
-													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+													<div
+														style={{ whiteSpace: "normal" }}
+														className='price w-100 d-flex justify-content-start align-items-start p-2'>
 														{fetchedData?.data?.product?.short_description}
 													</div>
 												</div>
@@ -334,13 +415,13 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 											<div className='col-md-7 col-12'>
 												<div
-													className='d-flex justify-content-center align-items-start'
+													className='d-flex justify-content-center align-items-center'
 													style={{
 														background: "#eeeeef",
 														border: "1px solid #a7a7a71a",
 														height: "48px",
 													}}>
-													<div className='price w-100 d-flex justify-content-start align-items-start pe-2'>
+													<div className='price w-100 d-flex justify-content-center align-items-center p-2'>
 														{fetchedData?.data?.product?.category?.name}
 													</div>
 												</div>
@@ -519,7 +600,7 @@ const ShowImportEtlobhaProduct = () => {
 														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{fetchedData?.data?.product?.stock}
+														{fetchedData?.data?.product?.mainstock}
 													</div>
 												</div>
 											</div>

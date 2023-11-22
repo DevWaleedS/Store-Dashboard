@@ -237,19 +237,19 @@ const EditProductPage = () => {
 
 	// to get multi images
 	const emptyMultiImages = [];
-	for (let index = 0; index < 5 - multiImages.length; index++) {
-		emptyMultiImages.push(index);
+	for (let index = 0; index < 5 - multiImages?.length; index++) {
+		emptyMultiImages?.push(index);
 	}
 
 	const onChangeMultiImages = (imageList, addUpdateIndex) => {
 		// Check the size for each image in the list
-		const isSizeValid = imageList.every(
-			(image) => image.file.size <= maxFileSize
+		const isSizeValid = imageList?.every(
+			(image) => image?.file?.size <= maxFileSize
 		);
 
 		// Check if this file is video
 		const isVideo = imageList.every((image) =>
-			image.file.type.startsWith("video/")
+			image?.file?.type.startsWith("video/")
 		);
 
 		if (!isSizeValid) {
@@ -267,7 +267,7 @@ const EditProductPage = () => {
 					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
 					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
 			});
-			setMultiImages([]);
+			setMultiImages([...multiImages]);
 		} else {
 			setProductError({
 				...productError,
