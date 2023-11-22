@@ -370,6 +370,7 @@ const EditProductPage = () => {
 		if (icon?.length !== 0) {
 			formData.append("cover", icon[0] || null);
 		}
+
 		if (multiImages.length !== 0) {
 			for (let i = 0; i < multiImages?.length; i++) {
 				formData.append(

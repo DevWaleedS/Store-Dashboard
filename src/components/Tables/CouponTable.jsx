@@ -419,7 +419,6 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																	display: "flex",
 																	justifyContent: "start",
 																	alignItems: "center",
-																	gap: "7px",
 																}}>
 																<Checkbox
 																	sx={{

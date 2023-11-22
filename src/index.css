@@ -1440,13 +1440,6 @@ select {
 	max-width: 250px;
 }
 
-.actions {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 0.5rem;
-}
-
 .actions img {
 	cursor: pointer;
 }

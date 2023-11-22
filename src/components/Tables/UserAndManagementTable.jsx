@@ -39,7 +39,13 @@ function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='center' sx={{ color: "#02466a", width: "120px" }}>
+				<TableCell
+					align='center'
+					sx={{
+						color: "#02466a",
+						width: "120px",
+						paddingRight: "40px !important",
+					}}>
 					م
 				</TableCell>
 
@@ -417,7 +423,6 @@ export default function UserAndManagementTable({
 																	display: "flex",
 																	justifyContent: "start",
 																	alignItems: "center",
-																	gap: "7px",
 																}}>
 																<Checkbox
 																	sx={{
@@ -441,7 +446,30 @@ export default function UserAndManagementTable({
 															</div>
 														</TableCell>
 
-														<TableCell align='right'>{row?.name}</TableCell>
+														<TableCell align='center'>
+															<div
+																className='cate-prim d-flex align-items-center justify-content-start'
+																style={{
+																	width: " 240px",
+																}}>
+																<img
+																	className='img_icons'
+																	src={row?.image}
+																	alt='img'
+																/>
+
+																<span
+																	className='me-3'
+																	style={{
+																		maxWidth: "100%",
+																		whiteSpace: "nowrap",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
+																	}}>
+																	{row?.name}
+																</span>
+															</div>
+														</TableCell>
 														<TableCell align='center'>{row?.email}</TableCell>
 														<TableCell align='center'>
 															{row?.role?.name}

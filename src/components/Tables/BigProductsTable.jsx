@@ -38,7 +38,13 @@ function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='left' sx={{ color: "#02466a", width: "68px" }}>
+				<TableCell
+					align='center'
+					sx={{
+						color: "#02466a",
+						width: "68px",
+						paddingRight: "60px !important",
+					}}>
 					م
 				</TableCell>
 
@@ -436,7 +442,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																id={labelId}
 																scope='row'
 																align='right'>
-																<div className='flex items-center gap-4 pe-2'>
+																<div className='flex items-center gap-4 '>
 																	<Checkbox
 																		sx={{
 																			color: "#356b88",

@@ -299,7 +299,7 @@ export default function BigOrdersTable({
 																className='flex items-center'
 																style={{
 																	display: "flex",
-																	justifyContent: "start",
+																	justifyContent: "center",
 																	alignItems: "center",
 																	gap: "7px",
 																}}>

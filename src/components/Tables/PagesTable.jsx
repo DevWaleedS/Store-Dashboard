@@ -40,7 +40,13 @@ function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#c6e1f0" }}>
 			<TableRow>
-				<TableCell align='left' sx={{ color: "#02466a", width: "80px" }}>
+				<TableCell
+					align='left'
+					sx={{
+						color: "#02466a",
+						width: "80px",
+						paddingRight: "40px !important",
+					}}>
 					م
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
@@ -424,7 +430,6 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																	display: "flex",
 																	justifyContent: "start",
 																	alignItems: "center",
-																	gap: "7px",
 																}}>
 																<Checkbox
 																	sx={{
@@ -469,29 +474,31 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 															</span>
 														</TableCell>
 														<TableCell align='center'>
-															<div className='actions d-flex align-items-center justify-content-evenly'>
+															<div className='actions d-flex align-items-center justify-content-center '>
 																<Link
 																	to={`EditPage/${row?.id}`}
 																	style={{ cursor: "pointer" }}>
 																	<img src={editIcon} alt='' loading='lazy' />
 																</Link>
-																<span>
-																	<DeletteIcon
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("delete");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/page/${row?.id}`
-																			);
-																		}}
-																		style={{
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
-																		}}></DeletteIcon>
-																</span>
+
+																<DeletteIcon
+																	onClick={() => {
+																		setActionDelete(
+																			"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("delete");
+																		setUrl(
+																			`https://backend.atlbha.com/api/Store/page/${row?.id}`
+																		);
+																	}}
+																	style={{
+																		paddingRight: "10px",
+																		width: "40px",
+																		cursor: "pointer",
+																		color: "red",
+																	}}
+																/>
+
 																<Switch
 																	onChange={() => changePageStatus(row?.id)}
 																	checked={

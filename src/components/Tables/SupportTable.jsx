@@ -412,7 +412,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 															</div>
 														</TableCell>
 														<TableCell align='right'>
-															<div className='actions gap-0 d-flex justify-content-center'>
+															<div className='actions d-flex justify-content-center align-items-center'>
 																<span
 																	style={{ cursor: "pointer" }}
 																	onClick={() => {
