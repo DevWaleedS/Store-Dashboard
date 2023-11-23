@@ -311,7 +311,11 @@ export default function BigOrdersTable({
 														</TableCell>
 
 														<TableCell align='right'>
-															{row?.shipping?.track_id}
+															<div
+																className='text-overflow'
+																style={{ maxWidth: "250px" }}>
+																{row?.shipping?.track_id}
+															</div>
 														</TableCell>
 														<TableCell align='right'>
 															<div className='cate-prim'>

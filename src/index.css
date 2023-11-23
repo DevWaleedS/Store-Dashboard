@@ -4682,14 +4682,10 @@ input:disabled {
 	font-weight: 500;
 }
 
-.order-details-body
-	.order-details-box
-	.order-details-data
-	.order-data-row
-	span {
+.order-details-body .order-details-box .order-details-data .order-data-row span,
+.order-data-row > div {
 	background: #cce4ff38;
 	min-width: 190px;
-
 	min-height: 65px;
 	max-height: 100px;
 	overflow: auto;
@@ -4705,6 +4701,26 @@ input:disabled {
 	-ms-border-radius: 6px;
 	-o-border-radius: 6px;
 }
+.order-data-row.track_id_box span.track_id_input {
+	box-shadow: none !important;
+	background: transparent !important;
+	border-radius: 0px !important;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	-ms-border-radius: 0px !important;
+	-o-border-radius: 0px !important;
+	width: 90%;
+	padding: 0 100px 0 10px;
+}
+
+.order-data-row.track_id_box span.track_id_input::-webkit-scrollbar {
+	height: 8px;
+	width: 1px;
+}
+
+.order-data-row.track_id_box span.track_id_input::-webkit-scrollbar-thumb {
+	border: none;
+}
 
 .order-details-body
 	.order-details-box
@@ -4713,6 +4729,16 @@ input:disabled {
 	span.status {
 	background: var(--blue-100);
 	color: var(--blue-500);
+}
+
+/*  to  handle copy-track_id-icon style  */
+.copy-track_id-icon {
+	background: transparent;
+	width: 10%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .client-date img {

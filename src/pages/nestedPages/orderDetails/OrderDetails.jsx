@@ -345,7 +345,7 @@ const OrderDetails = () => {
 					) : (
 						<section className='order-details-body'>
 							<div className='mb-md-5 mb-4'>
-								<div className='order-details-box '>
+								<div className='order-details-box mb-5'>
 									<div className='title mb-4'>
 										<h5>بيانات الطلب</h5>
 									</div>
@@ -435,35 +435,34 @@ const OrderDetails = () => {
 															)
 														</span>
 													</div>
-													<div className='order-data-row'>
-														<span
-															style={{
-																width: "100%",
-																display: "flex",
-																flexDirection: "row",
-																alignItems: "center",
-																justifyContent: "space-between",
-																padding: "0 10px",
-															}}>
-															{fetchedData?.data?.orders?.shipping?.track_id}
+													<div className='order-data-row track_id_box'>
+														<div className='d-flex justify-content-center align-items-center'>
+															<span className='track_id_input'>
+																{fetchedData?.data?.orders?.shipping?.track_id}
+															</span>
 															{copy ? (
-																<AiFillCheckCircle color='#1dbbbe' />
+																<div className='copy-track_id-icon'>
+																	<AiFillCheckCircle color='#1dbbbe' />
+																</div>
 															) : (
-																<AiFillCopy
-																	color='#1dbbbe'
-																	style={{ cursor: "pointer" }}
-																	onClick={() => {
-																		setCopy(true);
-																		setTimeout(() => {
-																			navigator.clipboard.writeText(
-																				fetchedData?.data?.orders?.shipping
-																					?.track_id
-																			);
-																			setCopy(false);
-																		}, 1000);
-																	}}></AiFillCopy>
+																<div className='copy-track_id-icon'>
+																	<AiFillCopy
+																		color='#1dbbbe'
+																		style={{ cursor: "pointer" }}
+																		onClick={() => {
+																			setCopy(true);
+																			setTimeout(() => {
+																				navigator.clipboard.writeText(
+																					fetchedData?.data?.orders?.shipping
+																						?.track_id
+																				);
+																				setCopy(false);
+																			}, 1000);
+																		}}
+																	/>
+																</div>
 															)}
-														</span>
+														</div>
 													</div>
 												</div>
 											)}
@@ -760,9 +759,10 @@ const OrderDetails = () => {
 													<div className='client-date'>
 														<div className='img mb-2'>
 															<img
+																alt=''
+																loading={"lazy"}
 																className=' img-fluid'
 																src={fetchedData?.data?.orders?.user?.image}
-																alt='client'
 															/>
 														</div>
 													</div>
@@ -811,6 +811,7 @@ const OrderDetails = () => {
 																	gap: "30px",
 																}}>
 																<Message />
+
 																<span className='text-overflow'>
 																	{fetchedData?.data?.orders?.user?.email}
 																</span>
