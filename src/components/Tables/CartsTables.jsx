@@ -56,9 +56,9 @@ function EnhancedTableHead(props) {
 				<TableCell sx={{ color: "#67747B" }} align='center'>
 					الحالة
 				</TableCell>
-				<TableCell
-					sx={{ color: "#02466a", width: "80px" }}
-					align='center'></TableCell>
+				<TableCell sx={{ color: "#02466a", width: "80px" }} align='center'>
+					الإجراء
+				</TableCell>
 			</TableRow>
 		</TableHead>
 	);

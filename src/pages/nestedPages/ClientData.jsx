@@ -371,13 +371,15 @@ const ClientData = () => {
 																<div className='row user-info-row'>
 																	<div className='col-md-2 col-12 mb-md-0 mb-3'>
 																		<Location />
-																		<span className='location '>
+																		<span className='location'>
 																			{cartDetails?.user?.city?.name}
 																		</span>
 																	</div>
 																	<div className='col-md-4  col-12 mb-md-0 mb-3 d-flex justify-content-md-center align-items-center'>
 																		<Phone />
-																		<span className='location me-1'>
+																		<span
+																			className='location me-1'
+																			style={{ direction: "ltr" }}>
 																			{" "}
 																			{cartDetails?.user?.phonenumber}{" "}
 																		</span>
