@@ -847,6 +847,14 @@ textarea,
 	position: unset;
 	font-size: 20px;
 	color: #eff9ff;
+	visibility: visible;
+	display: flex;
+}
+.rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean svg {
+	font-size: 14px;
+	fill: #02466a;
+	position: absolute;
+	top: 20px;
 }
 
 .date-picker .rs-picker-toggle-textbox {

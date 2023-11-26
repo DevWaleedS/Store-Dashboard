@@ -31,7 +31,7 @@ const Report = () => {
 	const componentRef = useRef();
 	const [dateValue, setDateValue] = useState([]);
 	const [url, setUrl] = useState(
-		`https://backend.atlbha.com/api/Store/reports?startDate=2023-02-12&endDate=2023-05-14`
+		`https://backend.atlbha.com/api/Store/reports?startDate=''&endDate=''`
 	);
 
 	// We use this effect to avoid the errors
@@ -143,6 +143,8 @@ const Report = () => {
 										<span className='me-2'>المبيعات</span>
 									</button>
 								</li>
+
+								{/*
 								<li className='nav-item mb-2 me-md-3 ' role='presentation'>
 									<button
 										className='customers-btn'
@@ -157,6 +159,8 @@ const Report = () => {
 										<span className='me-2'>العملاء</span>
 									</button>
 								</li>
+							
+							*/}
 							</ul>
 						</div>
 					</div>
@@ -171,13 +175,17 @@ const Report = () => {
 							aria-labelledby='sales-tab'>
 							<SalesReports salesReport={fetchedData} loading={loading} />
 						</div>
-						<div
+
+						{/*
+					<div
 							className='tab-pane fade'
 							id='pills-custmores'
 							role='tabpanel'
 							aria-labelledby='pills-custmores-tab'>
 							<CustomersReports />
 						</div>
+					
+					*/}
 					</div>
 				</div>
 			</section>

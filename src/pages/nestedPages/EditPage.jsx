@@ -111,9 +111,9 @@ const EditPage = () => {
 		},
 	});
 
-	const itsPost = page?.pageCategory?.includes(1);
 	const [tag, setTag] = useState("");
 	const [descriptionLength, setDescriptionLength] = useState(false);
+	const itsPost = page?.pageCategory?.includes(1);
 	const [description, setDescription] = useState({
 		htmlValue: "",
 		editorState: EditorState.createEmpty(),
@@ -361,8 +361,8 @@ const EditPage = () => {
 													</div>
 													<input
 														name='title'
-														className='w-100'
 														type='text'
+														className='w-100'
 														placeholder='عنوان الصفحة'
 														{...register("title", {
 															required: " حقل العنوان مطلوب",
