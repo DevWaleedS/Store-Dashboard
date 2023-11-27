@@ -18,10 +18,10 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-//  ICONS
+//  Icons
 import { BsArrowLeft } from "react-icons/bs";
 import { MdFileUpload } from "react-icons/md";
-import { ReactComponent as CommentIcon } from "../../data/Icons/icon-32-comment.svg";
+import { CommentIcon } from "../../data/Icons";
 
 const TemplateUpdate = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(

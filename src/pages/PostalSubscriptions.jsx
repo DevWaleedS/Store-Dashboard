@@ -9,7 +9,7 @@ import useFetch from "../Hooks/UseFetch";
 import { PostalSubscriptionsTable } from "../components/Tables";
 
 // Icons
-import howIcon from "../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../data/Icons";
 import { BsSearch } from "react-icons/bs";
 
 // Export File
@@ -63,7 +63,7 @@ const PostalSubscriptions = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

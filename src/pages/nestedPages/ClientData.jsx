@@ -45,6 +45,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import howIcon from "../../data/Icons/icon_24_home.svg";
 import {
 	Communication,
+	DateIcon,
 	DeleteIcon,
 	Dollar,
 	Location,
@@ -991,7 +992,7 @@ const ClientData = () => {
 													</label>
 
 													<div className='date-icon'>
-														<DeleteIcon />
+														<DateIcon />
 													</div>
 													<DatePicker
 														placeholderText='اختر تاريخ انتهاء الخصم'

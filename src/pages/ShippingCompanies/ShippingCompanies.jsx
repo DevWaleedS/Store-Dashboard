@@ -14,9 +14,9 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 // Context
 import Context from "../../Context/context";
 
-// ICONS
+// Icons
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../../data/Icons";
 
 const ShippingCompanies = () => {
 	// to get all  data from server
@@ -75,7 +75,7 @@ const ShippingCompanies = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

@@ -1,10 +1,7 @@
 import React, { Fragment } from "react";
+import { CheckMark, FileIcon, PageIcon, Product } from "../../../data/Icons";
 
-// ICONS
-import { ReactComponent as PageIcon } from "../../../data/Icons/icon-3.svg";
-import { ReactComponent as CheckMark } from "../../../data/Icons/icon-24- true.svg";
-import { ReactComponent as Product } from "../../../data/Icons/icon-32-product.svg";
-import { ReactComponent as FileIcon } from "../../../data/Icons/icon-24- uncomplete order.svg";
+// Icons
 
 const OrdersQuickDetails = ({
 	loading,

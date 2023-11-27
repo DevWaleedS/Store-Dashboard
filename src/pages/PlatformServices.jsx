@@ -34,7 +34,7 @@ import { TagInput } from "evergreen-ui";
 // ICONS
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../data/Icons";
 
 const PlatformServices = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -125,7 +125,7 @@ const PlatformServices = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={howIcon} alt='' loading='lazy' />
+										<HomeIcon />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

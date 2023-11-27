@@ -148,14 +148,10 @@ const OrdersTableData = ({ ordersDetails }) => {
 															<Link
 																className='dropdown-item'
 																to={`/Orders/OrderDetails/${order?.id}`}>
-																<Reports className='report-icon' />
+																<Reports className='report-icon' title='تفاصيل الطلب'/>
 															</Link>
 														</li>
-														<li className='delete'>
-															<button className='dropdown-item'>
-																<DeleteIcon />
-															</button>
-														</li>
+														
 													</ul>
 												</div>
 											</td>

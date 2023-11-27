@@ -100,7 +100,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع الكوبونات ' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -524,11 +524,12 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																	<Link
 																		to={`EditCoupon/${row.id}`}
 																		style={{ cursor: "pointer" }}>
-																		<Reports />
+																		<Reports title='تفاصيل الكوبون' />
 																	</Link>
 																</span>
 																<span>
 																	<DeleteIcon
+																		title='حذف الكوبون'
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف الكوبون وهذة الخطوة غير قابلة للرجوع"
@@ -543,7 +544,8 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																			color: "red",
 																			fontSize: "1.2rem",
 																			marginRight: "5px",
-																		}}></DeleteIcon>
+																		}}
+																	/>
 																</span>
 															</div>
 														</TableCell>

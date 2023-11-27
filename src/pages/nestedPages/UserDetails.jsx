@@ -12,9 +12,8 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-// icons
-import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
+// Icons
+import { Message, Phone } from "../../data/Icons";
 
 const style = {
 	position: "absolute",

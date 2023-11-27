@@ -32,7 +32,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // icons
 import { IoIosArrowDown } from "react-icons/io";
-import { DeleteIcon, SearchIcon } from "../../data/Icons";
+import { DateIcon, DeleteIcon, SearchIcon } from "../../data/Icons";
 
 // Modal Style
 const style = {
@@ -493,7 +493,7 @@ const AddCoupon = () => {
 												تاريخ الانتهاء<span className='text-danger'>*</span>
 											</label>
 											<div className='date-icon'>
-												<DeleteIcon />
+												<DateIcon />
 											</div>
 											<DatePicker
 												minDate={moment().toDate()}

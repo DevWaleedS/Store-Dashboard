@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 // Icons
 import { BiSearch } from "react-icons/bi";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
+import { ArrowBack } from "../data/Icons";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -42,7 +42,7 @@ const Support = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={arrowBack} alt='' loading='lazy' />
+										<ArrowBack />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

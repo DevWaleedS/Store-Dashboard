@@ -16,15 +16,17 @@ import { useCookies } from "react-cookie";
 import Switch from "@mui/material/Switch";
 import { Avatar, Button } from "@mui/material";
 
-// ICONS
+// Icons
 import { BiHide } from "react-icons/bi";
 import { FcCheckmark } from "react-icons/fc";
 import { MdOutlineTimer } from "react-icons/md";
-import { ReactComponent as StoreIcon } from "../../data/Icons/icon-24-store.svg";
-import { ReactComponent as StarIcon } from "../../data/Icons/icon-20-star.svg";
-import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReplayIcon } from "../../data/Icons/icon-24-repley.svg";
-import { ReactComponent as HalfStarIcon } from "../../data/Icons/icon-20-star_half.svg";
+import {
+	DeleteIcon,
+	HalfStarIcon,
+	ReplayIcon,
+	StarIcon,
+	StoreIcon,
+} from "../../data/Icons";
 
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -220,7 +222,7 @@ const RatingWeight = ({
 																		`https://backend.atlbha.com/api/Store/comment/${rate?.id}`
 																	);
 																}}>
-																<DeleteIcon />
+																<DeleteIcon title='حذف التعليق' />
 																<span className='user-name me-2 align-self-center'>
 																	حذف{" "}
 																</span>
@@ -234,7 +236,7 @@ const RatingWeight = ({
 																	dispatch(openReplyModal());
 																	setCommentDetails(rate);
 																}}>
-																<ReplayIcon />
+																<ReplayIcon title='ارسال رد علي التعليق'/>
 																<span className='user-name me-2 align-self-center'>
 																	رد{" "}
 																</span>

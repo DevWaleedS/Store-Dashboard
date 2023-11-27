@@ -3,7 +3,7 @@ import React, { Fragment, useState, useContext, useEffect } from "react";
 // Third party
 import axios from "axios";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 // Context
@@ -31,8 +31,8 @@ import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Import icon
-import { DeleteIcon } from "../../data/Icons";
 import { FiSearch } from "react-icons/fi";
+import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -109,7 +109,7 @@ function EnhancedTableToolbar(props) {
 							}}
 							className='delete-all'>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع السلات' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -159,6 +159,7 @@ export default function CartsTables({
 	search,
 	setSearch,
 }) {
+	const navigate = useNavigate();
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -358,20 +359,16 @@ export default function CartsTables({
 														</TableCell>
 
 														<TableCell align='right'>
-															<Link
-																to={`ClientData/${row?.id}`}
-																style={{ cursor: "pointer" }}>
-																<div className='cate-prim'>
-																	<img
-																		src={row?.user?.image}
-																		alt='img'
-																		className=' rounded-circle img_icons'
-																	/>
-																	<span className='me-3 text-black'>
-																		{row?.user?.name}
-																	</span>
-																</div>
-															</Link>
+															<div className='cate-prim'>
+																<img
+																	src={row?.user?.image}
+																	alt='img'
+																	className=' rounded-circle img_icons'
+																/>
+																<span className='me-3 text-black'>
+																	{row?.user?.name}
+																</span>
+															</div>
 														</TableCell>
 														<TableCell align='right'>
 															{moment(row?.created_at).format("YYYY-MM-DD")}
@@ -384,18 +381,29 @@ export default function CartsTables({
 
 														<TableCell align='center'>{row?.status}</TableCell>
 														<TableCell align='center' sx={{ width: "80px" }}>
-															<DeleteIcon
-																style={{ cursor: "pointer" }}
-																onClick={() => {
-																	setActionDelete(
-																		"سيتم حذف السلة وهذة الخطوة غير قابلة للرجوع"
-																	);
-																	setDeleteMethod("get");
-																	setUrl(
-																		`https://backend.atlbha.com/api/Store/deleteCart?id[]=${row?.id}`
-																	);
-																}}
-															/>
+															<div className='d-flex align-items-center justify-content-center gap-2 '>
+																<EditIcon
+																	title='تعديل السلة'
+																	style={{ cursor: "pointer" }}
+																	onClick={() =>
+																		navigate(`ClientData/${row?.id}`)
+																	}
+																/>
+
+																<DeleteIcon
+																	title='حذف السلة'
+																	style={{ cursor: "pointer" }}
+																	onClick={() => {
+																		setActionDelete(
+																			"سيتم حذف السلة وهذة الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("get");
+																		setUrl(
+																			`https://backend.atlbha.com/api/Store/deleteCart?id[]=${row?.id}`
+																		);
+																	}}
+																/>
+															</div>
 														</TableCell>
 													</TableRow>
 												);

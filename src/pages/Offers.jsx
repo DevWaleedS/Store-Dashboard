@@ -4,7 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 import Switch from "@mui/material/Switch";
-import howIcon from "../data/Icons/icon_24_home.svg";
+
 import { IoMdAdd } from "react-icons/io";
 import { BsGift } from "react-icons/bs";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -12,6 +12,7 @@ import moment from "moment";
 import Context from "../Context/context";
 import { useCookies } from "react-cookie";
 import CircularLoading from "../HelperComponents/CircularLoading";
+import { HomeIcon } from "../data/Icons";
 
 const Offers = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -54,7 +55,7 @@ const Offers = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

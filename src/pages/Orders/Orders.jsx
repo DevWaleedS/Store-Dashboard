@@ -10,8 +10,8 @@ import { OrdersQuickDetails } from "./index";
 import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
+import { ArrowBack } from "../../data/Icons";
 import { AiOutlineSearch } from "react-icons/ai";
-import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 
 const Orders = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -78,7 +78,7 @@ const Orders = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={arrowBack} alt='' loading='lazy' />
+									<ArrowBack />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

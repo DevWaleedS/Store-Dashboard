@@ -4,12 +4,12 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
-// ICONS
+// Icons
 import { AiOutlineSearch } from "react-icons/ai";
-import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 
 // COMPONENTS
 import TemplateUpdate from "./TemplateUpdate";
+import { ArrowBack } from "../../data/Icons";
 
 const TemplateSetting = () => {
 	return (
@@ -38,7 +38,7 @@ const TemplateSetting = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={arrowBack} alt='' loading='lazy' />
+										<ArrowBack />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

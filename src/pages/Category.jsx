@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 
-// iCONS
+// Icons
 import { MdAdd } from "react-icons/md";
+import { HomeIcon } from "../data/Icons";
 import { BsSearch } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
-import howIcon from "../data/Icons/icon_24_home.svg";
 
+// Components
 import useFetch from "../Hooks/UseFetch";
 
 //Mui
@@ -66,7 +67,7 @@ const Category = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

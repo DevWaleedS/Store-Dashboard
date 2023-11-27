@@ -17,9 +17,9 @@ import { Switch } from "@mui/material";
 import useFetch from "../Hooks/UseFetch";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
-// import images
+// Icons
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../data/Icons";
 
 const PaymentGetways = () => {
 	// to get all  data from server
@@ -80,7 +80,7 @@ const PaymentGetways = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

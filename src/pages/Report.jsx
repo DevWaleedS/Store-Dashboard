@@ -19,13 +19,10 @@ import "rsuite/dist/rsuite.min.css";
 
 // import icons and images
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as PrintIcon } from "../data/Icons/icon-24-print.svg";
-import { ReactComponent as ClientsIcon } from "../data/Icons/icon-24-user.svg";
-import { ReactComponent as WalletIcon } from "../data/Icons/icon-24-wallet.svg";
+import { HomeIcon, PrintIcon, WalletIcon } from "../data/Icons";
 
 // Pages Components
-import { CustomersReports, SalesReports } from "./nestedPages";
+import { SalesReports } from "./nestedPages";
 
 const Report = () => {
 	const componentRef = useRef();
@@ -79,7 +76,7 @@ const Report = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={howIcon} alt='' loading='lazy' />
+										<HomeIcon />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

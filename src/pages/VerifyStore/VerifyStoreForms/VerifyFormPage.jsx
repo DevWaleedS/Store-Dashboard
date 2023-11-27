@@ -35,10 +35,9 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-// ICONS
+// Icons
 import { IoIosArrowDown } from "react-icons/io";
-import { ReactComponent as WebsiteIcon } from "../../../data/Icons/website.svg";
-import { ReactComponent as UploadIcon } from "../../../data/Icons/icon-24-upload_outlined.svg";
+import { UploadIcon, WebsiteIcon } from "../../../data/Icons";
 
 const inputStyle = {
 	width: "100%",

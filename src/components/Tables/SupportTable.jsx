@@ -103,7 +103,7 @@ function EnhancedTableToolbar(props) {
 									setActionTitle("Delete");
 								}}>
 								<IconButton>
-									<DeleteIcon />
+									<DeleteIcon title='حذف جميع الشكاوي' />
 									حذف الكل
 								</IconButton>
 							</Tooltip>
@@ -420,7 +420,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																	onClick={() => {
 																		navigate(`supportDetails/${row?.id}`);
 																	}}>
-																	<Reports />
+																	<Reports title='تفاصيل الشكوي' />
 																</span>
 
 																<span>
@@ -472,6 +472,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 
 																<span>
 																	<DeleteIcon
+																		title='حذف  الشكوى'
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع"

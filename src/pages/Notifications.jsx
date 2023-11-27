@@ -21,8 +21,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 // Icons
 import { AiOutlineSearch } from "react-icons/ai";
-import DeleteIcon from "../data/Icons/icon-24-delete.svg";
-import { ReactComponent as CheckedSquare } from "../data/Icons/icon-24-square checkmark.svg";
+import { CheckedSquare, DeleteIcon } from "../data/Icons";
 
 const Notifications = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -231,11 +230,7 @@ const Notifications = () => {
 																);
 																setActionTitle("Delete");
 															}}>
-															<img
-																src={DeleteIcon}
-																alt='delete-icon'
-																loading='lazy'
-															/>
+															<DeleteIcon title='حذف جميع الاشعارات' />
 															<h6 className='' style={{ color: "#FF3838" }}>
 																حذف
 															</h6>

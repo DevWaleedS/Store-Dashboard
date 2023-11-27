@@ -15,17 +15,19 @@ import { LoadingContext } from "../Context/LoadingProvider";
 import useFetch from "../Hooks/UseFetch";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
-// Icons
-import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as Twitter } from "../data/Icons/Twitter.svg";
-import { ReactComponent as SnaChat } from "../data/Icons/icon-24-snapchat.svg";
-import { ReactComponent as Instagram } from "../data/Icons/icon-24-instagram.svg";
-import { ReactComponent as Youtube } from "../data/Icons/icon-24-youtube.svg";
-import { ReactComponent as Facebock } from "../data/Icons/icon-24-facebbock.svg";
-
 // MUI
 import { Button } from "@mui/material";
+
+// Icons
+import { AiOutlineSearch } from "react-icons/ai";
+import {
+	Facebock,
+	HomeIcon,
+	Instagram,
+	SnaChat,
+	Twitter,
+	Youtube,
+} from "../data/Icons";
 
 const SocialPages = () => {
 	// to get all  data from server
@@ -167,7 +169,7 @@ const SocialPages = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

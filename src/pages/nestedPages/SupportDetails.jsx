@@ -14,25 +14,27 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 
-// ICONS
-import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
-import { ReactComponent as StatusIcon } from "../../data/Icons/status.svg";
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import { ReactComponent as Client } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Customer } from "../../data/Icons/icon-support.svg";
-import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
-import { ReactComponent as ReplayIcon } from "../../data/Icons/icon-24-repley.svg";
-import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
-import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
-import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
-import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
-import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
-
 // Components
 import GetDateOnly from "../../HelperComponents/GetDateOnly";
 import { SendSupportReplayModal } from "../../components/Modal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Icons
+import {
+	Attchment,
+	BoldIcon,
+	Customer,
+	DateIcon,
+	FormatTextCenter,
+	FormatTextLeft,
+	FormatTextPoint,
+	FormatTextPointSqure,
+	FormatTextRight,
+	Phone,
+	ReplayIcon,
+	StatusIcon,
+	User,
+} from "../../data/Icons";
 
 // Modal Style
 const style = {
@@ -130,7 +132,7 @@ const SupportDetails = () => {
 															<div className='row mb-md-4 mb-3'>
 																<div className='data-row d-flex flex-md-row flex-column'>
 																	<div className='box label-box'>
-																		<Client className='client-icon' />
+																		<User className='client-icon' />
 																		<span className='me-2'>اسم العميل</span>
 																	</div>
 

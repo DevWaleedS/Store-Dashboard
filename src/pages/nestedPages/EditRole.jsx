@@ -30,10 +30,9 @@ import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { ArrowBack, SearchIcon } from "../../data/Icons";
 
 // ICONS
-import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import arrowBack from "../../data/Icons/icon-30-arrwos back.svg";
 
 // Modal Style
 const style = {
@@ -202,7 +201,7 @@ const EditRole = () => {
 										<nav aria-label='breadcrumb'>
 											<ol className='breadcrumb'>
 												<li className='breadcrumb-item'>
-													<img src={arrowBack} alt='' loading='lazy' />
+													<ArrowBack />
 													<Link to='/Management/JobTitles' className='me-2'>
 														الأدوار الوظيفية
 													</Link>

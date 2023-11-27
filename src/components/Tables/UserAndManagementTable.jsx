@@ -100,7 +100,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع المستخدمين' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -518,13 +518,14 @@ export default function UserAndManagementTable({
 														<TableCell align='right'>
 															<div className='actions d-flex justify-content-evenly'>
 																<Link to={`info/${row.id}`}>
-																	<Reports />
+																	<Reports title='تفاصيل المستخدم' />
 																</Link>
 																<Link to={`user/${row.id}`}>
-																	<EditIcon />
+																	<EditIcon title='تعديل بيانات المستخدم' />
 																</Link>
 																<span>
 																	<DeleteIcon
+																		title='حذف المستخدم'
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف المستخدم وهذة الخطوة غير قابلة للرجوع"
@@ -538,7 +539,8 @@ export default function UserAndManagementTable({
 																			cursor: "pointer",
 																			color: "red",
 																			fontSize: "1.2rem",
-																		}}></DeleteIcon>
+																		}}
+																	/>
 																</span>
 															</div>
 														</TableCell>

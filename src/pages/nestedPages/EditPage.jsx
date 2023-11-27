@@ -39,8 +39,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // ICONS
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
-import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.svg";
+import { DocsIcon, PaperIcon } from "../../data/Icons";
 
 // Modal Style
 const style = {

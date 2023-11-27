@@ -12,8 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetActivity } from "../../store/slices/AddActivity";
 import { resetSubActivity } from "../../store/slices/AddSubActivity";
 
-// ICONS
-import howIcon from "../../data/Icons/icon_24_home.svg";
+// Icons
+import { HomeIcon } from "../../data/Icons";
 
 // Components
 import ActivityType from "./VerifyStoreForms/ActivityType";
@@ -60,7 +60,7 @@ const VerifyStore = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

@@ -108,7 +108,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع المنتجات' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -625,10 +625,11 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																				: `EditProduct/${row?.id}`
 																		}
 																		style={{ cursor: "pointer" }}>
-																		<EditIcon />
+																		<EditIcon title='تعديل المنتج' />
 																	</Link>
 																	<span>
 																		<DeleteIcon
+																			title='حذف المنتج'
 																			onClick={() => {
 																				setActionDelete(
 																					"سيتم حذف المنتج وهذة الخطوة غير قابلة للرجوع"
@@ -642,7 +643,8 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																				cursor: "pointer",
 																				color: "red",
 																				fontSize: "1.2rem",
-																			}}></DeleteIcon>
+																			}}
+																		/>
 																	</span>
 																</div>
 															</TableCell>

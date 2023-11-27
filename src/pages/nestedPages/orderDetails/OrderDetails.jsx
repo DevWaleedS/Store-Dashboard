@@ -41,6 +41,7 @@ import {
 	Quantity,
 	StatusIcon,
 	WalletIcon,
+	DateIcon,
 } from "../../../data/Icons";
 
 // Table
@@ -386,7 +387,7 @@ const OrderDetails = () => {
 											</div>
 											<div className='box'>
 												<div className='order-head-row'>
-													<DeleteIcon className='date-icon' />
+													<DateIcon className='date-icon' />
 													<span className='me-3'>تاريخ الطلب</span>
 												</div>
 
@@ -1207,23 +1208,6 @@ const OrderDetails = () => {
 										<span className='fs-6 text-danger'>{printError}</span>
 									</>
 								)}
-
-								{/**
-											<div className='order-action-box mb-md-5'>
-										<div className='action-title'>
-											<ListIcon className='list-icon' />
-											<span className='me-2'> حذف الطلب</span>
-										</div>
-										<div
-											className='action-icon'
-											onClick={() => {
-												deleteProduct(fetchedData?.data?.orders?.id);
-											}}
-										>
-											<DeleteIcon className='delete-icon' />
-										</div>
-									</div>
-									*/}
 							</div>
 						</div>
 					</div>

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -20,17 +21,18 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-// import images
-import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as Menuu } from "../data/Icons/menuu.svg";
-import { ReactComponent as Icons } from "../data/Icons/icons.svg";
-import { ReactComponent as Caaard } from "../data/Icons/caaard.svg";
-import { ReactComponent as Footer } from "../data/Icons/footer.svg";
-import { ReactComponent as Border } from "../data/Icons/border.svg";
-import { ReactComponent as Border01 } from "../data/Icons/border01.svg";
-import { ReactComponent as Background } from "../data/Icons/background.svg";
-import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
-import { toast } from "react-toastify";
+// Icons
+import {
+	Background,
+	Border,
+	Border01,
+	Caaard,
+	Category,
+	Footer,
+	HomeIcon,
+	Icons,
+	Menuu,
+} from "../data/Icons";
 
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -330,7 +332,7 @@ const PaintStore = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

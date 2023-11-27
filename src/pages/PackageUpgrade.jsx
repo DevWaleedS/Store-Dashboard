@@ -9,12 +9,11 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 // Components
-
 import { Plans } from "../components";
 
 // Icons
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../data/Icons";
 
 const PackageUpgrade = () => {
 	const [yearlyPlan, setYearlyPlan] = useState(false);
@@ -44,7 +43,7 @@ const PackageUpgrade = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

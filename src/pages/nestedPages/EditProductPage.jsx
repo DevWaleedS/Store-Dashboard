@@ -31,17 +31,19 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import { useForm, Controller } from "react-hook-form";
 
-// icons and images
+// Icons
 import { BsPlayCircle } from "react-icons/bs";
 import { TiDeleteOutline } from "react-icons/ti";
 import CloseIcon from "@mui/icons-material/Close";
 import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
-import { ReactComponent as LinkIcon } from "../../data/Icons/link.svg";
-import { ReactComponent as TwitterIcon } from "../../data/Icons/Xx.svg";
-import { ReactComponent as TiktokIcon } from "../../data/Icons/tiktok.svg";
-import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { ReactComponent as InstagramIcon } from "../../data/Icons/instagramm.svg";
-import { ReactComponent as SnapchatIcon } from "../../data/Icons/icon-24-snapchat-yellow.svg";
+import {
+	InstagramIcon,
+	LinkIcon,
+	SnapchatIcon,
+	TiktokIcon,
+	TwitterIcon,
+	UploadIcon,
+} from "../../data/Icons";
 
 const style = {
 	position: "fixed",

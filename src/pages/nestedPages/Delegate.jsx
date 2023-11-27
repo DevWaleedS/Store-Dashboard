@@ -11,9 +11,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 
 // ICONS
+import { HomeIcon } from "../../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../../data/Icons/icon_24_home.svg";
 
 // Components
 import { DelegateTable } from "../../components/Tables";
@@ -52,7 +52,7 @@ const Delegate = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

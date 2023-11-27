@@ -110,7 +110,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع الصفحات' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -477,10 +477,11 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																<Link
 																	to={`EditPage/${row?.id}`}
 																	style={{ cursor: "pointer" }}>
-																	<EditIcon />
+																	<EditIcon title='تعديل الصفحة ' />
 																</Link>
 
 																<DeleteIcon
+																	title='حذف الصفحة'
 																	onClick={() => {
 																		setActionDelete(
 																			"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch } from "react-redux";
 import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
@@ -22,21 +22,22 @@ import Checkbox from "@mui/material/Checkbox";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// ICONS
-import howIcon from "../../data/Icons/icon_24_home.svg";
-import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import { ReactComponent as OffersIcon } from "../../data/Icons/icon-24-offer.svg";
-import { ReactComponent as GiftIcon } from "../../data/Icons/icon-offer gift.svg";
-import { ReactComponent as ArrowIcon } from "../../data/Icons/icon-30-arrwos back.svg";
-import { ReactComponent as ArrowIconDown } from "../../data/Icons/icon-24-chevron_down.svg";
-import { ReactComponent as Quantity } from "../../data/Icons/icon-24-Quantity.svg";
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import { ReactComponent as MultiDevices } from "../../data/Icons/laptop icon-24.svg";
-import { ReactComponent as MobileIcon } from "../../data/Icons/mobile-icon-24.svg";
-import { ReactComponent as LaptopIcon } from "../../data/Icons/laptop-icon-24.svg";
-import { ReactComponent as Dollar } from "../../data/Icons/icon-6.svg";
+// Icons
 import { IoIosArrowDown } from "react-icons/io";
-import { useEffect } from "react";
+import {
+	ArrowBack,
+	ArrowDown,
+	DateIcon,
+	Dollar,
+	GiftIcon,
+	HomeIcon,
+	LaptopIcon,
+	Mobile,
+	MultiDevices,
+	OffersIcon,
+	Quantity,
+	SearchIcon,
+} from "../../data/Icons";
 
 // Modal Style
 const style = {
@@ -253,7 +254,7 @@ const OfferDetails = () => {
 										<ol className='breadcrumb'>
 											<li className='breadcrumb-item'>
 												<Link to='/' className='me-2'>
-													<img src={howIcon} alt='' loading='lazy' />
+													<HomeIcon />
 													<span className='me-2'> الرئيسية</span>
 												</Link>
 											</li>
@@ -396,7 +397,7 @@ const OfferDetails = () => {
 														onChange={(e) => {
 															handleOnChange(e);
 														}}
-														IconComponent={ArrowIconDown}
+														IconComponent={ArrowDown}
 														displayEmpty
 														inputProps={{ "aria-label": "Without label" }}
 														disabled
@@ -419,7 +420,7 @@ const OfferDetails = () => {
 															<span className='me-3'>موقع المتجر</span>
 														</MenuItem>
 														<MenuItem value='store_application'>
-															<MobileIcon />
+															<Mobile />
 															<span className='me-3'>تطبيق المتجر</span>
 														</MenuItem>
 
@@ -1842,7 +1843,7 @@ const OfferDetails = () => {
 									<div className='form-body'>
 										<div className='row d-flex justify-content-evenly position-relative'>
 											<div className='arrow-icon'>
-												<ArrowIcon />
+												<ArrowBack />
 											</div>
 
 											<div className='col-md-6 col-12 mb-md-0 mb-3'>

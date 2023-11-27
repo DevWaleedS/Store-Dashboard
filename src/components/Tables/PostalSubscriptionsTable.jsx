@@ -87,7 +87,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع الايميلات' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -338,6 +338,7 @@ export default function PostalSubscriptionsTable({
 															<div className='actions d-flex align-items-center justify-content-evenly'>
 																<span>
 																	<DeleteIcon
+																		title='حذف الايميل'
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف الايميل وهذة الخطوة غير قابلة للرجوع"
@@ -352,7 +353,8 @@ export default function PostalSubscriptionsTable({
 																			color: "red",
 																			fontSize: "1.2rem",
 																			marginRight: "5px",
-																		}}></DeleteIcon>
+																		}}
+																	/>
 																</span>
 															</div>
 														</TableCell>

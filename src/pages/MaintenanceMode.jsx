@@ -25,8 +25,8 @@ import { Button, Switch } from "@mui/material";
 
 // Icons
 import { RiText } from "react-icons/ri";
+import { TextIcon } from "../data/Icons";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { ReactComponent as TextIcon } from "../data/Icons/icon-24-format text right.svg";
 
 const style = {
 	position: "fixed",

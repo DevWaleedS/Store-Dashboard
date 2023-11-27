@@ -14,10 +14,9 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { DeleteIcon, EditIcon } from "../../data/Icons";
 
-// ICONS
-import { ReactComponent as EditIcon } from "../../data/Icons/editt 2.svg";
-import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
+// Icons
 
 // Modal Style
 const style = {
@@ -123,7 +122,7 @@ const JobTitles = () => {
 														<button
 															className='edit-btn'
 															onClick={() => navigate(`EditRole/${role?.id}`)}>
-															<EditIcon />
+															<EditIcon title='تعديل الدور' />
 															<span className='me-2'>تحرير</span>
 														</button>
 														<button
@@ -137,7 +136,7 @@ const JobTitles = () => {
 																);
 															}}
 															className='delete-btn me-md-3'>
-															<DeleteIcon />
+															<DeleteIcon title='حذف الدور' />
 															<span className='me-md-2'>حذف</span>
 														</button>
 													</div>

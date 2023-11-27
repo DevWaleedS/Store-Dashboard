@@ -12,10 +12,8 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-// icons
-import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
+// Icons
+import { Message, Mobile, User } from "../../data/Icons";
 
 const style = {
 	position: "fixed",

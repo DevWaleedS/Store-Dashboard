@@ -8,7 +8,6 @@ import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
-import arrowBack from "../data/Icons/icon-30-arrwos back.svg";
 
 //Mui
 import Select from "@mui/material/Select";
@@ -18,6 +17,7 @@ import { Button } from "@mui/material";
 
 // Components
 import { PagesTable } from "../components/Tables";
+import { ArrowBack } from "../data/Icons";
 
 // filter Pages by
 const filtersTypes = [
@@ -117,7 +117,7 @@ const Pages = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={arrowBack} alt='' loading='lazy' />
+										<ArrowBack />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

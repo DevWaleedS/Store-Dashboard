@@ -11,8 +11,8 @@ import { Menu, MenuItem } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 // Icons
+import { HomeIcon } from "../../data/Icons";
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../../data/Icons/icon_24_home.svg";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
 	MdOutlineArrowBackIosNew,
@@ -118,7 +118,7 @@ const Rating = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

@@ -24,13 +24,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 
-// icons
+// Icons
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
+import { Message, Mobile, Password, User } from "../../data/Icons";
 
 // Styles this pagw
 const style = {

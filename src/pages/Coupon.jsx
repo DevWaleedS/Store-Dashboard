@@ -8,9 +8,9 @@ import { Link, useNavigate } from "react-router-dom";
 // Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
+import { HomeIcon } from "../data/Icons";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
-import howIcon from "../data/Icons/icon_24_home.svg";
 
 //MUI
 import Select from "@mui/material/Select";
@@ -128,7 +128,7 @@ const Coupon = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

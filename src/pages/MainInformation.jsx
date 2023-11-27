@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import ImageUploading from "react-images-uploading";
@@ -27,19 +28,21 @@ import { useDispatch } from "react-redux";
 import useFetch from "../Hooks/UseFetch";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
-// IMPORT ICON
+// Icons
 import { MdFileUpload } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
-import howIcon from "../data/Icons/icon_24_home.svg";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { ReactComponent as Timer } from "../data/Icons/timer.svg";
-import { ReactComponent as Address } from "../data/Icons/address.svg";
-import { ReactComponent as CitIcon } from "../data/Icons/icon-24-town.svg";
-import { ReactComponent as CountryIcon } from "../data/Icons/icon-24-country.svg";
-import { ReactComponent as EditIcon } from "../data/Icons/document_text_outlined.svg";
-import { toast } from "react-toastify";
+import {
+	Address,
+	CityIcon,
+	CountryIcon,
+	EditIcon,
+	HomeIcon,
+	Timer,
+} from "../data/Icons";
 
+// -------------------------------------------------------------
 const style = {
 	position: "absolute",
 	top: "55%",
@@ -624,7 +627,7 @@ const MainInformation = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
@@ -931,7 +934,7 @@ const MainInformation = () => {
 										</div>
 										<div className='select-country'>
 											<div className='select-icon'>
-												<CitIcon className='' />
+												<CityIcon />
 											</div>
 
 											<Select

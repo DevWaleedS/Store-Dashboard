@@ -97,7 +97,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon />
+								<DeleteIcon title='حذف جميع النشاطات و التصنيفات' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -621,11 +621,12 @@ export default function EnhancedTable({
 																	<Link
 																		to={`EditCategory/${row?.id}`}
 																		style={{ cursor: "pointer" }}>
-																		<EditIcon />
+																		<EditIcon title='تعديل التصنيف' />
 																	</Link>
 																</span>
 																<span>
 																	<DeleteIcon
+																		title='حذف التصنيف'
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
@@ -641,7 +642,8 @@ export default function EnhancedTable({
 																			cursor: "pointer",
 																			color: "red",
 																			fontSize: "1.2rem",
-																		}}></DeleteIcon>
+																		}}
+																	/>
 																</span>
 															</div>
 														</TableCell>

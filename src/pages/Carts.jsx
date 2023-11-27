@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 // Icons
-import howIcon from "../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../data/Icons";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -39,7 +39,7 @@ const Carts = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>

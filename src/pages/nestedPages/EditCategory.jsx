@@ -21,10 +21,9 @@ import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 // Components
 import AddSubCategory from "./AddSubCategory";
 
-// ICONS
-import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
+// Icons
 import { AiOutlinePlus } from "react-icons/ai";
+import { DeleteIcon, UploadIcon } from "../../data/Icons";
 
 // Context
 import Context from "../../Context/context";

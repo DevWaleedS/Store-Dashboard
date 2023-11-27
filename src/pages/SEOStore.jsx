@@ -21,13 +21,15 @@ import Button from "@mui/material/Button";
 import { TagsInput } from "react-tag-input-component";
 
 // Icons
-import howIcon from "../data/Icons/icon_24_home.svg";
-import { ReactComponent as LinkIcon } from "../data/Icons/link.svg";
-import { ReactComponent as BlogIcon } from "../data/Icons/Blog.svg";
-import { ReactComponent as TwitterIcon } from "../data/Icons/blue-Xx.svg";
-import { ReactComponent as TiktokIcon } from "../data/Icons/blue-tiktok.svg";
-import { ReactComponent as SnapchatIcon } from "../data/Icons/blue-snapchat.svg";
-import { ReactComponent as InstagramIcon } from "../data/Icons/blue-instagram.svg";
+import {
+	HomeIcon,
+	BlogIcon,
+	InstagramIcon,
+	LinkIcon,
+	SnapchatIcon,
+	TiktokIcon,
+	TwitterIcon,
+} from "../data/Icons";
 
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -161,7 +163,7 @@ const PaintStore = () => {
 						<nav aria-label='breadcrumb'>
 							<ol className='breadcrumb'>
 								<li className='breadcrumb-item'>
-									<img src={howIcon} alt='' loading='lazy' />
+									<HomeIcon />
 									<Link to='/' className='me-2'>
 										الرئيسية
 									</Link>
