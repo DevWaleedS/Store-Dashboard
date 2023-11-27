@@ -89,6 +89,7 @@ const PostalSubscriptions = () => {
 										type='text'
 										name='search'
 										id='search'
+										autoComplete='false'
 										placeholder=' ابحث عن طريق البريد الالكتروني '
 									/>
 									<BsSearch />

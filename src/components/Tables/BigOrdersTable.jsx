@@ -29,9 +29,10 @@ import { TablePagination } from "./TablePagination";
 
 // filter orders by
 const filtersTypes = [
-	{ id: 3, ar_name: "حالة الطلب", en_name: "status" },
-	{ id: 4, ar_name: "كمية الطلب", en_name: "quantity" },
-	{ id: 2, ar_name: "شركة الشحن", en_name: "shipping_company" },
+	{ id: 1, ar_name: "الكل", en_name: "all" },
+	{ id: 2, ar_name: "حالة الطلب", en_name: "status" },
+	{ id: 3, ar_name: "كمية الطلب", en_name: "quantity" },
+	{ id: 4, ar_name: "شركة الشحن", en_name: "shipping_company" },
 ];
 
 // Style The MUI Select
@@ -141,6 +142,7 @@ function EnhancedTableToolbar(props) {
 								<FiSearch />
 								<input
 									type='text'
+									autoComplete='false'
 									value={search}
 									onChange={(e) => setSearch(e.target.value)}
 									placeholder=' ابحث عن طريق رقم التتبع أو اسم شركة الشحن'

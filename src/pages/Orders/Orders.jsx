@@ -20,9 +20,9 @@ const Orders = () => {
 
 	// to create search
 	const [search, setSearch] = useState("");
-	let orders = fetchedData?.data?.orders;
 	const [select, setSelect] = useState("");
-	let filterOrders = fetchedData?.data?.orders;
+	let orders = fetchedData?.data?.orders;
+	let filterOrders = orders;
 
 	// Search
 	if (search !== "") {
@@ -43,14 +43,12 @@ const Orders = () => {
 		filterOrders = orders?.sort((a, b) =>
 			a?.shippingtypes?.name?.localeCompare(b?.shippingtypes?.name)
 		);
-	} else if (select === "qty") {
-		filterOrders = orders?.sort((a, b) =>
-			a?.quantity.localeCompare(b?.quantity)
-		);
+	} else if (select === "quantity") {
+		filterOrders = orders?.sort((a, b) => a?.quantity - b?.quantity);
 	} else if (select === "status") {
 		filterOrders = orders?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
-		filterOrders = fetchedData?.data?.orders;
+		filterOrders = orders;
 	}
 
 	return (

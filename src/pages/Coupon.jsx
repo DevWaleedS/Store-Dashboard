@@ -20,9 +20,10 @@ import { CouponTable } from "../components/Tables";
 
 // filter Coupon by
 const filtersTypes = [
-	{ id: 1, ar_name: "نوع الكوبون", en_name: "type" },
-	{ id: 2, ar_name: "الحالة", en_name: "status" },
-	{ id: 3, ar_name: "تاريخ الانتهاء", en_name: "date" },
+	{ id: 1, ar_name: "الكل", en_name: "all" },
+	{ id: 2, ar_name: "نوع الكوبون", en_name: "type" },
+	{ id: 3, ar_name: "الحالة", en_name: "status" },
+	{ id: 4, ar_name: "تاريخ الانتهاء", en_name: "date" },
 ];
 
 const selectFilterStyles = {
@@ -84,10 +85,11 @@ const Coupon = () => {
 	const [select, setSelect] = useState("");
 
 	let coupons = fetchedData?.data?.coupons;
-	let filterCoupons = fetchedData?.data?.coupons;
+	let filterCoupons = coupons;
 
 	// Search
 	if (search !== "") {
+		console.log(search);
 		coupons = fetchedData?.data?.coupons?.filter((item) =>
 			item?.code?.toLowerCase()?.includes(search?.toLowerCase())
 		);
@@ -108,14 +110,9 @@ const Coupon = () => {
 	} else if (select === "status") {
 		filterCoupons = coupons?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
-		filterCoupons = fetchedData?.data?.coupons;
+		filterCoupons = coupons;
 	}
 	// -------------------------------------------------------------------------------
-
-	//
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
 
 	return (
 		<>
@@ -145,66 +142,65 @@ const Coupon = () => {
 				</div>
 				<div className='coupon-form mb-3'>
 					<div className='add-category'>
-						<form onSubmit={handleSubmit}>
-							<div className='input-group'>
-								<div className='search-input input-box'>
-									<input
-										value={search}
-										onChange={(e) => setSearch(e.target.value)}
-										type='text'
-										name='search'
-										id='search'
-										placeholder=' ابحث عن طريق اسم الكوبون '
-									/>
-									<BsSearch className='search-icon' />
-								</div>
-
-								{/**/}
-
-								<div className='select-input input-box '>
-									<FormControl sx={{ width: "100%" }}>
-										<FiFilter className='filter-icon' />
-										<Select
-											displayEmpty
-											value={select}
-											onChange={(e) => setSelect(e.target.value)}
-											sx={selectFilterStyles}
-											IconComponent={IoIosArrowDown}
-											inputProps={{ "aria-label": "Without label" }}
-											renderValue={(selected) => {
-												if (select === "") {
-													return <p style={{ color: "#02466a" }}>فرز حسب</p>;
-												}
-												const result =
-													filtersTypes?.filter(
-														(item) => item?.en_name === selected
-													) || "";
-												return result[0]?.ar_name;
-											}}>
-											{filtersTypes?.map((item) => (
-												<MenuItem
-													sx={menuItemStyles}
-													key={item?.id}
-													value={item?.en_name}>
-													{item?.ar_name}
-												</MenuItem>
-											))}
-										</Select>
-									</FormControl>
-								</div>
-
-								<div className='add-category-bt-box'>
-									<button
-										className='add-cat-btn'
-										onClick={() => {
-											navigate("AddCoupon");
-										}}>
-										<MdAdd />
-										<span className='me-2'> اضافه كوبون</span>
-									</button>
-								</div>
+						<div className='input-group'>
+							<div className='search-input input-box'>
+								<input
+									value={search}
+									onChange={(e) => setSearch(e.target.value)}
+									type='text'
+									name='search'
+									id='search'
+									autoComplete='false'
+									placeholder=' ابحث عن طريق اسم الكوبون '
+								/>
+								<BsSearch className='search-icon' />
 							</div>
-						</form>
+
+							{/**/}
+
+							<div className='select-input input-box '>
+								<FormControl sx={{ width: "100%" }}>
+									<FiFilter className='filter-icon' />
+									<Select
+										displayEmpty
+										value={select}
+										onChange={(e) => setSelect(e.target.value)}
+										sx={selectFilterStyles}
+										IconComponent={IoIosArrowDown}
+										inputProps={{ "aria-label": "Without label" }}
+										renderValue={(selected) => {
+											if (select === "") {
+												return <p style={{ color: "#02466a" }}>فرز حسب</p>;
+											}
+											const result =
+												filtersTypes?.filter(
+													(item) => item?.en_name === selected
+												) || "";
+											return result[0]?.ar_name;
+										}}>
+										{filtersTypes?.map((item) => (
+											<MenuItem
+												sx={menuItemStyles}
+												key={item?.id}
+												value={item?.en_name}>
+												{item?.ar_name}
+											</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</div>
+
+							<div className='add-category-bt-box'>
+								<button
+									className='add-cat-btn'
+									onClick={() => {
+										navigate("AddCoupon");
+									}}>
+									<MdAdd />
+									<span className='me-2'> اضافه كوبون</span>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 

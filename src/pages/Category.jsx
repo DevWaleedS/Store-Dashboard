@@ -91,6 +91,7 @@ const Category = () => {
 										type='text'
 										name='search'
 										id='search'
+										autoComplete='false'
 										placeholder='ابحث في النشاطات و التصنيفات'
 									/>
 									<BsSearch />

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+
+// Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
+import { Link, useNavigate } from "react-router-dom";
 
 // ICONS
 import { MdAdd } from "react-icons/md";
@@ -21,6 +23,7 @@ import { ArrowBack } from "../data/Icons";
 
 // filter Pages by
 const filtersTypes = [
+	{ id: 1, ar_name: "الكل", en_name: "all" },
 	{ id: 2, ar_name: "الحالة", en_name: "status" },
 	{ id: 3, ar_name: "تاريخ الانشاء", en_name: "date" },
 ];
@@ -83,7 +86,7 @@ const Pages = () => {
 	const [select, setSelect] = useState("");
 
 	let pages = fetchedData?.data?.pages;
-	let filterPages = fetchedData?.data?.pages;
+	let filterPages = pages;
 
 	// Search
 	if (search !== "") {
@@ -102,7 +105,7 @@ const Pages = () => {
 	} else if (select === "status") {
 		filterPages = pages?.sort((a, b) => a?.status.localeCompare(b?.status));
 	} else {
-		filterPages = fetchedData?.data?.pages;
+		filterPages = pages;
 	}
 
 	return (
@@ -137,12 +140,13 @@ const Pages = () => {
 						<div className='pages-search-bx'>
 							<BsSearch className='search-icon' />
 							<input
-								value={search}
-								onChange={(e) => setSearch(e.target.value)}
+								id='search'
 								type='text'
 								name='search'
-								id='search'
+								autoComplete='false'
+								value={search}
 								placeholder='ابحث عن  طريق اسم الصفحة'
+								onChange={(e) => setSearch(e.target.value)}
 							/>
 						</div>
 					</div>

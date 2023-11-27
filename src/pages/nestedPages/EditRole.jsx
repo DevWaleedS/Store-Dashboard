@@ -180,6 +180,7 @@ const EditRole = () => {
 																type='text'
 																name='search-input'
 																id='search-input'
+																autoComplete='false'
 																placeholder='ابحث عن صلاحية'
 															/>
 														</div>

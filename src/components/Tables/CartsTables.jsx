@@ -90,6 +90,7 @@ function EnhancedTableToolbar(props) {
 				<input
 					type='text'
 					value={search}
+					autoComplete='false'
 					onChange={(e) => setSearch(e.target.value)}
 					placeholder='ابحث عن طريق اسم العميل '
 					className='w-100'
