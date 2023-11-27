@@ -272,6 +272,33 @@ const OrderDetails = () => {
 						});
 					}
 				});
+		} else if (
+			fetchedData?.data?.orders?.shippingtypes?.name === "J&T Express"
+		) {
+			axios
+				.get(
+					`https://backend.atlbha.com/api/Store/PrintJTSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+					{
+						headers: {
+							"Content-Type": "multipart/form-data",
+							Authorization: `Bearer ${cookies?.access_token}`,
+						},
+					}
+				)
+				.then((res) => {
+					if (res?.data?.success === true && res?.data?.data?.status === 200) {
+						// this will open the sticker in new tap
+						window.open(
+							`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data}`,
+							"_blank"
+						);
+					} else {
+						setPrintError(res?.data?.message?.ar);
+						toast.error(res?.data?.message?.ar, {
+							theme: "light",
+						});
+					}
+				});
 		} else {
 			axios
 				.get(
