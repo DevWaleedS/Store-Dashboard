@@ -426,7 +426,7 @@ const AddNewProduct = () => {
 			<>
 				<div onClick={closeVideoModal} className='video-modal'></div>
 				<div className='video-url-content'>
-					<CloseIcon onClick={closeVideoModal} />
+					<CloseIcon className='close_video_icon' onClick={closeVideoModal} />
 					<video src={url} controls />
 				</div>
 			</>
