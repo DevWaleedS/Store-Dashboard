@@ -12,15 +12,17 @@ import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Icons
-import UserImage from "../../data/Icons/user-img.png";
-import howIcon from "../../data/Icons/icon_24_home.svg";
-import { ReactComponent as Attchment } from "../../data/Icons/icon-5.svg";
-import { ReactComponent as BoldIcon } from "../../data/Icons/icon-24-Bold.svg";
-import { ReactComponent as FormatTextLeft } from "../../data/Icons/icon-24-format text lift.svg";
-import { ReactComponent as FormatTextPoint } from "../../data/Icons/icon-24-format text point.svg";
-import { ReactComponent as FormatTextRight } from "../../data/Icons/icon-24-format text right.svg";
-import { ReactComponent as FormatTextCenter } from "../../data/Icons/icon-24-format text center.svg";
-import { ReactComponent as FormatTextPointSqure } from "../../data/Icons/icon-24-format text-point.svg";
+import { UserImage } from "../../data/images";
+import {
+	Attchment,
+	BoldIcon,
+	FormatTextCenter,
+	FormatTextLeft,
+	FormatTextPoint,
+	FormatTextPointSqure,
+	FormatTextRight,
+	HomeIcon,
+} from "../../data/Icons";
 
 // Css Styles
 import "./EvaluationThePlatform.css";
@@ -81,7 +83,7 @@ const EvaluationThePlatform = () => {
 							<nav aria-label='breadcrumb'>
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
-										<img src={howIcon} alt='' loading='lazy' />
+										<HomeIcon />
 										<Link to='/' className='me-2'>
 											الرئيسية
 										</Link>

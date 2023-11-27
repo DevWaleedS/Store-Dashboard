@@ -33,8 +33,7 @@ import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Import Icons
-import editIcon from "../../data/Icons/editt 2.svg";
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -111,7 +110,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -474,14 +473,14 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 															</span>
 														</TableCell>
 														<TableCell align='center'>
-															<div className='actions d-flex align-items-center justify-content-center '>
+															<div className='actions d-flex align-items-center justify-content-center'>
 																<Link
 																	to={`EditPage/${row?.id}`}
 																	style={{ cursor: "pointer" }}>
-																	<img src={editIcon} alt='' loading='lazy' />
+																	<EditIcon />
 																</Link>
 
-																<DeletteIcon
+																<DeleteIcon
 																	onClick={() => {
 																		setActionDelete(
 																			"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"

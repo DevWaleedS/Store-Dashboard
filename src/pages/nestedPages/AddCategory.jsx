@@ -24,10 +24,9 @@ import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-// ICONS
+// Icons
 import { AiOutlinePlus } from "react-icons/ai";
-import { ReactComponent as UploadIcon } from "../../data/Icons/icon-24-uplad.svg";
-import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { DeleteIcon, UploadIcon } from "../../data/Icons";
 
 // Modal style
 const style = {

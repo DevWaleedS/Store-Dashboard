@@ -16,12 +16,12 @@ import { SouqOtlbhaProducts, ProductsFilterOperations } from "./index";
 
 // ICONS
 import { AiOutlineSearch } from "react-icons/ai";
+import { FilterIcon } from "../../../data/Icons";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
 	MdOutlineArrowBackIosNew,
 	MdOutlineArrowForwardIos,
 } from "react-icons/md";
-import { ReactComponent as FilterIcon } from "../../../data/Icons/icon-24-filter.svg";
 
 const SouqOtlobha = () => {
 	const navigate = useNavigate();

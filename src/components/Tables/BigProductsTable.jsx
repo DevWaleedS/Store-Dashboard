@@ -26,8 +26,7 @@ import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { ReactComponent as EditIcon } from "../../data/Icons/editt 2.svg";
+import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 // Context
 import Context from "../../Context/context";
@@ -109,7 +108,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -629,7 +628,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																		<EditIcon />
 																	</Link>
 																	<span>
-																		<DeletteIcon
+																		<DeleteIcon
 																			onClick={() => {
 																				setActionDelete(
 																					"سيتم حذف المنتج وهذة الخطوة غير قابلة للرجوع"
@@ -643,7 +642,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																				cursor: "pointer",
 																				color: "red",
 																				fontSize: "1.2rem",
-																			}}></DeletteIcon>
+																			}}></DeleteIcon>
 																	</span>
 																</div>
 															</TableCell>

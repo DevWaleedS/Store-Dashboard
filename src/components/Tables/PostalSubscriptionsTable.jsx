@@ -29,7 +29,7 @@ import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
 // import icons
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { DeleteIcon } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -87,7 +87,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -337,7 +337,7 @@ export default function PostalSubscriptionsTable({
 														<TableCell align='right'>
 															<div className='actions d-flex align-items-center justify-content-evenly'>
 																<span>
-																	<DeletteIcon
+																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف الايميل وهذة الخطوة غير قابلة للرجوع"
@@ -352,7 +352,7 @@ export default function PostalSubscriptionsTable({
 																			color: "red",
 																			fontSize: "1.2rem",
 																			marginRight: "5px",
-																		}}></DeletteIcon>
+																		}}></DeleteIcon>
 																</span>
 															</div>
 														</TableCell>

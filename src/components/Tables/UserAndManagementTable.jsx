@@ -25,10 +25,8 @@ import TableContainer from "@mui/material/TableContainer";
 import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// import icons
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-report.svg";
-import { ReactComponent as EditIcon } from "../../data/Icons/icon-24-edit.svg";
+// Icons
+import { DeleteIcon, EditIcon, Reports } from "../../data/Icons";
 
 // Context
 import Context from "../../Context/context";
@@ -102,7 +100,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -520,13 +518,13 @@ export default function UserAndManagementTable({
 														<TableCell align='right'>
 															<div className='actions d-flex justify-content-evenly'>
 																<Link to={`info/${row.id}`}>
-																	<ReportIcon />
+																	<Reports />
 																</Link>
 																<Link to={`user/${row.id}`}>
 																	<EditIcon />
 																</Link>
 																<span>
-																	<DeletteIcon
+																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف المستخدم وهذة الخطوة غير قابلة للرجوع"
@@ -540,7 +538,7 @@ export default function UserAndManagementTable({
 																			cursor: "pointer",
 																			color: "red",
 																			fontSize: "1.2rem",
-																		}}></DeletteIcon>
+																		}}></DeleteIcon>
 																</span>
 															</div>
 														</TableCell>

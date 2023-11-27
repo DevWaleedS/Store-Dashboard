@@ -32,8 +32,7 @@ import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
 // import icons
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-report.svg";
+import { DeleteIcon, Reports } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -101,7 +100,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -525,11 +524,11 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																	<Link
 																		to={`EditCoupon/${row.id}`}
 																		style={{ cursor: "pointer" }}>
-																		<ReportIcon />
+																		<Reports />
 																	</Link>
 																</span>
 																<span>
-																	<DeletteIcon
+																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف الكوبون وهذة الخطوة غير قابلة للرجوع"
@@ -544,7 +543,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																			color: "red",
 																			fontSize: "1.2rem",
 																			marginRight: "5px",
-																		}}></DeletteIcon>
+																		}}></DeleteIcon>
 																</span>
 															</div>
 														</TableCell>

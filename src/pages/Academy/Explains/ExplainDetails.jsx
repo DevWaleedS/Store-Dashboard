@@ -7,9 +7,9 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 // Components
 import useFetch from "../../../Hooks/UseFetch";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { ArrowBack } from "../../../data/Icons";
 
-// ICONS
-import arrowBack from "../../../data/Icons/icon-30-arrwos back.svg";
+// Icons
 
 const ExplainDetails = () => {
 	const { id } = useParams();
@@ -45,7 +45,7 @@ const ExplainDetails = () => {
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
 										<Link to='/' className='me-2'>
-											<img src={arrowBack} alt='' loading='lazy' />
+											<ArrowBack />
 											<span className='me-2'> الرئيسية</span>
 										</Link>
 									</li>

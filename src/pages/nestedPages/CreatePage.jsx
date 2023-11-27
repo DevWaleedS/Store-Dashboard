@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
@@ -32,9 +33,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // ICONS
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { ReactComponent as DocsIcon } from "../../data/Icons/icon-24-write.svg";
-import { ReactComponent as PaperIcon } from "../../data/Icons/icon-24- details.svg";
-import { toast } from "react-toastify";
+import { DocsIcon, PaperIcon } from "../../data/Icons";
 
 // Modal Style
 const style = {

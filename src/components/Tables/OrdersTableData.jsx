@@ -1,12 +1,10 @@
 import * as React from "react";
 import { BsArrowLeft } from "react-icons/bs";
-
 import { Link, useNavigate } from "react-router-dom";
 
 // Icons
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { ReactComponent as DeleteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-actions-info_outined.svg";
+import { DeleteIcon, Reports } from "../../data/Icons";
 
 const OrdersTableData = ({ ordersDetails }) => {
 	const navigate = useNavigate();
@@ -150,7 +148,7 @@ const OrdersTableData = ({ ordersDetails }) => {
 															<Link
 																className='dropdown-item'
 																to={`/Orders/OrderDetails/${order?.id}`}>
-																<ReportIcon className='report-icon' />
+																<Reports className='report-icon' />
 															</Link>
 														</li>
 														<li className='delete'>

@@ -7,36 +7,7 @@ import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { NavLink, Link } from "react-router-dom";
 
 // Icons
-import { ReactComponent as Eye } from "../data/Icons/icon-24-invisible.svg";
-import { ReactComponent as HomeImage } from "../data/Icons/icon-24-dashboard.svg";
-import { ReactComponent as Category } from "../data/Icons/icon-24-Category.svg";
-import { ReactComponent as Products } from "../data/Icons/product-24.svg";
-import { ReactComponent as Orders } from "../data/Icons/icon-24-order.svg";
-import { ReactComponent as Marketing } from "../data/Icons/icon-24-marketing.svg";
 
-import { ReactComponent as Rating } from "../data/Icons/icon-24-ratings.svg";
-import { ReactComponent as PagesIcon } from "../data/Icons/icon-24-pages.svg";
-import { ReactComponent as Academy } from "../data/Icons/icon-24-graduatioin.svg";
-
-import { ReactComponent as Template } from "../data/Icons/icon-24-template.svg";
-import { ReactComponent as Layout } from "../data/Icons/layout.svg";
-import { ReactComponent as Paint } from "../data/Icons/Paint.svg";
-import { ReactComponent as Info } from "../data/Icons/icon-24-info.svg";
-import { ReactComponent as Social } from "../data/Icons/icon-24-social.svg";
-import { ReactComponent as Support } from "../data/Icons/icon-24-support.svg";
-import { ReactComponent as Setting } from "../data/Icons/icon-24-setting.svg";
-// import { ReactComponent as Clients } from "../data/Icons/icon-24-client.svg";
-import { ReactComponent as Reports } from "../data/Icons/icon-24-report.svg";
-import { ReactComponent as Services } from "../data/Icons/service.svg";
-import { ReactComponent as Discoint } from "../data/Icons/icon-24-discount.svg";
-import { ReactComponent as Shoping } from "../data/Icons/icon-24-design store.svg";
-import { ReactComponent as Delevray } from "../data/Icons/icon-24-delivery.svg";
-// import { ReactComponent as Offer } from "../data/Icons/icon-24-offer.svg";
-import { ReactComponent as Payment } from "../data/Icons/icon-24-payment Getway.svg";
-import { ReactComponent as Verification } from "../data/Icons/icon-24-Verification.svg";
-import { ReactComponent as BsCart } from "../data/Icons/icon-24-shopping_cart.svg";
-import { ReactComponent as Evaluation } from "../data/Icons/evaluation.svg";
-import { FaCircle } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 // Redux
@@ -49,6 +20,34 @@ import useFetch from "../Hooks/UseFetch";
 
 // Context
 import Context from "../Context/context";
+import {
+	Academy,
+	BsCart,
+	Category,
+	Delevray,
+	Discoint,
+	Evaluation,
+	Eye,
+	HomeImage,
+	Info,
+	Layout,
+	Marketing,
+	Orders,
+	PagesIcon,
+	Paint,
+	Payment,
+	Products,
+	Rating,
+	Reports,
+	Services,
+	Setting,
+	Shoping,
+	Social,
+	Support,
+	Template,
+	Verification,
+} from "../data/Icons";
+import { FaCircle } from "react-icons/fa";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);

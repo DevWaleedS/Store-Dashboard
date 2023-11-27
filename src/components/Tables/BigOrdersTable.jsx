@@ -20,9 +20,9 @@ import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
 
 // Icons
-import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-actions-info_outined.svg";
-import { FiSearch, FiFilter } from "react-icons/fi";
+import { ReportIcon } from "../../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
+import { FiSearch, FiFilter } from "react-icons/fi";
 
 // Components
 import { TablePagination } from "./TablePagination";

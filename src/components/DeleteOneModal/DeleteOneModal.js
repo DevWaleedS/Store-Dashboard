@@ -1,15 +1,25 @@
 import React, { useState, useContext, Fragment } from "react";
-import ReactDom from "react-dom";
-import { DeleteContext } from "../../Context/DeleteProvider";
-import { ReactComponent as Warning } from "../../data/Icons/icon-32-warning.svg";
-import styles from "./DeleteOneModal.module.css";
-import axios from "axios";
-import { useCookies } from "react-cookie";
-import Context from "../../Context/context";
 
+// Third party
+import axios from "axios";
+import ReactDom from "react-dom";
+import { useCookies } from "react-cookie";
+
+// Context
+import Context from "../../Context/context";
+import { DeleteContext } from "../../Context/DeleteProvider";
+
+// Styles
+import styles from "./DeleteOneModal.module.css";
+
+// Icons
+import { Warning } from "../../data/Icons";
+
+// Backdrop Styles
 const BackDrop = () => {
 	return <div className={styles.backdrop}></div>;
 };
+
 const DeleteOneModal = () => {
 	const [cookies] = useCookies(["access_token"]);
 

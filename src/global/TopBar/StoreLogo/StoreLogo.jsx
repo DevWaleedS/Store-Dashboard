@@ -4,7 +4,7 @@ import React from "react";
 import useFetch from "../../../Hooks/UseFetch";
 
 // images and icons
-import demoLogo from "../../../data/Icons/logo.png";
+import { DefaultLogo } from "../../../data/images";
 
 const StoreLogo = () => {
 	const { fetchedData: store_Setting } = useFetch(
@@ -23,7 +23,7 @@ const StoreLogo = () => {
 				src={
 					localStorage.getItem("storeLogo")
 						? localStorage.getItem("storeLogo")
-						: demoLogo
+						: DefaultLogo
 				}
 				alt=''
 			/>

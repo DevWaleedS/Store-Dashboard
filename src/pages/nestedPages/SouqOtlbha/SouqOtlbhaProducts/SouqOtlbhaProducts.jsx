@@ -8,7 +8,7 @@ import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
 // Icons
 import { BsStarFill } from "react-icons/bs";
-import { ReactComponent as CurrencyIcon } from "../../../../data/Icons/icon-24-Currency.svg";
+import { CurrencyIcon } from "../../../../data/Icons";
 
 const SouqOtlbhaProducts = ({ data, loading, page, rowsPerPage }) => {
 	const navigate = useNavigate();

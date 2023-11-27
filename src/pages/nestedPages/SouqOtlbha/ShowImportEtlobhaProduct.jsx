@@ -20,8 +20,7 @@ import Modal from "@mui/material/Modal";
 
 // icons and images
 import { Controller, useForm } from "react-hook-form";
-import PlayVideo from "../../../data/Icons/video-play.svg";
-import { ReactComponent as CurrencyIcon } from "../../../data/Icons/icon-24-Currency.svg";
+import { CurrencyIcon, PlayVideo } from "../../../data/Icons";
 
 const style = {
 	position: "fixed",
@@ -295,7 +294,7 @@ const ShowImportEtlobhaProduct = () => {
 																				style={{
 																					cursor: "pointer",
 																				}}
-																				poster={PlayVideo}
+																				poster={<PlayVideo />}
 																				src={item?.image}
 																				className='img-fluid'
 																			/>

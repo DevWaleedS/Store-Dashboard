@@ -4,6 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
@@ -26,6 +27,7 @@ import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Table
 import Table from "@mui/material/Table";
@@ -41,14 +43,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // ICONS
 import howIcon from "../../data/Icons/icon_24_home.svg";
-import CircularLoading from "../../HelperComponents/CircularLoading";
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import { ReactComponent as Phone } from "../../data/Icons/icon-24- call.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as Dollar } from "../../data/Icons/icon-24-dollar.svg";
-import { ReactComponent as Location } from "../../data/Icons/icon-24-pic map.svg";
-import { ReactComponent as Communication } from "../../data/Icons/ico - 24 - communication - send_outlined.svg";
-import { toast } from "react-toastify";
+import {
+	Communication,
+	DeleteIcon,
+	Dollar,
+	Location,
+	Message,
+	Phone,
+} from "../../data/Icons";
 
 // Modal Style
 const style = {
@@ -989,7 +991,7 @@ const ClientData = () => {
 													</label>
 
 													<div className='date-icon'>
-														<DateIcon />
+														<DeleteIcon />
 													</div>
 													<DatePicker
 														placeholderText='اختر تاريخ انتهاء الخصم'

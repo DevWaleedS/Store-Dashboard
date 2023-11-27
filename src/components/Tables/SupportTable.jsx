@@ -30,12 +30,14 @@ import TableContainer from "@mui/material/TableContainer";
 import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// ICons
+// Icons
 import { GoCheck } from "react-icons/go";
-import { ReactComponent as ReportIcon } from "../../data/Icons/icon-24-report.svg";
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
-import { ReactComponent as DeadLineIcon } from "../../data/Icons/icon-24-deadline.svg";
-import { ReactComponent as HourGleass } from "../../data/Icons/icon-24-hourgleass_half.svg";
+import {
+	DeadLineIcon,
+	DeleteIcon,
+	HourGleass,
+	Reports,
+} from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -101,7 +103,7 @@ function EnhancedTableToolbar(props) {
 									setActionTitle("Delete");
 								}}>
 								<IconButton>
-									<DeletteIcon />
+									<DeleteIcon />
 									حذف الكل
 								</IconButton>
 							</Tooltip>
@@ -418,7 +420,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																	onClick={() => {
 																		navigate(`supportDetails/${row?.id}`);
 																	}}>
-																	<ReportIcon />
+																	<Reports />
 																</span>
 
 																<span>
@@ -469,7 +471,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																</span>
 
 																<span>
-																	<DeletteIcon
+																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع"
@@ -483,7 +485,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			cursor: "pointer",
 																			color: "red",
 																			fontSize: "1.2rem",
-																		}}></DeletteIcon>
+																		}}
+																	/>
 																</span>
 															</div>
 														</TableCell>

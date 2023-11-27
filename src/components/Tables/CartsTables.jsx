@@ -3,6 +3,7 @@ import React, { Fragment, useState, useContext, useEffect } from "react";
 // Third party
 import axios from "axios";
 import moment from "moment";
+import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 // Context
@@ -27,12 +28,11 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Import icon
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { DeleteIcon } from "../../data/Icons";
 import { FiSearch } from "react-icons/fi";
-import { Link } from "react-router-dom";
 
 function EnhancedTableHead(props) {
 	return (
@@ -91,7 +91,7 @@ function EnhancedTableToolbar(props) {
 					type='text'
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder='ابحث عن طريق اسم الزبون '
+					placeholder='ابحث عن طريق اسم العميل '
 					className='w-100'
 				/>
 			</div>
@@ -109,7 +109,7 @@ function EnhancedTableToolbar(props) {
 							}}
 							className='delete-all'>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -384,7 +384,7 @@ export default function CartsTables({
 
 														<TableCell align='center'>{row?.status}</TableCell>
 														<TableCell align='center' sx={{ width: "80px" }}>
-															<DeletteIcon
+															<DeleteIcon
 																style={{ cursor: "pointer" }}
 																onClick={() => {
 																	setActionDelete(

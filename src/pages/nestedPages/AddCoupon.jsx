@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -31,9 +32,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // icons
 import { IoIosArrowDown } from "react-icons/io";
-import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
-import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import { toast } from "react-toastify";
+import { DeleteIcon, SearchIcon } from "../../data/Icons";
 
 // Modal Style
 const style = {
@@ -494,7 +493,7 @@ const AddCoupon = () => {
 												تاريخ الانتهاء<span className='text-danger'>*</span>
 											</label>
 											<div className='date-icon'>
-												<DateIcon />
+												<DeleteIcon />
 											</div>
 											<DatePicker
 												minDate={moment().toDate()}

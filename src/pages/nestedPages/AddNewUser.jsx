@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 
 // Context
 import Context from "../../Context/context";
@@ -26,12 +27,8 @@ import useFetch from "../../Hooks/UseFetch";
 
 // icons
 import { IoIosArrowDown } from "react-icons/io";
-import { useForm, Controller } from "react-hook-form";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { ReactComponent as User } from "../../data/Icons/icon-24-user.svg";
-import { ReactComponent as Mobile } from "../../data/Icons/mobile-icon-24.svg";
-import { ReactComponent as Message } from "../../data/Icons/icon-24-email.svg";
-import { ReactComponent as Password } from "../../data/Icons/icon-24-invisible.svg";
+import { Message, Mobile, Password, User } from "../../data/Icons";
 
 // Page Style
 const style = {

@@ -8,11 +8,9 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../store/slices/VideoModal-slice";
 
-// ICONS
+// Icons
 import { BiPlayCircle } from "react-icons/bi";
-import arrowBack from "../../../data/Icons/icon-30-arrwos back.svg";
-import { ReactComponent as PDFIcon } from "../../../data/Icons/pfd.svg";
-import { ReactComponent as ArrowDown } from "../../../data/Icons/icon-24-chevron_down.svg";
+import { ArrowBack, ArrowDown, PDFIcon } from "../../../data/Icons";
 
 // Components
 import useFetch from "../../../Hooks/UseFetch";
@@ -45,7 +43,7 @@ const CourseDetails = () => {
 								<ol className='breadcrumb'>
 									<li className='breadcrumb-item'>
 										<Link to='/' className='me-2'>
-											<img src={arrowBack} alt='' loading='lazy' />
+											<ArrowBack />
 											<span className='me-2'> الرئيسية</span>
 										</Link>
 									</li>

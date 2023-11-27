@@ -1,6 +1,7 @@
 import React from "react";
-import { ReactComponent as LogoSvg } from "../../../data/Icons/logo svg.svg";
+
 import "./LogoHeader.css";
+import { LogoSvg } from "../../../data/Icons";
 
 const LogoHeader = () => {
 	const NavigateToHomePage = () => {

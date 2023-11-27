@@ -1,14 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
 
+// Third party
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { ReactComponent as SvgComponent } from "../../../../data/Icons/Component 59 – 11.svg";
-import { ReactComponent as SvgKey } from "../../../../data/Icons/key.svg";
-import LogoHeader from "../../LogoHeader/LogoHeader";
-import "./RestorePassword.css";
-import { ResetPasswordContext } from "../../../../Context/ResetPasswordProvider";
+// Components
 import { AlertModal } from "../AlertModal";
+import LogoHeader from "../../LogoHeader/LogoHeader";
+
+// Styles
+import "./RestorePassword.css";
+
+// Context
+import { ResetPasswordContext } from "../../../../Context/ResetPasswordProvider";
+
+// Icons
+import { SvgComponent, SvgKey } from "../../../../data/Icons";
 
 const RestorePassword = () => {
 	const navigate = useNavigate();

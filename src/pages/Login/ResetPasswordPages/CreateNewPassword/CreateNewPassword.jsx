@@ -1,16 +1,22 @@
 import React, { useState, useContext } from "react";
+
+// Third party
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom/dist";
+
+// Context
+import { UserAuth } from "../../../../Context/UserAuthorProvider";
 import { ResetPasswordContext } from "../../../../Context/ResetPasswordProvider";
 
-// ICONS
-import { ReactComponent as EyeOPen } from "../../../../data/Icons/eye_open.svg";
-import { ReactComponent as EyeClose } from "../../../../data/Icons/eye_close.svg";
-import { ReactComponent as SvgComponent } from "../../../../data/Icons/Component 59 – 11.svg";
-import "./CreateNewPassword.css";
+// Components
 import LogoHeader from "../../LogoHeader/LogoHeader";
-import { useNavigate } from "react-router-dom/dist";
-import { UserAuth } from "../../../../Context/UserAuthorProvider";
+
+// Icons
+import { EyeClose, EyeOPen, SvgComponent } from "../../../../data/Icons";
+
+// Styles
+import "./CreateNewPassword.css";
 
 const CreateNewPassword = () => {
 	let type = "password";

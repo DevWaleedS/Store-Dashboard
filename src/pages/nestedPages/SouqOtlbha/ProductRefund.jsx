@@ -21,8 +21,7 @@ import Modal from "@mui/material/Modal";
 
 // Icons
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import PlayVideo from "../../../data/Icons/video-play.svg";
-import { ReactComponent as CurrencyIcon } from "../../../data/Icons/icon-24-Currency.svg";
+import { CurrencyIcon, PlayVideo } from "../../../data/Icons";
 
 // Select Styles
 const modalStyle = {
@@ -226,7 +225,7 @@ const ProductRefund = () => {
 																			style={{
 																				cursor: "pointer",
 																			}}
-																			poster={PlayVideo}
+																			poster={<PlayVideo />}
 																			src={item?.image}
 																			className='img-fluid'
 																		/>

@@ -14,9 +14,9 @@ import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 
-// icons
+// Icons
+import { Verification } from "../../data/Icons";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import { ReactComponent as Verification } from "../../data/Icons/icon-24-Verification.svg";
 
 // Context
 import { UserAuth } from "../../Context/UserAuthorProvider";

@@ -31,8 +31,7 @@ import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
 // ICONS
-import editIcon from "../../data/Icons/editt 2.svg";
-import { ReactComponent as DeletteIcon } from "../../data/Icons/icon-24-delete.svg";
+import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -98,7 +97,7 @@ function EnhancedTableToolbar(props) {
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeletteIcon />
+								<DeleteIcon />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -613,7 +612,7 @@ export default function EnhancedTable({
 														</TableCell>
 
 														<TableCell align='right'>
-															<div className='actions d-flex justify-content-evenly'>
+															<div className='actions d-flex justify-content-center gap-1'>
 																<span
 																	style={{
 																		pointerEvents:
@@ -622,15 +621,11 @@ export default function EnhancedTable({
 																	<Link
 																		to={`EditCategory/${row?.id}`}
 																		style={{ cursor: "pointer" }}>
-																		<img
-																			src={editIcon}
-																			alt='edit'
-																			title='edit'
-																		/>
+																		<EditIcon />
 																	</Link>
 																</span>
 																<span>
-																	<DeletteIcon
+																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
@@ -646,7 +641,7 @@ export default function EnhancedTable({
 																			cursor: "pointer",
 																			color: "red",
 																			fontSize: "1.2rem",
-																		}}></DeletteIcon>
+																		}}></DeleteIcon>
 																</span>
 															</div>
 														</TableCell>

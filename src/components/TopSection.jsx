@@ -2,7 +2,7 @@ import * as React from "react";
 
 // ICON
 import { AiOutlineSearch } from "react-icons/ai";
-import { ReactComponent as HomeIcon } from "../data/Icons/icon_24_home.svg";
+import { HomeIcon } from "../data/Icons";
 
 const TopSection = () => {
 	return (
