@@ -79,8 +79,10 @@ const OrderDetails = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/orders/${id}`
 	);
-	const { fetchedData: cities } = useFetch(
-		`https://backend.atlbha.com/api/Store/getAllCity`
+
+	const [shippingId, setShippingId] = useState(null);
+	const { fetchedData: shippingCities } = useFetch(
+		`https://backend.atlbha.com/api/selector/shippingcities/${shippingId}`
 	);
 
 	const [cookies] = useCookies(["access_token"]);
@@ -124,46 +126,45 @@ const OrderDetails = () => {
 			});
 		}
 	}, [fetchedData?.data?.orders?.shipping]);
+
+	useEffect(() => {
+		if (fetchedData?.data?.orders?.shippingtypes) {
+			setShippingId(fetchedData?.data?.orders?.shippingtypes?.id);
+		}
+	}, [fetchedData?.data?.orders?.shippingtypes]);
 	// ----------------------------------------------------
 
 	function removeDuplicates(arr) {
 		const unique = arr?.filter((obj, index) => {
-			return index === arr?.findIndex((o) => obj?.province === o?.province);
+			return (
+				index ===
+				arr?.findIndex((o) => obj?.region?.name_en === o?.region?.name_en)
+			);
 		});
 		return unique;
 	}
 
 	const getCityFromProvince =
-		cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.province === shipping?.district
+		shippingCities?.data?.cities?.filter(
+			(obj) => obj?.region?.name_en === shipping?.district
 		) || [];
 
-	function translateProvinceName(name) {
-		const unique = cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.province === name
-		);
-		return unique?.[0]?.provice_ar || name;
-	}
-
 	function translateCityName(name) {
-		const unique = cities?.data?.cities?.data?.cities?.filter(
-			(obj) => obj?.name === name
+		const unique = shippingCities?.data?.cities?.filter(
+			(obj) => obj?.name_en === name
 		);
-		return unique?.[0]?.name_ar || name;
+		return unique?.[0]?.name || name;
 	}
+
+	function translateProvinceName(name) {
+		const unique = shippingCities?.data?.cities?.filter((obj) => {
+			return obj?.region?.name_en === name;
+		});
+
+		return unique?.[0]?.name || name;
+	}
+
 	// -----------------------------------------------------
-
-	// handle calc total price if codePrice is !== 0
-	const calcTotalPrice = (codprice, totalPrice) => {
-		const cashOnDelivery = codprice || 0;
-		const totalCartValue = totalPrice;
-
-		const totalValue = cashOnDelivery
-			? (totalCartValue + cashOnDelivery)?.toFixed(2)
-			: totalPrice;
-		return totalValue;
-	};
-	// -------------------------------------------------
 
 	// To handle update order Status
 	const updateOrderStatus = (status) => {
@@ -464,11 +465,7 @@ const OrderDetails = () => {
 												</div>
 												<div className='order-data-row'>
 													<span>
-														{calcTotalPrice(
-															fetchedData?.data?.orders?.codprice,
-															fetchedData?.data?.orders?.total_price
-														)}{" "}
-														ر.س
+														{fetchedData?.data?.orders?.total_price} ر.س
 													</span>
 												</div>
 											</div>
@@ -818,11 +815,7 @@ const OrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{calcTotalPrice(
-																	fetchedData?.data?.orders?.codprice,
-																	fetchedData?.data?.orders?.total_price
-																)}{" "}
-																ر.س
+																{fetchedData?.data?.orders?.total_price} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -1002,30 +995,30 @@ const OrderDetails = () => {
 													displayEmpty
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
-														if (!selected) {
+														if (!selected || shipping?.district === "") {
 															return (
 																<p className='text-[#ADB5B9]'>اختر المنطقة</p>
 															);
 														}
 														return translateProvinceName(selected);
 													}}>
-													{removeDuplicates(
-														cities?.data?.cities?.data?.cities
-													)?.map((district, index) => {
-														return (
-															<MenuItem
-																key={index}
-																className='souq_storge_category_filter_items'
-																sx={{
-																	backgroundColor: "rgba(211, 211, 211, 1)",
-																	height: "3rem",
-																	"&:hover": {},
-																}}
-																value={district?.province}>
-																{district?.provice_ar}
-															</MenuItem>
-														);
-													})}
+													{removeDuplicates(shippingCities?.data?.cities)?.map(
+														(district, index) => {
+															return (
+																<MenuItem
+																	key={index}
+																	className='souq_storge_category_filter_items'
+																	sx={{
+																		backgroundColor: "rgba(211, 211, 211, 1)",
+																		height: "3rem",
+																		"&:hover": {},
+																	}}
+																	value={district?.region?.name_en}>
+																	{district?.region?.name}
+																</MenuItem>
+															);
+														}
+													)}
 												</Select>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -1076,16 +1069,16 @@ const OrderDetails = () => {
 													displayEmpty
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
-														if (shipping?.city === "") {
+														if (!selected || shipping?.city === "") {
 															return (
 																<p className='text-[#ADB5B9]'>اختر المدينة</p>
 															);
 														}
 														const result =
 															getCityFromProvince?.filter(
-																(district) => district?.name === selected
+																(district) => district?.name_en === selected
 															) || "";
-														return result[0]?.name_ar;
+														return result[0]?.name;
 													}}>
 													{getCityFromProvince?.map((city, index) => {
 														return (
@@ -1097,8 +1090,8 @@ const OrderDetails = () => {
 																	height: "3rem",
 																	"&:hover": {},
 																}}
-																value={city?.name}>
-																{city?.name_ar}
+																value={city?.name_en}>
+																{city?.name}
 															</MenuItem>
 														);
 													})}

@@ -27,7 +27,7 @@ import FormControl from "@mui/material/FormControl";
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { Message, Mobile, Password, User } from "../../data/Icons";
+import { Message, Mobile, Eye, User } from "../../data/Icons";
 
 // Styles this pagw
 const style = {
@@ -149,14 +149,14 @@ const EditUserPage = () => {
 
 	// Show and hidden password function
 	const [passwordType, setPasswordType] = useState("password");
-	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
+	const [showPasswordIcon, setShowPasswordIcon] = useState(<Eye />);
 	const showPasswordToggle = () => {
 		if (passwordType === "password") {
 			setPasswordType("text");
 			setShowPasswordIcon(<AiOutlineEyeInvisible />);
 		} else {
 			setPasswordType("password");
-			setShowPasswordIcon(<Password />);
+			setShowPasswordIcon(<Eye />);
 		}
 	};
 	// ------------------------------------------------------------------

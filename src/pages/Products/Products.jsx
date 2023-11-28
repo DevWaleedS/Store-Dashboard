@@ -66,11 +66,13 @@ const Products = () => {
 
 	if (search !== "") {
 		products = fetchedData?.data?.products?.filter((item) =>
-			item?.name.includes(search)
+			item?.name.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
 		products = fetchedData?.data?.products;
 	}
+
+	console.log(search);
 
 	if (category_id !== "") {
 		filterProducts = products?.filter(

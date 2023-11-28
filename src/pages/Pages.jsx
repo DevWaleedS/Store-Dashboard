@@ -24,8 +24,9 @@ import { ArrowBack } from "../data/Icons";
 // filter Pages by
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
-	{ id: 2, ar_name: "الحالة", en_name: "status" },
-	{ id: 3, ar_name: "تاريخ الانشاء", en_name: "date" },
+	{ id: 2, ar_name: "تم النشر", en_name: "active" },
+	{ id: 3, ar_name: "محظور", en_name: "notActive" },
+	{ id: 4, ar_name: "تاريخ النشر", en_name: "date" },
 ];
 
 const selectFilterStyles = {
@@ -102,8 +103,10 @@ const Pages = () => {
 		filterPages = pages?.sort((a, b) =>
 			a?.created_at.localeCompare(b?.created_at)
 		);
-	} else if (select === "status") {
-		filterPages = pages?.sort((a, b) => a?.status.localeCompare(b?.status));
+	} else if (select === "active") {
+		filterPages = pages?.filter((page) => page?.status === "تم النشر");
+	} else if (select === "notActive") {
+		filterPages = pages?.filter((page) => page?.status === "محظور");
 	} else {
 		filterPages = pages;
 	}

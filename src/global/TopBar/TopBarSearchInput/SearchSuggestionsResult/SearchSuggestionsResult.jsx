@@ -11,6 +11,7 @@ import Context from "../../../../Context/context";
 import { useDispatch } from "react-redux";
 import { openVerifyModal } from "../../../../store/slices/VerifyStoreModal-slice";
 import { openMaintenanceModeModal } from "../../../../store/slices/MaintenanceModeModal";
+import { openDelegateRequestAlert } from "../../../../store/slices/DelegateRequestAlert-slice";
 
 const SearchSuggestionsResult = ({
 	suggestionsResult,
@@ -33,6 +34,7 @@ const SearchSuggestionsResult = ({
 	const { setTogglePag } = academyToggleContext;
 	// ---------------------------------------------------------
 
+	//
 	const handleRoute = (item) => {
 		if (item?.sectionName === "وضع الصيانة") {
 			setNavbarZindex(true);
@@ -45,10 +47,16 @@ const SearchSuggestionsResult = ({
 		} else if (item?.sectionName === "شروحات") {
 			navigate(`${item?.route}`);
 			setTogglePag(2);
+		} else if (item?.sectionName === "التسويق عبر المشاهير") {
+			window.open(item?.route, "_blank");
+		} else if (item?.sectionName === "طلب مندوب") {
+			navigate(`${item?.route}`);
+			dispatch(openDelegateRequestAlert());
 		} else {
 			navigate(`${item?.route}`);
 		}
 	};
+
 	return (
 		<>
 			<ul className={styles.search_suggestions_result_wrapper}>

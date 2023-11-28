@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 
 // Icons
-import { Product, Sales, User, Visit } from "../../data/Icons";
+import { Product, Sales, User, Eye } from "../../data/Icons";
 
 const DashboardSummeryDetails = ({ summeryDetails, loading }) => {
 	const details = [
 		{
 			id: 1,
-			icon: <Visit />,
+			icon: <Eye />,
 			title: "اجمالي الزيارات ",
 			numbers: summeryDetails?.visits || 0,
 			color: "#A4A1FB",

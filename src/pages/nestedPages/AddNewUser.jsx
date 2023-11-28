@@ -28,7 +28,7 @@ import useFetch from "../../Hooks/UseFetch";
 // icons
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { Message, Mobile, Password, User } from "../../data/Icons";
+import { Message, Mobile, Eye, User } from "../../data/Icons";
 
 // Page Style
 const style = {
@@ -139,14 +139,14 @@ const AddNewUser = () => {
 
 	// Show and hidden password function
 	const [passwordType, setPasswordType] = useState("password");
-	const [showPasswordIcon, setShowPasswordIcon] = useState(<Password />);
+	const [showPasswordIcon, setShowPasswordIcon] = useState(<Eye />);
 	const showPasswordToggle = () => {
 		if (passwordType === "password") {
 			setPasswordType("text");
 			setShowPasswordIcon(<AiOutlineEyeInvisible />);
 		} else {
 			setPasswordType("password");
-			setShowPasswordIcon(<Password />);
+			setShowPasswordIcon(<Eye />);
 		}
 	};
 	// -------------------------------------------------

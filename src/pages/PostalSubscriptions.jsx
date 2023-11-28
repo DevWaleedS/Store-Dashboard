@@ -49,9 +49,6 @@ const PostalSubscriptions = () => {
 		FileSaver.saveAs(data, "subscriptions_emails" + fileExtension);
 	};
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
 	return (
 		<>
 			<Helmet>
@@ -80,27 +77,25 @@ const PostalSubscriptions = () => {
 				</div>
 				<div className='coupon-form mb-3'>
 					<div className='add-category'>
-						<form onSubmit={handleSubmit}>
-							<div className='input-group'>
-								<div className='search-input input-box'>
-									<input
-										value={search}
-										onChange={(e) => setSearch(e.target.value)}
-										type='text'
-										name='search'
-										id='search'
-										autoComplete='false'
-										placeholder=' ابحث عن طريق البريد الالكتروني '
-									/>
-									<BsSearch />
-								</div>
-								<div className='add-category-bt-box'>
-									<button className='add-cat-btn' onClick={exportToCSV}>
-										<span className='me-2'>تصدير</span>
-									</button>
-								</div>
+						<div className='input-group'>
+							<div className='search-input input-box'>
+								<input
+									value={search}
+									onChange={(e) => setSearch(e.target.value)}
+									type='text'
+									name='search'
+									id='search'
+									autoComplete='false'
+									placeholder=' ابحث عن طريق البريد الالكتروني '
+								/>
+								<BsSearch />
 							</div>
-						</form>
+							<div className='add-category-bt-box'>
+								<button className='add-cat-btn' onClick={exportToCSV}>
+									<span className='me-2'>تصدير</span>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 

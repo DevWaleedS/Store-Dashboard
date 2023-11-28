@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { CheckMark, FileIcon, PageIcon, Product } from "../../../data/Icons";
+import { Completed, FileIcon, PageIcon, Product } from "../../../data/Icons";
 
 // Icons
 
@@ -14,7 +14,7 @@ const OrdersQuickDetails = ({
 	const details = [
 		{
 			id: 1,
-			icon: <CheckMark />,
+			icon: <Completed />,
 			title: "طلبات مكتمله ",
 			numbers: completed,
 			color: "#3ae374",

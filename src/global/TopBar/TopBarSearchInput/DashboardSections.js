@@ -148,7 +148,7 @@ export const dashboardSections = [
 	{
 		id: 20,
 		sectionName: "توثيق المتجر",
-		route: "openVerifyModal",
+		route: "",
 		icon: <Verification />,
 	},
 	{
@@ -190,7 +190,7 @@ export const dashboardSections = [
 	{
 		id: 27,
 		sectionName: "وضع الصيانة",
-		route: "openMaintenanceModeModal",
+		route: "",
 		icon: <FaCircle style={{ width: "14px" }} />,
 	},
 	{
@@ -223,12 +223,12 @@ export const dashboardSections = [
 		route: "EvaluationThePlatform",
 		icon: <Evaluation />,
 	},
-	// {
-	// 	id: 27,
-	// 	sectionName: "",
-	// 	route: "SEOStore",
-	// 	icon: <FaCircle style={{ width: "14px" }} />,
-	// },
+	{
+		id: 27,
+		sectionName: "طلب مندوب",
+		route: "PlatformServices",
+		icon: <Services className='custom_fill_color' />,
+	},
 	// {
 	// 	id: 27,
 	// 	sectionName: "",

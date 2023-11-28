@@ -7,23 +7,24 @@ import useFetch from "../../Hooks/UseFetch";
 
 // Components
 import { OrdersQuickDetails } from "./index";
+import { TopBarSearchInput } from "../../global";
 import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
 import { ArrowBack } from "../../data/Icons";
-import { AiOutlineSearch } from "react-icons/ai";
-import { TopBarSearchInput } from "../../global";
 
 const Orders = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/orders"
 	);
+	// -----------------------------------------------------------
 
-	// to create search
+	// To create search
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
 	let orders = fetchedData?.data?.orders;
 	let filterOrders = orders;
+	// ------------------------------------------------------------
 
 	// Search
 	if (search !== "") {
@@ -39,18 +40,37 @@ const Orders = () => {
 	} else {
 		orders = fetchedData?.data?.orders;
 	}
+	// -------------------------------------------------------------
 
-	if (select === "shipping_company") {
-		filterOrders = orders?.sort((a, b) =>
-			a?.shippingtypes?.name?.localeCompare(b?.shippingtypes?.name)
+	// Filter
+	if (select === "new") {
+		filterOrders = orders?.filter((order) => order?.status === "جديد");
+	} else if (select === "canceled") {
+		filterOrders = orders?.filter((order) => order?.status === "ملغي");
+	} else if (select === "completed") {
+		filterOrders = orders?.filter((order) => order?.status === "مكتمل");
+	} else if (select === "readyToShipping") {
+		filterOrders = orders?.filter((order) => order?.status === "جاهز للشحن");
+	} else if (select === "Imile") {
+		filterOrders = orders?.filter(
+			(order) => order?.OrderAddress?.shippingtype_id?.name === "Imile"
 		);
-	} else if (select === "quantity") {
-		filterOrders = orders?.sort((a, b) => a?.quantity - b?.quantity);
-	} else if (select === "status") {
-		filterOrders = orders?.sort((a, b) => a?.status.localeCompare(b?.status));
+	} else if (select === "J&T Express") {
+		filterOrders = orders?.filter(
+			(order) => order?.OrderAddress?.shippingtype_id?.name === "J&T Express"
+		);
+	} else if (select === "semsa") {
+		filterOrders = orders?.filter(
+			(order) => order?.OrderAddress?.shippingtype_id?.name === "سمسا"
+		);
+	} else if (select === "saee") {
+		filterOrders = orders?.filter(
+			(order) => order?.OrderAddress?.shippingtype_id?.name === "ساعي"
+		);
 	} else {
 		filterOrders = orders;
 	}
+	// ---------------------------------------------------------------
 
 	return (
 		<>

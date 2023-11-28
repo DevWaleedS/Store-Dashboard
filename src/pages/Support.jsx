@@ -67,7 +67,7 @@ const Support = () => {
 								name='search'
 								id='search'
 								autoComplete='false'
-								placeholder='ابحث عن  طريق رسالة'
+								placeholder='ابحث عن طريق  عنوان الرسالة'
 							/>
 						</div>
 					</div>

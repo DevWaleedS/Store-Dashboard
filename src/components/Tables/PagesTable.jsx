@@ -40,11 +40,11 @@ function EnhancedTableHead(props) {
 		<TableHead sx={{ backgroundColor: "#c6e1f0" }}>
 			<TableRow>
 				<TableCell
-					align='left'
+					align='center'
 					sx={{
 						color: "#02466a",
 						width: "80px",
-						paddingRight: "40px !important",
+						paddingRight: "50px !important",
 					}}>
 					م
 				</TableCell>
@@ -480,25 +480,6 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																	<EditIcon title='تعديل الصفحة ' />
 																</Link>
 
-																<DeleteIcon
-																	title='حذف الصفحة'
-																	onClick={() => {
-																		setActionDelete(
-																			"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
-																		);
-																		setDeleteMethod("delete");
-																		setUrl(
-																			`https://backend.atlbha.com/api/Store/page/${row?.id}`
-																		);
-																	}}
-																	style={{
-																		paddingRight: "10px",
-																		width: "40px",
-																		cursor: "pointer",
-																		color: "red",
-																	}}
-																/>
-
 																<Switch
 																	onChange={() => changePageStatus(row?.id)}
 																	checked={
@@ -539,6 +520,24 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																				},
 																			},
 																		},
+																	}}
+																/>
+																<DeleteIcon
+																	title='حذف الصفحة'
+																	onClick={() => {
+																		setActionDelete(
+																			"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("delete");
+																		setUrl(
+																			`https://backend.atlbha.com/api/Store/page/${row?.id}`
+																		);
+																	}}
+																	style={{
+																		paddingRight: "10px",
+																		width: "40px",
+																		cursor: "pointer",
+																		color: "red",
 																	}}
 																/>
 															</div>

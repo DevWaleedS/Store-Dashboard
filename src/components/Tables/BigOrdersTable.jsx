@@ -30,9 +30,14 @@ import { TablePagination } from "./TablePagination";
 // filter orders by
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
-	{ id: 2, ar_name: "حالة الطلب", en_name: "status" },
-	{ id: 3, ar_name: "كمية الطلب", en_name: "quantity" },
-	{ id: 4, ar_name: "شركة الشحن", en_name: "shipping_company" },
+	{ id: 2, ar_name: "جديد", en_name: "new" },
+	{ id: 3, ar_name: "ملغي", en_name: "canceled" },
+	{ id: 4, ar_name: "مكتمل", en_name: "completed" },
+	{ id: 5, ar_name: "جاهز للشحن", en_name: "readyToShipping" },
+	{ id: 6, ar_name: "Imile", en_name: "Imile" },
+	{ id: 7, ar_name: "J&T Express", en_name: "J&T Express" },
+	{ id: 8, ar_name: "سمسا", en_name: "semsa" },
+	{ id: 9, ar_name: "ساعي", en_name: "saee" },
 ];
 
 // Style The MUI Select
@@ -235,17 +240,6 @@ export default function BigOrdersTable({
 		return arr;
 	};
 
-	// handle calc total price if codePrice is !== 0
-	const calcTotalPrice = (codprice, totalPrice) => {
-		const cashOnDelivery = codprice || 0;
-		const totalCartValue = totalPrice;
-
-		const totalValue = cashOnDelivery
-			? (totalCartValue + cashOnDelivery)?.toFixed(2)
-			: totalPrice;
-		return totalValue;
-	};
-
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
@@ -315,7 +309,7 @@ export default function BigOrdersTable({
 														<TableCell align='right'>
 															<div
 																className='text-overflow'
-																style={{ maxWidth: "250px" }}>
+																style={{ maxWidth: "210px" }}>
 																{row?.shipping?.track_id}
 															</div>
 														</TableCell>
@@ -379,8 +373,7 @@ export default function BigOrdersTable({
 															{row?.quantity}
 														</TableCell>
 														<TableCell align='center'>
-															{calcTotalPrice(row?.codprice, row?.total_price)}{" "}
-															ر.س
+															{row?.total_price} ر.س
 														</TableCell>
 
 														<TableCell align='right'>
