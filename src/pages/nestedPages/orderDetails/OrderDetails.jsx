@@ -161,7 +161,7 @@ const OrderDetails = () => {
 			return obj?.region?.name_en === name;
 		});
 
-		return unique?.[0]?.name || name;
+		return unique?.[0]?.region?.name || name;
 	}
 
 	// -----------------------------------------------------
