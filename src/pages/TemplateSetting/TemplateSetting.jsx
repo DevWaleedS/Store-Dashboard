@@ -4,12 +4,10 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
-// Icons
-import { AiOutlineSearch } from "react-icons/ai";
-
 // COMPONENTS
 import TemplateUpdate from "./TemplateUpdate";
 import { ArrowBack } from "../../data/Icons";
+import { TopBarSearchInput } from "../../global";
 
 const TemplateSetting = () => {
 	return (
@@ -20,16 +18,7 @@ const TemplateSetting = () => {
 			<section className='template-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category mb-md-4 mb-3'>

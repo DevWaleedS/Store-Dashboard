@@ -14,6 +14,7 @@ import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // Components
 import useFetch from "../../../Hooks/UseFetch";
+import { TopBarSearchInput } from "../../../global";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // MUI
@@ -26,12 +27,11 @@ import { usePDF } from "react-to-pdf";
 // Icons
 import { BiLinkExternal } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
-import { AiFillCopy, AiFillCheckCircle, AiOutlineSearch } from "react-icons/ai";
+import { AiFillCopy, AiFillCheckCircle } from "react-icons/ai";
 import {
 	ArrowBack,
 	ArrowDown,
 	User,
-	DeleteIcon,
 	ListIcon,
 	Location,
 	Message,
@@ -223,61 +223,13 @@ const OrderDetails = () => {
 	const printSticker = () => {
 		setPrintError("");
 
-		if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
-			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${cookies?.access_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						const newTab = window.open("", "_blank");
-						if (newTab) {
-							newTab.document.write(res?.data?.data?.Sticker?.data);
-							newTab.document.close();
-						} else {
-							console.error("Failed to open a new tab");
-						}
-					} else {
-						setPrintError(res?.data?.message?.ar);
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-					}
-				});
-		} else if (fetchedData?.data?.orders?.shippingtypes?.name === "Imile") {
-			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/PrintImileSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${cookies?.access_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						// this will open the sticker in new tap
-						window.open(res?.data?.data?.Sticker?.billUrl, "_blank");
-					} else {
-						setPrintError(res?.data?.message?.ar);
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-					}
-				});
-		} else if (
-			fetchedData?.data?.orders?.shippingtypes?.name === "J&T Express"
+		if (
+			fetchedData?.data?.orders?.shipping?.status === "ملغي" ||
+			fetchedData?.data?.orders?.shipping?.status === "جديد"
 		) {
 			axios
 				.get(
-					`https://backend.atlbha.com/api/Store/PrintJTSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+					`https://backend.atlbha.com/api/Store/PrintSticker/${id}/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
@@ -287,11 +239,9 @@ const OrderDetails = () => {
 				)
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						// this will open the sticker in new tap
-						window.open(
-							`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data}`,
-							"_blank"
-						);
+						toast.error(res?.data?.message?.ar, {
+							theme: "light",
+						});
 					} else {
 						setPrintError(res?.data?.message?.ar);
 						toast.error(res?.data?.message?.ar, {
@@ -300,30 +250,120 @@ const OrderDetails = () => {
 					}
 				});
 		} else {
-			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${cookies?.access_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						// this will open the sticker in new tap
-						window.open(
-							`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data?.[0]}`,
-							"_blank"
-						);
-					} else {
-						setPrintError(res?.data?.message?.ar);
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-					}
-				});
+			if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
+				axios
+					.get(
+						`https://backend.atlbha.com/api/Store/PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						{
+							headers: {
+								"Content-Type": "multipart/form-data",
+								Authorization: `Bearer ${cookies?.access_token}`,
+							},
+						}
+					)
+					.then((res) => {
+						if (
+							res?.data?.success === true &&
+							res?.data?.data?.status === 200
+						) {
+							const newTab = window.open("", "_blank");
+							if (newTab) {
+								newTab.document.write(res?.data?.data?.Sticker?.data);
+								newTab.document.close();
+							} else {
+								console.error("Failed to open a new tab");
+							}
+						} else {
+							setPrintError(res?.data?.message?.ar);
+							toast.error(res?.data?.message?.ar, {
+								theme: "light",
+							});
+						}
+					});
+			} else if (fetchedData?.data?.orders?.shippingtypes?.name === "Imile") {
+				axios
+					.get(
+						`https://backend.atlbha.com/api/Store/PrintImileSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						{
+							headers: {
+								"Content-Type": "multipart/form-data",
+								Authorization: `Bearer ${cookies?.access_token}`,
+							},
+						}
+					)
+					.then((res) => {
+						if (
+							res?.data?.success === true &&
+							res?.data?.data?.status === 200
+						) {
+							// this will open the sticker in new tap
+							window.open(res?.data?.data?.Sticker?.billUrl, "_blank");
+						} else {
+							setPrintError(res?.data?.message?.ar);
+							toast.error(res?.data?.message?.ar, {
+								theme: "light",
+							});
+						}
+					});
+			} else if (
+				fetchedData?.data?.orders?.shippingtypes?.name === "J&T Express"
+			) {
+				axios
+					.get(
+						`https://backend.atlbha.com/api/Store/PrintJTSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						{
+							headers: {
+								"Content-Type": "multipart/form-data",
+								Authorization: `Bearer ${cookies?.access_token}`,
+							},
+						}
+					)
+					.then((res) => {
+						if (
+							res?.data?.success === true &&
+							res?.data?.data?.status === 200
+						) {
+							// this will open the sticker in new tap
+							window.open(
+								`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data}`,
+								"_blank"
+							);
+						} else {
+							setPrintError(res?.data?.message?.ar);
+							toast.error(res?.data?.message?.ar, {
+								theme: "light",
+							});
+						}
+					});
+			} else {
+				axios
+					.get(
+						`https://backend.atlbha.com/api/Store/PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						{
+							headers: {
+								"Content-Type": "multipart/form-data",
+								Authorization: `Bearer ${cookies?.access_token}`,
+							},
+						}
+					)
+					.then((res) => {
+						if (
+							res?.data?.success === true &&
+							res?.data?.data?.status === 200
+						) {
+							// this will open the sticker in new tap
+							window.open(
+								`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data?.[0]}`,
+								"_blank"
+							);
+						} else {
+							setPrintError(res?.data?.message?.ar);
+							toast.error(res?.data?.message?.ar, {
+								theme: "light",
+							});
+						}
+					});
+			}
 		}
 	};
 	// -------------------------------------------------
@@ -340,16 +380,7 @@ const OrderDetails = () => {
 			<section className='order-details-page orders-pages p-md-3' id='report'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 
@@ -1218,22 +1249,21 @@ const OrderDetails = () => {
 								</div>
 
 								{fetchedData?.data?.orders?.shipping && (
-									<>
-										<button
-											disabled={fetchedData?.data?.orders?.shipping === null}
-											style={{ cursor: "pointer" }}
-											onClick={() => printSticker()}
-											className='order-action-box mb-3'>
-											<div className='action-title'>
-												<ListIcon className='list-icon' />
-												<span className='me-2'>طباعة بوليصة الشحن</span>
-											</div>
-											<div className='action-icon'>
-												<Print />
-											</div>
-										</button>
-										<span className='fs-6 text-danger'>{printError}</span>
-									</>
+									<button
+										style={{ cursor: "pointer" }}
+										onClick={() => printSticker()}
+										className='order-action-box mb-3'>
+										<div className='action-title'>
+											<ListIcon className='list-icon' />
+											<span className='me-2 ms-2'> طباعة بوليصة الشحن</span>
+											{printError && (
+												<span className='fs-6 text-danger'>({printError})</span>
+											)}
+										</div>
+										<div className='action-icon'>
+											<Print />
+										</div>
+									</button>
 								)}
 							</div>
 						</div>

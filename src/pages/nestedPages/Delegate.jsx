@@ -13,9 +13,9 @@ import FormControl from "@mui/material/FormControl";
 // ICONS
 import { HomeIcon } from "../../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineSearch } from "react-icons/ai";
 
 // Components
+import { TopBarSearchInput } from "../../global";
 import { DelegateTable } from "../../components/Tables";
 
 const Delegate = () => {
@@ -35,16 +35,7 @@ const Delegate = () => {
 			<section className=' delegate-page p-md-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category mb-md-4'>

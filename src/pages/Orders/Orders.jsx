@@ -12,6 +12,7 @@ import { BigOrdersTable } from "../../components/Tables";
 // Icons
 import { ArrowBack } from "../../data/Icons";
 import { AiOutlineSearch } from "react-icons/ai";
+import { TopBarSearchInput } from "../../global";
 
 const Orders = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -59,16 +60,7 @@ const Orders = () => {
 			<section className='orders-pages p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category'>

@@ -9,6 +9,7 @@ import moment from "moment-with-locales-es6";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
+import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // Context
@@ -20,7 +21,6 @@ import { NotificationContext } from "../Context/NotificationProvider";
 import Checkbox from "@mui/material/Checkbox";
 
 // Icons
-import { AiOutlineSearch } from "react-icons/ai";
 import { CheckedSquare, DeleteIcon } from "../data/Icons";
 
 const Notifications = () => {
@@ -146,16 +146,7 @@ const Notifications = () => {
 			<section className='notifications'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 

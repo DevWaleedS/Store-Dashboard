@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
+import { TopBarSearchInput } from "../../global";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
@@ -15,7 +16,7 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import Context from "../../Context/context";
 
 // Icons
-import { AiOutlineSearch } from "react-icons/ai";
+
 import { HomeIcon } from "../../data/Icons";
 
 const ShippingCompanies = () => {
@@ -58,16 +59,7 @@ const ShippingCompanies = () => {
 			<section className='shipping-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category mb-md-5 mb-3'>

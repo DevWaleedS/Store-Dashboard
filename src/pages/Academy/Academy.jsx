@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";
@@ -12,9 +12,13 @@ import { ArrowBack } from "../../data/Icons";
 import Explain from "./Explains/Explain";
 import CoursesTraining from "./Courses/CoursesTraining";
 
+// Context
+import Context from "../../Context/context";
+
 const Academy = () => {
-	// Use state to the next button
-	const [togglePage, setTogglePag] = useState(1);
+	// to handle CoursesTraining and Explain in Academy Section
+	const academyToggleContext = useContext(Context);
+	const { togglePage, setTogglePag } = academyToggleContext;
 
 	// Set function to change between pages
 	const togglePagesHandle = (index) => {

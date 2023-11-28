@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
 
 // Components
+import { TopBarSearchInput } from "../global";
 import { DelegateRequestAlert } from "../components/Modal";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
@@ -33,7 +34,6 @@ import { TagInput } from "evergreen-ui";
 
 // ICONS
 import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineSearch } from "react-icons/ai";
 import { HomeIcon } from "../data/Icons";
 
 const PlatformServices = () => {
@@ -107,16 +107,7 @@ const PlatformServices = () => {
 			<section className='PlatformServices-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category mb-md-4 mb-3'>

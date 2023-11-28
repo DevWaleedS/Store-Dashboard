@@ -9,6 +9,8 @@ const ContextProvider = (props) => {
 	const [productsData, setProductsData] = React.useState();
 	const [actionWarning, setActionWarning] = useState(false);
 	const [navbarZindex, setNavbarZindex] = useState(false);
+	// to handle CoursesTraining and Explain in Academy Section
+	const [togglePage, setTogglePag] = useState(1);
 
 	useEffect(() => {
 		if (title) {
@@ -32,6 +34,8 @@ const ContextProvider = (props) => {
 		productsData,
 		navbarZindex,
 		setNavbarZindex,
+		togglePage,
+		setTogglePag,
 	};
 
 	return <Context.Provider value={context}>{props.children}</Context.Provider>;

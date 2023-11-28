@@ -26,12 +26,12 @@ import { useDispatch } from "react-redux";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
+import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // Icons
 import { MdFileUpload } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineSearch } from "react-icons/ai";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import {
 	Address,
@@ -610,16 +610,7 @@ const MainInformation = () => {
 			<section className='main-info-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category mb-md-4'>

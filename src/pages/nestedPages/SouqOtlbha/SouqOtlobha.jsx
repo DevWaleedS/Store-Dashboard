@@ -22,6 +22,7 @@ import {
 	MdOutlineArrowBackIosNew,
 	MdOutlineArrowForwardIos,
 } from "react-icons/md";
+import { TopBarSearchInput } from "../../../global";
 
 const SouqOtlobha = () => {
 	const navigate = useNavigate();
@@ -73,16 +74,7 @@ const SouqOtlobha = () => {
 			<section className='souqOtlobha-page'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='souqOtlobha-wrapper p-md-4'>

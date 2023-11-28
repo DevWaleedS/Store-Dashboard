@@ -1,24 +1,17 @@
 import * as React from "react";
 
-// ICON
-import { AiOutlineSearch } from "react-icons/ai";
+// Icons
 import { HomeIcon } from "../data/Icons";
+
+// Search Components
+import { TopBarSearchInput } from "../global";
 
 const TopSection = () => {
 	return (
 		<div className='row'>
 			<div className='col-12 d-md-none d-flex'>
 				<div className='search-header-box'>
-					<div className='search-icon'>
-						<AiOutlineSearch color='#02466A' />
-					</div>
-					<input
-						type='text'
-						name='search'
-						id='search'
-						className='input'
-						placeholder='أدخل كلمة البحث'
-					/>
+					<TopBarSearchInput />
 				</div>
 			</div>
 			<div className='col-lg-6 col-12 mb-md-0 mb-2'>

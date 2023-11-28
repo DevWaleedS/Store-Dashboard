@@ -43,7 +43,9 @@ const TopBar = ({ toggleSidebar }) => {
 						/>
 						<ul className='navbar-nav ms-md-auto ms-0 d-flex align-items-lg-center justify-content-between'>
 							{/** Search Input Component */}
-							<TopBarSearchInput />
+							<li className='nav-item search-box d-md-flex d-none'>
+								<TopBarSearchInput />
+							</li>
 
 							{/** notification Component */}
 							<Notifications />

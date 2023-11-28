@@ -6,10 +6,6 @@ import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 // use Nav lINKS
 import { NavLink, Link } from "react-router-dom";
 
-// Icons
-
-import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
-
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
@@ -20,6 +16,9 @@ import useFetch from "../Hooks/UseFetch";
 
 // Context
 import Context from "../Context/context";
+
+// Icons
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import {
 	Academy,
 	BsCart,
@@ -355,7 +354,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> بيانات المتجر الاساسية</span>
+							<span className='me-2'> إعدادت المتجر الاساسية</span>
 						</MenuItem>
 					</NavLink>
 					<Link

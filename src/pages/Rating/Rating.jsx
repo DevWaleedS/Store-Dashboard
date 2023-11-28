@@ -12,7 +12,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 // Icons
 import { HomeIcon } from "../../data/Icons";
-import { AiOutlineSearch } from "react-icons/ai";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
 	MdOutlineArrowBackIosNew,
@@ -26,6 +25,7 @@ import Context from "../../Context/context";
 import RatingWeight from "./RatingWeight";
 import useFetch from "../../Hooks/UseFetch";
 import { SendReplayModal } from "../../components/Modal";
+import { TopBarSearchInput } from "../../global";
 
 const Rating = () => {
 	const contextStore = useContext(Context);
@@ -101,16 +101,7 @@ const Rating = () => {
 			<section className='rating-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
-						<div className='search-icon'>
-							<AiOutlineSearch color='#02466A' />
-						</div>
-						<input
-							type='text'
-							name='search'
-							id='search'
-							className='input'
-							placeholder='أدخل كلمة البحث'
-						/>
+						<TopBarSearchInput />
 					</div>
 				</div>
 				<div className='head-category mb-md-4'>
