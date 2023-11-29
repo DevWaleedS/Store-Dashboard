@@ -1,11 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
+
+// Third party
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
+// Icons
 import { BsArrowLeft } from "react-icons/bs";
 import { CommentIcon } from "../../../data/Icons";
-import { useCookies } from "react-cookie";
+
+// Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
-import axios from "axios";
+
+// MUI
 import { Button, FormControl, Switch } from "@mui/material";
 
 const UpdateComments = ({ Comments, reload, setReload }) => {

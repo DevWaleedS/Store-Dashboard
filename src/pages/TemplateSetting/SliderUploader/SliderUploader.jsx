@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
-import ImageUploading from "react-images-uploading";
-import { Button, FormControl, Switch } from "@mui/material";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
 
-import { MdFileUpload } from "react-icons/md";
+// Third party
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import ImageUploading from "react-images-uploading";
+
+// Icons
+import { MdFileUpload } from "react-icons/md";
+
+// Components
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
+// MUI
+import { Button, FormControl, Switch } from "@mui/material";
+
+// Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 

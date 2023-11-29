@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
+// Third party
+import axios from "axios";
 import { useCookies } from "react-cookie";
+import ImageUploading from "react-images-uploading";
+
+// MUI
+import { Button, FormControl, Switch } from "@mui/material";
+
+// Icons
+import { MdFileUpload } from "react-icons/md";
+
+// Components
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
+// Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
-import axios from "axios";
-import { Button, FormControl, Switch } from "@mui/material";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
-import { MdFileUpload } from "react-icons/md";
-import ImageUploading from "react-images-uploading";
 
 const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
