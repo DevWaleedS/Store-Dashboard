@@ -237,39 +237,42 @@ const EditProductPage = () => {
 	// handle images size
 	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 
-	// to get multi images
+	// To get multi images
 	const emptyMultiImages = [];
 	for (let index = 0; index < 5 - multiImages?.length; index++) {
 		emptyMultiImages?.push(index);
 	}
 
-	const onChangeMultiImages = (imageList, addUpdateIndex) => {
+	const onChangeMultiImages = (imageList) => {
 		// Check the size for each image in the list
-		const isSizeValid = imageList?.every(
+		const isSizeValid = imageList.every(
 			(image) => image?.file?.size <= maxFileSize
 		);
 
 		// Check if this file is video
-		const isVideo = imageList.every((image) =>
-			image?.file?.type.startsWith("video/")
+		const isVideo = imageList.every(
+			(image) =>
+				image?.file?.type.startsWith("video") ||
+				image?.file?.type?.includes(
+					"video/mp4" || "video/avi" || "video/mov" || "video/mkv"
+				) ||
+				image?.file?.type?.includes(".mp4" || ".avi" || ".mov" || ".mkv")
 		);
 
+		const errorMessage = isVideo
+			? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
+			: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+
 		if (!isSizeValid) {
-			toast.warning(
-				isVideo
-					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
-				{
-					theme: "light",
-				}
-			);
+			toast.warning(errorMessage, { theme: "light" });
 			setProductError({
 				...productError,
-				images: isVideo
-					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+				images: errorMessage,
 			});
-			setMultiImages([...multiImages]);
+
+			// Remove the last uploaded image if it exceeds the size limit
+			const updatedImageList = imageList.slice(0, -1);
+			setMultiImages(updatedImageList);
 		} else {
 			setProductError({
 				...productError,
@@ -290,14 +293,15 @@ const EditProductPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 				if (!isSizeValid) {
-					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+					toast.warning(errorMessage, {
 						theme: "light",
 					});
 					setProductError({
 						...productError,
-						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+						cover: errorMessage,
 					});
 				} else {
 					setProductError({
@@ -1102,11 +1106,12 @@ const EditProductPage = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<ImageUploading
-													value={multiImages}
-													onChange={onChangeMultiImages}
 													multiple
 													maxNumber={5}
+													value={multiImages}
 													dataURLKey='data_url'
+													allowNonImageType={true}
+													onChange={onChangeMultiImages}
 													acceptType={[
 														"jpg",
 														"png",
@@ -1117,8 +1122,7 @@ const EditProductPage = () => {
 														"avi",
 														"mov",
 														"mkv",
-													]}
-													allowNonImageType={true}>
+													]}>
 													{({
 														imageList,
 														onImageUpload,

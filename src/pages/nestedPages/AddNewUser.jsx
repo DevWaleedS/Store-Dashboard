@@ -164,15 +164,16 @@ const AddNewUser = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 				if (!isSizeValid) {
 					setImages([]);
-					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+					toast.warning(errorMessage, {
 						theme: "light",
 					});
 					setUserError({
 						...userError,
-						image: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+						image: errorMessage,
 					});
 				} else {
 					setUserError({

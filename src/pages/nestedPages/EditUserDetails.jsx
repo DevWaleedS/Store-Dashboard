@@ -22,7 +22,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // Icons
-import { Message, Mobile, Phone, UploadIcon } from "../../data/Icons";
+import { Message, Mobile, Phone, UploadUserImageIcon } from "../../data/Icons";
 
 const style = {
 	position: "fixed",
@@ -148,15 +148,16 @@ const EditUserDetails = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 				if (!isSizeValid) {
 					setUserImage([]);
-					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+					toast.warning(errorMessage, {
 						theme: "light",
 					});
 					setDataError({
 						...dataError,
-						image: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+						image: errorMessage,
 					});
 				} else {
 					setDataError({
@@ -489,7 +490,7 @@ const EditUserDetails = () => {
 													)}
 
 													<span className='upload-icon'>
-														<UploadIcon />
+														<UploadUserImageIcon />
 													</span>
 												</div>
 

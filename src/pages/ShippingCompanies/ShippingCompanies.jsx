@@ -84,6 +84,9 @@ const ShippingCompanies = () => {
 				</div>
 
 				{/* Shipping Companies Data Components */}
+				<div className='shipping-company-hint mb-2'>
+					اشتراك واحد يتيح لك استخدام جميع شركات الشحن
+				</div>
 				<div className='data-container'>
 					<div className='row'>
 						{loading ? (
@@ -96,7 +99,9 @@ const ShippingCompanies = () => {
 							fetchedData?.data?.shippingtypes?.map((item) => (
 								<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
 									<ShippingCompaniesData
-										data={item?.name}
+										shippingCompanyName={
+											item?.name === "خدمة توصيل" ? item?.name : ""
+										}
 										image={item?.image}
 										changeStatus={() => changeStatus(item?.id)}
 										checked={item?.status === "نشط" ? true : false}

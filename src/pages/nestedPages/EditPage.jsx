@@ -209,15 +209,16 @@ const EditPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 				if (!isSizeValid) {
-					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+					toast.warning(errorMessage, {
 						theme: "light",
 					});
 					setImages([]);
 					setPageError({
 						...pageError,
-						images: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+						images: errorMessage,
 					});
 				} else {
 					setPageError({

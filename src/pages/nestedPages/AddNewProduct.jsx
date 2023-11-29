@@ -237,14 +237,15 @@ const AddNewProduct = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 				if (!isSizeValid) {
-					toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+					toast.warning(errorMessage, {
 						theme: "light",
 					});
 					setProductError({
 						...productError,
-						cover: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+						cover: errorMessage,
 					});
 					setIcons([]);
 				} else {

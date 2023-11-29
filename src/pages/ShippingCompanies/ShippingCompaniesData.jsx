@@ -1,12 +1,20 @@
 import React from "react";
 import { Switch } from "@mui/material";
 
-const ShippingCompaniesData = ({ data, image, changeStatus, checked }) => {
+const ShippingCompaniesData = ({
+	shippingCompanyName,
+	changeStatus,
+	checked,
+	image,
+}) => {
+	console.log(shippingCompanyName);
 	return (
 		<div className='data-widget'>
 			<div className='data'>
 				<div className='shipping-image-box'>
 					<img src={image} alt='' loading='lazy' />
+
+					<div className='shipping-company-name'>{shippingCompanyName}</div>
 				</div>
 			</div>
 			<div className='switch-box'>

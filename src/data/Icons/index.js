@@ -72,7 +72,7 @@ export { ReactComponent as TiktokIcon } from "./tiktok.svg";
 export { ReactComponent as InstagramIcon } from "./instagramm.svg";
 export { ReactComponent as SnapchatIcon } from "./icon-24-snapchat-yellow.svg";
 export { ReactComponent as Mobile } from "./mobile-icon-24.svg";
-
+export { ReactComponent as Document } from "./document_text_outlined.svg";
 export { ReactComponent as Dollar } from "./icon-24-dollar.svg";
 export { ReactComponent as Communication } from "./ico - 24 - communication - send_outlined.svg";
 export { ReactComponent as GiftIcon } from "./icon-offer gift.svg";
@@ -112,3 +112,5 @@ export { ReactComponent as SnaChat } from "./icon-24-snapchat.svg";
 export { ReactComponent as Instagram } from "./icon-24-instagram.svg";
 export { ReactComponent as Youtube } from "./icon-24-youtube.svg";
 export { ReactComponent as Completed } from "./icon-24- true.svg";
+export { ReactComponent as UploadUserImageIcon } from "./icon-24-upload_outlined.svg";
+export { ReactComponent as MyAccountIcon } from "./icon-24-client.svg";

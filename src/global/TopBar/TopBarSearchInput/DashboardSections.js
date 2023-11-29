@@ -1,15 +1,21 @@
 import {
 	Academy,
+	Background,
 	BsCart,
+	Caaard,
 	Category,
 	Delevray,
 	Discoint,
 	Evaluation,
 	Eye,
+	Footer,
 	HomeImage,
+	Icons,
 	Info,
 	Layout,
 	Marketing,
+	Menuu,
+	MyAccountIcon,
 	Orders,
 	PagesIcon,
 	Paint,
@@ -29,6 +35,12 @@ import { FaCircle } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 export const dashboardSections = [
+	{
+		id: 233223,
+		sectionName: "تعديل بيانات حسابي",
+		route: "UserDetails",
+		icon: <MyAccountIcon />,
+	},
 	{
 		id: 1,
 		sectionName: "الرئيسية ",
@@ -128,6 +140,18 @@ export const dashboardSections = [
 		icon: <Template />,
 	},
 	{
+		id: 160,
+		sectionName: "تعديل السلايدر",
+		route: "Template",
+		icon: <Template />,
+	},
+	{
+		id: 20098,
+		sectionName: "تعديل البنر",
+		route: "Template",
+		icon: <Template />,
+	},
+	{
 		id: 17,
 		sectionName: "تنسيق القالب",
 		route: "Template",
@@ -140,6 +164,44 @@ export const dashboardSections = [
 		icon: <Paint />,
 	},
 	{
+		id: 180347,
+		sectionName: "تغيير اللون الأساسي للمتجر",
+		route: "PaintStore",
+		icon: <Caaard />,
+	},
+	{
+		id: 187231,
+		sectionName: "تغيير اللون الفرعي للمتجر",
+		route: "PaintStore",
+		icon: <Category />,
+	},
+	{
+		id: 1802342932328347,
+		sectionName: "تغيير  خلفية الهيدر للمتجر",
+		route: "PaintStore",
+		icon: <Menuu />,
+	},
+	{
+		id: 233223,
+		sectionName: "تغيير لون الخلفية للمتجر",
+		route: "PaintStore",
+		icon: <Background />,
+	},
+
+	{
+		id: 2324,
+		sectionName: "تغيير  لون إطار القائمه السلفيه Footer للمتجر",
+		route: "PaintStore",
+		icon: <Footer />,
+	},
+	{
+		id: 34552,
+		sectionName: "تغيير لون الأيقونات للمتجر",
+		route: "PaintStore",
+		icon: <Icons />,
+	},
+
+	{
 		id: 19,
 		sectionName: "بيانات المتجر",
 		route: "SocialPages",
@@ -151,6 +213,7 @@ export const dashboardSections = [
 		route: "",
 		icon: <Verification />,
 	},
+
 	{
 		id: 21,
 		sectionName: "صفحات التواصل",

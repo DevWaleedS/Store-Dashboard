@@ -20,6 +20,9 @@ body,
 	font-family: "Tajawal", sans-serif;
 	scroll-behavior: smooth;
 }
+.Toastify__toast-body > div:last-child {
+	white-space: normal;
+}
 
 .content > .row {
 	width: 100%;
@@ -2659,6 +2662,9 @@ nav.navigation {
 	padding: 12px 30px;
 	border-radius: 30px;
 }
+.view-more-btn a:hover {
+	color: var(--white-400);
+}
 
 .view-more-btn a svg {
 	font-size: 22px;
@@ -2981,6 +2987,17 @@ nav.navigation {
 	padding: 16px;
 	gap: 0.5rem;
 }
+
+/* shipping-company-hint */
+.shipping-company-hint {
+	background-color: var(--second-300);
+	width: clamp(70%, 100%, 100%);
+	padding: 10px 12px;
+	font-weight: 400;
+	font-size: 18px;
+	color: #fff;
+}
+
 .data-widget .data .shipping-image-box {
 	display: flex;
 	flex-direction: column;
@@ -2992,6 +3009,11 @@ nav.navigation {
 .data-widget .data .shipping-image-box img {
 	max-width: 100%;
 	height: 100%;
+}
+.data-widget .shipping-image-box .shipping-company-name {
+	color: var(--primary-500);
+	font-size: 18px;
+	font-weight: 500;
 }
 
 .data-widget .switch-box {

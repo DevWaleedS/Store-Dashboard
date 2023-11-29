@@ -121,7 +121,7 @@ const RootLayout = () => {
 							position='top-left'
 							newestOnTop={false}
 							hideProgressBar={false}
-							style={{ fontSize: "14px", color: "#000" }}
+							style={{ fontSize: "14px", color: "#000", whiteSpace: "normal" }}
 						/>
 
 						{title && <ActionCompleteComp />}

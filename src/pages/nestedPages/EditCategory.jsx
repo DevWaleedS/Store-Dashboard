@@ -91,15 +91,16 @@ const EditCategory = () => {
 		const isSizeValid = imageList.every(
 			(image) => image.file.size <= maxFileSize
 		);
+		const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 		if (!isSizeValid) {
 			setIcons([]);
-			toast.warning("حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.", {
+			toast.warning(errorMessage, {
 				theme: "light",
 			});
 			setCategoryError({
 				...categoryError,
-				icon: " حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+				icon: errorMessage,
 			});
 		} else {
 			setIcons(imageList);

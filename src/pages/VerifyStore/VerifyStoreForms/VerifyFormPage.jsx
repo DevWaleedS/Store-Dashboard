@@ -110,7 +110,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		store_name: "",
 		city_id: "",
 		maeruf_city_id: "",
-		link: "",
 	});
 
 	// errors
@@ -121,7 +120,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		store_name: "",
 		city_id: "",
 		file: "",
-		link: "",
 	});
 
 	const resetDataErrors = () => {
@@ -203,10 +201,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		);
 		formData.append("commercialregistertype", data?.commercialregistertype);
 		formData.append("store_name", data?.store_name);
-		formData.append(
-			"link",
-			data?.commercialregistertype === "maeruf" ? data?.link : ""
-		);
+
 		formData.append(
 			"city_id",
 			data?.commercialregistertype === "maeruf"
@@ -250,7 +245,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							res?.data?.message?.en?.commercialregistertype?.[0],
 						store_name: res?.data?.message?.en?.store_name?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
-						link: res?.data?.message?.en?.link?.[0],
+
 						file: res?.data?.message?.en?.file?.[0],
 					});
 				}
@@ -679,7 +674,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											}}
 										/>
 									}
-									label=' معروف / وثيقة العمل الحر'
+									label='وثيقة العمل الحر'
 								/>
 							</RadioGroup>
 							<WebsiteIcon className='mx-3' />
@@ -737,42 +732,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									)}
 								</div>
 							</div>
-							<div className='row  d-flex justify-content-between align-items-center mb-3'>
-								<div className='col-md-4 col-12 mb-md-0 mb-3'>
-									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										رابط معروف / وثيقة العمل الحر
-										<span className='important-hint'>*</span>
-									</h5>
-								</div>
-								<div className='col-md-8 col-12'>
-									<input
-										name='link'
-										value={data?.link}
-										onChange={(e) => {
-											handleOnChange(e);
-										}}
-										placeholder='https//www.sample.com'
-										style={{
-											textAlign: "left",
-											width: "100%",
-											height: "50px",
-											padding: "18px",
-											background: "#FAFAFA",
-											color: "#000000",
-											fontSize: "16px",
-											fontWeight: "400",
-											borderRadius: "4px",
-										}}
-									/>
-									{dataErrors?.link && (
-										<div
-											className='important-hint me-1'
-											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											{dataErrors?.link}
-										</div>
-									)}
-								</div>
-							</div>
+
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
@@ -833,7 +793,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							<div className='row d-flex justify-content-between align-items-center '>
 								<div className='col-4 col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
-										رفع الوثيقة<span className='important-hint'>*</span>
+										رفع وثيقة العمل الحر
+										<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>

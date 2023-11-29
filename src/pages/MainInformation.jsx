@@ -37,7 +37,7 @@ import {
 	Address,
 	CityIcon,
 	CountryIcon,
-	EditIcon,
+	Document,
 	HomeIcon,
 	Timer,
 } from "../data/Icons";
@@ -194,58 +194,178 @@ const MainInformation = () => {
 
 	// handle images size
 	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
-	// to upload the store logo
+
+	// Function to handle notifications and update the state based on the image type (logo or icon)
+	const handleInvalid = (type, errMsg, resetState) => {
+		// Display a warning notification
+		toast.warning(errMsg, { theme: "light" });
+
+		// Update the error state based on the image type
+		setSettingErr((prevErr) => ({
+			...prevErr,
+			[type]: errMsg,
+		}));
+
+		// Reset the image state
+		resetState();
+	};
+
+	// Function to handle changes in the logo
 	const onChangeStoreLogo = (imageList, addUpdateIndex) => {
-		// Check the size for each image in the list
+		// Check if the image size is valid
 		const isSizeValid = imageList.every(
 			(image) => image.file.size <= maxFileSize
 		);
 
+		// Check if the image dimensions are valid
+		imageList.every((image) => {
+			const img = new Image();
+
+			// Set the event listener to check dimensions once the image is loaded
+			img.onload = () => {
+				if (img.width !== 110 && img.height !== 110) {
+					// If dimensions are not valid, display a warning and reset the logo state
+					handleInvalid(
+						"logo",
+						"مقاس الشعار يجب أن يكون  110 بكسل عرض 110 بكسل ارتفاع.",
+						() => setStoreLogo([])
+					);
+				}
+			};
+
+			img.src = image?.data_url;
+
+			return true; // Returning true because the actual check is done in the onload event
+		});
+
+		// If the image size is not valid
 		if (!isSizeValid) {
-			toast.warning("حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.", {
-				theme: "light",
-			});
-			setSettingErr({
-				...settingErr,
-				logo: "حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.",
-			});
-			setStoreLogo([]);
-		} else {
-			setSettingErr({
-				...settingErr,
-				logo: null,
-			});
-			setStoreLogo(imageList);
+			// Display a warning message and reset the logo state
+			handleInvalid(
+				"logo",
+				"حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.",
+
+				() => setStoreLogo([])
+			);
+			return;
 		}
+
+		// If all checks are valid, update the state
+		setSettingErr({ ...settingErr, logo: null });
+		setStoreLogo(imageList);
 	};
 
-	// to upload the store icon
+	// Function to handle changes in the icon
 	const onChangeSelectIcon = (imageList, addUpdateIndex) => {
-		// Check the size for each image in the list
+		// Check if the image size is valid
 		const isSizeValid = imageList.every(
 			(image) => image.file.size <= maxFileSize
 		);
 
+		// Check if the image dimensions are valid
+		imageList.every((image) => {
+			const img = new Image();
+
+			// Set the event listener to check dimensions once the image is loaded
+			img.onload = () => {
+				if (img.width !== 32 && img.height !== 32) {
+					// If dimensions are not valid, display a warning and reset the icon state
+					handleInvalid(
+						"icon",
+						"مقاس الايقون يجب أن يكون  32 بكسل عرض 32 بكسل ارتفاع.",
+						() => setStoreIcon([])
+					);
+				}
+			};
+
+			img.src = image?.data_url;
+
+			return true; // Returning true because the actual check is done in the onload event
+		});
+
+		// If the image size is not valid
 		if (!isSizeValid) {
-			toast.warning("حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.", {
-				theme: "light",
-			});
-			setSettingErr({
-				...settingErr,
-				icon: "حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.",
-			});
-			setStoreIcon([]);
-		} else {
-			setSettingErr({
-				...settingErr,
-				icon: null,
-			});
-			setStoreIcon(imageList);
+			// Display a warning message and reset the icon state
+			handleInvalid("icon", "حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.", () =>
+				setStoreIcon([])
+			);
+			return;
 		}
+
+		// If all checks are valid, update the state
+		setSettingErr({ ...settingErr, icon: null });
+		setStoreIcon(imageList);
 	};
 
+	// ----------------------------------------------------------------------------
+
+	// TO HANDLE VALIDATION USER PHONE NUMBER
+	useEffect(() => {
+		const PhoneNumberValidation = PHONE_REGEX.test(phoneNumber);
+		setValidPhoneNumber(PhoneNumberValidation);
+	}, [phoneNumber]);
+
+	// TO HANDLE VALIDATION FOR DOMAIN NAME
+	useEffect(() => {
+		const domainNameValidation = USER_REGEX.test(domain);
+		setValidDomainName(domainNameValidation);
+	}, [domain]);
 	// ------------------------------------------------------------------
 
+	const updateState = (index) => {
+		setWorkDays((prevState) => {
+			const newState = prevState.map((obj, i) => {
+				if (index === i) {
+					return {
+						...obj,
+						status: obj?.status === "active" ? "not_active" : "active",
+					};
+				}
+				return obj;
+			});
+
+			return newState;
+		});
+	};
+
+	const updateFromTime = (index, value) => {
+		setWorkDays((prevState) => {
+			const newState = prevState.map((obj, i) => {
+				if (index === i) {
+					return { ...obj, from: value };
+				}
+				return obj;
+			});
+			return newState;
+		});
+	};
+
+	const updateToTime = (index, value) => {
+		setWorkDays((prevState) => {
+			const newState = prevState.map((obj, i) => {
+				if (index === i) {
+					return { ...obj, to: value };
+				}
+				return obj;
+			});
+			return newState;
+		});
+	};
+
+	const updateAll = (value) => {
+		setWorkDays((prevState) => {
+			const newState = prevState.map((obj, index) => {
+				return {
+					...obj,
+					status: fetchedData?.data?.setting_store?.workDays?.[index]?.status,
+					from: fetchedData?.data?.setting_store?.workDays?.[index]?.from,
+					to: fetchedData?.data?.setting_store?.workDays?.[index]?.to,
+				};
+			});
+			return newState;
+		});
+	};
+	// -------------------------------------------------------------------
 	// to update UpdateMaintenanceMode values
 	const settingsStoreUpdate = () => {
 		resetSettingError();
@@ -365,74 +485,7 @@ const MainInformation = () => {
 				}
 			});
 	};
-	// ------------------------------------------------------------------
-
-	// TO HANDLE VALIDATION USER PHONE NUMBER
-	useEffect(() => {
-		const PhoneNumberValidation = PHONE_REGEX.test(phoneNumber);
-		setValidPhoneNumber(PhoneNumberValidation);
-	}, [phoneNumber]);
-
-	// TO HANDLE VALIDATION FOR DOMAIN NAME
-	useEffect(() => {
-		const domainNameValidation = USER_REGEX.test(domain);
-		setValidDomainName(domainNameValidation);
-	}, [domain]);
-	// ------------------------------------------------------------------
-
-	const updateState = (index) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, i) => {
-				if (index === i) {
-					return {
-						...obj,
-						status: obj?.status === "active" ? "not_active" : "active",
-					};
-				}
-				return obj;
-			});
-
-			return newState;
-		});
-	};
-
-	const updateFromTime = (index, value) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, i) => {
-				if (index === i) {
-					return { ...obj, from: value };
-				}
-				return obj;
-			});
-			return newState;
-		});
-	};
-
-	const updateToTime = (index, value) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, i) => {
-				if (index === i) {
-					return { ...obj, to: value };
-				}
-				return obj;
-			});
-			return newState;
-		});
-	};
-
-	const updateAll = (value) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, index) => {
-				return {
-					...obj,
-					status: fetchedData?.data?.setting_store?.workDays?.[index]?.status,
-					from: fetchedData?.data?.setting_store?.workDays?.[index]?.from,
-					to: fetchedData?.data?.setting_store?.workDays?.[index]?.to,
-				};
-			});
-			return newState;
-		});
-	};
+	// -----------------------------------------------------------------------------
 
 	return (
 		<>
@@ -684,9 +737,16 @@ const MainInformation = () => {
 															className='upload-log-btn'
 															onClick={onImageUpload}
 															{...dragProps}>
-															<span> رفع الشعار </span>
+															<span className='d-flex justify-content-center align-items-center gap-2'>
+																رفع الشعار
+																<div className='tax-text'>
+																	(المقاس الأنسب 110 بكسل عرض 110 بكسل الارتفاع)
+																</div>
+															</span>
+
 															<MdFileUpload />
 														</button>
+
 														{settingErr?.logo && (
 															<>
 																<span className='fs-6 w-100 text-danger'>
@@ -711,6 +771,9 @@ const MainInformation = () => {
 										<div className='select-country'>
 											<label htmlFor='upload-icon' className='setting_label'>
 												ايقونة تبويب المتجر في المتصفح
+												<span className='tax-text me-2'>
+													(المقاس الأنسب 32 بكسل عرض 32 بكسل الارتفاع)
+												</span>
 											</label>
 											<div>
 												<ImageUploading
@@ -748,10 +811,6 @@ const MainInformation = () => {
 													)}
 												</ImageUploading>
 											</div>
-
-											<p className='upload-icon-hint'>
-												المقاس الأنسب 32 بكسل عرض 32 بكسل الارتفاع
-											</p>
 										</div>
 										{settingErr?.icon && (
 											<div className='d-flex flex-wrap'>
@@ -1149,7 +1208,7 @@ const MainInformation = () => {
 										</label>
 										<div className='select-country'>
 											<div className='select-icon'>
-												<EditIcon className='edit-icon' />
+												<Document className='edit-icon' />
 											</div>
 											<textarea
 												name='descriptionValue'

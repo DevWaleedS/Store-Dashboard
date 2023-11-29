@@ -514,7 +514,7 @@ const PaintStore = () => {
 								<div className='content mb-2'>
 									<div className='text'>
 										<Menuu />
-										<span>لون القائمة العلوية</span>
+										<span>خلفية الهيدر</span>
 									</div>
 									<label
 										htmlFor='menu-bg'
