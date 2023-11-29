@@ -33,11 +33,11 @@ const filtersTypes = [
 	{ id: 2, ar_name: "جديد", en_name: "new" },
 	{ id: 3, ar_name: "ملغي", en_name: "canceled" },
 	{ id: 4, ar_name: "مكتمل", en_name: "completed" },
-	{ id: 5, ar_name: "جاهز للشحن", en_name: "readyToShipping" },
-	{ id: 6, ar_name: "Imile", en_name: "Imile" },
-	{ id: 7, ar_name: "J&T Express", en_name: "J&T Express" },
-	{ id: 8, ar_name: "سمسا", en_name: "semsa" },
-	{ id: 9, ar_name: "ساعي", en_name: "saee" },
+	{ id: 5, ar_name: "جاهز للشحن", en_name: "ready" },
+	{ id: 6, ar_name: "ساعي", en_name: "ساعي" },
+	{ id: 7, ar_name: "Imile", en_name: "Imile" },
+	{ id: 8, ar_name: "سمسا", en_name: "سمسا" },
+	{ id: 9, ar_name: "J&T Express", en_name: "J&T Express" },
 ];
 
 // Style The MUI Select
