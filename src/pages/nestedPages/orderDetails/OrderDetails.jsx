@@ -42,6 +42,7 @@ import {
 	StatusIcon,
 	WalletIcon,
 	DateIcon,
+	Delevray,
 } from "../../../data/Icons";
 
 // Table
@@ -480,6 +481,7 @@ const OrderDetails = () => {
 											</div>
 											<div className='box'>
 												<div className='order-head-row'>
+													<Delevray />
 													<span className='me-3'>شركة الشحن</span>
 												</div>
 												<div className='order-data-row'>

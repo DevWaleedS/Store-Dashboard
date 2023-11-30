@@ -17,6 +17,7 @@ import { Button, FormControl, Switch } from "@mui/material";
 // Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
+import { toast } from "react-toastify";
 
 const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
@@ -39,6 +40,80 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	const [sliderstatus1, setSlidersStatus1] = useState(true);
 	const [sliderstatus2, setSlidersStatus2] = useState(true);
 	const [sliderstatus3, setSlidersStatus3] = useState(true);
+
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const handleImageUpload =
+		(
+			sliderIndex,
+			sliderState,
+			setSliderState,
+			previewSliderState,
+			setPreviewSliderState,
+			sliderNameState
+		) =>
+		async (imageList) => {
+			const imageSize = imageList[0]?.file.size;
+
+			const maxSizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 2 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و440 بكسل ارتفاع.";
+
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img.width !== 1110 && img.height !== 440) {
+							toast.warning(dimensionsErrorMessage, {
+								theme: "light",
+							});
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
+
+			const isValidDimensions = await Promise.all(
+				imageList.map(checkImageDimensions)
+			).then((results) => results.every((result) => result));
+
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isValidDimensions) {
+				return;
+			}
+
+			if (imageSize >= maxFileSize && !isValidDimensions) {
+				toast.warning(maxSizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+			} else if (imageSize >= maxFileSize && isValidDimensions) {
+				toast.warning(maxSizeErrorMessage, {
+					theme: "light",
+				});
+			} else {
+				const updatedSliderState = [...sliderState];
+				updatedSliderState[sliderIndex] = imageList;
+				setSliderState(updatedSliderState);
+				setPreviewSliderState(imageList);
+
+				const updatedNameState = updatedSliderState[sliderIndex]?.[0]?.data_url;
+				const sliderNames = [
+					setFirstSliderName,
+					setSecondSliderName,
+					setThirdSliderName,
+				];
+
+				if (sliderNames[sliderIndex]) {
+					sliderNames[sliderIndex](updatedNameState);
+				}
+			}
+		};
 
 	useEffect(() => {
 		if (sliders) {
@@ -86,6 +161,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 				}
 			});
 	};
+
 	return (
 		<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 			<div className='title'>
@@ -147,13 +223,17 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={firstSlider}
-											onChange={(imageList) => {
-												setFirstSlider(imageList);
-												setPreviewSlider(imageList);
-											}}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg"]}
+											onChange={handleImageUpload(
+												0,
+												firstSlider,
+												setFirstSlider,
+												previewSlider,
+												setPreviewSlider,
+												setFirstSliderName
+											)}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button
@@ -227,10 +307,14 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={secondSlider}
-											onChange={(imageList) => {
-												setSecondSlider(imageList);
-												setPreviewSlider(imageList);
-											}}
+											onChange={handleImageUpload(
+												1,
+												secondSlider,
+												setSecondSlider,
+												previewSlider,
+												setPreviewSlider,
+												setSecondSliderName
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -307,10 +391,14 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={thirdSlider}
-											onChange={(imageList) => {
-												setThirdSlider(imageList);
-												setPreviewSlider(imageList);
-											}}
+											onChange={handleImageUpload(
+												2,
+												thirdSlider,
+												setThirdSlider,
+												previewSlider,
+												setPreviewSlider,
+												setThirdSliderName
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>

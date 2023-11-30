@@ -16,6 +16,7 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 // Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
+import { toast } from "react-toastify";
 
 const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
@@ -33,11 +34,85 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const [firstBanner, setFirstBanner] = useState([]);
 	const [secondBanner, setSecondBanner] = useState([]);
 	const [thirdBanner, setThirdBanner] = useState([]);
+
 	const [firstBannerName, setFirstBannerName] = useState("");
 	const [secondBannerName, setSecondBannerName] = useState("");
 	const [thirdBannerName, setThirdBannerName] = useState("");
 	const [previewBanner, setPreviewBanner] = useState("");
 
+	// handle images size
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const handleImageUpload =
+		(
+			bannerIndex,
+			bannerState,
+			setBannerState,
+			previewBannerState,
+			setPreviewBannerState,
+			bannerNameState
+		) =>
+		async (imageList) => {
+			const imageSize = imageList[0]?.file.size;
+
+			const maxSizeErrorMessage = "حجم البنر يجب أن لا يزيد عن 2 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس البنر يجب أن يكون 1110 بكسل عرض و440 بكسل ارتفاع.";
+
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img.width !== 1110 && img.height !== 440) {
+							toast.warning(dimensionsErrorMessage, {
+								theme: "light",
+							});
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
+
+			const isValidDimensions = await Promise.all(
+				imageList.map(checkImageDimensions)
+			).then((results) => results.every((result) => result));
+
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isValidDimensions) {
+				return;
+			}
+
+			if (imageSize >= maxFileSize && !isValidDimensions) {
+				toast.warning(maxSizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+			} else if (imageSize >= maxFileSize && isValidDimensions) {
+				toast.warning(maxSizeErrorMessage, {
+					theme: "light",
+				});
+			} else {
+				const updatedSliderState = [...bannerState];
+				updatedSliderState[bannerIndex] = imageList;
+				setBannerState(updatedSliderState);
+				setPreviewBannerState(imageList);
+
+				const updatedNameState = updatedSliderState[bannerIndex]?.[0]?.data_url;
+				const bannerNames = [
+					setFirstBannerName,
+					setSecondBannerName,
+					setThirdBannerName,
+				];
+
+				if (bannerNames[bannerIndex]) {
+					bannerNames[bannerIndex](updatedNameState);
+				}
+			}
+		};
 	useEffect(() => {
 		if (Banners) {
 			// set banners status
@@ -148,10 +223,14 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={firstBanner}
-											onChange={(imageList) => {
-												setFirstBanner(imageList);
-												setPreviewBanner(imageList);
-											}}
+											onChange={handleImageUpload(
+												0,
+												firstBanner,
+												setFirstBanner,
+												previewBanner,
+												setPreviewBanner,
+												setFirstBannerName
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -228,10 +307,14 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={secondBanner}
-											onChange={(imageList) => {
-												setSecondBanner(imageList);
-												setPreviewBanner(imageList);
-											}}
+											onChange={handleImageUpload(
+												0,
+												firstBanner,
+												setFirstBanner,
+												previewBanner,
+												setPreviewBanner,
+												setFirstBannerName
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -308,10 +391,14 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={thirdBanner}
-											onChange={(imageList) => {
-												setThirdBanner(imageList);
-												setPreviewBanner(imageList);
-											}}
+											onChange={handleImageUpload(
+												0,
+												firstBanner,
+												setFirstBanner,
+												previewBanner,
+												setPreviewBanner,
+												setFirstBannerName
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
