@@ -7,7 +7,6 @@ const ShippingCompaniesData = ({
 	checked,
 	image,
 }) => {
-	console.log(shippingCompanyName);
 	return (
 		<div className='data-widget'>
 			<div className='data'>

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { openVerifyModal } from "../../../../store/slices/VerifyStoreModal-slice";
 import { openMaintenanceModeModal } from "../../../../store/slices/MaintenanceModeModal";
 import { openDelegateRequestAlert } from "../../../../store/slices/DelegateRequestAlert-slice";
+import { openProductHintModal } from "../../../../store/slices/ImportProductHintModal";
 
 const SearchSuggestionsResult = ({
 	suggestionsResult,
@@ -34,7 +35,7 @@ const SearchSuggestionsResult = ({
 	const { setTogglePag } = academyToggleContext;
 	// ---------------------------------------------------------
 
-	//
+	// to handle open all pages
 	const handleRoute = (item) => {
 		if (item?.sectionName === "وضع الصيانة") {
 			setNavbarZindex(true);
@@ -52,6 +53,9 @@ const SearchSuggestionsResult = ({
 		} else if (item?.sectionName === "طلب مندوب") {
 			navigate(`${item?.route}`);
 			dispatch(openDelegateRequestAlert());
+		} else if (item?.sectionName === "سوق اطلبها") {
+			navigate(`${item?.route}`);
+			dispatch(openProductHintModal());
 		} else {
 			navigate(`${item?.route}`);
 		}

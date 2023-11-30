@@ -54,8 +54,26 @@ export const dashboardSections = [
 		icon: <Category />,
 	},
 	{
+		id: 99280990,
+		sectionName: "اضافة نشاط أو تصنيف",
+		route: "Category/AddCategory",
+		icon: <Category />,
+	},
+	{
 		id: 3,
 		sectionName: "المنتجات",
+		route: "Products",
+		icon: <Products />,
+	},
+	{
+		id: 98076554,
+		sectionName: "اضافة منتج",
+		route: "Products/AddProduct",
+		icon: <Products />,
+	},
+	{
+		id: 98076554,
+		sectionName: "سوق اطلبها",
 		route: "Products",
 		icon: <Products />,
 	},
@@ -75,6 +93,12 @@ export const dashboardSections = [
 		id: 6,
 		sectionName: "الكوبونات",
 		route: "Coupon",
+		icon: <Discoint />,
+	},
+	{
+		id: 6,
+		sectionName: "اضافة كوبون",
+		route: "Coupon/AddCoupon",
 		icon: <Discoint />,
 	},
 	{
@@ -111,6 +135,12 @@ export const dashboardSections = [
 		id: 12,
 		sectionName: "الصفحات",
 		route: "Pages",
+		icon: <PagesIcon />,
+	},
+	{
+		id: 12,
+		sectionName: "انشاء صفحة جديدة",
+		route: "Pages/AddPage",
 		icon: <PagesIcon />,
 	},
 	{

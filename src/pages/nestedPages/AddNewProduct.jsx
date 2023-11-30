@@ -189,31 +189,31 @@ const AddNewProduct = () => {
 		emptyMultiImages.push(index);
 	}
 
-	const onChangeMultiImages = (imageList, addUpdateIndex) => {
+	const onChangeMultiImages = (imageList) => {
 		// Check the size for each image in the list
-		const isSizeValid = imageList.every(
-			(image) => image?.file?.size <= maxFileSize
+		const isSizeValid = imageList?.every((image) =>
+			image?.image ? true : image?.file?.size <= maxFileSize
 		);
 
 		// Check if this file is video
-		const isVideo = imageList.every((image) =>
-			image?.file?.type.startsWith("video/")
-		);
+		const isVideo =
+			imageList?.[imageList?.length - 1]?.file?.type?.startsWith("video/");
+
+		const errorMessage = isVideo
+			? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
+			: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
 
 		if (!isSizeValid) {
-			toast.warning(
-				isVideo
-					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
-				{ theme: "light" }
-			);
+			toast.warning(errorMessage, { theme: "light" });
 			setProductError({
 				...productError,
-				images: isVideo
-					? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-					: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.",
+				images: errorMessage,
 			});
 			setMultiImages([...multiImages]);
+
+			// Remove the last uploaded image if it exceeds the size limit
+			const updatedImageList = imageList.slice(0, -1);
+			setMultiImages(updatedImageList);
 		} else {
 			setProductError({
 				...productError,

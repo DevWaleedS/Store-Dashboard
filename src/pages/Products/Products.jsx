@@ -72,7 +72,7 @@ const Products = () => {
 		products = fetchedData?.data?.products;
 	}
 
-	console.log(search);
+	
 
 	if (category_id !== "") {
 		filterProducts = products?.filter(
