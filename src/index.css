@@ -2996,6 +2996,18 @@ nav.navigation {
 	font-size: 18px;
 	color: #fff;
 }
+.other-shipping-company {
+	width: 100%;
+	background: #fff;
+	padding: 16px 8px;
+	margin: 0 auto;
+}
+
+.other-shipping-company .data-widget {
+	box-shadow: none;
+	margin-bottom: 0px;
+	border: 1px solid #f5f5f5;
+}
 
 .other-shipping-company .shipping-company-hint {
 	background-color: transparent;
@@ -9730,6 +9742,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.widget-text svg {
 		width: 20px !important;
 		height: 20px !important;
+	}
+	.other-shipping-company {
+		padding: 16;
+	}
+
+	.other-shipping-company .data-widget {
+		box-shadow: none;
+		margin-bottom: 20px;
+		border: 1px solid #f5f5f5;
 	}
 
 	.widget-text span {
