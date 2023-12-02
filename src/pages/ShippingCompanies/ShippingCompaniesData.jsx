@@ -3,6 +3,7 @@ import { Switch } from "@mui/material";
 
 const ShippingCompaniesData = ({
 	shippingCompanyName,
+	currentShippingPrice,
 	changeStatus,
 	checked,
 	image,
@@ -13,7 +14,18 @@ const ShippingCompaniesData = ({
 				<div className='shipping-image-box'>
 					<img src={image} alt='' loading='lazy' />
 
-					<div className='shipping-company-name'>{shippingCompanyName}</div>
+					{currentShippingPrice && (
+						<div className='current-price mt-1'>
+							تكلفة الشحن :
+							{currentShippingPrice === "" ||
+							currentShippingPrice === "0" ||
+							currentShippingPrice === 0 ? (
+								<span>شحن مجاني</span>
+							) : (
+								<span>{currentShippingPrice} ر.س</span>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 			<div className='switch-box'>

@@ -3006,8 +3006,8 @@ nav.navigation {
 .other-shipping-company .shipping-price-input-box {
 	width: 100%;
 	height: clamp(48px, 56px, 56px);
-	padding: 0 16px;
-	background-color: var(--white-200);
+	padding: 0;
+	background-color: var(--white-100);
 	border: 1px solid var(--gray-100);
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -3015,18 +3015,29 @@ nav.navigation {
 	-o-border-radius: 2px;
 	border-radius: 2px;
 }
-.other-shipping-company svg {
-	fill: var(--gray-300);
+.other-shipping-company .shipping-price-hint {
+	background-color: #f7f8f8;
+	fill: var(--gray-700);
+	padding: 0 10px;
+	font-size: 16px;
+	font-weight: 500;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 .other-shipping-company .shipping-price {
 	background-color: transparent;
+	padding-right: 8px;
 	width: 100%;
 	height: 100%;
 	font-size: 18px;
 	font-weight: 400;
 }
 .other-shipping-company .shipping-price::placeholder {
-	color: var(--gray-300);
+	color: #bebebe;
+	font-size: 16px;
+	font-weight: 400;
 }
 
 .other-shipping-company .shipping-price-input-box .currency {
@@ -3036,7 +3047,7 @@ nav.navigation {
 	height: 100%;
 	font-size: 18px;
 	font-weight: 400;
-	color: var(--gray-300);
+	color: #a3a3a3;
 }
 
 .data-widget .data .shipping-image-box {
@@ -3056,7 +3067,24 @@ nav.navigation {
 	font-size: 18px;
 	font-weight: 500;
 }
-
+.data-widget .shipping-image-box .current-price {
+	color: var(--primary-500);
+	font-size: 16px;
+	font-weight: 500;
+}
+.data-widget .shipping-image-box .current-price span {
+	color: var(--second-500);
+	font-size: 16px;
+	font-weight: 400;
+}
+.other-shipping-company .save-price-btn {
+	background-color: var(--second-500);
+	color: #fff;
+	height: clamp(48px, 56px, 56px);
+	width: 100%;
+	font-size: 20px;
+	font-weight: 500;
+}
 .data-widget .switch-box {
 	display: flex;
 	flex-direction: column;

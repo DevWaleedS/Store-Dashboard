@@ -17,11 +17,15 @@ import Context from "../../Context/context";
 
 // Icons
 
-import { CurrencyIcon, HomeIcon } from "../../data/Icons";
+import { HomeIcon } from "../../data/Icons";
+import { toast } from "react-toastify";
 
 const ShippingCompanies = () => {
 	const [cookies] = useCookies(["access_token"]);
 	const [price, setPrice] = useState("");
+	const [currentPrice, setCurrentPrice] = useState("");
+	const [validPriceFocus, setValidPriceFocus] = useState(false);
+	const [otherShippingCompanyId, setOtherShippingCompanyId] = useState(null);
 	const [otherShippingCompanyStatus, setOtherShippingCompanyStatus] =
 		useState(false);
 
@@ -43,6 +47,8 @@ const ShippingCompanies = () => {
 
 	useEffect(() => {
 		if (otherShippingCompany) {
+			setCurrentPrice(otherShippingCompany[0]?.price);
+			setOtherShippingCompanyId(otherShippingCompany[0]?.id);
 			setOtherShippingCompanyStatus(
 				otherShippingCompany[0]?.status === "نشط" ? true : false
 			);
@@ -95,6 +101,35 @@ const ShippingCompanies = () => {
 			});
 	};
 
+	const updatePrice = () => {
+		let formData = new FormData();
+		formData.append("price", price);
+		axios
+			.post(
+				`https://backend.atlbha.com/api/Store/updatePrice/${otherShippingCompanyId}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				} else {
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.price?.[0], {
+						theme: "light",
+					});
+				}
+			});
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -135,7 +170,7 @@ const ShippingCompanies = () => {
 					{loading ? (
 						<div className='row'>
 							<div
-								className='d-flex justify-content-center align-items-center'
+								className='d-flex justify-content-center align-items-center col-12'
 								style={{ minHeight: "250px" }}>
 								<CircularLoading />
 							</div>
@@ -148,6 +183,7 @@ const ShippingCompanies = () => {
 										<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
 											<ShippingCompaniesData
 												shippingCompanyName=''
+												currentShippingPrice=''
 												image={item?.image}
 												changeStatus={() => changeStatus(item?.id)}
 												checked={item?.status === "نشط" ? true : false}
@@ -158,9 +194,14 @@ const ShippingCompanies = () => {
 
 							<div className='row other-shipping-company'>
 								{otherShippingCompany?.map((item) => (
-									<div key={item?.id} className='col-xl-3 col-lg-4 col-6'>
+									<div key={item?.id} className='col-xl-3 col-lg-4 col-12'>
+										<div className='shipping-company-hint d-lg-none d-flex mb-2 '>
+											من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة في
+											توصيل الطلبات وتحديد تكلفة الشحن المناسبة.
+										</div>
 										<ShippingCompaniesData
 											shippingCompanyName={item?.name}
+											currentShippingPrice={currentPrice}
 											image={item?.image}
 											changeStatus={() =>
 												changeOtherShippingCompanyStatusAndAddPrice(item?.id)
@@ -169,33 +210,61 @@ const ShippingCompanies = () => {
 										/>
 									</div>
 								))}
-								<div className='col-xl-7 col-lg-6 col-6'>
-									<div className='mt-5'>
-										<div className='shipping-company-hint mb-2'>
-											يمكنك من خلال تفعيل هذا الخيار ان تقوم بتحديد الطريقة التي
-											يمكنك استخدامها في توصيل الطلبات
-										</div>
-										<div
-											style={{
-												backgroundColor: otherShippingCompanyStatus
-													? "#fefefeef"
-													: "#f7f7f7",
-											}}
-											className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1'>
-											<CurrencyIcon />
+								{otherShippingCompany?.length !== 0 && (
+									<div className='col-xl-7 col-lg-6 col-12'>
+										<div className=''>
+											<div className='shipping-company-hint  d-lg-flex d-none mb-2'>
+												من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة في
+												توصيل الطلبات وتحديد تكلفة الشحن المناسبة.
+											</div>
+											<div
+												style={{
+													backgroundColor: !otherShippingCompanyStatus
+														? "#fefefeef"
+														: "#fffffff7",
+												}}
+												className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1 mb-2'>
+												<div className='shipping-price-hint'>تكلفة الشحن </div>
+												<input
+													type='text'
+													name='price'
+													value={price}
+													onChange={(e) => setPrice(e.target.value)}
+													placeholder='حدد تكلفة الشحن  المناسبة'
+													className='shipping-price'
+													onFocus={() => {
+														setValidPriceFocus(true);
+													}}
+													onBlur={() => {
+														setValidPriceFocus(true);
+													}}
+													aria-invalid={validPriceFocus ? "false" : "true"}
+												/>
 
-											<input
-												type='text'
-												name='price'
-												value={price}
-												onChange={(e) => setPrice(e.target.value)}
-												placeholder='حدد سعر الشحن المناسب'
-												className='shipping-price'
-											/>
-											<div className='currency'>ر.س</div>
+												<div className='currency p-2'>ر.س</div>
+											</div>
+											{validPriceFocus && price && price === "0" && (
+												<div
+													className={" d-block important-hint  mb-2  "}
+													style={{
+														fontSize: "16px",
+														whiteSpace: "normal",
+														marginTop: "-10px",
+													}}>
+													تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد
+													من ذلك؟
+												</div>
+											)}
+
+											<button
+												className='save-price-btn'
+												disabled={!otherShippingCompanyStatus}
+												onClick={updatePrice}>
+												تعديل تكلفة الشحن
+											</button>
 										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</>
 					)}

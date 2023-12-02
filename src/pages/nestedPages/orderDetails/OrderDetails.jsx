@@ -25,8 +25,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { usePDF } from "react-to-pdf";
 
 // Icons
+import { PiTrafficSign } from "react-icons/pi";
 import { BiLinkExternal } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
+import { FaMountainCity, FaSignsPost } from "react-icons/fa6";
+import { FaServicestack, FaCity } from "react-icons/fa";
+
+import { BsFillInfoSquareFill } from "react-icons/bs";
 import { AiFillCopy, AiFillCheckCircle } from "react-icons/ai";
 import {
 	ArrowBack,
@@ -439,7 +444,7 @@ const OrderDetails = () => {
 											<div className='box'>
 												<div className='order-head-row'>
 													<StatusIcon />
-													<span className='me-3'>الحالة</span>
+													<span className='me-2'>الحالة</span>
 												</div>
 												<div className='order-data-row'>
 													<span>{fetchedData?.data?.orders?.status}</span>
@@ -448,7 +453,7 @@ const OrderDetails = () => {
 											<div className='box'>
 												<div className='order-head-row'>
 													<DateIcon className='date-icon' />
-													<span className='me-3'>تاريخ الطلب</span>
+													<span className='me-2'>تاريخ الطلب</span>
 												</div>
 
 												<div className='order-data-row'>
@@ -473,7 +478,7 @@ const OrderDetails = () => {
 											<div className='box'>
 												<div className='order-head-row'>
 													<Quantity />
-													<span className='me-3'> عدد المنتجات</span>
+													<span className='me-2'> عدد المنتجات</span>
 												</div>
 												<div className='order-data-row'>
 													<span>{fetchedData?.data?.orders?.quantity}</span>
@@ -481,8 +486,8 @@ const OrderDetails = () => {
 											</div>
 											<div className='box'>
 												<div className='order-head-row'>
-													<Delevray />
-													<span className='me-3'>شركة الشحن</span>
+													<Delevray style={{ width: "34px", height: "34px" }} />
+													<span className='me-2'>شركة الشحن</span>
 												</div>
 												<div className='order-data-row'>
 													<span>
@@ -495,7 +500,8 @@ const OrderDetails = () => {
 											{fetchedData?.data?.orders?.shipping?.track_id && (
 												<div className='box mb-4'>
 													<div className='order-head-row'>
-														<span className='me-3 '>رقم التتبع</span>{" "}
+														<FaServicestack />
+														<span className='me-2'>رقم التتبع</span>{" "}
 														<span
 															className='me-2'
 															style={{
@@ -551,7 +557,8 @@ const OrderDetails = () => {
 											{fetchedData?.data?.orders?.shipping?.shipping_id && (
 												<div className='box mb-4'>
 													<div className='order-head-row'>
-														<span className='me-3'>رقم البوليصة</span>
+														<PiTrafficSign />
+														<span className='me-2'>رقم البوليصة</span>
 													</div>
 													<div className='order-data-row'>
 														<span>
@@ -563,7 +570,10 @@ const OrderDetails = () => {
 										</div>
 										<div className=''>
 											<div className='order-head-row'>
-												<span className='me-3'>ملاحظات الطلب</span>
+												<BsFillInfoSquareFill
+													style={{ width: "22px", height: "22px" }}
+												/>
+												<span className='me-2'>ملاحظات الطلب</span>
 											</div>
 											<div className='order-data-row'>
 												<span
@@ -634,7 +644,7 @@ const OrderDetails = () => {
 																			alt='client'
 																		/>
 																		<span
-																			className='me-3'
+																			className='me-2'
 																			style={{
 																				minWidth: "400px",
 																				maxWidth: "550px",
@@ -898,6 +908,13 @@ const OrderDetails = () => {
 														<div className='col-md-6 col-12 mb-3'>
 															<h6 className='mb-3'>المنطقة</h6>
 															<div className='info-box'>
+																<FaCity
+																	style={{
+																		width: "24px",
+																		height: "24px",
+																		fill: "#1dbbbe",
+																	}}
+																/>
 																<span style={{ whiteSpace: "normal" }}>
 																	{translateProvinceName(
 																		fetchedData?.data?.orders?.OrderAddress
@@ -908,7 +925,15 @@ const OrderDetails = () => {
 														</div>
 														<div className='col-md-6 col-12 mb-3'>
 															<h6 className='mb-3'>المدينة</h6>
+
 															<div className='info-box'>
+																<FaMountainCity
+																	style={{
+																		width: "24px",
+																		height: "24px",
+																		fill: "#1dbbbe",
+																	}}
+																/>
 																<span style={{ whiteSpace: "normal" }}>
 																	{translateCityName(
 																		fetchedData?.data?.orders?.OrderAddress
@@ -922,6 +947,13 @@ const OrderDetails = () => {
 															<div className='col-md-6 col-12 mb-3'>
 																<h6 className='mb-3'>الرمز البريدي</h6>
 																<div className='info-box'>
+																	<FaSignsPost
+																		style={{
+																			width: "24px",
+																			height: "24px",
+																			fill: "#1dbbbe",
+																		}}
+																	/>
 																	<span style={{ whiteSpace: "normal" }}>
 																		{
 																			fetchedData?.data?.orders?.OrderAddress
