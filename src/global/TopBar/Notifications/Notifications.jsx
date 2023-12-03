@@ -168,7 +168,7 @@ const Notifications = () => {
 													not?.read_at === null || not?.read_at === ""
 														? "un-read"
 														: ""
-												} notification-data`}>
+												} notification-data text-overflow`}>
 												{not?.message}
 											</span>
 										</div>

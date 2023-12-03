@@ -566,14 +566,17 @@ textarea,
 }
 
 .navbar-nav .notification-dropdown li {
-	background: #fafafa;
+	background: #fff;
 	padding: 10px 0px;
 }
 
-.navbar-nav .notification-dropdown li:hover, .navbar-nav .notification-dropdown li.un-read {
+.navbar-nav .notification-dropdown li:hover {
 	background: #e7f3f9;
 }
 
+.notification-dropdown li.un-read {
+	background: #fafafa;
+}
 
 .navbar-nav .notification-dropdown li .user-name {
 	display: block;
