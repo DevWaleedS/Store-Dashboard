@@ -109,7 +109,7 @@ const VerifyStore = () => {
 															? "صديقي التاجر"
 															: userInfo?.name}
 													</span>{" "}
-													المتجر الخاص تحت المراجعة من قبل الجهات المختصة
+													المتجر الخاص قيد المراجعة من قبل الجهات المختصة
 												</p>
 												<IoMdCloseCircleOutline
 													style={{ cursor: "pointer", fill: "#02466a" }}

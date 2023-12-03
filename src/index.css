@@ -35,9 +35,15 @@ body {
 	overflow-x: hidden !important;
 }
 
-body:has(.MuiPopover-root) {
+body:has(.MuiPopover-root),
+body:has(.MuiBackdrop-root) {
 	overflow: auto !important;
 	padding-right: 0 !important;
+}
+
+.MuiList-root {
+	padding-right: 0 !important;
+	width: 100% !important;
 }
 
 svg:not(:root) {
@@ -452,6 +458,11 @@ textarea,
 	cursor: pointer;
 }
 
+/* Custom scroll style */
+.navbar-nav .dropdown-menu::-webkit-scrollbar {
+	width: 8px;
+}
+
 .navbar-nav .dropdown-menu.user-info-dropdown {
 	--bs-dropdown-bg: none !important;
 	--bs-dropdown-border-width: none !important;
@@ -523,15 +534,12 @@ textarea,
 	border: 1px solid var(--gray-100);
 	top: 130% !important;
 	left: -330px;
-	padding: 10px;
+	padding: 10px 0 0;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	-ms-border-radius: 4px;
 	-o-border-radius: 4px;
-	width: 376px;
-	height: 376px;
-	overflow-y: auto;
 }
 
 .navbar-nav .notification-dropdown .notifications-title {
@@ -551,6 +559,12 @@ textarea,
 	color: var(--second-500);
 }
 
+.navbar-nav .notification-dropdown .notification-wrapper {
+	width: 376px;
+	height: 300px;
+	overflow-y: auto;
+}
+
 .navbar-nav .notification-dropdown li {
 	background: #fafafa;
 	padding: 10px 0px;
@@ -568,11 +582,18 @@ textarea,
 	color: #011723;
 	font-weight: 500;
 }
+.navbar-nav .notification-dropdown li .user-name.un-read {
+	font-weight: 600;
+}
 
 .navbar-nav .notification-dropdown li .notification-data {
 	font-size: 16px;
 	letter-spacing: 0px;
 	color: #67747b;
+}
+.navbar-nav .notification-dropdown li .notification-data.un-read {
+	font-weight: 500;
+	color: #011723;
 }
 
 .navbar-nav .notification-dropdown li img {

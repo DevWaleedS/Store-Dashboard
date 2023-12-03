@@ -98,11 +98,15 @@ const Notifications = () => {
 				</Badge>
 			</div>
 
-			<ul className='dropdown-menu notification-dropdown'>
+			<ul
+				className='dropdown-menu notification-dropdown'
+				style={{ direction: "rtl" }}>
 				{fetchedData?.data?.notifications.length === 0 ? (
 					<></>
 				) : (
-					<div className='d-flex justify-content-between align-items-center mb-2 px-3 notification-header'>
+					<div
+						className='d-flex justify-content-between align-items-center mb-2 px-3 notification-header'
+						style={{ direction: "ltr" }}>
 						<span
 							onClick={() => deleteNotifications()}
 							className='delete-notifications'>
@@ -112,34 +116,51 @@ const Notifications = () => {
 					</div>
 				)}
 				{fetchedData?.data?.notifications.length === 0 ? (
-					<div className='h-100 d-flex flex-column align-items-center justify-content-center'>
-						<p>!لايوجد اشعارات حتى هذه اللحظة</p>
+					<div className='notification-wrapper'>
+						<div className='h-100 d-flex flex-column align-items-center justify-content-center'>
+							<p style={{ direction: "ltr" }}>!لايوجد اشعارات حتى هذه اللحظة</p>
+						</div>
 					</div>
 				) : (
-					fetchedData?.data?.notifications?.map((not, index) => (
-						<li
-							key={index}
-							className=''
-							onClick={() => {
-								navigate("/Notifications");
-							}}>
-							<div
-								className='dropdown-item d-flex justify-content-end align-items-center text-overflow '
-								to='UserDetails'>
-								<div className='me-2'>
-									<span className='user-name'>{not?.user[0]?.name}</span>
-									<span className='notification-data'>{not?.message}</span>
+					<div className='notification-wrapper'>
+						{fetchedData?.data?.notifications?.map((not, index) => (
+							<li
+								key={index}
+								onClick={() => {
+									navigate("/Notifications");
+								}}>
+								<div
+									className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center text-overflow '
+									to='UserDetails'>
+									<div className='me-2'>
+										<span
+											className={`${
+												not?.read_at === null || not?.read_at === ""
+													? "un-read"
+													: ""
+											} user-name`}>
+											{not?.user[0]?.name}
+										</span>
+										<span
+											className={`${
+												not?.read_at === null || not?.read_at === ""
+													? "un-read"
+													: ""
+											} notification-data`}>
+											{not?.message}
+										</span>
+									</div>
+									<img
+										width={35}
+										height={35}
+										className='img-fluid'
+										src={not?.user[0]?.image}
+										alt={not?.user[0]?.name}
+									/>
 								</div>
-								<img
-									width={35}
-									height={35}
-									className='img-fluid'
-									src={not?.user[0]?.image}
-									alt={not?.user[0]?.name}
-								/>
-							</div>
-						</li>
-					))
+							</li>
+						))}
+					</div>
 				)}
 			</ul>
 		</li>

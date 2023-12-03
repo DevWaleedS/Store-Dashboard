@@ -270,7 +270,7 @@ const Notifications = () => {
 																</div>
 
 																<div className='d-flex flex-row align-items-center '>
-																	<img
+																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
 																				"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
@@ -280,8 +280,6 @@ const Notifications = () => {
 																				`https://backend.atlbha.com/api/Store/NotificationDelete/${not?.id}`
 																			);
 																		}}
-																		src={DeleteIcon}
-																		alt='delete-icon'
 																		style={{ cursor: "pointer" }}
 																	/>
 																</div>

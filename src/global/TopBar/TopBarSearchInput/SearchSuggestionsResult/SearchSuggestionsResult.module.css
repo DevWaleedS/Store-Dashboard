@@ -15,6 +15,11 @@
 	-o-border-radius: 4px;
 	overflow-y: auto;
 }
+
+/* Custom scroll style */
+.search_suggestions_result_wrapper::-webkit-scrollbar {
+	width: 8px;
+}
 @media (max-width: 992px) {
 	.search_suggestions_result_wrapper {
 		top: 50px;
