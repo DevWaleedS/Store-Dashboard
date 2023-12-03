@@ -158,9 +158,11 @@ const Notifications = () => {
 										markSingleNotificationAsRead(not?.id);
 									}}>
 									<div
-										className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center text-overflow '
+										className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center '
 										to='UserDetails'>
-										<div className='me-2 text-overflow '>
+										<div
+											className='me-2 text-overflow '
+											style={{ textAlign: "right" }}>
 											<span
 												className={`${
 													not?.read_at === null || not?.read_at === ""
@@ -174,7 +176,7 @@ const Notifications = () => {
 													not?.read_at === null || not?.read_at === ""
 														? "un-read"
 														: ""
-												} notification-data text-overflow`}>
+												} notification-data`}>
 												{not?.message}
 											</span>
 										</div>
