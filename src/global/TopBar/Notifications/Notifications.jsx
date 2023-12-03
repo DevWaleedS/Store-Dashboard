@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import Badge from "@mui/material/Badge";
@@ -12,32 +12,33 @@ import { useCookies } from "react-cookie";
 import useFetch from "../../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 
+// Loading Component
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { toast } from "react-toastify";
+
 const Notifications = () => {
 	const navigate = useNavigate();
 	const [cookies] = useCookies(["access_token"]);
+	const [loading, setLoading] = useState(false);
+	const [closeMenu, setCloseMenu] = useState(false);
+
 	// calling notifications
 	const { fetchedData, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);
 	// ---------------------------------------------------------
 
-	// Mark a notification as read
-	const markNotificationAsRead = (e) => {
+	// Mark single notification as read
+	const markSingleNotificationAsRead = (id) => {
 		if (fetchedData?.data?.count_of_notifications === 0) return;
 
-		const queryParams = fetchedData?.data?.notifications
-			?.map((not) => `id[]=${not?.id}`)
-			.join("&");
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/NotificationRead?${queryParams}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
-					},
-				}
-			)
+			.get(`https://backend.atlbha.com/api/Store/NotificationRead?id[]=${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${cookies?.access_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setReload(!reload);
@@ -46,6 +47,7 @@ const Notifications = () => {
 				}
 			});
 	};
+	/* ------------------------------------------------------------------------------- */
 
 	// Delete Notification
 	const deleteNotifications = () => {
@@ -65,8 +67,11 @@ const Notifications = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setReload(!reload);
+					setLoading(!loading);
 				} else {
-					setReload(!reload);
+					toast.error(res?.data?.message?.ar || res?.data?.message?.en, {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -75,12 +80,11 @@ const Notifications = () => {
 	return (
 		<li className='nav-item notification '>
 			<div
-				className='nav-link dropdown'
+				id='dropdownMenuClickableInside'
 				data-bs-toggle='dropdown'
+				data-bs-auto-close={closeMenu ? true : false}
 				aria-expanded='false'
-				onClick={() => {
-					markNotificationAsRead();
-				}}>
+				className='nav-link'>
 				<Badge
 					max={50}
 					badgeContent={fetchedData?.data?.count_of_notifications}
@@ -99,7 +103,10 @@ const Notifications = () => {
 			</div>
 
 			<ul
-				className='dropdown-menu notification-dropdown'
+				aria-labelledby='dropdownMenuClickableInside'
+				className={`${
+					closeMenu ? true : false
+				} dropdown-menu notification-dropdown`}
 				style={{ direction: "rtl" }}>
 				{fetchedData?.data?.notifications.length === 0 ? (
 					<></>
@@ -108,7 +115,7 @@ const Notifications = () => {
 						className='d-flex justify-content-between align-items-center mb-2 px-3 notification-header'
 						style={{ direction: "ltr" }}>
 						<span
-							onClick={() => deleteNotifications()}
+							onClick={deleteNotifications}
 							className='delete-notifications'>
 							حذف الكل
 						</span>
@@ -123,43 +130,59 @@ const Notifications = () => {
 					</div>
 				) : (
 					<div className='notification-wrapper'>
-						{fetchedData?.data?.notifications?.map((not, index) => (
-							<li
-								key={index}
-								onClick={() => {
-									navigate("/Notifications");
-								}}>
-								<div
-									className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center text-overflow '
-									to='UserDetails'>
-									<div className='me-2'>
-										<span
-											className={`${
-												not?.read_at === null || not?.read_at === ""
-													? "un-read"
-													: ""
-											} user-name`}>
-											{not?.user[0]?.name}
-										</span>
-										<span
-											className={`${
-												not?.read_at === null || not?.read_at === ""
-													? "un-read"
-													: ""
-											} notification-data`}>
-											{not?.message}
-										</span>
-									</div>
-									<img
-										width={35}
-										height={35}
-										className='img-fluid'
-										src={not?.user[0]?.image}
-										alt={not?.user[0]?.name}
-									/>
+						{loading ? (
+							<div className='notification-wrapper'>
+								<div className='h-100 d-flex flex-column align-items-center justify-content-center'>
+									<CircularLoading />
 								</div>
-							</li>
-						))}
+							</div>
+						) : (
+							fetchedData?.data?.notifications?.map((not, index) => (
+								<li
+									key={index}
+									className={`${
+										not?.read_at === null || not?.read_at === ""
+											? "un-read"
+											: ""
+									}`}
+									onClick={() => {
+										setReload(!reload);
+										setCloseMenu(!closeMenu);
+										navigate("/Notifications");
+										markSingleNotificationAsRead(not?.id);
+									}}>
+									<div
+										className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center text-overflow '
+										to='UserDetails'>
+										<div className='me-2 text-overflow '>
+											<span
+												className={`${
+													not?.read_at === null || not?.read_at === ""
+														? "un-read"
+														: ""
+												} user-name`}>
+												{not?.user[0]?.name}
+											</span>
+											<span
+												className={`${
+													not?.read_at === null || not?.read_at === ""
+														? "un-read"
+														: ""
+												} notification-data`}>
+												{not?.message}
+											</span>
+										</div>
+										<img
+											width={35}
+											height={35}
+											className='img-fluid'
+											src={not?.user[0]?.image}
+											alt={not?.user[0]?.name}
+										/>
+									</div>
+								</li>
+							))
+						)}
 					</div>
 				)}
 			</ul>

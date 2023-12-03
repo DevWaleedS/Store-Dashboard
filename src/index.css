@@ -570,9 +570,10 @@ textarea,
 	padding: 10px 0px;
 }
 
-.navbar-nav .notification-dropdown li:hover {
+.navbar-nav .notification-dropdown li:hover, .navbar-nav .notification-dropdown li.un-read {
 	background: #e7f3f9;
 }
+
 
 .navbar-nav .notification-dropdown li .user-name {
 	display: block;
@@ -590,6 +591,8 @@ textarea,
 	font-size: 16px;
 	letter-spacing: 0px;
 	color: #67747b;
+	display: flex;
+	justify-content: flex-start;
 }
 .navbar-nav .notification-dropdown li .notification-data.un-read {
 	font-weight: 500;
