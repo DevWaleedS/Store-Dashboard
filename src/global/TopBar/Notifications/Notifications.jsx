@@ -21,6 +21,7 @@ const Notifications = () => {
 	const [cookies] = useCookies(["access_token"]);
 	const [loading, setLoading] = useState(false);
 	const [closeMenu, setCloseMenu] = useState(false);
+	const [countOfNotifications, setCountOfNotifications] = useState(false);
 
 	// calling notifications
 	const { fetchedData, reload, setReload } = useFetch(
@@ -87,7 +88,9 @@ const Notifications = () => {
 				className='nav-link'>
 				<Badge
 					max={50}
-					badgeContent={fetchedData?.data?.count_of_notifications}
+					badgeContent={
+						countOfNotifications ? 0 : fetchedData?.data?.count_of_notifications
+					}
 					sx={{
 						"& .MuiBadge-badge": {
 							backgroundColor: "#ffc06a",
@@ -96,6 +99,9 @@ const Notifications = () => {
 						},
 					}}>
 					<MdNotifications
+						onClick={() => {
+							setCountOfNotifications(true);
+						}}
 						title='الاشعارات'
 						style={{ width: "24px", height: "24px", fill: "#03476a" }}
 					/>

@@ -52,22 +52,33 @@ const Notifications = () => {
 
 	// formatDate
 	const formatDate = (date) => {
-		const calcPassedDays = (date1, date2) =>
-			Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
-		const currentDate = calcPassedDays(+new Date(), +new Date(date));
+		const calcPassedMinutes = (date1, date2) =>
+			Math.round(Math.abs(date2 - date1) / (1000 * 60));
 
-		if (currentDate === 0)
+		const currentMinutes = calcPassedMinutes(+new Date(), +new Date(date));
+
+		if (currentMinutes <= 1) {
+			return "الآن";
+		}
+
+		const currentDate = Math.round(currentMinutes / 60 / 24);
+
+		if (currentDate === 0) {
 			return "اليوم،" + moment(date).locale("ar").format(" h:mm a");
-		if (currentDate === 1)
+		}
+		if (currentDate === 1) {
 			return "أمس،" + moment(date).locale("ar").format(" h:mm a");
-		if (currentDate === 2)
-			return "منذ يومان،" + moment(date).locale("ar").format(" h:mm a");
-		if (currentDate <= 7)
+		}
+		if (currentDate === 2) {
+			return "منذ يومين،" + moment(date).locale("ar").format(" h:mm a");
+		}
+		if (currentDate <= 7) {
 			return (
 				`منذ ${currentDate} أيام،` + moment(date).locale("ar").format(" h:mm a")
 			);
+		}
 
-		return moment(date).locale("ar").format("D MMMM YYYY, h:mm a");
+		return moment(date).locale("ar").format("D MMMM YYYY");
 	};
 	// -----------------------------------------------------------------
 
