@@ -155,10 +155,13 @@ const CourseDetails = () => {
 																			onClick={() => {
 																				dispatch(openModal(video));
 																			}}
-																			className='unit-name text-overflow'
-																			style={{ cursor: "pointer" }}>
-																			<BiPlayCircle />
-																			<span className='me-2'>
+																			className='unit-name text-overflow'>
+																			<BiPlayCircle
+																				style={{ cursor: "pointer" }}
+																			/>
+																			<span
+																				className='me-2 video-name'
+																				style={{ cursor: "pointer" }}>
 																				{video?.name}
 																			</span>
 																		</div>

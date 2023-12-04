@@ -4964,8 +4964,13 @@ input:disabled {
 	text-align: right;
 }
 
-.accordion-box span {
+.accordion-box span.video-name {
 	font-size: 20px;
+	color:var(--blue-500)
+}
+.accordion-box span.video-name:hover{
+	color:var(--blue-600)
+
 }
 
 .accordion-box .accordion-body {
