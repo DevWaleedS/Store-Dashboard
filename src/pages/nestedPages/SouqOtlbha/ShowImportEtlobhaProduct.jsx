@@ -294,9 +294,19 @@ const ShowImportEtlobhaProduct = () => {
 																				style={{
 																					cursor: "pointer",
 																				}}
-																				poster={<PlayVideo />}
 																				src={item?.image}
 																				className='img-fluid'
+																			/>
+
+																			<PlayVideo
+																				onClick={() => {
+																					setImagesPreview(item?.image);
+																				}}
+																				style={{
+																					fill: "#fff",
+																					cursor: "pointer",
+																					position: "absolute",
+																				}}
 																			/>
 																		</div>
 																	);

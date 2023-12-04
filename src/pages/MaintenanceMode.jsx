@@ -20,7 +20,6 @@ import { closeMaintenanceModeModal } from "../store/slices/MaintenanceModeModal"
 // MUI
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Backdrop from "@mui/material/Backdrop";
 import { Button, Switch } from "@mui/material";
 
 // Icons
@@ -174,11 +173,7 @@ const MaintenanceModeModal = () => {
 							setNavbarZindex(false);
 							dispatch(closeMaintenanceModeModal());
 						}}
-						closeAfterTransition
-						BackdropComponent={Backdrop}
-						BackdropProps={{
-							timeout: 500,
-						}}>
+						closeAfterTransition>
 						<Fade in={isOpenMaintenanceModeModal}>
 							<div style={style}>
 								<form onSubmit={handleSubmit(UpdateMaintenanceMode)}>

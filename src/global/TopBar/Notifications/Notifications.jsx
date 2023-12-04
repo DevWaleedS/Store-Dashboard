@@ -181,9 +181,7 @@ const Notifications = () => {
 											</span>
 										</div>
 										<img
-											width={35}
-											height={35}
-											className='img-fluid'
+											className='img-fluid notification_img_style'
 											src={not?.user[0]?.image}
 											alt={not?.user[0]?.name}
 										/>

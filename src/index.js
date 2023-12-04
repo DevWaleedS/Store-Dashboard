@@ -34,7 +34,6 @@ import {
 	Pages,
 	PaymentGetways,
 	Report,
-	MainInformation,
 	Management,
 	SocialPages,
 	//PackageUpgrade,
@@ -115,6 +114,7 @@ import { RestorePassword } from "./pages/Login/ResetPasswordPages/RestorePasswor
 import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
 import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
 import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
+import { MainInformation } from "./pages/MainInformationSetting";
 
 /**
  * ----------------------------------------------------------------------------------------------

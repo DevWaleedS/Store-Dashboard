@@ -45,10 +45,6 @@ const CourseVideoModal = () => {
 			{isOpenVideoModal && currentVideo && videoUrl && (
 				<div>
 					<Modal
-						sx={{
-							backgroundColor: "none",
-							backdropFilter: "blur(4px)",
-						}}
 						aria-labelledby='transition-modal-title'
 						aria-describedby='transition-modal-description'
 						open={isOpenVideoModal}

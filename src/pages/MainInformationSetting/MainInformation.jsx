@@ -6,33 +6,30 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import ImageUploading from "react-images-uploading";
 
 // MUI
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
-import Switch from "@mui/material/Switch";
 import MenuItem from "@mui/material/MenuItem";
 
 // Context
-import Context from "../Context/context";
-import { LoadingContext } from "../Context/LoadingProvider";
+import Context from "../../Context/context";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Redux
-import { openVerifyAfterMainModal } from "../store/slices/VerifyStoreAlertAfterMainModal-slice";
 import { useDispatch } from "react-redux";
+import { openVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAfterMainModal-slice";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
-import { TopBarSearchInput } from "../global";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import useFetch from "../../Hooks/UseFetch";
+import { TopBarSearchInput } from "../../global";
+import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
+import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
-import { MdFileUpload } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+
 import {
 	Address,
 	CityIcon,
@@ -40,36 +37,8 @@ import {
 	Document,
 	HomeIcon,
 	Timer,
-} from "../data/Icons";
-
-// -------------------------------------------------------------
-const style = {
-	position: "absolute",
-	top: "55%",
-	left: "50%",
-	transform: "translate(-50%, -50%)",
-	width: "900px",
-	maxWidth: "90%",
-	bgcolor: "#fff",
-	border: "1px solid #707070",
-	borderRadius: "16px",
-	boxShadow: 24,
-};
-
-const contentStyle = {
-	height: "500px",
-	display: "flex",
-	flexDirection: "column",
-	gap: "18px",
-	fontSize: "20px",
-	fontWight: 400,
-	letterSpacing: "0.2px",
-	color: "#FFFFFF",
-	padding: "30px 80px 20px",
-	whiteSpace: "normal",
-	overflowY: "auto",
-	overflowX: "hidden",
-};
+} from "../../data/Icons";
+import HoursWorks from "./HoursWorks/HoursWorks";
 
 const MainInformation = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -77,8 +46,9 @@ const MainInformation = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [openHoursWork, setOpenHoursWork] = useState(false);
 
+	// Hours Works
+	const [openHoursWork, setOpenHoursWork] = useState(false);
 	const [openAlawys, setOpenAlawys] = useState();
 	const [workDays, setWorkDays] = useState([
 		{
@@ -123,6 +93,7 @@ const MainInformation = () => {
 	const [defaultStoreIcon, setDefaultStoreIcon] = useState("");
 	const [storeLogo, setStoreLogo] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
+	const [storeName, setStoreName] = useState("");
 	const [domain, setDomain] = useState("");
 	const [country, setCountry] = useState("");
 	const [city, setCity] = useState("");
@@ -139,6 +110,7 @@ const MainInformation = () => {
 		description: "",
 		logo: "",
 		icon: "",
+		store_name: "",
 		domain: "",
 		city_id: "",
 		country_id: "",
@@ -146,12 +118,32 @@ const MainInformation = () => {
 		storeEmail: "",
 		storeAddress: "",
 	});
+	const resetSettingError = () => {
+		setSettingErr({
+			description: "",
+			logo: "",
+			icon: "",
+			store_name: "",
+			domain: "",
+			city_id: "",
+			country_id: "",
+			phoneNumber: "",
+			storeEmail: "",
+			storeAddress: "",
+		});
+	};
+	// ----------------------------------------
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
 		if (fetchedData?.data?.setting_store) {
 			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
+			setStoreName(fetchedData?.data?.setting_store?.store_name);
+			localStorage.setItem(
+				"storeName",
+				fetchedData?.data?.setting_store?.store_name
+			);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);
@@ -176,127 +168,6 @@ const MainInformation = () => {
 		}
 	}, [fetchedData?.data?.setting_store]);
 
-	// ---------------------------
-	const resetSettingError = () => {
-		setSettingErr({
-			description: "",
-			logo: "",
-			icon: "",
-			domain: "",
-			city_id: "",
-			country_id: "",
-			phoneNumber: "",
-			storeEmail: "",
-			storeAddress: "",
-		});
-	};
-	// ----------------------------------------------
-
-	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
-
-	// Function to handle notifications and update the state based on the image type (logo or icon)
-	const handleInvalid = (type, errMsg, resetState) => {
-		// Display a warning notification
-		toast.warning(errMsg, { theme: "light" });
-
-		// Update the error state based on the image type
-		setSettingErr((prevErr) => ({
-			...prevErr,
-			[type]: errMsg,
-		}));
-
-		// Reset the image state
-		resetState();
-	};
-
-	// Function to handle changes in the logo
-	const onChangeStoreLogo = (imageList, addUpdateIndex) => {
-		// Check if the image size is valid
-		const isSizeValid = imageList.every(
-			(image) => image.file.size <= maxFileSize
-		);
-
-		// Check if the image dimensions are valid
-		imageList.every((image) => {
-			const img = new Image();
-
-			// Set the event listener to check dimensions once the image is loaded
-			img.onload = () => {
-				if (img.width !== 110 && img.height !== 110) {
-					// If dimensions are not valid, display a warning and reset the logo state
-					handleInvalid(
-						"logo",
-						"مقاس الشعار يجب أن يكون  110 بكسل عرض 110 بكسل ارتفاع.",
-						() => setStoreLogo([])
-					);
-				}
-			};
-
-			img.src = image?.data_url;
-
-			return true; // Returning true because the actual check is done in the onload event
-		});
-
-		// If the image size is not valid
-		if (!isSizeValid) {
-			// Display a warning message and reset the logo state
-			handleInvalid(
-				"logo",
-				"حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.",
-
-				() => setStoreLogo([])
-			);
-			return;
-		}
-
-		// If all checks are valid, update the state
-		setSettingErr({ ...settingErr, logo: null });
-		setStoreLogo(imageList);
-	};
-
-	// Function to handle changes in the icon
-	const onChangeSelectIcon = (imageList, addUpdateIndex) => {
-		// Check if the image size is valid
-		const isSizeValid = imageList.every(
-			(image) => image.file.size <= maxFileSize
-		);
-
-		// Check if the image dimensions are valid
-		imageList.every((image) => {
-			const img = new Image();
-
-			// Set the event listener to check dimensions once the image is loaded
-			img.onload = () => {
-				if (img.width !== 32 && img.height !== 32) {
-					// If dimensions are not valid, display a warning and reset the icon state
-					handleInvalid(
-						"icon",
-						"مقاس الايقون يجب أن يكون  32 بكسل عرض 32 بكسل ارتفاع.",
-						() => setStoreIcon([])
-					);
-				}
-			};
-
-			img.src = image?.data_url;
-
-			return true; // Returning true because the actual check is done in the onload event
-		});
-
-		// If the image size is not valid
-		if (!isSizeValid) {
-			// Display a warning message and reset the icon state
-			handleInvalid("icon", "حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.", () =>
-				setStoreIcon([])
-			);
-			return;
-		}
-
-		// If all checks are valid, update the state
-		setSettingErr({ ...settingErr, icon: null });
-		setStoreIcon(imageList);
-	};
-
 	// ----------------------------------------------------------------------------
 
 	// TO HANDLE VALIDATION USER PHONE NUMBER
@@ -312,59 +183,6 @@ const MainInformation = () => {
 	}, [domain]);
 	// ------------------------------------------------------------------
 
-	const updateState = (index) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, i) => {
-				if (index === i) {
-					return {
-						...obj,
-						status: obj?.status === "active" ? "not_active" : "active",
-					};
-				}
-				return obj;
-			});
-
-			return newState;
-		});
-	};
-
-	const updateFromTime = (index, value) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, i) => {
-				if (index === i) {
-					return { ...obj, from: value };
-				}
-				return obj;
-			});
-			return newState;
-		});
-	};
-
-	const updateToTime = (index, value) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, i) => {
-				if (index === i) {
-					return { ...obj, to: value };
-				}
-				return obj;
-			});
-			return newState;
-		});
-	};
-
-	const updateAll = (value) => {
-		setWorkDays((prevState) => {
-			const newState = prevState.map((obj, index) => {
-				return {
-					...obj,
-					status: fetchedData?.data?.setting_store?.workDays?.[index]?.status,
-					from: fetchedData?.data?.setting_store?.workDays?.[index]?.from,
-					to: fetchedData?.data?.setting_store?.workDays?.[index]?.to,
-				};
-			});
-			return newState;
-		});
-	};
 	// -------------------------------------------------------------------
 	// to update UpdateMaintenanceMode values
 	const settingsStoreUpdate = () => {
@@ -381,6 +199,7 @@ const MainInformation = () => {
 		if (storeIcon?.length !== 0) {
 			formData.append("icon", storeIcon[0]?.file);
 		}
+		formData.append("store_name", storeName);
 		formData.append("domain", domain);
 		formData.append("country_id", country);
 		formData.append("city_id", city);
@@ -443,6 +262,7 @@ const MainInformation = () => {
 					setSettingErr({
 						logo: res?.data?.message?.en?.logo,
 						icon: res?.data?.message?.en?.icon,
+						store_name: res?.data?.message?.en?.store_name?.[0],
 						domain: res?.data?.message?.en?.domain?.[0],
 						country_id: res?.data?.message?.en?.country_id?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
@@ -460,7 +280,9 @@ const MainInformation = () => {
 					toast.error(res?.data?.message?.en?.icon, {
 						theme: "light",
 					});
-
+					toast.error(res?.data?.message?.en?.store_name?.[0], {
+						theme: "light",
+					});
 					toast.error(res?.data?.message?.en?.domain?.[0], {
 						theme: "light",
 					});
@@ -492,174 +314,7 @@ const MainInformation = () => {
 			<Helmet>
 				<title>لوحة تحكم أطلبها | بيانات المتجر الأساسية</title>
 			</Helmet>
-			<Modal
-				open={openHoursWork}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'>
-				<Box component={"div"} sx={style}>
-					<div
-						className='d-flex flex-row align-items-center justify-content-between p-4'
-						style={{ backgroundColor: "#1DBBBE", borderRadius: "8px" }}>
-						<h6 style={{ color: "#F7FCFF" }}>ساعات العمل</h6>
-						<AiOutlineCloseCircle
-							onClick={() => {
-								setOpenHoursWork(false);
-								setOpenAlawys(
-									fetchedData?.data?.setting_store?.working_status === "active"
-										? true
-										: false
-								);
-								setWorkDays(fetchedData?.data?.setting_store?.workDays);
-							}}
-							style={{
-								color: "#ffffff",
-								width: "22px",
-								height: "22px",
-								cursor: "pointer",
-							}}
-						/>
-					</div>
-					<div
-						className='delegate-request-alert text-center'
-						style={contentStyle}>
-						<div
-							className='d-flex flex-row align-items-center justify-content-center gap-3'
-							style={{
-								backgroundColor: !openAlawys ? "#011723" : "#ADB5B9",
-								borderRadius: "8px",
-								fontSize: "20px",
-								padding: "14px",
-							}}>
-							<Switch
-								onChange={(e) => {
-									setOpenAlawys(!openAlawys);
-									updateAll(e.target.checked);
-								}}
-								checked={!openAlawys}
-								sx={{
-									width: "36px !important",
-									height: "22px !important",
-									padding: "0 !important",
-									borderRadius: "20px !important",
-									"& .MuiSwitch-track": {
-										width: "36px !important",
-										height: "22px !important",
-										opacity: 1,
-										backgroundColor: "rgba(0,0,0,.25)",
-										boxSizing: "border-box",
-										borderRadius: "20px !important",
-									},
-									"& .MuiSwitch-thumb": {
-										boxShadow: "none",
-										width: "16px !important",
-										height: "16px !important",
-										borderRadius: "50% !important",
-										transform: "translate(3px,3px) !important",
-										color: "#fff",
-									},
 
-									"&:hover": {
-										"& .MuiSwitch-thumb": {
-											boxShadow: "none !important",
-										},
-									},
-
-									"& .MuiSwitch-switchBase": {
-										padding: "0px !important",
-										top: "0px !important",
-										left: "0px !important",
-										"&.Mui-checked": {
-											transform: "translateX(12px) !important",
-											color: "#fff",
-											"& + .MuiSwitch-track": {
-												opacity: 1,
-												backgroundColor: "#3AE374",
-											},
-										},
-									},
-								}}
-							/>
-							مفتوح دائماً
-						</div>
-						{workDays?.map((day, index) => (
-							<div
-								key={index}
-								className='work-day d-flex flex-sm-row flex-column align-items-center justify-content-between px-3 py-2 gap-3'
-								style={{
-									minWidth: "max-content",
-									minHeight: "80px",
-									backgroundColor: "#FFFFFF",
-									boxShadow: "0px 3px 6px #0000000F",
-									borderRadius: "8px",
-								}}>
-								<div className='d-flex flex-row align-items-center gap-3'>
-									<span
-										style={{
-											minWidth: "100px",
-											color: "#011723",
-											fontSize: "18px",
-											fontWeight: "500",
-										}}>
-										{day?.day?.name}
-									</span>
-									<button
-										disabled={!openAlawys}
-										onClick={() => updateState(index)}
-										className='day-switch'
-										style={{
-											backgroundColor:
-												day?.status === "active" ? "#3AE374" : "#ADB5B9",
-										}}>
-										{day?.status === "not_active" && <span>مغلق</span>}
-										<p className='circle'></p>
-										{day?.status === "active" && <span>مفتوح</span>}
-									</button>
-								</div>
-
-								{day?.status === "active" && (
-									<div className='choose-time'>
-										<div className='time-input'>
-											<input
-												value={day?.from}
-												onChange={(e) => updateFromTime(index, e.target.value)}
-												type='time'
-												style={{ color: "#000000" }}
-												disabled={!openAlawys}
-											/>
-										</div>
-										<div className='time-input'>
-											<input
-												value={day?.to}
-												onChange={(e) => updateToTime(index, e.target.value)}
-												type='time'
-												style={{ color: "#000000" }}
-												disabled={!openAlawys}
-											/>
-										</div>
-									</div>
-								)}
-							</div>
-						))}
-
-						<button
-							onClick={() => {
-								setEndActionTitle("تم حفظ تحديث ساعات العمل");
-								setOpenHoursWork(false);
-							}}
-							style={{
-								minHeight: "56px",
-								color: "#fff",
-								fontSize: "20px",
-								fontWight: 500,
-								backgroundColor: "#1DBBBE",
-								borderRadius: " 8px",
-							}}
-							className='w-100'>
-							حفظ ساعات العمل
-						</button>
-					</div>
-				</Box>
-			</Modal>
 			<section className='main-info-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>
 					<div className='search-header-box'>
@@ -696,128 +351,50 @@ const MainInformation = () => {
 						</div>
 					) : (
 						<div className='row'>
+							{/** Upload Logo row */}
 							<div className='col-12 mb-4'>
-								{/** Upload Logo row */}
-								<div className='row d-flex justify-content-center align-items-center mb-3'>
-									<div className='col-lg-6 col-12'>
-										{/** Image Perv Section */}
-										<div className='upload-logo-set d-flex justify-content-center align-items-center flex-column'>
-											{/** Upload Image  */}
-											<ImageUploading
-												value={storeLogo}
-												onChange={onChangeStoreLogo}
-												dataURLKey='data_url'
-												acceptType={["jpg", "png", "jpeg"]}>
-												{({ imageList, onImageUpload, dragProps }) => (
-													// Ui For Upload Log
-													<Fragment>
-														{/** Preview Image Box */}
-														<div className='upload-image-wrapper'>
-															{storeLogo[0] ? (
-																<div className='upload-image-bx mb-2'>
-																	<img
-																		src={storeLogo?.[0]?.data_url}
-																		alt={""}
-																		className='img-fluid'
-																	/>
-																</div>
-															) : (
-																<div className='upload-image-bx mb-2'>
-																	<img
-																		src={defaultStoreLogo}
-																		alt={""}
-																		className='img-fluid'
-																	/>
-																</div>
-															)}
-														</div>
-
-														{/** upload btn */}
-														<button
-															className='upload-log-btn'
-															onClick={onImageUpload}
-															{...dragProps}>
-															<span className='d-flex justify-content-center align-items-center gap-2'>
-																رفع الشعار
-																<div className='tax-text'>
-																	(المقاس الأنسب 110 بكسل عرض 110 بكسل الارتفاع)
-																</div>
-															</span>
-
-															<MdFileUpload />
-														</button>
-
-														{settingErr?.logo && (
-															<>
-																<span className='fs-6 w-100 text-danger'>
-																	{settingErr?.logo}
-																</span>
-															</>
-														)}
-													</Fragment>
-												)}
-											</ImageUploading>
-										</div>
-									</div>
-								</div>
+								{/** Upload logo */}
+								<UploadStoreLogo
+									storeLogo={storeLogo}
+									setStoreLogo={setStoreLogo}
+									defaultStoreLogo={defaultStoreLogo}
+									logoErrors={settingErr?.logo && settingErr?.logo}
+								/>
 							</div>
 
+							{/** Upload Icon row */}
 							<div className='col-12 mb-4'>
-								{/** Upload Icon row */}
-								<div
-									className='row d-flex justify-content-center align-items-center'
-									style={{ cursor: "pointer" }}>
-									<div className='col-lg-8 col-12'>
-										<div className='select-country'>
-											<label htmlFor='upload-icon' className='setting_label'>
-												ايقونة تبويب المتجر في المتصفح
-												<span className='tax-text me-2'>
-													(المقاس الأنسب 32 بكسل عرض 32 بكسل الارتفاع)
-												</span>
-											</label>
-											<div>
-												<ImageUploading
-													value={storeIcon}
-													onChange={onChangeSelectIcon}
-													dataURLKey='data_url'
-													acceptType={["jpg", "png", "jpeg"]}>
-													{({ onImageUpload, dragProps }) => (
-														<div
-															className='upload-icon-btn'
-															onClick={() => {
-																onImageUpload();
-															}}
-															{...dragProps}>
-															<div style={{ width: "35px", height: "35px" }}>
-																{storeIcon[0] ? (
-																	<img
-																		className='img-fluid'
-																		src={storeIcon[0].data_url}
-																		alt=''
-																		style={{ objectFit: "contain" }}
-																	/>
-																) : (
-																	<img
-																		className='img-fluid'
-																		src={defaultStoreIcon}
-																		alt=''
-																		style={{ objectFit: "contain" }}
-																	/>
-																)}
-															</div>
+								<UploadStoreIcon
+									storeIcon={storeIcon}
+									setStoreIcon={setStoreIcon}
+									iconErrors={settingErr?.icon && settingErr?.icon}
+									defaultStoreIcon={defaultStoreIcon}
+								/>
+							</div>
 
-															<MdFileUpload />
-														</div>
-													)}
-												</ImageUploading>
-											</div>
+							<div className=' col-12 mb-4'>
+								<div className='row d-flex justify-content-center align-items-center'>
+									<div className='col-lg-8 col-12'>
+										<div className='store_email'>
+											<label
+												htmlFor='storeName'
+												className='setting_label d-block'>
+												اسم المتجر
+											</label>
+											<input
+												className='text-right store-email-input w-100 '
+												type='text'
+												name='storeName'
+												id='storeName'
+												value={storeName}
+												onChange={(e) => setStoreName(e.target.value)}
+												placeholder='قم بكتابة اسم المتجر الخاص بك'
+											/>
 										</div>
-										{settingErr?.icon && (
-											<div className='d-flex flex-wrap'>
-												<span className='fs-6 w-100 text-danger'>
-													{settingErr?.icon}
-												</span>
-											</div>
+										{settingErr?.store_name && (
+											<span className='fs-6 w-100 text-danger'>
+												{settingErr?.store_name}
+											</span>
 										)}
 									</div>
 								</div>
@@ -1121,7 +698,7 @@ const MainInformation = () => {
 												className='direction-ltr text-right store-email-input w-100'
 												name='store_email'
 												id='store_email'
-												placeholder='البريد الالكتروني'
+												placeholder=' البريد الالكتروني'
 												value={storeEmail}
 												onChange={(e) => setStoreEmail(e.target.value)}
 												disabled={true}
@@ -1260,6 +837,16 @@ const MainInformation = () => {
 					)}
 				</div>
 			</section>
+
+			{/* Hours Works Modal */}
+			<HoursWorks
+				workDays={workDays}
+				openAlawys={openAlawys}
+				setWorkDays={setWorkDays}
+				setOpenAlawys={setOpenAlawys}
+				openHoursWork={openHoursWork}
+				setOpenHoursWork={setOpenHoursWork}
+			/>
 		</>
 	);
 };

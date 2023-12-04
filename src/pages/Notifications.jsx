@@ -57,22 +57,30 @@ const Notifications = () => {
 
 		const currentMinutes = calcPassedMinutes(+new Date(), +new Date(date));
 
-		if (currentMinutes <= 1) {
+		if (currentMinutes < 1) {
 			return "الآن";
+		} else if (currentMinutes === 1) {
+			return "منذ دقيقة";
+		} else if (currentMinutes === 2) {
+			return "منذ دقيقتين";
+		} else if (currentMinutes <= 10) {
+			return `منذ ${currentMinutes} دقائق`;
+		} else if (currentMinutes < 60) {
+			return `منذ ${currentMinutes} دقيقة`;
+		} else if (currentMinutes < 120) {
+			return "منذ ساعة";
+		} else if (currentMinutes < 1440) {
+			const hours = Math.floor(currentMinutes / 60);
+			return `منذ ${hours} ساعة و ${currentMinutes % 60} دقيقة`;
 		}
 
 		const currentDate = Math.round(currentMinutes / 60 / 24);
 
-		if (currentDate === 0) {
-			return "اليوم،" + moment(date).locale("ar").format(" h:mm a");
-		}
 		if (currentDate === 1) {
 			return "أمس،" + moment(date).locale("ar").format(" h:mm a");
-		}
-		if (currentDate === 2) {
+		} else if (currentDate === 2) {
 			return "منذ يومين،" + moment(date).locale("ar").format(" h:mm a");
-		}
-		if (currentDate <= 7) {
+		} else if (currentDate <= 7) {
 			return (
 				`منذ ${currentDate} أيام،` + moment(date).locale("ar").format(" h:mm a")
 			);

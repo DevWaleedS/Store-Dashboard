@@ -136,6 +136,9 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									</>
 								)}
 							</div>
+							<div className='tax-text w-100 hint'>
+								الحد الأقصي للسلايدر الواحد هو 2MG
+							</div>
 						</div>
 					</div>
 					<div className='col-12 mb-2'>

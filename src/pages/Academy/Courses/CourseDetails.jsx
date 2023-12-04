@@ -151,19 +151,16 @@ const CourseDetails = () => {
 																	<li
 																		className='d-flex justify-content-between align-items-center'
 																		key={idx}>
-																		<div className='unit-name text-overflow'>
-																			<BiPlayCircle
-																				style={{ cursor: "pointer" }}
-																				onClick={() => {
-																					dispatch(openModal(video));
-																				}}
-																			/>
+																		<div
+																			onClick={() => {
+																				dispatch(openModal(video));
+																			}}
+																			className='unit-name text-overflow'
+																			style={{ cursor: "pointer" }}>
+																			<BiPlayCircle />
 																			<span className='me-2'>
-																				{" "}
 																				{video?.name}
 																			</span>
-																			{/*This is video modal */}
-																			<CourseVideoModal />
 																		</div>
 																		<div className='unit-time'>
 																			<span>{video?.duration}</span>
@@ -204,6 +201,9 @@ const CourseDetails = () => {
 					</>
 				)}
 			</section>
+
+			{/*This is video modal */}
+			<CourseVideoModal />
 		</>
 	);
 };

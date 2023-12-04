@@ -13,7 +13,7 @@ export { default as SocialPages } from "./SocialPages";
 export { default as Notifications } from "./Notifications";
 export { default as PackageUpgrade } from "./PackageUpgrade";
 export { default as PaymentGetways } from "./PaymentGetways";
-export { default as MainInformation } from "./MainInformation";
+
 export { default as MaintenanceMode } from "./MaintenanceMode";
 export { default as PlatformServices } from "./PlatformServices";
 export { default as PostalSubscriptions } from "./PostalSubscriptions";

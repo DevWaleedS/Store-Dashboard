@@ -68,8 +68,6 @@ const UserProfileImage = () => {
 	useEffect(() => {
 		if (profile) {
 			setUserInfo({
-				user_name: profile?.data?.users?.user_name,
-				name: profile?.data?.users?.name,
 				user_image: profile?.data?.users?.image,
 			});
 		}
@@ -108,9 +106,9 @@ const UserProfileImage = () => {
 					color={colors.white[300]}>
 					<div className='dropdown-title d-md-flex align-items-center d-none'>
 						<span className='me-1 '>
-							{userInfo?.name === null
-								? userInfo?.user_name || "التاجر"
-								: userInfo?.name}
+							{localStorage.getItem("storeName") !== undefined
+								? localStorage.getItem("storeName")
+								: "اسم المتجر"}
 						</span>
 						<IoIosArrowDown />
 					</div>
@@ -121,6 +119,7 @@ const UserProfileImage = () => {
 						anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
 						variant='dot'>
 						<Avatar
+							sx={{ border: "2px solid #ddd" }}
 							alt='avatarImage'
 							src={profile?.data?.users?.image || userInfo?.user_image}
 						/>

@@ -20,7 +20,7 @@ const ShippingCompaniesData = ({
 							{currentShippingPrice === "" ||
 							currentShippingPrice === "0" ||
 							currentShippingPrice === 0 ? (
-								<span>شحن مجاني</span>
+								<span> شحن مجاني </span>
 							) : (
 								<span>{currentShippingPrice} ر.س</span>
 							)}

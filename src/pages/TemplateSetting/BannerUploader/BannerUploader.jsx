@@ -137,11 +137,17 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									</>
 								)}
 							</div>
+							<div
+								className='tax-text w-100 hint'
+								>
+								الحد الأقصي للبنر الواحد هو 2MG
+							</div>
 						</div>
 					</div>
 					<div className='col-12 mb-2'>
 						<div className='add-banners-bts-wrapper mt-md-0 mt-3 px-md-0 px-2'>
 							{/** Btn to upload banners */}
+
 							<div className='add-banners'>
 								<div className='add-banner-btn-box d-flex flex-md-row flex-column justify-content-start align-items-md-center'>
 									<label htmlFor='add-banner-1'>بانر إعلاني رقم 1</label>

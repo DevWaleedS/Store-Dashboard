@@ -201,7 +201,9 @@ const ShippingCompanies = () => {
 										</div>
 										<ShippingCompaniesData
 											shippingCompanyName={item?.name}
-											currentShippingPrice={currentPrice}
+											currentShippingPrice={
+												otherShippingCompanyStatus && currentPrice
+											}
 											image={item?.image}
 											changeStatus={() =>
 												changeOtherShippingCompanyStatusAndAddPrice(item?.id)

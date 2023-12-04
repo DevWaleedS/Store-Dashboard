@@ -22,6 +22,7 @@ import { openVerifyStoreAlertModal } from "../../../store/slices/VerifyStoreAler
 
 // third party
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
@@ -245,8 +246,25 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							res?.data?.message?.en?.commercialregistertype?.[0],
 						store_name: res?.data?.message?.en?.store_name?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
-
 						file: res?.data?.message?.en?.file?.[0],
+					});
+					toast.error(res?.data?.message?.en?.name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.commercialregistertype?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.store_name?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.city_id?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.file?.[0], {
+						theme: "light",
 					});
 				}
 			});
@@ -701,7 +719,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										اسم المتجر<span className='important-hint'>*</span>
+										اسم مالك الوثيقة <span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
@@ -711,7 +729,44 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
-										placeholder='قم بكتابة اسم المتجر كما هو موجود في الوثيقة'
+										placeholder='قم بكتابة الاسم كما هو موضح في الوثيقة'
+										style={{
+											width: "100%",
+											height: "50px",
+											padding: "18px",
+											background: "#FAFAFA",
+											color: "#00000",
+											fontSize: "16px",
+											fontWeight: "400",
+											borderRadius: "4px",
+										}}
+									/>
+									{dataErrors?.store_name && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.store_name}
+										</div>
+									)}
+								</div>
+							</div>
+							<div className='row  d-flex justify-content-between align-items-center mb-3'>
+								<div className='col-md-4 col-12 mb-md-0 mb-3'>
+									<h5
+										className='label'
+										style={{ color: "#1DBBBE", whiteSpace: "normal" }}>
+										رابط الوثيقة في منصة المركز السعودي للاعمال{" "}
+										<span className='important-hint'>*</span>
+									</h5>
+								</div>
+								<div className='col-md-8 col-12'>
+									<input
+										name='store_name'
+										value={data?.store_name}
+										onChange={(e) => {
+											handleOnChange(e);
+										}}
+										placeholder='قم بنسخ الرابط وضعه هنا'
 										style={{
 											width: "100%",
 											height: "50px",

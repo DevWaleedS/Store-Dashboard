@@ -515,7 +515,7 @@ export default function EnhancedTable({
 																								row?.store === null
 																									? "#FFFF"
 																									: "#dcdcdc",
-																							minWidth: "50%",
+																							minWidth: "40%",
 																						}}>
 																						<span className='w-100 text-center text-overflow'>
 																							{tag?.name}
