@@ -401,7 +401,7 @@ const router = createBrowserRouter([
 				element: <PlatformServices />,
 			},
 			{
-				path: "PlatformServices/Delegate",
+				path: "/Delegate",
 				element: <Delegate />,
 			},
 			{

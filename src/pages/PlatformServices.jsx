@@ -3,18 +3,13 @@ import React, { useEffect, useState, useContext } from "react";
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import useFetch from "../Hooks/UseFetch";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
-// Redux
-import { useDispatch } from "react-redux";
-import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
-
 // Components
+import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
-import { DelegateRequestAlert } from "../components/Modal";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // Context
@@ -29,34 +24,58 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
-// Tags INPUT LIBRARY
-import { TagInput } from "evergreen-ui";
-
-// ICONS
-import { IoIosArrowDown } from "react-icons/io";
+// Icons
 import { HomeIcon } from "../data/Icons";
+import { IoIosArrowDown } from "react-icons/io";
+// ---------------------------------------------
+
+// Select Style
+const selectStyle = {
+	fontSize: "18px",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+		"@media(max-width:768px)": {
+			right: "90%",
+		},
+	},
+};
+// -----------------------------------------------------
 
 const PlatformServices = () => {
+	const [cookies] = useCookies(["access_token"]);
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
+	// ------------------------------------------------------------
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/etlobhaservice/show"
 	);
 	const { fetchedData: services } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/services"
 	);
+	// -----------------------------------------
+
 	const [data, setData] = useState({
 		store_name: "",
 		activity: [],
 		services: [],
+		name: "",
 	});
-
-	const [cookies] = useCookies(["access_token"]);
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-	const LoadingStore = useContext(LoadingContext);
-	const { setLoadingTitle } = LoadingStore;
-
-	// to open DelegateRequestAlert
-	const dispatch = useDispatch(true);
+	// ---------------------------------------------
 
 	// To get Activity and store name
 	useEffect(() => {
@@ -68,14 +87,18 @@ const PlatformServices = () => {
 			),
 		});
 	}, [fetchedData]);
+	// --------------------------------------------
 
 	// Send Request Order
 	const requestOrder = () => {
 		setLoadingTitle("جاري ارسال الطلب");
+
 		let formData = new FormData();
+		formData.append("name", data?.name);
 		for (let i = 0; i < data?.services?.length; i++) {
 			formData.append([`service_id[${i}]`], data?.services[i]);
 		}
+
 		axios
 			.post(`https://backend.atlbha.com/api/Store/etlobhaservice`, formData, {
 				headers: {
@@ -88,16 +111,17 @@ const PlatformServices = () => {
 					setReload(!reload);
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					setData({ ...data, services: [] });
+					setData({ ...data, services: [], name: "" });
 				} else {
 					setLoadingTitle("");
 					toast.error(res?.data?.message?.ar, {
 						theme: "light",
 					});
-					setData({ ...data, services: [] });
+					setData({ ...data, services: [], name: "" });
 				}
 			});
 	};
+	// --------------------------------------
 
 	return (
 		<>
@@ -128,14 +152,6 @@ const PlatformServices = () => {
 								</ol>
 							</nav>
 						</div>
-
-						<div className='col-md-6 col-12 d-flex justify-content-end p-0'>
-							<button
-								className='delegate-request-btn'
-								onClick={() => dispatch(openDelegateRequestAlert())}>
-								طلب مندوب
-							</button>
-						</div>
 					</div>
 				</div>
 				<div className='delegate-request-form'>
@@ -147,9 +163,9 @@ const PlatformServices = () => {
 							<CircularLoading />
 						</div>
 					) : (
-						<form onSubmit={(e) => e.preventDefault()}>
+						<>
 							<div className='row align-items-center mb-md-4 mb-3'>
-								<div className='col-md-4 col-12 d-flex justify-content-md-center mb-md-0 mb-2'>
+								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
 									<label htmlFor='store-name'>
 										اسم المتجر
 										<span>(تلقائي)</span>
@@ -165,51 +181,34 @@ const PlatformServices = () => {
 								</div>
 							</div>
 							<div className='row align-items-center mb-md-4 mb-3'>
-								<div className='col-md-4 col-12 d-flex justify-content-md-center mb-md-0 mb-2'>
+								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
 									<label htmlFor='store-activity'>
 										نشاط أو تصنيف المتجر
 										<span>(تلقائي)</span>
 									</label>
 								</div>
 								<div className='col-md-7 col-12'>
-									<TagInput
-										className='store-activity-input w-100'
-										values={data?.activity}
-										disabled={true}
-									/>
+									<div className='store-activity-input '>
+										{data?.activity?.map((activity, idx) => (
+											<div key={idx} className='activity'>
+												{activity}
+											</div>
+										))}
+									</div>
 								</div>
 							</div>
-							<div
-								className='row align-items-center'
-								style={{ marginBottom: "100px" }}>
-								<div className='col-md-4 col-12 d-flex justify-content-md-center mb-md-0 mb-2'>
-									<label htmlFor='order-number'>نوع الخدمات المطلوبة</label>
+							<div className='row align-items-center mb-3'>
+								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
+									<label htmlFor='order-number'>
+										نوع الخدمات المطلوبة
+										<span className='important-hint'>*</span>
+									</label>
 								</div>
 								<div className='col-md-7 col-12'>
 									<FormControl sx={{ m: 0, width: "100%" }}>
 										<Select
 											className='bg-white'
-											sx={{
-												fontSize: "18px",
-												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-													{
-														paddingRight: "20px",
-													},
-												"& .MuiOutlinedInput-root": {
-													"& :hover": {
-														border: "none",
-													},
-												},
-												"& .MuiOutlinedInput-notchedOutline": {
-													border: "none",
-												},
-												"& .MuiSelect-icon": {
-													right: "95%",
-													"@media(max-width:768px)": {
-														right: "90%",
-													},
-												},
-											}}
+											sx={selectStyle}
 											IconComponent={IoIosArrowDown}
 											multiple
 											displayEmpty
@@ -222,8 +221,9 @@ const PlatformServices = () => {
 											renderValue={(selected) => {
 												if (data?.services?.length === 0) {
 													return (
-														<span style={{ color: "#011723" }}>
-															اختر خدمة أو أكثر
+														<span
+															style={{ color: "#011723", fontSize: "16px" }}>
+															يمكنك اختيار خدمة أو أكثر
 														</span>
 													);
 												}
@@ -246,21 +246,45 @@ const PlatformServices = () => {
 									</FormControl>
 								</div>
 							</div>
-							<div className='row d-flex justify-content-center'>
-								<div className='col-md-10 col-12 d-flex justify-content-center'>
+
+							<div className='row align-items-center mb-4'>
+								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
+									<label htmlFor='order-number' className='d-block'>
+										اضافة خدمة جديدة
+										<span>(اختياري)</span>
+									</label>
+								</div>
+								<div className='col-md-7 col-12'>
+									<div className='new-service-hint'>
+										يمكنك إضافه خدمة جديدة في حال لم تكن موجودة في قائمة الخدمات
+										بالأعلي
+									</div>
+									<input
+										type='text'
+										value={data?.name}
+										onChange={(e) => setData({ ...data, name: e.target.value })}
+										className='w-100 new-service-input'
+										placeholder='ادخل اسم الخدمة الجديدة'
+									/>
+								</div>
+							</div>
+
+							<div className='row align-items-center'>
+								<div className='col-md-4 col-12 '></div>
+								<div className='col-md-7 col-12'>
 									<button
 										className='w-100 upload-request-btn'
 										onClick={() => requestOrder()}
-										disabled={data?.services?.length === 0}>
+										disabled={
+											data?.services?.length === 0 && data?.name === ""
+										}>
 										رفع الطلب
 									</button>
 								</div>
 							</div>
-						</form>
+						</>
 					)}
 				</div>
-				{/** DelegateRequestAlert */}
-				<DelegateRequestAlert />
 			</section>
 		</>
 	);

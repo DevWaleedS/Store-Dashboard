@@ -157,7 +157,7 @@ const CreateRole = () => {
 													<StarIcon className='star-icon' />
 													<span className='me-2'>
 														اسم الدور الوظيفي
-														<span className='text-danger'>*</span>
+														<span className='important-hint'>*</span>
 													</span>
 												</label>
 												<input

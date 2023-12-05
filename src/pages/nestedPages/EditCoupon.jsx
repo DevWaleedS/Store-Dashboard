@@ -456,7 +456,7 @@ const EditCoupon = () => {
 											<div className='row mb-md-5 d-flex  justify-content-evenly'>
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='coupon-name' className='d-block mb-1'>
-														كود الكوبون<span className='text-danger'>*</span>
+														كود الكوبون<span className='important-hint'>*</span>
 													</label>
 													<input
 														type='text'
@@ -483,7 +483,7 @@ const EditCoupon = () => {
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='uses-count' className='d-block mb-1'>
 														عدد مرات الاستخدام للجميع
-														<span className='text-danger'>*</span>
+														<span className='important-hint'>*</span>
 													</label>
 													<Controller
 														name={"total_redemptions"}
@@ -531,7 +531,7 @@ const EditCoupon = () => {
 													<label
 														htmlFor='coupon-name '
 														className='d-block mb-1'>
-														نوع الخصم<span className='text-danger'>*</span>
+														نوع الخصم<span className='important-hint'>*</span>
 													</label>
 													<Controller
 														name={"discount_type"}
@@ -638,7 +638,7 @@ const EditCoupon = () => {
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
 														عدد مرات الاستخدام للزبون الواحد
-														<span className='text-danger'>*</span>
+														<span className='important-hint'>*</span>
 													</label>
 													<Controller
 														name={"user_redemptions"}
@@ -687,7 +687,8 @@ const EditCoupon = () => {
 													<label
 														htmlFor='coupon-name '
 														className='d-block mb-1'>
-														تاريخ الانتهاء<span className='text-danger'>*</span>
+														تاريخ الانتهاء
+														<span className='important-hint'>*</span>
 													</label>
 													<div className='date-icon'>
 														<DateIcon />
@@ -713,7 +714,7 @@ const EditCoupon = () => {
 
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
-														شحن مجاني<span className='text-danger'>*</span>
+														شحن مجاني<span className='important-hint'>*</span>
 													</label>
 													<Controller
 														name={"free_shipping"}
@@ -769,7 +770,7 @@ const EditCoupon = () => {
 														htmlFor='coupon-name '
 														className='d-block mb-1'>
 														الحد الأدنى من المشتريات
-														<span className='text-danger'>*</span>
+														<span className='important-hint'>*</span>
 													</label>
 													<Controller
 														name={"total_price"}
@@ -816,7 +817,7 @@ const EditCoupon = () => {
 												{/*<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='user-count' className='d-block mb-1'>
 														استثناء المنتجات المخفضة
-														<span className='text-danger'>*</span>
+														<span className='important-hint'>*</span> 
 													</label>
 													<Controller
 														name={"exception_discount_product"}
@@ -881,7 +882,7 @@ const EditCoupon = () => {
 															<div className='row-title mb-2'>
 																<h4 className='mb-2'>
 																	يتم تطبيق العرض على
-																	<span className='text-danger'>*</span>
+																	<span className='important-hint'>*</span>
 																</h4>
 																<p>اختر واحد من الخيارات التالية</p>
 															</div>
@@ -1167,7 +1168,7 @@ const EditCoupon = () => {
 												</div>
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3 enable-switches'>
 													<label htmlFor='user-count' className='d-block mb-1'>
-														الحالة<span className='text-danger'>*</span>
+														الحالة<span className='important-hint'>*</span>
 													</label>
 													<Switch
 														onClick={() => {

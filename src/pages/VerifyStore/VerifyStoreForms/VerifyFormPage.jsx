@@ -105,33 +105,35 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	// to handle data
 	const [file, setFile] = useState([]);
 	const [data, setData] = useState({
-		name: "",
 		phonenumber: "",
-		commercialregistertype: "",
-		store_name: "",
+		verification_type: "",
+		owner_name: "",
+		commercial_name: "",
+		link: "",
 		city_id: "",
-		maeruf_city_id: "",
+		freelancing_city_id: "",
 	});
 
 	// errors
 	const [dataErrors, setDataErrors] = useState({
-		name: "",
 		phonenumber: "",
-		commercialregistertype: "",
-		store_name: "",
+		verification_type: "",
+		owner_name: "",
+		commercial_name: "",
+		link: "",
 		city_id: "",
 		file: "",
 	});
 
 	const resetDataErrors = () => {
 		setDataErrors({
-			name: "",
 			phonenumber: "",
-			commercialregistertype: "",
-			store_name: "",
+			verification_type: "",
+			owner_name: "",
+			commercial_name: "",
+			link: "",
 			city_id: "",
 			file: "",
-			link: "",
 		});
 	};
 
@@ -160,19 +162,18 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	});
 
 	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>
-			{file.path} - {file.size}
-		</li>
+		<li key={file.path}>{file.path}</li>
 	));
 
 	const handleOnChange = (e) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 	};
 
+	// To get the the owner phone number
 	useEffect(() => {
 		setData({
 			...data,
-			name: fetchedData?.data?.username,
+
 			phonenumber: fetchedData?.data?.phonenumber?.startsWith("+966")
 				? fetchedData?.data?.phonenumber.slice(4)
 				: fetchedData?.data?.phonenumber?.startsWith("00966")
@@ -192,7 +193,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		setLoadingTitle("جاري ارسال طلب التوثيق");
 
 		let formData = new FormData();
-		formData.append("name", data?.name);
+
 		formData.append(
 			"phonenumber",
 			data?.phonenumber?.startsWith("+966") ||
@@ -200,15 +201,27 @@ const VerifyFormPage = forwardRef((props, ref) => {
 				? data?.phonenumber
 				: `+966${data?.phonenumber}`
 		);
-		formData.append("commercialregistertype", data?.commercialregistertype);
-		formData.append("store_name", data?.store_name);
+
+		formData.append("verification_type", data?.verification_type);
+		formData.append("owner_name", data?.owner_name);
+		formData.append(
+			"commercial_name",
+			data?.verification_type === "commercialregister"
+				? data?.commercial_name
+				: ""
+		);
+		formData.append(
+			"link",
+			data?.verification_type === "maeruf" ? data?.link : ""
+		);
 
 		formData.append(
 			"city_id",
-			data?.commercialregistertype === "maeruf"
-				? data?.maeruf_city_id
+			data?.verification_type === "maeruf"
+				? data?.freelancing_city_id
 				: data?.city_id
 		);
+
 		if (file?.length !== 0) {
 			formData.append("file", file[0]);
 		}
@@ -242,9 +255,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					setDataErrors({
 						name: res?.data?.message?.en?.name?.[0],
 						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
-						commercialregistertype:
-							res?.data?.message?.en?.commercialregistertype?.[0],
-						store_name: res?.data?.message?.en?.store_name?.[0],
+						verification_type: res?.data?.message?.en?.verification_type?.[0],
+						commercial_name: res?.data?.message?.en?.commercial_name?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
 						file: res?.data?.message?.en?.file?.[0],
 					});
@@ -254,16 +266,19 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.commercialregistertype?.[0], {
+					toast.error(res?.data?.message?.en?.verification_type?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.store_name?.[0], {
+					toast.error(res?.data?.message?.en?.commercial_name?.[0], {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.city_id?.[0], {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.file?.[0], {
+						theme: "light",
+					});
+					toast.info(res?.data?.message?.ar, {
 						theme: "light",
 					});
 				}
@@ -293,23 +308,13 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							<h5 className='label'>نوع النشاط أو التصنيف الرئيسي</h5>
 						</div>
 						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
-							{selectedActivity?.map((activity, index) => (
-								<div
-									key={index}
-									style={{
-										backgroundColor: "#bfc3c5",
-										borderRadius: "18px",
-										fontSize: "16px",
-										fontWeight: "400",
-										width: "max-content",
-										padding: "6px 10px",
-										minWidth: "min-content",
-										maxWidth: "500",
-										whiteSpace: "pre-line",
-									}}>
-									{activity?.name}
-								</div>
-							))}
+							<div className='main-categories w-100'>
+								{selectedActivity?.map((activity, index) => (
+									<div key={index} className='categories'>
+										{activity?.name}
+									</div>
+								))}
+							</div>
 						</div>
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
@@ -317,51 +322,23 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							<h5 className='label'>نوع النشاط أو التصنيف الفرعي</h5>
 						</div>
 						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
-							{selectedSubActivities?.map((sub, index) => (
-								<div
-									key={index}
-									style={{
-										backgroundColor: "#bfc3c5",
-										borderRadius: "18px",
-										fontSize: "16px",
-										fontWeight: "400",
-										width: "max-content",
-										padding: "6px 10px",
-										minWidth: "min-content",
-										maxWidth: "500",
-										whiteSpace: "pre-line",
-									}}>
-									{sub?.name}
+							{selectedSubActivities?.length === 0 ? (
+								<div style={{ fontSize: "16px", color: "#1dbbbe" }}>
+									{" "}
+									لا توجد تصنيفات فرعية{" "}
 								</div>
-							))}
-						</div>
-					</div>
-					<div className='row d-flex justify-content-between align-items-center pt-md-4 pt-3'>
-						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
-							<h5 className='label'>
-								اسم المالك <span className='important-hint mx-1'>(اجباري)</span>
-							</h5>
-						</div>
-						<div className='col-md-8 col-12'>
-							<input
-								name='name'
-								value={data?.name}
-								onChange={(e) => {
-									handleOnChange(e);
-								}}
-								type='text'
-								placeholder='قم بكتابة اسم المالك'
-								style={inputStyle}
-							/>
-							{dataErrors?.name && (
-								<div
-									className='important-hint me-1'
-									style={{ fontSize: "16px", whiteSpace: "normal" }}>
-									{dataErrors?.name}
+							) : (
+								<div className='main-categories w-100'>
+									{selectedSubActivities?.map((sub, index) => (
+										<div key={index} className='categories'>
+											{sub?.name}
+										</div>
+									))}
 								</div>
 							)}
 						</div>
 					</div>
+
 					<div className='row d-flex justify-content-between align-items-center pt-4'>
 						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
 							<h5 className='label'>
@@ -424,8 +401,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						<div className='col-4 d-flex justify-content-start gap-3 align-items-center'>
 							<RadioGroup
 								aria-labelledby='demo-radio-buttons-group-label'
-								name='commercialregistertype'
-								value={data?.commercialregistertype}
+								name='verification_type'
+								value={data?.verification_type}
 								onChange={(e) => {
 									handleOnChange(e);
 								}}>
@@ -434,9 +411,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										marginRight: -1,
 									}}
 									value={"commercialregister"}
-									checked={
-										data?.commercialregistertype === "commercialregister"
-									}
+									checked={data?.verification_type === "commercialregister"}
 									className='label'
 									control={
 										<Radio
@@ -456,11 +431,11 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									}
 									label='السجل التجاري'
 								/>
-								{dataErrors?.commercialregistertype && (
+								{dataErrors?.verification_type && (
 									<div
 										className='important-hint me-1'
 										style={{ fontSize: "16px", whiteSpace: "normal" }}>
-										{dataErrors?.commercialregistertype}
+										{dataErrors?.verification_type}
 									</div>
 								)}
 							</RadioGroup>
@@ -475,22 +450,22 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									: "d-none"
 							}
 							style={{
-								top: dataErrors?.commercialregistertype ? "10px" : "10px",
+								top: dataErrors?.verification_type ? "10px" : "10px",
 							}}>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
 									<h5 className='label' style={{ color: "#1DBBBE" }}>
-										الاسم التجاري<span className='important-hint'>*</span>
+										اسم التاجر<span className='important-hint'>*</span>
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
 									<input
-										name='store_name'
-										value={data?.store_name}
+										name='owner_name'
+										value={data?.owner_name}
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
-										placeholder='قم بكتابة الاسم التجاري كما هو موجود في السجل التجاري'
+										placeholder='قم بكتابة اسم التاجر كما هو موضح في السجل التجاري'
 										style={{
 											width: "100%",
 											height: "50px",
@@ -503,11 +478,46 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										}}
 									/>
 
-									{dataErrors?.store_name && (
+									{dataErrors?.owner_name && (
 										<div
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											{dataErrors?.store_name}
+											{dataErrors?.owner_name}
+										</div>
+									)}
+								</div>
+							</div>
+							<div className='row  d-flex justify-content-between align-items-center mb-3'>
+								<div className='col-md-4 col-12 mb-md-0 mb-3'>
+									<h5 className='label' style={{ color: "#1DBBBE" }}>
+										الاسم التجاري<span className='important-hint'>*</span>
+									</h5>
+								</div>
+								<div className='col-md-8 col-12'>
+									<input
+										name='commercial_name'
+										value={data?.commercial_name}
+										onChange={(e) => {
+											handleOnChange(e);
+										}}
+										placeholder='قم بكتابة الاسم التجاري كما هو موضح في السجل التجاري'
+										style={{
+											width: "100%",
+											height: "50px",
+											padding: "18px",
+											background: "#FAFAFA",
+											color: "#00000",
+											fontSize: "16px",
+											fontWeight: "400",
+											borderRadius: "4px",
+										}}
+									/>
+
+									{dataErrors?.commercial_name && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.commercial_name}
 										</div>
 									)}
 								</div>
@@ -664,8 +674,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						<div className='col-4 d-flex justify-content-start gap-3 align-items-center'>
 							<RadioGroup
 								aria-labelledby='demo-radio-buttons-group-label'
-								name='commercialregistertype'
-								value={data?.commercialregistertype}
+								name='verification_type'
+								value={data?.verification_type}
 								onChange={(e) => {
 									handleOnChange(e);
 								}}>
@@ -674,7 +684,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										marginRight: -1,
 									}}
 									value={"maeruf"}
-									checked={data?.commercialregistertype === "maeruf"}
+									checked={data?.verification_type === "maeruf"}
 									className='label'
 									control={
 										<Radio
@@ -697,11 +707,11 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							</RadioGroup>
 							<WebsiteIcon className='mx-3' />
 						</div>
-						{dataErrors?.commercialregistertype && (
+						{dataErrors?.verification_type && (
 							<div
 								className='important-hint me-1'
 								style={{ fontSize: "16px", whiteSpace: "normal" }}>
-								{dataErrors?.commercialregistertype}
+								{dataErrors?.verification_type}
 							</div>
 						)}
 
@@ -714,7 +724,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									: " d-none "
 							}
 							style={{
-								top: dataErrors?.commercialregistertype ? "10px" : "10px",
+								top: dataErrors?.verification_type ? "10px" : "10px",
 							}}>
 							<div className='row  d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3'>
@@ -724,8 +734,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 								<div className='col-md-8 col-12'>
 									<input
-										name='store_name'
-										value={data?.store_name}
+										name='owner_name'
+										value={data?.owner_name}
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
@@ -741,11 +751,11 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											borderRadius: "4px",
 										}}
 									/>
-									{dataErrors?.store_name && (
+									{dataErrors?.owner_name && (
 										<div
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											{dataErrors?.store_name}
+											{dataErrors?.owner_name}
 										</div>
 									)}
 								</div>
@@ -761,12 +771,12 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 								<div className='col-md-8 col-12'>
 									<input
-										name='store_name'
-										value={data?.store_name}
+										name='link'
+										value={data?.link}
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
-										placeholder='قم بنسخ الرابط وضعه هنا'
+										placeholder='قم بنسخ رابط الوثيقة وضعه هنا'
 										style={{
 											width: "100%",
 											height: "50px",
@@ -778,11 +788,11 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											borderRadius: "4px",
 										}}
 									/>
-									{dataErrors?.store_name && (
+									{dataErrors?.link && (
 										<div
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											{dataErrors?.store_name}
+											{dataErrors?.link}
 										</div>
 									)}
 								</div>
@@ -808,14 +818,14 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											}}
 											IconComponent={IoIosArrowDown}
 											displayEmpty
-											name='maeruf_city_id'
-											value={data?.maeruf_city_id}
+											name='freelancing_city_id'
+											value={data?.freelancing_city_id}
 											onChange={(e) => {
 												handleOnChange(e);
 											}}
 											input={<OutlinedInput />}
 											renderValue={(selected) => {
-												if (data?.maeruf_city_id === "") {
+												if (data?.freelancing_city_id === "") {
 													return <p className='text-[#ADB5B9]'>اختر المدينة</p>;
 												}
 												const result =

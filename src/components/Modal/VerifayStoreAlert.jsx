@@ -46,8 +46,9 @@ const VerifyAlert = () => {
 				<Box component={"div"} sx={style}>
 					<div className='store-alert-body text-center' style={contentStyle}>
 						<p>جاري مراجعة طلب التوثيق في أقل من 24 ساعة </p>
+						<p>ستصلك رسالة عبر البريد الالكتروني </p>
 					</div>
-					<div className='store-alert-footer d-flex justify-between '>
+					<div className='store-alert-footer d-flex justify-between'>
 						<button
 							onClick={() => {
 								navigate("/");

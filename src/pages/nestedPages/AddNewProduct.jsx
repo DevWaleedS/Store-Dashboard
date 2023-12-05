@@ -466,7 +466,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-name'>
 												{" "}
-												اسم المنتج <span className='text-danger'>*</span>
+												اسم المنتج <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -493,7 +493,8 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
-												وصف قصير للمنتج <span className='text-danger'>*</span>
+												وصف قصير للمنتج{" "}
+												<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -540,7 +541,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
 												{" "}
-												وصف المنتج <span className='text-danger'>*</span>
+												وصف المنتج <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -568,7 +569,7 @@ const AddNewProduct = () => {
 											<label htmlFor='product-category'>
 												{" "}
 												النشاط أو التصنيف الرئيسي
-												<span className='text-danger'>*</span>{" "}
+												<span className='important-hint'>*</span>{" "}
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -748,7 +749,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
 												{" "}
-												المخزون <span className='text-danger'>*</span>
+												المخزون <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -794,7 +795,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
 												{" "}
-												الوزن <span className='text-danger'>*</span>
+												الوزن <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -842,7 +843,7 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
-												السعر <span className='text-danger'>*</span>{" "}
+												السعر <span className='important-hint'>*</span>{" "}
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -883,6 +884,7 @@ const AddNewProduct = () => {
 													/>
 												)}
 											/>
+											ال
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -963,7 +965,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-image'>
 												{" "}
-												صورة المنتج <span className='text-danger'>*</span>
+												صورة المنتج <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -1005,7 +1007,9 @@ const AddNewProduct = () => {
 											<label htmlFor='product-images'>
 												الصور المتعددة او الفيديو
 												<br />
-												<div className='tax-text '>
+												<div
+													className='tax-text'
+													style={{ whiteSpace: "normal" }}>
 													(الحد الأقصي للصورة أو الفيديو 2MB)
 												</div>
 											</label>

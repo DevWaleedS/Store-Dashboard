@@ -30,7 +30,7 @@
 .title {
 	letter-spacing: 0.24px;
 	color: #011723;
-	white-space: 'nowrap';
+	white-space: "nowrap";
 	font-weight: 400;
 	font-size: 24px;
 }
@@ -39,12 +39,11 @@
 }
 .line_anim {
 	height: 16px;
-
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	animation: anim 3s ease-out;
-	-webkit-animation: anim 3s ease-out;
+	animation: anim 2s ease-out;
+	-webkit-animation: anim 2s ease-out;
 }
 
 .fcc {

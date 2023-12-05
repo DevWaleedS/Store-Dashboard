@@ -738,7 +738,7 @@ const ClientData = () => {
 																	htmlFor='coupon-name '
 																	className='d-block mb-1'>
 																	نوع الخصم
-																	<span className='text-danger'>*</span>
+																	<span className='important-hint'>*</span>
 																</label>
 																<RadioGroup
 																	defaultValue='percent'

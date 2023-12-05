@@ -295,7 +295,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='full-name' className=''>
-												الإسم الكامل<span className='text-danger'>*</span>
+												الإسم الكامل<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -326,7 +326,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='user-name' className=''>
-												اسم المستخدم<span className='text-danger'>*</span>
+												اسم المستخدم<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -358,7 +358,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='job-title' className=''>
-												الدور الوظيفي<span className='text-danger'>*</span>
+												الدور الوظيفي<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -426,7 +426,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='password' className=''>
-												كلمة المرور<span className='text-danger'>*</span>
+												كلمة المرور<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -460,7 +460,8 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='email' className=''>
-												البريد الإلكتروني<span className='text-danger'>*</span>
+												البريد الإلكتروني
+												<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -492,7 +493,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='phone-number' className=''>
-												رقم الهاتف<span className='text-danger'>*</span>
+												رقم الهاتف<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>
@@ -527,7 +528,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='personal-image' className=''>
-												الصورة الشخصية<span className='text-danger'>*</span>
+												الصورة الشخصية<span className='important-hint'>*</span>
 												<div className='tax-text'>(الحد الأقصي للصورة 2MB)</div>
 											</label>
 										</div>
@@ -565,7 +566,7 @@ const AddNewUser = () => {
 									<div className='row mb-lg-4 mb-3'>
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='status' className=''>
-												الحالة<span className='text-danger'>*</span>
+												الحالة<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>

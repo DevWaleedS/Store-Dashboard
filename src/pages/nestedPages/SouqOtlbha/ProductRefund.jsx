@@ -321,7 +321,7 @@ const ProductRefund = () => {
 											{/* Selling Price */}
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
-													سعر البيع<span className='text-danger'>*</span>{" "}
+													سعر البيع<span className='important-hint'>*</span>{" "}
 													<span>(قم بإضافة السعر الخاص بك)</span>
 													<br />
 													<p className='tax-text'>(السعر يشمل الضريبة)</p>
@@ -390,7 +390,7 @@ const ProductRefund = () => {
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
 													الكمية المراد استيرادها من المنتج
-													<span className='text-danger'>*</span>{" "}
+													<span className='important-hint'>*</span>{" "}
 													<span>(قم بإضافة الكمية الخاص بك)</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>

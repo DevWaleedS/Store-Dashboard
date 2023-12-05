@@ -27,7 +27,7 @@ import SideBar from "../global/SideBar";
 
 // App Modal
 import MaintenanceMode from "./MaintenanceMode";
-import { VerifyStoreModal } from "../components/Modal";
+import { DelegateRequestAlert, VerifyStoreModal } from "../components/Modal";
 import { VerifayStoreAlert } from "../components/Modal";
 import { VerifayAfterMainInfoAlert } from "../components/Modal";
 
@@ -132,6 +132,8 @@ const RootLayout = () => {
 						{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
 						{isOpenMaintenanceModeModal && <MaintenanceMode />}
 						{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
+						{/** Delegate Request Alert */}
+						<DelegateRequestAlert />
 						<main className='content'>
 							<div className='row'>
 								<div className='sidebar-col'>

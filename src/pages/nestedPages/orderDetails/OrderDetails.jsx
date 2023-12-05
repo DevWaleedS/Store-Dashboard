@@ -991,7 +991,7 @@ const OrderDetails = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
-													المنطقة<span className='text-danger'>*</span>
+													المنطقة<span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
@@ -1065,7 +1065,7 @@ const OrderDetails = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
-													المدينة<span className='text-danger'>*</span>
+													المدينة<span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
@@ -1139,7 +1139,7 @@ const OrderDetails = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-name'>
-													العنوان <span className='text-danger'>*</span>
+													العنوان <span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>

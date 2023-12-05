@@ -140,10 +140,6 @@ const MainInformation = () => {
 			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setStoreName(fetchedData?.data?.setting_store?.store_name);
-			localStorage.setItem(
-				"storeName",
-				fetchedData?.data?.setting_store?.store_name
-			);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
 			setCountry([fetchedData?.data?.setting_store?.country?.id]);
 			setCity([fetchedData?.data?.setting_store?.city?.id]);

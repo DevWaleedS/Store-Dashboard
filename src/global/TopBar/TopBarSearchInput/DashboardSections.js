@@ -31,7 +31,7 @@ import {
 	Template,
 	Verification,
 } from "../../../data/Icons";
-import { FaCircle } from "react-icons/fa";
+import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 export const dashboardSections = [
@@ -320,7 +320,7 @@ export const dashboardSections = [
 		id: 27,
 		sectionName: "طلب مندوب",
 		route: "PlatformServices",
-		icon: <Services className='custom_fill_color' />,
+		icon: <FaUserCheck />,
 	},
 	// {
 	// 	id: 27,

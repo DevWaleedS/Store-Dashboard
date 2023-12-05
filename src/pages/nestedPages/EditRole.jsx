@@ -223,7 +223,7 @@ const EditRole = () => {
 													<label className='d-block mb-2' htmlFor='role-search'>
 														<span>
 															اسم الدور الوظيفي
-															<span className='text-danger'>*</span>
+															<span className='important-hint'>*</span>
 														</span>
 													</label>
 													<input

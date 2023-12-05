@@ -17,7 +17,7 @@ const ContextProvider = (props) => {
 			setTimeout(() => {
 				setEndActionTitle(null);
 				setActionWarning(false);
-			}, 3000);
+			}, 2000);
 		}
 	}, [title]);
 

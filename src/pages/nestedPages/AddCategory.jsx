@@ -201,7 +201,7 @@ const AddCategory = () => {
 										<div className='col-md-3 col-12'>
 											<label htmlFor='add-icon'>
 												ايقونة النشاط أو التصنيف
-												<span className='text-danger'>*</span>
+												<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
@@ -272,7 +272,7 @@ const AddCategory = () => {
 											<label htmlFor='category-name'>
 												{" "}
 												النشاط أو التصنيف الرئيسي
-												<span className='text-danger'>*</span>
+												<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>

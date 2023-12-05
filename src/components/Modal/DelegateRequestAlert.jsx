@@ -41,14 +41,16 @@ const DelegateRequestAlert = () => {
 	return (
 		<div className='add-category-form' open={isOpen}>
 			<Modal
-				onClick={() => dispatch(closeDelegateRequestAlert())}
 				open={isOpen}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='close-icon p-2 text-start'>
 						<AiOutlineCloseCircle
-							onClick={() => dispatch(closeDelegateRequestAlert())}
+							onClick={() => {
+								dispatch(closeDelegateRequestAlert());
+								navigate("");
+							}}
 							style={{
 								color: "#000",
 								width: "22px",

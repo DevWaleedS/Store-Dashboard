@@ -50,6 +50,12 @@ svg:not(:root) {
 	overflow: visible !important;
 }
 
+.loading-text {
+	font-size: 18px;
+	font-weight: 500;
+	color: #108699;
+}
+
 /* Custom scroll style */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -2822,10 +2828,6 @@ nav.navigation {
 	height: auto;
 }
 
-/* .form-row .form.verifay {
-	min-height: 900px;
-} */
-
 .select-store-type .label {
 	font-size: 18px;
 	font-weight: 400;
@@ -4966,11 +4968,10 @@ input:disabled {
 
 .accordion-box span.video-name {
 	font-size: 20px;
-	color:var(--blue-500)
+	color: var(--blue-500);
 }
-.accordion-box span.video-name:hover{
-	color:var(--blue-600)
-
+.accordion-box span.video-name:hover {
+	color: var(--blue-600);
 }
 
 .accordion-box .accordion-body {
@@ -6739,12 +6740,12 @@ input:disabled {
 .PlatformServices-page .delegate-request-form label span {
 	font: normal 16px/30px "Tajawal";
 	color: #ff3838;
-	margin-right: 10px;
+	margin-right: 6px;
 }
 
 .PlatformServices-page .delegate-request-form input {
 	height: 56px;
-	font-size: "18px";
+	font-size: 18px;
 	background: #ffffff;
 	padding: 18px;
 	border-radius: 4px !important;
@@ -6754,41 +6755,54 @@ input:disabled {
 	-o-border-radius: 4px !important;
 }
 
-/* Tag input .store-activity-input */
-.PlatformServices-page .delegate-request-form .store-activity-input {
+/*  .store-activity-input */
+.PlatformServices-page .delegate-request-form .store-activity-input,
+.form-row .form .main-categories {
 	background-color: #ffffff;
+	min-height: 56px;
+	max-height: 180px;
+	overflow-y: auto;
 	border: none;
-	padding: 0;
-	padding-right: 14px;
-}
-
-.PlatformServices-page
-	.delegate-request-form
-	.store-activity-input
-	.ub-dspl_flex {
+	padding: 14px;
+	display: flex;
+	gap: 5px;
+	flex-wrap: wrap;
 	align-items: center;
+	justify-content: flex-start;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
 }
 
-.PlatformServices-page .delegate-request-form .ub-box-szg_border-box strong {
+.PlatformServices-page .delegate-request-form .store-activity-input .activity,
+.form-row .form .main-categories .categories {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: max-content;
-	padding: 2px 8px;
-	height: 34px;
 	background: #eeeeee;
-	border-radius: 17px;
-	font: normal 18px/30px "Tajawal";
-	letter-spacing: 0px;
+	padding: 0px 8px;
 	color: #67747b;
+	border-radius: 18px;
+	letter-spacing: 0px;
+	font: normal 18px/30px "Tajawal";
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	-ms-border-radius: 18px;
+	-o-border-radius: 18px;
 }
-
+.PlatformServices-page .delegate-request-form .new-service-hint {
+	font-size: 16px;
+	font-weight: 400;
+	color: var(--second-500);
+	white-space: normal;
+}
 .PlatformServices-page
 	.delegate-request-form
-	.ub-box-szg_border-box
-	strong
-	svg {
-	display: none;
+	input.new-service-input::placeholder {
+	font-size: 16px;
 }
 
 .PlatformServices-page .delegate-request-form .upload-request-btn {
@@ -6800,7 +6814,11 @@ input:disabled {
 	letter-spacing: 0.2px;
 	color: #ffffff;
 	background: #1dbbbe;
-	border-radius: 8px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
 }
 
 /* select Delegate page */
@@ -7483,7 +7501,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .seo-store-page .data-container .wrong-text {
 	font-size: 0.9rem;
 	font-weight: 500;
-	color: var(--red-500);
+	color: #ff3838;
 	margin: 0;
 }
 
@@ -8105,6 +8123,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 @media (max-width: 768px) {
+	.loading-text {
+		font-size: 16px;
+	}
 	.add-user-form .form-body input[name="phonenumber"] {
 		padding-left: 50px;
 		font-size: 16px;
@@ -10446,16 +10467,22 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.PlatformServices-page .delegate-request-form input {
 		height: 45px;
+		padding: 14px;
 		font-size: 16px;
 	}
 
-	.PlatformServices-page .delegate-request-form .store-activity-input {
-		padding: 0;
-	}
-
-	.PlatformServices-page .delegate-request-form .ub-box-szg_border-box strong {
+	.PlatformServices-page
+		.delegate-request-form
+		.store-activity-input
+		.activity {
 		height: 30px;
 		font-size: 16px;
+	}
+	.PlatformServices-page .delegate-request-form .new-service-hint,
+	.PlatformServices-page
+		.delegate-request-form
+		input.new-service-input::placeholder {
+		font-size: 14px;
 	}
 
 	.PlatformServices-page .delegate-request-form .upload-request-btn {

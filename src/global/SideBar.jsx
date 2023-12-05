@@ -46,7 +46,8 @@ import {
 	Template,
 	Verification,
 } from "../data/Icons";
-import { FaCircle } from "react-icons/fa";
+import { FaCircle, FaUserCheck } from "react-icons/fa";
+import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);
@@ -131,6 +132,15 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'>الطلبات </span>
 					</MenuItem>
 				</NavLink>
+				<NavLink
+					className='menu-link'
+					to='PlatformServices'
+					onClick={() => closeSidebar()}>
+					<MenuItem>
+						<Services />
+						<span className='me-2'> خدمات المنصة</span>
+					</MenuItem>
+				</NavLink>
 				{/** Markting Sub menu */}
 				<SubMenu label='التسويق' icon={<Marketing />} as='li'>
 					<NavLink
@@ -207,6 +217,18 @@ const SideBar = ({ open, closeSidebar }) => {
 					<MenuItem>
 						<Rating className='rating-icon' />
 						<span className='me-2'>التقييمات </span>
+					</MenuItem>
+				</NavLink>
+				<NavLink
+					className='menu-link'
+					to='Delegate'
+					onClick={() => {
+						closeSidebar();
+						dispatch(openDelegateRequestAlert());
+					}}>
+					<MenuItem>
+						<FaUserCheck />
+						<span className='me-2'>طلب مندوب</span>
 					</MenuItem>
 				</NavLink>
 				<NavLink
@@ -388,15 +410,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						</MenuItem>
 					</NavLink>
 				</SubMenu>
-				<NavLink
-					className='menu-link'
-					to='PlatformServices'
-					onClick={() => closeSidebar()}>
-					<MenuItem>
-						<Services />
-						<span className='me-2'> خدمات المنصة</span>
-					</MenuItem>
-				</NavLink>
+
 				<NavLink
 					className='menu-link'
 					to='Report'
