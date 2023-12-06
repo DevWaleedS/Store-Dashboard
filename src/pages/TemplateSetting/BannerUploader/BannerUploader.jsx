@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
+
 // Third party
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import ImageUploading from "react-images-uploading";
 
@@ -17,6 +19,35 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
+// Switch Style
+const switchStyle = {
+	width: "35px",
+	padding: 0,
+	height: "20px",
+	borderRadius: "0.75rem",
+	"& .MuiSwitch-thumb": {
+		width: "12px",
+		height: "12px",
+	},
+	"& .MuiSwitch-switchBase": {
+		padding: "0",
+		top: "4px",
+		left: "4px",
+	},
+	"& .MuiSwitch-switchBase.Mui-checked": {
+		left: "-4px",
+	},
+	"& .Mui-checked .MuiSwitch-thumb": {
+		backgroundColor: "#FFFFFF",
+	},
+	"& .MuiSwitch-track": {
+		height: "100%",
+	},
+	"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+		backgroundColor: "#3AE374",
+		opacity: 1,
+	},
+};
 const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
@@ -33,11 +64,13 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const [firstBanner, setFirstBanner] = useState([]);
 	const [secondBanner, setSecondBanner] = useState([]);
 	const [thirdBanner, setThirdBanner] = useState([]);
+
 	const [firstBannerName, setFirstBannerName] = useState("");
 	const [secondBannerName, setSecondBannerName] = useState("");
 	const [thirdBannerName, setThirdBannerName] = useState("");
 	const [previewBanner, setPreviewBanner] = useState("");
 
+	// To
 	useEffect(() => {
 		if (Banners) {
 			// set banners status
@@ -49,6 +82,85 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 			setThirdBannerName(Banners[0]?.banar3);
 		}
 	}, [Banners]);
+
+	// To handle width and height of banners
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const handleImageUpload =
+		(bannerIndex, bannerState, setBannerState, setPreviewBannerState) =>
+		async (imageList) => {
+			// Check if the image size is valid
+			const isSizeValid = imageList?.every(
+				(image) => image?.file?.size <= maxFileSize
+			);
+
+			// Errors message
+			const sizeErrorMessage = "حجم البانر يجب أن لا يزيد عن 2 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس البنر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
+
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img?.width !== 1110 && img?.height !== 440) {
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
+
+			const isValidDimensions = await Promise?.all(
+				imageList?.map(checkImageDimensions)
+			).then((results) => results?.every((result) => result));
+
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isSizeValid && !isValidDimensions) {
+				// Display a warning message and reset the logo state
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isValidDimensions && sizeErrorMessage) {
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isSizeValid && isValidDimensions) {
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else {
+				const updatedSliderState = [...bannerState];
+				updatedSliderState[bannerIndex] = imageList;
+				setBannerState(updatedSliderState);
+
+				const updatedNameState = updatedSliderState[bannerIndex]?.data_url;
+				const updatedFileState = updatedSliderState[bannerIndex];
+
+				const bannerNames = [
+					setFirstBannerName,
+					setSecondBannerName,
+					setThirdBannerName,
+				];
+
+				const bannerFile = [setFirstBanner, setSecondBanner, setThirdBanner];
+
+				if (bannerNames[bannerIndex]) {
+					bannerNames[bannerIndex](updatedNameState);
+				}
+				if (bannerFile[bannerIndex]) {
+					bannerFile[bannerIndex](updatedFileState);
+				}
+			}
+			setPreviewBannerState(imageList);
+		};
 
 	// update banners function
 	const updateBanners = () => {
@@ -137,9 +249,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									</>
 								)}
 							</div>
-							<div
-								className='tax-text w-100 hint'
-								>
+							<div className='tax-text w-100 hint'>
 								الحد الأقصي للبنر الواحد هو 2MG
 							</div>
 						</div>
@@ -154,10 +264,12 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={firstBanner}
-											onChange={(imageList) => {
-												setFirstBanner(imageList);
-												setPreviewBanner(imageList);
-											}}
+											onChange={handleImageUpload(
+												0,
+												firstBanner,
+												setFirstBanner,
+												setPreviewBanner
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -195,36 +307,9 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 										</ImageUploading>
 										<div className='switches-group'>
 											<Switch
-												onChange={() => setBannerStatus1(!bannerstatus1)}
-												sx={{
-													width: "35px",
-													padding: 0,
-													height: "20px",
-													borderRadius: "0.75rem",
-													"& .MuiSwitch-thumb": {
-														width: "12px",
-														height: "12px",
-													},
-													"& .MuiSwitch-switchBase": {
-														padding: "0",
-														top: "4px",
-														left: "4px",
-													},
-													"& .MuiSwitch-switchBase.Mui-checked": {
-														left: "-4px",
-													},
-													"& .Mui-checked .MuiSwitch-thumb": {
-														backgroundColor: "#FFFFFF",
-													},
-													"& .MuiSwitch-track": {
-														height: "100%",
-													},
-													"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-														backgroundColor: "#3AE374",
-														opacity: 1,
-													},
-												}}
+												sx={switchStyle}
 												checked={bannerstatus1}
+												onChange={() => setBannerStatus1(!bannerstatus1)}
 											/>
 										</div>
 									</div>
@@ -234,10 +319,12 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={secondBanner}
-											onChange={(imageList) => {
-												setSecondBanner(imageList);
-												setPreviewBanner(imageList);
-											}}
+											onChange={handleImageUpload(
+												1,
+												secondBanner,
+												setSecondBanner,
+												setPreviewBanner
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -275,36 +362,9 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 										</ImageUploading>
 										<div className='switches-group'>
 											<Switch
-												onChange={() => setBannerStatus2(!bannerstatus2)}
-												sx={{
-													width: "35px",
-													padding: 0,
-													height: "20px",
-													borderRadius: "0.75rem",
-													"& .MuiSwitch-thumb": {
-														width: "12px",
-														height: "12px",
-													},
-													"& .MuiSwitch-switchBase": {
-														padding: "0",
-														top: "4px",
-														left: "4px",
-													},
-													"& .MuiSwitch-switchBase.Mui-checked": {
-														left: "-4px",
-													},
-													"& .Mui-checked .MuiSwitch-thumb": {
-														backgroundColor: "#FFFFFF",
-													},
-													"& .MuiSwitch-track": {
-														height: "100%",
-													},
-													"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-														backgroundColor: "#3AE374",
-														opacity: 1,
-													},
-												}}
+												sx={switchStyle}
 												checked={bannerstatus2}
+												onChange={() => setBannerStatus2(!bannerstatus2)}
 											/>
 										</div>
 									</div>
@@ -314,10 +374,12 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={thirdBanner}
-											onChange={(imageList) => {
-												setThirdBanner(imageList);
-												setPreviewBanner(imageList);
-											}}
+											onChange={handleImageUpload(
+												2,
+												thirdBanner,
+												setThirdBanner,
+												setPreviewBanner
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -355,36 +417,9 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 										</ImageUploading>
 										<div className='switches-group'>
 											<Switch
-												onChange={() => setBannerStatus3(!bannerstatus3)}
-												sx={{
-													width: "35px",
-													padding: 0,
-													height: "20px",
-													borderRadius: "0.75rem",
-													"& .MuiSwitch-thumb": {
-														width: "12px",
-														height: "12px",
-													},
-													"& .MuiSwitch-switchBase": {
-														padding: "0",
-														top: "4px",
-														left: "4px",
-													},
-													"& .MuiSwitch-switchBase.Mui-checked": {
-														left: "-4px",
-													},
-													"& .Mui-checked .MuiSwitch-thumb": {
-														backgroundColor: "#FFFFFF",
-													},
-													"& .MuiSwitch-track": {
-														height: "100%",
-													},
-													"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-														backgroundColor: "#3AE374",
-														opacity: 1,
-													},
-												}}
+												sx={switchStyle}
 												checked={bannerstatus3}
+												onChange={() => setBannerStatus3(!bannerstatus3)}
 											/>
 										</div>
 									</div>

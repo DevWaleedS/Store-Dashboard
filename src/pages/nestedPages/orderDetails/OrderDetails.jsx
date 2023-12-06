@@ -1302,7 +1302,10 @@ const OrderDetails = () => {
 								<div className='order-action-box mb-3'>
 									<div className='action-title'>
 										<ListIcon className='list-icon' />
-										<span className='me-2'> تصدير الطلب</span>
+										<span className='me-2' style={{ fontSize: "18px" }}>
+											{" "}
+											تصدير الطلب
+										</span>
 									</div>
 									<div className='action-icon'>
 										<PDFIcon className='pdf-icon' onClick={() => toPDF()} />
@@ -1330,7 +1333,10 @@ const OrderDetails = () => {
 										className='order-action-box mb-3'>
 										<div className='action-title'>
 											<ListIcon className='list-icon' />
-											<span className='me-2 ms-2'> طباعة بوليصة الشحن</span>
+											<span className='me-2 ms-2' style={{ fontSize: "18px" }}>
+												{" "}
+												طباعة بوليصة الشحن
+											</span>
 											{printError && (
 												<span className='fs-6 text-danger'>({printError})</span>
 											)}

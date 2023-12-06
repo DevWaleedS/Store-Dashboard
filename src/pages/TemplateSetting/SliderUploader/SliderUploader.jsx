@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 // Third party
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import ImageUploading from "react-images-uploading";
 
@@ -17,6 +18,36 @@ import { Button, FormControl, Switch } from "@mui/material";
 // Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
+
+// switchStyle
+const switchStyle = {
+	width: "35px",
+	padding: 0,
+	height: "20px",
+	borderRadius: "0.75rem",
+	"& .MuiSwitch-thumb": {
+		width: "12px",
+		height: "12px",
+	},
+	"& .MuiSwitch-switchBase": {
+		padding: "0",
+		top: "4px",
+		left: "4px",
+	},
+	"& .MuiSwitch-switchBase.Mui-checked": {
+		left: "-4px",
+	},
+	"& .Mui-checked .MuiSwitch-thumb": {
+		backgroundColor: "#FFFFFF",
+	},
+	"& .MuiSwitch-track": {
+		height: "100%",
+	},
+	"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
+		backgroundColor: "#3AE374",
+		opacity: 1,
+	},
+};
 
 const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
@@ -51,6 +82,85 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 			setThirdSliderName(sliders[0]?.slider3);
 		}
 	}, [sliders]);
+
+	// To handle width and height of banners
+	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const handleImageUpload =
+		(sliderIndex, sliderState, setSliderState, setPreviewSliderState) =>
+		async (imageList) => {
+			// Check if the image size is valid
+			const isSizeValid = imageList?.every(
+				(image) => image?.file?.size <= maxFileSize
+			);
+
+			// Errors message
+			const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 2 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
+
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img?.width !== 1110 && img?.height !== 440) {
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
+
+			const isValidDimensions = await Promise?.all(
+				imageList?.map(checkImageDimensions)
+			).then((results) => results?.every((result) => result));
+
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isSizeValid && !isValidDimensions) {
+				// Display a warning message and reset the logo state
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isValidDimensions && sizeErrorMessage) {
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isSizeValid && isValidDimensions) {
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else {
+				const updatedSliderState = [...sliderState];
+				updatedSliderState[sliderIndex] = imageList;
+				setSliderState(updatedSliderState);
+
+				const updatedNameState = updatedSliderState[sliderIndex]?.data_url;
+				const updatedFileState = updatedSliderState[sliderIndex];
+
+				const sliderNames = [
+					setFirstSliderName,
+					setSecondSliderName,
+					setThirdSliderName,
+				];
+
+				const sliderFile = [setFirstSlider, setSecondSlider, setThirdSlider];
+
+				if (sliderNames[sliderIndex]) {
+					sliderNames[sliderIndex](updatedNameState);
+				}
+				if (sliderFile[sliderIndex]) {
+					sliderFile[sliderIndex](updatedFileState);
+				}
+			}
+			setPreviewSliderState(imageList);
+		};
 
 	// update Sliders function
 	const updateSliders = () => {
@@ -150,10 +260,12 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={firstSlider}
-											onChange={(imageList) => {
-												setFirstSlider(imageList);
-												setPreviewSlider(imageList);
-											}}
+											onChange={handleImageUpload(
+												0,
+												firstSlider,
+												setFirstSlider,
+												setPreviewSlider
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -191,36 +303,9 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 										</ImageUploading>
 										<div className='switches-group'>
 											<Switch
-												onChange={() => setSlidersStatus1(!sliderstatus1)}
-												sx={{
-													width: "35px",
-													padding: 0,
-													height: "20px",
-													borderRadius: "0.75rem",
-													"& .MuiSwitch-thumb": {
-														width: "12px",
-														height: "12px",
-													},
-													"& .MuiSwitch-switchBase": {
-														padding: "0",
-														top: "4px",
-														left: "4px",
-													},
-													"& .MuiSwitch-switchBase.Mui-checked": {
-														left: "-4px",
-													},
-													"& .Mui-checked .MuiSwitch-thumb": {
-														backgroundColor: "#FFFFFF",
-													},
-													"& .MuiSwitch-track": {
-														height: "100%",
-													},
-													"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-														backgroundColor: "#3AE374",
-														opacity: 1,
-													},
-												}}
+												sx={switchStyle}
 												checked={sliderstatus1}
+												onChange={() => setSlidersStatus1(!sliderstatus1)}
 											/>
 										</div>
 									</div>
@@ -230,10 +315,12 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={secondSlider}
-											onChange={(imageList) => {
-												setSecondSlider(imageList);
-												setPreviewSlider(imageList);
-											}}
+											onChange={handleImageUpload(
+												1,
+												secondSlider,
+												setSecondSlider,
+												setPreviewSlider
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -271,36 +358,9 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 										</ImageUploading>
 										<div className='switches-group'>
 											<Switch
-												onChange={() => setSlidersStatus2(!sliderstatus2)}
-												sx={{
-													width: "35px",
-													padding: 0,
-													height: "20px",
-													borderRadius: "0.75rem",
-													"& .MuiSwitch-thumb": {
-														width: "12px",
-														height: "12px",
-													},
-													"& .MuiSwitch-switchBase": {
-														padding: "0",
-														top: "4px",
-														left: "4px",
-													},
-													"& .MuiSwitch-switchBase.Mui-checked": {
-														left: "-4px",
-													},
-													"& .Mui-checked .MuiSwitch-thumb": {
-														backgroundColor: "#FFFFFF",
-													},
-													"& .MuiSwitch-track": {
-														height: "100%",
-													},
-													"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-														backgroundColor: "#3AE374",
-														opacity: 1,
-													},
-												}}
+												sx={switchStyle}
 												checked={sliderstatus2}
+												onChange={() => setSlidersStatus2(!sliderstatus2)}
 											/>
 										</div>
 									</div>
@@ -310,10 +370,12 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 									<div className='wrapper'>
 										<ImageUploading
 											value={thirdSlider}
-											onChange={(imageList) => {
-												setThirdSlider(imageList);
-												setPreviewSlider(imageList);
-											}}
+											onChange={handleImageUpload(
+												2,
+												thirdSlider,
+												setThirdSlider,
+												setPreviewSlider
+											)}
 											maxNumber={2}
 											dataURLKey='data_url'
 											acceptType={["jpg", "png", "jpeg"]}>
@@ -351,36 +413,9 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 										</ImageUploading>
 										<div className='switches-group'>
 											<Switch
-												onChange={() => setSlidersStatus3(!sliderstatus3)}
-												sx={{
-													width: "35px",
-													padding: 0,
-													height: "20px",
-													borderRadius: "0.75rem",
-													"& .MuiSwitch-thumb": {
-														width: "12px",
-														height: "12px",
-													},
-													"& .MuiSwitch-switchBase": {
-														padding: "0",
-														top: "4px",
-														left: "4px",
-													},
-													"& .MuiSwitch-switchBase.Mui-checked": {
-														left: "-4px",
-													},
-													"& .Mui-checked .MuiSwitch-thumb": {
-														backgroundColor: "#FFFFFF",
-													},
-													"& .MuiSwitch-track": {
-														height: "100%",
-													},
-													"&.MuiSwitch-root .Mui-checked+.MuiSwitch-track": {
-														backgroundColor: "#3AE374",
-														opacity: 1,
-													},
-												}}
+												sx={switchStyle}
 												checked={sliderstatus3}
+												onChange={() => setSlidersStatus3(!sliderstatus3)}
 											/>
 										</div>
 									</div>
