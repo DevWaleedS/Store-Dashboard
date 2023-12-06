@@ -67,11 +67,22 @@ const Notifications = () => {
 			return `منذ ${currentMinutes} دقائق`;
 		} else if (currentMinutes < 60 && currentMinutes >= 11) {
 			return `منذ ${currentMinutes} دقيقة`;
-		} else if (currentMinutes < 120) {
+		} else if (currentMinutes === 60) {
 			return "منذ ساعة";
+		} else if (currentMinutes === 120) {
+			return "منذ ساعتين";
 		} else if (currentMinutes < 1440) {
-			const hours = Math.floor(currentMinutes / 60);
-			return `منذ ${hours} ساعة و ${currentMinutes % 60} دقيقة`;
+			let hours = Math.floor(currentMinutes / 60);
+			let min = currentMinutes % 60;
+			if (hours === 1) {
+				return `منذ ساعة و ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
+			} else if (hours === 2) {
+				return `منذ  و ساعتين ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
+			} else if (hours <= 10) {
+				return `منذ ${hours} ساعات و ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
+			} else {
+				return `منذ ${hours} ساعة و ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
+			}
 		}
 
 		const currentDate = Math.round(currentMinutes / 60 / 24);

@@ -1235,7 +1235,17 @@ const OrderDetails = () => {
 												</span>
 											</div>
 											<div className='action-icon'>
-												<ArrowDown />
+												<ArrowDown
+													style={{
+														cursor:
+															fetchedData?.data?.orders?.status ===
+																"تم التوصيل" ||
+															fetchedData?.data?.orders?.status === "ملغي" ||
+															fetchedData?.data?.orders?.status === "مكتمل"
+																? "not-allowed"
+																: "pointer",
+													}}
+												/>
 											</div>
 										</button>
 
@@ -1342,7 +1352,17 @@ const OrderDetails = () => {
 											)}
 										</div>
 										<div className='action-icon'>
-											<Print />
+											<Print
+												style={{
+													cursor:
+														fetchedData?.data?.orders?.status ===
+															"تم التوصيل" ||
+														fetchedData?.data?.orders?.status === "ملغي" ||
+														fetchedData?.data?.orders?.status === "مكتمل"
+															? "not-allowed"
+															: "pointer",
+												}}
+											/>
 										</div>
 									</button>
 								)}

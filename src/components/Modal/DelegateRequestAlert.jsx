@@ -75,7 +75,7 @@ const DelegateRequestAlert = () => {
 					</div>
 					<div className='d-flex justify-between '>
 						<button
-							onClick={() => navigate("Delegate")}
+							onClick={() => dispatch(closeDelegateRequestAlert())}
 							style={{
 								color: "#fff",
 								fontSize: "24px",
