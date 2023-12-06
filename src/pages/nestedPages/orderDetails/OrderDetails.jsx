@@ -1027,6 +1027,14 @@ const OrderDetails = () => {
 													}}
 													IconComponent={IoIosArrowDown}
 													displayEmpty
+													disabled={
+														fetchedData?.data?.orders?.status ===
+															"تم التوصيل" ||
+														fetchedData?.data?.orders?.status === "ملغي" ||
+														fetchedData?.data?.orders?.status === "مكتمل"
+															? true
+															: false
+													}
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
 														if (!selected || shipping?.district === "") {
@@ -1101,6 +1109,14 @@ const OrderDetails = () => {
 													}}
 													IconComponent={IoIosArrowDown}
 													displayEmpty
+													disabled={
+														fetchedData?.data?.orders?.status ===
+															"تم التوصيل" ||
+														fetchedData?.data?.orders?.status === "ملغي" ||
+														fetchedData?.data?.orders?.status === "مكتمل"
+															? true
+															: false
+													}
 													inputProps={{ "aria-label": "Without label" }}
 													renderValue={(selected) => {
 														if (!selected || shipping?.city === "") {
@@ -1144,6 +1160,14 @@ const OrderDetails = () => {
 											</div>
 											<div className='col-lg-9 col-md-9 col-12'>
 												<input
+													disabled={
+														fetchedData?.data?.orders?.status ===
+															"تم التوصيل" ||
+														fetchedData?.data?.orders?.status === "ملغي" ||
+														fetchedData?.data?.orders?.status === "مكتمل"
+															? true
+															: false
+													}
 													type='text'
 													placeholder='عنوان الشحنة'
 													name='name'
@@ -1190,15 +1214,25 @@ const OrderDetails = () => {
 									id='accordionExample'>
 									<div className='accordion-item w-100'>
 										<button
-											className='accordion-button  text-end '
+											disabled={
+												fetchedData?.data?.orders?.status === "تم التوصيل" ||
+												fetchedData?.data?.orders?.status === "ملغي" ||
+												fetchedData?.data?.orders?.status === "مكتمل"
+													? true
+													: false
+											}
 											type='button'
+											className='accordion-button  text-end '
 											data-bs-toggle='collapse'
 											data-bs-target='#collapseOne'
 											aria-expanded='true'
 											aria-controls='collapseOne'>
 											<div className='action-title w-100'>
 												<ListIcon className='list-icon' />
-												<span className='me-2'> تعديل حالة الطلب</span>
+												<span className='me-2' style={{ fontSize: "18px" }}>
+													{" "}
+													تعديل حالة الطلب
+												</span>
 											</div>
 											<div className='action-icon'>
 												<ArrowDown />
@@ -1277,7 +1311,21 @@ const OrderDetails = () => {
 
 								{fetchedData?.data?.orders?.shipping && (
 									<button
-										style={{ cursor: "pointer" }}
+										disabled={
+											fetchedData?.data?.orders?.status === "تم التوصيل" ||
+											fetchedData?.data?.orders?.status === "ملغي" ||
+											fetchedData?.data?.orders?.status === "مكتمل"
+												? true
+												: false
+										}
+										style={{
+											cursor:
+												fetchedData?.data?.orders?.status === "تم التوصيل" ||
+												fetchedData?.data?.orders?.status === "ملغي" ||
+												fetchedData?.data?.orders?.status === "مكتمل"
+													? "not-allowed"
+													: "pointer",
+										}}
 										onClick={() => printSticker()}
 										className='order-action-box mb-3'>
 										<div className='action-title'>

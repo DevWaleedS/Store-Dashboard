@@ -380,6 +380,7 @@ export default function BigOrdersTable({
 															<div className='actions d-flex justify-content-evenly'>
 																<span>
 																	<ReportIcon
+																		title='تفاصيل الطلب'
 																		style={{ cursor: "pointer" }}
 																		onClick={() => {
 																			navigate(`OrderDetails/${row?.id}`);

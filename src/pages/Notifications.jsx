@@ -65,7 +65,7 @@ const Notifications = () => {
 			return "منذ دقيقتين";
 		} else if (currentMinutes <= 10) {
 			return `منذ ${currentMinutes} دقائق`;
-		} else if (currentMinutes < 60) {
+		} else if (currentMinutes < 60 && currentMinutes >= 11) {
 			return `منذ ${currentMinutes} دقيقة`;
 		} else if (currentMinutes < 120) {
 			return "منذ ساعة";
@@ -77,12 +77,13 @@ const Notifications = () => {
 		const currentDate = Math.round(currentMinutes / 60 / 24);
 
 		if (currentDate === 1) {
-			return "أمس،" + moment(date).locale("ar").format(" h:mm a");
+			return "أمس، الساعة " + moment(date).locale("ar").format(" h:mm a");
 		} else if (currentDate === 2) {
-			return "منذ يومين،" + moment(date).locale("ar").format(" h:mm a");
+			return " منذ يومين، الساعة" + moment(date).locale("ar").format(" h:mm a");
 		} else if (currentDate <= 7) {
 			return (
-				`منذ ${currentDate} أيام،` + moment(date).locale("ar").format(" h:mm a")
+				`منذ ${currentDate}  أيام، الساعة` +
+				moment(date).locale("ar").format(" h:mm a")
 			);
 		}
 
