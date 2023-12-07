@@ -50,6 +50,30 @@ const FormSearchWeight = ({
 			break;
 	}
 
+	//  select styles
+	const selectStyle = {
+		fontSize: "18px",
+		backgroundColor: "#ededed",
+		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+			{
+				paddingRight: "20px",
+			},
+		"& .MuiOutlinedInput-root": {
+			"& :hover": {
+				border: "none",
+			},
+		},
+		"& .MuiOutlinedInput-notchedOutline": {
+			border: "none",
+		},
+		"& .MuiSelect-icon": {
+			right: "94%",
+		},
+		"& .MuiSelect-nativeInput": {
+			display: "none",
+		},
+	};
+
 	return (
 		<div className='add-category'>
 			<form onSubmit={handleSubmit}>
@@ -79,28 +103,7 @@ const FormSearchWeight = ({
 									setCategory_id(e.target.value);
 									categorySelected(e.target.value);
 								}}
-								sx={{
-									fontSize: "18px",
-									backgroundColor: "#ededed",
-									"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-										{
-											paddingRight: "20px",
-										},
-									"& .MuiOutlinedInput-root": {
-										"& :hover": {
-											border: "none",
-										},
-									},
-									"& .MuiOutlinedInput-notchedOutline": {
-										border: "none",
-									},
-									"& .MuiSelect-icon": {
-										right: "94%",
-									},
-									"& .MuiSelect-nativeInput": {
-										display: "none",
-									},
-								}}
+								sx={selectStyle}
 								IconComponent={IoIosArrowDown}
 								displayEmpty
 								inputProps={{ "aria-label": "Without label" }}

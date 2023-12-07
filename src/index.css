@@ -6503,6 +6503,7 @@ input:disabled {
 }
 .import-product-multi-images div {
 	width: 120px;
+	height: 120px;
 }
 
 .product-images .another-image div,
@@ -8791,6 +8792,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.add-product-from-store-footer button {
 		height: 48px !important;
 		font-size: 18px !important;
+	}
+
+	/*  show import priducnt */
+	.import-product-multi-images div,
+	.import-product-multi-images .video_wrapper {
+		width: 70px;
+		height: 70px;
+		padding: 10px;
 	}
 
 	/* add-new-product */

@@ -72,8 +72,6 @@ const Products = () => {
 		products = fetchedData?.data?.products;
 	}
 
-	
-
 	if (category_id !== "") {
 		filterProducts = products?.filter(
 			(item) => item?.category?.id === category_id
@@ -82,19 +80,28 @@ const Products = () => {
 		filterProducts = products;
 	}
 
+	// Export the product file
 	const exportToCSV = () => {
 		const ws = XLSX.utils.json_to_sheet(
 			filterProducts?.map((item) => ({
 				id: item?.id,
 				name: item?.name,
 				description: item?.description,
+				short_description: item?.short_description,
 				selling_price: item?.selling_price,
 				category_id: item?.category?.name,
 				discount_price: item?.discount_price,
 				subcategory_id: item?.subcategory?.map((sub) => sub?.name)?.toString(),
+				weight: item?.weight,
 				stock: item?.stock,
 				cover: item?.cover,
 				seo: item?.SEOdescription,
+				snappixel: item?.snappixel,
+				tiktokpixel: item?.tiktokpixel,
+				twitterpixel: item?.twitterpixel,
+				instapixel: item?.instapixel,
+				robot_link: item?.robot_link,
+				google_analytics: item?.google_analytics,
 			}))
 		);
 		const wb = { Sheets: { data: ws }, SheetNames: ["data"] };

@@ -315,7 +315,7 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={`${
+																			className={` d-flex justify-content-center align-items-center ${
 																				isActive === index ? "active" : ""
 																			}`}>
 																			<img
