@@ -1,94 +1,103 @@
-.ql-snow .ql-picker.ql-header {
+.quill {
+	width: 100%;
+	height: 100%;
+}
+.quill .ql-container.ql-snow {
+	height: 550px;
+	border: 1px solid var(--gray-300);
+}
+
+.quill .ql-snow .ql-picker.ql-header {
 	width: max-content;
 }
-.ql-toolbar.ql-snow .ql-picker-label {
+.quill .ql-toolbar.ql-snow .ql-picker-label {
 	border: none;
 }
-.ql-snow .ql-picker-label {
+.quill .ql-snow .ql-picker-label {
 	padding-left: 8px;
 	padding-right: 16px;
 }
 
-.ql-snow .ql-picker.ql-expanded .ql-picker-label,
-.ql-snow.ql-toolbar button:hover,
-.ql-snow .ql-toolbar button:hover,
-.ql-snow.ql-toolbar button:focus,
-.ql-snow .ql-toolbar button:focus,
-.ql-snow.ql-toolbar button.ql-active,
-.ql-snow .ql-toolbar button.ql-active,
-.ql-snow.ql-toolbar .ql-picker-label:hover,
-.ql-snow .ql-toolbar .ql-picker-label:hover,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active,
-.ql-snow.ql-toolbar .ql-picker-item:hover,
-.ql-snow .ql-toolbar .ql-picker-item:hover,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected,
-.ql-snow.ql-toolbar button:hover .ql-stroke,
-.ql-snow .ql-toolbar button:hover .ql-stroke,
-.ql-snow.ql-toolbar button:focus .ql-stroke,
-.ql-snow .ql-toolbar button:focus .ql-stroke,
-.ql-snow.ql-toolbar button.ql-active .ql-stroke,
-.ql-snow .ql-toolbar button.ql-active .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
-.ql-snow.ql-toolbar button:hover .ql-stroke-miter,
-.ql-snow .ql-toolbar button:hover .ql-stroke-miter,
-.ql-snow.ql-toolbar button:focus .ql-stroke-miter,
-.ql-snow .ql-toolbar button:focus .ql-stroke-miter,
-.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
-.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
-.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
-.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+.quill .ql-snow .ql-picker.ql-expanded .ql-picker-label,
+.quill .ql-snow.ql-toolbar button:hover,
+.quill .ql-snow .ql-toolbar button:hover,
+.quill .ql-snow.ql-toolbar button:focus,
+.quill .ql-snow .ql-toolbar button:focus,
+.quill .ql-snow.ql-toolbar button.ql-active,
+.quill .ql-snow .ql-toolbar button.ql-active,
+.quill .ql-snow.ql-toolbar .ql-picker-label:hover,
+.quill .ql-snow .ql-toolbar .ql-picker-label:hover,
+.quill .ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.quill .ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.quill .ql-snow.ql-toolbar .ql-picker-item:hover,
+.quill .ql-snow .ql-toolbar .ql-picker-item:hover,
+.quill .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.quill .ql-snow .ql-toolbar .ql-picker-item.ql-selected,
+.quill .ql-snow.ql-toolbar button:hover .ql-stroke,
+.quill .ql-snow .ql-toolbar button:hover .ql-stroke,
+.quill .ql-snow.ql-toolbar button:focus .ql-stroke,
+.quill .ql-snow .ql-toolbar button:focus .ql-stroke,
+.quill .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.quill .ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.quill .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.quill .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.quill .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.quill .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.quill .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
+.quill .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
+.quill .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.quill .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.quill .ql-snow.ql-toolbar button:hover .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar button:hover .ql-stroke-miter,
+.quill .ql-snow.ql-toolbar button:focus .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar button:focus .ql-stroke-miter,
+.quill .ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.quill .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.quill .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.quill .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.quill .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.quill .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
 	color: var(--second-500);
 }
 
-.ql-toolbar.ql-snow .ql-formats {
+.quill .ql-toolbar.ql-snow .ql-formats {
 	margin-right: 0;
 }
 
-.ql-editor {
+.quill .ql-editor {
 	text-align: right;
 	background-color: #ffff;
 	font-size: 18px;
 	font-weight: 400;
 }
 
-.ql-toolbar.ql-snow {
+.quill .ql-toolbar.ql-snow {
 	font-family: "Tajawal", sans-serif !important;
 	padding: 10px 8px;
 	border-radius: 5px 5px 0 0;
 }
-.ql-editor.ql-blank::before {
+.quill .ql-editor.ql-blank::before {
 	font-size: 18px;
 	font-weight: 400;
 	font-style: normal;
 }
 
-.ql-snow .ql-tooltip {
+.quill .ql-snow .ql-tooltip {
 	width: 400px;
 	white-space: normal;
 	gap: 5px;
 }
 
-.ql-editor li:not(.ql-direction-rtl)::before {
+.quill .ql-editor li:not(.ql-direction-rtl)::before {
 	margin-left: 0;
 	margin-right: 0;
 	text-align: right;
 }
-.ql-snow .ql-tooltip input[type="text"] {
+.quill .ql-snow .ql-tooltip input[type="text"] {
 	width: 100%;
 	font-size: 14px;
 	height: 36px;
@@ -96,17 +105,17 @@
 	direction: ltr;
 	padding: 3px 10px;
 }
-.ql-snow .ql-tooltip.ql-flip {
+.quill .ql-snow .ql-tooltip.ql-flip {
 	left: unset !important;
 }
-.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+.quill .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
 	content: "حفظ";
 }
-.ql-snow .ql-tooltip[data-mode="link"]::before {
+.quill .ql-snow .ql-tooltip[data-mode="link"]::before {
 	content: "ادخل الرابط";
 }
 
-.ql-snow .ql-tooltip a {
+.quill .ql-snow .ql-tooltip a {
 	background: var(--second-500);
 	width: 100%;
 	padding: 5px;
@@ -114,17 +123,17 @@
 	justify-content: center;
 	margin-bottom: 5px;
 }
-.ql-snow a {
+.quill .ql-snow a {
 	color: #fff;
 }
 
-.ql-snow .ql-tooltip::before {
+.quill .ql-snow .ql-tooltip::before {
 	content: " الرابط الحالي (اضغط علي الرابط للمعاينة)";
 	line-height: 26px;
 	margin-right: 8px;
 }
 
-.ql-snow .ql-tooltip a.ql-preview {
+.quill .ql-snow .ql-tooltip a.ql-preview {
 	display: inline-block;
 	max-width: 100%;
 	overflow-x: hidden;
@@ -134,14 +143,71 @@
 	color: var(--second-500);
 	border: 1px solid #ddd;
 }
-.ql-snow .ql-tooltip a.ql-action::after {
+.quill .ql-snow .ql-tooltip a.ql-action::after {
 	border-right: 1px solid #ccc;
 	content: "تعديل";
 	margin-left: 16px;
 	padding-right: 8px;
 }
 
-.ql-snow .ql-tooltip a.ql-remove::before {
+.quill .ql-snow .ql-tooltip a.ql-remove::before {
 	content: "حذف";
 	margin-left: 8px;
+}
+/* empty-cart */
+.empty-cart .quill .ql-toolbar.ql-snow {
+	background-color: #fff;
+}
+.empty-cart .quill .ql-container.ql-snow {
+	height: 200px;
+	background-color: #f2f2f2;
+	border: 1px solid var(--bs-gray-200);
+	box-shadow: 0 0 2px 0 var(--gray-100);
+	color: #000;
+	color: var(--black-300);
+	padding: 25px;
+	white-space: normal !important;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-ms-border-radius: 6px;
+	-o-border-radius: 6px;
+}
+
+.empty-cart .quill .ql-editor {
+	background-color: #f2f2f2;
+}
+
+/*  evaluation-the-platform style */
+.evaluation-the-platform .quill .ql-container.ql-snow {
+	border: none;
+	height: 220px;
+	background-color: #fff;
+	border-radius: 0 0 8px 8px;
+	-webkit-border-radius: 0 0 8px 8px;
+	-moz-border-radius: 0 0 8px 8px;
+	-ms-border-radius: 0 0 8px 8px;
+	-o-border-radius: 0 0 8px 8px;
+	box-shadow: 0 3px 6px #02466a0f !important;
+	padding: 80px 20px 20px;
+}
+
+.evaluation-the-platform .ql-editor ql-blank {
+	font-size: 20px;
+	font-weight: 500;
+}
+.evaluation-the-platform .quill .ql-editor {
+	color: #000;
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.evaluation-the-platform .quill .ql-toolbar.ql-snow {
+	border: 1px solid var(--gray-100);
+	padding: 18px;
+	border-radius: none;
+	-webkit-border-radius: none;
+	-moz-border-radius: none;
+	-ms-border-radius: none;
+	-o-border-radius: none;
 }

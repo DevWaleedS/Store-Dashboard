@@ -1,55 +1,47 @@
-import React, { useRef, useEffect, useContext } from "react";
-import Quill from "quill";
+import React, { useContext } from "react";
+import ReactQuill from "react-quill";
 
 // Context
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Css Styles
-import "quill/dist/quill.snow.css";
 import "./TextEditor.css";
+import "react-quill/dist/quill.snow.css";
 
-const TextEditor = () => {
-	const quillRef = useRef(null);
-
+const TextEditor = ({ ToolBar, placeholder }) => {
 	const editorContent = useContext(TextEditorContext);
 	const { setEditorValue, editorValue } = editorContent;
 
-	console.log(editorValue);
+	let toolbarOptions;
+	if (ToolBar === "createOrEditPages") {
+		toolbarOptions = [
+			[{ header: [1, 2, 3, 4, 5, 6, false] }],
+			[{ align: [] }],
+			["italic", "underline", "bold"],
+			[{ background: [] }, { color: [] }],
+			[{ list: "ordered" }, { list: "bullet" }],
+			["link", "image"],
+		];
+	} else if (ToolBar === "emptyCart") {
+		toolbarOptions = [
+			["italic", "underline", "bold"],
+			[{ list: "ordered" }, { list: "bullet" }],
+			["link", "image"],
+		];
+	} else if (ToolBar === "evaluationThePlatform") {
+		toolbarOptions = [["italic", "underline", "bold"]];
+	}
 
-	const toolbarOptions = [
-		[{ header: [1, 2, 3, 4, 5, 6, false] }],
-		["italic", "underline", "bold"],
-		[{ color: [] }, { background: [] }],
-		[{ align: [] }],
-		[{ list: "ordered" }, { list: "bullet" }],
-		["link", "image"],
-	];
-
-	useEffect(() => {
-		const quill = new Quill(quillRef?.current, {
-			theme: "snow",
-			modules: {
-				toolbar: toolbarOptions,
-			},
-			placeholder: "محتوي الصفحة...",
-		});
-
-		quill.on("text-change", () => {
-			// Update the current editor value
-			setEditorValue(quill.root.innerHTML);
-		});
-
-		// Optional: Set the initial editor content if available
-		if (editorValue) {
-			quill.root.innerHTML = editorValue;
-		}
-
-		return () => {
-			quill.off("text-change");
-		};
-	}, []);
-
-	return <div ref={quillRef} style={{ height: "400px", width: "100%" }} />;
+	return (
+		<ReactQuill
+			theme='snow'
+			dir='rtl'
+			placeholder={placeholder}
+			value={editorValue}
+			onChange={setEditorValue}
+			modules={{ toolbar: toolbarOptions }}
+		/>
+	);
 };
 
 export default TextEditor;

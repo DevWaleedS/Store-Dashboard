@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export const TextEditorContext = React.createContext({});
 
 const TextEditorProvider = (props) => {
-	const [editorValue, setEditorValue] = useState("محتوي الصفحه");
+	const [editorValue, setEditorValue] = useState(null);
 
 	const editorContent = {
 		editorValue,

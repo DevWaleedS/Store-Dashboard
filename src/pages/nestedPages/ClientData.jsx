@@ -6,19 +6,13 @@ import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
-import draftToHtml from "draftjs-to-html";
-import { Editor } from "react-draft-wysiwyg";
-import {
-	ContentState,
-	EditorState,
-	convertFromHTML,
-	convertToRaw,
-} from "draft-js";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -27,6 +21,7 @@ import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
+import { TextEditor } from "../../components/TextEditor";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Table
@@ -146,6 +141,10 @@ const ClientData = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
+	// To get the editor content
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
+
 	const [openPercentMenu, setOpenPercentMenu] = useState(false);
 	const [free_shipping, setFree_shipping] = useState(false);
 	const [discount_type, setDiscount_type] = useState(null);
@@ -157,23 +156,6 @@ const ClientData = () => {
 
 	// ----------------------------------------------------------------------
 
-	// to write the message
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
-	};
-	// ----------------------------------------------------------------------
-
 	// To set discount_total
 	useEffect(() => {
 		if (cartDetails) {
@@ -181,14 +163,7 @@ const ClientData = () => {
 			setDiscount_value(cartDetails?.discount_value);
 			setDiscount_type(cartDetails?.discount_type);
 			setFree_shipping(cartDetails?.free_shipping === "0" ? false : true);
-			setDescription({
-				...description,
-				editorState: EditorState.createWithContent(
-					ContentState.createFromBlockArray(
-						convertFromHTML(cartDetails?.message || "")
-					)
-				),
-			});
+			setEditorValue(cartDetails?.message || "");
 		}
 	}, [cartDetails]);
 
@@ -285,7 +260,7 @@ const ClientData = () => {
 			formData.append("discount_value", "");
 		}
 
-		formData.append("message", description?.htmlValue);
+		formData.append("message", editorValue);
 		formData.append("discount_total", discount_total);
 		formData.append(
 			"discount_expire_date",
@@ -311,6 +286,7 @@ const ClientData = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Carts");
 					setReload(!reload);
+					setEditorValue(null);
 				} else {
 					setLoadingTitle("");
 					setErrors({
@@ -893,36 +869,10 @@ const ClientData = () => {
 												نص الرسالة
 											</h2>
 										</div>
-										<div className='d-flex flex-row align-items-center gap-4'>
-											<Editor
-												className='text-black'
-												toolbarHidden={false}
-												editorState={description.editorState}
-												onEditorStateChange={onEditorStateChange}
-												inDropdown={true}
-												placeholder={
-													<p
-														style={{
-															fontSize: "20px",
-															fontWeight: "400",
-															color: "#011723",
-															whiteSpace: "normal",
-														}}>
-														هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة،
-														لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك
-														أن تولد مثل هذا النص أو العديد من النصوص الأخرى
-													</p>
-												}
-												editorClassName='demo-editor'
-												toolbar={{
-													options: ["inline", "textAlign", "image", "list"],
-													inline: {
-														options: ["bold"],
-													},
-													list: {
-														options: ["unordered", "ordered"],
-													},
-												}}
+										<div className='d-flex flex-row align-items-center gap-4 empty-cart'>
+											<TextEditor
+												ToolBar={"emptyCart"}
+												placeholder={"اكتب الرساله..."}
 											/>
 										</div>
 										{errors?.messageErr && (

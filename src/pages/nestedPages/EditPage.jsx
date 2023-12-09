@@ -116,13 +116,6 @@ const EditPage = () => {
 	const [descriptionLength, setDescriptionLength] = useState(false);
 	const itsPost = page?.pageCategory?.includes(1);
 
-	// to convert html to plain text
-	// const htmlToPlainText = (html) => {
-	// 	const doc = new DOMParser().parseFromString(html, "text/html");
-	// 	return doc.body.textContent || "";
-	// };
-	// const textEditorPlainValue = htmlToPlainText(editorValue);
-
 	// ---------------------------------------------------------
 	const addTags = () => {
 		setPage({ ...page, tags: [...page?.tags, tag] });
@@ -269,6 +262,7 @@ const EditPage = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Pages");
 					setReload(!reload);
+					setEditorValue(null);
 				} else {
 					setLoadingTitle("");
 					setPageError({
@@ -413,57 +407,21 @@ const EditPage = () => {
 											<div className='row'>
 												<div className='col-12'>
 													<div className='py-4'>
-														<TextEditor />
+														<TextEditor
+															ToolBar={"createOrEditPages"}
+															placeholder={"محتوى الصفحة..."}
+														/>
 													</div>
+												</div>
+												<div className='col-12'>
+													{pageError?.page_content && (
+														<span className='fs-6 text-danger'>
+															{pageError?.page_content}
+														</span>
+													)}
 												</div>
 											</div>
-											{/*
-											
-												<div className='row'>
-													<div className='col-12'>
-														<div className=''>
-															<div className='d-flex flex-row align-items-center gap-4 py-4'>
-																<Editor
-																	toolbarHidden={false}
-																	editorState={description.editorState}
-																	onEditorStateChange={onEditorStateChange}
-																	inDropdown={true}
-																	placeholder={
-																		<div
-																			className='d-flex flex-column  '
-																			style={{ color: "#ADB5B9" }}>
-																			محتوي الصفحة
-																		</div>
-																	}
-																	wrapperClassName='demo-wrapper'
-																	editorClassName='demo-editor'
-																	toolbar={{
-																		options: [
-																			"inline",
-																			"textAlign",
-																			"image",
-																			"list",
-																		],
-																		inline: {
-																			options: ["bold"],
-																		},
-																		list: {
-																			options: ["unordered", "ordered"],
-																		},
-																	}}
-																/>
-															</div>
-														</div>
-													</div>
-													<div className='col-12'>
-														{pageError?.page_content && (
-															<span className='fs-6 text-danger'>
-																{pageError?.page_content}
-															</span>
-														)}
-													</div>
-												</div>
-											*/}
+
 											<div className='row mb-md-5 mb-3 seo-inputs'>
 												<div className='col-12 mb-md-4 mb-3'>
 													<h4>تحسينات SEO</h4>

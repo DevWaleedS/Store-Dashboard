@@ -70,7 +70,7 @@ const CreatePage = () => {
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
-	const { editorValue } = editorContent;
+	const { editorValue, setEditorValue } = editorContent;
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -281,6 +281,7 @@ const CreatePage = () => {
 						setEndActionTitle(res?.data?.message?.ar);
 						navigate("/Pages");
 						setReload(!reload);
+						setEditorValue(null);
 					} else {
 						setLoadingTitle("");
 
@@ -418,41 +419,10 @@ const CreatePage = () => {
 									<div className='row'>
 										<div className='col-12'>
 											<div className='py-4'>
-												<TextEditor />
-											</div>
-										</div>
-									</div>
-									{/*
-								
-									<div className='row'>
-										<div className='col-12'>
-											<div className=''>
-												<div className='d-flex flex-row align-items-center gap-4 py-4'>
-													<Editor
-														className='text-black'
-														toolbarHidden={false}
-														editorState={description.editorState}
-														onEditorStateChange={onEditorStateChange}
-														inDropdown={true}
-														placeholder={
-															<div
-																className='d-flex flex-column  '
-																style={{ color: "#ADB5B9" }}>
-																محتوي الصفحة
-															</div>
-														}
-														editorClassName='demo-editor'
-														toolbar={{
-															options: ["inline", "textAlign", "image", "list"],
-															inline: {
-																options: ["bold"],
-															},
-															list: {
-																options: ["unordered", "ordered"],
-															},
-														}}
-													/>
-												</div>
+												<TextEditor
+													ToolBar={"createOrEditPages"}
+													placeholder={"محتوى الصفحة..."}
+												/>
 											</div>
 										</div>
 										<div className='col-12'>
@@ -463,7 +433,7 @@ const CreatePage = () => {
 											)}
 										</div>
 									</div>
-								*/}
+
 									<div className='row mb-md-5 mb-3 seo-inputs'>
 										<div className='col-12 mb-md-4 mb-3'>
 											<h4>تحسينات SEO</h4>
