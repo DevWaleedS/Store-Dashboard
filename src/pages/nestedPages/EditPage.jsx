@@ -5,15 +5,7 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
-import draftToHtml from "draftjs-to-html";
 import { useDropzone } from "react-dropzone";
-import { Editor } from "react-draft-wysiwyg";
-import {
-	EditorState,
-	convertToRaw,
-	ContentState,
-	convertFromHTML,
-} from "draft-js";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -23,6 +15,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
+import { TextEditor } from "../../components/TextEditor";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // MUI
@@ -40,7 +33,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { DocsIcon, PaperIcon } from "../../data/Icons";
-
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 // Modal Style
 const style = {
 	position: "fixed",
@@ -76,11 +69,19 @@ const EditPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/post-categories"
 	);
 	const navigate = useNavigate();
+
 	const [cookies] = useCookies(["access_token"]);
+
+	// To get the editor content
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
 	const [page, setPage] = useState({
 		title: "",
 		page_desc: "",
@@ -93,6 +94,7 @@ const EditPage = () => {
 		postCategory_id: "",
 		image: "",
 	});
+
 	const {
 		register,
 		handleSubmit,
@@ -113,10 +115,13 @@ const EditPage = () => {
 	const [tag, setTag] = useState("");
 	const [descriptionLength, setDescriptionLength] = useState(false);
 	const itsPost = page?.pageCategory?.includes(1);
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
+
+	// to convert html to plain text
+	// const htmlToPlainText = (html) => {
+	// 	const doc = new DOMParser().parseFromString(html, "text/html");
+	// 	return doc.body.textContent || "";
+	// };
+	// const textEditorPlainValue = htmlToPlainText(editorValue);
 
 	// ---------------------------------------------------------
 	const addTags = () => {
@@ -129,16 +134,6 @@ const EditPage = () => {
 		setPage({ ...page, tags: newTags });
 	};
 	// ------------------------------------------------------
-
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
-	};
 
 	const [pageError, setPageError] = useState({
 		title: "",
@@ -163,13 +158,14 @@ const EditPage = () => {
 			images: "",
 		});
 	};
+	// -----------------------------------------------------
 
 	useEffect(() => {
 		setPage({
 			...page,
 			title: fetchedData?.data?.pages?.title,
 			page_desc: fetchedData?.data?.pages?.page_desc,
-			page_content: fetchedData?.data?.pages?.page_content,
+			page_content: fetchedData?.data?.pages?.page_content || "",
 			seo_title: fetchedData?.data?.pages?.seo_title,
 			seo_link: fetchedData?.data?.pages?.seo_link,
 			seo_desc: fetchedData?.data?.pages?.seo_desc,
@@ -180,20 +176,12 @@ const EditPage = () => {
 			postCategory_id: fetchedData?.data?.pages?.postCategory?.id,
 			image: fetchedData?.data?.pages?.image,
 		});
-		setDescription({
-			...description,
-			editorState: EditorState.createWithContent(
-				ContentState.createFromBlockArray(
-					convertFromHTML(fetchedData?.data?.pages?.page_content || "")
-				)
-			),
-		});
+		setEditorValue(fetchedData?.data?.pages?.page_content);
 	}, [fetchedData?.data?.pages]);
 
 	useEffect(() => {
 		reset(page);
 	}, [page, reset]);
-
 	// -------------------------------------------------
 
 	// Add Post image
@@ -253,21 +241,21 @@ const EditPage = () => {
 		formData.append("_method", "PUT");
 		formData.append("title", data?.title);
 		formData.append("page_desc", data?.page_desc);
-		formData.append(
-			"page_content",
-			description?.htmlValue || page?.page_content
-		);
+		formData.append("page_content", editorValue || page?.page_content);
 		formData.append("seo_title", data?.seo_title);
 		formData.append("seo_link", data?.seo_link);
 		formData.append("seo_desc", data?.seo_desc);
+
 		formData.append("tags", page?.tags?.join(","));
 		for (let i = 0; i < page?.pageCategory?.length; i++) {
 			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
 		}
+
 		formData.append("postCategory_id", itsPost ? page?.postCategory_id : null);
 		if (images.length !== 0) {
 			formData.append("image", itsPost ? images[0] || null : null);
 		}
+
 		axios
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
@@ -316,6 +304,9 @@ const EditPage = () => {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.image?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.postcategory_id?.[0], {
 						theme: "light",
 					});
 				}
@@ -421,48 +412,58 @@ const EditPage = () => {
 											</div>
 											<div className='row'>
 												<div className='col-12'>
-													<div className=''>
-														<div className='d-flex flex-row align-items-center gap-4 py-4'>
-															<Editor
-																toolbarHidden={false}
-																editorState={description.editorState}
-																onEditorStateChange={onEditorStateChange}
-																inDropdown={true}
-																placeholder={
-																	<div
-																		className='d-flex flex-column  '
-																		style={{ color: "#ADB5B9" }}>
-																		محتوي الصفحة
-																	</div>
-																}
-																wrapperClassName='demo-wrapper'
-																editorClassName='demo-editor'
-																toolbar={{
-																	options: [
-																		"inline",
-																		"textAlign",
-																		"image",
-																		"list",
-																	],
-																	inline: {
-																		options: ["bold"],
-																	},
-																	list: {
-																		options: ["unordered", "ordered"],
-																	},
-																}}
-															/>
-														</div>
+													<div className='py-4'>
+														<TextEditor />
 													</div>
 												</div>
-												<div className='col-12'>
-													{pageError?.page_content && (
-														<span className='fs-6 text-danger'>
-															{pageError?.page_content}
-														</span>
-													)}
-												</div>
 											</div>
+											{/*
+											
+												<div className='row'>
+													<div className='col-12'>
+														<div className=''>
+															<div className='d-flex flex-row align-items-center gap-4 py-4'>
+																<Editor
+																	toolbarHidden={false}
+																	editorState={description.editorState}
+																	onEditorStateChange={onEditorStateChange}
+																	inDropdown={true}
+																	placeholder={
+																		<div
+																			className='d-flex flex-column  '
+																			style={{ color: "#ADB5B9" }}>
+																			محتوي الصفحة
+																		</div>
+																	}
+																	wrapperClassName='demo-wrapper'
+																	editorClassName='demo-editor'
+																	toolbar={{
+																		options: [
+																			"inline",
+																			"textAlign",
+																			"image",
+																			"list",
+																		],
+																		inline: {
+																			options: ["bold"],
+																		},
+																		list: {
+																			options: ["unordered", "ordered"],
+																		},
+																	}}
+																/>
+															</div>
+														</div>
+													</div>
+													<div className='col-12'>
+														{pageError?.page_content && (
+															<span className='fs-6 text-danger'>
+																{pageError?.page_content}
+															</span>
+														)}
+													</div>
+												</div>
+											*/}
 											<div className='row mb-md-5 mb-3 seo-inputs'>
 												<div className='col-12 mb-md-4 mb-3'>
 													<h4>تحسينات SEO</h4>
@@ -541,7 +542,10 @@ const EditPage = () => {
 												<div className='col-md-6 col-12 mb-3'>
 													<div className='wrapper'>
 														<div className='title'>
-															<h4>تصنيف الصفحة</h4>
+															<h4>
+																تصنيف الصفحة
+																<span className='important-hint'> * </span>
+															</h4>
 														</div>
 														<div className='body page-category '>
 															<FormGroup
@@ -666,7 +670,10 @@ const EditPage = () => {
 														<div className='col-md-6 col-12'>
 															<div className='wrapper h-auto'>
 																<div className='title'>
-																	<h4>تصنيف المدونة</h4>
+																	<h4>
+																		تصنيف المدونة
+																		<span className='important-hint'>*</span>
+																	</h4>
 																</div>
 																<FormControl sx={{ m: 0, width: "100%" }}>
 																	<Select

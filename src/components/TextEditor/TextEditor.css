@@ -1,0 +1,147 @@
+.ql-snow .ql-picker.ql-header {
+	width: max-content;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+	border: none;
+}
+.ql-snow .ql-picker-label {
+	padding-left: 8px;
+	padding-right: 16px;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-label,
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button:focus .ql-stroke,
+.ql-snow .ql-toolbar button:focus .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow .ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+	color: var(--second-500);
+}
+
+.ql-toolbar.ql-snow .ql-formats {
+	margin-right: 0;
+}
+
+.ql-editor {
+	text-align: right;
+	background-color: #ffff;
+	font-size: 18px;
+	font-weight: 400;
+}
+
+.ql-toolbar.ql-snow {
+	font-family: "Tajawal", sans-serif !important;
+	padding: 10px 8px;
+	border-radius: 5px 5px 0 0;
+}
+.ql-editor.ql-blank::before {
+	font-size: 18px;
+	font-weight: 400;
+	font-style: normal;
+}
+
+.ql-snow .ql-tooltip {
+	width: 400px;
+	white-space: normal;
+	gap: 5px;
+}
+
+.ql-editor li:not(.ql-direction-rtl)::before {
+	margin-left: 0;
+	margin-right: 0;
+	text-align: right;
+}
+.ql-snow .ql-tooltip input[type="text"] {
+	width: 100%;
+	font-size: 14px;
+	height: 36px;
+	margin-bottom: 6px;
+	direction: ltr;
+	padding: 3px 10px;
+}
+.ql-snow .ql-tooltip.ql-flip {
+	left: unset !important;
+}
+.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
+	content: "حفظ";
+}
+.ql-snow .ql-tooltip[data-mode="link"]::before {
+	content: "ادخل الرابط";
+}
+
+.ql-snow .ql-tooltip a {
+	background: var(--second-500);
+	width: 100%;
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 5px;
+}
+.ql-snow a {
+	color: #fff;
+}
+
+.ql-snow .ql-tooltip::before {
+	content: " الرابط الحالي (اضغط علي الرابط للمعاينة)";
+	line-height: 26px;
+	margin-right: 8px;
+}
+
+.ql-snow .ql-tooltip a.ql-preview {
+	display: inline-block;
+	max-width: 100%;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	vertical-align: top;
+	background: transparent;
+	color: var(--second-500);
+	border: 1px solid #ddd;
+}
+.ql-snow .ql-tooltip a.ql-action::after {
+	border-right: 1px solid #ccc;
+	content: "تعديل";
+	margin-left: 16px;
+	padding-right: 8px;
+}
+
+.ql-snow .ql-tooltip a.ql-remove::before {
+	content: "حذف";
+	margin-left: 8px;
+}
