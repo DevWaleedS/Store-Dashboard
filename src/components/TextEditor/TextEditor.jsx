@@ -8,7 +8,7 @@ import { TextEditorContext } from "../../Context/TextEditorProvider";
 import "./TextEditor.css";
 import "react-quill/dist/quill.snow.css";
 
-const TextEditor = ({ ToolBar, placeholder }) => {
+const TextEditor = ({ ToolBar, placeholder, disabled }) => {
 	const editorContent = useContext(TextEditorContext);
 	const { setEditorValue, editorValue } = editorContent;
 
@@ -36,6 +36,7 @@ const TextEditor = ({ ToolBar, placeholder }) => {
 		<ReactQuill
 			theme='snow'
 			dir='rtl'
+			readOnly={disabled}
 			placeholder={placeholder}
 			value={editorValue}
 			onChange={setEditorValue}

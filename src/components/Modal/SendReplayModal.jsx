@@ -1,19 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+
+// Third party
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+
+// Context
 import Context from "../../Context/context";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeReplyModal } from "../../store/slices/ReplyModal-slice";
 
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+// Icons
 import { FiSend } from "react-icons/fi";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+
+// Components
+import { TextEditor } from "../TextEditor";
 
 const style = {
 	position: "absolute",
@@ -42,11 +50,6 @@ const contentStyles = {
 	height: "64px",
 	background: "#F4F5F7",
 	border: "1px solid #67747B33",
-	borderRadius: "0px 8px",
-	whiteSpace: "normal",
-	fontSize: "20px",
-	fontWight: 500,
-	color: "#011723",
 };
 
 const SendReplayModal = ({ commentDetails, reload, setReload }) => {
@@ -56,30 +59,22 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
 	const dispatch = useDispatch(false);
 
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
-
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
-	};
+	// To get the editor content
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
 
 	// Handle errors
 	const [messageError, serMessageError] = useState("");
+
+	const resetsMessage = () => {
+		setEditorValue(null);
+	};
 
 	// to send Replay Comment
 	const sendReplayComment = () => {
 		serMessageError("");
 		let formData = new FormData();
-		formData.append("comment_text", description?.htmlValue);
+		formData.append("comment_text", editorValue);
 		formData.append("comment_id", commentDetails?.id);
 
 		axios
@@ -94,8 +89,15 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 					setEndActionTitle(res?.data?.message?.ar);
 					dispatch(closeReplyModal());
 					setReload(!reload);
+					resetsMessage();
 				} else {
 					serMessageError(res?.data?.message?.en?.comment_text?.[0]);
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.comment_text?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -137,45 +139,10 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 										نص الرسالة
 									</h2>
 								</div>
-								<div className='d-flex flex-row align-items-center gap-4  py-4'>
-									<Editor
-										className='text-black '
-										toolbarHidden={false}
-										editorState={description.editorState}
-										onEditorStateChange={onEditorStateChange}
-										inDropdown={true}
-										placeholder={
-											<div className='d-flex flex-column  '>
-												<p
-													style={{
-														fontSize: "20px",
-														fontWeight: "500",
-														color: "#011723",
-													}}>
-													{" "}
-													شكراً أسيل{" "}
-												</p>
-												<p
-													style={{
-														fontSize: "20px",
-														fontWeight: "500",
-														color: "#011723",
-													}}>
-													{" "}
-													سعداء بتسوقك من متجرنا{" "}
-												</p>
-											</div>
-										}
-										editorClassName='demo-editor'
-										toolbar={{
-											options: ["inline", "textAlign", "image", "list"],
-											inline: {
-												options: ["bold"],
-											},
-											list: {
-												options: ["unordered", "ordered"],
-											},
-										}}
+								<div className='d-flex flex-row align-items-center gap-4 pb-4 send-replay'>
+									<TextEditor
+										ToolBar={"emptyCart"}
+										placeholder={`شكرا ${commentDetails?.user?.name} سعداء بتسوقك من متجرنا.`}
 									/>
 								</div>
 								{messageError && (
@@ -204,7 +171,10 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 							<span className=''>ارسال</span>
 						</button>
 						<button
-							onClick={() => dispatch(closeReplyModal())}
+							onClick={() => {
+								dispatch(closeReplyModal());
+								resetsMessage();
+							}}
 							style={{
 								color: "#02466A",
 								fontSize: "24px",

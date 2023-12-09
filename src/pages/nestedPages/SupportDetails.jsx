@@ -35,6 +35,7 @@ import {
 	StatusIcon,
 	User,
 } from "../../data/Icons";
+import { TextEditor } from "../../components/TextEditor";
 
 // Modal Style
 const style = {
@@ -243,26 +244,12 @@ const SupportDetails = () => {
 												</div>
 											</div>
 
-											<div className='col-12'>
-												<div className='text-editor-icons'>
-													<BoldIcon />
-													<FormatTextRight className='me-3' />
-													<FormatTextLeft className='me-3' />
-													<FormatTextCenter className='me-3' />
-													<Attchment className='me-3' />
-													<FormatTextPointSqure className='me-3' />
-													<FormatTextPoint className='me-3' />
-												</div>
-											</div>
-
-											<div className='col-12'>
-												<textarea
+											<div className='col-12 empty-cart'>
+												<TextEditor
 													disabled={true}
-													name='page-content-input'
-													id='page-content-input'
-													value={
-														fetchedData?.data?.technicalSupports?.content
-													}></textarea>
+													ToolBar={"emptyCart"}
+													placeholder={`${fetchedData?.data?.technicalSupports?.content}`}
+												/>
 											</div>
 										</div>
 
