@@ -21,15 +21,8 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
 import {
-	Attchment,
-	BoldIcon,
 	Customer,
 	DateIcon,
-	FormatTextCenter,
-	FormatTextLeft,
-	FormatTextPoint,
-	FormatTextPointSqure,
-	FormatTextRight,
 	Phone,
 	ReplayIcon,
 	StatusIcon,
