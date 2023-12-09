@@ -13,19 +13,12 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Icons
 import { UserImage } from "../../data/images";
-import {
-	Attchment,
-	BoldIcon,
-	FormatTextCenter,
-	FormatTextLeft,
-	FormatTextPoint,
-	FormatTextPointSqure,
-	FormatTextRight,
-	HomeIcon,
-} from "../../data/Icons";
+import { HomeIcon } from "../../data/Icons";
 
 // Css Styles
 import "./EvaluationThePlatform.css";
+import { TextEditor } from "../../components/TextEditor";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 const EvaluationThePlatform = () => {
 	const [cookies] = useCookies(["access_token"]);
@@ -34,7 +27,11 @@ const EvaluationThePlatform = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-	const [commentText, setCommentText] = useState("");
+	// const [commentText, setCommentText] = useState("");
+
+	// To get the editor content
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
 
 	// To handle errors
 	const [evaluationError, setEvaluationError] = useState("");
@@ -44,7 +41,7 @@ const EvaluationThePlatform = () => {
 		setLoadingTitle("جاري إضافة تعليقك لمنصة اطلبها ");
 		setEvaluationError("");
 		let formData = new FormData();
-		formData.append("comment_text", commentText);
+		formData.append("comment_text", editorValue);
 		axios
 			.post(`https://backend.atlbha.com/api/Store/etlobhaComment`, formData, {
 				headers: {
@@ -57,10 +54,10 @@ const EvaluationThePlatform = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
+					setEditorValue(null);
 				} else {
 					setLoadingTitle("");
 					setEvaluationError(res?.data?.message?.en?.comment_text?.[0]);
-					setEndActionTitle(res?.data?.message?.ar);
 					toast.error(res?.data?.message?.en?.comment_text?.[0], {
 						theme: "light",
 					});
@@ -70,6 +67,10 @@ const EvaluationThePlatform = () => {
 				}
 			});
 	};
+
+	console.log(editorValue !== "", editorValue);
+	console.log(editorValue !== "<p><br></p>", editorValue);
+	console.log(editorValue !== null, editorValue);
 	return (
 		<>
 			<Helmet>
@@ -102,24 +103,13 @@ const EvaluationThePlatform = () => {
 						<div className='label d-flex align-items-center justify-content-center text-center'>
 							قم بتقييم تجربة استخدامك لمنصة أطلبها
 						</div>
-						<div className=''>
-							<div className='text-editor-icons'>
-								<BoldIcon />
-								<FormatTextRight className='me-3' />
-								<FormatTextLeft className='me-3' />
-								<FormatTextCenter className='me-3' />
-								<Attchment className='me-3' />
-								<FormatTextPointSqure className='me-3' />
-								<FormatTextPoint className='me-3' />
-							</div>
-							<div className='d-flex flex-row align-items-center'>
-								<textarea
-									resize='false'
-									value={commentText}
-									onChange={(e) => setCommentText(e.target.value)}
-									placeholder='	منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة
-                           الإلكترونية'></textarea>
-							</div>
+						<div className='evaluation-the-platform'>
+							<TextEditor
+								ToolBar={"evaluationThePlatform"}
+								placeholder={
+									"منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة الإلكترونية"
+								}
+							/>
 						</div>
 					</div>
 					<div className='col-12'>
@@ -140,21 +130,34 @@ const EvaluationThePlatform = () => {
 						<div className='preview-valuation-wrapper d-flex flex-column justify-content-center align-items-center gap-4'>
 							<div className='user-image  '>
 								<img
+									className='img-fluid'
 									src={localStorage.getItem("storeLogo") || UserImage}
 									alt=''
 								/>
 							</div>
-							<div className='evaluation-content'>
-								{commentText
-									? commentText
-									: "منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة الإلكترونية"}
-							</div>
+							{editorValue === null || editorValue === "<p><br></p>" ? (
+								<div className='evaluation-content'>
+									منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة الإلكترونية
+								</div>
+							) : (
+								<div
+									className='evaluation-content'
+									dangerouslySetInnerHTML={{
+										__html: editorValue,
+									}}
+								/>
+							)}
 						</div>
 					</div>
 
 					<div className='col-12 mb-5'>
 						<div className=' d-flex flex-column justify-content-center align-items-center'>
 							<button
+								disabled={
+									editorValue === null || editorValue === "<p><br></p>"
+										? true
+										: false
+								}
 								onClick={addEvaluationThePlatform}
 								className='send-valuation-btn d-flex flex-column justify-content-center align-items-center'>
 								ارسال

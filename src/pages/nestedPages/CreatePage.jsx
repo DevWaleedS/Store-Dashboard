@@ -5,11 +5,8 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
-import draftToHtml from "draftjs-to-html";
-import { Editor } from "react-draft-wysiwyg";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
-import { EditorState, convertToRaw } from "draft-js";
 import { useForm, Controller } from "react-hook-form";
 
 // Context
@@ -18,6 +15,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
+import { TextEditor } from "../../components/TextEditor";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -34,6 +32,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { DocsIcon, PaperIcon } from "../../data/Icons";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Modal Style
 const style = {
@@ -70,12 +69,15 @@ const CreatePage = () => {
 	const [cookies] = useCookies(["access_token"]);
 
 	// To get the editor content
-	// const editorContent = useContext(TextEditorContext);
-	// const { editorValue } = editorContent;
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
 	const [type, setType] = useState("");
 	const {
 		register,
@@ -125,10 +127,7 @@ const CreatePage = () => {
 	const itsPost = page?.pageCategory?.includes(1);
 	const [tag, setTag] = useState("");
 	const [descriptionLength, setDescriptionLength] = useState(false);
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
+
 	// ----------------------------------------------------------------------
 
 	// Add and edit TAGS
@@ -140,18 +139,6 @@ const CreatePage = () => {
 	const updateTags = (i) => {
 		const newTags = page?.tags?.filter((tag, index) => index !== i);
 		setPage({ ...page, tags: newTags });
-	};
-	// ----------------------------------------------------------------------
-
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
 	};
 	// ----------------------------------------------------------------------
 
@@ -211,7 +198,7 @@ const CreatePage = () => {
 		let formData = new FormData();
 		formData.append("title", data?.title);
 		formData.append("page_desc", data?.page_desc);
-		formData.append("page_content", description?.htmlValue);
+		formData.append("page_content", editorValue);
 		formData.append("seo_title", data?.seo_title);
 		formData.append("seo_link", data?.seo_link);
 		formData.append("seo_desc", data?.seo_desc);
@@ -294,6 +281,7 @@ const CreatePage = () => {
 						setEndActionTitle(res?.data?.message?.ar);
 						navigate("/Pages");
 						setReload(!reload);
+						setEditorValue(null);
 					} else {
 						setLoadingTitle("");
 
@@ -427,35 +415,14 @@ const CreatePage = () => {
 											</div>
 										</div>
 									</div>
+
 									<div className='row'>
 										<div className='col-12'>
-											<div className=''>
-												<div className='d-flex flex-row align-items-center gap-4 py-4'>
-													<Editor
-														className='text-black'
-														toolbarHidden={false}
-														editorState={description.editorState}
-														onEditorStateChange={onEditorStateChange}
-														inDropdown={true}
-														placeholder={
-															<div
-																className='d-flex flex-column  '
-																style={{ color: "#ADB5B9" }}>
-																محتوي الصفحة
-															</div>
-														}
-														editorClassName='demo-editor'
-														toolbar={{
-															options: ["inline", "textAlign", "image", "list"],
-															inline: {
-																options: ["bold"],
-															},
-															list: {
-																options: ["unordered", "ordered"],
-															},
-														}}
-													/>
-												</div>
+											<div className='py-4'>
+												<TextEditor
+													ToolBar={"createOrEditPages"}
+													placeholder={"محتوى الصفحة..."}
+												/>
 											</div>
 										</div>
 										<div className='col-12'>
@@ -466,6 +433,7 @@ const CreatePage = () => {
 											)}
 										</div>
 									</div>
+
 									<div className='row mb-md-5 mb-3 seo-inputs'>
 										<div className='col-12 mb-md-4 mb-3'>
 											<h4>تحسينات SEO</h4>
@@ -544,7 +512,10 @@ const CreatePage = () => {
 										<div className='col-md-6 col-12 mb-3'>
 											<div className='wrapper'>
 												<div className='title'>
-													<h4>تصنيف الصفحة</h4>
+													<h4>
+														تصنيف الصفحة
+														<span className='important-hint'> * </span>
+													</h4>
 												</div>
 												<div className='body page-category '>
 													<FormGroup className='' sx={{ overflow: "hidden" }}>

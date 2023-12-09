@@ -130,7 +130,11 @@ const RatingWeight = ({
 														<Avatar
 															alt='avatar'
 															src={rate?.user?.image}
-															sx={{ width: 44, height: 44 }}
+															sx={{
+																width: 44,
+																height: 44,
+																border: "2px solid #ddd",
+															}}
 														/>
 														<span className='user-name me-2 align-self-center text-overflow'>
 															{" "}
@@ -236,7 +240,7 @@ const RatingWeight = ({
 																	dispatch(openReplyModal());
 																	setCommentDetails(rate);
 																}}>
-																<ReplayIcon title='ارسال رد علي التعليق'/>
+																<ReplayIcon title='ارسال رد علي التعليق' />
 																<span className='user-name me-2 align-self-center'>
 																	رد{" "}
 																</span>

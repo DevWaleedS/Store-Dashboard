@@ -1,19 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+
+// Third party
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
+// Context
 import Context from "../../Context/context";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeReplyModal } from "../../store/slices/ReplyModal-slice";
-import { useNavigate } from "react-router-dom";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+
+// Icons
 import { FiSend } from "react-icons/fi";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+
+// Components
+import { TextEditor } from "../TextEditor";
 
 const style = {
 	position: "absolute",
@@ -42,41 +51,25 @@ const contentStyles = {
 	height: "64px",
 	background: "#F4F5F7",
 	border: "1px solid #67747B33",
-	borderRadius: "0px 8px",
+
 	whiteSpace: "normal",
-	fontSize: "20px",
-	fontWight: 500,
-	color: "#011723",
 };
 
 const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
+	// To get the editor content
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
+
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
 
-	const [description, setDescription] = useState({
-		htmlValue: "",
-		editorState: EditorState.createEmpty(),
-	});
-
-	const onEditorStateChange = (editorValue) => {
-		const editorStateInHtml = draftToHtml(
-			convertToRaw(editorValue.getCurrentContent())
-		);
-
-		setDescription({
-			htmlValue: editorStateInHtml,
-			editorState: editorValue,
-		});
-	};
-
 	const resetsMessage = () => {
-		setDescription({
-			htmlValue: "",
-		});
+		setEditorValue(null);
 	};
 
 	// Handle errors
@@ -86,7 +79,7 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 	const sendReplayComment = () => {
 		serMessageError("");
 		let formData = new FormData();
-		formData.append("replay_text", description?.htmlValue);
+		formData.append("replay_text", editorValue);
 		formData.append("technical_support_id", supportDetails?.id);
 
 		axios
@@ -109,6 +102,13 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 					navigate("Support");
 				} else {
 					serMessageError(res?.data?.message?.en?.replay_text?.[0]);
+
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.replay_text?.[0], {
+						theme: "light",
+					});
 				}
 			});
 	};
@@ -150,35 +150,10 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 										نص الرسالة
 									</h2>
 								</div>
-								<div className='d-flex flex-row align-items-center gap-4  py-4'>
-									<Editor
-										className='text-black '
-										toolbarHidden={false}
-										editorState={description.editorState}
-										onEditorStateChange={onEditorStateChange}
-										inDropdown={true}
-										placeholder={
-											<div className='d-flex flex-column  '>
-												<p
-													style={{
-														fontSize: "20px",
-														fontWeight: "500",
-														color: "#a1a1a1",
-													}}>
-													نحن سعداء بتواصلك معنا ي {supportDetails?.user?.name}
-												</p>
-											</div>
-										}
-										editorClassName='demo-editor'
-										toolbar={{
-											options: ["inline", "textAlign", "image", "list"],
-											inline: {
-												options: ["bold"],
-											},
-											list: {
-												options: ["unordered", "ordered"],
-											},
-										}}
+								<div className='d-flex flex-row align-items-center send-replay gap-4 pb-4'>
+									<TextEditor
+										ToolBar={"emptyCart"}
+										placeholder={`نحن سعداء بتواصلك معنا يا ${supportDetails?.user?.name}.`}
 									/>
 								</div>
 								{messageError && (
