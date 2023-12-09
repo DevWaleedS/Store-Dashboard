@@ -246,7 +246,7 @@ const SupportDetails = () => {
 
 											<div className='col-12 empty-cart'>
 												<TextEditor
-													disabled={true}
+													readOnly={true}
 													ToolBar={"emptyCart"}
 													placeholder={`${fetchedData?.data?.technicalSupports?.content}`}
 												/>
