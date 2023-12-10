@@ -68,7 +68,8 @@ const UserProfileImage = () => {
 	useEffect(() => {
 		if (profile) {
 			setUserInfo({
-				username: `${profile?.data?.users?.name} ${profile?.data?.users?.lastname}`,
+				name: profile?.data?.users?.name,
+				username: profile?.data?.users?.user_name,
 				user_image: profile?.data?.users?.image,
 			});
 		}
@@ -106,7 +107,11 @@ const UserProfileImage = () => {
 					aria-expanded='false'
 					color={colors.white[300]}>
 					<div className='dropdown-title d-md-flex align-items-center d-none'>
-						<span className='me-1 '>{userInfo?.username || "اسم التاجر"}</span>
+						<span className='me-1 '>
+							{userInfo?.name !== null
+								? userInfo?.name
+								: userInfo?.username || "اسم التاجر"}
+						</span>
 						<IoIosArrowDown />
 					</div>
 

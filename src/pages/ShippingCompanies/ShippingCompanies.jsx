@@ -22,12 +22,17 @@ import { toast } from "react-toastify";
 
 const ShippingCompanies = () => {
 	const [cookies] = useCookies(["access_token"]);
-	const [price, setPrice] = useState("");
-	const [currentPrice, setCurrentPrice] = useState("");
 	const [validPriceFocus, setValidPriceFocus] = useState(false);
-	const [otherShippingCompanyId, setOtherShippingCompanyId] = useState(null);
-	const [otherShippingCompanyStatus, setOtherShippingCompanyStatus] =
-		useState(false);
+	const [otherShippingCompany, setOtherShippingCompany] = useState([]);
+	const [allShippingCompanies, setAllShippingCompanies] = useState([]);
+	const [otherShipCompDetails, setOtherShipCompDetails] = useState({
+		id: "",
+		status: "",
+		price: "",
+		currentPrice: "",
+		time: "",
+		currentTime: "",
+	});
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -37,23 +42,60 @@ const ShippingCompanies = () => {
 		`https://backend.atlbha.com/api/Store/shippingtype`
 	);
 
-	const otherShippingCompany = fetchedData?.data?.shippingtypes?.filter(
-		(shippingCompany) => shippingCompany?.name === "اخرى"
-	);
+	// Side Effects
+	useEffect(() => {
+		if (fetchedData) {
+			setOtherShippingCompany(
+				fetchedData?.data?.shippingtypes?.filter(
+					(shippingCompany) => shippingCompany?.name === "اخرى"
+				)
+			);
 
-	const allShippingCompanies = fetchedData?.data?.shippingtypes?.filter(
-		(shippingCompany) => shippingCompany?.name !== "اخرى"
-	);
+			setAllShippingCompanies(
+				fetchedData?.data?.shippingtypes?.filter(
+					(shippingCompany) => shippingCompany?.name !== "اخرى"
+				)
+			);
+		}
+	}, [fetchedData]);
+	// ------------------------
 
 	useEffect(() => {
 		if (otherShippingCompany) {
-			setCurrentPrice(otherShippingCompany[0]?.price);
-			setOtherShippingCompanyId(otherShippingCompany[0]?.id);
-			setOtherShippingCompanyStatus(
-				otherShippingCompany[0]?.status === "نشط" ? true : false
-			);
+			setOtherShipCompDetails((prevDetails) => ({
+				...prevDetails,
+				id: otherShippingCompany[0]?.id,
+				status: otherShippingCompany[0]?.status === "نشط" ? true : false,
+				price: otherShippingCompany[0]?.price,
+				time: otherShippingCompany[0]?.time,
+				currentPrice: otherShippingCompany[0]?.price,
+				currentTime: otherShippingCompany[0]?.time,
+			}));
 		}
 	}, [otherShippingCompany]);
+
+	// TO HANDLE NAME OF DAYS
+	const daysDefinition = (time) => {
+		let timeValue = Number(time);
+		if (timeValue === 1) {
+			return "يوم واحد";
+		} else if (timeValue === 2) {
+			return "يومين";
+		} else if (timeValue <= 10 && timeValue >= 3) {
+			return `${timeValue} أيام`;
+		} else {
+			return `${timeValue} يوم`;
+		}
+	};
+
+	// handle onchange function
+	const handleOnChangeDetails = (e) => {
+		const { name, value } = e.target;
+		setOtherShipCompDetails((prevState) => ({
+			...prevState,
+			[name]: value,
+		}));
+	};
 
 	// change the Shipping Company  Status
 	const changeStatus = (id) => {
@@ -82,7 +124,7 @@ const ShippingCompanies = () => {
 	const changeOtherShippingCompanyStatusAndAddPrice = (id) => {
 		axios
 			.get(
-				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${price}`,
+				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}`,
 				{
 					headers: {
 						"Content-Type": "application/json",
@@ -103,10 +145,11 @@ const ShippingCompanies = () => {
 
 	const updatePrice = () => {
 		let formData = new FormData();
-		formData.append("price", price);
+		formData.append("price", otherShipCompDetails?.price);
+		formData.append("time", otherShipCompDetails?.time);
 		axios
 			.post(
-				`https://backend.atlbha.com/api/Store/updatePrice/${otherShippingCompanyId}`,
+				`https://backend.atlbha.com/api/Store/updatePrice/${otherShipCompDetails?.id}`,
 				formData,
 				{
 					headers: {
@@ -124,6 +167,9 @@ const ShippingCompanies = () => {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.price?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.time?.[0], {
 						theme: "light",
 					});
 				}
@@ -184,6 +230,7 @@ const ShippingCompanies = () => {
 											<ShippingCompaniesData
 												shippingCompanyName=''
 												currentShippingPrice=''
+												currentShippingTime={0}
 												image={item?.image}
 												changeStatus={() => changeStatus(item?.id)}
 												checked={item?.status === "نشط" ? true : false}
@@ -202,7 +249,12 @@ const ShippingCompanies = () => {
 										<ShippingCompaniesData
 											shippingCompanyName={item?.name}
 											currentShippingPrice={
-												otherShippingCompanyStatus && currentPrice
+												otherShipCompDetails?.status &&
+												otherShipCompDetails?.currentPrice
+											}
+											currentShippingTime={
+												otherShipCompDetails?.status &&
+												otherShipCompDetails?.currentTime
 											}
 											image={item?.image}
 											changeStatus={() =>
@@ -221,7 +273,7 @@ const ShippingCompanies = () => {
 											</div>
 											<div
 												style={{
-													backgroundColor: !otherShippingCompanyStatus
+													backgroundColor: !otherShipCompDetails?.status
 														? "#fefefeef"
 														: "#fffffff7",
 												}}
@@ -230,9 +282,9 @@ const ShippingCompanies = () => {
 												<input
 													type='text'
 													name='price'
-													value={price}
-													onChange={(e) => setPrice(e.target.value)}
-													placeholder='حدد تكلفة الشحن  المناسبة'
+													value={otherShipCompDetails?.price}
+													onChange={(e) => handleOnChangeDetails(e)}
+													placeholder='حدد تكلفة الشحن المناسبة'
 													className='shipping-price'
 													onFocus={() => {
 														setValidPriceFocus(true);
@@ -245,24 +297,50 @@ const ShippingCompanies = () => {
 
 												<div className='currency p-2'>ر.س</div>
 											</div>
-											{validPriceFocus && price && price === "0" && (
-												<div
-													className={" d-block important-hint  mb-2  "}
-													style={{
-														fontSize: "16px",
-														whiteSpace: "normal",
-														marginTop: "-10px",
-													}}>
-													تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد
-													من ذلك؟
+											{validPriceFocus &&
+												otherShipCompDetails?.price &&
+												otherShipCompDetails?.price === "0" && (
+													<div
+														className={" d-block important-hint  mb-2  "}
+														style={{
+															fontSize: "16px",
+															whiteSpace: "normal",
+															marginTop: "-10px",
+														}}>
+														تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد
+														من ذلك؟
+													</div>
+												)}
+
+											<div
+												style={{
+													backgroundColor: !otherShipCompDetails?.status
+														? "#fefefeef"
+														: "#fffffff7",
+												}}
+												className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1 mb-2'>
+												<div className='shipping-price-hint'>مدة التوصيل </div>
+												<input
+													type='text'
+													name='time'
+													value={otherShipCompDetails?.time}
+													onChange={(e) => handleOnChangeDetails(e)}
+													placeholder='حدد مدة التوصيل '
+													className='shipping-price'
+												/>
+												<div className='currency p-2'>
+													{otherShipCompDetails?.time === "" ||
+													otherShipCompDetails?.time === "0"
+														? "يوم"
+														: daysDefinition(otherShipCompDetails?.time)}
 												</div>
-											)}
+											</div>
 
 											<button
 												className='save-price-btn'
-												disabled={!otherShippingCompanyStatus}
+												disabled={!otherShipCompDetails?.status}
 												onClick={updatePrice}>
-												تعديل تكلفة الشحن
+												تعديل بيانات الشحن
 											</button>
 										</div>
 									</div>

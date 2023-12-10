@@ -1322,7 +1322,9 @@ const OrderDetails = () => {
 									</div>
 								</div>
 
-								{fetchedData?.data?.orders?.shipping && (
+								{(fetchedData?.data?.orders?.shipping ||
+									fetchedData?.data?.orders?.shippingtypes?.name !==
+										"اخرى") && (
 									<button
 										disabled={
 											fetchedData?.data?.orders?.status === "تم التوصيل" ||

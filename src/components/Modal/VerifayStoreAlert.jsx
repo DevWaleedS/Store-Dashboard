@@ -23,9 +23,10 @@ const style = {
 };
 
 const contentStyle = {
+	letterSpacing: "0px",
+	whiteSpace: "normal",
 	fontSize: "24px",
 	fontWight: 500,
-	letterSpacing: "0px",
 	color: "#1DBBBE",
 	padding: "110px 45px",
 };
