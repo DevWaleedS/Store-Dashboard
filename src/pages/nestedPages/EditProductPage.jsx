@@ -44,6 +44,7 @@ import {
 	TwitterIcon,
 	UploadIcon,
 } from "../../data/Icons";
+import { PlayVideo } from "../../data/images";
 
 const style = {
 	position: "fixed",
@@ -1149,15 +1150,12 @@ const EditProductPage = () => {
 																			key={index}
 																			className='add-product-images'>
 																			<video
-																				src={image.data_url || image?.image}
-																				poster={image.data_url || image?.image}
-																			/>
-
-																			<BsPlayCircle
+																				style={{ padding: "16px" }}
 																				onClick={() =>
 																					setUrl(image.data_url || image?.image)
 																				}
-																				className='play-video'
+																				src={image.data_url || image?.image}
+																				poster={PlayVideo}
 																			/>
 
 																			<div className='delete-video-icon'>
