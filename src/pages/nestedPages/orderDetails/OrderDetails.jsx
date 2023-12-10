@@ -1322,52 +1322,55 @@ const OrderDetails = () => {
 									</div>
 								</div>
 
-								{(fetchedData?.data?.orders?.shipping ||
-									fetchedData?.data?.orders?.shippingtypes?.name !==
-										"اخرى") && (
-									<button
-										disabled={
-											fetchedData?.data?.orders?.status === "تم التوصيل" ||
-											fetchedData?.data?.orders?.status === "ملغي" ||
-											fetchedData?.data?.orders?.status === "مكتمل"
-												? true
-												: false
-										}
-										style={{
-											cursor:
+								{fetchedData?.data?.orders?.shipping &&
+									fetchedData?.data?.orders?.shippingtypes?.name !== "اخرى" && (
+										<button
+											disabled={
 												fetchedData?.data?.orders?.status === "تم التوصيل" ||
 												fetchedData?.data?.orders?.status === "ملغي" ||
 												fetchedData?.data?.orders?.status === "مكتمل"
-													? "not-allowed"
-													: "pointer",
-										}}
-										onClick={() => printSticker()}
-										className='order-action-box mb-3'>
-										<div className='action-title'>
-											<ListIcon className='list-icon' />
-											<span className='me-2 ms-2' style={{ fontSize: "18px" }}>
-												{" "}
-												طباعة بوليصة الشحن
-											</span>
-											{printError && (
-												<span className='fs-6 text-danger'>({printError})</span>
-											)}
-										</div>
-										<div className='action-icon'>
-											<Print
-												style={{
-													cursor:
-														fetchedData?.data?.orders?.status ===
-															"تم التوصيل" ||
-														fetchedData?.data?.orders?.status === "ملغي" ||
-														fetchedData?.data?.orders?.status === "مكتمل"
-															? "not-allowed"
-															: "pointer",
-												}}
-											/>
-										</div>
-									</button>
-								)}
+													? true
+													: false
+											}
+											style={{
+												cursor:
+													fetchedData?.data?.orders?.status === "تم التوصيل" ||
+													fetchedData?.data?.orders?.status === "ملغي" ||
+													fetchedData?.data?.orders?.status === "مكتمل"
+														? "not-allowed"
+														: "pointer",
+											}}
+											onClick={() => printSticker()}
+											className='order-action-box mb-3'>
+											<div className='action-title'>
+												<ListIcon className='list-icon' />
+												<span
+													className='me-2 ms-2'
+													style={{ fontSize: "18px" }}>
+													{" "}
+													طباعة بوليصة الشحن
+												</span>
+												{printError && (
+													<span className='fs-6 text-danger'>
+														({printError})
+													</span>
+												)}
+											</div>
+											<div className='action-icon'>
+												<Print
+													style={{
+														cursor:
+															fetchedData?.data?.orders?.status ===
+																"تم التوصيل" ||
+															fetchedData?.data?.orders?.status === "ملغي" ||
+															fetchedData?.data?.orders?.status === "مكتمل"
+																? "not-allowed"
+																: "pointer",
+													}}
+												/>
+											</div>
+										</button>
+									)}
 							</div>
 						</div>
 					</div>

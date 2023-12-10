@@ -100,7 +100,8 @@ const ProductRefund = () => {
 	// Handle Import Product
 	const importProduct = () => {
 		resetProductErrors();
-		setLoadingTitle("جاري استيراد المنتج");
+		setLoadingTitle("جاري اضافة المنتج الي سلة الاستيراد");
+
 		let formData = new FormData();
 		formData.append("product_id", productInfo?.id);
 		formData.append("price", productInfo?.price);
@@ -124,7 +125,7 @@ const ProductRefund = () => {
 					setProductErrors({
 						...productErrors,
 						price: res?.data?.message?.en?.price?.[0],
-						qty: res?.data?.message?.ar,
+						qty: res?.data?.message?.en?.qty?.[0],
 					});
 
 					toast.error(res?.data?.message?.en?.price?.[0], {
@@ -140,6 +141,8 @@ const ProductRefund = () => {
 				}
 			});
 	};
+
+	console.log(productErrors?.price);
 
 	return (
 		<>
@@ -366,6 +369,12 @@ const ProductRefund = () => {
 														{fetchedData?.data?.products?.purchasing_price})
 													</span>
 												)}
+
+												{productErrors?.price && (
+													<span className='fs-6 text-danger'>
+														{productErrors?.price}
+													</span>
+												)}
 											</div>
 
 											{/* Stock */}
@@ -431,6 +440,12 @@ const ProductRefund = () => {
 														الكمية المطلوبة غير متوفرة
 													</span>
 												)}
+
+												{productErrors?.qty && (
+													<span className='fs-6 text-danger'>
+														{productErrors?.qty}
+													</span>
+												)}
 											</div>
 
 											{/* About This product */}
@@ -450,7 +465,7 @@ const ProductRefund = () => {
 											onClick={() => {
 												importProduct();
 											}}>
-											استيراد
+											اضافه المنتج الي سلة الاستيراد
 										</button>
 									</div>
 								</div>

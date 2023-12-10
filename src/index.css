@@ -6398,6 +6398,8 @@ input:disabled {
 
 .product-images .another-image div {
 	width: 70px;
+	height: 70px;
+
 }
 .import-product-multi-images div {
 	width: 120px;
