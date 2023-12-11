@@ -21,7 +21,7 @@ import useFetch from "../Hooks/UseFetch";
 
 export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 	const { fetchedData } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
+		"https://backend.atlbha.com/api/Store/selector/etlobahCategory"
 	);
 	const { activity } = useSelector((state) => state.AddActivity);
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
