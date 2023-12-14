@@ -284,8 +284,7 @@ const Notifications = () => {
 																/>
 																<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
 																	<div className='flex flex-col gap-1'>
-																		<h2 className='notifications-title'>
-																			{not?.message}
+																		<h2 className='notifications-title' dangerouslySetInnerHTML={{__html: not?.message}}>
 																		</h2>
 																		<p className='notification-user-name '>
 																			{not?.user[0]?.name}

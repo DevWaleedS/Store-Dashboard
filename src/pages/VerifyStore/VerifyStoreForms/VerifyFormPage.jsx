@@ -109,7 +109,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		verification_type: "",
 		owner_name: "",
 		commercial_name: "",
-		link: "",
 		city_id: "",
 		freelancing_city_id: "",
 	});
@@ -120,7 +119,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		verification_type: "",
 		owner_name: "",
 		commercial_name: "",
-		link: "",
 		city_id: "",
 		file: "",
 	});
@@ -131,7 +129,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			verification_type: "",
 			owner_name: "",
 			commercial_name: "",
-			link: "",
 			city_id: "",
 			file: "",
 		});
@@ -209,10 +206,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			data?.verification_type === "commercialregister"
 				? data?.commercial_name
 				: ""
-		);
-		formData.append(
-			"link",
-			data?.verification_type === "maeruf" ? data?.link : ""
 		);
 
 		formData.append(
@@ -756,43 +749,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.owner_name}
-										</div>
-									)}
-								</div>
-							</div>
-							<div className='row  d-flex justify-content-between align-items-center mb-3'>
-								<div className='col-md-4 col-12 mb-md-0 mb-3'>
-									<h5
-										className='label'
-										style={{ color: "#1DBBBE", whiteSpace: "normal" }}>
-										رابط الوثيقة في منصة المركز السعودي للاعمال{" "}
-										<span className='important-hint'>*</span>
-									</h5>
-								</div>
-								<div className='col-md-8 col-12'>
-									<input
-										name='link'
-										value={data?.link}
-										onChange={(e) => {
-											handleOnChange(e);
-										}}
-										placeholder='قم بنسخ رابط الوثيقة وضعه هنا'
-										style={{
-											width: "100%",
-											height: "50px",
-											padding: "18px",
-											background: "#FAFAFA",
-											color: "#00000",
-											fontSize: "16px",
-											fontWeight: "400",
-											borderRadius: "4px",
-										}}
-									/>
-									{dataErrors?.link && (
-										<div
-											className='important-hint me-1'
-											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											{dataErrors?.link}
 										</div>
 									)}
 								</div>

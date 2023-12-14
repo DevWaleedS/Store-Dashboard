@@ -176,8 +176,9 @@ const Notifications = () => {
 													not?.read_at === null || not?.read_at === ""
 														? "un-read"
 														: ""
-												} notification-data`}>
-												{not?.message}
+												} notification-data`}
+												dangerouslySetInnerHTML={{__html: not?.message}}
+											>
 											</span>
 										</div>
 										<img

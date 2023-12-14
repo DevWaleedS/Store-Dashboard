@@ -114,3 +114,5 @@ export { ReactComponent as Youtube } from "./icon-24-youtube.svg";
 export { ReactComponent as Completed } from "./icon-24- true.svg";
 export { ReactComponent as UploadUserImageIcon } from "./icon-24-upload_outlined.svg";
 export { ReactComponent as MyAccountIcon } from "./icon-24-client.svg";
+export { ReactComponent as Cross10 } from "./cross-10.svg";
+export { ReactComponent as Check9x7Svg } from "./check-9x7.svg";

@@ -12,10 +12,10 @@ import Context from "../../../Context/context";
 import { Menu, MenuItem } from "@mui/material";
 
 // COMPONENTS
-import { SouqOtlbhaProducts, ProductsFilterOperations } from "./index";
+import { SouqOtlbhaProducts, ProductsFilterOperations, CartMenu } from "./index";
 
 // ICONS
-import { AiOutlineSearch } from "react-icons/ai";
+import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import { FilterIcon } from "../../../data/Icons";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
@@ -26,13 +26,15 @@ import { TopBarSearchInput } from "../../../global";
 
 const SouqOtlobha = () => {
 	const navigate = useNavigate();
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/etlobhaShow"
+	const { fetchedData: cartData, loading, reload, setReload } = useFetch(
+		"https://backend.atlbha.com/api/Store/showImportCart"
 	);
 
 	const [showFilteringOptions, setShowFilteringOptions] = useState(false);
 	const contextStore = useContext(Context);
 	const { productsData } = contextStore;
+
+	const [showCart, setShowCart] = useState(false);
 
 	/**
 	 *------------------------------------------------------------------------
@@ -81,9 +83,14 @@ const SouqOtlobha = () => {
 					<div className='row mb-md-4 mb-3'>
 						<div className='col-lg-6 col-12 mb-lg-0 mb-3'>
 							<div className='total-products'>
-								<span>{loading ? 0 : fetchedData?.data?.count_products}</span>
-								<span>عدد المنتجات التي تمت اضافتها</span>
+								<div className="shipping-icon" onClick={() => setShowCart(!showCart)}>
+									<LocalMallOutlinedIcon />
+									<span className="number">{loading ? 0 : cartData?.data?.cart?.count ? cartData?.data?.cart?.count : 0}</span>
+								</div>
+								<span className="text">المنتجات التي تمت اضافتها لسلة الاستيراد</span>
+								{showCart && <CartMenu data={cartData?.data?.cart} reload={reload} setReload={setReload} />}
 							</div>
+							{showCart && <div className='cart-menu-layout' onClick={() => setShowCart(false)} />}
 						</div>
 						<div className='col-lg-6 col-12'>
 							<div className='btn-group d-flex gap-4 me-0 me-lg-5'>
@@ -180,10 +187,10 @@ const SouqOtlobha = () => {
 												borderRadius: "10px",
 												backgroundColor:
 													Math.ceil(productsData?.length / rowsPerPage) ===
-														page + 1 && "#508FF4",
+													page + 1 && "#508FF4",
 												color:
 													Math.ceil(productsData?.length / rowsPerPage) ===
-														page + 1 && "#fff",
+													page + 1 && "#fff",
 											}}
 											onClick={() => {
 												setPage(

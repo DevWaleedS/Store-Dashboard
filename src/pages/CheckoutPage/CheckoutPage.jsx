@@ -1,0 +1,445 @@
+import React, { useState } from 'react';
+// Third party
+import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
+import useFetch from "../../Hooks/UseFetch";
+import axios from 'axios';
+import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+// Components
+import CircularLoading from "../../HelperComponents/CircularLoading";
+// Icons
+import { HomeIcon, Check9x7Svg } from "../../data/Icons";
+
+function CheckoutPage() {
+  const [cookies] = useCookies(["access_token"]);
+  const { fetchedData, loading, reload, setReload } = useFetch(
+    "https://backend.atlbha.com/api/Store/showImportCart"
+  );
+  const { fetchedData: paymentMethods } = useFetch('https://backend.atlbha.com/api/Store/paymentmethodsImport');
+  const { fetchedData: citiesData } = useFetch(
+    "https://backend.atlbha.com/api/selector/shippingcities/5"
+  );
+  const [paymentSelect, setPaymentSelect] = useState(null);
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [shipping, setShipping] = useState({
+    id: null,
+    district: "",
+    city: "",
+    address: "",
+    postCode: "",
+    notes: "",
+    defaultAddress: true,
+  });
+
+  const [error, setError] = useState({
+    district: "",
+    city: "",
+    address: "",
+    postCode: "",
+    notes: "",
+    paymentMethod: "",
+    shippingType: "",
+  });
+
+  const resetError = () => {
+    setError({
+      district: "",
+      city: "",
+      address: "",
+      postCode: "",
+      notes: "",
+      paymentMethod: "",
+      shippingType: "",
+    });
+  };
+
+  function removeDuplicates(arr) {
+    const unique = arr?.filter((obj, index) => {
+      return index === arr?.findIndex((o) => obj?.region?.name_en === o?.region?.name_en);
+    });
+    return unique;
+  }
+
+  const getCityFromProvince =
+    citiesData?.data?.cities?.filter((obj) => obj?.region?.name_en === shipping?.district) || [];
+
+  const handleCheckout = () => {
+    resetError();
+    setBtnLoading(true);
+    let formData = new FormData();
+    formData.append("district", shipping?.district);
+    formData.append("city", shipping?.city);
+    formData.append("street_address", shipping?.address);
+    // formData.append("postal_code", shipping?.postCode);
+    formData.append("paymentype_id", JSON.parse(paymentSelect)?.id);
+    formData.append("cod", JSON.parse(paymentSelect)?.name === "الدفع عند الاستلام" ? 1 : 0);
+    formData.append("description", shipping?.notes || "");
+    formData.append("default_address", shipping?.defaultAddress ? 1 : 0);
+    axios
+      .post(`https://backend.atlbha.com/api/Store/checkoutImport`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${cookies?.access_token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.success === true && res?.data?.data?.status === 200) {
+          if (res?.data?.message?.en === "order send successfully") {
+            setBtnLoading(false);
+            toast.success(res?.data?.message?.ar, { theme: "colored" });
+            window.location.replace(`/`);
+          } else {
+            setBtnLoading(false);
+            toast.error(res?.data?.message?.ar, { theme: "colored" });
+          }
+        } else {
+          setBtnLoading(false);
+          setError({
+            district: res?.data?.message?.en?.district?.[0] || "",
+            city: res?.data?.message?.en?.city?.[0] || "",
+            address: res?.data?.message?.en?.street_address?.[0] || "",
+            postCode: res?.data?.message?.en?.postal_code?.[0] || "",
+            notes: res?.data?.message?.en?.description?.[0] || "",
+            paymentMethod: res?.data?.message?.en?.paymentype_id?.[0] || "",
+          });
+          toast.error(res?.data?.message?.en?.district?.[0], {
+            theme: "light",
+          });
+          toast.error(res?.data?.message?.en?.city?.[0], {
+            theme: "light",
+          });
+          toast.error(res?.data?.message?.en?.street_address?.[0], {
+            theme: "light",
+          });
+          toast.error(res?.data?.message?.en?.description?.[0], {
+            theme: "light",
+          });
+          toast.error(res?.data?.message?.en?.paymentype_id?.[0], {
+            theme: "light",
+          });
+        }
+      });
+  };
+
+
+  const renderPaymentsList = () => {
+    const paymentsData = paymentMethods?.data?.payment_types?.map((payment) => {
+      const renderPayment = () => (
+        <li className="item">
+          <label className="header">
+            <div className="d-flex flex-row align-items-center">
+              <span className="input-radio">
+                <span className="body">
+                  <input
+                    type="radio"
+                    className="input"
+                    name="checkout_payment_method"
+                    value={JSON.stringify(payment)}
+                    checked={JSON.parse(paymentSelect)?.id === Number(payment?.id)}
+                    onChange={(e) => setPaymentSelect(e.target.value)}
+                  />
+                  <span className="input-radio-circle" />
+                </span>
+              </span>
+              <span>{payment?.name}</span>
+            </div>
+            <img src={payment?.image} alt="" width="40" height="20" style={{ objectFit: "contain" }} />
+          </label>
+        </li>
+      );
+
+      return (
+        renderPayment()
+      );
+    });
+
+    return (
+      <div className="payment-methods">
+        <h6>يرجى اختيار طريقة الدفع</h6>
+        <ul className="list">{paymentsData}</ul>
+        {error?.paymentMethod && (
+          <span style={{ fontSize: "0.85rem", fontWeight: "500" }} className="text-danger">
+            {error?.paymentMethod}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>لوحة تحكم أطلبها | الدفع </title>
+      </Helmet>
+      <section className='coupon-page p-lg-3'>
+        <div className='head-category'>
+          <div className='row'>
+            <nav aria-label='breadcrumb'>
+              <ol className='breadcrumb'>
+                <li className='breadcrumb-item'>
+                  <HomeIcon />
+                  <Link to='/' className='me-2'>
+                    الرئيسية
+                  </Link>
+                </li>
+                <li className='breadcrumb-item' aria-current='page'>
+                  <Link to='/Products/SouqOtlobha' className='me-2'>
+                    سوق أطلبها
+                  </Link>
+                </li>
+                <li className='breadcrumb-item active' aria-current='page'>
+                  الدفع
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <div className='checkout-page'>
+          <h3>الدفع</h3>
+          <div className='block'>
+            <div className='container'>
+              {loading
+                ?
+                <CircularLoading />
+                :
+                fetchedData?.data?.cart ?
+                  <div className='row'>
+                    <div className='col-12 col-lg-6 col-xl-7'>
+                      <div className='card mb-lg-0'>
+                        <div className='card-body'>
+                          <h3 className='card-title'>تفاصيل الفاتورة</h3>
+                          <div className="form-group mt-3">
+                            <label htmlFor="country">
+                              المنطقة
+                              <span
+                                className="required"
+                              >
+                                *
+                              </span>
+                            </label>
+                            <select
+                              value={shipping?.district}
+                              onChange={(e) => {
+                                setShipping({ ...shipping, district: e.target.value });
+                              }}
+                              id="country"
+                              className="form-control"
+                            >
+                              <option value="" disabled={true}>
+                                اختر المنطقة...
+                              </option>
+                              {removeDuplicates(citiesData?.data?.cities)?.map(
+                                (district, index) => (
+                                  <option key={index} value={district?.region?.name_en}>
+                                    {district?.region?.name}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                            {error?.district && (
+                              <span
+                                style={{ fontSize: "0.85rem", fontWeight: "500" }}
+                                className="text-danger"
+                              >
+                                {error?.district}
+                              </span>
+                            )}
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="city">
+                              المدينة
+                              <span
+                                className="required"
+                              >
+                                *
+                              </span>
+                            </label>
+                            <select
+                              value={shipping?.city}
+                              onChange={(e) =>
+                                setShipping({ ...shipping, city: e.target.value })
+                              }
+                              id="city"
+                              className="form-control"
+                            >
+                              <option value="">اختر المدينة...</option>
+                              {getCityFromProvince?.map((city, index) => (
+                                <option key={index} value={city?.name_en}>
+                                  {city?.name}
+                                </option>
+                              ))}
+                            </select>
+                            {error?.city && (
+                              <span
+                                style={{ fontSize: "0.85rem", fontWeight: "500" }}
+                                className="text-danger"
+                              >
+                                {error?.city}
+                              </span>
+                            )}
+                          </div>
+                          <div className='form-group'>
+                            <label htmlFor='address'>اسم الشارع <span className='required'>*</span></label>
+                            <input
+                              value={shipping?.address}
+                              onChange={(e) =>
+                                setShipping({ ...shipping, address: e.target.value })
+                              }
+                              id='address'
+                              type='text'
+                              className='form-control'
+                            />
+                            {error?.address && (
+                              <span
+                                style={{ fontSize: "0.85rem", fontWeight: "500" }}
+                                className="text-danger"
+                              >
+                                {error?.address}
+                              </span>
+                            )}
+                          </div>
+                          <div className='form-group'>
+                            <label htmlFor='post_code'>رمز البريدي / ZIP (اختياري)</label>
+                            <input
+                              value={shipping?.postCode}
+                              onChange={(e) =>
+                                setShipping({ ...shipping, postCode: e.target.value })
+                              }
+                              id='post_code'
+                              type='text'
+                              className='form-control'
+                            />
+                            {error?.postCode && (
+                              <span
+                                style={{ fontSize: "0.85rem", fontWeight: "500" }}
+                                className="text-danger"
+                              >
+                                {error?.postCode}
+                              </span>
+                            )}
+                          </div>
+                          <div className="form-group">
+                            <div className="form-check">
+                              <span className="input-check">
+                                <span className="body">
+                                  <input
+                                    className="input"
+                                    type="checkbox"
+                                    id="checkout-create-account"
+                                    value={!shipping?.defaultAddress}
+                                    onChange={(e) => {
+                                      setShipping({
+                                        ...shipping,
+                                        defaultAddress: e.target.checked,
+                                      });
+                                    }
+                                    }
+                                    checked={shipping?.defaultAddress}
+                                  />
+                                  <span className="input-check-box" />
+                                  <Check9x7Svg className="input-check-icon" />
+                                </span>
+                              </span>
+                              <label
+                                className="form-check-label"
+                                htmlFor="checkout-create-account"
+                              >
+                                تعيينه كـ عنوان افتراضي
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className='card-divider'></div>
+                        <div className='card-body'>
+                          <h3 className='card-title'>تفاصيل الشحن</h3>
+                          <div className='form-group'>
+                            <label htmlFor='note'>ملاحظات الطلب <span className='required'>*</span></label>
+                            <textarea
+                              id='note'
+                              className='form-control'
+                              rows='4'
+                              value={shipping?.notes}
+                              onChange={(e) =>
+                                setShipping({ ...shipping, notes: e.target.value })
+                              }
+                            >
+                            </textarea>
+                            {error?.notes && (
+                              <span
+                                style={{ fontSize: "0.85rem", fontWeight: "500" }}
+                                className="text-danger"
+                              >
+                                {error?.notes}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='col-12 col-lg-6 col-xl-5 mt-4 mt-lg-0'>
+                      <div className='card mb-lg-0'>
+                        <div className='card-body'>
+                          <h3 className='card-title'>تفاصيل الطلب</h3>
+                          <table className='checkout-totals'>
+                            <thead>
+                              <tr>
+                                <th>المنتج</th>
+                                <th>الاجمالي</th>
+                              </tr>
+                            </thead>
+                            <tbody className='products'>
+                              {fetchedData?.data?.cart?.cartDetail?.map((item) => (
+                                <tr key={item?.id}>
+                                  <td style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "0.2rem" }}>
+                                    <span style={{ maxWidth: "170px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item?.product?.name}</span> × <span>{item?.qty}</span>
+                                  </td>
+                                  <td>{item?.sum} ر.س</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                            <tbody className='subtotals'>
+                              <tr>
+                                <th>السعر</th>
+                                <td>{fetchedData?.data?.cart?.subtotal} ر.س</td>
+                              </tr>
+                              <tr>
+                                <th>الضريبة</th>
+                                <td>{fetchedData?.data?.cart?.tax} ر.س</td>
+                              </tr>
+                              <tr>
+                                <th>الشحن</th>
+                                <td>{fetchedData?.data?.cart?.shipping_price} ر.س</td>
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th>الاجمالي <span className='tax-text'>(شامل الضريبة)</span></th>
+                                <td>{fetchedData?.data?.cart?.total} ر.س</td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                          {renderPaymentsList()}
+
+                          <button className='checkout-btn' disabled={btnLoading} onClick={() => handleCheckout()}>تأكيد الطلب</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  :
+                  <div className='empty'>
+                    <span>
+                      لاتوجد منتجات في سلة الاستيراد
+                    </span>
+                    <Link to="/Products/SouqOtlobha">العودة إلى سوق أطلبها</Link>
+                  </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section >
+    </>
+  )
+}
+
+export default CheckoutPage;
