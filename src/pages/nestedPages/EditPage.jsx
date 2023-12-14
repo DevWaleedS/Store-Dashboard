@@ -180,73 +180,105 @@ const EditPage = () => {
 	// Add Post image
 	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 	const [images, setImages] = useState([]);
-
-	const {
-		acceptedFiles,
-		getRootProps,
-		getInputProps
-	  } = useDropzone({
+	const errMsgStyle = {
+		whiteSpace: "normal",
+		padding: "0",
+		fontSize: "14px",
+	};
+	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
-		  "image/jpeg": [],
-		  "image/jpg": [],
-		  "image/png": []
+			"image/jpeg": [],
+			"image/jpg": [],
+			"image/png": [],
 		},
-		onDrop: (acceptedFiles) => {
-		  const updatedIcons = acceptedFiles?.map((file) => {
-			const isSizeValid = file.size <= maxFileSize;
-			const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
-			const requireMindWidth = 300;
-			const requireMaxdWidth = 600;
-			const requireMindHeight = 150;
-			const requireMaxdHeight = 300;
-	  
-			const img = new Image();
 
-			img.onload = () => {
-			  const isDimensionsValid = (img.width >= requireMindWidth && img.width <= requireMaxdWidth) && (img.height >= requireMindHeight && img.height <= requireMaxdHeight);
-	  
-			  if (!isDimensionsValid) {
-				toast.warning("مقاس الصورة يجب ان يكون أكبر من 300 بكسل وأقل من 600 بكسل عرض و أكبر من 150 بكسل وأقل من 300 بكسل ارتفاع", {
-				  theme: "light"
-				});
-				setImages([]);
-				setPageError({
-				  ...pageError,
-				  images: "مقاس الصورة يجب ان يكون أكبر من 300 بكسل وأقل من 600 بكسل عرض و أكبر من 150 بكسل وأقل من 300 بكسل ارتفاع"
-				});
-			  } else if (!isSizeValid) {
-				toast.warning(errorMessage, {
-				  theme: "light"
-				});
-				setImages([]);
-				setPageError({
-				  ...pageError,
-				  images: errorMessage
-				});
-			  } else {
-				setPageError({
-				  ...pageError,
-				  images: null
-				});
-			  }
-			};
-	  
-			img.src = URL.createObjectURL(file);
-	  
-			return isSizeValid
-			  ? Object.assign(file, { preview: URL.createObjectURL(file) })
-			  : null;
-		  });
-	  
-		  setImages(updatedIcons?.filter((image) => image !== null));
-		}
-	  });
-	
+		onDrop: (acceptedFiles) => {
+			const updatedIcons = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const requireMindWidth = 300;
+				const requireMaxdWidth = 600;
+				const requireMindHeight = 150;
+				const requireMaxdHeight = 300;
+				const img = new Image();
+
+				const errorMes = `
+				<span> - الحد الأدني للأبعاد هو 300بكسل عرض و 150بكسل ارتفاع</span>
+				 <br />
+				<span> - الحد الأقصي للأبعاد هو 600بكسل عرض و 300بكسل ارتفاع</span> `;
+
+				img.onload = () => {
+					const isDimensionsValid =
+						img.width >= requireMindWidth &&
+						img.width <= requireMaxdWidth &&
+						img.height >= requireMindHeight &&
+						img.height <= requireMaxdHeight;
+
+					if (!isDimensionsValid && isSizeValid) {
+						toast.warning(
+							<div
+								style={errMsgStyle}
+								dangerouslySetInnerHTML={{ __html: errorMes }}
+							/>,
+							{
+								theme: "light",
+							}
+						);
+						setImages([]);
+						setPageError({
+							...pageError,
+							images: (
+								<div
+									style={errMsgStyle}
+									dangerouslySetInnerHTML={{ __html: errorMes }}
+								/>
+							),
+						});
+					} else if (!isSizeValid && !isDimensionsValid) {
+						toast.warning(errorMessage, {
+							theme: "light",
+						});
+
+						toast.warning(
+							<div
+								style={errMsgStyle}
+								dangerouslySetInnerHTML={{ __html: errorMes }}
+							/>,
+							{
+								theme: "light",
+							}
+						);
+						setImages([]);
+					} else if (!isSizeValid && isDimensionsValid) {
+						toast.warning(errorMessage, {
+							theme: "light",
+						});
+						setImages([]);
+						setPageError({
+							...pageError,
+							images: errorMessage,
+						});
+					} else {
+						setPageError({
+							...pageError,
+							images: null,
+						});
+					}
+				};
+
+				img.src = URL.createObjectURL(file);
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setImages(updatedIcons?.filter((image) => image !== null));
+		},
+	});
 
 	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>
-			{file.path} - {file.size} bytes
-		</li>
+		<li key={file.path}>{file.path} bytes</li>
 	));
 
 	const handleOnChange = (e) => {
@@ -656,7 +688,7 @@ const EditPage = () => {
 																<div className='title'>
 																	<h4>
 																		تصنيف المدونة
-																		<span className='important-hint'>*</span>
+																		<span className='important-hint'> * </span>
 																	</h4>
 																</div>
 																<FormControl sx={{ m: 0, width: "100%" }}>
@@ -729,8 +761,41 @@ const EditPage = () => {
 														<div className='col-md-6 col-12'>
 															<div className='wrapper h-auto'>
 																<div className='title'>
-																	<h4>صورة المدونة</h4>
-																	<span style={{ fontSize:"0.8rem",color:"#7e7e7e", whiteSpace:"break-spaces" }}> المقاس الأنسب أكبر من 300 بكسل وأقل من 600 بكسل عرض و أكبر من 150 بكسل وأقل من 300 بكسل ارتفاع</span>
+																	<h4>
+																		صورة المدونة
+																		<span className='important-hint'> * </span>
+																	</h4>
+																	<span
+																		style={{
+																			display: "block",
+																			fontSize: "1rem",
+																			color: "#7e7e7e",
+																			whiteSpace: "break-spaces",
+																			fontWight: "600",
+																		}}>
+																		الأبعاد المناسبة:
+																	</span>
+																	<span
+																		style={{
+																			fontSize: "0.9rem",
+																			color: "#7e7e7e",
+
+																			whiteSpace: "break-spaces",
+																		}}>
+																		- (الحد الادني للابعاد 300 بكسل عرض - 150
+																		بكسل ارتفاع)
+																	</span>
+																	<span
+																		style={{
+																			display: "block",
+																			fontSize: "0.9rem",
+																			color: "#7e7e7e",
+
+																			whiteSpace: "break-spaces",
+																		}}>
+																		- (الحد الأقصي للابعاد 600 بكسل عرض - 300
+																		بكسل ارتفاع)
+																	</span>
 																</div>
 																<div
 																	{...getRootProps({

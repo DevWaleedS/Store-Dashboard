@@ -114,7 +114,10 @@ const ProductRefund = () => {
 				},
 			})
 			.then((res) => {
-				if (res?.data?.success === true && res?.data?.message?.en === "Cart Added successfully") {
+				if (
+					res?.data?.success === true &&
+					res?.data?.message?.en === "Cart Added successfully"
+				) {
 					setLoadingTitle("");
 					setReload(!reload);
 					navigate("/Products/SouqOtlobha");
@@ -125,14 +128,14 @@ const ProductRefund = () => {
 					setLoadingTitle("");
 					setProductErrors({
 						...productErrors,
-						price: res?.data?.message?.en?.['data.0.price']?.[0],
-						qty: res?.data?.message?.en?.['data.0.qty']?.[0],
+						price: res?.data?.message?.en?.["data.0.price"]?.[0],
+						qty: res?.data?.message?.en?.["data.0.qty"]?.[0],
 					});
 
-					toast.error(res?.data?.message?.en?.['data.0.price']?.[0], {
+					toast.error(res?.data?.message?.en?.["data.0.price"]?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.['data.0.qty']?.[0], {
+					toast.error(res?.data?.message?.en?.["data.0.qty"]?.[0], {
 						theme: "light",
 					});
 				}
@@ -297,8 +300,7 @@ const ProductRefund = () => {
 												</div>
 											</div>
 										</div>
-										<div
-											className='col-md-6 col-12'>
+										<div className='col-md-6 col-12'>
 											{/* purchasing_price */}
 											<div className='product-price mb-3'>
 												<div className='label mb-1'>سعر الشراء</div>
@@ -320,7 +322,7 @@ const ProductRefund = () => {
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
 													الكمية المراد استيرادها من المنتج
-													<span className='important-hint'>*</span>{" "}
+													<span style={{ color: "#ff3838" }}> * </span>{" "}
 													<span>(قم بإضافة الكمية الخاص بك)</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
