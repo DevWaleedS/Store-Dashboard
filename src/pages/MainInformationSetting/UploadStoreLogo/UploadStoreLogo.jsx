@@ -36,7 +36,7 @@ const UploadStoreLogo = ({
 
 			// Set the event listener to check dimensions once the image is loaded
 			img.onload = () => {
-				if (img.width !== 110 && img.height !== 110) {
+				if ((img.width !== 110 || img.height !== 110) && (img.width !== 110 || img.height >= 110) && (img.width >= 110 || img.height !== 110)) {
 					// If dimensions are not valid, display a warning and reset the logo state
 					handleInvalid(
 						"logo",
@@ -113,7 +113,7 @@ const UploadStoreLogo = ({
 									<span className='d-flex justify-content-center align-items-center gap-2'>
 										رفع الشعار
 										<div className='tax-text'>
-											(المقاس الأنسب 110 بكسل عرض 110 بكسل الارتفاع)
+											(المقاس الأنسب 110 بكسل عرض أو 110 بكسل الارتفاع)
 										</div>
 									</span>
 

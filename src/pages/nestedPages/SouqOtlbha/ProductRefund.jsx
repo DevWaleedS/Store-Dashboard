@@ -87,8 +87,7 @@ const ProductRefund = () => {
 		if (fetchedData?.data?.products) {
 			setProductInfo({
 				...productInfo,
-
-				price: fetchedData?.data?.products?.selling_price,
+				price: fetchedData?.data?.products?.purchasing_price,
 				qty: fetchedData?.data?.products?.qty,
 			});
 
@@ -103,46 +102,42 @@ const ProductRefund = () => {
 		setLoadingTitle("جاري اضافة المنتج الي سلة الاستيراد");
 
 		let formData = new FormData();
-		formData.append("product_id", productInfo?.id);
-		formData.append("price", productInfo?.price);
-		formData.append("qty", productInfo?.qty);
+		formData.append("data[0][id]", productInfo?.id);
+		formData.append("data[0][price]", productInfo?.price);
+		formData.append("data[0][qty]", productInfo?.qty);
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/importproduct`, formData, {
+			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${cookies?.access_token}`,
 				},
 			})
 			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+				if (res?.data?.success === true && res?.data?.message?.en === "Cart Added successfully") {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Products/SouqOtlobha");
 					setReload(!reload);
+					navigate("/Products/SouqOtlobha");
+					toast.success(res?.data?.message?.ar, {
+						theme: "light",
+					});
 				} else {
 					setLoadingTitle("");
 					setProductErrors({
 						...productErrors,
-						price: res?.data?.message?.en?.price?.[0],
-						qty: res?.data?.message?.en?.qty?.[0],
+						price: res?.data?.message?.en?.['data.0.price']?.[0],
+						qty: res?.data?.message?.en?.['data.0.qty']?.[0],
 					});
 
-					toast.error(res?.data?.message?.en?.price?.[0], {
+					toast.error(res?.data?.message?.en?.['data.0.price']?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.qty?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.ar, {
+					toast.error(res?.data?.message?.en?.['data.0.qty']?.[0], {
 						theme: "light",
 					});
 				}
 			});
 	};
-
-	console.log(productErrors?.price);
 
 	return (
 		<>
@@ -303,8 +298,7 @@ const ProductRefund = () => {
 											</div>
 										</div>
 										<div
-											className='col-md-6 col-12'
-											style={{ alignSelf: "end" }}>
+											className='col-md-6 col-12'>
 											{/* purchasing_price */}
 											<div className='product-price mb-3'>
 												<div className='label mb-1'>سعر الشراء</div>
@@ -317,80 +311,6 @@ const ProductRefund = () => {
 													</div>
 
 													<div className='currency d-flex justify-content-center align-items-center'>
-														ر.س
-													</div>
-												</div>
-											</div>
-
-											{/* Selling Price */}
-											<div className='product-price mb-3'>
-												<div className='label selling-price-label mb-1'>
-													سعر البيع<span className='important-hint'>*</span>{" "}
-													<span>(قم بإضافة السعر الخاص بك)</span>
-													<br />
-													<p className='tax-text'>(السعر يشمل الضريبة)</p>
-												</div>
-												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='price-icon d-flex align-items-center p-2 gap-3'>
-														<CurrencyIcon />
-														<div className='price w-100 d-flex justify-content-center align-items-center'>
-															<input
-																className='text-center'
-																style={{
-																	direction: "ltr",
-																}}
-																type='text'
-																name='price'
-																value={productInfo?.price}
-																onChange={(e) =>
-																	setProductInfo({
-																		...productInfo,
-																		price: e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		),
-																	})
-																}
-															/>
-														</div>
-													</div>
-
-													<div className='currency d-flex justify-content-center align-items-center'>
-														ر.س
-													</div>
-												</div>
-
-												{Number(productInfo?.price) <
-													Number(
-														fetchedData?.data?.products?.purchasing_price
-													) && (
-													<span className='fs-6 text-danger'>
-														السعر يجب ان يكون اكبر من او يساوي (
-														{fetchedData?.data?.products?.purchasing_price})
-													</span>
-												)}
-
-												{productErrors?.price && (
-													<span className='fs-6 text-danger'>
-														{productErrors?.price}
-													</span>
-												)}
-											</div>
-
-											{/* Stock */}
-											<div className='product-price mb-3'>
-												<div className='label mb-1'> الكمية في المخزون</div>
-												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='price-icon d-flex  p-2 gap-3'>
-														<CurrencyIcon className='invisible ' />
-														<div
-															className='price w-100 d-flex justify-content-center align-items-center'
-															style={{ color: "#67747B" }}>
-															{fetchedData?.data?.products?.stock}
-														</div>
-													</div>
-
-													<div className='currency d-flex justify-content-center align-items-center invisible '>
 														ر.س
 													</div>
 												</div>

@@ -145,42 +145,66 @@ const CreatePage = () => {
 	// Add Post image
 	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
 	const [images, setImages] = useState([]);
-	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+	const {
+		acceptedFiles,
+		getRootProps,
+		getInputProps
+	  } = useDropzone({
 		accept: {
-			"image/jpeg": [],
-			"image/jpg": [],
-			"image/png": [],
+		  "image/jpeg": [],
+		  "image/jpg": [],
+		  "image/png": []
 		},
-
 		onDrop: (acceptedFiles) => {
-			const updatedIcons = acceptedFiles?.map((file) => {
-				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+		  const updatedIcons = acceptedFiles?.map((file) => {
+			const isSizeValid = file.size <= maxFileSize;
+			const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+			const requireMindWidth = 300;
+			const requireMaxdWidth = 600;
+			const requireMindHeight = 150;
+			const requireMaxdHeight = 300;
+	  
+			const img = new Image();
 
-				if (!isSizeValid) {
-					toast.warning(errorMessage, {
-						theme: "light",
-					});
-					setImages([]);
-					setPageError({
-						...pageError,
-						images: errorMessage,
-					});
-				} else {
-					setPageError({
-						...pageError,
-						images: null,
-					});
-				}
-
-				return isSizeValid
-					? Object.assign(file, { preview: URL.createObjectURL(file) })
-					: null;
-			});
-
-			setImages(updatedIcons?.filter((image) => image !== null));
-		},
-	});
+			img.onload = () => {
+			  const isDimensionsValid = (img.width >= requireMindWidth && img.width <= requireMaxdWidth) && (img.height >= requireMindHeight && img.height <= requireMaxdHeight);
+	  
+			  if (!isDimensionsValid) {
+				toast.warning("مقاس الصورة يجب ان يكون أكبر من 300 بكسل وأقل من 600 بكسل عرض و أكبر من 150 بكسل وأقل من 300 بكسل ارتفاع", {
+				  theme: "light"
+				});
+				setImages([]);
+				setPageError({
+				  ...pageError,
+				  images: "مقاس الصورة يجب ان يكون أكبر من 300 بكسل وأقل من 600 بكسل عرض و أكبر من 150 بكسل وأقل من 300 بكسل ارتفاع"
+				});
+			  } else if (!isSizeValid) {
+				toast.warning(errorMessage, {
+				  theme: "light"
+				});
+				setImages([]);
+				setPageError({
+				  ...pageError,
+				  images: errorMessage
+				});
+			  } else {
+				setPageError({
+				  ...pageError,
+				  images: null
+				});
+			  }
+			};
+	  
+			img.src = URL.createObjectURL(file);
+	  
+			return isSizeValid
+			  ? Object.assign(file, { preview: URL.createObjectURL(file) })
+			  : null;
+		  });
+	  
+		  setImages(updatedIcons?.filter((image) => image !== null));
+		}
+	  });
 
 	const files = acceptedFiles.map((file) => (
 		<li key={file.path}>{file.path}</li>
@@ -696,6 +720,7 @@ const CreatePage = () => {
 													<div className='wrapper h-auto'>
 														<div className='title'>
 															<h4>صورة المدونة</h4>
+															<span style={{ fontSize:"0.8rem",color:"#7e7e7e", whiteSpace:"break-spaces" }}> المقاس الأنسب أكبر من 300 بكسل وأقل من 600 بكسل عرض و أكبر من 150 بكسل وأقل من 300 بكسل ارتفاع</span>
 														</div>
 														<div
 															{...getRootProps({
@@ -736,7 +761,7 @@ const CreatePage = () => {
 														</div>
 													</div>
 													<div className='col-12'>
-														<span className='fs-6 text-danger'>
+														<span style={{ whiteSpace:"break-spaces" }} className='fs-6 text-danger'>
 															{pageError?.images}
 														</span>
 													</div>

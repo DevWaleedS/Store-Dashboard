@@ -46,6 +46,8 @@ import {
 	PostalSubscriptions,
 	PaintStore,
 	SEOStore,
+	CartPage,
+	CheckoutPage
 } from "./pages";
 
 import { Rating } from "./pages/Rating";
@@ -287,6 +289,16 @@ const router = createBrowserRouter([
 			{
 				path: "Products/SouqOtlobha/ProductRefund/:id",
 				element: <ProductRefund />,
+			},
+
+			{
+				path: "Products/SouqOtlobha/Cart",
+				element: <CartPage />,
+			},
+
+			{
+				path: "Products/SouqOtlobha/Checkout",
+				element: <CheckoutPage />,
 			},
 
 			{

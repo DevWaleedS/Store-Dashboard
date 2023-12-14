@@ -68,9 +68,6 @@ const EvaluationThePlatform = () => {
 			});
 	};
 
-	console.log(editorValue !== "", editorValue);
-	console.log(editorValue !== "<p><br></p>", editorValue);
-	console.log(editorValue !== null, editorValue);
 	return (
 		<>
 			<Helmet>
