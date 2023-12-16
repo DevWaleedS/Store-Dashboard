@@ -120,10 +120,8 @@ const ProductRefund = () => {
 				) {
 					setLoadingTitle("");
 					setReload(!reload);
+					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Products/SouqOtlobha");
-					toast.success(res?.data?.message?.ar, {
-						theme: "light",
-					});
 				} else {
 					setLoadingTitle("");
 					setProductErrors({

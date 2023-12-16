@@ -217,6 +217,7 @@ const EditPage = () => {
 					if (!isDimensionsValid && isSizeValid) {
 						toast.warning(
 							<div
+								className="wrign-dimensions"
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,
@@ -229,6 +230,7 @@ const EditPage = () => {
 							...pageError,
 							images: (
 								<div
+									className="wrign-dimensions"
 									style={errMsgStyle}
 									dangerouslySetInnerHTML={{ __html: errorMes }}
 								/>
@@ -241,6 +243,7 @@ const EditPage = () => {
 
 						toast.warning(
 							<div
+								className="wrign-dimensions"
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,
@@ -701,9 +704,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																				{
-																					paddingRight: "20px",
-																				},
+																			{
+																				paddingRight: "20px",
+																			},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",

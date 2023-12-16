@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 // Third party
 import { Helmet } from "react-helmet";
 import useFetch from "../../Hooks/UseFetch";
@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+// Context
+import { LoadingContext } from "../../Context/LoadingProvider";
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
 // Icons
@@ -16,6 +18,52 @@ function CartPage() {
     const { fetchedData, loading, reload, setReload } = useFetch(
         "https://backend.atlbha.com/api/Store/showImportCart"
     );
+    const LoadingStore = useContext(LoadingContext);
+    const { setLoadingTitle } = LoadingStore;
+
+    const [productInfo, setProductInfo] = useState([]);
+    const [newproductInfo, setNewProductInfo] = useState([]);
+
+    useEffect(() => {
+        if (fetchedData?.data?.cart?.cartDetail) {
+            setProductInfo(fetchedData?.data?.cart?.cartDetail);
+            setNewProductInfo(fetchedData?.data?.cart?.cartDetail);
+        }
+    }, [fetchedData?.data?.cart?.cartDetail]);
+
+    const updateQtyValue = (index) => (e) => {
+        const temp = newproductInfo?.map((item, idx) => {
+            if (index === idx) {
+                return { ...item, [e.target.name]: e.target.value.replace(/[^0-9]/g, "") };
+            } else {
+                return item;
+            }
+        });
+        setNewProductInfo(temp);
+    };
+
+    const handleIncrement = (index) => () => {
+        const temp = newproductInfo?.map((item, idx) => {
+            if (index === idx) {
+                return { ...item, qty: Number(item?.qty) + 1 };
+            } else {
+                return item;
+            }
+        });
+        setNewProductInfo(temp);
+    }
+
+    const handleDecrement = (index) => () => {
+        const temp = newproductInfo?.map((item, idx) => {
+            if (index === idx) {
+                return { ...item, qty: Number(item?.qty) !== 1 ? Number(item?.qty) - 1 : Number(item?.qty) };
+            } else {
+                return item;
+            }
+        });
+        setNewProductInfo(temp);
+    }
+
     // delete item from cart function 
     const deleteItemFromCart = (id) => {
         axios
@@ -39,6 +87,43 @@ function CartPage() {
                 }
             });
     }
+
+    // Handle Update Cart
+    const updateCart = () => {
+        setLoadingTitle("جاري تحديث السلة");
+        let formData = new FormData();
+        for (let i = 0; i < newproductInfo?.length; i++) {
+            formData.append([`data[${i}][id]`], newproductInfo?.[i]?.product?.id);
+            formData.append([`data[${i}][price]`], Number(newproductInfo?.[i]?.price));
+            formData.append([`data[${i}][qty]`], newproductInfo?.[i]?.qty);
+        }
+        axios
+            .post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${cookies?.access_token}`,
+                },
+            })
+            .then((res) => {
+                if (
+                    res?.data?.success === true &&
+                    res?.data?.message?.en === "Cart Added successfully"
+                ) {
+                    setLoadingTitle("");
+                    setReload(!reload);
+                    toast.success("تم تحديث السلة بنجاح", {
+                        theme: "light",
+                    });
+                } else {
+                    setLoadingTitle("");
+                    toast.error(res?.data?.message?.ar, {
+                        theme: "light",
+                    });
+                }
+            });
+    };
+
+    const updateCartDisabled = productInfo?.every(item => newproductInfo?.some((product) => Number(product?.qty) === Number(item?.qty)));
 
     return (
         <>
@@ -91,7 +176,7 @@ function CartPage() {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {fetchedData?.data?.cart?.cartDetail?.map((product) => (
+                                                    {newproductInfo?.map((product, index) => (
                                                         <tr key={product?.id}>
                                                             <td>
                                                                 <div className='image'>
@@ -106,12 +191,12 @@ function CartPage() {
                                                             <td>{Number(product?.price)} ر.س</td>
                                                             <td>
                                                                 <div className='qty'>
-                                                                    <button >+</button>
-                                                                    <input value={product?.qty} />
-                                                                    <button >-</button>
+                                                                    <button onClick={handleIncrement(index)}>+</button>
+                                                                    <input type='number' min={1} name="qty" value={Number(product?.qty)} onChange={updateQtyValue(index)} />
+                                                                    <button onClick={handleDecrement(index)}>-</button>
                                                                 </div>
                                                             </td>
-                                                            <td>{product?.sum} ر.س</td>
+                                                            <td>{Number(product?.price) * Number(product?.qty)} ر.س</td>
                                                             <td>
                                                                 <button className='remove' onClick={() => deleteItemFromCart(product?.id)}>
                                                                     <Cross10 />
@@ -125,7 +210,7 @@ function CartPage() {
                                         <div className='actions'>
                                             <div className='buttons'>
                                                 <Link to="/Products/SouqOtlobha">العودة لسوق أطلبها</Link>
-                                                <button type="button" className='update' disabled>تحديث السلة</button>
+                                                <button onClick={() => updateCart()} type="button" className='update' disabled={updateCartDisabled}>تحديث السلة</button>
                                             </div>
                                         </div>
                                         <div className='row justify-content-end pt-md-5 pt-4'>
