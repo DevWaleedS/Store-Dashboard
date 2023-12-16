@@ -183,6 +183,7 @@ const CreatePage = () => {
 					if (!isDimensionsValid && isSizeValid) {
 						toast.warning(
 							<div
+								className="wrign-dimensions"
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,
@@ -195,6 +196,7 @@ const CreatePage = () => {
 							...pageError,
 							images: (
 								<div
+								className="wrign-dimensions"
 									style={errMsgStyle}
 									dangerouslySetInnerHTML={{ __html: errorMes }}
 								/>
@@ -207,6 +209,7 @@ const CreatePage = () => {
 
 						toast.warning(
 							<div
+							className="wrign-dimensions"
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,

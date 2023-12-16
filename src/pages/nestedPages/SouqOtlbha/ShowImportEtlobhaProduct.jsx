@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Context
 import Context from "../../../Context/context";
@@ -284,9 +285,8 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={`video_wrapper ${
-																				isActive === index ? "active" : ""
-																			}`}>
+																			className={`video_wrapper ${isActive === index ? "active" : ""
+																				}`}>
 																			<video
 																				onClick={() => {
 																					setImagesPreview(item?.image);
@@ -315,9 +315,8 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={` d-flex justify-content-center align-items-center ${
-																				isActive === index ? "active" : ""
-																			}`}>
+																			className={` d-flex justify-content-center align-items-center ${isActive === index ? "active" : ""
+																				}`}>
 																			<img
 																				style={{
 																					cursor: "pointer",
@@ -450,7 +449,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
 													{fetchedData?.data?.product?.subcategory?.length ===
-													0 ? (
+														0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -582,11 +581,11 @@ const ShowImportEtlobhaProduct = () => {
 													Number(
 														fetchedData?.data?.product?.purchasing_price
 													) && (
-													<span className='fs-6 text-danger'>
-														السعر يجب ان يكون اكبر من او يساوي (
-														{fetchedData?.data?.product?.purchasing_price})
-													</span>
-												)}
+														<span className='fs-6 text-danger'>
+															السعر يجب ان يكون اكبر من او يساوي (
+															{fetchedData?.data?.product?.purchasing_price})
+														</span>
+													)}
 
 												<div className='fs-6 text-danger'>
 													{errors?.price && errors.price.message}
@@ -595,11 +594,11 @@ const ShowImportEtlobhaProduct = () => {
 										</div>
 
 										{/* Stock */}
+
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'>الكمية في المخزون </label>
+												<label htmlFor='price'>الكمية التي قمت باستيرادها</label>
 											</div>
-
 											<div className='col-md-7 col-12'>
 												<div
 													className='d-flex justify-content-center align-items-center'
@@ -609,89 +608,35 @@ const ShowImportEtlobhaProduct = () => {
 														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{fetchedData?.data?.product?.mainstock}
+														{product?.qty}
 													</div>
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
 										</div>
 
-										{/* Stock */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-md-3 col-12'>
-												<label htmlFor='price'>
-													{" "}
-													الكمية التي قمت باستيرادها{" "}
-												</label>
+										{Number(fetchedData?.data?.product?.stock) <= 1 &&
+											<div className='row mb-md-5 mb-3'>
+												<div className='col-md-3 col-12'>
+													<label htmlFor='price'>يمكنك استيراد كمية جديدة</label>
+												</div>
+												<div className='col-md-7 col-12'>
+													<div
+														className='d-flex justify-content-center align-items-center'
+														style={{
+															background: "transparent",
+															border: "1px solid #a7a7a71a",
+															height: "48px",
+														}}>
+														<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
+															<Link to={"/Products/SouqOtlobha"}>استيراد</Link>
+														</div>
+													</div>
+												</div>
+												<div className='col-md-3 col-12'></div>
 											</div>
+										}
 
-											<div className='col-md-7 col-12'>
-												<div className='tax-text'>
-													يمكنك تعديل الكمية التي قمت باستيرادها{" "}
-												</div>
-												<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-													{" "}
-													<Controller
-														name={"qty"}
-														control={control}
-														rules={{
-															required: "حقل الكمية في المخزون  مطلوب",
-															pattern: {
-																value: /^[0-9.]+$/i,
-																message: "يجب أن تكون الكمية في المخزون  رقمًا",
-															},
-															min: {
-																value: 1,
-																message:
-																	"يجب أن تكون  الكمية في المخزون أكبر من 0",
-															},
-														}}
-														render={({ field: { onChange, value } }) => (
-															<input
-																className='import_products_input'
-																style={{
-																	background: "#FFF",
-																	height: "48px",
-																	borderRadius: "0",
-																}}
-																name={"qty"}
-																type='text'
-																id='qty'
-																value={value}
-																onChange={(e) => {
-																	setProduct({
-																		...product,
-																		qty: e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		),
-																	});
-																	onChange(
-																		e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		)
-																	);
-																}}
-															/>
-														)}
-													/>
-												</div>
-											</div>
-											<div className='col-md-3 col-12'></div>
-											<div className='col-md-7 col-12'>
-												{Number(product?.qty) >
-													Number(fetchedData?.data?.product?.stock) && (
-													<span className='fs-6 text-danger'>
-														الكمية المطلوبة غير متوفرة
-													</span>
-												)}
-
-												<div className='fs-6 text-danger'>
-													{errors?.qty && errors.qty.message}
-												</div>
-											</div>
-										</div>
 									</div>
 									<div className='form-footer'>
 										<div className='row d-flex justify-content-center align-items-center'>

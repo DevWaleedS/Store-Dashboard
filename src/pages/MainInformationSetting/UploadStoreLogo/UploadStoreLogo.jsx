@@ -110,7 +110,7 @@ const UploadStoreLogo = ({
 									className='upload-log-btn'
 									onClick={onImageUpload}
 									{...dragProps}>
-									<span className='d-flex justify-content-center align-items-center gap-2'>
+									<span className='d-flex justify-content-center align-items-center gap-1 flex-wrap'>
 										رفع الشعار
 										<div className='tax-text'>
 											(المقاس الأنسب 110 بكسل عرض أو 110 بكسل الارتفاع)
