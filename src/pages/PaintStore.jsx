@@ -33,6 +33,7 @@ import {
 	Icons,
 	Menuu,
 } from "../data/Icons";
+import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
 
 const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -50,6 +51,7 @@ const PaintStore = () => {
 
 	const [primaryBg, setPrimaryBg] = useState("#e5e5e5");
 	const [secondaryBg, setSecondaryBg] = useState("#02466a");
+	const [fontColor, setFontColor] = useState("#3d464d");
 	const [headerBg, setHeaderBg] = useState("#1dbbbe");
 	const [layoutBg, setLayoutBg] = useState("#ffffff");
 	const [iconsBg, setIconsBg] = useState("#1dbbbe");
@@ -62,6 +64,7 @@ const PaintStore = () => {
 		if (fetchedData?.data?.Theme) {
 			setPrimaryBg(fetchedData?.data?.Theme?.primaryBg);
 			setSecondaryBg(fetchedData?.data?.Theme?.secondaryBg);
+			setFontColor(fetchedData?.data?.Theme?.fontColor);
 			setHeaderBg(fetchedData?.data?.Theme?.headerBg);
 			setLayoutBg(fetchedData?.data?.Theme?.layoutBg);
 			setIconsBg(fetchedData?.data?.Theme?.iconsBg);
@@ -133,6 +136,39 @@ const PaintStore = () => {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.secondaryBg?.[0], {
+						theme: "light",
+					});
+				}
+			});
+	};
+
+	const handleFontColorUpdate = () => {
+		setLoadingTitle("جاري تعديل لون الخط");
+
+		let formData = new FormData();
+		formData.append("fontColor", fontColor);
+		axios
+			.post(
+				`https://backend.atlbha.com/api/Store/themeFontColorUpdate`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${cookies?.access_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setLoadingTitle("");
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				} else {
+					setLoadingTitle("");
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.primaryBg?.[0], {
 						theme: "light",
 					});
 				}
@@ -273,6 +309,10 @@ const PaintStore = () => {
 
 	const resetSecondaryColor = () => {
 		setSecondaryBg("#02466a");
+	};
+
+	const resetFontColor = () => {
+		setFontColor("#3d464d");
 	};
 
 	const resetHeaderColor = () => {
@@ -492,6 +532,79 @@ const PaintStore = () => {
 									اعادة اللون الإفتراضي
 								</button>
 								<button type='button' onClick={handleSecondaryUpdate}>
+									حـفـظ
+								</button>
+							</AccordionDetails>
+						</Accordion>
+						<Accordion
+							expanded={expanded === "panel7"}
+							onChange={handleChange("panel7")}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon />}
+								aria-controls='panel7bh-content'
+								id='panel7bh-header'>
+								<FontDownloadOutlinedIcon fontSize="1.3rem"/>
+								<h6>لون الخط</h6>
+								<p>(يمكنك تغيير لون الخط في القالب)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='content mb-2'>
+									<div className='text'>
+										<FontDownloadOutlinedIcon fontSize="1.3rem"/>
+										<span>لون الخط</span>
+									</div>
+									<label
+										htmlFor='font-color'
+										className='picker-bg'
+										style={{
+											backgroundColor: fontColor,
+											borderColor: fontColor ? fontColor : "#000000",
+										}}>
+										<label htmlFor='font-color-picker'>
+											<ClickIcon
+												fill={
+													fontColor
+														? fontColor !== "#ffffff"
+															? "#ffffff"
+															: "#000000"
+														: "#000000"
+												}
+											/>
+											<input
+												id='font-color-picker'
+												type='color'
+												value={fontColor}
+												onChange={(e) => setFontColor(e.target.value)}
+											/>
+										</label>
+										<input
+											style={{
+												color: fontColor
+													? fontColor !== "#ffffff"
+														? "#ffffff"
+														: "#000000"
+													: "#000000",
+											}}
+											id='font-color'
+											type='text'
+											value={fontColor}
+											onChange={(e) =>
+												setFontColor(
+													e.target.value
+														.replace(/[^#A-Fa-f0-9]/g, "")
+														.slice(0, 7)
+												)
+											}
+										/>
+									</label>
+								</div>
+								<button
+									className='reset'
+									type='button'
+									onClick={resetFontColor}>
+									اعادة اللون الإفتراضي
+								</button>
+								<button type='button' onClick={handleFontColorUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>

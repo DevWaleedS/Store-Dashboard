@@ -119,7 +119,7 @@ const EvaluationThePlatform = () => {
 					<div className='col-12 mb-4'>
 						<div className='preview-valuation'>
 							معاينة التقييم{" "}
-							<span>(يمكن أن يظهر تقييمك في الصفحة الرئيسية للمنصة)</span>
+							<span>(يظهر تقييمك في الصفحة الرئيسية للمنصة)</span>
 						</div>
 					</div>
 

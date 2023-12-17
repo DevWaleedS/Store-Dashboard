@@ -554,7 +554,7 @@ const EditUserPage = () => {
 														type='tel'
 														id='phonenumber'
 														className='direction-ltr'
-														placeholder='0096654845613'
+														placeholder='567891234'
 														{...register("phonenumber", {
 															required: "حقل رقم الجوال مطلوب",
 															pattern: {

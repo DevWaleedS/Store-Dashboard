@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
@@ -6,6 +6,8 @@ import useFetch from "../../Hooks/UseFetch";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+// Context
+import Context from "../../Context/context";
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
 // Icons
@@ -22,6 +24,8 @@ function CheckoutPage() {
 	const { fetchedData: citiesData } = useFetch(
 		"https://backend.atlbha.com/api/selector/shippingcities/5"
 	);
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [shipping, setShipping] = useState({
@@ -97,11 +101,13 @@ function CheckoutPage() {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					if (res?.data?.message?.en === "order send successfully") {
 						setBtnLoading(false);
-						toast.success(res?.data?.message?.ar, { theme: "colored" });
+						setEndActionTitle(res?.data?.message?.ar);
 						window.location.replace(`/`);
+						setReload(!reload);
 					} else {
 						setBtnLoading(false);
 						toast.error(res?.data?.message?.ar, { theme: "colored" });
+						setReload(!reload);
 					}
 				} else {
 					setBtnLoading(false);
@@ -128,6 +134,7 @@ function CheckoutPage() {
 					toast.error(res?.data?.message?.en?.paymentype_id?.[0], {
 						theme: "light",
 					});
+					setReload(!reload);
 				}
 			});
 	};

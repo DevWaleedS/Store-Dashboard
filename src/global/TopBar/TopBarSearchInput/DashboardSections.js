@@ -38,7 +38,7 @@ export const dashboardSections = [
 	{
 		id: 233223,
 		sectionName: "تعديل بيانات حسابي",
-		route: "UserDetails",
+		route: "EditUserDetails",
 		icon: <MyAccountIcon />,
 	},
 	{

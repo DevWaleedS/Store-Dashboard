@@ -22,7 +22,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // Icons
-import { Message, Mobile, Phone, UploadUserImageIcon } from "../../data/Icons";
+import { Message, Mobile, Phone, UploadUserImageIcon, Eye } from "../../data/Icons";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
 
 const style = {
 	position: "fixed",
@@ -87,6 +88,32 @@ const EditUserDetails = () => {
 		},
 	});
 
+	// Show and hidden password function
+	const [passwordType, setPasswordType] = useState("password");
+	const [showPasswordIcon, setShowPasswordIcon] = useState(<Eye />);
+	const showPasswordToggle = () => {
+		if (passwordType === "password") {
+			setPasswordType("text");
+			setShowPasswordIcon(<AiOutlineEyeInvisible />);
+		} else {
+			setPasswordType("password");
+			setShowPasswordIcon(<Eye />);
+		}
+	};
+
+	// Show and hidden confirm password function
+	const [passwordConfirmType, setPasswordConfirmType] = useState("password");
+	const [showPasswordConfirmIcon, setShowPasswordConfirmIcon] = useState(<Eye />);
+	const showPasswordConfirmToggle = () => {
+		if (passwordConfirmType === "password") {
+			setPasswordConfirmType("text");
+			setShowPasswordConfirmIcon(<AiOutlineEyeInvisible />);
+		} else {
+			setPasswordConfirmType("password");
+			setShowPasswordConfirmIcon(<Eye />);
+		}
+	};
+
 	// -----------------------------------------------
 	// TO HANDLE ERRORS
 	const [dataError, setDataError] = useState({
@@ -120,8 +147,8 @@ const EditUserDetails = () => {
 				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.users?.phonenumber?.slice(4)
 					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
-					? fetchedData?.data?.users?.phonenumber.slice(5)
-					: fetchedData?.data?.users?.phonenumber,
+						? fetchedData?.data?.users?.phonenumber.slice(5)
+						: fetchedData?.data?.users?.phonenumber,
 			});
 		}
 	}, [fetchedData?.data?.users]);
@@ -210,8 +237,6 @@ const EditUserDetails = () => {
 		let formData = new FormData();
 		formData.append("name", data?.name);
 		formData.append("user_name", data?.user_name);
-		formData.append("email", data?.email);
-		formData.append("phonenumber", data?.phonenumber);
 
 		if (data?.password !== "") {
 			formData.append("password", data?.password);
@@ -289,7 +314,7 @@ const EditUserDetails = () => {
 											<nav aria-label='breadcrumb'>
 												<ol className='breadcrumb'>
 													<li className='breadcrumb-item text-bold'>
-														<Link to='/UserDetails'>حساب الادمن</Link>
+														<Link to='/'>الرئيسية</Link>
 													</li>
 
 													<li
@@ -418,7 +443,7 @@ const EditUserDetails = () => {
 													<span className='important-hint'>*</span>
 												</label>
 												<input
-													style={{ direction: "ltr", textAlign: "left" }}
+													style={{ direction: "ltr", textAlign: "left",cursor:"auto" }}
 													name='email'
 													type='email'
 													placeholder='Omar.sample@sa.com'
@@ -430,6 +455,7 @@ const EditUserDetails = () => {
 																"القيمة التي تم إدخالها لا تطابق تنسيق البريد الإلكتروني",
 														},
 													})}
+													disabled
 												/>
 												<br />
 												<span className='fs-6 text-danger'>
@@ -443,13 +469,20 @@ const EditUserDetails = () => {
 												<label className='d-block mb-2' htmlFor='password'>
 													كلمة المرور
 												</label>
-												<input
-													name='password'
-													type='password'
-													placeholder='********'
-													className='d-block'
-													{...register("password", {})}
-												/>
+												<div className="password-type">
+													<input
+														name='password'
+														type={passwordType}
+														placeholder='********'
+														className='d-block'
+														{...register("password", {})}
+													/>
+													<div
+														className='input-icons password-icon'
+														onClick={showPasswordToggle}>
+														{showPasswordIcon}
+													</div>
+												</div>
 												<span className='password-hint'>
 													أدخل أرقام وحروف ورموز
 												</span>
@@ -505,13 +538,20 @@ const EditUserDetails = () => {
 												<label className='d-block mb-2' htmlFor='re-password'>
 													تأكيد كلمة المرور
 												</label>
-												<input
-													name='confirm_password'
-													type='password'
-													placeholder='********'
-													className='d-block'
-													{...register("confirm_password", {})}
-												/>
+												<div className="password-type">
+													<input
+														name='confirm_password'
+														type={passwordConfirmType}
+														placeholder='********'
+														className='d-block'
+														{...register("confirm_password", {})}
+													/>
+													<div
+														className='input-icons password-icon'
+														onClick={showPasswordConfirmToggle}>
+														{showPasswordConfirmIcon}
+													</div>
+												</div>
 												<span className='password-hint'>
 													أدخل أرقام وحروف ورموز
 												</span>
@@ -543,6 +583,8 @@ const EditUserDetails = () => {
 															message: "يجب أن رقم الجوال رقمًا",
 														},
 													})}
+													disabled
+													style={{ cursor:"auto" }}
 												/>
 
 												<span className='input-icon'>

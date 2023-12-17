@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 // Context
+import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -20,6 +21,8 @@ function CartPage() {
     );
     const LoadingStore = useContext(LoadingContext);
     const { setLoadingTitle } = LoadingStore;
+    const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
     const [productInfo, setProductInfo] = useState([]);
     const [newproductInfo, setNewProductInfo] = useState([]);
@@ -111,9 +114,7 @@ function CartPage() {
                 ) {
                     setLoadingTitle("");
                     setReload(!reload);
-                    toast.success("تم تحديث السلة بنجاح", {
-                        theme: "light",
-                    });
+                    setEndActionTitle("تم تحديث السلة بنجاح");
                 } else {
                     setLoadingTitle("");
                     toast.error(res?.data?.message?.ar, {
