@@ -440,7 +440,6 @@ const EditUserDetails = () => {
 											<div className='col-lg-4 col-md-5 col-12'>
 												<label className='d-block mb-2' htmlFor='email'>
 													البريد الالكتروني
-													<span className='important-hint'>*</span>
 												</label>
 												<input
 													style={{ direction: "ltr", textAlign: "left",cursor:"auto" }}
@@ -494,7 +493,7 @@ const EditUserDetails = () => {
 											</div>
 										</div>
 										<div className='row mb-md-4 mb-3'>
-											<div className='col-lg-4 col-12'>
+											<div className='col-lg-4 col-12 mb-md-0 mb-3'>
 												<label
 													className='d-block mb-2'
 													htmlFor='upload-user-image'>
@@ -506,7 +505,7 @@ const EditUserDetails = () => {
 												<div
 													{...getRootProps({
 														className:
-															"upload-user-image d-flex justify-content-between",
+															"upload-user-image d-flex align-items-center justify-content-between",
 													})}>
 													<input
 														{...getInputProps()}
@@ -566,7 +565,7 @@ const EditUserDetails = () => {
 										<div className='row mb-4'>
 											<div className='col-lg-4 col-12'>
 												<label className='d-block mb-2' htmlFor='phone-number'>
-													رقم الهاتف<span className='important-hint'>*</span>
+													رقم الهاتف
 												</label>
 												<span className='Country_Key'>+966</span>
 												<input

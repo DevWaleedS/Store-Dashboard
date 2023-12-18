@@ -6070,7 +6070,7 @@ input:disabled {
 
 .user-details-body .upload-user-image .upload-icon {
 	position: relative;
-	top: -19px;
+	top: 0;
 	left: -19px;
 	background-color: var(--primary-500);
 	border-radius: 4px;
@@ -9818,6 +9818,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.ProductRefund-wrapper .product-price .label {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: wrap;
 		margin-bottom: 0 !important;
 	}
 
