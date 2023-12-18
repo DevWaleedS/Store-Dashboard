@@ -33,9 +33,9 @@ import { IoIosArrowDown } from "react-icons/io";
 const selectStyle = {
 	fontSize: "18px",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+	{
+		paddingRight: "20px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -74,6 +74,7 @@ const PlatformServices = () => {
 		activity: [],
 		services: [],
 		name: "",
+		description: "",
 	});
 	// ---------------------------------------------
 
@@ -98,6 +99,7 @@ const PlatformServices = () => {
 		for (let i = 0; i < data?.services?.length; i++) {
 			formData.append([`service_id[${i}]`], data?.services[i]);
 		}
+		formData.append("description", data?.description);
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/etlobhaservice`, formData, {
@@ -111,13 +113,13 @@ const PlatformServices = () => {
 					setReload(!reload);
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
-					setData({ ...data, services: [], name: "" });
+					setData({ ...data, services: [], name: "", description: "" });
 				} else {
 					setLoadingTitle("");
 					toast.error(res?.data?.message?.ar, {
 						theme: "light",
 					});
-					setData({ ...data, services: [], name: "" });
+					setData({ ...data, services: [], name: "", description: "" });
 				}
 			});
 	};
@@ -265,6 +267,26 @@ const PlatformServices = () => {
 										onChange={(e) => setData({ ...data, name: e.target.value })}
 										className='w-100 new-service-input'
 										placeholder='ادخل اسم الخدمة الجديدة'
+									/>
+								</div>
+							</div>
+
+							<div className='row align-items-center mb-4'>
+								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
+									<label htmlFor='order-number' className='d-block'>
+										وصف الخدمة
+										<span>(اختياري)</span>
+									</label>
+								</div>
+								<div className='col-md-7 col-12'>
+									<textarea
+										id='product-desc'
+										name='description'
+										className='w-100 new-service-input'
+										placeholder='قم بكتابة وصف واضح للخدمة'
+										value={data?.description}
+										onChange={(e) => setData({ ...data, description: e.target.value })}
+										rows={4}
 									/>
 								</div>
 							</div>

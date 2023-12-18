@@ -157,9 +157,7 @@ const Notifications = () => {
 										navigate("/Notifications");
 										markSingleNotificationAsRead(not?.id);
 									}}>
-									<div
-										className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center '
-										to='UserDetails'>
+									<div className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center'>
 										<div
 											className='me-2 text-overflow '
 											style={{ textAlign: "right" }}>

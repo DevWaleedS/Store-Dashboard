@@ -18,7 +18,6 @@ export { default as EditCategory } from "./EditCategory";
 export { default as AddNewProduct } from "./AddNewProduct";
 export { default as EditProductPage } from "./EditProductPage";
 
-export { default as UserDetails } from "./UserDetails";
 export { default as EditUserDetails } from "./EditUserDetails";
 
 export { default as Delegate } from "./Delegate";

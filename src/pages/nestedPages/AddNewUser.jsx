@@ -505,7 +505,7 @@ const AddNewUser = () => {
 												name='phonenumber'
 												type='tel'
 												id='phonenumber'
-												placeholder='54845613'
+												placeholder='567891234'
 												className='direction-ltr'
 												{...register("phonenumber", {
 													required: "حقل  رقم الجوال مطلوب",

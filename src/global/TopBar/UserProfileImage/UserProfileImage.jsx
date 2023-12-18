@@ -131,7 +131,7 @@ const UserProfileImage = () => {
 					<li className=''>
 						<Link
 							className='dropdown-item d-flex justify-content-end align-items-center'
-							to='UserDetails'>
+							to='EditUserDetails'>
 							<span className='me-2'>حسابي</span>
 							<UserIcon />
 						</Link>

@@ -59,6 +59,8 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const [bannerstatus1, setBannerStatus1] = useState(true);
 	const [bannerstatus2, setBannerStatus2] = useState(true);
 	const [bannerstatus3, setBannerStatus3] = useState(true);
+	console.log(bannerstatus2);
+	console.log(bannerstatus3);
 
 	// Banners Images
 	const [firstBanner, setFirstBanner] = useState([]);
@@ -74,12 +76,12 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	useEffect(() => {
 		if (Banners) {
 			// set banners status
-			setBannerStatus1(Banners[0]?.banarstatus1 === "active" ? true : false);
-			setFirstBannerName(Banners[0]?.banar1);
-			setBannerStatus2(Banners[0]?.banarstatus2 === "active" ? true : false);
-			setSecondBannerName(Banners[0]?.banar2);
-			setBannerStatus3(Banners?.banarstatus3 === "active" ? true : false);
-			setThirdBannerName(Banners[0]?.banar3);
+			setBannerStatus1(Banners?.[0]?.banarstatus1 === "active" ? true : false);
+			setFirstBannerName(Banners?.[0]?.banar1);
+			setBannerStatus2(Banners?.[0]?.banarstatus2 === "active" ? true : false);
+			setSecondBannerName(Banners?.[0]?.banar2);
+			setBannerStatus3(Banners?.[0]?.banarstatus3 === "active" ? true : false);
+			setThirdBannerName(Banners?.[0]?.banar3);
 		}
 	}, [Banners]);
 
@@ -309,7 +311,13 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 											<Switch
 												sx={switchStyle}
 												checked={bannerstatus1}
-												onChange={() => setBannerStatus1(!bannerstatus1)}
+												onChange={() => {
+													if(bannerstatus2 === false && bannerstatus3 === false ){
+														toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
+													}else{
+														setBannerStatus1(!bannerstatus1)
+													}
+												}}
 											/>
 										</div>
 									</div>
@@ -364,7 +372,13 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 											<Switch
 												sx={switchStyle}
 												checked={bannerstatus2}
-												onChange={() => setBannerStatus2(!bannerstatus2)}
+												onChange={() => {
+													if(bannerstatus1 === false && bannerstatus3 === false ){
+														toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
+													}else{
+														setBannerStatus2(!bannerstatus2)
+													}
+												}}
 											/>
 										</div>
 									</div>
@@ -419,7 +433,16 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 											<Switch
 												sx={switchStyle}
 												checked={bannerstatus3}
-												onChange={() => setBannerStatus3(!bannerstatus3)}
+												onChange={() => 
+													{
+														if(bannerstatus1 === false && bannerstatus2 === false ){
+															toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
+														}
+														else{
+															setBannerStatus3(!bannerstatus3)
+														}
+													}
+												}
 											/>
 										</div>
 									</div>

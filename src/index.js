@@ -81,7 +81,6 @@ import {
 	CreateRole,
 	AddCategory,
 	AddNewUser,
-	UserDetails,
 	EditUserDetails,
 	Delegate,
 	// CreateOffer,
@@ -344,13 +343,9 @@ const router = createBrowserRouter([
 				element: <UserData />,
 			},
 
+			// Nested EditUserDetails
 			{
-				path: "UserDetails",
-				element: <UserDetails />,
-			},
-			// Nested EditUserDetails from userDetails
-			{
-				path: "UserDetails/EditUserDetails",
+				path: "EditUserDetails",
 				element: <EditUserDetails />,
 			},
 

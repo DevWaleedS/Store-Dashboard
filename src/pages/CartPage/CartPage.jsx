@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 // Context
+import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -20,6 +21,8 @@ function CartPage() {
     );
     const LoadingStore = useContext(LoadingContext);
     const { setLoadingTitle } = LoadingStore;
+    const contextStore = useContext(Context);
+    const { setEndActionTitle } = contextStore;
 
     const [productInfo, setProductInfo] = useState([]);
     const [newproductInfo, setNewProductInfo] = useState([]);
@@ -31,10 +34,10 @@ function CartPage() {
         }
     }, [fetchedData?.data?.cart?.cartDetail]);
 
-    const updateQtyValue = (index) => (e) => {
+    const updateQtyValue = (index, e) => {
         const temp = newproductInfo?.map((item, idx) => {
             if (index === idx) {
-                return { ...item, [e.target.name]: e.target.value.replace(/[^0-9]/g, "") };
+                return { ...item, [e.target.name]: e.target.value.replace(/^0+/, '') };
             } else {
                 return item;
             }
@@ -42,7 +45,7 @@ function CartPage() {
         setNewProductInfo(temp);
     };
 
-    const handleIncrement = (index) => () => {
+    const handleIncrement = (index) => {
         const temp = newproductInfo?.map((item, idx) => {
             if (index === idx) {
                 return { ...item, qty: Number(item?.qty) + 1 };
@@ -53,7 +56,7 @@ function CartPage() {
         setNewProductInfo(temp);
     }
 
-    const handleDecrement = (index) => () => {
+    const handleDecrement = (index) => {
         const temp = newproductInfo?.map((item, idx) => {
             if (index === idx) {
                 return { ...item, qty: Number(item?.qty) !== 1 ? Number(item?.qty) - 1 : Number(item?.qty) };
@@ -111,9 +114,7 @@ function CartPage() {
                 ) {
                     setLoadingTitle("");
                     setReload(!reload);
-                    toast.success("تم تحديث السلة بنجاح", {
-                        theme: "light",
-                    });
+                    setEndActionTitle("تم تحديث السلة بنجاح");
                 } else {
                     setLoadingTitle("");
                     toast.error(res?.data?.message?.ar, {
@@ -191,9 +192,38 @@ function CartPage() {
                                                             <td>{Number(product?.price)} ر.س</td>
                                                             <td>
                                                                 <div className='qty'>
-                                                                    <button onClick={handleIncrement(index)}>+</button>
-                                                                    <input type='number' min={1} name="qty" value={Number(product?.qty)} onChange={updateQtyValue(index)} />
-                                                                    <button onClick={handleDecrement(index)}>-</button>
+                                                                    <button onClick={() => {
+                                                                        if (Number(product?.qty) + 1 > Number(product?.product?.stock)) {
+                                                                            toast.error(
+                                                                                `الكمية المتوفرة ${+product?.product?.stock === 1
+                                                                                    ? "قطعة واحدة "
+                                                                                    : +product?.product?.stock === 2
+                                                                                        ? " قطعتين "
+                                                                                        : ` ${+product?.product?.stock} قطع`
+                                                                                } فقط `
+                                                                            );
+                                                                        } else {
+                                                                            handleIncrement(index)
+                                                                        }
+                                                                    }}
+                                                                    >
+                                                                        +
+                                                                    </button>
+                                                                    <input type='number' min={1} name="qty" value={Number(product?.qty)} onChange={(e) => {
+                                                                        if (e.target.value > Number(product?.product?.stock)) {
+                                                                            toast.error(
+                                                                                `الكمية المتوفرة ${+product?.product?.stock === 1
+                                                                                    ? "قطعة واحدة "
+                                                                                    : +product?.product?.stock === 2
+                                                                                        ? " قطعتين "
+                                                                                        : ` ${+product?.product?.stock} قطع`
+                                                                                } فقط `
+                                                                            );
+                                                                        } else {
+                                                                            updateQtyValue(index, e)
+                                                                        }
+                                                                    }} />
+                                                                    <button onClick={() => { handleDecrement(index) }} disabled={Number(product?.qty) <= 0}>-</button>
                                                                 </div>
                                                             </td>
                                                             <td>{Number(product?.price) * Number(product?.qty)} ر.س</td>
