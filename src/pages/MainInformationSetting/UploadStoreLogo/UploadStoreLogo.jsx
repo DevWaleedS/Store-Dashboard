@@ -24,7 +24,24 @@ const UploadStoreLogo = ({
 	};
 
 	// Function to handle changes in the logo
+	const errMsgStyle = {
+		whiteSpace: "normal",
+		padding: "0",
+		fontSize: "14px",
+	};
 	const onChangeStoreLogo = (imageList, addUpdateIndex) => {
+		const requireMinWidth = 110;
+		const requireMaxWidth = 160;
+		const requireMinHeight = 110;
+		const requireMaxHeight = 114;
+
+		const img = new Image();
+
+		const errorMes = `
+				<span> - الحد الأدني للأبعاد هو 110 عرض و 110 ارتفاع</span>
+				 <br />
+				<span> - الحد الأقصي للأبعاد هو 160 بكسل عرض و 114 ارتفاع</span> `;
+
 		// Check if the image size is valid
 		const isSizeValid = imageList.every(
 			(image) => image.file.size <= maxFileSize
@@ -32,15 +49,23 @@ const UploadStoreLogo = ({
 
 		// Check if the image dimensions are valid
 		imageList.every((image) => {
-			const img = new Image();
-
 			// Set the event listener to check dimensions once the image is loaded
 			img.onload = () => {
-				if ((img.width !== 110 || img.height !== 110) && (img.width !== 110 || img.height >= 110) && (img.width >= 110 || img.height !== 110)) {
+				const isDimensionsValid =
+					img.width >= requireMinWidth &&
+					img.height >= requireMinHeight &&
+					img.width <= requireMaxWidth &&
+					img.height <= requireMaxHeight;
+
+				if (!isDimensionsValid) {
 					// If dimensions are not valid, display a warning and reset the logo state
 					handleInvalid(
 						"logo",
-						"مقاس الشعار يجب أن يكون  110 بكسل عرض 110 بكسل ارتفاع.",
+						<div
+							className='wrign-dimensions'
+							style={errMsgStyle}
+							dangerouslySetInnerHTML={{ __html: errorMes }}
+						/>,
 						() => setStoreLogo([])
 					);
 				}
@@ -113,7 +138,7 @@ const UploadStoreLogo = ({
 									<span className='d-flex justify-content-center align-items-center gap-1 flex-wrap'>
 										رفع الشعار
 										<div className='tax-text'>
-											(المقاس الأنسب 110 بكسل عرض أو 110 بكسل الارتفاع)
+											(المقاس الأنسب 160 بكسل عرض أو 114 بكسل الارتفاع)
 										</div>
 									</span>
 
