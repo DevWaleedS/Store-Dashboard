@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 // Third party
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Icons
 import { BsArrowLeft } from "react-icons/bs";
@@ -17,7 +16,6 @@ import { LoadingContext } from "../../../Context/LoadingProvider";
 import { Button, FormControl, Switch } from "@mui/material";
 
 const UpdateComments = ({ Comments, reload, setReload }) => {
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -46,7 +44,7 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/commentUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

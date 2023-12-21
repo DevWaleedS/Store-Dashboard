@@ -4,7 +4,6 @@ import React, { Fragment, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -161,7 +160,6 @@ export default function CartsTables({
 	setSearch,
 }) {
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const NotificationStore = useContext(NotificationContext);
@@ -238,7 +236,7 @@ export default function CartsTables({
 				.get(`https://backend.atlbha.com/api/Store/deleteCart?${queryParams}`, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				})
 				.then((res) => {

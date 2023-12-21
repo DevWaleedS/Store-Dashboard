@@ -6,16 +6,16 @@ import { useNavigate } from "react-router-dom";
 
 // Components
 import { AlertModal } from "../AlertModal";
-import LogoHeader from "../../LogoHeader/LogoHeader";
+import LogoHeader from "../../../LogoHeader/LogoHeader";
 
 // Styles
 import "./RestorePassword.css";
 
 // Context
-import { ResetPasswordContext } from "../../../../Context/ResetPasswordProvider";
+import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvider";
 
 // Icons
-import { SvgComponent, SvgKey } from "../../../../data/Icons";
+import { SvgComponent, SvgKey } from "../../../../../data/Icons";
 
 const RestorePassword = () => {
 	const navigate = useNavigate();

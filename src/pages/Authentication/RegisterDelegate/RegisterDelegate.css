@@ -1,0 +1,605 @@
+.register-form{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    justify-content: start;
+    width: 100%;
+}
+
+.register-form .user-form {
+	width: 100%;
+}
+
+.register-form .user-form h4{
+    color: #1dbbbe;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0 10px 26px 0;
+    width: 100%;
+    text-align: right;
+}
+
+.register-form .user-form .content {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.register-form .user-form form {
+	width: 100%;
+	height: 100%;
+	direction: rtl;
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.register-form .user-form div {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.register-form .user-form div {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+	gap: 10px;
+	position: relative;
+}
+
+.register-form .user-form div .box{
+	cursor: pointer;
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	left: -45px;
+	top: 45px;
+}
+.register-form .user-form div span {
+	cursor: pointer;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	transition: ease 0.3s;
+}
+.register-form .user-form div .box span::before {
+	content: 'مقارنة الباقات';
+	position: absolute;
+	/* display: none; */
+	top: -35px;
+	width: 110px;
+	color: #1dbbbe;
+	font-size: 18px;
+	font-weight: 400;
+	text-align: center;
+	opacity: 0;
+	transition: ease 0.3s;
+}
+.register-form .user-form div .box span:hover::before {
+	display: block;
+	content: 'مقارنة الباقات';
+	opacity: 1;
+}
+
+@media (max-width: 1200px) {
+	.register-form .user-form div .box {
+		cursor: pointer;
+		position: absolute;
+		width: 36px;
+		height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		right: 80px;
+		top: 20px;
+	}
+	.register-form .user-form div .box {
+		cursor: pointer;
+		position: absolute;
+		width: 36px;
+		height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		right: 80px;
+		top: -10px;
+	}
+	.register-form .user-form .info-package {
+		height: 120px;
+		justify-content: flex-end;
+	}
+}
+.register-form .user-form div h5 {
+	width: 100%;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--black-900);
+}
+
+.register-form .user-form div select,
+.register-form .user-form .check-mark,
+.register-form .user-form .select-mu,
+.register-form .user-form div input {
+	width: 100%;
+	height: 56px;
+	border: none;
+	outline: none !important ;
+	box-shadow: none !important;
+    font-size: 1rem;
+	padding: 0 20px;
+	border: 1px solid #e4e4e4 !important;
+	border-radius: 04px;
+	color: #011723;
+	background-color: #fff;
+}
+.register-form .user-form div .phone_input{
+    border: none !important;
+}
+.register-form .select-mu {
+	width: 100%;
+	height: 56px;
+	border: none !important;
+	outline: none !important ;
+	box-shadow: none !important;
+	padding: 0 20px;
+	border: 1px solid #e4e4e4 !important;
+	border-radius: 04px;
+	color: #011723;
+	background-color: #fff;
+}
+
+.register-form .select-mu svg {
+	left: 20px !important;
+	right: auto !important;
+	color: #343a40;
+	font-size: 17px;
+}
+.register-form .select-mu .MuiSelect-select {
+	padding-right: 5px !important;
+	font-family: 'Tajawal', sans-serif !important;
+	color: #67747b;
+}
+
+input::placeholder {
+	color: #8a9191 !important;
+	font-size: 16px;
+}
+.register-form .user-form .select-mu .MuiSelect-select,
+.register-form .user-form div select,
+.register-form .user-form div input::placeholder {
+	color: #67747b;
+}
+
+.register-form .user-form div select {
+	background-position: left 20px center;
+}
+
+.register-form .user-form div.phone {
+	position: relative;
+}
+
+.register-form .user-form .country_key {
+	color: #011723;
+	font-size: 20px;
+	font-weight: 400;
+
+	width: fit-content;
+}
+
+.register-form .owner-form {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+    direction: rtl;
+}
+
+.register-form .owner-form form {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+	margin-right: 5px;
+	gap: 25px;
+}
+
+.register-form .owner-form form h4 {
+	margin-bottom: 0;
+	margin-right: 0px;
+}
+
+.register-form .owner-form form div {
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+	gap: 10px;
+	position: relative;
+}
+
+.register-form .owner-form form input {
+	width: 100%;
+	height: 56px;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	padding: 0 45px;
+	border: 1px solid #e4e4e4 !important;
+	border-radius: 04px;
+	color: #011723;
+}
+
+.register-form .owner-form form div h5 {
+	width: 100%;
+	margin: 0;
+	color: #011723;
+	font-size: 18px;
+	font-weight: 400;
+}
+
+.input_wrapper {
+	width: 100%;
+	height: 56px;
+	padding: 0 0 0 22px;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background-color: #fff;
+	border: 1px solid #e4e4e4 !important;
+	border-radius: 04px;
+	color: #011723;
+	-webkit-border-radius: 04px;
+	-moz-border-radius: 04px;
+	-ms-border-radius: 04px;
+	-o-border-radius: 04px;
+}
+
+.input_wrapper .phone_input {
+	width: 100%;
+	height: 56px;
+	border: none !important;
+	outline: none !important ;
+	box-shadow: none !important;
+	border-radius: none !important;
+	-webkit-border-radius: none !important;
+	-moz-border-radius: none !important;
+	-ms-border-radius: none !important;
+	-o-border-radius: none !important;
+}
+
+.register-form .owner-form form .country_key {
+	color: #011723;
+	font-size: 20px;
+	font-weight: 400;
+
+	width: fit-content;
+}
+
+.register-form form div #span-icon {
+	position: absolute;
+	width: fit-content;
+	height: 24px;
+	bottom: 20px;
+	right: 15px;
+}
+.register-form form div #span-icon svg path{
+    fill: #1dbbbe;
+}
+
+.register-form .owner-form .box-pay {
+	display: flex;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: column;
+	width: 100%;
+}
+
+.register-form .owner-form .box-pay .top {
+	/* margin-top: 54px; */
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: start;
+	flex-direction: row;
+	width: 100%;
+	max-width: 355px;
+	gap: 10px;
+}
+
+.register-form .owner-form .box-pay .top .form-check {
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.register-form .owner-form .box-pay .top .form-check input {
+	width: 24px;
+	height: 24px;
+	outline: none;
+	box-shadow: none;
+	border: 1px solid #011723;
+	cursor: pointer;
+}
+
+.register-form .owner-form .box-pay .top h5 {
+	color: #67747b;
+	font-weight: 400;
+	font-size: 18px;
+}
+
+.register-form .owner-form .box-pay button {
+	width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	background-color: #02466a;
+	margin: 20px 0;
+    border-radius: 32px;
+    color: #f7fcff;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: .1px;
+    padding: 10px 30px;
+    white-space: nowrap;
+}
+.register-form .owner-form .box-pay button:disabled,
+.bt-main:disabled {
+	cursor: not-allowed !important;
+}
+
+.register-form .owner-form .box-pay ul {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 !important;
+	margin: 0 !important;
+	gap: 15px;
+}
+
+.register-form .owner-form .box-pay ul li {
+	margin: 0;
+	color: #011723;
+	font-size: 18px;
+	font-weight: 400;
+	cursor: pointer;
+}
+
+.register-form .owner-form .box-pay ul li:nth-child(2) {
+	color: #1dbbbe;
+}
+
+@media (max-width: 992px) {
+	.register-form .all-content {
+		align-items: flex-start;
+		justify-content: flex-start;
+		flex-direction: column-reverse;
+		gap: 15px;
+		height: max-content !important;
+	}
+
+	.register-form .all-content .box-form-banner {
+		height: 600px;
+		flex: none;
+		padding: 20px;
+		padding: 40px 10px !important;
+		max-width: 100%;
+	}
+
+	.register-form .all-content .box-container-form {
+		padding: 40px 10px !important;
+		padding-bottom: 140px !important;
+	}
+	.register-form .all-content .content form {
+		max-width: 100%;
+	}
+	.register-form .all-content .box-container-form .all {
+		max-width: 100% !important;
+	}
+	/* .register-form .user-form .content {
+        padding-right: 0 !important;
+    } */
+}
+
+@media (min-width: 992px) {
+	.register-form .all-content .box-form-banner,
+	.register-form .all-content .box-container-form {
+		/* padding-right: 40px; */
+		padding: 0 40px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.register-form .all-content .box-form-banner,
+	.register-form .all-content .box-container-form {
+		/* padding-right: 80px; */
+		padding: 0 60px;
+	}
+}
+@media (min-width: 1800px) {
+	.register-form .all-content .box-form-banner,
+	.register-form .all-content .box-container-form {
+		/* padding-right: 140px; */
+		padding: 0 140px;
+	}
+}
+@media (min-width: 1200px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 370px;
+	}
+}
+@media (min-width: 1250px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 420px;
+	}
+}
+
+@media (min-width: 1300px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 430px;
+	}
+}
+@media (min-width: 1350px) {
+	.register-form .all .owner-form,
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 460px;
+	}
+}
+@media (min-width: 1440px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 500px;
+	}
+}
+@media (min-width: 1480px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 530px;
+	}
+}
+
+@media (min-width: 1520px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 550px;
+	}
+}
+@media (min-width: 1550px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 580px;
+	}
+}
+@media (min-width: 1650px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 620px;
+	}
+}
+@media (min-width: 1720px) {
+	.register-form .all .owner-form,
+	.register-form .all-content .box-container-form .all .user-info,
+	.register-form .all-content .content form {
+		max-width: 657px;
+	}
+}
+
+/* ============ */
+@media (min-width: 1880px) {
+	.register-form .all-content .box-container-form {
+		padding-left: 60px;
+	}
+}
+/* ==================== */
+@media (max-width: 768px) {
+	.register-form form div #span-icon {
+		bottom: 13px !important;
+	}
+}
+@media (max-width: 667px) {
+	.register-form .all-content .box-container-form {
+		overflow: auto;
+	}
+	.register-form .all .owner-form {
+		width: 100%;
+		align-items: center;
+		justify-content: start;
+	}
+	.register-form .all-content,
+	.all-content.show {
+		height: max-content !important;
+	}
+	.register-form .all-content .box-container-form .all .user-info {
+		gap: 10px;
+	}
+	.register-form .all-content .box-container-form .all .user-info button {
+		width: 100%;
+		max-width: 180px;
+		height: 45px;
+	}
+	.register-form .all .owner-form form {
+		width: 100%;
+		max-width: 100%;
+		gap: 25px;
+	}
+	.register-form .all-content .content form {
+		max-width: 100%;
+	}
+	.register-form .all .user-form .content {
+		justify-content: center;
+	}
+
+	.register-form .all .owner-form .box-pay ul {
+		gap: 10px;
+	}
+	.register-form .all .owner-form .box-pay ul li {
+		margin: 0;
+		white-space: nowrap;
+		font-size: 16px;
+	}
+	.register-form .all .owner-form .box-pay {
+		width: 100%;
+		max-width: 100%;
+		margin: 0 auto;
+	}
+
+	.register-form .user-form div .box {
+		top: 20px;
+	}
+	/* ======================= */
+}
+@media (max-width: 576px) {
+	.register-form .owner-form .box-pay button{
+		height: 46px;
+		font-size: 1.1rem;
+	}
+    .register-form .user-form div h5{
+        font-size: 1rem;
+    }
+}
+@media (max-width: 480px) {
+	.register-form .all-content .box-container-form {
+		overflow: auto;
+	}
+
+	.register-form .all-content,
+	.all-content.show {
+		height: max-content !important;
+	}
+}
+
+/* ======================= */

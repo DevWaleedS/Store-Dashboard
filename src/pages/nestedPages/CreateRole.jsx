@@ -4,7 +4,6 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -61,7 +60,6 @@ const CreateRole = () => {
 	);
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -90,7 +88,7 @@ const CreateRole = () => {
 			.post("https://backend.atlbha.com/api/Store/roles", data, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

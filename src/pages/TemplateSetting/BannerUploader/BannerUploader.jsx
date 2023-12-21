@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from "react";
 // Third party
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import ImageUploading from "react-images-uploading";
 
 // MUI
@@ -49,7 +48,6 @@ const switchStyle = {
 	},
 };
 const BannerUploader = ({ Banners, loading, reload, setReload }) => {
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -86,7 +84,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	}, [Banners]);
 
 	// To handle width and height of banners
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(bannerIndex, bannerState, setBannerState, setPreviewBannerState) =>
 		async (imageList) => {
@@ -96,7 +94,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 			);
 
 			// Errors message
-			const sizeErrorMessage = "حجم البانر يجب أن لا يزيد عن 2 ميجابايت.";
+			const sizeErrorMessage = "حجم البانر يجب أن لا يزيد عن 1 ميجابايت.";
 			const dimensionsErrorMessage =
 				"مقاس البنر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 
@@ -184,7 +182,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/banarUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -252,7 +250,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 								)}
 							</div>
 							<div className='tax-text w-100 hint'>
-								الحد الأقصي للبنر الواحد هو 2MG
+								الحد الأقصي للبنر الواحد هو 1MB
 							</div>
 						</div>
 					</div>

@@ -4,7 +4,6 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import moment from "moment-with-locales-es6";
 
 // Components
@@ -24,8 +23,6 @@ import Checkbox from "@mui/material/Checkbox";
 import { CheckedSquare, DeleteIcon } from "../data/Icons";
 
 const Notifications = () => {
-	const [cookies] = useCookies(["access_token"]);
-
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);
@@ -150,7 +147,7 @@ const Notifications = () => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)

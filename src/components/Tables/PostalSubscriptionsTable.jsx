@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 
 // Third party
 import axios from "axios";
-import { useCookies } from "react-cookie";
 
 // MUI
 import PropTypes from "prop-types";
@@ -136,7 +135,6 @@ export default function PostalSubscriptionsTable({
 	reload,
 	setReload,
 }) {
-	const [cookies] = useCookies(["access_token"]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
@@ -232,7 +230,7 @@ export default function PostalSubscriptionsTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)

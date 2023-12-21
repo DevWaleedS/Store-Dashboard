@@ -3,7 +3,6 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 
 // Context
@@ -47,8 +46,6 @@ const MaintenanceModeModal = () => {
 	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
 	const { setNavbarZindex } = Z_index;
-
-	const [cookies] = useCookies(["access_token"]);
 	const { fetchedData, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/maintenance"
 	);
@@ -128,7 +125,7 @@ const MaintenanceModeModal = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

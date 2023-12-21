@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 // Third party
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // MUI
 import PropTypes from "prop-types";
@@ -202,7 +201,6 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function BigProductsTable({ data, loading, reload, setReload }) {
-	const [cookies] = useCookies(["access_token"]);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -256,7 +254,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
@@ -277,7 +275,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 			.get(`https://backend.atlbha.com/api/Store/specialStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -300,7 +298,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -324,7 +322,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)

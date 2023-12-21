@@ -4,7 +4,6 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -52,7 +51,6 @@ const ShowImportEtlobhaProduct = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/product/${id}`
 	);
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -167,7 +165,7 @@ const ShowImportEtlobhaProduct = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

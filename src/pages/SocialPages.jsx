@@ -5,7 +5,6 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../Context/context";
@@ -35,7 +34,6 @@ const SocialPages = () => {
 		`https://backend.atlbha.com/api/Store/socialMedia_store_show`
 	);
 
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -106,7 +104,7 @@ const SocialPages = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

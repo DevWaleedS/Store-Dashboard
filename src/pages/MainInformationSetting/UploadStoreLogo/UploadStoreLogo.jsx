@@ -12,7 +12,7 @@ const UploadStoreLogo = ({
 	logoErrors,
 }) => {
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 
 	// Function to handle notifications and update the state based on the image type (logo or icon)
 	const handleInvalid = (type, errMsg, resetState) => {
@@ -56,7 +56,7 @@ const UploadStoreLogo = ({
 			// Display a warning message and reset the logo state
 			handleInvalid(
 				"logo",
-				"حجم الشعار يجب أن لا يزيد عن 2 ميجابايت.",
+				"حجم الشعار يجب أن لا يزيد عن 1 ميجابايت.",
 
 				() => setStoreLogo([])
 			);
@@ -104,7 +104,7 @@ const UploadStoreLogo = ({
 
 								{/** upload btn */}
 								<span className='tax-text w-100'>
-									الحد الأقصي للشعار هو 2MG
+									الحد الأقصي للشعار هو 1MB
 								</span>
 								<button
 									className='upload-log-btn'

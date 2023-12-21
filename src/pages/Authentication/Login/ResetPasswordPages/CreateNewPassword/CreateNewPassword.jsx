@@ -2,18 +2,17 @@ import React, { useState, useContext } from "react";
 
 // Third party
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom/dist";
 
 // Context
-import { UserAuth } from "../../../../Context/UserAuthorProvider";
-import { ResetPasswordContext } from "../../../../Context/ResetPasswordProvider";
+import { UserAuth } from "../../../../../Context/UserAuthorProvider";
+import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvider";
 
 // Components
-import LogoHeader from "../../LogoHeader/LogoHeader";
+import LogoHeader from "../../../LogoHeader/LogoHeader";
 
 // Icons
-import { EyeClose, EyeOPen, SvgComponent } from "../../../../data/Icons";
+import { EyeClose, EyeOPen, SvgComponent } from "../../../../../data/Icons";
 
 // Styles
 import "./CreateNewPassword.css";
@@ -24,12 +23,11 @@ const CreateNewPassword = () => {
 
 	// if user is verify his account
 	const NavigateToLogInPage = () => {
-		navigate("/login");
+		navigate("/auth/login");
 	};
 
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
 	const { userPhoneNumber, resetPasswordToken } = ResetPasswordInfo;
-	const [cookies, setCookie] = useCookies(["access_token"]);
 
 	// to set remember me
 	const RememberMe = useContext(UserAuth);
@@ -74,7 +72,7 @@ const CreateNewPassword = () => {
 			.post("https://backend.atlbha.com/api/password/reset-password", formData)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setCookie("access_token", res?.data?.data?.token, { path: "/" });
+					localStorage.setItem("store_token", res?.data?.data?.token);
 					if (
 						!resetPasswordToken ||
 						res?.data?.message?.en === "This password reset token is invalid."
@@ -197,8 +195,8 @@ const CreateNewPassword = () => {
 										!type === "password"
 											? type
 											: showConfirmPassword
-											? "text"
-											: type
+												? "text"
+												: type
 									}
 								/>
 

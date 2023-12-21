@@ -5,7 +5,6 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -49,7 +48,6 @@ const style = {
 
 const EditUserDetails = () => {
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 
 	const UserInfo = useContext(UserAuth);
 	const contextStore = useContext(Context);
@@ -160,7 +158,7 @@ const EditUserDetails = () => {
 	// ----------------------------------------------------
 
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	// Use state with useDropzone library to set banners
 	const [userImage, setUserImage] = React.useState([]);
 
@@ -175,7 +173,7 @@ const EditUserDetails = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					setUserImage([]);
@@ -251,7 +249,7 @@ const EditUserDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/profile`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -447,12 +445,6 @@ const EditUserDetails = () => {
 													type='email'
 													placeholder='Omar.sample@sa.com'
 													{...register("email", {
-														required: "حقل البريد الإلكتروني مطلوب",
-														pattern: {
-															value: /\S+@\S+\.\S+/,
-															message:
-																"القيمة التي تم إدخالها لا تطابق تنسيق البريد الإلكتروني",
-														},
 													})}
 													disabled
 												/>
@@ -499,7 +491,7 @@ const EditUserDetails = () => {
 													htmlFor='upload-user-image'>
 													الصورة الشخصية{" "}
 													<span className='tax-text '>
-														(الحد الأقصي للصورة 2MB)
+														(الحد الأقصي للصورة 1MB)
 													</span>
 												</label>
 												<div
@@ -575,12 +567,6 @@ const EditUserDetails = () => {
 													type='tel'
 													placeholder={500000000}
 													{...register("phonenumber", {
-														required: "حقل رقم الجوال مطلوب",
-
-														pattern: {
-															value: /^[0-9+]+$/i,
-															message: "يجب أن رقم الجوال رقمًا",
-														},
 													})}
 													disabled
 													style={{ cursor:"auto" }}

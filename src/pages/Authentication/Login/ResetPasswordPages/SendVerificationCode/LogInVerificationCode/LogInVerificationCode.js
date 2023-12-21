@@ -3,15 +3,15 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { ReactComponent as SvgComponent } from "../../../../../data/Icons/Component 59 – 11.svg";
-import { ReactComponent as SvgRepeat } from "../../../../../data/Icons/Repeat.svg";
+import { ReactComponent as SvgComponent } from "../../../../../../data/Icons/Component 59 – 11.svg";
+import { ReactComponent as SvgRepeat } from "../../../../../../data/Icons/Repeat.svg";
 import OtpInput from "react-otp-input";
 
-import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvider";
+import { ResetPasswordContext } from "../../../../../../Context/ResetPasswordProvider";
 
 import "../SendVerificationCode.css";
 
-import LogoHeader from "../../../LogoHeader/LogoHeader";
+import LogoHeader from "../../../../LogoHeader/LogoHeader";
 import { AlertModal } from "../../AlertModal";
 
 const LogInVerificationCode = () => {
@@ -78,7 +78,7 @@ const LogInVerificationCode = () => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setResetPasswordToken(res?.data?.data?.token);
 					if (res?.data?.message?.ar === "تم التحقق") {
-						navigate("/login");
+						navigate("/auth/login");
 					} else {
 						setVerError(res?.data?.message?.ar);
 					}

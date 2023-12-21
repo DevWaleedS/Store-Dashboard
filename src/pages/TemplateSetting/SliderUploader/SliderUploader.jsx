@@ -3,7 +3,6 @@ import React, { useState, useEffect, useContext } from "react";
 // Third party
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import ImageUploading from "react-images-uploading";
 
 // Icons
@@ -50,7 +49,6 @@ const switchStyle = {
 };
 
 const SliderUploader = ({ sliders, loading, reload, setReload }) => {
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -84,7 +82,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	}, [sliders]);
 
 	// To handle width and height of banners
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(sliderIndex, sliderState, setSliderState, setPreviewSliderState) =>
 			async (imageList) => {
@@ -94,7 +92,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 				);
 
 				// Errors message
-				const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 2 ميجابايت.";
+				const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 1 ميجابايت.";
 				const dimensionsErrorMessage =
 					"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 
@@ -182,7 +180,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/sliderUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -247,7 +245,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 								)}
 							</div>
 							<div className='tax-text w-100 hint'>
-								الحد الأقصي للسلايدر الواحد هو 2MG
+								الحد الأقصي للسلايدر الواحد هو 1MB
 							</div>
 						</div>
 					</div>

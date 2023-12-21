@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useCookies } from "react-cookie";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 // Context
@@ -69,7 +68,6 @@ const EditRole = () => {
 	});
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -120,7 +118,7 @@ const EditRole = () => {
 			.post(`https://backend.atlbha.com/api/Store/roles/${id}`, formData, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

@@ -4,7 +4,6 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import { useCookies } from "react-cookie";
 import useFetch from "../../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -84,7 +83,6 @@ const CreateOffer = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -360,7 +358,7 @@ const CreateOffer = () => {
 			.post(`https://backend.atlbha.com/api/Store/offer`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

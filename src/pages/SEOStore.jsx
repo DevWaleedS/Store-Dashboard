@@ -5,7 +5,6 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -35,8 +34,6 @@ const PaintStore = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/seo`
 	);
-
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -106,7 +103,7 @@ const PaintStore = () => {
 			.post(`https://backend.atlbha.com/api/Store/updateSeo`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

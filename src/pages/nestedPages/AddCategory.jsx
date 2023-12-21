@@ -4,7 +4,6 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
@@ -56,7 +55,6 @@ const AddCategory = () => {
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -80,7 +78,7 @@ const AddCategory = () => {
 	});
 
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 
 	// Use state with useDropzone library to set banners
 	const [icons, setIcons] = React.useState([]);
@@ -89,7 +87,7 @@ const AddCategory = () => {
 		const isSizeValid = imageList.every(
 			(image) => image.file.size <= maxFileSize
 		);
-		const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+		const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 		if (!isSizeValid) {
 			toast.warning(errorMessage, {
@@ -131,7 +129,7 @@ const AddCategory = () => {
 			.post(`https://backend.atlbha.com/api/Store/category`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -241,7 +239,7 @@ const AddCategory = () => {
 																		( سيتم قبول الصور jpeg & png & jpg)
 																	</span>
 																	<div className='tax-text '>
-																		(الحد الأقصي للصورة 2MB)
+																		(الحد الأقصي للصورة 1MB)
 																	</div>
 																</div>
 															</div>

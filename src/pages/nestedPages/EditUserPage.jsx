@@ -4,7 +4,6 @@ import React, { useState, useEffect, useContext, Fragment } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -81,7 +80,6 @@ const userStatusArray = [
 ];
 const EditUserPage = () => {
 	const { id } = useParams();
-	const [cookies] = useCookies(["access_token"]);
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/user/${id}`
@@ -163,7 +161,7 @@ const EditUserPage = () => {
 
 	//  use dropzone to get personal image
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const [images, setImages] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
@@ -175,7 +173,7 @@ const EditUserPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					setImages([]);
@@ -266,7 +264,7 @@ const EditUserPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

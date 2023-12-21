@@ -8,7 +8,6 @@ import { MdNotifications } from "react-icons/md";
 
 // Third Party
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import useFetch from "../../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +17,6 @@ import { toast } from "react-toastify";
 
 const Notifications = () => {
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 	const [loading, setLoading] = useState(false);
 	const [closeMenu, setCloseMenu] = useState(false);
 	const [countOfNotifications, setCountOfNotifications] = useState(false);
@@ -37,7 +35,7 @@ const Notifications = () => {
 			.get(`https://backend.atlbha.com/api/Store/NotificationRead?id[]=${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -61,7 +59,7 @@ const Notifications = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

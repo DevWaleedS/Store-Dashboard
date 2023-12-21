@@ -11,6 +11,11 @@ const ContextProvider = (props) => {
 	const [navbarZindex, setNavbarZindex] = useState(false);
 	// to handle CoursesTraining and Explain in Academy Section
 	const [togglePage, setTogglePag] = useState(1);
+	const [email, setEmail] = useState(null);
+	const [resendButtonDisabled, setResendButtonDisabled] = useState(false);
+	const [disapledBtn, setDisabledBtn] = useState(false);
+	const [showAlertModal, setShowAlertModal] = useState(false);
+	const [message, setMessage] = useState("");
 
 	useEffect(() => {
 		if (title) {
@@ -36,6 +41,16 @@ const ContextProvider = (props) => {
 		setNavbarZindex,
 		togglePage,
 		setTogglePag,
+		email,
+		setEmail,
+		resendButtonDisabled,
+		setResendButtonDisabled,
+		disapledBtn,
+		setDisabledBtn,
+		showAlertModal,
+		setShowAlertModal,
+		message,
+		setMessage
 	};
 
 	return <Context.Provider value={context}>{props.children}</Context.Provider>;

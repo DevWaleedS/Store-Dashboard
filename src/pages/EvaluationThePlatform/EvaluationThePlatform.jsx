@@ -5,7 +5,6 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -21,7 +20,6 @@ import { TextEditor } from "../../components/TextEditor";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 const EvaluationThePlatform = () => {
-	const [cookies] = useCookies(["access_token"]);
 	const [reload, setReload] = useState(false);
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -46,7 +44,7 @@ const EvaluationThePlatform = () => {
 			.post(`https://backend.atlbha.com/api/Store/etlobhaComment`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

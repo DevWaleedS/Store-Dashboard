@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react";
 // Third party
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 // Context
@@ -56,7 +55,6 @@ const contentStyles = {
 };
 
 const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -89,7 +87,7 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

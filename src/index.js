@@ -20,8 +20,6 @@ import "bootstrap/dist/js/bootstrap.bundle";
 // IMPORT ALL PAGES
 import RootLayout from "./pages/RootLayout";
 
-// Import All Pages to create routes
-import { Login } from "./pages/Login";
 
 // INDEX CSS FILE
 import "./index.css";
@@ -111,11 +109,13 @@ import {
 import { OrderDetails } from "./pages/nestedPages/orderDetails";
 
 // Login and reset password  pages
-import { RestorePassword } from "./pages/Login/ResetPasswordPages/RestorePassword";
-import { CreateNewPassword } from "./pages/Login/ResetPasswordPages/CreateNewPassword";
-import SendVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
-import LogInVerificationCode from "./pages/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
+import { RestorePassword } from "./pages/Authentication/Login/ResetPasswordPages/RestorePassword";
+import { CreateNewPassword } from "./pages/Authentication/Login/ResetPasswordPages/CreateNewPassword";
+import SendVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
+import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 import { MainInformation } from "./pages/MainInformationSetting";
+import Main from "./pages/Authentication/Main/Main";
+import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -124,7 +124,8 @@ import { MainInformation } from "./pages/MainInformationSetting";
  */
 
 const router = createBrowserRouter([
-	{ path: "Login", element: <Login /> },
+	{ path: '/auth/:type', element: <Main /> },
+	{ path: "VerificationPage", element: <VerificationPage /> },
 	// RestorePassword Pages
 	{
 		path: "RestorePassword",

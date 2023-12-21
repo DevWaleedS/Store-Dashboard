@@ -4,7 +4,6 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 
@@ -88,7 +87,6 @@ const AddNewUser = () => {
 	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -153,7 +151,7 @@ const AddNewUser = () => {
 
 	//  use dropzone to get personal image
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
@@ -164,7 +162,7 @@ const AddNewUser = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					setImages([]);
@@ -218,7 +216,7 @@ const AddNewUser = () => {
 			.post(`https://backend.atlbha.com/api/Store/user`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -529,7 +527,7 @@ const AddNewUser = () => {
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='personal-image' className=''>
 												الصورة الشخصية<span className='important-hint'>*</span>
-												<div className='tax-text'>(الحد الأقصي للصورة 2MB)</div>
+												<div className='tax-text'>(الحد الأقصي للصورة 1MB)</div>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>

@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
@@ -76,7 +75,6 @@ const AddNewProduct = () => {
 
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -182,7 +180,7 @@ const AddNewProduct = () => {
 	}, [googleAnalyticsLink]);
 
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	// to get multi images
 	const [multiImages, setMultiImages] = useState([]);
 	const emptyMultiImages = [];
@@ -201,8 +199,8 @@ const AddNewProduct = () => {
 			imageList?.[imageList?.length - 1]?.file?.type?.startsWith("video/");
 
 		const errorMessage = isVideo
-			? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-			: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+			? "حجم الفيديو يجب أن لا يزيد عن 1 ميجابايت."
+			: "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 		if (!isSizeValid) {
 			toast.warning(errorMessage, { theme: "light" });
@@ -238,7 +236,7 @@ const AddNewProduct = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					toast.warning(errorMessage, {
@@ -331,7 +329,7 @@ const AddNewProduct = () => {
 			.post(`https://backend.atlbha.com/api/Store/product`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -977,7 +975,7 @@ const AddNewProduct = () => {
 													<span>( سيتم قبول الصور jpeg & png & jpg )</span>
 
 													<div className='tax-text '>
-														(الحد الأقصي للصورة 2MB)
+														(الحد الأقصي للصورة 1MB)
 													</div>
 												</div>
 											</div>
@@ -1008,7 +1006,7 @@ const AddNewProduct = () => {
 												<div
 													className='tax-text'
 													style={{ whiteSpace: "normal" }}>
-													(الحد الأقصي للصورة أو الفيديو 2MB)
+													(الحد الأقصي للصورة أو الفيديو 1MB)
 												</div>
 											</label>
 										</div>

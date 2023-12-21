@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -69,8 +68,6 @@ const EditPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/post-categories"
 	);
 	const navigate = useNavigate();
-
-	const [cookies] = useCookies(["access_token"]);
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
@@ -178,7 +175,7 @@ const EditPage = () => {
 	// -------------------------------------------------
 
 	// Add Post image
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const [images, setImages] = useState([]);
 	const errMsgStyle = {
 		whiteSpace: "normal",
@@ -195,7 +192,7 @@ const EditPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 				const requireMindWidth = 300;
 				const requireMaxdWidth = 600;
 				const requireMindHeight = 150;
@@ -280,8 +277,8 @@ const EditPage = () => {
 		},
 	});
 
-	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>{file.path} bytes</li>
+	const files = acceptedFiles.map((file, index) => (
+		<li key={index} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{file.path}</li>
 	));
 
 	const handleOnChange = (e) => {
@@ -314,7 +311,7 @@ const EditPage = () => {
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -803,7 +800,7 @@ const EditPage = () => {
 																<div
 																	{...getRootProps({
 																		className:
-																			"d-flex justify-content-between p-3",
+																			"d-flex justify-content-between p-3 gap-2",
 																	})}>
 																	<input
 																		{...getInputProps()}
@@ -835,8 +832,7 @@ const EditPage = () => {
 																	</span>
 																	{files?.length !== 0 && (
 																		<ul
-																			style={{ fontSize: "14px" }}
-																			className='m-0'>
+																			style={{ fontSize: "14px", overflow: "hidden" }} className='m-0'>
 																			{files}
 																		</ul>
 																	)}

@@ -10,7 +10,6 @@ import { DeleteContext } from "../../Context/DeleteProvider";
 
 // Third party
 import axios from "axios";
-import { useCookies } from "react-cookie";
 
 // MUI
 import Switch from "@mui/material/Switch";
@@ -42,7 +41,6 @@ const RatingWeight = ({
 	rowsPerPage,
 }) => {
 	const dispatch = useDispatch(true);
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
@@ -90,7 +88,7 @@ const RatingWeight = ({
 			.get(`https://backend.atlbha.com/api/Store/changeCommentStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

@@ -660,8 +660,9 @@ textarea {
 }
 
 .search-box input::placeholder {
-	color: var(--white-600);
+	color: var(--white-600) !important;
 	font-weight: 400;
+	font-size: 1.3rem;
 }
 
 .search-box svg.search_icon {
@@ -9981,6 +9982,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		padding: 0 !important;
 		overflow: visible !important;
 		margin-left: 5px;
+		margin-right: 8px;
 	}
 
 	.MuiButtonBase-root.MuiSwitch-switchBase {

@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useContext } from "react";
 // Third party
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -150,7 +149,6 @@ EnhancedTableToolbar.propTypes = {
 const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	// Get Data From Redux Store
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -250,7 +248,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -277,7 +275,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

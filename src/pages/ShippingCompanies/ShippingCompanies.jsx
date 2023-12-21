@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
@@ -21,7 +20,6 @@ import { HomeIcon } from "../../data/Icons";
 import { toast } from "react-toastify";
 
 const ShippingCompanies = () => {
-	const [cookies] = useCookies(["access_token"]);
 	const [validPriceFocus, setValidPriceFocus] = useState(false);
 	const [otherShippingCompany, setOtherShippingCompany] = useState([]);
 	const [allShippingCompanies, setAllShippingCompanies] = useState([]);
@@ -105,7 +103,7 @@ const ShippingCompanies = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
@@ -128,7 +126,7 @@ const ShippingCompanies = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
@@ -154,7 +152,7 @@ const ShippingCompanies = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
