@@ -59,9 +59,11 @@ function Main() {
 		}
 	}, [parm?.type]);
 
-	if (store_token) {
-		return <Navigate to='/' />;
-	}
+	// THIS IS WILL BROKEN THE AUT LOGIC
+
+	// if (store_token) {
+	// 	return <Navigate to='/' />;
+	// }
 
 	return (
 		<>

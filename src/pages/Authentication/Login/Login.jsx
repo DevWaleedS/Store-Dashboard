@@ -84,7 +84,7 @@ const Login = () => {
 		};
 		axios.post("https://backend.atlbha.com/api/loginapi", data).then((res) => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-				localStorage.setItem("store_token",res?.data?.data?.token);
+				localStorage.setItem("store_token", res?.data?.data?.token);
 
 				if (rememberMe?.remember_me) {
 					//Set username, password and remember_me status to context
@@ -152,9 +152,7 @@ const Login = () => {
 						onChange={(e) => setUsername(e.target.value)}
 						onKeyDown={handleKeyDown}
 					/>
-					{usernameError && (
-						<span className='wrong-text'>{usernameError}</span>
-					)}
+					{usernameError && <span className='wrong-text'>{usernameError}</span>}
 				</div>
 				<div className='password-field'>
 					{type === "password" ? (
@@ -185,9 +183,7 @@ const Login = () => {
 						minLength={8}
 						onChange={(e) => setPassword(e.target.value)}
 						onKeyDown={handleKeyDown}
-						type={
-							!type === "password" ? type : showPassword ? "text" : type
-						}
+						type={!type === "password" ? type : showPassword ? "text" : type}
 					/>
 
 					{passwordError && (
@@ -199,7 +195,9 @@ const Login = () => {
 					)}
 				</div>
 			</div>
-			<div className='wrong-text'>{error}</div>
+			<div className='wrong-text' style={{ color: "red" }}>
+				{error}
+			</div>
 			<div className='top checkbox_row'>
 				<div className='check'>
 					<div className='form-check'>
