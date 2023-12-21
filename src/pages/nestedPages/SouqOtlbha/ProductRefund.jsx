@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
@@ -45,8 +44,6 @@ const modalStyle = {
 };
 
 const ProductRefund = () => {
-	const [cookies] = useCookies(["access_token"]);
-
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -110,7 +107,7 @@ const ProductRefund = () => {
 			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

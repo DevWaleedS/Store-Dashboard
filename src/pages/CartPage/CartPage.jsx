@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 // Context
 import Context from "../../Context/context";
@@ -15,7 +14,6 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { HomeIcon, Cross10 } from "../../data/Icons";
 
 function CartPage() {
-    const [cookies] = useCookies(["access_token"]);
     const { fetchedData, loading, reload, setReload } = useFetch(
         "https://backend.atlbha.com/api/Store/showImportCart"
     );
@@ -73,7 +71,7 @@ function CartPage() {
             .get(`https://backend.atlbha.com/api/Store/deleteImportCart/${id}`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${cookies?.access_token}`,
+                    Authorization: `Bearer ${localStorage.getItem("store_token")}`,
                 },
             })
             .then((res) => {
@@ -104,7 +102,7 @@ function CartPage() {
             .post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${cookies?.access_token}`,
+                    Authorization: `Bearer ${localStorage.getItem("store_token")}`,
                 },
             })
             .then((res) => {

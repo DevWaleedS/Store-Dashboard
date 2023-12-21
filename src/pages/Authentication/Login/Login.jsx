@@ -4,7 +4,6 @@ import { ReactComponent as EyeOPen } from "../../../data/Icons/eye_open.svg";
 import { ReactComponent as EyeClose } from "../../../data/Icons/eye_close.svg";
 import "./Login.css";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { UserAuth } from "../../../Context/UserAuthorProvider";
 import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
 
@@ -15,8 +14,6 @@ import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
 const Login = () => {
 	let type = "password";
 	const navigate = useNavigate();
-	const [cookies, setCookie] = useCookies(["access_token"]);
-
 	// If user is not verify
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
 	const { setEmail } = ResetPasswordInfo;
@@ -87,8 +84,7 @@ const Login = () => {
 		};
 		axios.post("https://backend.atlbha.com/api/loginapi", data).then((res) => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-				//Set token to cookies
-				setCookie("access_token", res?.data?.data?.token, { path: "/" });
+				localStorage.setItem("store_token",res?.data?.data?.token);
 
 				if (rememberMe?.remember_me) {
 					//Set username, password and remember_me status to context

@@ -4,7 +4,6 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -205,7 +204,6 @@ EnhancedTableToolbar.propTypes = {
 
 // Start Pages Table
 export default function PagesTable({ data, loading, reload, setReload }) {
-	const [cookies] = useCookies(["access_token"]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
@@ -304,7 +302,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -328,7 +326,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -356,7 +354,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

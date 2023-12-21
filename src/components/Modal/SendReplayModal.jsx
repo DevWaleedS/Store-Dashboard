@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react";
 // Third party
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -53,7 +52,6 @@ const contentStyles = {
 };
 
 const SendReplayModal = ({ commentDetails, reload, setReload }) => {
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
@@ -81,7 +79,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/replaycomment`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

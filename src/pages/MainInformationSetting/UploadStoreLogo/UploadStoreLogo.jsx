@@ -104,7 +104,7 @@ const UploadStoreLogo = ({
 
 								{/** upload btn */}
 								<span className='tax-text w-100'>
-									الحد الأقصي للشعار هو 2MG
+									الحد الأقصي للشعار هو 1MB
 								</span>
 								<button
 									className='upload-log-btn'

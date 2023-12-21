@@ -5,7 +5,6 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -41,7 +40,6 @@ import {
 import HoursWorks from "./HoursWorks/HoursWorks";
 
 const MainInformation = () => {
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -235,7 +233,7 @@ const MainInformation = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

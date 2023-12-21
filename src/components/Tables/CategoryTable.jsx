@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 // Third part
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 // MUI
 import PropTypes from "prop-types";
@@ -196,7 +195,6 @@ export default function EnhancedTable({
 	reload,
 	setReload,
 }) {
-	const [cookies] = useCookies(["access_token"]);
 
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
@@ -251,7 +249,7 @@ export default function EnhancedTable({
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
@@ -276,7 +274,7 @@ export default function EnhancedTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -300,7 +298,7 @@ export default function EnhancedTable({
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)

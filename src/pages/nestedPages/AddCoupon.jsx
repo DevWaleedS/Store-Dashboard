@@ -5,7 +5,6 @@ import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 // Components
@@ -32,7 +31,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // icons
 import { IoIosArrowDown } from "react-icons/io";
-import { DateIcon, DeleteIcon, SearchIcon } from "../../data/Icons";
+import { DateIcon, SearchIcon } from "../../data/Icons";
 
 // Modal Style
 const style = {
@@ -68,7 +67,6 @@ const AddCoupon = () => {
 
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -202,7 +200,7 @@ const AddCoupon = () => {
 			.post(`https://backend.atlbha.com/api/Store/coupons`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

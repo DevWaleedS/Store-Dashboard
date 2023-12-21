@@ -4,7 +4,6 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import ImageUploading from "react-images-uploading";
 import { TagsInput } from "react-tag-input-component";
@@ -13,7 +12,6 @@ import { useNavigate, useParams } from "react-router-dom";
 // Components
 import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-import TextareaCode from "../../components/TextareaCode/TextareaCode";
 
 // Context
 import Context from "../../Context/context";
@@ -76,7 +74,6 @@ const EditProductPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
 
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -388,7 +385,7 @@ const EditProductPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
@@ -1059,7 +1056,7 @@ const EditProductPage = () => {
 														</div>
 														<span>( سيتم قبول الصور jpeg & png & jpg )</span>
 														<div className='tax-text '>
-															(الحد الأقصي للصورة 2MB)
+															(الحد الأقصي للصورة 1MB)
 														</div>
 													</div>
 												</div>
@@ -1099,7 +1096,7 @@ const EditProductPage = () => {
 													<div
 														className='tax-text'
 														style={{ whiteSpace: "normal" }}>
-														(الحد الأقصي للصورة أو الفيديو 2MB)
+														(الحد الأقصي للصورة أو الفيديو 1MB)
 													</div>
 												</label>
 											</div>

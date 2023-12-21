@@ -4,7 +4,6 @@ import React, { useState, useEffect, useContext, Fragment } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -81,7 +80,6 @@ const userStatusArray = [
 ];
 const EditUserPage = () => {
 	const { id } = useParams();
-	const [cookies] = useCookies(["access_token"]);
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/user/${id}`
@@ -266,7 +264,7 @@ const EditUserPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { MdErrorOutline } from "react-icons/md";
 import { ReactComponent as SvgUser } from "../../../data/Icons/icon-24-user.svg";
 
@@ -44,7 +43,6 @@ const RegisterBox = () => {
      *  	=> TO OPEN THE TERMS AND CONDITIONS MODAL <=
      *  ------------------------------------------------- */
     const [showTermsModal, setShowTermsModal] = useState(false);
-    const [cookies, setCookie] = useCookies(["access_token"]);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isChecked, setIsChecked] = useState(0);
@@ -154,7 +152,7 @@ const RegisterBox = () => {
             .post("https://backend.atlbha.com/api/registerapi", formData)
             .then((res) => {
                 if (res?.data?.success === true && res?.data?.data?.status === 200) {
-                    setCookie("access_token", res?.data?.data?.token);
+                    localStorage.setItem("store_token", res?.data?.data?.token);
                     setEmail(registerInfo?.email);
                     setResendButtonDisabled(true);
                     setDisabledBtn(true);

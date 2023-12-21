@@ -3,7 +3,6 @@ import React, { useState, useContext, Fragment } from "react";
 // Third party
 import axios from "axios";
 import ReactDom from "react-dom";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -21,8 +20,6 @@ const BackDrop = () => {
 };
 
 const DeleteOneModal = () => {
-	const [cookies] = useCookies(["access_token"]);
-
 	const [loading, setLoading] = useState(false);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -44,7 +41,7 @@ const DeleteOneModal = () => {
 				.delete(url, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				})
 				.then((res) => {
@@ -68,7 +65,7 @@ const DeleteOneModal = () => {
 				.get(url, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				})
 				.then((res) => {

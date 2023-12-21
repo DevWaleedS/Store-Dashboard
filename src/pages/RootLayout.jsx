@@ -15,10 +15,9 @@ import { theme } from "../Theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 
 // Third part
-import { useCookies } from "react-cookie";
 
 import { ToastContainer } from "react-toastify";
-import { Outlet, ScrollRestoration,Navigate } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
@@ -39,7 +38,6 @@ import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteC
 import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 
 const RootLayout = () => {
-	const [cookies] = useCookies(["access_token"]);
 	// To open and close side bar in mobile screen
 	const [openSidebar, setOpenSidebar] = React.useState(false);
 
@@ -77,7 +75,7 @@ const RootLayout = () => {
 	const dispatchVerifyModal = useDispatch(false);
 
 	useEffect(() => {
-		dispatch(StoreVerificationThunk(cookies?.access_token));
+		dispatch(StoreVerificationThunk(localStorage.getItem("store_token")));
 	}, [dispatch]);
 
 	// This is modal verification Store Status message That is display after dashboard is open

@@ -23,7 +23,6 @@ import { openVerifyStoreAlertModal } from "../../../store/slices/VerifyStoreAler
 // third party
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 
@@ -69,8 +68,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const { fetchedData: cities } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
-
-	const [cookies] = useCookies(["access_token"]);
 
 	// to open verify alert
 	const dispatchVerifyAlert = useDispatch(false);
@@ -231,7 +228,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)

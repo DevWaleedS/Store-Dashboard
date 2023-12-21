@@ -5,7 +5,6 @@ import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -49,7 +48,6 @@ const style = {
 
 const EditUserDetails = () => {
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 
 	const UserInfo = useContext(UserAuth);
 	const contextStore = useContext(Context);
@@ -251,7 +249,7 @@ const EditUserDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/profile`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -493,7 +491,7 @@ const EditUserDetails = () => {
 													htmlFor='upload-user-image'>
 													الصورة الشخصية{" "}
 													<span className='tax-text '>
-														(الحد الأقصي للصورة 2MB)
+														(الحد الأقصي للصورة 1MB)
 													</span>
 												</label>
 												<div

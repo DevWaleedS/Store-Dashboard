@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 // Third party
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import moment from "moment-with-locales-es6";
 
 // MUI
@@ -194,7 +193,6 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function CouponTable({ data, loading, reload, setReload }) {
-	const [cookies] = useCookies(["access_token"]);
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -291,7 +289,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				}
 			)
@@ -316,7 +314,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -340,7 +338,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)

@@ -2,21 +2,18 @@ import React from 'react';
 // Third party
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 // ICONS
 import { Cross10 } from '../../../data/Icons';
 
 function CartMenu({ data, reload, setReload }) {
-    const [cookies] = useCookies(["access_token"]);
-
     // delete item from cart function 
     const deleteItemFromCart = (id) => {
         axios
             .get(`https://backend.atlbha.com/api/Store/deleteImportCart/${id}`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${cookies?.access_token}`,
+                    Authorization: `Bearer ${localStorage.getItem("store_token")}`,
                 },
             })
             .then((res) => {

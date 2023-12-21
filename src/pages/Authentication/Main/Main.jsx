@@ -3,12 +3,12 @@ import "./Main.css";
 // Third party
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { useCookies } from "react-cookie";
 // Components
 import LogoHeader from '../LogoHeader/LogoHeader';
 import Tabs from '../Tabs/Tabs';
 import Login from '../Login/Login';
 import RegisterStore from '../RegisterStore/RegisterStore';
+import useFetch from '../../../Hooks/UseFetch';
 // Icons
 import { ReactComponent as SvgComponent } from "../../../data/Icons/Component 59 – 11.svg";
 import { ReactComponent as Svgarrwos } from "../../../data/Icons/icon-30-arrwos back1.svg";
@@ -20,19 +20,22 @@ const imgSubTitle = [{ id: 1, text: "منصة اطلبها للتجارة الإ
 
 
 function Main() {
+    const { fetchedData } = useFetch(
+        "https://backend.atlbha.com/api/selector/registrationMarketer"
+    );
+    const store_token = localStorage.getItem("store_token");
     const navigate = useNavigate();
     const parm = useParams();
-    const [cookies] = useCookies(["access_token"]);
     const [activeTab, setActiveTab] = useState(0);
     useEffect(() => {
         if (parm?.type === "login" || parm?.type === "merchant" || parm?.type === "delegate") {
-            setActiveTab(parm?.type === "login" ? 0 : parm?.type === "merchant" ? 1 : parm?.type === "delegate" ? 2 : 0);
+            setActiveTab(parm?.type === "login" ? 0 : parm?.type === "merchant" ? 1 : (parm?.type === "delegate" && fetchedData?.data?.registration_marketer === "active") ? 2 : 0);
         } else {
             navigate("*");
         }
     }, [parm?.type]);
 
-    if (cookies.access_token) {
+    if (store_token) {
         return <Navigate to='/' />
     }
 

@@ -4,7 +4,6 @@ import React, { Fragment, useContext, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -66,7 +65,6 @@ const CreatePage = () => {
 	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
-	const [cookies] = useCookies(["access_token"]);
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
@@ -281,7 +279,7 @@ const CreatePage = () => {
 				.post(`https://backend.atlbha.com/api/Store/page-publish`, formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				})
 				.then((res) => {
@@ -336,7 +334,7 @@ const CreatePage = () => {
 				.post(`https://backend.atlbha.com/api/Store/page`, formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${cookies?.access_token}`,
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 					},
 				})
 				.then((res) => {

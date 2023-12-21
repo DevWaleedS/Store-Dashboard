@@ -5,7 +5,6 @@ import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
 
 // Context
@@ -91,7 +90,6 @@ const OrderDetails = () => {
 		`https://backend.atlbha.com/api/selector/shippingcities/${shippingId}`
 	);
 
-	const [cookies] = useCookies(["access_token"]);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -189,7 +187,7 @@ const OrderDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/orders/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
@@ -240,7 +238,7 @@ const OrderDetails = () => {
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${cookies?.access_token}`,
+							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 						},
 					}
 				)
@@ -264,7 +262,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${cookies?.access_token}`,
+								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 							},
 						}
 					)
@@ -294,7 +292,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${cookies?.access_token}`,
+								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 							},
 						}
 					)
@@ -321,7 +319,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${cookies?.access_token}`,
+								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 							},
 						}
 					)
@@ -349,7 +347,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${cookies?.access_token}`,
+								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 							},
 						}
 					)

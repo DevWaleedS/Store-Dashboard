@@ -13,7 +13,6 @@ import { ReactComponent as LogOutIcon } from "../../../data/Icons/icon-24-sign o
 // Third Party
 import axios from "axios";
 import { tokens } from "../../../Theme";
-import { useCookies } from "react-cookie";
 import useFetch from "../../../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../../Context/UserAuthorProvider";
@@ -53,7 +52,6 @@ const UserProfileImage = () => {
 	const colors = tokens(theme.palette);
 
 	const navigate = useNavigate();
-	const [cookies] = useCookies(["access_token"]);
 
 	// TO SET THE NAME AND IMAGE TO CONTEXT
 	const UserInfo = useContext(UserAuth);
@@ -82,14 +80,12 @@ const UserProfileImage = () => {
 			.get("https://backend.atlbha.com/api/logout", {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					document.cookie =
-						"access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
+					localStorage.removeItem("store_token");
 					navigate("/auth/login");
 				} else {
 					console.log(res?.data?.message?.ar);

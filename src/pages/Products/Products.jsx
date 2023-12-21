@@ -14,7 +14,6 @@ import { BigProductsTable } from "../../components/Tables";
 
 // Icons
 import { MdAdd } from "react-icons/md";
-import { useCookies } from "react-cookie";
 
 // Context
 import Context from "../../Context/context";
@@ -24,8 +23,6 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 
 const Products = () => {
-	const [cookies] = useCookies(["access_token"]);
-
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
@@ -119,7 +116,7 @@ const Products = () => {
 			.post(`https://backend.atlbha.com/api/Store/import-products`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {

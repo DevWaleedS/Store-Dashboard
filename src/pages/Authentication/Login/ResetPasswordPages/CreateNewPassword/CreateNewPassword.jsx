@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 
 // Third party
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom/dist";
 
 // Context
@@ -29,7 +28,6 @@ const CreateNewPassword = () => {
 
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
 	const { userPhoneNumber, resetPasswordToken } = ResetPasswordInfo;
-	const [cookies, setCookie] = useCookies(["access_token"]);
 
 	// to set remember me
 	const RememberMe = useContext(UserAuth);
@@ -74,7 +72,7 @@ const CreateNewPassword = () => {
 			.post("https://backend.atlbha.com/api/password/reset-password", formData)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setCookie("access_token", res?.data?.data?.token, { path: "/" });
+					localStorage.setItem("store_token", res?.data?.data?.token);
 					if (
 						!resetPasswordToken ||
 						res?.data?.message?.en === "This password reset token is invalid."
@@ -197,8 +195,8 @@ const CreateNewPassword = () => {
 										!type === "password"
 											? type
 											: showConfirmPassword
-											? "text"
-											: type
+												? "text"
+												: type
 									}
 								/>
 

@@ -660,8 +660,9 @@ textarea {
 }
 
 .search-box input::placeholder {
-	color: var(--white-600);
+	color: var(--white-600) !important;
 	font-weight: 400;
+	font-size: 1.3rem;
 }
 
 .search-box svg.search_icon {

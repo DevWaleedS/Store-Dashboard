@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 import { MdErrorOutline } from "react-icons/md";
 // import this library to write media query with inline style
 import Radium from "radium";
@@ -25,7 +24,6 @@ const PHONE_REGEX = /^(5\d{8})$/;
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
 function RegisterDelegate() {
-    const navigate = useNavigate();
     const contextStore = useContext(Context);
     const {
         message,
@@ -44,7 +42,6 @@ function RegisterDelegate() {
     const [showTermsModal, setShowTermsModal] = useState(false);
 
     // TO STORE DATA FROM SELECTORS API
-    const [cookies, setCookie] = useCookies(["access_token"]);
     const [citiesList, setCitiesList] = useState([]);
     const [city, setCity] = useState("");
     const [isChecked, setIsChecked] = useState(0);
@@ -144,6 +141,7 @@ function RegisterDelegate() {
                     setDisabledBtn(true);
                     setMessage(res?.data?.message?.ar);
                     setShowAlertModal(true);
+                    window.location.href = "https://atlbha.com";
                 } else {
                     if (res?.data?.message.ar === "stop_registration_markter") {
                         setError(res?.data?.message.en);
@@ -385,8 +383,6 @@ function RegisterDelegate() {
                                                 onChange={(e) => {
                                                     if (e.target.checked) {
                                                         setIsChecked(1);
-                                                        setShowAlertModal(true);
-                                                        setMessage("من هنا تم اللقاء")
                                                     } else {
                                                         setIsChecked(0);
                                                     }

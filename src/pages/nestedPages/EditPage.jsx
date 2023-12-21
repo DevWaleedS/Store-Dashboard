@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import { useDropzone } from "react-dropzone";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -69,8 +68,6 @@ const EditPage = () => {
 		"https://backend.atlbha.com/api/Store/selector/post-categories"
 	);
 	const navigate = useNavigate();
-
-	const [cookies] = useCookies(["access_token"]);
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
@@ -314,7 +311,7 @@ const EditPage = () => {
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${cookies?.access_token}`,
+					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
 				},
 			})
 			.then((res) => {
