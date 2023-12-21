@@ -185,6 +185,7 @@
     }
 
     .main-in-box .all-content .right-side .all .tabs {
+        width: 100%;
         overflow-x: auto;
     }
 
@@ -242,11 +243,15 @@
     }
 
     .main-in-box .all-content .right-side .all .tabs {
+        justify-content: flex-start;
         overflow-x: auto;
+    }
+    .main-in-box .all-content .right-side .all .tabs::-webkit-scrollbar{
+        display: none;
     }
 
     .main-in-box .all-content .right-side .all .tabs .tab {
-        min-width: 100px;
+        min-width: 140px;
         height: 46px;
         padding: 10px 20px;
         font-size: 1rem;

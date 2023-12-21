@@ -401,7 +401,7 @@ const RegisterBox = () => {
                                                     fontWeight: 400,
                                                     color: "#67747B",
                                                     marginTop: "-14px",
-                                                    whiteSpace: "normal"
+                                                    whiteSpace: "break-spaces"
                                                 }}>
                                                 بتسجيلك فإنك توافق على سياسة
                                                 <Link onClick={() => setShowTermsModal(true)}>
