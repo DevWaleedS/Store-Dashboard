@@ -236,7 +236,7 @@ const EditProductPage = () => {
 
 	// ---------------------------------------------------
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 
 	// To get multi images
 	const emptyMultiImages = [];
@@ -255,8 +255,8 @@ const EditProductPage = () => {
 			imageList?.[imageList?.length - 1]?.file?.type?.startsWith("video/");
 
 		const errorMessage = isVideo
-			? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-			: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+			? "حجم الفيديو يجب أن لا يزيد عن 1 ميجابايت."
+			: "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 		if (!isSizeValid) {
 			toast.warning(errorMessage, { theme: "light" });
@@ -289,7 +289,7 @@ const EditProductPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					toast.warning(errorMessage, {

@@ -86,7 +86,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	}, [Banners]);
 
 	// To handle width and height of banners
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(bannerIndex, bannerState, setBannerState, setPreviewBannerState) =>
 		async (imageList) => {
@@ -96,7 +96,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 			);
 
 			// Errors message
-			const sizeErrorMessage = "حجم البانر يجب أن لا يزيد عن 2 ميجابايت.";
+			const sizeErrorMessage = "حجم البانر يجب أن لا يزيد عن 1 ميجابايت.";
 			const dimensionsErrorMessage =
 				"مقاس البنر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 

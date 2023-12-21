@@ -83,7 +83,7 @@ const EditCategory = () => {
 	});
 
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	// Use state  set banners
 	const [icons, setIcons] = React.useState([]);
 	const onChange = (imageList, addUpdateIndex) => {
@@ -91,7 +91,7 @@ const EditCategory = () => {
 		const isSizeValid = imageList.every(
 			(image) => image.file.size <= maxFileSize
 		);
-		const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+		const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 		if (!isSizeValid) {
 			setIcons([]);

@@ -6,14 +6,14 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom/dist";
 
 // Context
-import { UserAuth } from "../../../../Context/UserAuthorProvider";
-import { ResetPasswordContext } from "../../../../Context/ResetPasswordProvider";
+import { UserAuth } from "../../../../../Context/UserAuthorProvider";
+import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvider";
 
 // Components
-import LogoHeader from "../../LogoHeader/LogoHeader";
+import LogoHeader from "../../../LogoHeader/LogoHeader";
 
 // Icons
-import { EyeClose, EyeOPen, SvgComponent } from "../../../../data/Icons";
+import { EyeClose, EyeOPen, SvgComponent } from "../../../../../data/Icons";
 
 // Styles
 import "./CreateNewPassword.css";
@@ -24,7 +24,7 @@ const CreateNewPassword = () => {
 
 	// if user is verify his account
 	const NavigateToLogInPage = () => {
-		navigate("/login");
+		navigate("/auth/login");
 	};
 
 	const ResetPasswordInfo = useContext(ResetPasswordContext);

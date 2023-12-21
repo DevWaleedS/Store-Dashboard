@@ -244,7 +244,7 @@ const MainInformation = () => {
 					setLoadingTitle("");
 					setReload(!reload);
 					if (
-						res?.data?.data?.storeSetting?.verification_status ===
+						res?.data?.data?.setting_store?.verification_status ===
 						"لم يتم الطلب"
 					) {
 						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());

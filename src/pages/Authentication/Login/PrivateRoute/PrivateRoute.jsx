@@ -8,7 +8,7 @@ const PrivateRoute = ({ children }) => {
 	return cookies?.access_token ? (
 		children
 	) : (
-		<Navigate state={{ from: location }} replace to='/login' />
+		<Navigate state={{ from: location }} replace to='/auth/login' />
 	);
 };
 

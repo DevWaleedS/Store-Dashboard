@@ -14,7 +14,7 @@ const UploadStoreIcon = ({
 	defaultStoreIcon,
 }) => {
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 
 	// Function to handle notifications and update the state based on the image type (logo or icon)
 	const handleInvalid = (type, errMsg, resetState) => {
@@ -56,7 +56,7 @@ const UploadStoreIcon = ({
 		// If the image size is not valid
 		if (!isSizeValid) {
 			// Display a warning message and reset the icon state
-			handleInvalid("icon", "حجم الايقون يجب أن لا يزيد عن 2 ميجابايت.", () =>
+			handleInvalid("icon", "حجم الايقون يجب أن لا يزيد عن 1 ميجابايت.", () =>
 				setStoreIcon([])
 			);
 

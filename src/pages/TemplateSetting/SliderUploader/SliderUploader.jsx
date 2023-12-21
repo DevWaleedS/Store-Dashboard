@@ -84,7 +84,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	}, [sliders]);
 
 	// To handle width and height of banners
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(sliderIndex, sliderState, setSliderState, setPreviewSliderState) =>
 			async (imageList) => {
@@ -94,7 +94,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 				);
 
 				// Errors message
-				const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 2 ميجابايت.";
+				const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 1 ميجابايت.";
 				const dimensionsErrorMessage =
 					"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 

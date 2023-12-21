@@ -12,7 +12,7 @@
 .alert-modal_body {
 	position: fixed;
 	right: 0%;
-	top: 0%;
+	top: 5%;
 	width: 430px;
 	height: 114px;
 	overflow: auto;
@@ -47,6 +47,8 @@
 	letter-spacing: 0.2px;
 	color: #14e29d;
 	display: flex;
+	white-space: normal;
+	text-align: center;
 }
 
 .progress-bar {

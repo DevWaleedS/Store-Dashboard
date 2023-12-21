@@ -178,7 +178,7 @@ const EditPage = () => {
 	// -------------------------------------------------
 
 	// Add Post image
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const [images, setImages] = useState([]);
 	const errMsgStyle = {
 		whiteSpace: "normal",
@@ -195,7 +195,7 @@ const EditPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 				const requireMindWidth = 300;
 				const requireMaxdWidth = 600;
 				const requireMindHeight = 150;

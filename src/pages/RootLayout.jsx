@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
 import { StoreVerificationThunk } from "../store/Thunk/storeVerificationThunk";
@@ -19,7 +18,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { useCookies } from "react-cookie";
 
 import { ToastContainer } from "react-toastify";
-import { Outlet, ScrollRestoration } from "react-router-dom";
+import { Outlet, ScrollRestoration,Navigate } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
@@ -37,7 +36,7 @@ import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
 import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
 
 // PrivateRoute (Login Authenticating)
-import PrivateRoute from "./Login/PrivateRoute/PrivateRoute";
+import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 
 const RootLayout = () => {
 	const [cookies] = useCookies(["access_token"]);

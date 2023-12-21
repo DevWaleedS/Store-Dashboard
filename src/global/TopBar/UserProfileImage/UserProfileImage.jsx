@@ -90,7 +90,7 @@ const UserProfileImage = () => {
 					document.cookie =
 						"access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-					navigate("/Login");
+					navigate("/auth/login");
 				} else {
 					console.log(res?.data?.message?.ar);
 				}

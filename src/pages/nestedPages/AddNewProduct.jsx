@@ -182,7 +182,7 @@ const AddNewProduct = () => {
 	}, [googleAnalyticsLink]);
 
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	// to get multi images
 	const [multiImages, setMultiImages] = useState([]);
 	const emptyMultiImages = [];
@@ -201,8 +201,8 @@ const AddNewProduct = () => {
 			imageList?.[imageList?.length - 1]?.file?.type?.startsWith("video/");
 
 		const errorMessage = isVideo
-			? "حجم الفيديو يجب أن لا يزيد عن 2 ميجابايت."
-			: "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+			? "حجم الفيديو يجب أن لا يزيد عن 1 ميجابايت."
+			: "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 		if (!isSizeValid) {
 			toast.warning(errorMessage, { theme: "light" });
@@ -238,7 +238,7 @@ const AddNewProduct = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					toast.warning(errorMessage, {

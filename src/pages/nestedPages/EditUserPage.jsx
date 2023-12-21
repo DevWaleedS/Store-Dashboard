@@ -163,7 +163,7 @@ const EditUserPage = () => {
 
 	//  use dropzone to get personal image
 	// handle images size
-	const maxFileSize = 2 * 1024 * 1024; // 2 MB;
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const [images, setImages] = useState([]);
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
@@ -175,7 +175,7 @@ const EditUserPage = () => {
 		onDrop: (acceptedFiles) => {
 			const updatedIcons = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الصورة يجب أن لا يزيد عن 1 ميجابايت.";
 
 				if (!isSizeValid) {
 					setImages([]);

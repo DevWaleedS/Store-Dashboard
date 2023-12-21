@@ -1,16 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { LogoHeader } from "./index";
-import { ReactComponent as SvgComponent } from "../../data/Icons/Component 59 – 11.svg";
-import { ReactComponent as EyeOPen } from "../../data/Icons/eye_open.svg";
-import { ReactComponent as EyeClose } from "../../data/Icons/eye_close.svg";
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as EyeOPen } from "../../../data/Icons/eye_open.svg";
+import { ReactComponent as EyeClose } from "../../../data/Icons/eye_close.svg";
 import "./Login.css";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-
-import { Helmet } from "react-helmet";
-import { UserAuth } from "../../Context/UserAuthorProvider";
-import { ResetPasswordContext } from "../../Context/ResetPasswordProvider";
+import { UserAuth } from "../../../Context/UserAuthorProvider";
+import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  TO HANDLE THE REG_EXPRESS
@@ -56,10 +52,6 @@ const Login = () => {
 	 */
 	const NavigateToRestorePassword = () => {
 		navigate("/RestorePassword");
-	};
-
-	const NavigateToRegisterPage = () => {
-		window.location.href = "http://atlbha.com/register/merchant";
 	};
 
 	//Set username, password and remember_me status from context
@@ -152,119 +144,90 @@ const Login = () => {
 	}, [password]);
 	// --------------------------------------------------------------------------------------------------
 
-	return cookies?.access_token ? (
-		<Navigate to='/' />
-	) : (
-		<>
-			<Helmet>
-				<title>لوحة تحكم أطلبها | تسجيل الدخول</title>
-			</Helmet>
-			<div className='sign-in-box' dir='ltr'>
-				<div className='all-content' dir='rtl'>
-					<div className='box-container-form'>
-						<LogoHeader />
-						<div className='all'>
-							<h2>قم بتسجيل الدخول الى حسابك</h2>
-							<div className='box'>
-								<div>
-									<h5>الاسم</h5>
-									<input
-										type='text'
-										placeholder='ادخل اسم المستخدم او البريد الالكتروني'
-										value={username}
-										onChange={(e) => setUsername(e.target.value)}
-										onKeyDown={handleKeyDown}
-									/>
-									{usernameError && (
-										<span className='wrong-text'>{usernameError}</span>
-									)}
-								</div>
-								<div className='password-field'>
-									{type === "password" ? (
-										showPassword ? (
-											<EyeOPen
-												onClick={() => {
-													setShowPassword((prev) => !prev);
-												}}
-												className='show-password-icon'
-											/>
-										) : (
-											<EyeClose
-												onClick={() => {
-													setShowPassword((prev) => !prev);
-												}}
-												className='show-password-icon'
-											/>
-										)
-									) : null}
+	return (
+		<div className='form'>
+			<div className='box'>
+				<div>
+					<h5>الاسم</h5>
+					<input
+						type='text'
+						placeholder='ادخل اسم المستخدم او البريد الالكتروني'
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+						onKeyDown={handleKeyDown}
+					/>
+					{usernameError && (
+						<span className='wrong-text'>{usernameError}</span>
+					)}
+				</div>
+				<div className='password-field'>
+					{type === "password" ? (
+						showPassword ? (
+							<EyeOPen
+								onClick={() => {
+									setShowPassword((prev) => !prev);
+								}}
+								className='show-password-icon'
+							/>
+						) : (
+							<EyeClose
+								onClick={() => {
+									setShowPassword((prev) => !prev);
+								}}
+								className='show-password-icon'
+							/>
+						)
+					) : null}
 
-									<h5>كلمة المرور</h5>
-									<input
-										style={{ textAlign: "right" }}
-										autoComplete='off'
-										value={password}
-										placeholder='********'
-										maxLength={24}
-										minLength={8}
-										onChange={(e) => setPassword(e.target.value)}
-										onKeyDown={handleKeyDown}
-										type={
-											!type === "password" ? type : showPassword ? "text" : type
-										}
-									/>
+					<h5>كلمة المرور</h5>
+					<input
+						style={{ textAlign: "right" }}
+						autoComplete='off'
+						value={password}
+						placeholder='********'
+						maxLength={24}
+						minLength={8}
+						onChange={(e) => setPassword(e.target.value)}
+						onKeyDown={handleKeyDown}
+						type={
+							!type === "password" ? type : showPassword ? "text" : type
+						}
+					/>
 
-									{passwordError && (
-										<span
-											className='wrong-text w-100 d-flex justify-content-start'
-											style={{ color: "red" }}>
-											{passwordError}
-										</span>
-									)}
-								</div>
-							</div>
-							<div className='wrong-text'>{error}</div>
-							<div className='top checkbox_row'>
-								<div className='check'>
-									<div className='form-check'>
-										<input
-											className='form-check-input'
-											type='checkbox'
-											id='flexCheckDefault'
-											value={rememberMe?.remember_me}
-											onChange={(e) =>
-												setRememberMe({
-													...rememberMe,
-													remember_me: e.target.value,
-												})
-											}
-										/>
-									</div>
-									<h6>تذكرني</h6>
-								</div>
-								<h5 onClick={NavigateToRestorePassword}>نسيت كلمة المرور ؟</h5>
-							</div>
-							<button className='bt-main' onClick={Login}>
-								تسجيل الدخول
-							</button>
-							<ul>
-								<li>ليس لديك حساب؟</li>
-								<li onClick={NavigateToRegisterPage}>أنشئ حساب</li>
-							</ul>
-						</div>
-					</div>
-
-					<div className='box-form-banner'>
-						<span className='over-info'>
-							<SvgComponent />
+					{passwordError && (
+						<span
+							className='wrong-text w-100 d-flex justify-content-start'
+							style={{ color: "red" }}>
+							{passwordError}
 						</span>
-						<div className='info-svg'>
-							<h4>منصة اطلبها للتجارة الإلكترونية</h4>
-							<h1> مرحباً بعودتك</h1>
-						</div>
-					</div>
+					)}
 				</div>
 			</div>
-		</>
+			<div className='wrong-text'>{error}</div>
+			<div className='top checkbox_row'>
+				<div className='check'>
+					<div className='form-check'>
+						<input
+							className='form-check-input'
+							type='checkbox'
+							id='flexCheckDefault'
+							value={rememberMe?.remember_me}
+							onChange={(e) =>
+								setRememberMe({
+									...rememberMe,
+									remember_me: e.target.value,
+								})
+							}
+						/>
+					</div>
+					<h6>تذكرني</h6>
+				</div>
+				<h5 onClick={NavigateToRestorePassword}>نسيت كلمة المرور ؟</h5>
+			</div>
+			<button className='bt-main' onClick={Login}>
+				تسجيل الدخول
+			</button>
+		</div>
 	);
 };
 
