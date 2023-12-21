@@ -36,6 +36,7 @@ export { ReactComponent as DeadLineIcon } from "./icon-24-deadline.svg";
 export { ReactComponent as HourGleass } from "./icon-24-hourgleass_half.svg";
 export { ReactComponent as HomeIcon } from "./icon_24_home.svg";
 export { ReactComponent as ArrowBack } from "./icon-30-arrwos back.svg";
+export { ReactComponent as BackToHomeArrow } from "./icon-30-arrwos back1.svg";
 export { ReactComponent as PDFIcon } from "./pfd.svg";
 export { ReactComponent as ArrowDown } from "./icon-24-chevron_down.svg";
 export { ReactComponent as User } from "./icon-24-user.svg";
