@@ -92,6 +92,7 @@
 	font-family: "Tajawal", sans-serif !important;
 	padding: 10px 8px;
 	border-radius: 5px 5px 0 0;
+	white-space: break-spaces;
 }
 .quill .ql-editor.ql-blank::before {
 	font-size: 18px;
@@ -171,6 +172,7 @@
 .empty-cart .quill .ql-toolbar.ql-snow,
 .send-replay .quill .ql-toolbar.ql-snow {
 	background-color: #fff;
+	white-space: break-spaces;
 }
 .empty-cart .quill .ql-container.ql-snow,
 .send-replay .quill .ql-container.ql-snow {
@@ -226,4 +228,5 @@
 	-moz-border-radius: none;
 	-ms-border-radius: none;
 	-o-border-radius: none;
+	white-space: break-spaces;
 }

@@ -277,8 +277,8 @@ const EditPage = () => {
 		},
 	});
 
-	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>{file.path} bytes</li>
+	const files = acceptedFiles.map((file, index) => (
+		<li key={index} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{file.path}</li>
 	));
 
 	const handleOnChange = (e) => {
@@ -800,7 +800,7 @@ const EditPage = () => {
 																<div
 																	{...getRootProps({
 																		className:
-																			"d-flex justify-content-between p-3",
+																			"d-flex justify-content-between p-3 gap-2",
 																	})}>
 																	<input
 																		{...getInputProps()}
@@ -832,8 +832,7 @@ const EditPage = () => {
 																	</span>
 																	{files?.length !== 0 && (
 																		<ul
-																			style={{ fontSize: "14px" }}
-																			className='m-0'>
+																			style={{ fontSize: "14px", overflow: "hidden" }} className='m-0'>
 																			{files}
 																		</ul>
 																	)}

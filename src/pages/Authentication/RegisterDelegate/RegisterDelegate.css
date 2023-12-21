@@ -525,6 +525,11 @@ input::placeholder {
 	}
 }
 /* ==================== */
+@media (max-width: 768px) {
+	.register-form form div #span-icon {
+		bottom: 13px !important;
+	}
+}
 @media (max-width: 667px) {
 	.register-form .all-content .box-container-form {
 		overflow: auto;

@@ -194,7 +194,7 @@ const CreatePage = () => {
 							...pageError,
 							images: (
 								<div
-								className="wrign-dimensions"
+									className="wrign-dimensions"
 									style={errMsgStyle}
 									dangerouslySetInnerHTML={{ __html: errorMes }}
 								/>
@@ -207,7 +207,7 @@ const CreatePage = () => {
 
 						toast.warning(
 							<div
-							className="wrign-dimensions"
+								className="wrign-dimensions"
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,
@@ -244,8 +244,8 @@ const CreatePage = () => {
 		},
 	});
 
-	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>{file.path}</li>
+	const files = acceptedFiles.map((file,index) => (
+		<li key={index} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{file.path}</li>
 	));
 	// ----------------------------------------------------------------------
 
@@ -703,9 +703,9 @@ const CreatePage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																	{
+																		paddingRight: "20px",
+																	},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -798,7 +798,7 @@ const CreatePage = () => {
 														</div>
 														<div
 															{...getRootProps({
-																className: "d-flex justify-content-between p-3",
+																className: "d-flex justify-content-between p-3 gap-2",
 															})}>
 															<input
 																{...getInputProps()}
@@ -827,8 +827,7 @@ const CreatePage = () => {
 															</span>
 															{files?.length !== 0 && (
 																<ul
-																	style={{ fontSize: "14px" }}
-																	className='m-0'>
+																	style={{ fontSize: "14px", overflow: "hidden" }} className='m-0'>
 																	{files}
 																</ul>
 															)}
