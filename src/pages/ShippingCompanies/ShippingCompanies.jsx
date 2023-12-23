@@ -120,9 +120,10 @@ const ShippingCompanies = () => {
 
 	// Change OtherShipping Company Status And Add Price
 	const changeOtherShippingCompanyStatusAndAddPrice = (id) => {
+		// https://backend.atlbha.com/api/Store/changeShippingtypeStatus/5?price=20&time=5
 		axios
 			.get(
-				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}`,
+				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,
 				{
 					headers: {
 						"Content-Type": "application/json",
