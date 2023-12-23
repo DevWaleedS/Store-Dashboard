@@ -34,10 +34,12 @@ function Main() {
 	const { fetchedData } = useFetch(
 		"https://backend.atlbha.com/api/selector/registrationMarketer"
 	);
-	const store_token = localStorage.getItem("store_token");
+
 	const navigate = useNavigate();
 	const parm = useParams();
 	const [activeTab, setActiveTab] = useState(0);
+
+	// To handle add activeTab to current tab
 	useEffect(() => {
 		if (
 			parm?.type === "login" ||
@@ -57,17 +59,7 @@ function Main() {
 		} else {
 			navigate("*");
 		}
-	}, [parm?.type]);
-
-	// THIS IS WILL BROKEN THE AUT LOGIC
-
-	/**
-	 * 
-	 * if (store_token) {
-		return <Navigate to='/' />;
-	}
-
-	 */
+	}, [parm?.type, fetchedData?.data?.registration_marketer]);
 
 	return (
 		<>

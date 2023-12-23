@@ -295,20 +295,22 @@ const ShippingCompanies = () => {
 
 												<div className='currency p-2'>ر.س</div>
 											</div>
-											{validPriceFocus &&
-												otherShipCompDetails?.price &&
-												otherShipCompDetails?.price === "0" && (
-													<div
-														className={" d-block important-hint  mb-2  "}
-														style={{
-															fontSize: "16px",
-															whiteSpace: "normal",
-															marginTop: "-10px",
-														}}>
-														تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد
-														من ذلك؟
-													</div>
-												)}
+											<div
+												className={`${
+													validPriceFocus &&
+													otherShipCompDetails?.price &&
+													otherShipCompDetails?.price === "0"
+														? "d-block"
+														: "d-none"
+												}  important-hint  mb-2 `}
+												style={{
+													fontSize: "16px",
+													whiteSpace: "normal",
+													marginTop: "-10px",
+												}}>
+												تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد من
+												ذلك؟
+											</div>
 
 											<div
 												style={{
