@@ -21,6 +21,7 @@ import {
 
 // Styles
 import "./CreateNewPassword.css";
+import "../../Login.css";
 
 const CreateNewPassword = () => {
 	let type = "password";

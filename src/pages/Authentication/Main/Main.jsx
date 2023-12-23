@@ -61,9 +61,13 @@ function Main() {
 
 	// THIS IS WILL BROKEN THE AUT LOGIC
 
-	// if (store_token) {
-	// 	return <Navigate to='/' />;
-	// }
+	/**
+	 * 
+	 * if (store_token) {
+		return <Navigate to='/' />;
+	}
+
+	 */
 
 	return (
 		<>

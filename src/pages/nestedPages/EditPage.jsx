@@ -214,7 +214,7 @@ const EditPage = () => {
 					if (!isDimensionsValid && isSizeValid) {
 						toast.warning(
 							<div
-								className="wrign-dimensions"
+								className='wrign-dimensions'
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,
@@ -227,7 +227,7 @@ const EditPage = () => {
 							...pageError,
 							images: (
 								<div
-									className="wrign-dimensions"
+									className='wrign-dimensions'
 									style={errMsgStyle}
 									dangerouslySetInnerHTML={{ __html: errorMes }}
 								/>
@@ -240,7 +240,7 @@ const EditPage = () => {
 
 						toast.warning(
 							<div
-								className="wrign-dimensions"
+								className='wrign-dimensions'
 								style={errMsgStyle}
 								dangerouslySetInnerHTML={{ __html: errorMes }}
 							/>,
@@ -278,7 +278,15 @@ const EditPage = () => {
 	});
 
 	const files = acceptedFiles.map((file, index) => (
-		<li key={index} style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{file.path}</li>
+		<li
+			key={index}
+			style={{
+				overflow: "hidden",
+				textOverflow: "ellipsis",
+				whiteSpace: "nowrap",
+			}}>
+			{file.path}
+		</li>
 	));
 
 	const handleOnChange = (e) => {
@@ -373,7 +381,10 @@ const EditPage = () => {
 			<div open={true}>
 				<Modal
 					open={true}
-					onClose={() => navigate("/Pages")}
+					onClose={() => {
+						navigate("/Pages");
+						setEditorValue(null);
+					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box sx={style} className='create-pages-modal'>
@@ -385,7 +396,10 @@ const EditPage = () => {
 										<div className='form-title  d-flex justify-content-between align-items-center'>
 											<h5 className=''>{page?.title}</h5>
 											<AiOutlineCloseCircle
-												onClick={() => navigate("/Pages")}
+												onClick={() => {
+													navigate("/Pages");
+													setEditorValue(null);
+												}}
 											/>
 										</div>
 									</div>
@@ -683,7 +697,7 @@ const EditPage = () => {
 												</div>
 												{itsPost && (
 													<>
-														<div className='col-md-6 col-12'>
+														<div className='col-md-6 col-12 mb-3'>
 															<div className='wrapper h-auto'>
 																<div className='title'>
 																	<h4>
@@ -701,9 +715,9 @@ const EditPage = () => {
 																		sx={{
 																			fontSize: "18px",
 																			"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																				{
+																					paddingRight: "20px",
+																				},
 																			"& .MuiOutlinedInput-root": {
 																				"& :hover": {
 																					border: "none",
@@ -832,22 +846,36 @@ const EditPage = () => {
 																	</span>
 																	{files?.length !== 0 && (
 																		<ul
-																			style={{ fontSize: "14px", overflow: "hidden" }} className='m-0'>
+																			style={{
+																				fontSize: "14px",
+																				overflow: "hidden",
+																			}}
+																			className='m-0'>
 																			{files}
 																		</ul>
 																	)}
 																</div>
+
+																{page?.image !== "" && (
+																	<div
+																		className='p-3 d-flex justify-conent-center align-items-center'
+																		style={{
+																			width: "100%",
+
+																			borderRadius: "8px",
+																		}}>
+																		<img
+																			style={{
+																				borderRadius: "8px",
+																			}}
+																			className='img-fluid'
+																			src={images[0]?.preview || page?.image}
+																			alt='img-page'
+																		/>
+																	</div>
+																)}
 															</div>
-															{page?.image !== "" && (
-																<img
-																	style={{ objectFit: "contain" }}
-																	className='mt-3'
-																	src={images[0]?.preview || page?.image}
-																	width={200}
-																	height={100}
-																	alt='img-page'
-																/>
-															)}
+
 															<div className='col-12'>
 																<span className='fs-6 text-danger'>
 																	{pageError?.images}
