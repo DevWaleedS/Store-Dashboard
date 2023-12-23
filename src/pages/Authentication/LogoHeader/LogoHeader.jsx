@@ -20,7 +20,8 @@ const LogoHeader = () => {
 				{location.pathname === "/RestorePassword" ||
 				location.pathname === "/SendVerificationCode" ||
 				location.pathname === "/VerificationPage" ||
-				location.pathname === "/LogInVerificationCode" ? (
+				location.pathname === "/LogInVerificationCode" ||
+				location.pathname === "/CreateNewPassword" ? (
 					<div
 						className='box-logo d-flex justify-content-start align-items-center'
 						onClick={handleGoBack}>

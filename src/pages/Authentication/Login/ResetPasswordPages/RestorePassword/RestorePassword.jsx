@@ -15,11 +15,7 @@ import "./RestorePassword.css";
 import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvider";
 
 // Icons
-import {
-	BackToHomeArrow,
-	SvgComponent,
-	SvgKey,
-} from "../../../../../data/Icons";
+import { SvgComponent, SvgKey } from "../../../../../data/Icons";
 
 const RestorePassword = () => {
 	const navigate = useNavigate();

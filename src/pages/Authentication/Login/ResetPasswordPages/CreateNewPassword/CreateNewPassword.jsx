@@ -12,12 +12,7 @@ import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvid
 import LogoHeader from "../../../LogoHeader/LogoHeader";
 
 // Icons
-import {
-	BackToHomeArrow,
-	EyeClose,
-	EyeOPen,
-	SvgComponent,
-} from "../../../../../data/Icons";
+import { EyeClose, EyeOPen, SvgComponent } from "../../../../../data/Icons";
 
 // Styles
 import "./CreateNewPassword.css";
@@ -250,12 +245,6 @@ const CreateNewPassword = () => {
 				</div>
 
 				<div className='box-form-banner'>
-					<a href='https://atlbha.com' className='back'>
-						<span>
-							<BackToHomeArrow />
-						</span>
-						الرئيسية
-					</a>
 					<span className='over-info'>
 						<SvgComponent />
 					</span>

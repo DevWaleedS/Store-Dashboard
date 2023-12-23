@@ -167,13 +167,20 @@ ellipse {
 	.password-field .show-password-icon {
 		top: 52px;
 	}
+	.sign-in-box .all-content {
+		height: auto;
+	}
+	.sign-in-box .all-content .box-form-banner {
+		height: 400px;
+		padding-top: 20px;
+	}
 	.sign-in-box .all-content .box-form-banner .info-svg h1 {
-		font-size: 65px;
-		line-height: 65px;
-		font-weight: 500;
+		font-size: 50px;
+		line-height: 50px;
+		font-weight: 600;
 	}
 	.sign-in-box .all-content .box-form-banner .info-svg h4 {
-		font-size: 44px;
+		font-size: 40px;
 		line-height: 44px;
 		font-weight: 400;
 	}
@@ -186,13 +193,13 @@ ellipse {
 	.form .box input {
 		font-size: 15px;
 	}
-	.form .top{
+	.form .top {
 		margin-bottom: 20px;
 	}
-	.form .top h5{
+	.form .top h5 {
 		font-size: 0.9rem;
 	}
-	.form button{
+	.form button {
 		height: 46px;
 		font-size: 1.1rem;
 	}
