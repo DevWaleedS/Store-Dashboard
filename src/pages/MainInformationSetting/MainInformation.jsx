@@ -39,6 +39,28 @@ import {
 } from "../../data/Icons";
 import HoursWorks from "./HoursWorks/HoursWorks";
 
+const selectStyle = {
+	width: "100%",
+	fontSize: "18px",
+
+	"& .MuiSelect-select.MuiSelect-outlined": {
+		paddingRight: "50px !important",
+	},
+
+	"& .MuiOutlinedInput-root": {
+		border: "none",
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "1px solid #ededed",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 const MainInformation = () => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -139,17 +161,17 @@ const MainInformation = () => {
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setStoreName(fetchedData?.data?.setting_store?.store_name);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
-			setCountry([fetchedData?.data?.setting_store?.country?.id]);
-			setCity([fetchedData?.data?.setting_store?.city?.id]);
+			setCountry(fetchedData?.data?.setting_store?.country?.id);
+			setCity(fetchedData?.data?.setting_store?.city?.id);
 			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
 			setPhoneNumber(
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-						"00966"
-					)
-						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-						: fetchedData?.data?.setting_store?.user?.phonenumber
+							"00966"
+					  )
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
@@ -305,6 +327,8 @@ const MainInformation = () => {
 			});
 	};
 	// -----------------------------------------------------------------------------
+
+	console.log(country);
 
 	return (
 		<>
@@ -489,30 +513,21 @@ const MainInformation = () => {
 														},
 													},
 												}}
-												sx={{
-													width: "100%",
-													fontSize: "18px",
-													"& .MuiSelect-select.MuiSelect-outlined": {
-														paddingRight: "50px !important",
-													},
-													"& .MuiOutlinedInput-root": {
-														"& :hover": {
-															border: "none",
-														},
-													},
-													"& .MuiOutlinedInput-notchedOutline": {
-														border: "1px solid #ededed",
-													},
-													"& .MuiSelect-icon": {
-														right: "95%",
-													},
-												}}
+												sx={selectStyle}
 												IconComponent={IoIosArrowDown}
 												displayEmpty
 												inputProps={{ "aria-label": "Without label" }}
 												renderValue={(selected) => {
-													if (country?.length === 0) {
-														return <span>اختر الدولة</span>;
+													if (
+														country === "" ||
+														!selected ||
+														country === "undefined"
+													) {
+														return (
+															<span style={{ color: "#7d7d7d" }}>
+																اختر الدولة
+															</span>
+														);
 													}
 													const result = countryList?.data?.countries?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
@@ -575,32 +590,20 @@ const MainInformation = () => {
 														},
 													},
 												}}
-												sx={{
-													width: "100%",
-													fontSize: "18px",
-
-													"& .MuiSelect-select.MuiSelect-outlined": {
-														paddingRight: "50px !important",
-													},
-
-													"& .MuiOutlinedInput-root": {
-														"& :hover": {
-															border: "none",
-														},
-													},
-													"& .MuiOutlinedInput-notchedOutline": {
-														border: "1px solid #ededed",
-													},
-													"& .MuiSelect-icon": {
-														right: "95%",
-													},
-												}}
+												sx={selectStyle}
 												IconComponent={IoIosArrowDown}
 												displayEmpty
-												inputProps={{ "aria-label": "Without label" }}
 												renderValue={(selected) => {
-													if (city?.length === 0) {
-														return <span>اختر المدينة</span>;
+													if (
+														city === "" ||
+														city === "undefined" ||
+														!selected
+													) {
+														return (
+															<span style={{ color: "#7d7d7d" }}>
+																اختر المدينة
+															</span>
+														);
 													}
 													const result = citiesList?.data?.cities?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
@@ -654,9 +657,15 @@ const MainInformation = () => {
 													className='text-right form-control store-desc w-100'
 													name='address'
 													id='address'
-													placeholder='قم بادخال عنوان المتجر '
-													value={`${countryAddress} -  ${cityAddress}`}
+													placeholder='عنوان المتجر يضاف تلقائي'
+													value={
+														countryAddress &&
+														cityAddress &&
+														`${countryAddress} -  ${cityAddress}
+													`
+													}
 													onChange={() => console.log("test")}
+													readonly
 													rows='3'
 												/>
 											</div>
