@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import ImageUploading from "react-images-uploading";
 import { Fragment } from "react";
 import { MdFileUpload } from "react-icons/md";
+import { UploadIcon } from "../../../data/Icons";
 
 const UploadStoreLogo = ({
 	storeLogo,
@@ -116,15 +117,35 @@ const UploadStoreLogo = ({
 												className='img-fluid'
 											/>
 										</div>
-									) : (
-										<div className='upload-image-bx mb-2'>
-											<img
-												src={defaultStoreLogo}
-												alt={""}
-												className='img-fluid'
-											/>
-										</div>
-									)}
+									) :
+										defaultStoreLogo ?
+											(
+												<div className='upload-image-bx mb-2'>
+													<img
+														src={defaultStoreLogo}
+														alt={""}
+														className='img-fluid'
+													/>
+												</div>
+											)
+											:
+											(
+												<div
+													style={{ cursor:"pointer" }}
+													onClick={() => {
+														onImageUpload();
+													}}
+													className='h-100 d-flex flex-column align-items-center justify-content-center gap-3'
+													{...dragProps}
+												>
+													<UploadIcon width="40px" height="40px" />
+													<div className='add-image-btn'>
+														<label htmlFor='add-image'> اسحب الصورة هنا</label>
+													</div>
+													<span style={{ fontSize: "1rem", color: "#7d7d7d" }}>( سيتم قبول الصور jpeg & png & jpg )</span>
+												</div>
+											)
+									}
 								</div>
 
 								{/** upload btn */}
