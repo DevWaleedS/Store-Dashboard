@@ -143,7 +143,7 @@ const CreateNewPassword = () => {
 									style={{ textAlign: "right" }}
 									autoComplete='off'
 									value={password}
-									placeholder='********'
+									placeholder=''
 									maxLength={24}
 									minLength={8}
 									onChange={(e) => setPassword(e.target.value)}
@@ -186,7 +186,7 @@ const CreateNewPassword = () => {
 									style={{ textAlign: "right" }}
 									autoComplete='off'
 									value={confirmPassword}
-									placeholder='********'
+									placeholder=''
 									maxLength={24}
 									minLength={8}
 									onChange={(e) => setConfirmPassword(e.target.value)}

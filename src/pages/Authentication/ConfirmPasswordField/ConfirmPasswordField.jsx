@@ -43,7 +43,7 @@ const ConfirmPasswordField = ({
 					style={{ textAlign: "right" }}
 					autoComplete='off'
 					value={password}
-					placeholder='********'
+					placeholder=''
 					maxLength={24}
 					minLength={8}
 					onChange={(e) => setPassword(e.target.value)}

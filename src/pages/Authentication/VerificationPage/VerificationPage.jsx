@@ -14,7 +14,7 @@ const VerificationPage = () => {
 
     // if user is verify his account
     const NavigateToDashboardPage = () => {
-        window.location.href = "/";
+        window.location.href = "/auth/login";
     };
 
     const contextStore = useContext(Context);

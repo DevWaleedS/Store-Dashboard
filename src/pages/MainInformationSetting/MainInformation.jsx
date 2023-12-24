@@ -146,10 +146,10 @@ const MainInformation = () => {
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-							"00966"
-					  )
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-					: fetchedData?.data?.setting_store?.user?.phonenumber
+						"00966"
+					)
+						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+						: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
@@ -185,14 +185,8 @@ const MainInformation = () => {
 
 		let formData = new FormData();
 
-		// Check if a new logo is uploaded, otherwise use the existing one
-		if (storeLogo?.length !== 0) {
-			formData.append("logo", storeLogo[0]?.file);
-		}
-		// Check if a new icon is uploaded, otherwise use the existing one
-		if (storeIcon?.length !== 0) {
-			formData.append("icon", storeIcon[0]?.file);
-		}
+		formData.append("logo", storeLogo[0]?.file || defaultStoreLogo || "");
+		formData.append("icon", storeIcon[0]?.file || defaultStoreIcon || "");
 		formData.append("store_name", storeName);
 		formData.append("domain", domain);
 		formData.append("country_id", country);
@@ -264,6 +258,15 @@ const MainInformation = () => {
 						storeEmail: res?.data?.message?.en?.store_email?.[0],
 						phoneNumber: res?.data?.message?.en?.phonenumber?.[0],
 						description: res?.data?.message?.en?.description?.[0],
+					});
+					toast.error(res?.data?.message?.en?.logo?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.icon?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
 					});
 					toast.error(res?.data?.message?.ar, {
 						theme: "light",
@@ -514,7 +517,7 @@ const MainInformation = () => {
 													const result = countryList?.data?.countries?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
 													);
-													setCountryAddress(result?.[0]?.name);
+													setCountryAddress(result?.[0]?.name || "");
 													return result?.[0]?.name;
 												}}>
 												{countryList?.data?.countries?.map((item, idx) => {
@@ -602,7 +605,7 @@ const MainInformation = () => {
 													const result = citiesList?.data?.cities?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
 													);
-													setCityAddress(result?.[0]?.name);
+													setCityAddress(result?.[0]?.name || "");
 
 													return result?.[0]?.name;
 												}}>
