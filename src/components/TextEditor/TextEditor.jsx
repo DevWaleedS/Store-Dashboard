@@ -22,6 +22,14 @@ const TextEditor = ({ ToolBar, placeholder, readOnly }) => {
 			[{ list: "ordered" }, { list: "bullet" }],
 			["link", "image"],
 		];
+	} else if (ToolBar === "product") {
+		toolbarOptions = [
+			["italic", "underline", "bold"],
+			[{ align: [] }],
+			[{ background: [] }, { color: [] }],
+			[{ list: "ordered" }, { list: "bullet" }],
+			["link", "image"],
+		];
 	} else if (ToolBar === "emptyCart") {
 		toolbarOptions = [
 			["italic", "underline", "bold"],

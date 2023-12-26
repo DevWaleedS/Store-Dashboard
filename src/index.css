@@ -8211,6 +8211,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .add-new-product-form .rti--container .rti--input::placeholder {
 	color: #505050;
 }
+.product-texteditor .quill .ql-container.ql-snow{
+	height: 150px;
+	border: none;
+}
+.product-texteditor .ql-toolbar.ql-snow{
+	border-color: #e6e4e4;
+}
 
 .seo-store-page .data-container .inputs-group .input .rti--container .rti--tag {
 	width: fit-content;

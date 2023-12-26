@@ -12,11 +12,11 @@ import { useNavigate, useParams } from "react-router-dom";
 // Components
 import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-
+import { TextEditor } from "../../components/TextEditor";
 // Context
 import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
-
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 // MUI
 
 import Box from "@mui/material/Box";
@@ -78,6 +78,8 @@ const EditProductPage = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+	const editorContent = useContext(TextEditorContext);
+	const { editorValue, setEditorValue } = editorContent;
 	const [product, setProduct] = useState({
 		name: "",
 		short_description: "",
@@ -141,7 +143,6 @@ const EditProductPage = () => {
 				...product,
 				name: fetchedData?.data?.product?.name,
 				short_description: fetchedData?.data?.product?.short_description,
-				description: fetchedData?.data?.product?.description,
 				selling_price: fetchedData?.data?.product?.selling_price,
 				category_id: fetchedData?.data?.product?.category?.id,
 				discount_price: fetchedData?.data?.product?.discount_price,
@@ -151,6 +152,7 @@ const EditProductPage = () => {
 				stock: fetchedData?.data?.product?.stock,
 				weight: fetchedData?.data?.product?.weight,
 			});
+			setEditorValue(fetchedData?.data?.product?.description);
 			setGoogleAnalyticsLink(
 				fetchedData?.data?.product?.google_analytics || ""
 			);
@@ -350,7 +352,7 @@ const EditProductPage = () => {
 		formData.append("_method", "PUT");
 		formData.append("name", data?.name);
 		formData.append("short_description", data?.short_description);
-		formData.append("description", data?.description);
+		formData.append("description", editorValue);
 		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
 		formData.append("discount_price", data?.discount_price);
@@ -395,6 +397,7 @@ const EditProductPage = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Products");
 					setReload(!reload);
+					setEditorValue(null);
 				} else {
 					setLoadingTitle("");
 					setProductError({
@@ -607,14 +610,11 @@ const EditProductPage = () => {
 													وصف المنتج<span className='important-hint'>*</span>
 												</label>
 											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<textarea
-													name='description'
-													id='product-desc'
-													placeholder='قم بكتابة وصف واضح للمنتج'
-													{...register("description", {
-														required: "حقل الوصف مطلوب",
-													})}></textarea>
+											<div className='col-lg-7 col-md-9 col-12 product-texteditor'>
+												<TextEditor
+													ToolBar={"product"}
+													placeholder={'قم بكتابة وصف واضح للمنتج'}
+												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -649,9 +649,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																	{
+																		paddingRight: "20px",
+																	},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -739,7 +739,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-													subcategory[0]?.subcategory?.length === 0 ? (
+														subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -749,9 +749,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -999,16 +999,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-													product?.selling_price === ""
+														product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -1134,9 +1134,9 @@ const EditProductPage = () => {
 																const isVideo =
 																	image?.data_url?.includes(
 																		"video/mp4" ||
-																			"video/avi" ||
-																			"video/mov" ||
-																			"video/mkv"
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
 																	) ||
 																	image?.image?.includes(
 																		".mp4" || ".avi" || ".mov" || ".mkv"
@@ -1237,7 +1237,7 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
-										
+
 									</div>
 
 									{/* Save and cancle buttons */}
