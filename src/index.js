@@ -20,7 +20,6 @@ import "bootstrap/dist/js/bootstrap.bundle";
 // IMPORT ALL PAGES
 import RootLayout from "./pages/RootLayout";
 
-
 // INDEX CSS FILE
 import "./index.css";
 
@@ -45,7 +44,7 @@ import {
 	PaintStore,
 	SEOStore,
 	CartPage,
-	CheckoutPage
+	CheckoutPage,
 } from "./pages";
 
 import { Rating } from "./pages/Rating";
@@ -56,7 +55,7 @@ import { Academy } from "./pages/Academy";
 import { CourseDetails } from "./pages/Academy/Courses";
 import { ExplainDetails } from "./pages/Academy/Explains";
 
-import { Products } from "./pages/Products";
+import { AddNewProduct, EditProduct, Products } from "./pages/Products";
 import { ErrorPage } from "./pages/ErrorPage";
 import { VerifyStore } from "./pages/VerifyStore";
 import { TemplateSetting } from "./pages/TemplateSetting";
@@ -74,8 +73,6 @@ import {
 	EditRole,
 	UserData,
 	EditCategory,
-	AddNewProduct,
-	EditProductPage,
 	CreateRole,
 	AddCategory,
 	AddNewUser,
@@ -106,15 +103,16 @@ import {
 	ShowImportEtlobhaProduct,
 } from "./pages/nestedPages/SouqOtlbha";
 
+import { MainInformation } from "./pages/MainInformationSetting";
 import { OrderDetails } from "./pages/nestedPages/orderDetails";
 
 // Login and reset password  pages
+import Main from "./pages/Authentication/Main/Main";
+
 import { RestorePassword } from "./pages/Authentication/Login/ResetPasswordPages/RestorePassword";
 import { CreateNewPassword } from "./pages/Authentication/Login/ResetPasswordPages/CreateNewPassword";
 import SendVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
 import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
-import { MainInformation } from "./pages/MainInformationSetting";
-import Main from "./pages/Authentication/Main/Main";
 import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
 
 /**
@@ -124,7 +122,7 @@ import VerificationPage from "./pages/Authentication/VerificationPage/Verificati
  */
 
 const router = createBrowserRouter([
-	{ path: '/auth/:type', element: <Main /> },
+	{ path: "/auth/:type", element: <Main /> },
 	{ path: "VerificationPage", element: <VerificationPage /> },
 	// RestorePassword Pages
 	{
@@ -273,7 +271,7 @@ const router = createBrowserRouter([
 			// nested Edit Product Page
 			{
 				path: "Products/EditProduct/:id",
-				element: <EditProductPage />,
+				element: <EditProduct />,
 			},
 			// ShowImportEtlobhaProduct page
 			{

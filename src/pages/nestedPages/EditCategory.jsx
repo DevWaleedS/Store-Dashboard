@@ -106,7 +106,7 @@ const EditCategory = () => {
 		}
 	};
 
-	// to get all data from api
+	/** to get all data from api */
 	useEffect(() => {
 		setCategory({
 			...category,
@@ -118,7 +118,7 @@ const EditCategory = () => {
 		reset(category);
 	}, [category, reset]);
 
-	// update category function
+	/** update category function */
 	const updateCategory = (data) => {
 		setLoadingTitle("جاري تعديل النشاط أو التصنيف");
 		let formData = new FormData();
@@ -128,7 +128,7 @@ const EditCategory = () => {
 			formData.append("icon", icons[0]?.file || null);
 		}
 
-		// to select all subcategories
+		/** to select all subcategories */
 		for (let i = 0; i < subCategories?.length; i++) {
 			if (subCategories[i]?.name !== "") {
 				formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
@@ -152,6 +152,7 @@ const EditCategory = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Category");
 					setReload(!reload);
+					setSubCategories([]);
 				} else {
 					setLoadingTitle("");
 
@@ -171,10 +172,9 @@ const EditCategory = () => {
 					});
 				}
 			});
-		setSubCategories([]);
 	};
 
-	// to edit the sub category
+	/** to edit the sub category */
 	const updateSubCatChanged = (e, index) => {
 		const newArray = subCategories?.map((item, i) => {
 			if (index === i) {
@@ -186,7 +186,7 @@ const EditCategory = () => {
 		setSubCategories(newArray);
 	};
 
-	// to get all subcategoris
+	/**	 to get all subcategoris */
 	useEffect(() => {
 		if (fetchedData?.data?.categories) {
 			for (
@@ -213,7 +213,10 @@ const EditCategory = () => {
 			<div className='' open={true}>
 				<Modal
 					open={true}
-					onClose={() => navigate("/Category")}
+					onClose={() => {
+						setSubCategories([]);
+						navigate("/Category");
+					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box component={"div"} sx={style}>

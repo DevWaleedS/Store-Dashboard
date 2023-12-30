@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
@@ -22,6 +22,10 @@ function CheckoutPage() {
 	const { fetchedData: citiesData } = useFetch(
 		"https://backend.atlbha.com/api/selector/shippingcities/5"
 	);
+	const { fetchedData: defaultAddress } = useFetch(
+		"https://backend.atlbha.com/api/show_default_address"
+	);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const [paymentSelect, setPaymentSelect] = useState(null);
@@ -36,6 +40,27 @@ function CheckoutPage() {
 		defaultAddress: true,
 	});
 
+	/** set the default address */
+	useEffect(() => {
+		if (defaultAddress) {
+			setShipping({
+				...shipping,
+				id: defaultAddress?.data?.orderAddress?.id,
+				district: defaultAddress?.data?.orderAddress?.district,
+				city: defaultAddress?.data?.orderAddress?.city,
+				address: defaultAddress?.data?.orderAddress?.street_address,
+				postCode: defaultAddress?.data?.orderAddress?.postCode,
+				notes: defaultAddress?.data?.orderAddress?.notes,
+				defaultAddress:
+					defaultAddress?.data?.orderAddress?.default_address === "1"
+						? true
+						: false,
+			});
+		}
+	}, [defaultAddress]);
+	/* -------------------------------------------- */
+
+	/** Errors  */
 	const [error, setError] = useState({
 		district: "",
 		city: "",
@@ -57,6 +82,7 @@ function CheckoutPage() {
 			shippingType: "",
 		});
 	};
+	/** ----------------------------- */
 
 	function removeDuplicates(arr) {
 		const unique = arr?.filter((obj, index) => {
@@ -348,14 +374,13 @@ function CheckoutPage() {
 																	className='input'
 																	type='checkbox'
 																	id='checkout-create-account'
-																	value={!shipping?.defaultAddress}
+																	checked={shipping?.defaultAddress}
 																	onChange={(e) => {
 																		setShipping({
 																			...shipping,
 																			defaultAddress: e.target.checked,
 																		});
 																	}}
-																	checked={shipping?.defaultAddress}
 																/>
 																<span className='input-check-box' />
 																<Check9x7Svg className='input-check-icon' />

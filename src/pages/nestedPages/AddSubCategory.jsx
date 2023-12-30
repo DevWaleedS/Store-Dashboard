@@ -49,11 +49,7 @@ const AddSubCategory = () => {
 
 	return (
 		<div className='add-category-form bg-white' open={isOpen}>
-			<Modal
-				open={isOpen}
-				onClose={() => dispatch(closeAddSubCategory())}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'>
+			<Modal open={isOpen} onClose={() => dispatch(closeAddSubCategory())}>
 				<Box component={"div"} sx={style}>
 					<div
 						className='add-form-wrapper bg-white'

@@ -283,8 +283,9 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={`video_wrapper ${isActive === index ? "active" : ""
-																				}`}>
+																			className={`video_wrapper ${
+																				isActive === index ? "active" : ""
+																			}`}>
 																			<video
 																				onClick={() => {
 																					setImagesPreview(item?.image);
@@ -313,8 +314,9 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={` d-flex justify-content-center align-items-center ${isActive === index ? "active" : ""
-																				}`}>
+																			className={` d-flex justify-content-center align-items-center ${
+																				isActive === index ? "active" : ""
+																			}`}>
 																			<img
 																				style={{
 																					cursor: "pointer",
@@ -379,9 +381,11 @@ const ShowImportEtlobhaProduct = () => {
 													}}>
 													<div
 														style={{ whiteSpace: "normal" }}
-														className='price w-100 d-flex justify-content-start align-items-start p-2'>
-														{fetchedData?.data?.product?.description}
-													</div>
+														className='price w-100 d-flex justify-content-start align-items-start p-2'
+														dangerouslySetInnerHTML={{
+															__html: fetchedData?.data?.product?.description,
+														}}
+													/>
 												</div>
 											</div>
 
@@ -447,7 +451,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
 													{fetchedData?.data?.product?.subcategory?.length ===
-														0 ? (
+													0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -579,11 +583,11 @@ const ShowImportEtlobhaProduct = () => {
 													Number(
 														fetchedData?.data?.product?.purchasing_price
 													) && (
-														<span className='fs-6 text-danger'>
-															السعر يجب ان يكون اكبر من او يساوي (
-															{fetchedData?.data?.product?.purchasing_price})
-														</span>
-													)}
+													<span className='fs-6 text-danger'>
+														السعر يجب ان يكون اكبر من او يساوي (
+														{fetchedData?.data?.product?.purchasing_price})
+													</span>
+												)}
 
 												<div className='fs-6 text-danger'>
 													{errors?.price && errors.price.message}
@@ -595,7 +599,9 @@ const ShowImportEtlobhaProduct = () => {
 
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'>الكمية التي قمت باستيرادها</label>
+												<label htmlFor='price'>
+													الكمية التي قمت باستيرادها
+												</label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div
@@ -613,10 +619,12 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'></div>
 										</div>
 
-										{Number(fetchedData?.data?.product?.stock) <= 1 &&
+										{Number(fetchedData?.data?.product?.stock) <= 1 && (
 											<div className='row mb-md-5 mb-3'>
 												<div className='col-md-3 col-12'>
-													<label htmlFor='price'>يمكنك استيراد كمية جديدة</label>
+													<label htmlFor='price'>
+														يمكنك استيراد كمية جديدة
+													</label>
 												</div>
 												<div className='col-md-7 col-12'>
 													<div
@@ -633,8 +641,7 @@ const ShowImportEtlobhaProduct = () => {
 												</div>
 												<div className='col-md-3 col-12'></div>
 											</div>
-										}
-
+										)}
 									</div>
 									<div className='form-footer'>
 										<div className='row d-flex justify-content-center align-items-center'>

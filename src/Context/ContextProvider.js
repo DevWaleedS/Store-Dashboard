@@ -22,7 +22,7 @@ const ContextProvider = (props) => {
 			setTimeout(() => {
 				setEndActionTitle(null);
 				setActionWarning(false);
-			}, 2000);
+			}, 1000);
 		}
 	}, [title]);
 
@@ -50,7 +50,7 @@ const ContextProvider = (props) => {
 		showAlertModal,
 		setShowAlertModal,
 		message,
-		setMessage
+		setMessage,
 	};
 
 	return <Context.Provider value={context}>{props.children}</Context.Provider>;

@@ -10,15 +10,16 @@ import { TagsInput } from "react-tag-input-component";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
-import CircularLoading from "../../HelperComponents/CircularLoading";
-import { TextEditor } from "../../components/TextEditor";
-// Context
-import Context from "../../Context/context";
-import { LoadingContext } from "../../Context/LoadingProvider";
-import { TextEditorContext } from "../../Context/TextEditorProvider";
-// MUI
+import useFetch from "../../../Hooks/UseFetch";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { TextEditor } from "../../../components/TextEditor";
 
+// Context
+import Context from "../../../Context/context";
+import { LoadingContext } from "../../../Context/LoadingProvider";
+import { TextEditorContext } from "../../../Context/TextEditorProvider";
+
+// MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -30,19 +31,11 @@ import Checkbox from "@mui/material/Checkbox";
 import { useForm, Controller } from "react-hook-form";
 
 // Icons
-import { BsPlayCircle } from "react-icons/bs";
+import { UploadIcon } from "../../../data/Icons";
+import { PlayVideo } from "../../../data/images";
 import { TiDeleteOutline } from "react-icons/ti";
 import CloseIcon from "@mui/icons-material/Close";
 import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
-import {
-	InstagramIcon,
-	LinkIcon,
-	SnapchatIcon,
-	TiktokIcon,
-	TwitterIcon,
-	UploadIcon,
-} from "../../data/Icons";
-import { PlayVideo } from "../../data/images";
 
 const style = {
 	position: "fixed",
@@ -64,7 +57,7 @@ const style = {
 	},
 };
 
-const EditProductPage = () => {
+const EditProduct = () => {
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -90,23 +83,13 @@ const EditProductPage = () => {
 		subcategory_id: [],
 		stock: "",
 		weight: "",
-		snapchat: "",
-		twitter: "",
-		tiktok: "",
-		instagram: "",
 	});
 
 	// --------------------------------------------
 	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
-	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
 	const [SEOdescription, setSEOdescription] = useState([]);
 	const [multiImages, setMultiImages] = useState([]);
 	const [icon, setIcon] = React.useState([]);
-	const [robotLink, setRobotLink] = useState("");
-	const [instagram, setInstagram] = useState("");
-	const [snapchat, setSnapchat] = useState("");
-	const [twitter, setTwitter] = useState("");
-	const [tiktok, setTiktok] = useState("");
 	const [url, setUrl] = useState("");
 
 	const {
@@ -153,33 +136,13 @@ const EditProductPage = () => {
 				weight: fetchedData?.data?.product?.weight,
 			});
 			setEditorValue(fetchedData?.data?.product?.description);
-			setGoogleAnalyticsLink(
-				fetchedData?.data?.product?.google_analytics || ""
-			);
-			setRobotLink(fetchedData?.data?.product?.robot_link || "");
-			setSnapchat(fetchedData?.data?.product?.snappixel || "");
-			setTwitter(fetchedData?.data?.product?.twitterpixel || "");
-			setTiktok(fetchedData?.data?.product?.tiktokpixel || "");
-			setInstagram(fetchedData?.data?.product?.instapixel || "");
+
 			setSEOdescription(
 				fetchedData?.data?.product?.SEOdescription.map((seo) => seo)
 			);
 			setMultiImages(fetchedData?.data?.product?.images.map((image) => image));
 		}
 	}, [fetchedData?.data?.product]);
-
-	// to handle errors of Google Analytics Link
-	const LINK_REGEX =
-		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
-		useState(false);
-	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
-		useState(false);
-
-	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
-		setValidGoogleAnalyticsLink(storeLinkValidation);
-	}, [googleAnalyticsLink]);
 
 	// ---------------------------------------------
 
@@ -196,13 +159,7 @@ const EditProductPage = () => {
 		stock: "",
 		weight: "",
 		SEOdescription: "",
-		googleAnalyticsLink: "",
-		robotLink: "",
 		images: [],
-		snappixel: "",
-		twitterpixel: "",
-		tiktokpixel: "",
-		instapixel: "",
 	});
 
 	const resetCouponError = () => {
@@ -218,13 +175,7 @@ const EditProductPage = () => {
 			stock: "",
 			weight: "",
 			SEOdescription: "",
-			googleAnalyticsLink: "",
-			robotLink: "",
 			images: [],
-			snappixel: "",
-			twitterpixel: "",
-			tiktokpixel: "",
-			instapixel: "",
 		});
 	};
 
@@ -359,12 +310,6 @@ const EditProductPage = () => {
 		formData.append("stock", data?.stock);
 		formData.append("weight", data?.weight);
 		formData.append("SEOdescription", SEOdescription.join(","));
-		formData.append("google_analytics", googleAnalyticsLink);
-		formData.append("robot_link", robotLink);
-		formData.append("snappixel", snapchat);
-		formData.append("twitterpixel", twitter);
-		formData.append("tiktokpixel", tiktok);
-		formData.append("instapixel", instagram);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
 		}
@@ -412,13 +357,7 @@ const EditProductPage = () => {
 						stock: res?.data?.message?.en?.stock?.[0],
 						weight: res?.data?.message?.en?.weight?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
-						googleAnalyticsLink: res?.data?.message?.en?.google_analytics?.[0],
-						robotLink: res?.data?.message?.en?.robot_link?.[0],
 						images: res?.data?.message?.en?.["images.0"]?.[0],
-						snappixel: res?.data?.message?.en?.snappixel?.[0],
-						twitterpixel: res?.data?.message?.en?.twitterpixel?.[0],
-						tiktokpixel: res?.data?.message?.en?.tiktokpixel?.[0],
-						instapixel: res?.data?.message?.en?.instapixel?.[0],
 					});
 
 					toast.error(res?.data?.message?.en?.name?.[0], {
@@ -452,28 +391,11 @@ const EditProductPage = () => {
 					toast.error(res?.data?.message?.en?.weight?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.google_analytics?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.robot_link?.[0], {
-						theme: "light",
-					});
+
 					toast.error(res?.data?.message?.en?.SEOdescription?.[0], {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.images?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.snappixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.twitterpixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.tiktokpixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.instapixel?.[0], {
 						theme: "light",
 					});
 				}
@@ -613,7 +535,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12 product-texteditor'>
 												<TextEditor
 													ToolBar={"product"}
-													placeholder={'قم بكتابة وصف واضح للمنتج'}
+													placeholder={"قم بكتابة وصف واضح للمنتج"}
 												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -649,9 +571,9 @@ const EditProductPage = () => {
 																sx={{
 																	fontSize: "18px",
 																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																		{
+																			paddingRight: "20px",
+																		},
 																	"& .MuiOutlinedInput-root": {
 																		"& :hover": {
 																			border: "none",
@@ -739,7 +661,7 @@ const EditProductPage = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-														subcategory[0]?.subcategory?.length === 0 ? (
+													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -749,9 +671,9 @@ const EditProductPage = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -999,16 +921,16 @@ const EditProductPage = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-														product?.selling_price === ""
+													product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -1134,9 +1056,9 @@ const EditProductPage = () => {
 																const isVideo =
 																	image?.data_url?.includes(
 																		"video/mp4" ||
-																		"video/avi" ||
-																		"video/mov" ||
-																		"video/mkv"
+																			"video/avi" ||
+																			"video/mov" ||
+																			"video/mkv"
 																	) ||
 																	image?.image?.includes(
 																		".mp4" || ".avi" || ".mov" || ".mkv"
@@ -1237,7 +1159,6 @@ const EditProductPage = () => {
 												</span>
 											</div>
 										</div>
-
 									</div>
 
 									{/* Save and cancle buttons */}
@@ -1267,4 +1188,4 @@ const EditProductPage = () => {
 	);
 };
 
-export default EditProductPage;
+export default EditProduct;

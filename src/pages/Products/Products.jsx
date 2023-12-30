@@ -92,13 +92,6 @@ const Products = () => {
 				weight: item?.weight,
 				stock: item?.stock,
 				cover: item?.cover,
-				seo: item?.SEOdescription,
-				snappixel: item?.snappixel,
-				tiktokpixel: item?.tiktokpixel,
-				twitterpixel: item?.twitterpixel,
-				instapixel: item?.instapixel,
-				robot_link: item?.robot_link,
-				google_analytics: item?.google_analytics,
 			}))
 		);
 		const wb = { Sheets: { data: ws }, SheetNames: ["data"] };

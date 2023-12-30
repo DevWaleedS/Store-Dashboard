@@ -176,7 +176,10 @@ const AddCategory = () => {
 			<div className='add-category-form' open={true}>
 				<Modal
 					open={true}
-					onClose={() => navigate("/Category")}
+					onClose={() => {
+						setSubCategories([]);
+						navigate("/Category");
+					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box component={"div"} sx={style}>

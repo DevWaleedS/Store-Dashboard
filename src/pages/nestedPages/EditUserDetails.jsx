@@ -21,7 +21,13 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 // Icons
-import { Message, Mobile, Phone, UploadUserImageIcon, Eye } from "../../data/Icons";
+import {
+	Message,
+	Mobile,
+	Phone,
+	UploadUserImageIcon,
+	Eye,
+} from "../../data/Icons";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 
 const style = {
@@ -101,7 +107,9 @@ const EditUserDetails = () => {
 
 	// Show and hidden confirm password function
 	const [passwordConfirmType, setPasswordConfirmType] = useState("password");
-	const [showPasswordConfirmIcon, setShowPasswordConfirmIcon] = useState(<Eye />);
+	const [showPasswordConfirmIcon, setShowPasswordConfirmIcon] = useState(
+		<Eye />
+	);
 	const showPasswordConfirmToggle = () => {
 		if (passwordConfirmType === "password") {
 			setPasswordConfirmType("text");
@@ -145,8 +153,8 @@ const EditUserDetails = () => {
 				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.users?.phonenumber?.slice(4)
 					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
-						? fetchedData?.data?.users?.phonenumber.slice(5)
-						: fetchedData?.data?.users?.phonenumber,
+					? fetchedData?.data?.users?.phonenumber.slice(5)
+					: fetchedData?.data?.users?.phonenumber,
 			});
 		}
 	}, [fetchedData?.data?.users]);
@@ -440,12 +448,15 @@ const EditUserDetails = () => {
 													البريد الالكتروني
 												</label>
 												<input
-													style={{ direction: "ltr", textAlign: "left",cursor:"auto" }}
+													style={{
+														direction: "ltr",
+														textAlign: "left",
+														cursor: "auto",
+													}}
 													name='email'
 													type='email'
 													placeholder='Omar.sample@sa.com'
-													{...register("email", {
-													})}
+													{...register("email", {})}
 													disabled
 												/>
 												<br />
@@ -460,7 +471,7 @@ const EditUserDetails = () => {
 												<label className='d-block mb-2' htmlFor='password'>
 													كلمة المرور
 												</label>
-												<div className="password-type">
+												<div className='password-type'>
 													<input
 														name='password'
 														type={passwordType}
@@ -529,7 +540,7 @@ const EditUserDetails = () => {
 												<label className='d-block mb-2' htmlFor='re-password'>
 													تأكيد كلمة المرور
 												</label>
-												<div className="password-type">
+												<div className='password-type'>
 													<input
 														name='confirm_password'
 														type={passwordConfirmType}
@@ -566,10 +577,9 @@ const EditUserDetails = () => {
 													name='phonenumber'
 													type='tel'
 													placeholder={500000000}
-													{...register("phonenumber", {
-													})}
+													{...register("phonenumber", {})}
 													disabled
-													style={{ cursor:"auto" }}
+													style={{ cursor: "auto" }}
 												/>
 
 												<span className='input-icon'>

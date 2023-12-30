@@ -11,6 +11,7 @@ import VerifyStoreModalSlice from "./slices/VerifyStoreModal-slice";
 import DelegateRequestAlert from "./slices/DelegateRequestAlert-slice";
 import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
 import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
+import ProductOptionModal from "./slices/ProductOptionModal";
 
 // store
 export const store = configureStore({
@@ -24,6 +25,7 @@ export const store = configureStore({
 		VideoModal: VideoModalSlice,
 		AddSubActivity: AddSubActivity,
 		VerifyModal: VerifyStoreModalSlice,
+		ProductOptionModal: ProductOptionModal,
 		AddSubCategorySlice: AddSubCategorySlice,
 		MaintenanceModeModal: MaintenanceModeModal,
 		DelegateRequestAlert: DelegateRequestAlert,

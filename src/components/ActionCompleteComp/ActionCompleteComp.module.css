@@ -42,8 +42,8 @@
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	animation: anim 2s ease-out;
-	-webkit-animation: anim 2s ease-out;
+	animation: anim 1s ease-out;
+	-webkit-animation: anim 1s ease-out;
 }
 
 .fcc {

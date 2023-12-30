@@ -370,9 +370,13 @@ const ProductRefund = () => {
 												<div className='label about-product-label mb-2'>
 													نبذة عن المنتج
 												</div>
-												<div className='input textarea '>
-													{fetchedData?.data?.products?.description}
-												</div>
+
+												<div
+													className='input textarea'
+													dangerouslySetInnerHTML={{
+														__html: fetchedData?.data?.products?.description,
+													}}
+												/>
 											</div>
 										</div>
 									</div>

@@ -10,9 +10,9 @@ import ImageUploading from "react-images-uploading";
 import { TagsInput } from "react-tag-input-component";
 
 // Context
-import Context from "../../Context/context";
-import { LoadingContext } from "../../Context/LoadingProvider";
-import { TextEditorContext } from "../../Context/TextEditorProvider";
+import Context from "../../../Context/context";
+import { LoadingContext } from "../../../Context/LoadingProvider";
+import { TextEditorContext } from "../../../Context/TextEditorProvider";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -25,24 +25,22 @@ import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
-import { TextEditor } from "../../components/TextEditor";
-import TextareaCode from "../../components/TextareaCode/TextareaCode";
+
+import useFetch from "../../../Hooks/UseFetch";
+import AddProductOptions from "./AddProductOptions";
+import { TextEditor } from "../../../components/TextEditor";
 
 // icons and images
-import { BsPlayCircle } from "react-icons/bs";
+import { FiPlus } from "react-icons/fi";
+import { UploadIcon } from "../../../data/Icons";
+import { PlayVideo } from "../../../data/images";
 import { TiDeleteOutline } from "react-icons/ti";
 import CloseIcon from "@mui/icons-material/Close";
 import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
-import {
-	InstagramIcon,
-	LinkIcon,
-	SnapchatIcon,
-	TiktokIcon,
-	TwitterIcon,
-	UploadIcon,
-} from "../../data/Icons";
-import { PlayVideo, PlayVideoImage } from "../../data/images";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { openProductOptionModal } from "../../../store/slices/ProductOptionModal";
 
 const style = {
 	position: "fixed",
@@ -73,13 +71,14 @@ const AddNewProduct = () => {
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
-
+	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
+
 	const { setLoadingTitle } = LoadingStore;
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
@@ -122,14 +121,8 @@ const AddNewProduct = () => {
 		subcategory_id: "",
 		stock: "",
 		weight: "",
-		googleAnalyticsLink: "",
-		robotLink: "",
 		SEOdescription: "",
 		images: "",
-		snappixel: "",
-		twitterpixel: "",
-		tiktokpixel: "",
-		instapixel: "",
 	});
 
 	const resetCouponError = () => {
@@ -139,48 +132,23 @@ const AddNewProduct = () => {
 			short_description: "",
 			description: "",
 			selling_price: "",
+			stock: "",
+			weight: "",
+			images: "",
 			category_id: "",
 			discount_price: "",
 			subcategory_id: "",
-			stock: "",
-			weight: "",
-			googleAnalyticsLink: "",
-			robotLink: "",
 			SEOdescription: "",
-			images: "",
-			snappixel: "",
-			twitterpixel: "",
-			tiktokpixel: "",
-			instapixel: "",
 		});
 	};
-	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
-	const [googleAnalyticsLink, setGoogleAnalyticsLink] = useState("");
-	const [SEOdescription, setSEOdescription] = useState([]);
-	const [robotLink, setRobotLink] = useState("");
-	const [instagram, setInstagram] = useState("");
-	const [snapchat, setSnapchat] = useState("");
-	const [twitter, setTwitter] = useState("");
-	const [tiktok, setTiktok] = useState("");
 	const [url, setUrl] = useState("");
+	const [SEOdescription, setSEOdescription] = useState([]);
+	const [shortDescriptionLength, setShortDescriptionLength] = useState(false);
 
-	// to handle close video privew
+	// to handle close video preview
 	const closeVideoModal = () => {
 		setUrl("");
 	};
-
-	// to handle errors of Google Analytics Link
-	const LINK_REGEX =
-		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-	const [validGoogleAnalyticsLink, setValidGoogleAnalyticsLink] =
-		useState(false);
-	const [validGoogleAnalyticsLinkFocus, setValidGoogleAnalyticsLinkFocus] =
-		useState(false);
-
-	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(googleAnalyticsLink);
-		setValidGoogleAnalyticsLink(storeLinkValidation);
-	}, [googleAnalyticsLink]);
 
 	// handle images size
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
@@ -312,13 +280,7 @@ const AddNewProduct = () => {
 		formData.append("discount_price", data?.discount_price);
 		formData.append("stock", data?.stock);
 		formData.append("weight", data?.weight);
-		formData.append("google_analytics", googleAnalyticsLink);
-		formData.append("robot_link", robotLink);
-		formData.append("SEOdescription", SEOdescription.join(","));
-		formData.append("snappixel", snapchat);
-		formData.append("twitterpixel", twitter);
-		formData.append("tiktokpixel", tiktok);
-		formData.append("instapixel", instagram);
+
 		formData.append("cover", icons[0]);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
@@ -355,14 +317,8 @@ const AddNewProduct = () => {
 						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
 						stock: res?.data?.message?.en?.stock?.[0],
 						weight: res?.data?.message?.en?.weight?.[0],
-						googleAnalyticsLink: res?.data?.message?.en?.google_analytics?.[0],
-						robotLink: res?.data?.message?.en?.robot_link?.[0],
 						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
 						images: res?.data?.message?.en?.images?.[0],
-						snappixel: res?.data?.message?.en?.snappixel?.[0],
-						twitterpixel: res?.data?.message?.en?.twitterpixel?.[0],
-						tiktokpixel: res?.data?.message?.en?.tiktokpixel?.[0],
-						instapixel: res?.data?.message?.en?.instapixel?.[0],
 					});
 					toast.error(res?.data?.message?.en?.name?.[0], {
 						theme: "light",
@@ -395,28 +351,11 @@ const AddNewProduct = () => {
 					toast.error(res?.data?.message?.en?.weight?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.google_analytics?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.robot_link?.[0], {
-						theme: "light",
-					});
+
 					toast.error(res?.data?.message?.en?.SEOdescription?.[0], {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.images?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.snappixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.twitterpixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.tiktokpixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.instapixel?.[0], {
 						theme: "light",
 					});
 				}
@@ -548,7 +487,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12 product-texteditor'>
 											<TextEditor
 												ToolBar={"product"}
-												placeholder={'قم بكتابة وصف واضح للمنتج'}
+												placeholder={"قم بكتابة وصف واضح للمنتج"}
 											/>
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
@@ -557,6 +496,170 @@ const AddNewProduct = () => {
 												{productError?.description}
 												{errors?.description && errors.description.message}
 											</span>
+										</div>
+									</div>
+
+									{/* Product Cover image */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label htmlFor='product-image'>
+												{" "}
+												صورة المنتج <span className='important-hint'>*</span>
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div {...getRootProps()}>
+												<div className='add-image-btn-box'>
+													<UploadIcon />
+													<div className='add-image-btn'>
+														<label htmlFor='add-image'> اسحب الصورة هنا</label>
+														<input {...getInputProps()} id='add-image' />
+													</div>
+													<span>( سيتم قبول الصور jpeg & png & jpg )</span>
+
+													<div className='tax-text '>
+														(الحد الأقصي للصورة 1MB)
+													</div>
+												</div>
+											</div>
+
+											{/** preview banner here */}
+											{bannersImage.length > 0 && (
+												<div className=' banners-preview-container'>
+													{bannersImage}
+												</div>
+											)}
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											{productError?.cover && (
+												<span className='fs-6 text-danger'>
+													{productError?.cover}
+												</span>
+											)}
+										</div>
+									</div>
+
+									{/* Multi Product Images */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label htmlFor='product-images'>
+												الصور المتعددة او الفيديو
+												<br />
+												<div
+													className='tax-text'
+													style={{ whiteSpace: "normal" }}>
+													(الحد الأقصي للصورة أو الفيديو 1MB)
+												</div>
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<ImageUploading
+												value={multiImages}
+												onChange={onChangeMultiImages}
+												multiple
+												maxNumber={5}
+												dataURLKey='data_url'
+												acceptType={[
+													"jpg",
+													"png",
+													"jpeg",
+													"svg",
+													"gif",
+													"mp4",
+													"avi",
+													"mov",
+													"mkv",
+												]}
+												allowNonImageType={true}>
+												{({
+													imageList,
+													onImageUpload,
+													onImageRemoveAll,
+													onImageUpdate,
+													onImageRemove,
+													isDragging,
+													dragProps,
+												}) => (
+													// write your building UI
+													<div className='d-flex flex-row align-items-center gap-4'>
+														{imageList.map((image, index) => {
+															const isVideo =
+																image?.data_url?.includes(
+																	"video/mp4" ||
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
+																) || image?.data_url?.endsWith(".mp4");
+															if (isVideo) {
+																return (
+																	<div
+																		key={index}
+																		className='add-product-images'>
+																		<video
+																			style={{ padding: "16px" }}
+																			onClick={() => setUrl(image.data_url)}
+																			src={image.data_url}
+																			poster={PlayVideo}
+																		/>
+
+																		<div className='delete-video-icon'>
+																			<TiDeleteOutline
+																				onClick={() => onImageRemove(index)}
+																				style={{
+																					fontSize: "1.2rem",
+																					color: "red",
+																				}}
+																			/>
+																		</div>
+																	</div>
+																);
+															} else {
+																return (
+																	<div
+																		key={index}
+																		className='add-product-images'>
+																		<img
+																			src={image.data_url}
+																			alt=''
+																			lazy={true}
+																		/>
+																		<div
+																			onClick={() => onImageRemove(index)}
+																			className='delete-icon'>
+																			<TiDeleteOutline
+																				style={{
+																					fontSize: "1.5rem",
+																					color: "red",
+																				}}></TiDeleteOutline>
+																		</div>
+																	</div>
+																);
+															}
+														})}
+														{emptyMultiImages.map((image, idx) => {
+															return (
+																<div
+																	key={idx}
+																	className='add-product-images'
+																	onClick={() => {
+																		onImageUpload();
+																	}}>
+																	<IoIosAddCircle className='add-icon' />
+																</div>
+															);
+														})}
+													</div>
+												)}
+											</ImageUploading>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											{productError?.images && (
+												<span className='fs-6 text-danger'>
+													{productError?.images}
+												</span>
+											)}
 										</div>
 									</div>
 
@@ -594,9 +697,9 @@ const AddNewProduct = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -668,7 +771,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-													subcategory[0]?.subcategory.length === 0 ? (
+												subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{ color: "#1dbbbe" }}>
@@ -680,9 +783,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
+																{
+																	paddingRight: "20px",
+																},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -738,6 +841,126 @@ const AddNewProduct = () => {
 													{productError?.subcategory_id}
 												</span>
 											)}
+										</div>
+									</div>
+
+									{/* Selling price */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
+											<label htmlFor='price'>
+												السعر <span className='important-hint'>*</span>{" "}
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='tax-text'>السعر يشمل الضريبة</div>
+											<Controller
+												name={"selling_price"}
+												control={control}
+												rules={{
+													required: "حقل سعر البيع مطلوب",
+													pattern: {
+														value: /^[0-9.]+$/i,
+														message: "يجب على الحقل سعر البيع أن يكون رقمًا",
+													},
+													min: {
+														value: 1,
+														message: " سعر البيع يجب ان يكون اكبر من 0",
+													},
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														disabled={product?.discount_price}
+														name={"selling_price"}
+														type='text'
+														id='price'
+														value={value}
+														onChange={(e) => {
+															setProduct({
+																...product,
+																selling_price: e.target.value.replace(
+																	/[^\d.]|\.(?=.*\.)/g,
+																	""
+																),
+															});
+															onChange(
+																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
+															);
+														}}
+													/>
+												)}
+											/>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span className='fs-6 text-danger'>
+												{productError?.selling_price}
+												{errors?.selling_price && errors.selling_price.message}
+											</span>
+										</div>
+									</div>
+
+									{/* Discount price */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
+											<label htmlFor='low-price'>السعر بعد الخصم</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='tax-text'>السعر يشمل الضريبة</div>
+											<Controller
+												name={"discount_price"}
+												control={control}
+												render={({ field: { onChange, value } }) => (
+													<input
+														name={"discount_price"}
+														type='text'
+														id='low-price'
+														value={value}
+														onChange={(e) => {
+															setProduct({
+																...product,
+																discount_price: e.target.value.replace(
+																	/[^\d.]|\.(?=.*\.)/g,
+																	""
+																),
+															});
+															onChange(
+																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
+															);
+														}}
+													/>
+												)}
+											/>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										{product?.discount_price && product?.selling_price && (
+											<div className='col-lg-7 col-md-9 col-12'>
+												{Number(product?.selling_price) -
+													Number(product?.discount_price) <=
+													0 && (
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
+											</div>
+										)}
+
+										{product?.discount_price &&
+											product?.selling_price === "" && (
+												<div className='col-lg-7 col-md-9 col-12'>
+													<span className='fs-6' style={{ color: "red" }}>
+														يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
+														سعر الخصم
+													</span>
+												</div>
+											)}
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span
+												className='fs-6 text-danger'
+												style={{ whiteSpace: "normal" }}>
+												{productError?.discount_price}
+												{errors?.discount_price &&
+													errors.discount_price.message}
+											</span>
 										</div>
 									</div>
 
@@ -836,290 +1059,6 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 
-									{/* Selling price */}
-									<div className='row mb-md-5 mb-3'>
-										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-											<label htmlFor='price'>
-												السعر <span className='important-hint'>*</span>{" "}
-											</label>
-										</div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<div className='tax-text'>السعر يشمل الضريبة</div>
-											<Controller
-												name={"selling_price"}
-												control={control}
-												rules={{
-													required: "حقل سعر البيع مطلوب",
-													pattern: {
-														value: /^[0-9.]+$/i,
-														message: "يجب على الحقل سعر البيع أن يكون رقمًا",
-													},
-													min: {
-														value: 1,
-														message: " سعر البيع يجب ان يكون اكبر من 0",
-													},
-												}}
-												render={({ field: { onChange, value } }) => (
-													<input
-														disabled={product?.discount_price}
-														name={"selling_price"}
-														type='text'
-														id='price'
-														value={value}
-														onChange={(e) => {
-															setProduct({
-																...product,
-																selling_price: e.target.value.replace(
-																	/[^\d.]|\.(?=.*\.)/g,
-																	""
-																),
-															});
-															onChange(
-																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
-															);
-														}}
-													/>
-												)}
-											/>
-										</div>
-										<div className='col-lg-3 col-md-3 col-12'></div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
-												{productError?.selling_price}
-												{errors?.selling_price && errors.selling_price.message}
-											</span>
-										</div>
-									</div>
-
-									{/* Discount price */}
-									<div className='row mb-md-5 mb-3'>
-										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-											<label htmlFor='low-price'>السعر بعد الخصم</label>
-										</div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<div className='tax-text'>السعر يشمل الضريبة</div>
-											<Controller
-												name={"discount_price"}
-												control={control}
-												render={({ field: { onChange, value } }) => (
-													<input
-														name={"discount_price"}
-														type='text'
-														id='low-price'
-														value={value}
-														onChange={(e) => {
-															setProduct({
-																...product,
-																discount_price: e.target.value.replace(
-																	/[^\d.]|\.(?=.*\.)/g,
-																	""
-																),
-															});
-															onChange(
-																e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "")
-															);
-														}}
-													/>
-												)}
-											/>
-										</div>
-										<div className='col-lg-3 col-md-3 col-12'></div>
-										{product?.discount_price && product?.selling_price && (
-											<div className='col-lg-7 col-md-9 col-12'>
-												{Number(product?.selling_price) -
-													Number(product?.discount_price) <=
-													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
-											</div>
-										)}
-
-										{product?.discount_price &&
-											product?.selling_price === "" && (
-												<div className='col-lg-7 col-md-9 col-12'>
-													<span className='fs-6' style={{ color: "red" }}>
-														يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
-														سعر الخصم
-													</span>
-												</div>
-											)}
-										<div className='col-lg-7 col-md-9 col-12'>
-											<span
-												className='fs-6 text-danger'
-												style={{ whiteSpace: "normal" }}>
-												{productError?.discount_price}
-												{errors?.discount_price &&
-													errors.discount_price.message}
-											</span>
-										</div>
-									</div>
-
-									{/* Product Cover image */}
-									<div className='row mb-md-5 mb-3'>
-										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='product-image'>
-												{" "}
-												صورة المنتج <span className='important-hint'>*</span>
-											</label>
-										</div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<div {...getRootProps()}>
-												<div className='add-image-btn-box'>
-													<UploadIcon />
-													<div className='add-image-btn'>
-														<label htmlFor='add-image'> اسحب الصورة هنا</label>
-														<input {...getInputProps()} id='add-image' />
-													</div>
-													<span>( سيتم قبول الصور jpeg & png & jpg )</span>
-
-													<div className='tax-text '>
-														(الحد الأقصي للصورة 1MB)
-													</div>
-												</div>
-											</div>
-
-											{/** preview banner here */}
-											{bannersImage.length > 0 && (
-												<div className=' banners-preview-container'>
-													{bannersImage}
-												</div>
-											)}
-										</div>
-										<div className='col-lg-3 col-md-3 col-12'></div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											{productError?.cover && (
-												<span className='fs-6 text-danger'>
-													{productError?.cover}
-												</span>
-											)}
-										</div>
-									</div>
-
-									{/* Multi Product Images */}
-									<div className='row mb-md-5 mb-3'>
-										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='product-images'>
-												الصور المتعددة او الفيديو
-												<br />
-												<div
-													className='tax-text'
-													style={{ whiteSpace: "normal" }}>
-													(الحد الأقصي للصورة أو الفيديو 1MB)
-												</div>
-											</label>
-										</div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<ImageUploading
-												value={multiImages}
-												onChange={onChangeMultiImages}
-												multiple
-												maxNumber={5}
-												dataURLKey='data_url'
-												acceptType={[
-													"jpg",
-													"png",
-													"jpeg",
-													"svg",
-													"gif",
-													"mp4",
-													"avi",
-													"mov",
-													"mkv",
-												]}
-												allowNonImageType={true}>
-												{({
-													imageList,
-													onImageUpload,
-													onImageRemoveAll,
-													onImageUpdate,
-													onImageRemove,
-													isDragging,
-													dragProps,
-												}) => (
-													// write your building UI
-													<div className='d-flex flex-row align-items-center gap-4'>
-														{imageList.map((image, index) => {
-															const isVideo =
-																image?.data_url?.includes(
-																	"video/mp4" ||
-																	"video/avi" ||
-																	"video/mov" ||
-																	"video/mkv"
-																) || image?.data_url?.endsWith(".mp4");
-															if (isVideo) {
-																return (
-																	<div
-																		key={index}
-																		className='add-product-images'>
-																		<video
-																			style={{ padding: "16px" }}
-																			onClick={() => setUrl(image.data_url)}
-																			src={image.data_url}
-																			poster={PlayVideo}
-																		/>
-
-																		<div className='delete-video-icon'>
-																			<TiDeleteOutline
-																				onClick={() => onImageRemove(index)}
-																				style={{
-																					fontSize: "1.2rem",
-																					color: "red",
-																				}}
-																			/>
-																		</div>
-																	</div>
-																);
-															} else {
-																return (
-																	<div
-																		key={index}
-																		className='add-product-images'>
-																		<img
-																			src={image.data_url}
-																			alt=''
-																			lazy={true}
-																		/>
-																		<div
-																			onClick={() => onImageRemove(index)}
-																			className='delete-icon'>
-																			<TiDeleteOutline
-																				style={{
-																					fontSize: "1.5rem",
-																					color: "red",
-																				}}></TiDeleteOutline>
-																		</div>
-																	</div>
-																);
-															}
-														})}
-														{emptyMultiImages.map((image, idx) => {
-															return (
-																<div
-																	key={idx}
-																	className='add-product-images'
-																	onClick={() => {
-																		onImageUpload();
-																	}}>
-																	<IoIosAddCircle className='add-icon' />
-																</div>
-															);
-														})}
-													</div>
-												)}
-											</ImageUploading>
-										</div>
-										<div className='col-lg-3 col-md-3 col-12'></div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											{productError?.images && (
-												<span className='fs-6 text-danger'>
-													{productError?.images}
-												</span>
-											)}
-										</div>
-									</div>
-
 									{/* Key words */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
@@ -1144,6 +1083,18 @@ const AddNewProduct = () => {
 										</div>
 									</div>
 
+									{/* Add Product options */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<button
+												className='product-option-btn w-100'
+												onClick={() => dispatch(openProductOptionModal())}>
+												<FiPlus />
+												إضافة خيارات المنتج
+											</button>
+										</div>
+									</div>
 								</div>
 
 								{/* Save and cancle buttons */}
@@ -1168,6 +1119,9 @@ const AddNewProduct = () => {
 					</Box>
 				</Modal>
 			</div>
+
+			{/* The Product Opthons Modal */}
+			<AddProductOptions />
 		</>
 	);
 };
