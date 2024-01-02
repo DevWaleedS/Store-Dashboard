@@ -113,7 +113,7 @@ const RestorePassword = () => {
 										style={{ direction: phoneNumber ? "ltr" : "rtl" }}
 									/>
 
-									<span>996+</span>
+									<span>966+</span>
 								</div>
 							</div>
 

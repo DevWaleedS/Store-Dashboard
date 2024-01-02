@@ -78,7 +78,10 @@ const LogInVerificationCode = () => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setResetPasswordToken(res?.data?.data?.token);
 					if (res?.data?.message?.ar === "تم التحقق") {
-						navigate("/auth/login");
+						// navigate("/auth/login");
+						localStorage.setItem("store_token", res?.data?.data?.token);
+						// NavigateToDashboardPage();
+						navigate("/");
 					} else {
 						setVerError(res?.data?.message?.ar);
 					}

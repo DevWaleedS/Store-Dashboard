@@ -117,7 +117,9 @@ const AddCategory = () => {
 		resetCategoryError();
 		let formData = new FormData();
 		formData.append("name", data?.name);
-		formData.append("icon", icons[0]?.file || null);
+		if (icons?.length !== 0) {
+			formData.append("icon", icons[0]?.file);
+		}
 
 		// to select all subcategories names
 		for (let i = 0; i < subCategories?.length; i++) {

@@ -72,25 +72,16 @@ const CourseDetails = () => {
 				) : (
 					<>
 						{/* Course image */}
-
-						<div className='row mb-md-5 mb-3'>
-							<div className='col-12'>
-								<div className='course-image'>
-									<img
-										style={{
-											width: fetchedData?.data?.course?.image ? "100%" : "0",
-										}}
-										src={fetchedData?.data?.course?.image}
-										className='img-fluid'
-										loading='lazy'
-										alt={""}
-									/>
-								</div>
-							</div>
-						</div>
-
+						<section className='course-image mb-5'>
+							<img
+								src={fetchedData?.data?.course?.image}
+								className='img-fluid'
+								loading='lazy'
+								alt={""}
+							/>
+						</section>
 						{/* Course details info */}
-						<div className='row mb-5'>
+						<section className='row mb-5'>
 							<div className='course-actions'>
 								<div className='course-name mb-1'>
 									<h4>{fetchedData?.data?.course?.name} </h4>
@@ -200,7 +191,7 @@ const CourseDetails = () => {
 									</div>
 								))}
 							</div>
-						</div>
+						</section>
 					</>
 				)}
 			</section>

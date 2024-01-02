@@ -78,17 +78,15 @@ const ExplainDetails = () => {
 								<h4>{fetchedData?.data?.explainvideos?.title}</h4>
 							</div>
 
-							<div className='col-12 mb-4 d-flex justify-content-center align-items-center'>
-								<div className='explain-video'>
-									<iframe
-										width='100%'
-										height='100%'
-										src={videoUrl}
-										allowFullScreen
-										title={fetchedData?.data?.explainvideos?.title}
-									/>
-								</div>
-							</div>
+							<section className='explain-video'>
+								<iframe
+									width='100%'
+									height='100%'
+									src={videoUrl}
+									allowFullScreen
+									title={fetchedData?.data?.explainvideos?.title}
+								/>
+							</section>
 						</div>
 					)}
 				</div>

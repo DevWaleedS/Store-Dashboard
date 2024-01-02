@@ -81,26 +81,7 @@ const VerifyStore = () => {
 									<CircularLoading />
 								) : (
 									<div className='d-flex justify-content-center align-items-center'>
-										{verificationStatus === "تم التوثيق" ? (
-											<div className='d-flex justify-content-between align-items-center verify-message-box gap-5'>
-												<p className='verify-message'>
-													مرحبا{" "}
-													<span className='text-bold'>
-														{userInfo?.name === null
-															? userInfo?.user_name || "صديقي التاجر"
-															: userInfo?.name}
-													</span>{" "}
-													المتجر الخاص مكتمل التوثيق <Verification />
-												</p>
-												<IoMdCloseCircleOutline
-													style={{ cursor: "pointer", fill: "#02466a" }}
-													fill='#02466a'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}
-												/>
-											</div>
-										) : verificationStatus === "جاري التوثيق" ? (
+										{verificationStatus === "جاري التوثيق" ? (
 											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 												<p className='verify-message'>
 													مرحبا{" "}

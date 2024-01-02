@@ -1,9 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 // Third party
 import axios from "axios";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+
 import { useNavigate } from "react-router-dom";
 
 // Redux
@@ -30,17 +32,17 @@ import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Checkbox, FormControlLabel, Switch } from "@mui/material";
 
-// Modal Styles
+/* Modal Styles */
 const style = {
 	position: "absolute",
 	top: "120px",
 	left: "50%",
 	transform: "translate(-50%, 0%)",
-	width: "1062px",
+	width: "992px",
 	maxWidth: "90%",
 };
 
-// switch style
+/* switch style */
 const switchStyle = {
 	width: "58px",
 	"& .MuiSwitch-track": {
@@ -79,7 +81,10 @@ const switchStyle = {
 			},
 		},
 		"&.Mui-checked:hover": {
-			backgroundColor: "none",
+			backgroundColor: "transparent",
+		},
+		"&:hover": {
+			backgroundColor: "transparent",
 		},
 	},
 };
@@ -128,8 +133,8 @@ const AddProductOptionsModal = () => {
 		(state) => state.ProductOptionModal
 	);
 
-	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
+	const dispatch = useDispatch(false);
 
 	const [activeOptions, setActiveOptions] = useState(false);
 	const [quantityIsUnlimited, setQuantityIsUnlimited] = useState(false);
@@ -137,14 +142,10 @@ const AddProductOptionsModal = () => {
 	/** to handle the option-section */
 	const [optionsSection, setOptionsSection] = useState([
 		{
-			id: 0,
+			id: uuidv4(),
 			name: "",
-			values: [{ id: null, value: "" }],
-
-			/** the product options  */
-			optionName: "",
-			price: "",
-			quantity: "",
+			values: [{ id: uuidv4(), value: "" }],
+			attributes: [{ id: uuidv4(), name: "", price: "", quantity: "" }],
 		},
 	]);
 
@@ -156,21 +157,73 @@ const AddProductOptionsModal = () => {
 	};
 
 	/** handle set option values inputs value */
-	const handleSetValuesInputsValue = (e, sectionIndex, itemIndex) => {
-		const updatedOptionsSections = [...optionsSection];
-		updatedOptionsSections[sectionIndex].values[itemIndex].value =
-			e.target.value;
-		setOptionsSection(updatedOptionsSections);
-	};
+	const handleSetValuesInputsValue = (
+		e,
+		section,
+		sectionIndex,
+		item,
+		itemIndex
+	) => {
+		console.log(section);
+		// const updatedOptionsSections = [...optionsSection];
 
-	/**  */
+		// // Update values array
+		// updatedOptionsSections[sectionIndex].values[itemIndex].value =
+		// 	e.target.value;
+
+		// // Update attributes array
+		// const attributeValues = updatedOptionsSections[sectionIndex].values.map(
+		// 	(val) => val.value || ""
+		// );
+		// const newValue = attributeValues;
+
+		// // Check if a new item was added
+		// const newSectionIndex = section.length;
+
+		// console.log(`section: ${section}`);
+		// console.log(sectionIndex === newSectionIndex);
+		// console.log(
+		// 	`sectionIndex: ${sectionIndex}`,
+		// 	`newSectionIndex : ${newSectionIndex}`
+		// );
+
+		// if (sectionIndex === newSectionIndex) {
+		// 	updatedOptionsSections[sectionIndex].attributes.forEach((attr, index) => {
+		// 		attr.name = newValue[index];
+		// 	});
+		// } else {
+		// 	// If a new item was added, merge its name with the existing names
+		// 	const existingAttributeNames = updatedOptionsSections
+		// 		.slice(0, newSectionIndex)
+		// 		.flatMap((section) =>
+		// 			section.attributes.map((attr) => attr.name || "")
+		// 		);
+		// 	const mergedNames = [...existingAttributeNames, newValue].join("/");
+
+		// 	updatedOptionsSections[newSectionIndex].attributes.forEach((attr) => {
+		// 		attr.name = mergedNames;
+		// 	});
+		// }
+	};
 
 	// handle Add New value Input
 	const handleAddNewValueInput = (sectionIndex) => {
 		const updatedOptionsSection = [...optionsSection];
 		updatedOptionsSection[sectionIndex].values.push({
-			id: sectionIndex + 1,
+			id: uuidv4(),
 			value: "",
+		});
+		setOptionsSection(updatedOptionsSection);
+	};
+
+	// handle Add New product attributes according item
+	const handleAddAttributesAccording = (sectionIndex) => {
+		const updatedOptionsSection = [...optionsSection];
+		updatedOptionsSection[sectionIndex].attributes.push({
+			id: uuidv4(),
+			name: "",
+			price: "",
+			quantity: "",
 		});
 		setOptionsSection(updatedOptionsSection);
 	};
@@ -183,6 +236,9 @@ const AddProductOptionsModal = () => {
 					return {
 						...section,
 						values: section.values.filter((item, i) => i !== inputItemIndex),
+						attributes: section.attributes.filter(
+							(item, i) => i !== inputItemIndex
+						),
 					};
 				}
 				return section;
@@ -192,22 +248,17 @@ const AddProductOptionsModal = () => {
 
 	/** handle add new option section */
 	const handleAddNewOptionsSection = () => {
-		// Create a new block with default values
-		const newOptionsSection = {
-			id: 0,
-			name: "",
-			values: [{ id: null, value: "" }],
-
-			/** the product options  */
-			optionName: "",
-			price: "",
-			quantity: "",
+		const updatedOptionsSections = [...optionsSection];
+		const newItem = {
+			id: uuidv4(),
+			name: "", // Set the initial name to an empty string
+			values: [{ id: uuidv4(), value: "" }],
+			attributes: [{ id: uuidv4(), name: "", price: "", quantity: "" }],
 		};
 
-		// Clone the existing createBlock array and add the new block
-		const updatedOptionsSections = [...optionsSection, newOptionsSection];
+		// Add the new item to the optionsSection
+		updatedOptionsSections.push(newItem);
 
-		// Update the state with the new array of blocks
 		setOptionsSection(updatedOptionsSections);
 	};
 
@@ -247,7 +298,7 @@ const AddProductOptionsModal = () => {
 			<section className='mb-6'>
 				{section?.values?.map((item, itemIndex) => (
 					<section
-						key={itemIndex}
+						key={itemIndex + 1}
 						className='mb-3 d-flex justify-content-start align-items-center gap-3'>
 						<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
 							<div className='input-icon'>
@@ -256,9 +307,15 @@ const AddProductOptionsModal = () => {
 							<input
 								type='text'
 								value={item?.value}
-								onChange={(e) =>
-									handleSetValuesInputsValue(e, sectionIndex, itemIndex)
-								}
+								onChange={(e) => {
+									handleSetValuesInputsValue(
+										e,
+										section,
+										sectionIndex,
+										item,
+										itemIndex
+									);
+								}}
 								placeholder={`القيمة رقم ${itemIndex + 1}`}
 							/>
 						</div>
@@ -278,7 +335,10 @@ const AddProductOptionsModal = () => {
 				{/* Add more item button */}
 				<div>
 					<button
-						onClick={() => handleAddNewValueInput(sectionIndex)}
+						onClick={() => {
+							handleAddAttributesAccording(sectionIndex);
+							handleAddNewValueInput(sectionIndex);
+						}}
 						className='w-100 add-new-value-btn d-flex justify-content-center align-items-center cursor-pointer'>
 						<FiPlus className='add-icon' />
 						إضافة قيمة جديدة
@@ -309,85 +369,86 @@ const AddProductOptionsModal = () => {
 		setOptionsSection(updatedOptionsInputs);
 	};
 
-	/** handle set option values inputs value */
-	const handleSetProductOptionsName = (index) => {
-		const updatedOptionsInputs = [...optionsSection];
-		updatedOptionsInputs[index].optionName = updatedOptionsInputs?.map(
-			(item) => item?.name
-		);
-		setOptionsSection(updatedOptionsInputs);
-	};
-
 	/** product Options According */
-	const productOptionsAccording = optionsSection?.map((item, itemIndex) => (
-		<section key={item?.id} className=' flex justify-start items-center gap-3'>
-			<Accordion
-				expanded={expanded === `panel${item?.id}`}
-				onChange={handleChange(`panel${item?.id}`)}>
-				<AccordionSummary
-					aria-controls={`panel${item?.id}-content`}
-					id={`panel${item?.id}-header`}
-					expandIcon={
-						<FaRegSquarePlus
-							style={{
-								fontSize: "1.2rem",
-								fill: "#023855",
-								marginLeft: "5px",
-							}}
-						/>
-					}>
-					<div className=' d-flex justify-content-between align-items-center  w-100'>
-						<Typography
-							sx={{
-								fontSize: "18px",
-								fontWeight: "400",
-								fontFamily: "Tajawal",
-								color: "#023855",
-							}}>
-							{item?.optionName}
-						</Typography>
+	const productOptionsAccording = optionsSection?.map((section, sectionIndex) =>
+		section?.attributes?.map((item, itemIndex) => (
+			<>
+				{item?.name !== "" && (
+					<section
+						key={itemIndex + 1}
+						className=' flex justify-start items-center gap-3 mb-3'>
+						<Accordion
+							expanded={expanded === `panel${item?.id}`}
+							onChange={handleChange(`panel${item?.id}`)}>
+							<AccordionSummary
+								aria-controls={`panel${item?.id}-content`}
+								id={`panel${item?.id}-header`}
+								expandIcon={
+									<FaRegSquarePlus
+										style={{
+											fontSize: "1.2rem",
+											fill: "#023855",
+											marginLeft: "5px",
+										}}
+									/>
+								}>
+								<div className=' d-flex justify-content-between align-items-center  w-100'>
+									<Typography
+										sx={{
+											fontSize: "18px",
+											fontWeight: "400",
+											fontFamily: "Tajawal",
+											color: "#023855",
+										}}>
+										{item?.name}
+									</Typography>
 
-						<Typography
-							sx={{
-								fontSize: "16px",
-								fontWeight: "400",
-								fontFamily: "Tajawal",
-								color: "#023855",
-							}}>
-							متوفر عدد {item?.quantity}
-						</Typography>
-					</div>
-				</AccordionSummary>
-				<AccordionDetails>
-					<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
-						<div className='input-icon'>
-							<IoPricetagsOutline />
-						</div>
-						<input
-							type='text'
-							placeholder='السعر'
-							value={item?.price}
-							onChange={(e) => handleSetOptionPrice(e, itemIndex)}
-						/>
+									<Typography
+										sx={{
+											fontSize: "16px",
+											fontWeight: "400",
+											fontFamily: "Tajawal",
+											color: "#023855",
+										}}>
+										متوفر عدد {item?.quantity}
+									</Typography>
+								</div>
+							</AccordionSummary>
+							<AccordionDetails>
+								<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+									<div className='input-icon'>
+										<IoPricetagsOutline />
+									</div>
+									<input
+										type='text'
+										placeholder='السعر'
+										value={item?.price}
+										onChange={(e) => handleSetOptionPrice(e, itemIndex)}
+									/>
 
-						<div className='input-type'>ر.س</div>
-					</div>
-					<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
-						<div className='input-icon'>
-							<MdStorage />
-						</div>
-						<input
-							type='text'
-							placeholder='الكمية'
-							value={item?.quantity}
-							onChange={(e) => handleSetValuesInputsQuantity(e, itemIndex)}
-						/>
-						<div className='input-type'>قطعة</div>
-					</div>
-				</AccordionDetails>
-			</Accordion>
-		</section>
-	));
+									<div className='input-type'>ر.س</div>
+								</div>
+								<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+									<div className='input-icon'>
+										<MdStorage />
+									</div>
+									<input
+										type='text'
+										placeholder='الكمية'
+										value={item?.quantity}
+										onChange={(e) =>
+											handleSetValuesInputsQuantity(e, itemIndex)
+										}
+									/>
+									<div className='input-type'>قطعة</div>
+								</div>
+							</AccordionDetails>
+						</Accordion>
+					</section>
+				)}
+			</>
+		))
+	);
 
 	return (
 		<Modal open={isProductOptionOpen}>
@@ -501,7 +562,7 @@ const AddProductOptionsModal = () => {
 						<div className='row d-flex justify-content-center align-items-center'>
 							<div className='col-lg-4 col-6'>
 								<button className='save-btn' onClick={console.log("")}>
-									حفظ الخيارت
+									حفظ
 								</button>
 							</div>
 							<div className='col-lg-4 col-6'>

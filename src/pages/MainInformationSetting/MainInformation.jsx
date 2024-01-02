@@ -743,7 +743,7 @@ const MainInformation = () => {
 											</label>
 
 											<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
-												<div className='main-domain-hint'>+996</div>
+												<div className='main-domain-hint'>+966</div>
 												<input
 													className='direction-ltr text-right store-email-input w-100'
 													name='phonenumber'
