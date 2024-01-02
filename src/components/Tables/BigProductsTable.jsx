@@ -25,12 +25,26 @@ import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
+import CloseIcon from "@mui/icons-material/Close";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 // Context
 import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
+import useFetch from "../../Hooks/UseFetch";
+import {
+	FormControl,
+	ListItemText,
+	MenuItem,
+	Modal,
+	Select,
+} from "@mui/material";
+import OutlinedInput from "@mui/material/OutlinedInput";
+
+import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 function EnhancedTableHead(props) {
 	return (
@@ -80,7 +94,12 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick } = props;
+	const {
+		numSelected,
+		rowCount,
+		onSelectAllClick,
+		handleOpenChangeCategoriesModal,
+	} = props;
 	const NotificationStore = useContext(NotificationContext);
 	const { setNotificationTitle, setActionTitle } = NotificationStore;
 
@@ -161,6 +180,14 @@ function EnhancedTableToolbar(props) {
 								تعطيل الكل
 							</IconButton>
 						</Tooltip>
+
+						<Tooltip>
+							<button
+								className='edit-all-categories-btn'
+								onClick={handleOpenChangeCategoriesModal}>
+								تعديل التصنيفات
+							</button>
+						</Tooltip>
 					</div>
 				)}
 			</div>
@@ -216,6 +243,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 	} = DeleteStore;
 
 	const [selected, setSelected] = useState([]);
+
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
@@ -232,7 +260,9 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelected = data?.map((n) => n.id);
+
 			setSelected(newSelected);
+
 			return;
 		}
 		setSelected([]);
@@ -342,6 +372,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
+
 		let newSelected = [];
 
 		if (selectedIndex === -1) {
@@ -378,13 +409,331 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 		}
 		return arr;
 	};
+
+	/**
+	 * ----------------------------------------------------------------------------
+	 * create change categories modal
+	 * ----------------------------------------------------------------------------
+	 */
+	const { fetchedData } = useFetch(
+		"https://backend.atlbha.com/api/Store/selector/mainCategories"
+	);
+
+	const [categories, setCategories] = useState([]);
+	const [category_id, setCategory_id] = useState("");
+	const [subcategory_id, setSubcategory_id] = useState([]);
+	const [openChangeCategoriesModal, setOpenChangeCategoriesModal] =
+		useState(false);
+
+	useEffect(() => {
+		if (fetchedData) {
+			setCategories(fetchedData);
+		}
+	}, [fetchedData]);
+
+	const subcategory =
+		categories?.data?.categories?.filter(
+			(sub) => sub?.id === parseInt(category_id)
+		) || [];
+	// ----------------------------------------------
+	// Handle Errors
+	const [productError, setProductError] = useState({
+		category_id: "",
+		subcategory_id: "",
+	});
+
+	const resetProductError = () => {
+		setProductError({
+			category_id: "",
+			subcategory_id: "",
+		});
+	};
+
+	/** open modal */
+	const handleOpenChangeCategoriesModal = () => {
+		setOpenChangeCategoriesModal(true);
+	};
+
+	/**  close modal */
+	const handleCloseChangeCategoriesModal = () => {
+		setOpenChangeCategoriesModal(false);
+	};
+
+	// Style the modal
+	const style = {
+		position: "absolute",
+		top: "100px",
+		left: "0",
+		transform: "translateX(50%)",
+		width: "50%",
+		maxWidth: "90%",
+	};
+
+	const selectStyle = {
+		fontSize: "18px",
+		height: "56px",
+		color: "#6790a6",
+		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+			{
+				paddingRight: "20px",
+			},
+		"&:hover": {
+			"& .MuiOutlinedInput-notchedOutline": {
+				borderColor: " #6790a6",
+			},
+		},
+		"& .MuiOutlinedInput-notchedOutline": {
+			border: "1px solid #6790a6",
+		},
+
+		"& .MuiSelect-icon": {
+			right: "95%",
+			color: "#6790a6",
+		},
+	};
+	/** ---------------------------------------------------------------------------------------------------------- */
+
+	/** handle change categories function */
+	const changeCategories = () => {
+		resetProductError();
+		const formData = new FormData();
+
+		formData.append("category_id", category_id);
+		for (let i = 0; i < subcategory_id?.length; i++) {
+			formData.append(`subcategory_id[${i}]`, subcategory_id[i]);
+		}
+
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+
+		axios
+			.post(
+				` https://backend.atlbha.com/api/Store/updateCategory?${queryParams}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setEndActionTitle(res?.data?.message?.ar);
+					handleCloseChangeCategoriesModal();
+					setSelected([]);
+					setReload(!reload);
+				} else {
+					setProductError({
+						category_id: res?.data?.message?.en?.category_id?.[0],
+						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
+					});
+
+					toast.error(res?.data?.message?.en?.category_id?.[0], {
+						theme: "light",
+					});
+
+					toast.error(res?.data?.message?.en?.subcategory_id?.[0], {
+						theme: "light",
+					});
+				}
+			});
+	};
+
+	const changeCategoriesModal = () => {
+		return (
+			<Modal open={openChangeCategoriesModal} closeAfterTransition>
+				<Box component={"div"} sx={style}>
+					<div className='change-categories-modal-content'>
+						<section className='mb-4 '>
+							<div className='row'>
+								<div className='col-12'>
+									<div
+										className='form-title  d-flex justify-content-center align-content-center'
+										style={{
+											borderRadius: "16px 16px 0 0",
+											backgroundColor: "#1DBBBE",
+											padding: "20px ",
+										}}>
+										<h5
+											className='text-white text-center'
+											style={{ fontSize: "22px", fontWeight: 400 }}>
+											تعديل تصنيفات مجموعة من المنتجات
+										</h5>
+
+										<div className='close-icon-video-modal ps-2'>
+											<AiOutlineCloseCircle
+												style={{ cursor: "pointer", color: "white" }}
+												onClick={handleCloseChangeCategoriesModal}
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+						<section className='p-3'>
+							<div className='row mb-md-5 mb-3'>
+								<div className='col-12 '>
+									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
+										<IoMdInformationCircleOutline />
+										<span>
+											بإمكانك تعديل تصنيفات المنتجات التي قمت بتحديدها
+										</span>
+									</div>
+								</div>
+							</div>
+							<div className='row mb-md-5 mb-3'>
+								<div className='col-12'>
+									<label htmlFor='product-category'>
+										{" "}
+										النشاط أو التصنيف الرئيسي
+										<span className='important-hint'>*</span>
+									</label>
+								</div>
+								<div className='col-12'>
+									<FormControl sx={{ m: 0, width: "95%", height: "56px" }}>
+										<Select
+											value={category_id}
+											name='category_id'
+											sx={selectStyle}
+											onChange={(e) => {
+												if (category_id !== e.target.value) {
+													setSubcategory_id([]);
+												}
+												setCategory_id(e.target.value);
+											}}
+											IconComponent={IoIosArrowDown}
+											displayEmpty
+											renderValue={(selected) => {
+												if (category_id === "" || !selected) {
+													return (
+														<p className='text-[#02466a]'>
+															اختر النشاط أو التصنيف
+														</p>
+													);
+												}
+												const result =
+													categories?.data?.categories?.filter(
+														(item) =>
+															item?.id === parseInt(selected) ||
+															item?.id === category_id
+													) || "";
+												return result[0]?.name;
+											}}>
+											{categories?.data?.categories?.map((cat, idx) => {
+												return (
+													<MenuItem
+														key={idx}
+														className='souq_storge_category_filter_items'
+														sx={{
+															backgroundColor: "rgba(211, 211, 211, 1)",
+															height: "3rem",
+															"&:hover": {},
+														}}
+														value={`${cat?.id}`}>
+														{cat?.name}
+													</MenuItem>
+												);
+											})}
+										</Select>
+									</FormControl>
+								</div>
+								<div className=' col-12'></div>
+								<div className='col-12'>
+									<span className='fs-6 text-danger'>
+										{productError?.category_id}
+									</span>
+								</div>
+							</div>
+
+							{/* Sub catagories */}
+							<div className='row mb-md-5 mb-3'>
+								<div className=' col-12'>
+									<label htmlFor='sub-category labeles'>
+										النشاط أو التصنيف الفرعي
+									</label>
+								</div>
+								<div className=' col-12'>
+									<FormControl sx={{ m: 0, width: "95%", height: "56px" }}>
+										{category_id !== "" &&
+										subcategory[0]?.subcategory?.length === 0 ? (
+											<div
+												className='d-flex justify-content-center align-items-center'
+												style={{ color: "#02466a" }}>
+												لا يوجد تصنيفات فرعية للتصنيف الرئيسي الذي اخترتة
+											</div>
+										) : (
+											<Select
+												sx={selectStyle}
+												IconComponent={IoIosArrowDown}
+												multiple
+												displayEmpty
+												name='subcategory_id'
+												value={subcategory_id || []}
+												onChange={(e) => setSubcategory_id(e.target.value)}
+												renderValue={(selected) => {
+													if (subcategory_id?.length === 0) {
+														return (
+															<p className='text-[#02466a]'>
+																النشاط أو التصنيف الفرعي
+															</p>
+														);
+													}
+													return selected?.map((item) => {
+														const result =
+															subcategory[0]?.subcategory?.filter(
+																(sub) => sub?.id === parseInt(item)
+															) || subcategory_id;
+														return `${result[0]?.name} , `;
+													});
+												}}>
+												{subcategory[0]?.subcategory?.map((sub, index) => (
+													<MenuItem key={index} value={sub?.id}>
+														<Checkbox
+															checked={subcategory_id?.indexOf(sub?.id) > -1}
+														/>
+														<ListItemText primary={sub?.name} />
+													</MenuItem>
+												))}
+											</Select>
+										)}
+									</FormControl>
+								</div>
+								<div className='col-12'></div>
+								<div className='col-12'>
+									{productError?.subcategory_id && (
+										<span className='fs-6 text-danger'>
+											{productError?.subcategory_id}
+										</span>
+									)}
+								</div>
+							</div>
+
+							<div className='row mb-3 d-flex justify-content-center align-items-center'>
+								<div className='col-md-5 col-12'>
+									<button
+										className='save-change-btn w-100'
+										onClick={changeCategories}>
+										حفظ
+									</button>
+								</div>
+							</div>
+						</section>
+					</div>
+				</Box>
+			</Modal>
+		);
+	};
+
 	return (
 		<Box sx={{ width: "100%" }}>
+			{openChangeCategoriesModal && changeCategoriesModal()}
+
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					numSelected={selected.length}
 					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
+					handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
 				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>

@@ -60,10 +60,12 @@ const VerifyStore = () => {
 			);
 		}
 	}, [fetchedData?.data?.stores]);
-
+	console.log(verificationStatus);
 	return (
 		<div>
-			{verificationStatus === "" || null ? null : (
+			{verificationStatus === "" ||
+			verificationStatus === "تم التوثيق" ||
+			null ? null : (
 				<Modal
 					open={isOpenVerifyModal}
 					onClose={() => {

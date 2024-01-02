@@ -1680,7 +1680,8 @@ nav.navigation {
 .product-options .close-icon-video-modal {
 	left: 14px;
 }
-.product-options .option-info-label {
+.product-options .option-info-label,
+.change-categories-modal-content .option-info-label {
 	background-color: rgba(81, 150, 243, 0.1);
 	padding: 10px 15px;
 	border: 1px solid rgba(81, 150, 243, 0.2);
@@ -1820,6 +1821,46 @@ nav.navigation {
 	width: 97.5%;
 	margin: 0 auto;
 	border: 1px solid #ddd;
+}
+
+/* product table and change categories modal  */
+.MuiToolbar-root .edit-all-categories-btn {
+	background-color: #faf6f1;
+	color: #ff9f1a;
+	padding: 2px 16px;
+	margin-right: 20px;
+	border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	-ms-border-radius: 20px;
+	-o-border-radius: 20px;
+}
+
+.change-categories-modal-content {
+	background-color: #fff;
+	border-radius: 16px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-ms-border-radius: 16px;
+	-o-border-radius: 16px;
+}
+.change-categories-modal-content label {
+	color: var(--primary-500);
+}
+
+.change-categories-modal-content .save-change-btn {
+	background-color: #1dbbbe;
+	color: #fff;
+
+	height: 56px;
+	padding: 10px 12px;
+	font-size: 20px;
+	font-weight: 400;
+	border-radius: 4px;
+}
+
+.change-categories-modal-content .close_video_icon {
+	cursor: pointer;
 }
 
 /* ------------------------------------------------------------------------------------ */

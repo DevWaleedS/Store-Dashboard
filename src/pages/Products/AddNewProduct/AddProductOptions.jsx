@@ -165,6 +165,7 @@ const AddProductOptionsModal = () => {
 		itemIndex
 	) => {
 		console.log(section);
+		console.log(optionsSection);
 		// const updatedOptionsSections = [...optionsSection];
 
 		// // Update values array
