@@ -116,7 +116,7 @@ function EnhancedTableToolbar(props) {
 			<div className=' d-flex flex-row-reverse  justify-content-between align-items-center '>
 				<div></div>
 				{numSelected > 0 && (
-					<div>
+					<div className=' d-flex justify-content-start align-items-center flex-wrap '>
 						<Tooltip
 							className='delete-all'
 							onClick={() => {
@@ -132,7 +132,7 @@ function EnhancedTableToolbar(props) {
 						</Tooltip>
 
 						<Tooltip
-							className='switch-all'
+							className='switch-all '
 							onClick={() => {
 								setNotificationTitle(
 									"سيتم تغيير حالة جميع المنتجات التي قمت بتحديدهم"
@@ -465,8 +465,13 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 		top: "100px",
 		left: "0",
 		transform: "translateX(50%)",
-		width: "50%",
-		maxWidth: "90%",
+		minWidth: "50%",
+		maxWidth: "95%",
+		"@media(max-width:768px)": {
+			top: "80px",
+
+			transform: "translateX(2%)",
+		},
 	};
 
 	const selectStyle = {
@@ -489,6 +494,18 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 		"& .MuiSelect-icon": {
 			right: "95%",
 			color: "#6790a6",
+		},
+
+		"@media(max-width:768px)": {
+			height: "48px",
+		},
+	};
+
+	const formControlStyle = {
+		m: 0,
+		width: "95%",
+		"@media(max-width:768px)": {
+			width: "100%",
 		},
 	};
 	/** ---------------------------------------------------------------------------------------------------------- */
@@ -556,7 +573,11 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 										}}>
 										<h5
 											className='text-white text-center'
-											style={{ fontSize: "22px", fontWeight: 400 }}>
+											style={{
+												fontSize: "22px",
+												fontWeight: 400,
+												whiteSpace: "normal",
+											}}>
 											تعديل تصنيفات مجموعة من المنتجات
 										</h5>
 
@@ -590,7 +611,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 									</label>
 								</div>
 								<div className='col-12'>
-									<FormControl sx={{ m: 0, width: "95%", height: "56px" }}>
+									<FormControl sx={formControlStyle}>
 										<Select
 											value={category_id}
 											name='category_id'
@@ -653,7 +674,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 									</label>
 								</div>
 								<div className=' col-12'>
-									<FormControl sx={{ m: 0, width: "95%", height: "56px" }}>
+									<FormControl sx={formControlStyle}>
 										{category_id !== "" &&
 										subcategory[0]?.subcategory?.length === 0 ? (
 											<div

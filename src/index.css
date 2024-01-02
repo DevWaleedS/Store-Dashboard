@@ -1688,6 +1688,10 @@ nav.navigation {
 	border-radius: 8px;
 	color: #0b4aa0;
 }
+.product-options .option-info-label span,
+.change-categories-modal-content .option-info-label span {
+	white-space: normal !important;
+}
 .product-options .option-info-label span {
 	font-size: 14px;
 	font-weight: 400;
@@ -4379,6 +4383,8 @@ input:disabled {
 
 /* -------------------------------------------------------------------------------------------------------------------------------- */
 /* create-offers-page */
+
+
 .create-offer-form-wrapper {
 	background-color: var(--white-100);
 	box-shadow: 0 0 5px 0 var(--bs-gray-200);
@@ -10178,7 +10184,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.form-title h5 {
 		font-size: 20px;
-		margin-bottom: 8px !important;
 	}
 
 	.form-title p {
@@ -10276,6 +10281,42 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.MuiMenuItem-root {
 		font-size: 16px !important;
+	}
+
+	/*  change product cateories  */
+
+	.MuiToolbar-root .edit-all-categories-btn {
+	margin-top: 10px;
+	width: 100%;
+}
+	.change-categories-modal-content {
+		border-radius: 8px;
+		-webkit-border-radius: 8px;
+		-moz-border-radius: 8px;
+		-ms-border-radius: 8px;
+		-o-border-radius: 8px;
+	}
+
+	.change-categories-modal-content .form-title {
+		border-radius: 8px 8px 0 0 !important;
+		-webkit-border-radius: 8px 8px 0 0 !important;
+		-moz-border-radius: 8px 8px 0 0 !important;
+		-ms-border-radius: 8px 8px 0 0 !important;
+		-o-border-radius: 8px 8px 0 0 !important;
+	}
+
+	.change-categories-modal-content .form-title h5,
+	.change-categories-modal-content label {
+		font-size: 16px !important;
+	}
+
+	.product-options .option-info-label span,
+	.change-categories-modal-content .option-info-label span {
+		font-size: 14px;
+	}
+
+	.change-categories-modal-content .save-change-btn {
+		height: 48px;
 	}
 
 	/* souqOtlobha-page */
@@ -10937,7 +10978,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.create-pages-form-wrapper .form-title,
 	.create-pages-form-wrapper .form-body {
-		padding: 20px 16px;
+		padding: 20px 16px !important;
 	}
 
 	.create-pages-form-wrapper .form-title h5 {
