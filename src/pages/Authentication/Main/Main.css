@@ -263,8 +263,8 @@
 		scroll-snap-align: start;
 		display: inline-block;
 		min-width: max-content;
-		height: 35px;
-		padding: 5px 10px;
+		height: 38px;
+		padding: 8px 12px;
 		font-size: 14px;
 		font-weight: 400;
 	}

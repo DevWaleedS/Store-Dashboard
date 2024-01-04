@@ -1085,6 +1085,7 @@ const AddNewProduct = () => {
 
 									{/* Add Product options */}
 
+									{/*
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -1096,6 +1097,7 @@ const AddNewProduct = () => {
 											</button>
 										</div>
 									</div>
+								*/}
 								</div>
 
 								{/* Save and cancle buttons */}
