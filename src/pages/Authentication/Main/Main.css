@@ -253,7 +253,7 @@
 		overflow-x: scroll;
 		scroll-snap-type: x mandatory;
 		padding-bottom: 12px;
-		gap: 2px;
+		gap: 5px;
 	}
 	.main-in-box .all-content .right-side .all .tabs::-webkit-scrollbar {
 		width: 4px;
@@ -264,7 +264,7 @@
 		display: inline-block;
 		min-width: max-content;
 		height: 35px;
-		padding: 5px 8px;
+		padding: 5px 10px;
 		font-size: 14px;
 		font-weight: 400;
 	}
