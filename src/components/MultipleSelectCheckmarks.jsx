@@ -19,6 +19,26 @@ import { IoIosArrowDown } from "react-icons/io";
 // Third Party
 import useFetch from "../Hooks/UseFetch";
 
+const selectStyle = {
+	backgroundColor: "#fff",
+	fontSize: "18px",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 	const { fetchedData } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/etlobahCategory"
@@ -42,25 +62,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 				<div className='col-md-8 col-12'>
 					<FormControl sx={{ m: 1, width: 630 }}>
 						<Select
-							sx={{
-								backgroundColor: "#fff",
-								fontSize: "18px",
-								"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-									{
-										paddingRight: "20px",
-									},
-								"& .MuiOutlinedInput-root": {
-									"& :hover": {
-										border: "none",
-									},
-								},
-								"& .MuiOutlinedInput-notchedOutline": {
-									border: "none",
-								},
-								"& .MuiSelect-icon": {
-									right: "95%",
-								},
-							}}
+							sx={selectStyle}
 							IconComponent={IoIosArrowDown}
 							multiple
 							displayEmpty
@@ -83,7 +85,17 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 								});
 							}}>
 							{fetchedData?.data?.categories?.map((act, index) => (
-								<MenuItem key={index} value={act?.id}>
+								<MenuItem
+									key={index}
+									value={act?.id}
+									sx={{
+										backgroundColor:
+											act?.store === null
+												? " #dfe2aa"
+												: " rgba(211, 211, 211, 1)",
+										height: "3rem",
+										"&:hover": {},
+									}}>
 									<Checkbox checked={activity.indexOf(act?.id) > -1} />
 									<ListItemText primary={act?.name} />
 								</MenuItem>

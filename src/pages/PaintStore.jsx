@@ -32,9 +32,13 @@ import {
 	Icons,
 	Menuu,
 } from "../data/Icons";
-import FontDownloadOutlinedIcon from '@mui/icons-material/FontDownloadOutlined';
+import FontDownloadOutlinedIcon from "@mui/icons-material/FontDownloadOutlined";
 
 const PaintStore = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/theme`
 	);
@@ -87,7 +91,7 @@ const PaintStore = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -119,7 +123,7 @@ const PaintStore = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -152,7 +156,7 @@ const PaintStore = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -184,7 +188,7 @@ const PaintStore = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -216,7 +220,7 @@ const PaintStore = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -245,7 +249,7 @@ const PaintStore = () => {
 			.post(`https://backend.atlbha.com/api/Store/themeIconUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -277,7 +281,7 @@ const PaintStore = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -541,14 +545,14 @@ const PaintStore = () => {
 								expandIcon={<ExpandMoreIcon />}
 								aria-controls='panel7bh-content'
 								id='panel7bh-header'>
-								<FontDownloadOutlinedIcon fontSize="1.3rem"/>
+								<FontDownloadOutlinedIcon fontSize='1.3rem' />
 								<h6>لون الخط</h6>
 								<p>(يمكنك تغيير لون الخط في القالب)</p>
 							</AccordionSummary>
 							<AccordionDetails>
 								<div className='content mb-2'>
 									<div className='text'>
-										<FontDownloadOutlinedIcon fontSize="1.3rem"/>
+										<FontDownloadOutlinedIcon fontSize='1.3rem' />
 										<span>لون الخط</span>
 									</div>
 									<label

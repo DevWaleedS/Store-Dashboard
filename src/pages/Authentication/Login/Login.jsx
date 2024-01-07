@@ -84,7 +84,8 @@ const Login = () => {
 		};
 		axios.post("https://backend.atlbha.com/api/loginapi", data).then((res) => {
 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-				localStorage.setItem("store_token", res?.data?.data?.token);
+				const token = res.data.data.token;
+				document.cookie = `store_token=${token}; path=/`;
 
 				if (rememberMe?.remember_me) {
 					//Set username, password and remember_me status to context

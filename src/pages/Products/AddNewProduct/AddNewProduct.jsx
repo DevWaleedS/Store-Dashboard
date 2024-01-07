@@ -67,7 +67,30 @@ const style = {
 	},
 };
 
+const selectStyle = {
+	fontSize: "18px",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 const AddNewProduct = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
@@ -294,7 +317,7 @@ const AddNewProduct = () => {
 			.post(`https://backend.atlbha.com/api/Store/product`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -694,24 +717,7 @@ const AddNewProduct = () => {
 																handleOnChange(e);
 																onChange(e);
 															}}
-															sx={{
-																fontSize: "18px",
-																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
-																"& .MuiOutlinedInput-root": {
-																	"& :hover": {
-																		border: "none",
-																	},
-																},
-																"& .MuiOutlinedInput-notchedOutline": {
-																	border: "none",
-																},
-																"& .MuiSelect-icon": {
-																	right: "95%",
-																},
-															}}
+															sx={selectStyle}
 															IconComponent={IoIosArrowDown}
 															displayEmpty
 															inputProps={{ "aria-label": "Without label" }}
@@ -737,7 +743,9 @@ const AddNewProduct = () => {
 																			className='souq_storge_category_filter_items'
 																			sx={{
 																				backgroundColor:
-																					"rgba(211, 211, 211, 1)",
+																					cat?.store === null
+																						? " #dfe2aa"
+																						: " rgba(211, 211, 211, 1)",
 																				height: "3rem",
 																				"&:hover": {},
 																			}}

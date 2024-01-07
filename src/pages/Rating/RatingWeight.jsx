@@ -40,6 +40,10 @@ const RatingWeight = ({
 	page,
 	rowsPerPage,
 }) => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const dispatch = useDispatch(true);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -88,7 +92,7 @@ const RatingWeight = ({
 			.get(`https://backend.atlbha.com/api/Store/changeCommentStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

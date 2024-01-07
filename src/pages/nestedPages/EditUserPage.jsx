@@ -79,6 +79,10 @@ const userStatusArray = [
 	{ id: 2, nameAr: "غير مفعل", nameEn: "not_active" },
 ];
 const EditUserPage = () => {
+		const store_token = document.cookie
+			?.split("; ")
+			?.find((cookie) => cookie.startsWith("store_token="))
+			?.split("=")[1];
 	const { id } = useParams();
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -264,7 +268,7 @@ const EditUserPage = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)

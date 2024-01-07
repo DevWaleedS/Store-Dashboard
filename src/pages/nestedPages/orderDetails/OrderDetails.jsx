@@ -80,6 +80,11 @@ function EnhancedTableHead() {
 }
 
 const OrderDetails = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
+
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/orders/${id}`
@@ -187,7 +192,7 @@ const OrderDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/orders/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -238,7 +243,7 @@ const OrderDetails = () => {
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)
@@ -262,7 +267,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+								Authorization: `Bearer ${store_token}`,
 							},
 						}
 					)
@@ -292,7 +297,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+								Authorization: `Bearer ${store_token}`,
 							},
 						}
 					)
@@ -319,7 +324,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+								Authorization: `Bearer ${store_token}`,
 							},
 						}
 					)
@@ -347,7 +352,7 @@ const OrderDetails = () => {
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+								Authorization: `Bearer ${store_token}`,
 							},
 						}
 					)

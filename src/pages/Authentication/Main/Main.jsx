@@ -16,97 +16,105 @@ import { SvgComponent } from "../../../data/Icons";
 import Loading from "../../Loading/Loading";
 
 const mainTitle = [
-    { id: 1, text: "قم بتسجيل الدخول الى حسابك" },
-    { id: 2, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
-    { id: 3, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
+	{ id: 1, text: "قم بتسجيل الدخول الى حسابك" },
+	{ id: 2, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
+	{ id: 3, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
 ];
 const imgTitle = [
-    { id: 1, text: "مرحباً بعودتك" },
-    { id: 2, text: "منصة اطلبها" },
-    { id: 3, text: "منصة اطلبها" },
+	{ id: 1, text: "مرحباً بعودتك" },
+	{ id: 2, text: "منصة اطلبها" },
+	{ id: 3, text: "منصة اطلبها" },
 ];
 const imgSubTitle = [
-    { id: 1, text: "منصة اطلبها للتجارة الإلكترونية" },
-    { id: 2, text: "معنى جديد للتجارة الإلكترونية" },
-    { id: 3, text: "معنى جديد للتجارة الإلكترونية" },
+	{ id: 1, text: "منصة اطلبها للتجارة الإلكترونية" },
+	{ id: 2, text: "معنى جديد للتجارة الإلكترونية" },
+	{ id: 3, text: "معنى جديد للتجارة الإلكترونية" },
 ];
 
 function Main() {
-    const { fetchedData, loading } = useFetch(
-        "https://backend.atlbha.com/api/selector/registrationMarketer"
-    );
+	const { fetchedData, loading } = useFetch(
+		"https://backend.atlbha.com/api/selector/registrationMarketer"
+	);
 
-    const navigate = useNavigate();
-    const parm = useParams();
-    const [activeTab, setActiveTab] = useState(0);
-    const store_token = localStorage.getItem("store_token");
-    // To handle add activeTab to current tab
-    useEffect(() => {
-        if (
-            parm?.type === "login" ||
-            parm?.type === "merchant" ||
-            parm?.type === "delegate"
-        ) {
-            setActiveTab(
-                parm?.type === "login"
-                    ? 0
-                    : parm?.type === "merchant"
-                        ? 1
-                        : parm?.type === "delegate" &&
-                            fetchedData?.data?.registration_marketer === "active"
-                            ? 2
-                            : 0
-            );
-        } else {
-            navigate("*");
-        }
-    }, [parm?.type, fetchedData?.data?.registration_marketer]);
+	const navigate = useNavigate();
+	const parm = useParams();
+	const [activeTab, setActiveTab] = useState(0);
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 
-    if (store_token) {
-        return <Navigate to='/' />
-    }
+	// To handle add activeTab to current tab
+	useEffect(() => {
+		if (
+			parm?.type === "login" ||
+			parm?.type === "merchant" ||
+			parm?.type === "delegate"
+		) {
+			setActiveTab(
+				parm?.type === "login"
+					? 0
+					: parm?.type === "merchant"
+					? 1
+					: parm?.type === "delegate" &&
+					  fetchedData?.data?.registration_marketer === "active"
+					? 2
+					: 0
+			);
+		} else {
+			navigate("*");
+		}
+	}, [parm?.type, fetchedData?.data?.registration_marketer]);
 
-    if (loading) {
-        return <Loading />;
-    }
+	if (store_token) {
+		return <Navigate to='/' />;
+	}
 
-    return (
-        <>
-            <Helmet>
-                <meta />
-                <title>أطلبها</title>
-                <meta name='description' content='معنى جديد للتجارة الإلكترونية' />
-            </Helmet>
-            <div className='main-in-box' dir='ltr'>
-                <div className='all-content' dir='rtl'>
-                    <div className='right-side'>
-                        <LogoHeader />
-                        <div className='all'>
-                            <Tabs activeTab={activeTab} setActiveTab={setActiveTab} registration_marketer={fetchedData?.data?.registration_marketer} />
-                            <h2>{mainTitle?.[activeTab]?.text}</h2>
-                            {activeTab === 0 ? (
-                                <Login />
-                            ) : activeTab === 1 ? (
-                                <RegisterStore />
-                            ) : (
-                                <RegisterDelegate />
-                            )}
-                        </div>
-                    </div>
+	if (loading) {
+		return <Loading />;
+	}
 
-                    <div className='left-side'>
-                        <span className='over-info'>
-                            <SvgComponent />
-                        </span>
-                        <div className='info-svg'>
-                            <h4>{imgSubTitle?.[activeTab]?.text}</h4>
-                            <h1>{imgTitle?.[activeTab]?.text}</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+	return (
+		<>
+			<Helmet>
+				<meta />
+				<title>أطلبها</title>
+				<meta name='description' content='معنى جديد للتجارة الإلكترونية' />
+			</Helmet>
+			<div className='main-in-box' dir='ltr'>
+				<div className='all-content' dir='rtl'>
+					<div className='right-side'>
+						<LogoHeader />
+						<div className='all'>
+							<Tabs
+								activeTab={activeTab}
+								setActiveTab={setActiveTab}
+								registration_marketer={fetchedData?.data?.registration_marketer}
+							/>
+							<h2>{mainTitle?.[activeTab]?.text}</h2>
+							{activeTab === 0 ? (
+								<Login />
+							) : activeTab === 1 ? (
+								<RegisterStore />
+							) : (
+								<RegisterDelegate />
+							)}
+						</div>
+					</div>
+
+					<div className='left-side'>
+						<span className='over-info'>
+							<SvgComponent />
+						</span>
+						<div className='info-svg'>
+							<h4>{imgSubTitle?.[activeTab]?.text}</h4>
+							<h1>{imgTitle?.[activeTab]?.text}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
 }
 
 export default Main;

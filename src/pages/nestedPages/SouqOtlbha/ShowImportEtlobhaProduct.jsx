@@ -46,6 +46,10 @@ const style = {
 };
 
 const ShowImportEtlobhaProduct = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -165,7 +169,7 @@ const ShowImportEtlobhaProduct = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)

@@ -16,6 +16,10 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { toast } from "react-toastify";
 
 const Notifications = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [closeMenu, setCloseMenu] = useState(false);
@@ -35,7 +39,7 @@ const Notifications = () => {
 			.get(`https://backend.atlbha.com/api/Store/NotificationRead?id[]=${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -59,7 +63,7 @@ const Notifications = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -173,9 +177,9 @@ const Notifications = () => {
 														? "un-read"
 														: ""
 												} notification-data`}
-												dangerouslySetInnerHTML={{__html: not?.message}}
-											>
-											</span>
+												dangerouslySetInnerHTML={{
+													__html: not?.message,
+												}}></span>
 										</div>
 										<img
 											className='img-fluid notification_img_style'

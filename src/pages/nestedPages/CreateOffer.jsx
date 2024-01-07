@@ -71,6 +71,10 @@ const style = {
 };
 
 const CreateOffer = () => {
+		const store_token = document.cookie
+			?.split("; ")
+			?.find((cookie) => cookie.startsWith("store_token="))
+			?.split("=")[1];
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
@@ -358,7 +362,7 @@ const CreateOffer = () => {
 			.post(`https://backend.atlbha.com/api/Store/offer`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

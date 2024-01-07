@@ -2,7 +2,10 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 
 export default function useFetch(url) {
-	const store_token = localStorage.getItem("store_token");
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const [fetchedData, setFetchedData] = useState(null);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);

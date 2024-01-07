@@ -44,6 +44,10 @@ const modalStyle = {
 };
 
 const ProductRefund = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -107,7 +111,7 @@ const ProductRefund = () => {
 			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

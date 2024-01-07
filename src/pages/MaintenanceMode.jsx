@@ -43,6 +43,10 @@ const style = {
 };
 
 const MaintenanceModeModal = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
 	const { setNavbarZindex } = Z_index;
@@ -125,7 +129,7 @@ const MaintenanceModeModal = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)

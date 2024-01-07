@@ -21,6 +21,10 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 import { HomeIcon } from "../data/Icons";
 
 const PaymentGetways = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/paymenttype`
@@ -36,7 +40,7 @@ const PaymentGetways = () => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)

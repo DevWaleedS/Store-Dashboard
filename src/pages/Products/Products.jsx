@@ -23,6 +23,10 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 
 const Products = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
@@ -109,7 +113,7 @@ const Products = () => {
 			.post(`https://backend.atlbha.com/api/Store/import-products`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

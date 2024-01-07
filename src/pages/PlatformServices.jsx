@@ -32,9 +32,9 @@ import { IoIosArrowDown } from "react-icons/io";
 const selectStyle = {
 	fontSize: "18px",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-	{
-		paddingRight: "20px",
-	},
+		{
+			paddingRight: "20px",
+		},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -53,6 +53,10 @@ const selectStyle = {
 // -----------------------------------------------------
 
 const PlatformServices = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -103,7 +107,7 @@ const PlatformServices = () => {
 			.post(`https://backend.atlbha.com/api/Store/etlobhaservice`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -283,7 +287,9 @@ const PlatformServices = () => {
 										className='w-100 new-service-input'
 										placeholder='قم بكتابة وصف واضح للخدمة'
 										value={data?.description}
-										onChange={(e) => setData({ ...data, description: e.target.value })}
+										onChange={(e) =>
+											setData({ ...data, description: e.target.value })
+										}
 										rows={4}
 									/>
 								</div>

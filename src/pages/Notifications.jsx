@@ -23,6 +23,10 @@ import Checkbox from "@mui/material/Checkbox";
 import { CheckedSquare, DeleteIcon } from "../data/Icons";
 
 const Notifications = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/NotificationIndex"
 	);
@@ -147,7 +151,7 @@ const Notifications = () => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)
@@ -281,8 +285,11 @@ const Notifications = () => {
 																/>
 																<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
 																	<div className='flex flex-col gap-1'>
-																		<h2 className='notifications-title' dangerouslySetInnerHTML={{__html: not?.message}}>
-																		</h2>
+																		<h2
+																			className='notifications-title'
+																			dangerouslySetInnerHTML={{
+																				__html: not?.message,
+																			}}></h2>
 																		<p className='notification-user-name '>
 																			{not?.user[0]?.name}
 																		</p>

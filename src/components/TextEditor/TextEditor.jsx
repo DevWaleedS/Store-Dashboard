@@ -28,7 +28,7 @@ const TextEditor = ({ ToolBar, placeholder, readOnly }) => {
 			[{ align: [] }],
 			[{ background: [] }, { color: [] }],
 			[{ list: "ordered" }, { list: "bullet" }],
-			["link", "image"],
+			["link"],
 		];
 	} else if (ToolBar === "emptyCart") {
 		toolbarOptions = [

@@ -147,6 +147,11 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
+
 	// Get Data From Redux Store
 	const navigate = useNavigate();
 	const NotificationStore = useContext(NotificationContext);
@@ -248,7 +253,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)
@@ -275,7 +280,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)

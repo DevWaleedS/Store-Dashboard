@@ -49,6 +49,10 @@ const switchStyle = {
 };
 
 const SliderUploader = ({ sliders, loading, reload, setReload }) => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -72,11 +76,17 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	useEffect(() => {
 		if (sliders) {
 			// set sliders status
-			setSlidersStatus1(sliders?.[0]?.sliderstatus1 === "active" ? true : false);
+			setSlidersStatus1(
+				sliders?.[0]?.sliderstatus1 === "active" ? true : false
+			);
 			setFirstSliderName(sliders?.[0]?.slider1);
-			setSlidersStatus2(sliders?.[0]?.sliderstatus2 === "active" ? true : false);
+			setSlidersStatus2(
+				sliders?.[0]?.sliderstatus2 === "active" ? true : false
+			);
 			setSecondSliderName(sliders?.[0]?.slider2);
-			setSlidersStatus3(sliders?.[0]?.sliderstatus3 === "active" ? true : false);
+			setSlidersStatus3(
+				sliders?.[0]?.sliderstatus3 === "active" ? true : false
+			);
 			setThirdSliderName(sliders?.[0]?.slider3);
 		}
 	}, [sliders]);
@@ -85,80 +95,80 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(sliderIndex, sliderState, setSliderState, setPreviewSliderState) =>
-			async (imageList) => {
-				// Check if the image size is valid
-				const isSizeValid = imageList?.every(
-					(image) => image?.file?.size <= maxFileSize
-				);
+		async (imageList) => {
+			// Check if the image size is valid
+			const isSizeValid = imageList?.every(
+				(image) => image?.file?.size <= maxFileSize
+			);
 
-				// Errors message
-				const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 1 ميجابايت.";
-				const dimensionsErrorMessage =
-					"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
+			// Errors message
+			const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 1 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 
-				const checkImageDimensions = (image) =>
-					new Promise((resolve) => {
-						const img = new Image();
-						img.onload = () => {
-							if (img?.width !== 1110 && img?.height !== 440) {
-								//  if the image dimensions is not valid
-								resolve(false);
-							} else {
-								resolve(true);
-							}
-						};
-						img.src = image?.data_url;
-					});
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img?.width !== 1110 && img?.height !== 440) {
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
 
-				const isValidDimensions = await Promise?.all(
-					imageList?.map(checkImageDimensions)
-				).then((results) => results?.every((result) => result));
+			const isValidDimensions = await Promise?.all(
+				imageList?.map(checkImageDimensions)
+			).then((results) => results?.every((result) => result));
 
-				// if the isValidDimensions and  imageSize >= maxFileSize return
-				if (!isSizeValid && !isValidDimensions) {
-					// Display a warning message and reset the logo state
-					toast.warning(sizeErrorMessage, {
-						theme: "light",
-					});
-					toast.warning(dimensionsErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else if (!isValidDimensions && sizeErrorMessage) {
-					toast.warning(dimensionsErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else if (!isSizeValid && isValidDimensions) {
-					toast.warning(sizeErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else {
-					const updatedSliderState = [...sliderState];
-					updatedSliderState[sliderIndex] = imageList;
-					setSliderState(updatedSliderState);
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isSizeValid && !isValidDimensions) {
+				// Display a warning message and reset the logo state
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isValidDimensions && sizeErrorMessage) {
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isSizeValid && isValidDimensions) {
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else {
+				const updatedSliderState = [...sliderState];
+				updatedSliderState[sliderIndex] = imageList;
+				setSliderState(updatedSliderState);
 
-					const updatedNameState = updatedSliderState[sliderIndex]?.data_url;
-					const updatedFileState = updatedSliderState[sliderIndex];
+				const updatedNameState = updatedSliderState[sliderIndex]?.data_url;
+				const updatedFileState = updatedSliderState[sliderIndex];
 
-					const sliderNames = [
-						setFirstSliderName,
-						setSecondSliderName,
-						setThirdSliderName,
-					];
+				const sliderNames = [
+					setFirstSliderName,
+					setSecondSliderName,
+					setThirdSliderName,
+				];
 
-					const sliderFile = [setFirstSlider, setSecondSlider, setThirdSlider];
+				const sliderFile = [setFirstSlider, setSecondSlider, setThirdSlider];
 
-					if (sliderNames[sliderIndex]) {
-						sliderNames[sliderIndex](updatedNameState);
-					}
-					if (sliderFile[sliderIndex]) {
-						sliderFile[sliderIndex](updatedFileState);
-					}
+				if (sliderNames[sliderIndex]) {
+					sliderNames[sliderIndex](updatedNameState);
 				}
-				setPreviewSliderState(imageList);
-			};
+				if (sliderFile[sliderIndex]) {
+					sliderFile[sliderIndex](updatedFileState);
+				}
+			}
+			setPreviewSliderState(imageList);
+		};
 
 	// update Sliders function
 	const updateSliders = () => {
@@ -180,7 +190,7 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/sliderUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -304,10 +314,15 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 												sx={switchStyle}
 												checked={sliderstatus1}
 												onChange={() => {
-													if (sliderstatus2 === false && sliderstatus3 === false) {
-														toast.warn("يجب أن يكون على الأقل سلايدر واحد مفعل");
+													if (
+														sliderstatus2 === false &&
+														sliderstatus3 === false
+													) {
+														toast.warn(
+															"يجب أن يكون على الأقل سلايدر واحد مفعل"
+														);
 													} else {
-														setSlidersStatus1(!sliderstatus1)
+														setSlidersStatus1(!sliderstatus1);
 													}
 												}}
 											/>
@@ -365,10 +380,15 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 												sx={switchStyle}
 												checked={sliderstatus2}
 												onChange={() => {
-													if (sliderstatus1 === false && sliderstatus3 === false) {
-														toast.warn("يجب أن يكون على الأقل سلايدر واحد مفعل");
+													if (
+														sliderstatus1 === false &&
+														sliderstatus3 === false
+													) {
+														toast.warn(
+															"يجب أن يكون على الأقل سلايدر واحد مفعل"
+														);
 													} else {
-														setSlidersStatus2(!sliderstatus2)
+														setSlidersStatus2(!sliderstatus2);
 													}
 												}}
 											/>
@@ -426,10 +446,15 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 												sx={switchStyle}
 												checked={sliderstatus3}
 												onChange={() => {
-													if (sliderstatus1 === false && sliderstatus2 === false) {
-														toast.warn("يجب أن يكون على الأقل سلايدر واحد مفعل");
+													if (
+														sliderstatus1 === false &&
+														sliderstatus2 === false
+													) {
+														toast.warn(
+															"يجب أن يكون على الأقل سلايدر واحد مفعل"
+														);
 													} else {
-														setSlidersStatus3(!sliderstatus3)
+														setSlidersStatus3(!sliderstatus3);
 													}
 												}}
 											/>

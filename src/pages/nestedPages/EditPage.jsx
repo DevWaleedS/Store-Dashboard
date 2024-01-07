@@ -57,6 +57,11 @@ const style = {
 };
 
 const EditPage = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
+
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/page/${id}`
@@ -319,7 +324,7 @@ const EditPage = () => {
 			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

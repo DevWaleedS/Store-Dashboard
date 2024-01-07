@@ -20,6 +20,10 @@ import { TextEditor } from "../../components/TextEditor";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 const EvaluationThePlatform = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const [reload, setReload] = useState(false);
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -44,7 +48,7 @@ const EvaluationThePlatform = () => {
 			.post(`https://backend.atlbha.com/api/Store/etlobhaComment`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

@@ -47,6 +47,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 	},
 }));
 const UserProfileImage = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	// Avatar Colors
 	const theme = useTheme();
 	const colors = tokens(theme.palette);
@@ -76,16 +80,25 @@ const UserProfileImage = () => {
 
 	// To log out from dashboard!
 	const logOut = () => {
+		// Clear all cookies
+		for (const cookie of document.cookie.split(";")) {
+			const [name, value] = cookie.trim().split("=");
+
+			// Set the cookie's expiration to a past date to delete it
+			document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+		}
+
 		axios
 			.get("https://backend.atlbha.com/api/logout", {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					localStorage.removeItem("store_token");
+
 					navigate("/auth/login");
 				} else {
 					console.log(res?.data?.message?.ar);

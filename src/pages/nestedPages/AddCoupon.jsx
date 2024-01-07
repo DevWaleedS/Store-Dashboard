@@ -55,6 +55,10 @@ const style = {
 };
 
 const AddCoupon = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { fetchedData: categories } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
@@ -200,7 +204,7 @@ const AddCoupon = () => {
 			.post(`https://backend.atlbha.com/api/Store/coupons`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -831,7 +835,7 @@ const AddCoupon = () => {
 																if (select_category_id === "") {
 																	return (
 																		<p className='text-[#ADB5B9]'>
-																			اختر التصنيف
+																			اختر النشاط أو التصنيف
 																		</p>
 																	);
 																}
@@ -848,7 +852,10 @@ const AddCoupon = () => {
 																			key={index}
 																			className='souq_storge_category_filter_items'
 																			sx={{
-																				backgroundColor: "#fff",
+																				backgroundColor:
+																					cat?.store === null
+																						? " #dfe2aa"
+																						: " rgba(211, 211, 211, 1)",
 																				height: "3rem",
 																				"&:hover": {},
 																			}}

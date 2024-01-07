@@ -67,7 +67,8 @@ const VerificationPage = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					if (res?.data?.message?.ar === "تم التحقق") {
-						localStorage.setItem("store_token", res?.data?.data?.token);
+						const token = res.data.data.token;
+						document.cookie = `store_token=${token}; path=/;`;
 						// NavigateToDashboardPage();
 						navigate("/");
 					} else {

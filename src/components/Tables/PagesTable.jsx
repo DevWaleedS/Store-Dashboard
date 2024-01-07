@@ -204,6 +204,11 @@ EnhancedTableToolbar.propTypes = {
 
 // Start Pages Table
 export default function PagesTable({ data, loading, reload, setReload }) {
+
+		const store_token = document.cookie
+			?.split("; ")
+			?.find((cookie) => cookie.startsWith("store_token="))
+			?.split("=")[1];
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
@@ -302,7 +307,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)
@@ -326,7 +331,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)
@@ -354,7 +359,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)

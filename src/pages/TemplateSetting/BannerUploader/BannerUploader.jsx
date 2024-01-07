@@ -48,6 +48,10 @@ const switchStyle = {
 	},
 };
 const BannerUploader = ({ Banners, loading, reload, setReload }) => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -182,7 +186,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/banarUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {
@@ -310,10 +314,13 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 												sx={switchStyle}
 												checked={bannerstatus1}
 												onChange={() => {
-													if(bannerstatus2 === false && bannerstatus3 === false ){
+													if (
+														bannerstatus2 === false &&
+														bannerstatus3 === false
+													) {
 														toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
-													}else{
-														setBannerStatus1(!bannerstatus1)
+													} else {
+														setBannerStatus1(!bannerstatus1);
 													}
 												}}
 											/>
@@ -371,10 +378,13 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 												sx={switchStyle}
 												checked={bannerstatus2}
 												onChange={() => {
-													if(bannerstatus1 === false && bannerstatus3 === false ){
+													if (
+														bannerstatus1 === false &&
+														bannerstatus3 === false
+													) {
 														toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
-													}else{
-														setBannerStatus2(!bannerstatus2)
+													} else {
+														setBannerStatus2(!bannerstatus2);
 													}
 												}}
 											/>
@@ -431,16 +441,16 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 											<Switch
 												sx={switchStyle}
 												checked={bannerstatus3}
-												onChange={() => 
-													{
-														if(bannerstatus1 === false && bannerstatus2 === false ){
-															toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
-														}
-														else{
-															setBannerStatus3(!bannerstatus3)
-														}
+												onChange={() => {
+													if (
+														bannerstatus1 === false &&
+														bannerstatus2 === false
+													) {
+														toast.warn("يجب أن يكون على الأقل بانر واحد مفعل");
+													} else {
+														setBannerStatus3(!bannerstatus3);
 													}
-												}
+												}}
 											/>
 										</div>
 									</div>

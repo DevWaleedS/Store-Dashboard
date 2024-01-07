@@ -13,6 +13,11 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { HomeIcon, Check9x7Svg } from "../../data/Icons";
 
 function CheckoutPage() {
+
+		const store_token = document.cookie
+			?.split("; ")
+			?.find((cookie) => cookie.startsWith("store_token="))
+			?.split("=")[1];
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/showImportCart"
 	);
@@ -118,7 +123,7 @@ function CheckoutPage() {
 			.post(`https://backend.atlbha.com/api/Store/checkoutImport`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

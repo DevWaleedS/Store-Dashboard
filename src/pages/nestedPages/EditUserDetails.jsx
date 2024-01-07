@@ -53,6 +53,10 @@ const style = {
 };
 
 const EditUserDetails = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const navigate = useNavigate();
 
 	const UserInfo = useContext(UserAuth);
@@ -257,7 +261,7 @@ const EditUserDetails = () => {
 			.post(`https://backend.atlbha.com/api/Store/profile`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

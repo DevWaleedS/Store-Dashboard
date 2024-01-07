@@ -193,6 +193,10 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function CouponTable({ data, loading, reload, setReload }) {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -289,7 +293,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 				{
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -314,7 +318,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)
@@ -338,7 +342,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					{
 						headers: {
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+							Authorization: `Bearer ${store_token}`,
 						},
 					}
 				)

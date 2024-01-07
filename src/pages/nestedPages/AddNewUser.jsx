@@ -82,6 +82,11 @@ const userStatusArray = [
 ];
 
 const AddNewUser = () => {
+
+		const store_token = document.cookie
+			?.split("; ")
+			?.find((cookie) => cookie.startsWith("store_token="))
+			?.split("=")[1];
 	const { fetchedData: roles } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/roles"
 	);
@@ -216,7 +221,7 @@ const AddNewUser = () => {
 			.post(`https://backend.atlbha.com/api/Store/user`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

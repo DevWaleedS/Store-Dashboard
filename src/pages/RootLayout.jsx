@@ -38,6 +38,10 @@ import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteC
 import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 
 const RootLayout = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	// To open and close side bar in mobile screen
 	const [openSidebar, setOpenSidebar] = React.useState(false);
 
@@ -75,7 +79,7 @@ const RootLayout = () => {
 	const dispatchVerifyModal = useDispatch(false);
 
 	useEffect(() => {
-		dispatch(StoreVerificationThunk(localStorage.getItem("store_token")));
+		dispatch(StoreVerificationThunk(store_token));
 	}, [dispatch]);
 
 	// This is modal verification Store Status message That is display after dashboard is open

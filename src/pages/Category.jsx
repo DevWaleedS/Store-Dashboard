@@ -82,7 +82,7 @@ const Category = () => {
 
 				<div className='mb-3'>
 					<div className='shipping-company-hint mb-2'>
-						سوف تظهر هذه التصنيفات بمجرد استخدامها في اضافة المنتجات الخاصة بك 
+						سوف تظهر هذه التصنيفات بمجرد استخدامها في اضافة المنتجات الخاصة بك
 					</div>
 					<div className='add-category'>
 						<form onSubmit={handleSubmit}>
@@ -112,9 +112,9 @@ const Category = () => {
 												fontSize: "18px",
 												backgroundColor: "#ededed",
 												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-												{
-													paddingRight: "20px",
-												},
+													{
+														paddingRight: "20px",
+													},
 												"& .MuiOutlinedInput-root": {
 													"& :hover": {
 														border: "none",
@@ -163,7 +163,10 @@ const Category = () => {
 														key={index}
 														className='souq_storge_category_filter_items'
 														sx={{
-															backgroundColor: "rgba(211, 211, 211, 1)",
+															backgroundColor:
+																cat?.store === null
+																	? " #dfe2aa"
+																	: " rgba(211, 211, 211, 1)",
 															height: "3rem",
 															"&:hover": {},
 														}}

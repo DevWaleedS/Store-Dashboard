@@ -16,6 +16,10 @@ import { LoadingContext } from "../../../Context/LoadingProvider";
 import { Button, FormControl, Switch } from "@mui/material";
 
 const UpdateComments = ({ Comments, reload, setReload }) => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -44,7 +48,7 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 			.post(`https://backend.atlbha.com/api/Store/commentUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+					Authorization: `Bearer ${store_token}`,
 				},
 			})
 			.then((res) => {

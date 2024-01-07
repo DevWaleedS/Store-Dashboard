@@ -57,7 +57,30 @@ const style = {
 	},
 };
 
+const selectStyle = {
+	fontSize: "18px",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 const EditProduct = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -332,7 +355,7 @@ const EditProduct = () => {
 				{
 					headers: {
 						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${localStorage.getItem("store_token")}`,
+						Authorization: `Bearer ${store_token}`,
 					},
 				}
 			)
@@ -568,24 +591,7 @@ const EditProduct = () => {
 															<Select
 																value={value}
 																name='category_id'
-																sx={{
-																	fontSize: "18px",
-																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
-																	"& .MuiOutlinedInput-root": {
-																		"& :hover": {
-																			border: "none",
-																		},
-																	},
-																	"& .MuiOutlinedInput-notchedOutline": {
-																		border: "none",
-																	},
-																	"& .MuiSelect-icon": {
-																		right: "95%",
-																	},
-																}}
+																sx={selectStyle}
 																onChange={(e) => {
 																	if (product?.category_id !== e.target.value) {
 																		setProduct({
@@ -627,7 +633,9 @@ const EditProduct = () => {
 																				className='souq_storge_category_filter_items'
 																				sx={{
 																					backgroundColor:
-																						"rgba(211, 211, 211, 1)",
+																						cat?.store === null
+																							? " #dfe2aa"
+																							: " rgba(211, 211, 211, 1)",
 																					height: "3rem",
 																					"&:hover": {},
 																				}}
