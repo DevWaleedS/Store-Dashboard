@@ -48,6 +48,7 @@ const ProductRefund = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
+
 	const { id } = useParams();
 	const navigate = useNavigate();
 
