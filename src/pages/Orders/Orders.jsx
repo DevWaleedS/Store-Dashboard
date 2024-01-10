@@ -35,6 +35,9 @@ const Orders = () => {
 					?.includes(search?.toLowerCase()) ||
 				order?.shippingtypes?.name
 					?.toLowerCase()
+					?.includes(search?.toLowerCase()) ||
+				order?.user?.name
+					?.toLowerCase()
 					?.includes(search?.toLowerCase())
 		);
 	} else {

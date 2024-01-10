@@ -187,7 +187,7 @@ const PlatformServices = () => {
 							<div className='row align-items-center mb-md-4 mb-3'>
 								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
 									<label htmlFor='store-activity'>
-										نشاط أو تصنيف المتجر
+										نشاط المتجر
 										<span>(تلقائي)</span>
 									</label>
 								</div>
@@ -261,7 +261,7 @@ const PlatformServices = () => {
 								<div className='col-md-7 col-12'>
 									<div className='new-service-hint'>
 										يمكنك إضافه خدمة جديدة في حال لم تكن موجودة في قائمة الخدمات
-										بالأعلي
+										بالأعلى
 									</div>
 									<input
 										type='text'
@@ -304,7 +304,7 @@ const PlatformServices = () => {
 										disabled={
 											data?.services?.length === 0 && data?.name === ""
 										}>
-										رفع الطلب
+										إرسال
 									</button>
 								</div>
 							</div>

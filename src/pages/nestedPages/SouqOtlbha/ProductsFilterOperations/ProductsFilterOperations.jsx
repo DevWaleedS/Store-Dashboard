@@ -112,7 +112,7 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 					<label
 						className='d-block mb-1'
 						style={{ fontSize: "18px", fontWight: 500 }}>
-						النشاط أو التصنيف الرئيسي
+						النشاط الرئيسي
 					</label>
 					<Select
 						sx={selectCategoriesStyles}
@@ -166,7 +166,7 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 					<label
 						className='d-block mb-1'
 						style={{ fontSize: "18px", fontWight: 500 }}>
-						النشاط أو التصنيف الفرعي
+						النشاط الفرعي
 					</label>
 					<Select
 						multiple

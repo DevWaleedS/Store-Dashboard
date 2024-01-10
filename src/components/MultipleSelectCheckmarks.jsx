@@ -55,7 +55,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 			<div className='row d-flex justify-content-between align-items-start mb-2 '>
 				<div className='col-md-4 col-12 d-flex pt-md-4'>
 					<h5 className='label'>
-						نوع النشاط أو التصنيف الرئيسي
+						نوع النشاط الرئيسي
 						<span className='important-hint'>*</span>
 					</h5>
 				</div>
@@ -73,7 +73,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 								if (activity?.length === 0) {
 									return (
 										<span style={{ color: "#011723" }}>
-											نشاط أو تصنيف المتجر الرئيسي
+											نشاط المتجر الرئيسي
 										</span>
 									);
 								}
@@ -104,7 +104,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 					</FormControl>
 					{showErr && (
 						<div className='text-danger me-1' style={{ fontSize: "16px" }}>
-							يرجي اختيار نوع النشاط أو التصنيف أولاّّ
+							يرجي اختيار نوع النشاط أولاّّ
 						</div>
 					)}
 				</div>
@@ -112,7 +112,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 			<div className='row d-flex justify-content-between align-items-start mb-2 '>
 				<div className='col-md-4 col-12 d-flex pt-md-4'>
 					<h5 className='label'>
-						نوع النشاط أو التصنيف الفرعي
+						نوع النشاط الفرعي
 						<span className='important-hint'>*</span>
 					</h5>
 				</div>
@@ -148,7 +148,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 								if (subActivities?.length === 0) {
 									return (
 										<span style={{ color: "#011723" }}>
-											نشاط أو تصنيف المتجر الفرعي
+											نشاط المتجر الفرعي
 										</span>
 									);
 								}

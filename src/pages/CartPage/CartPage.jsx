@@ -329,7 +329,7 @@ function CartPage() {
 													<Link
 														to='/Products/SouqOtlobha/Checkout'
 														className='checkout-btn'>
-														الاستمرار الى الدفع
+														الاستمرار إلى الدفع
 													</Link>
 												</div>
 											</div>

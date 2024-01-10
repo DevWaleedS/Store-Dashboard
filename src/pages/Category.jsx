@@ -59,7 +59,7 @@ const Category = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | النشاطات و التصنيفات</title>
+				<title>لوحة تحكم أطلبها | الأنشطة</title>
 			</Helmet>
 			<div className='category p-lg-3'>
 				<div className='head-category'>
@@ -73,7 +73,7 @@ const Category = () => {
 									</Link>
 								</li>
 								<li className='breadcrumb-item active ' aria-current='page'>
-									النشاطات و التصنيفات
+									الأنشطة
 								</li>
 							</ol>
 						</nav>
@@ -82,7 +82,7 @@ const Category = () => {
 
 				<div className='mb-3'>
 					<div className='shipping-company-hint mb-2'>
-						سوف تظهر هذه التصنيفات بمجرد استخدامها في اضافة المنتجات الخاصة بك
+						سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك
 					</div>
 					<div className='add-category'>
 						<form onSubmit={handleSubmit}>
@@ -95,7 +95,7 @@ const Category = () => {
 										name='search'
 										id='search'
 										autoComplete='false'
-										placeholder='ابحث في النشاطات و التصنيفات'
+										placeholder='ابحث في الأنشطة'
 									/>
 									<BsSearch />
 								</div>
@@ -137,7 +137,7 @@ const Category = () => {
 												if (category_id === "") {
 													return (
 														<p className='text-[#ADB5B9]'>
-															اختر النشاط أو التصنيف
+															اختر النشاط
 														</p>
 													);
 												}
@@ -186,7 +186,7 @@ const Category = () => {
 											navigate("AddCategory");
 										}}>
 										<MdAdd />
-										<span className='me-2'> اضافه نشاط أو تصنيف</span>
+										<span className='me-2'> اضافه نشاط</span>
 									</button>
 								</div>
 							</div>

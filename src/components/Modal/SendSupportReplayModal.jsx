@@ -101,7 +101,7 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 					dispatch(closeReplyModal());
 					setReload(!reload);
 					resetsMessage();
-					navigate("Support");
+					navigate("/Support");
 				} else {
 					serMessageError(res?.data?.message?.en?.replay_text?.[0]);
 

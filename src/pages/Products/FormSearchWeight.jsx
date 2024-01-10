@@ -36,8 +36,8 @@ const FormSearchWeight = ({
 			break;
 		case "coupon":
 			data = {
-				placeHolder: "ابحث عن طريق اسم الكوبون",
-				buttonValue: "  اضافه كوبون",
+				placeHolder: "ابحث عن طريق اسم كود الخصم",
+				buttonValue: "  اضافه كود خصم",
 			};
 			break;
 		case "customer":
@@ -94,7 +94,7 @@ const FormSearchWeight = ({
 					</div>
 
 					<div className='d-flex flex-column select-input input-box '>
-						<label htmlFor='form-select'> النشاط أو التصنيف</label>
+						<label htmlFor='form-select'> النشاط</label>
 						<FormControl sx={{ width: "100%" }}>
 							<Select
 								name='category_id'
@@ -110,7 +110,7 @@ const FormSearchWeight = ({
 								renderValue={(selected) => {
 									if (category_id === "") {
 										return (
-											<p style={{ color: "#ADB5B9" }}>اختر النشاط أو التصنيف</p>
+											<p style={{ color: "#ADB5B9" }}>اختر النشاط</p>
 										);
 									}
 									const result =

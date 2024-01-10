@@ -49,13 +49,13 @@ export const dashboardSections = [
 	},
 	{
 		id: 2,
-		sectionName: "النشاطات و التصنيفات",
+		sectionName: "الأنشطة",
 		route: "Category",
 		icon: <Category />,
 	},
 	{
 		id: 99280990,
-		sectionName: "اضافة نشاط أو تصنيف",
+		sectionName: "اضافة نشاط",
 		route: "Category/AddCategory",
 		icon: <Category />,
 	},
@@ -91,13 +91,13 @@ export const dashboardSections = [
 	},
 	{
 		id: 6,
-		sectionName: "الكوبونات",
+		sectionName: "أكواد الخصم",
 		route: "Coupon",
 		icon: <Discoint />,
 	},
 	{
 		id: 6,
-		sectionName: "اضافة كوبون",
+		sectionName: "اضافة كود خصم",
 		route: "Coupon/AddCoupon",
 		icon: <Discoint />,
 	},

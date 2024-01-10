@@ -44,7 +44,7 @@ const SalesReports = ({ salesReport, loading }) => {
 						<div className='total-wrapper  mb-2'>
 							<div className='row'>
 								<div className='col-5'>
-									<h6>كوبونات التخفيض</h6>
+									<h6>كود خصمات التخفيض</h6>
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>

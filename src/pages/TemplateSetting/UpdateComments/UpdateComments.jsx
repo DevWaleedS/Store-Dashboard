@@ -67,7 +67,7 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 		<div className='seo-weight-edit-box template-edit-box '>
 			<div className='title d-flex flex-md-row flex-column justify-content-between align-items-md-center flex-wrap gap-4'>
 				<h4>
-					التعليقات والعملاء{" "}
+					التعليقات والعملاء
 					<span> (تستطيع تفعيل وتعطيل العملاء المميزون والتعليقات )</span>
 				</h4>
 				<div className='view-more-btn mx-md-4 mt-md-0 mt-3'>

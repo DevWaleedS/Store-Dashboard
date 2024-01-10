@@ -39,9 +39,9 @@ const selectFilterStyles = {
 	backgroundColor: "aliceblue",
 	color: "#02466a",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "35px",
-		},
+	{
+		paddingRight: "35px",
+	},
 
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
@@ -122,7 +122,7 @@ const Coupon = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الكوبونات</title>
+				<title>لوحة تحكم أطلبها | أكواد الخصم</title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
 				<div className='head-category'>
@@ -139,7 +139,7 @@ const Coupon = () => {
 									التسويق
 								</li>
 								<li className='breadcrumb-item active' aria-current='page'>
-									كوبونات التخفيض
+									أكواد الخصم
 								</li>
 							</ol>
 						</nav>
@@ -156,7 +156,7 @@ const Coupon = () => {
 									name='search'
 									id='search'
 									autoComplete='false'
-									placeholder=' ابحث عن طريق اسم الكوبون '
+									placeholder=' ابحث عن طريق اسم كود الخصم '
 								/>
 								<BsSearch className='search-icon' />
 							</div>
@@ -202,7 +202,7 @@ const Coupon = () => {
 										navigate("AddCoupon");
 									}}>
 									<MdAdd />
-									<span className='me-2'> اضافه كوبون</span>
+									<span className='me-2'> اضافه كود خصم</span>
 								</button>
 							</div>
 						</div>

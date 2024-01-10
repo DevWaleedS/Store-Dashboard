@@ -34,6 +34,7 @@ import { FormControlLabel, Switch } from "@mui/material";
 import { IoIosArrowDown } from "react-icons/io";
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 // Modal Style
 const style = {
@@ -228,12 +229,12 @@ const EditCoupon = () => {
 			fetchedData?.data?.Coupons?.coupon_apply === "selected_product"
 				? "selected_product"
 				: fetchedData?.data?.Coupons?.coupon_apply === "selected_category"
-				? "selected_category"
-				: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
-				? "selected_payment"
-				: fetchedData?.data?.Coupons?.coupon_apply === "all"
-				? "all"
-				: null
+					? "selected_category"
+					: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
+						? "selected_payment"
+						: fetchedData?.data?.Coupons?.coupon_apply === "all"
+							? "all"
+							: null
 		);
 
 		setSelectedProducts(
@@ -255,7 +256,7 @@ const EditCoupon = () => {
 	 * ---------------------------------------------------------------------------------
 	 */
 	const changeCouponStatus = () => {
-		setLoadingTitle("جاري تغير حالة الكوبون");
+		setLoadingTitle("جاري تغير حالة كود الخصم");
 		axios
 			.get(
 				`https://backend.atlbha.com/api/Store/couponchangeSatusall?id[]=${fetchedData?.data?.Coupons?.id}`,
@@ -285,7 +286,7 @@ const EditCoupon = () => {
 	 * ---------------------------------------------------------------------------------
 	 */
 	const updateCoupon = (data) => {
-		setLoadingTitle("جاري تعديل الكوبون");
+		setLoadingTitle("جاري تعديل كود الخصم");
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("_method", "PUT");
@@ -318,7 +319,7 @@ const EditCoupon = () => {
 		selectedProducts?.forEach((product, idx) => {
 			formData.append(
 				`select_product_id[${idx}]`,
-				coupon_apply === "selected_product" ? product.id : ""
+				coupon_apply === "selected_product" ? product?.id : ""
 			);
 		});
 
@@ -381,10 +382,15 @@ const EditCoupon = () => {
 			});
 	};
 
+	const deleteItemFromSelectedProduct = (id) => {
+		const newLists = selectedProducts?.filter((__product, index) => index !== id);
+		setSelectedProducts(newLists);
+	}
+
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل كوبون</title>
+				<title>لوحة تحكم أطلبها | تعديل كود خصم</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -397,8 +403,8 @@ const EditCoupon = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title  '>
-										<h5 className='mb-3'>تفاصيل الكوبون</h5>
-										<p> تعديل واستعراض بيانات الكوبون</p>
+										<h5 className='mb-3'>تفاصيل كود الخصم</h5>
+										<p> تعديل واستعراض بيانات كود الخصم</p>
 									</div>
 								</div>
 							</div>
@@ -421,13 +427,13 @@ const EditCoupon = () => {
 														type='button'
 														className='enable-coupon-btn'
 														onClick={() => changeCouponStatus()}>
-														إعادة تفعيل الكوبون
+														إعادة تفعيل كود الخصم
 													</button>
 												</Fragment>
 											) : moment(
-													fetchedData?.data?.Coupons?.expire_date,
-													"YYYY-MM-DD"
-											  ).toDate() < currentDate ? (
+												fetchedData?.data?.Coupons?.expire_date,
+												"YYYY-MM-DD"
+											).toDate() < currentDate ? (
 												<Fragment>
 													<div className='coupon-status disabled'>منتهي</div>
 
@@ -437,12 +443,12 @@ const EditCoupon = () => {
 														onClick={() => {
 															setActiveCoupon(true);
 														}}>
-														إعادة تفعيل الكوبون
+														إعادة تفعيل كود الخصم
 													</button>
 													{activeCoupon && (
 														<div style={{ fontSize: "16px", color: "red" }}>
 															يرجي تحديث تاريخ الانتهاء لكي يتم إعادة تفعيل
-															الكوبون
+															كود الخصم
 														</div>
 													)}
 												</Fragment>
@@ -458,12 +464,12 @@ const EditCoupon = () => {
 											<div className='row mb-md-5 d-flex  justify-content-evenly'>
 												<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 													<label htmlFor='coupon-name' className='d-block mb-1'>
-														كود الكوبون<span className='important-hint'>*</span>
+														كود الخصم<span className='important-hint'>*</span>
 													</label>
 													<input
 														type='text'
 														id='coupon-code'
-														placeholder='ادخل كود الكوبون'
+														placeholder='ادخل كود الخصم'
 														name='code'
 														// disabled={isEnable === "نشط" ? false : true}
 														{...register("code", {
@@ -507,7 +513,7 @@ const EditCoupon = () => {
 															<input
 																type='text'
 																id='uses-count'
-																placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
+																placeholder='  عدد مرات استخدام كود الخصم لجميع العملاء'
 																name='total_redemptions'
 																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
@@ -546,14 +552,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='discount_type'
-																// disabled={isEnable === "نشط" ? false : true}
+															// disabled={isEnable === "نشط" ? false : true}
 															>
 																<div className='radio-box'>
 																	<FormControlLabel
 																		value='percent'
 																		id='percent-price'
 																		control={<Radio />}
-																		// disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -570,7 +576,7 @@ const EditCoupon = () => {
 																		value='fixed'
 																		id='fixed-price'
 																		control={<Radio />}
-																		// disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -664,7 +670,7 @@ const EditCoupon = () => {
 																type='text'
 																name='user_redemptions'
 																id='user-count'
-																placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
+																placeholder='  عدد مرات استخدام كود الخصم للعميل الواحد'
 																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
 																onChange={(e) =>
@@ -729,14 +735,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='free_shipping'
-																// disabled={isEnable === "نشط" ? false : true}
+															// disabled={isEnable === "نشط" ? false : true}
 															>
 																<div className='radio-box '>
 																	<FormControlLabel
 																		value={1}
 																		id='accept-free-shipping'
 																		control={<Radio />}
-																		// disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -751,7 +757,7 @@ const EditCoupon = () => {
 																		value={0}
 																		id='no-free-shipping'
 																		control={<Radio />}
-																		// disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -901,7 +907,7 @@ const EditCoupon = () => {
 																		value='all'
 																		id='all'
 																		control={<Radio />}
-																		// disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -918,7 +924,7 @@ const EditCoupon = () => {
 																		value='selected_product'
 																		id='selected_product'
 																		control={<Radio />}
-																		// disabled={isEnable === "نشط" ? false : true}
+																	// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -944,7 +950,7 @@ const EditCoupon = () => {
 																				: "disabled me-3"
 																		}
 																		htmlFor='selected_category'>
-																		تصنيفات مختارة
+																		أنشطة مختارة
 																	</label>
 																	</div>
 																<div className='radio-box select-apply-offer'>
@@ -1003,18 +1009,21 @@ const EditCoupon = () => {
 																		<li
 																			key={product.id}
 																			onClick={() => {
-																				handleProductSelect(product.id);
+																				handleProductSelect(product?.id);
 																				setSearchTerm("");
 																			}}>
-																			{product.name}
+																			{product?.name}
 																		</li>
 																	))}
 																</ul>
 															)}
 
 															<ul className='purchase_products_selected'>
-																{selectedProducts?.map((product) => (
-																	<li key={product.id}> _ {product.name}</li>
+																{selectedProducts?.map((product, index) => (
+																	<li className="d-flex flex-row align-items-center gap-2" key={product?.id}>
+																		<span>_ {product?.name}</span>
+																		<CloseOutlinedIcon style={{ fontSize: "1.2rem", color: "#ff0000", cursor: "pointer" }} onClick={() => deleteItemFromSelectedProduct(index)} />
+																	</li>
 																))}
 															</ul>
 														</div>
@@ -1032,9 +1041,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																		{
+																			paddingRight: "20px",
+																		},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",
@@ -1054,7 +1063,7 @@ const EditCoupon = () => {
 																		if (select_category_id === undefined) {
 																			return (
 																				<p className='text-[#ADB5B9]'>
-																					اختر التصنيف
+																					اختر النشاط
 																				</p>
 																			);
 																		}
@@ -1109,9 +1118,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
+																		{
+																			paddingRight: "20px",
+																		},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",

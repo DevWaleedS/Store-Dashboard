@@ -58,7 +58,7 @@ function CartMenu({ data, reload, setReload }) {
 									<div className='mate'>
 										<span>{product?.qty}</span>
 										{" × "}
-										<span className='price'>{product?.sum} ر.س</span>
+										<span className='price'>{product?.price} ر.س</span>
 									</div>
 								</div>
 								<button

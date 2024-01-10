@@ -299,7 +299,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
 						<div className='col-4 d-flex '>
-							<h5 className='label'>نوع النشاط أو التصنيف الرئيسي</h5>
+							<h5 className='label'>نوع النشاط الرئيسي</h5>
 						</div>
 						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
 							<div className='main-categories w-100'>
@@ -313,13 +313,12 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
 						<div className='col-4 d-flex '>
-							<h5 className='label'>نوع النشاط أو التصنيف الفرعي</h5>
+							<h5 className='label'>نوع النشاط الفرعي</h5>
 						</div>
 						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
 							{selectedSubActivities?.length === 0 ? (
 								<div style={{ fontSize: "16px", color: "#1dbbbe" }}>
-									{" "}
-									لا توجد تصنيفات فرعية{" "}
+									لا توجد أنشطة فرعية
 								</div>
 							) : (
 								<div className='main-categories w-100'>

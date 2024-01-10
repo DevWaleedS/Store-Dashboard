@@ -41,10 +41,10 @@ function EnhancedTableHead(props) {
 					م
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					اسم الكوبون
+					اسم كود الخصم
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					نوع الكوبون
+					نوع كود الخصم
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
 					تاريخ الانتهاء
@@ -94,12 +94,12 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع الكوبونات وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع أكواد الخصم وهذةالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon title='حذف جميع الكوبونات ' />
+								<DeleteIcon title='حذف جميع أكواد الخصم ' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -108,7 +108,7 @@ function EnhancedTableToolbar(props) {
 							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم تعطيل جميع الكوبونات التي قمت بتحديدهم"
+									"سيتم تعطيل جميع أكواد الخصم التي قمت بتحديدهم"
 								);
 								setActionTitle("changeStatus");
 							}}>
@@ -526,15 +526,15 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																	<Link
 																		to={`EditCoupon/${row.id}`}
 																		style={{ cursor: "pointer" }}>
-																		<Reports title='تفاصيل الكوبون' />
+																		<Reports title='تفاصيل كود الخصم' />
 																	</Link>
 																</span>
 																<span>
 																	<DeleteIcon
-																		title='حذف الكوبون'
+																		title='حذف كود الخصم'
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف الكوبون وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف كود الخصم وهذة الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

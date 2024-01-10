@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useContext } from "react";
+import React, { Fragment, useEffect, useContext, useState } from "react";
 
 // Third party
 import axios from "axios";
@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
+
+// Redux
+import { useDispatch } from "react-redux";
+import { openReplyModal } from "../../store/slices/ReplyModal-slice";
 
 // MUI
 import PropTypes from "prop-types";
@@ -36,7 +40,9 @@ import {
 	DeleteIcon,
 	HourGleass,
 	Reports,
+	ReplayIcon,
 } from "../../data/Icons";
+import { SendSupportReplayModal } from "../Modal";
 
 function EnhancedTableHead(props) {
 	return (
@@ -154,6 +160,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 
 	// Get Data From Redux Store
 	const navigate = useNavigate();
+	const dispatch = useDispatch(true);
+	const [UserDetails, setUserDetails] = useState("");
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -401,8 +409,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			row?.supportstatus === "منتهية"
 																				? "#3ae374"
 																				: row?.supportstatus === "غير منتهية "
-																				? "#ff9f1a"
-																				: "#d3d3d3",
+																					? "#ff9f1a"
+																					: "#d3d3d3",
 																		color: "#fff",
 																	}}>
 																	{row?.supportstatus === "منتهية" ? (
@@ -417,13 +425,23 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 															</div>
 														</TableCell>
 														<TableCell align='right'>
-															<div className='actions d-flex justify-content-center align-items-center'>
+															<div className='actions d-flex justify-content-center align-items-center gap-1'>
+																<span
+																	style={{ cursor: "pointer" }}
+																	onClick={() => {
+																		dispatch(openReplyModal());
+																		setUserDetails(row);
+																	}}
+																>
+																	<ReplayIcon title='الرد على الشكوى' />
+																</span>
+
 																<span
 																	style={{ cursor: "pointer" }}
 																	onClick={() => {
 																		navigate(`supportDetails/${row?.id}`);
 																	}}>
-																	<Reports title='تفاصيل الشكوي' />
+																	<Reports title='تفاصيل الشكوى' />
 																</span>
 
 																<span>
@@ -527,6 +545,11 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
+			<SendSupportReplayModal
+				reload={reload}
+				setReload={setReload}
+				supportDetails={UserDetails}
+			/>
 		</Box>
 	);
 };

@@ -228,7 +228,8 @@ const SupportDetails = () => {
 														className='replay-btn'
 														onClick={() => {
 															dispatch(openReplyModal());
-														}}>
+														}}
+														>
 														<ReplayIcon />
 														<span className='user-name me-2 align-self-center'>
 															رد

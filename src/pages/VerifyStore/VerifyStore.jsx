@@ -93,7 +93,7 @@ const VerifyStore = () => {
 												? "store-type verify-tab-bx active"
 												: "store-type verify-tab-bx "
 										}>
-										<h5>نشاط أو تصنيف المتجر</h5>
+										<h5>نشاط المتجر</h5>
 									</div>
 								</div>
 								<div className='col-md-3 col-6'>

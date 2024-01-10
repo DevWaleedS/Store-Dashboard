@@ -34,10 +34,6 @@ const filtersTypes = [
 	{ id: 3, ar_name: "ملغي", en_name: "canceled" },
 	{ id: 4, ar_name: "مكتمل", en_name: "completed" },
 	{ id: 5, ar_name: "جاهز للشحن", en_name: "ready" },
-	{ id: 6, ar_name: "ساعي", en_name: "ساعي" },
-	{ id: 7, ar_name: "Imile", en_name: "Imile" },
-	{ id: 8, ar_name: "سمسا", en_name: "سمسا" },
-	{ id: 9, ar_name: "J&T Express", en_name: "J&T Express" },
 ];
 
 // Style The MUI Select
@@ -150,7 +146,7 @@ function EnhancedTableToolbar(props) {
 									autoComplete='false'
 									value={search}
 									onChange={(e) => setSearch(e.target.value)}
-									placeholder=' ابحث عن طريق رقم التتبع أو اسم شركة الشحن'
+									placeholder=' ابحث برقم التتبع أو اسم شركة الشحن أو اسم العميل'
 								/>
 							</div>
 							<div className='select-input-box'>
