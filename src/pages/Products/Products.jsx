@@ -227,9 +227,11 @@ const Products = () => {
 				</div>
 				<div className='category-table'>
 					<BigProductsTable
-						reload={reload}
+						data={productsResult}
 						loading={loading}
+						reload={reload}
 						setReload={setReload}
+						tabSelectedId={tabSelected}
 					/>
 				</div>
 

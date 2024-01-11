@@ -282,6 +282,7 @@ const PlatformServices = () => {
 								</div>
 								<div className='col-md-7 col-12'>
 									<textarea
+										rows={4}
 										id='product-desc'
 										name='description'
 										className='w-100 new-service-input'
@@ -290,7 +291,6 @@ const PlatformServices = () => {
 										onChange={(e) =>
 											setData({ ...data, description: e.target.value })
 										}
-										rows={4}
 									/>
 								</div>
 							</div>

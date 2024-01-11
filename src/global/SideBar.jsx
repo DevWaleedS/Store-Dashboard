@@ -108,7 +108,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Category'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Category />
 						<span className='me-2'> الأنشطة</span>
@@ -117,7 +122,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Products'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Products />
 						<span className='me-2'> المنتجات</span>
@@ -126,7 +136,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Orders'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Orders />
 						<span className='me-2'>الطلبات </span>
@@ -135,7 +150,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='PlatformServices'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Services />
 						<span className='me-2'> خدمات المنصة</span>
@@ -146,7 +166,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='Coupon'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<Discoint />
 							<span className='me-2'> أكواد الخصم</span>
@@ -164,7 +189,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='Carts'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<BsCart />
 							<span className='me-2'> السلات المتروكة</span>
@@ -185,7 +215,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='PostalSubscriptions'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<MarkEmailReadIcon style={{ fontSize: "24px" }} />
 							<span className='me-2'>الاشتراكات البريدية</span>
@@ -194,7 +229,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='SEOStore'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> SEO المتجر </span>
@@ -213,7 +253,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Rating'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Rating className='rating-icon' />
 						<span className='me-2'>التقييمات </span>
@@ -225,6 +270,9 @@ const SideBar = ({ open, closeSidebar }) => {
 					onClick={() => {
 						closeSidebar();
 						dispatch(openDelegateRequestAlert());
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
 					}}>
 					<MenuItem>
 						<FaUserCheck />
@@ -234,7 +282,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Pages'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<PagesIcon />
 						<span className='me-2'> الصفحات</span>
@@ -243,7 +296,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Academy'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Academy />
 						<span className='me-2'> الأكاديمية</span>
@@ -253,7 +311,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='Template'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<Layout />
 							<span className='me-2'>تنسيق القالب</span>
@@ -262,7 +325,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='PaintStore'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<Paint />
 							<span className='me-2'>هوية المتجر</span>
@@ -287,7 +355,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='SocialPages'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<Social />
 							<span className='me-2'> صفحات التواصل</span>
@@ -344,7 +417,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Support'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Support />
 						<span className='me-2'> الدعم الفني</span>
@@ -353,7 +431,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='ShippingCompanies'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Delevray />
 						<span className='me-2'> شركات الشحن</span>
@@ -362,7 +445,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='PaymentGetways'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Payment />
 						<span className='me-2'> بوابات الدفع</span>
@@ -373,7 +461,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='MainInformation'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> إعدادت المتجر الاساسية</span>
@@ -394,7 +487,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='Management'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> الإدارة و المستخدمين </span>
@@ -403,7 +501,12 @@ const SideBar = ({ open, closeSidebar }) => {
 					<NavLink
 						className='sub-menu-link'
 						to='Notifications'
-						onClick={() => closeSidebar()}>
+						onClick={() => {
+							closeSidebar();
+							if (verificationStoreStatus !== "تم التوثيق") {
+								dispatchVerifyModal(openVerifyModal());
+							}
+						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> الإشعارات </span>
@@ -414,7 +517,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='Report'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Reports />
 						<span className='me-2'> التقارير</span>
@@ -423,7 +531,12 @@ const SideBar = ({ open, closeSidebar }) => {
 				<NavLink
 					className='menu-link'
 					to='EvaluationThePlatform'
-					onClick={() => closeSidebar()}>
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
 					<MenuItem>
 						<Evaluation />
 						<span className='me-2'> تقييم المنصة</span>

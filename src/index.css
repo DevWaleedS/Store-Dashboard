@@ -8232,6 +8232,9 @@ input:disabled {
 	input.new-service-input::placeholder {
 	font-size: 16px;
 }
+textarea.new-service-input {
+	resize: none;
+}
 
 .PlatformServices-page .delegate-request-form .upload-request-btn {
 	height: 60px;

@@ -24,25 +24,6 @@ import { UserAuth } from "../../Context/UserAuthorProvider";
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// styles
-const style = {
-	position: "absolute",
-	top: "18%",
-	left: "50%",
-	transform: "translate(-50%, -50%)",
-	width: "100%",
-	maxWidth: "100%",
-	bgcolor: "#ffdd00",
-	boxShadow: 24,
-	p: 4,
-	"@media(max-width:768px)": {
-		top: "70px",
-		left: 0,
-		transform: "none",
-		padding: "16px",
-	},
-};
-
 const VerifyStore = () => {
 	const UserInfo = useContext(UserAuth);
 	const { userInfo } = UserInfo;
@@ -60,40 +41,79 @@ const VerifyStore = () => {
 			);
 		}
 	}, [fetchedData?.data?.stores]);
-	
+
+	// styles
+	const style = {
+		position: "absolute",
+		top: "18%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+		width: "100%",
+		maxWidth: "100%",
+		bgcolor: verificationStatus === "تم التوثيق" ? "#07bc0c" : "#ffdd00",
+		boxShadow: 24,
+		p: 4,
+		"@media(max-width:768px)": {
+			top: "70px",
+			left: 0,
+			transform: "none",
+			padding: "16px",
+		},
+	};
+
 	return (
 		<div>
-			{verificationStatus === "" ||
-			verificationStatus === "تم التوثيق" ||
-			null ? null : (
-				<Modal
-					open={isOpenVerifyModal}
-					onClose={() => {
-						dispatch(closeVerifyModal());
-					}}
-					aria-labelledby='modal-modal-title'
-					aria-describedby='modal-modal-description'>
-					<Box sx={style}>
-						<Typography
-							component={"div"}
-							id='modal-modal-description'
-							sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
-							<div className='d-flex justify-content-center align-items-center'>
-								{loading ? (
-									<CircularLoading />
-								) : (
-									<div className='d-flex justify-content-center align-items-center'>
-										{verificationStatus === "جاري التوثيق" ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
-												<p className='verify-message'>
-													مرحبا{" "}
-													<span className='text-bold'>
-														{userInfo?.name === null
-															? "صديقي التاجر"
-															: userInfo?.name}
-													</span>{" "}
-													المتجر الخاص قيد المراجعة من قبل الجهات المختصة
-												</p>
+			<Modal
+				open={isOpenVerifyModal}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'>
+				<Box sx={style}>
+					<Typography
+						component={"div"}
+						id='modal-modal-description'
+						sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
+						<div className='d-flex justify-content-center align-items-center'>
+							{loading ? (
+								<CircularLoading />
+							) : (
+								<div className='d-flex justify-content-center align-items-center'>
+									{verificationStatus === "جاري التوثيق" ? (
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+											<p className='verify-message'>
+												مرحبا{" "}
+												<span className='text-bold'>
+													{userInfo?.name === null
+														? "صديقي التاجر"
+														: userInfo?.name}
+												</span>{" "}
+												المتجر الخاص قيد المراجعة من قبل الجهات المختصة
+											</p>
+											<IoMdCloseCircleOutline
+												style={{ cursor: "pointer", fill: "#02466a" }}
+												fill='#02466a'
+												onClick={() => {
+													dispatch(closeVerifyModal());
+												}}
+											/>
+										</div>
+									) : verificationStatus === "طلب جديد" ? (
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+											<p className='verify-message'>
+												مرحبا{" "}
+												{userInfo?.name === null
+													? userInfo?.user_name || "صديقي التاجر"
+													: userInfo?.name}{" "}
+												تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من الجهات
+												المختصة
+											</p>
+											<div className='btns-box' style={{ width: "250px" }}>
+												<Link
+													to='/VerifyStore'
+													onClick={() => {
+														dispatch(closeVerifyModal());
+													}}>
+													التوثيق الأن
+												</Link>
 												<IoMdCloseCircleOutline
 													style={{ cursor: "pointer", fill: "#02466a" }}
 													fill='#02466a'
@@ -102,95 +122,81 @@ const VerifyStore = () => {
 													}}
 												/>
 											</div>
-										) : verificationStatus === "طلب جديد" ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
-												<p className='verify-message'>
-													مرحبا{" "}
-													{userInfo?.name === null
-														? userInfo?.user_name || "صديقي التاجر"
-														: userInfo?.name}{" "}
-													تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من
-													الجهات المختصة
-												</p>
-												<div className='btns-box' style={{ width: "250px" }}>
-													<Link
-														to='/VerifyStore'
-														onClick={() => {
-															dispatch(closeVerifyModal());
-														}}>
-														التوثيق الأن
-													</Link>
-													<IoMdCloseCircleOutline
-														style={{ cursor: "pointer", fill: "#02466a" }}
-														fill='#02466a'
-														onClick={() => {
-															dispatch(closeVerifyModal());
-														}}
-													/>
-												</div>
+										</div>
+									) : verificationStatus === "التوثيق مرفوض" ? (
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+											<p className='verify-message'>
+												مرحبا{" "}
+												{userInfo?.name === null
+													? userInfo?.user_name || "صديقي التاجر"
+													: userInfo?.name}{" "}
+												طلب توثيقك مرفوض الرجاء التوجه إلى التوثيق لتعديل
+												البيانات
+											</p>
+											<div className='btns-box' style={{ width: "250px" }}>
+												<Link
+													to='/VerifyStore'
+													onClick={() => {
+														dispatch(closeVerifyModal());
+													}}>
+													التوثيق الأن
+												</Link>
+												<IoMdCloseCircleOutline
+													style={{ cursor: "pointer", fill: "#02466a" }}
+													fill='#02466a'
+													onClick={() => {
+														dispatch(closeVerifyModal());
+													}}
+												/>
 											</div>
-										) : verificationStatus === "التوثيق مرفوض" ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
-												<p className='verify-message'>
-													مرحبا{" "}
-													{userInfo?.name === null
-														? userInfo?.user_name || "صديقي التاجر"
-														: userInfo?.name}{" "}
-													طلب توثيقك مرفوض الرجاء التوجه إلى التوثيق لتعديل
-													البيانات
-												</p>
-												<div className='btns-box' style={{ width: "250px" }}>
-													<Link
-														to='/VerifyStore'
-														onClick={() => {
-															dispatch(closeVerifyModal());
-														}}>
-														التوثيق الأن
-													</Link>
-													<IoMdCloseCircleOutline
-														style={{ cursor: "pointer", fill: "#02466a" }}
-														fill='#02466a'
-														onClick={() => {
-															dispatch(closeVerifyModal());
-														}}
-													/>
-												</div>
+										</div>
+									) : verificationStatus === "لم يتم الطلب" ? (
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+											<p className='verify-message'>
+												مرحبا{" "}
+												{userInfo?.name === null
+													? userInfo?.user_name || "صديقي التاجر"
+													: userInfo?.name}{" "}
+												المتجر الخاص بك غير مكتمل الرجاء اكمال البيانات الاساسية
+												للمتجر
+											</p>
+											<div className='btns-box' style={{ width: "250px" }}>
+												<Link
+													to='/MainInformation'
+													onClick={() => {
+														dispatch(closeVerifyModal());
+													}}>
+													اكمال البيانات
+												</Link>
+												<IoMdCloseCircleOutline
+													style={{ cursor: "pointer", fill: "#02466a" }}
+													fill='#02466a'
+													onClick={() => {
+														dispatch(closeVerifyModal());
+													}}
+												/>
 											</div>
-										) : verificationStatus === "لم يتم الطلب" ? (
-											<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
-												<p className='verify-message'>
-													مرحبا{" "}
-													{userInfo?.name === null
-														? userInfo?.user_name || "صديقي التاجر"
-														: userInfo?.name}{" "}
-													المتجر الخاص بك غير مكتمل الرجاء اكمال البيانات
-													الاساسية للمتجر
-												</p>
-												<div className='btns-box' style={{ width: "250px" }}>
-													<Link
-														to='/MainInformation'
-														onClick={() => {
-															dispatch(closeVerifyModal());
-														}}>
-														اكمال البيانات
-													</Link>
-													<IoMdCloseCircleOutline
-														style={{ cursor: "pointer", fill: "#02466a" }}
-														fill='#02466a'
-														onClick={() => {
-															dispatch(closeVerifyModal());
-														}}
-													/>
-												</div>
-											</div>
-										) : null}
-									</div>
-								)}
-							</div>
-						</Typography>
-					</Box>
-				</Modal>
-			)}
+										</div>
+									) : verificationStatus === "تم التوثيق" ? (
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+											<p className='verify-message text-white'>
+												تهانينا... المتجر الخاص بك مكتمل التوثيق
+											</p>
+											<IoMdCloseCircleOutline
+												style={{ cursor: "pointer", fill: "#fff" }}
+												fill='#fff'
+												onClick={() => {
+													dispatch(closeVerifyModal());
+												}}
+											/>
+										</div>
+									) : null}
+								</div>
+							)}
+						</div>
+					</Typography>
+				</Box>
+			</Modal>
 		</div>
 	);
 };

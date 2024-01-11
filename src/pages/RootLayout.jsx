@@ -2,7 +2,10 @@ import React, { useContext, useEffect } from "react";
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
 import { StoreVerificationThunk } from "../store/Thunk/storeVerificationThunk";
-import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
+import {
+	closeVerifyModal,
+	openVerifyModal,
+} from "../store/slices/VerifyStoreModal-slice";
 
 // Context
 import Context from "../Context/context";
@@ -93,10 +96,11 @@ const RootLayout = () => {
 			) {
 				dispatchVerifyModal(openVerifyModal());
 			}
-		}, 100);
+		}, 0);
 
 		return () => {
 			clearTimeout(debounce);
+			dispatchVerifyModal(closeVerifyModal());
 		};
 	}, [verificationStoreStatus]);
 
