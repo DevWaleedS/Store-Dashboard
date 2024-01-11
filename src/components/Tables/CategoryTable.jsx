@@ -33,6 +33,7 @@ import { NotificationContext } from "../../Context/NotificationProvider";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
+	const { tabSelectedId } = props;
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
@@ -51,12 +52,14 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الأنشطة الفرعية
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a" }}>
+				{tabSelectedId === 1 && <TableCell align='center' sx={{ color: "#02466a" }}>
 					نشر
 				</TableCell>
-				<TableCell sx={{ color: "#02466a" }} align='center'>
+				}
+				{tabSelectedId === 1 && <TableCell sx={{ color: "#02466a" }} align='center'>
 					اجراء
 				</TableCell>
+				}
 			</TableRow>
 		</TableHead>
 	);
@@ -69,11 +72,12 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick } = props;
+	const { numSelected, rowCount, onSelectAllClick, tabSelectedId } = props;
 	const NotificationStore = useContext(NotificationContext);
 	const { setNotificationTitle, setActionTitle } = NotificationStore;
 
 	return (
+		tabSelectedId === 1 &&
 		<Toolbar
 			sx={{
 				pl: { sm: 2 },
@@ -194,12 +198,12 @@ export default function EnhancedTable({
 	loading,
 	reload,
 	setReload,
+	tabSelectedId,
 }) {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -365,6 +369,7 @@ export default function EnhancedTable({
 					numSelected={selected.length}
 					rowCount={fetchedData?.length}
 					onSelectAllClick={handleSelectAllClick}
+					tabSelectedId={tabSelectedId}
 				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
@@ -372,6 +377,7 @@ export default function EnhancedTable({
 							numSelected={selected.length}
 							onSelectAllClick={handleSelectAllClick}
 							rowCount={fetchedData?.length}
+							tabSelectedId={tabSelectedId}
 						/>
 
 						<TableBody>
@@ -420,26 +426,11 @@ export default function EnhancedTable({
 																className='flex items-center '
 																style={{
 																	display: "flex",
-																	justifyContent: "start",
+																	justifyContent: tabSelectedId === 1 ? "start" : "center",
 																	alignItems: "center",
 																	gap: "7px",
 																}}>
-																{row?.store === null ? (
-																	<Checkbox
-																		disabled={
-																			row?.store === null ? true : false
-																		}
-																		sx={{
-																			color: "#356b88",
-																			"& .MuiSvgIcon-root": {
-																				color: "#356b88",
-																			},
-																		}}
-																		inputProps={{
-																			"aria-labelledby": labelId,
-																		}}
-																	/>
-																) : (
+																{tabSelectedId === 1 && (
 																	<Checkbox
 																		sx={{
 																			color: "#356b88",
@@ -565,7 +556,7 @@ export default function EnhancedTable({
 															)}
 														</TableCell>
 
-														<TableCell align='center'>
+														{tabSelectedId === 1 && <TableCell align='center'>
 															<div
 																className='form-check form-switch'
 																style={{ margin: "0 auto" }}>
@@ -612,8 +603,9 @@ export default function EnhancedTable({
 																/>
 															</div>
 														</TableCell>
+														}
 
-														<TableCell align='right'>
+														{tabSelectedId === 1 && <TableCell align='right'>
 															<div className='actions d-flex justify-content-center gap-1'>
 																<span
 																	style={{
@@ -649,6 +641,7 @@ export default function EnhancedTable({
 																</span>
 															</div>
 														</TableCell>
+														}
 													</TableRow>
 												);
 											})

@@ -230,8 +230,6 @@ const Products = () => {
 						reload={reload}
 						loading={loading}
 						setReload={setReload}
-						data={productsResult}
-						tabSelected={tabSelected}
 					/>
 				</div>
 

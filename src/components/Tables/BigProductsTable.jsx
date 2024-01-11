@@ -99,6 +99,7 @@ function EnhancedTableToolbar(props) {
 		rowCount,
 		onSelectAllClick,
 		handleOpenChangeCategoriesModal,
+		tabSelectedId,
 	} = props;
 	const NotificationStore = useContext(NotificationContext);
 	const { setNotificationTitle, setActionTitle } = NotificationStore;
@@ -181,13 +182,14 @@ function EnhancedTableToolbar(props) {
 							</IconButton>
 						</Tooltip>
 
-						<Tooltip>
+						{tabSelectedId === 1 && <Tooltip>
 							<button
 								className='edit-all-categories-btn'
 								onClick={handleOpenChangeCategoriesModal}>
 								تعديل الأنشطة
 							</button>
 						</Tooltip>
+						}
 					</div>
 				)}
 			</div>
@@ -227,7 +229,7 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function BigProductsTable({ data, loading, reload, setReload }) {
+export default function BigProductsTable({ data, loading, reload, setReload, tabSelectedId }) {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -759,6 +761,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
 					handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
+					tabSelectedId={tabSelectedId}
 				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>

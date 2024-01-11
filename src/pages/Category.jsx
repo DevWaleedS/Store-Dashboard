@@ -232,6 +232,7 @@ const Category = () => {
 							loading={loading}
 							reload={reload}
 							setReload={setReload}
+							tabSelectedId={tabSelected}
 						/>
 					</div>
 				</div>
