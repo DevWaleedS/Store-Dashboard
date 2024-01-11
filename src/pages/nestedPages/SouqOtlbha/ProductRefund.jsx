@@ -321,26 +321,13 @@ const ProductRefund = () => {
 												</div>
 											</div>
 
-											{/* Stock */}
-											<div className='product-price mb-3'>
-												<div className='label mb-1'>أقل كمية للطلب</div>
-												<div className='input d-flex justify-content-center align-items-center'>
-													<div className='price-icon d-flex  p-2 gap-3'>
-														<div
-															className='price w-100 d-flex justify-content-center align-items-center'
-															style={{ color: "#67747B" }}>
-															{fetchedData?.data?.products?.less_qty}
-														</div>
-													</div>
-												</div>
-											</div>
-
 											{/* Selling Price */}
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
-													الكمية المراد استيرادها من المنتج
-													<span style={{ color: "#ff3838" }}> * </span>{" "}
-													<span>(قم بإضافة الكمية الخاص بك)</span>
+													أقل كمية يمكنك استيراها من هذا المنتج
+													<span style={{ color: "#ff3838" }}> * </span>
+													<span>
+													({fetchedData?.data?.products?.less_qty} قطعة)</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex align-items-center p-2 gap-3'>
