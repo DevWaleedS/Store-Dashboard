@@ -32,6 +32,7 @@ import "react-datepicker/dist/react-datepicker.css";
 // icons
 import { IoIosArrowDown } from "react-icons/io";
 import { DateIcon, SearchIcon } from "../../data/Icons";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 // Modal Style
 const style = {
@@ -149,8 +150,8 @@ const AddCoupon = () => {
 
 	const handleProductSelect = (productId) => {
 		setSelectProductId((prevSelectedIds) =>
-			prevSelectedIds.includes(productId)
-				? prevSelectedIds.filter((id) => id !== productId)
+			prevSelectedIds?.includes(productId)
+				? prevSelectedIds?.filter((id) => id !== productId)
 				: [...prevSelectedIds, productId]
 		);
 
@@ -159,7 +160,7 @@ const AddCoupon = () => {
 			(product) => product.id === productId
 		);
 		setSelectedProducts((prevSelectedProducts) =>
-			prevSelectedProducts.some((product) => product.id === selectedProduct.id)
+			prevSelectedProducts?.some((product) => product?.id === selectedProduct?.id)
 				? prevSelectedProducts
 				: [...prevSelectedProducts, selectedProduct]
 		);
@@ -167,7 +168,7 @@ const AddCoupon = () => {
 
 	// add coupon function
 	const addNewCoupon = (data) => {
-		setLoadingTitle("جاري اضافة الكوبون");
+		setLoadingTitle("جاري اضافة كود الخصم");
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("code", data?.code);
@@ -192,10 +193,10 @@ const AddCoupon = () => {
 		// 	"select_payment_id",
 		// 	coupon_apply === "selected_payment" ? select_payment_id : ""
 		// );
-		selectedProductIds.forEach((id, idx) =>
+		selectedProducts?.forEach((product, idx) =>
 			formData.append(
 				`select_product_id[${idx}]`,
-				coupon_apply === "selected_product" ? id : ""
+				coupon_apply === "selected_product" ? product?.id : ""
 			)
 		);
 
@@ -255,10 +256,15 @@ const AddCoupon = () => {
 			});
 	};
 
+	const deleteItemFromSelectedProduct = (id) => {
+		const newLists = selectedProducts?.filter((__product, index) => index !== id);
+		setSelectedProducts(newLists);
+	}
+	
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | اضافة كوبون</title>
+				<title>لوحة تحكم أطلبها | اضافة كود خصم</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -271,8 +277,8 @@ const AddCoupon = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title'>
-										<h5 className='mb-3'> تفاصيل الكوبون</h5>
-										<p>اضافة كوبون جديد</p>
+										<h5 className='mb-3'> تفاصيل كود الخصم</h5>
+										<p>اضافة كود خصم جديد</p>
 									</div>
 								</div>
 							</div>
@@ -282,12 +288,12 @@ const AddCoupon = () => {
 									<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
 										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
 											<label htmlFor='coupon-name' className='d-block mb-1'>
-												كود الكوبون<span className='important-hint'>*</span>
+												كود الخصم<span className='important-hint'>*</span>
 											</label>
 											<input
 												type='text'
 												id='coupon-code'
-												placeholder='ادخل كود الكوبون'
+												placeholder='ادخل كود الخصم'
 												name='code'
 												{...register("code", {
 													required: "حقل الكود مطلوب",
@@ -332,7 +338,7 @@ const AddCoupon = () => {
 													<input
 														type='text'
 														id='uses-count'
-														placeholder='  عدد مرات استخدام الكوبون لجميع العملاء'
+														placeholder='  عدد مرات استخدام كود الخصم لجميع العملاء'
 														name='total_redemptions'
 														value={value}
 														onChange={(e) =>
@@ -471,7 +477,7 @@ const AddCoupon = () => {
 													<input
 														type='text'
 														id='user-count'
-														placeholder='  عدد مرات استخدام الكوبون للعميل الواحد'
+														placeholder='  عدد مرات استخدام كود الخصم للعميل الواحد'
 														name='user_redemptions'
 														value={value}
 														onChange={(e) =>
@@ -729,7 +735,7 @@ const AddCoupon = () => {
 																		: "disabled me-3"
 																}
 																htmlFor='selected_category'>
-																تصنيفات مختارة
+																أنشطة مختارة
 															</label>
 															</div>
 														<div className='radio-box select-apply-offer'>
@@ -781,22 +787,25 @@ const AddCoupon = () => {
 													</div>
 													{searchTerm !== "" && (
 														<ul className='purchase_serach'>
-															{filteredProducts.map((product) => (
+															{filteredProducts?.map((product) => (
 																<li
-																	key={product.id}
+																	key={product?.id}
 																	onClick={() => {
-																		handleProductSelect(product.id);
+																		handleProductSelect(product?.id);
 																		setSearchTerm("");
 																	}}>
-																	{product.name}
+																	{product?.name}
 																</li>
 															))}
 														</ul>
 													)}
 
 													<ul className='purchase_products_selected'>
-														{selectedProducts.map((product) => (
-															<li key={product.id}> _ {product.name}</li>
+														{selectedProducts?.map((product, index) => (
+															<li className="d-flex flex-row align-items-center gap-2" key={product?.id}>
+																<span>_ {product?.name}</span>
+																<CloseOutlinedIcon style={{ fontSize: "1.2rem", color: "#ff0000", cursor: "pointer" }} onClick={() => deleteItemFromSelectedProduct(index)} />
+															</li>
 														))}
 													</ul>
 												</div>
@@ -813,9 +822,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -835,7 +844,7 @@ const AddCoupon = () => {
 																if (select_category_id === "") {
 																	return (
 																		<p className='text-[#ADB5B9]'>
-																			اختر النشاط أو التصنيف
+																			اختر النشاط
 																		</p>
 																	);
 																}
@@ -888,9 +897,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",

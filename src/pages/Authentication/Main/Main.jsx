@@ -16,7 +16,7 @@ import { SvgComponent } from "../../../data/Icons";
 import Loading from "../../Loading/Loading";
 
 const mainTitle = [
-	{ id: 1, text: "قم بتسجيل الدخول الى حسابك" },
+	{ id: 1, text: "قم بتسجيل الدخول إلى حسابك" },
 	{ id: 2, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
 	{ id: 3, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
 ];

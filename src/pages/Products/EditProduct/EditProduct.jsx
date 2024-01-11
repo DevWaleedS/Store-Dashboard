@@ -518,7 +518,7 @@ const EditProduct = () => {
 													render={({ field: { onChange, value } }) => (
 														<textarea
 															name='short_description'
-															placeholder='اكتب وصف قصير للمنتج لا يتعدي 100 حرف'
+															placeholder='اكتب وصف قصير للمنتج لا يتجاوز 100 حرف'
 															rows={5}
 															value={value}
 															onChange={(e) => {
@@ -541,7 +541,7 @@ const EditProduct = () => {
 												</span>
 												{shortDescriptionLength && (
 													<span className='fs-6 text-danger'>
-														الوصف يجب إلا يتعدي 100 حرف
+														الوصف لا يتجاوز 100 حرف
 													</span>
 												)}
 											</div>
@@ -575,7 +575,7 @@ const EditProduct = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
 													{" "}
-													النشاط أو التصنيف الرئيسي
+													النشاط الرئيسي
 													<span className='important-hint'>*</span>
 												</label>
 											</div>
@@ -585,7 +585,7 @@ const EditProduct = () => {
 														name={"category_id"}
 														control={control}
 														rules={{
-															required: "حقل النشاط أو التصنيف الرئيسي مطلوب",
+															required: "حقل النشاط الرئيسي مطلوب",
 														}}
 														render={({ field: { onChange, value } }) => (
 															<Select
@@ -613,7 +613,7 @@ const EditProduct = () => {
 																	) {
 																		return (
 																			<p className='text-[#ADB5B9]'>
-																				اختر النشاط أو التصنيف
+																				اختر النشاط
 																			</p>
 																		);
 																	}
@@ -663,7 +663,7 @@ const EditProduct = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='sub-category'>
-													النشاط أو التصنيف الفرعي
+													النشاط الفرعي
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -673,7 +673,7 @@ const EditProduct = () => {
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
-															لا يوجد تصنيفات فرعية للتصنيف الرئيسي الذي اخترتة
+															لا يوجد أنشطة فرعية للنشاط الرئيسي الذي اخترتة
 														</div>
 													) : (
 														<Select
@@ -693,7 +693,7 @@ const EditProduct = () => {
 															input={<OutlinedInput />}
 															renderValue={(selected) => {
 																if (product?.subcategory_id?.length === 0) {
-																	return "النشاط أو التصنيف الفرعي";
+																	return "النشاط الفرعي";
 																}
 																return selected?.map((item) => {
 																	const result =

@@ -424,7 +424,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-category'>
 													{" "}
-													النشاط أو التصنيف الرئيسي
+													النشاط الرئيسي
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
@@ -449,7 +449,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='sub-category'>
 													{" "}
-													النشاطات و التصنيفات الفرعية{" "}
+													الأنشطة الفرعية{" "}
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
@@ -459,7 +459,7 @@ const ShowImportEtlobhaProduct = () => {
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
-															(لا يوجد تصنيفات فرعية)
+															(لا يوجد أنشطة فرعية)
 														</div>
 													) : (
 														<div className='d-flex flex-wrap align-items-center justify-content-start gap-1'>

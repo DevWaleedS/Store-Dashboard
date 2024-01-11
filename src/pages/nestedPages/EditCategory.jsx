@@ -124,7 +124,7 @@ const EditCategory = () => {
 
 	/** update category function */
 	const updateCategory = (data) => {
-		setLoadingTitle("جاري تعديل النشاط أو التصنيف");
+		setLoadingTitle("جاري تعديل النشاط");
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("name", data?.name);
@@ -212,7 +212,7 @@ const EditCategory = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل تصنيف</title>
+				<title>لوحة تحكم أطلبها | تعديل نشاط</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -228,9 +228,9 @@ const EditCategory = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title'>
-										<h5 className='mb-3'> تعديل تصنيف</h5>
+										<h5 className='mb-3'> تعديل نشاط</h5>
 										<p>
-											قم بتحديث النشاط أو التصنيف والمعلومات الضرورية من هنا
+											قم بتحديث النشاط والمعلومات الضرورية من هنا
 										</p>
 									</div>
 								</div>
@@ -243,7 +243,7 @@ const EditCategory = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>
 											<label htmlFor='add-icon'>
-												ايقونة النشاط أو التصنيف
+												ايقونة النشاط
 												<span className='important-hint'>*</span>
 											</label>
 										</div>
@@ -318,7 +318,7 @@ const EditCategory = () => {
 										<div className='col-md-3 col-12'>
 											<label htmlFor='category-name'>
 												{" "}
-												النشاط أو التصنيف الرئيسي
+												النشاط الرئيسي
 												<span className='important-hint'>*</span>
 											</label>
 										</div>
@@ -326,7 +326,7 @@ const EditCategory = () => {
 											<input
 												type='text'
 												id='category-name'
-												placeholder='أدخل اسم النشاط أو التصنيف الرئيسي'
+												placeholder='أدخل اسم النشاط الرئيسي'
 												name='name'
 												{...register("name", {
 													required: "حقل الاسم مطلوب",
@@ -401,7 +401,7 @@ const EditCategory = () => {
 													dispatch(openAddSubCategory());
 												}}>
 												<AiOutlinePlus />
-												<span className='me-2'>اضافة تصنيف فرعي جديد</span>
+												<span className='me-2'>اضافة نشاط فرعي جديد</span>
 											</button>
 										</div>
 									</div>

@@ -1838,7 +1838,7 @@ const CreateOffer = () => {
 															}}
 														/>
 													}
-													label='تفعيل العرض مع وجود كوبون'
+													label='تفعيل العرض مع وجود كود خصم'
 												/>
 											</FormGroup>
 											<div className='col-12'>
@@ -2440,7 +2440,7 @@ const CreateOffer = () => {
 															}}
 														/>
 													}
-													label='تفعيل العرض مع وجود كوبون'
+													label='تفعيل العرض مع وجود كود خصم'
 												/>
 											</FormGroup>
 											<div className='col-12'>

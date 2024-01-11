@@ -39,7 +39,7 @@ const AddSubCategory = () => {
 		if (subcat) {
 			dispatch(closeAddSubCategory());
 		} else {
-			setSubError("يرجي اضافه النشاط أو التصنيف أولاً");
+			setSubError("يرجي اضافه النشاط أولاً");
 		}
 	};
 
@@ -66,7 +66,7 @@ const AddSubCategory = () => {
 									<h5
 										className='text-white text-center'
 										style={{ fontSize: "22px", fontWeight: 400 }}>
-										اضف تصنيف فرعي
+										اضف نشاط فرعي
 									</h5>
 								</div>
 								<div className='close-icon-video-modal'>
@@ -82,13 +82,13 @@ const AddSubCategory = () => {
 								<div className='row mb-5 mt-5 d-flex justify-content-center'>
 									<div className='col-8 '>
 										<label htmlFor='category-name ' className='d-block mb-2'>
-											اسم النشاط أو التصنيف الفرعي
+											اسم النشاط الفرعي
 										</label>
 
 										<input
 											type='text'
 											id='category-name'
-											placeholder='ادخل اسم النشاط أو التصنيف الفرعي'
+											placeholder='ادخل اسم النشاط الفرعي'
 											style={{ backgroundColor: "white" }}
 											value={subcat}
 											onChange={(e) => setSubCat(e.target.value.trimStart())}

@@ -75,12 +75,14 @@ const ProductRefund = () => {
 	const [productErrors, setProductErrors] = useState({
 		price: "",
 		qty: "",
+		less_qty: ""
 	});
 
 	const resetProductErrors = () => {
 		setProductErrors({
 			price: "",
 			qty: "",
+			less_qty: ""
 		});
 	};
 
@@ -101,7 +103,7 @@ const ProductRefund = () => {
 	// Handle Import Product
 	const importProduct = () => {
 		resetProductErrors();
-		setLoadingTitle("جاري اضافة المنتج الي سلة الاستيراد");
+		setLoadingTitle("جاري اضافة المنتج إلى سلة الاستيراد");
 
 		let formData = new FormData();
 		formData.append("data[0][id]", productInfo?.id);
@@ -130,12 +132,16 @@ const ProductRefund = () => {
 						...productErrors,
 						price: res?.data?.message?.en?.["data.0.price"]?.[0],
 						qty: res?.data?.message?.en?.["data.0.qty"]?.[0],
+						less_qty: res?.data?.message?.ar,
 					});
 
 					toast.error(res?.data?.message?.en?.["data.0.price"]?.[0], {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.["data.0.qty"]?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.ar, {
 						theme: "light",
 					});
 				}
@@ -217,9 +223,8 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`video_wrapper ${
-																			isActive === index ? "active" : ""
-																		}`}>
+																		className={`video_wrapper ${isActive === index ? "active" : ""
+																			}`}>
 																		<video
 																			onClick={() => {
 																				setImagesPreview(item?.image);
@@ -238,9 +243,8 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`${
-																			isActive === index ? "active" : ""
-																		}`}>
+																		className={`${isActive === index ? "active" : ""
+																			}`}>
 																		<img
 																			style={{
 																				cursor: "pointer",
@@ -263,11 +267,11 @@ const ProductRefund = () => {
 
 											<div className='product-category'>
 												<h3 className='text-center mb-3'>
-													نشاطات و تصنيفات المنتج
+													أنشطة المنتج
 												</h3>
 												<div className='main-category category mb-3'>
 													<div className='label mb-2'>
-														النشاط و التصنيف الرئيسي
+														النشاط الرئيسي
 													</div>
 													<div className='input'>
 														{fetchedData?.data?.products?.category?.name}
@@ -275,7 +279,7 @@ const ProductRefund = () => {
 												</div>
 												<div className='sub-category category'>
 													<div className='label mb-2'>
-														النشاطات و التصنيفات الفرعية{" "}
+														الأنشطة الفرعية{" "}
 													</div>
 													<div className='d-flex flex-wrap align-items-center justify-content-start flex-wrap gap-1'>
 														{fetchedData?.data?.products?.subcategory
@@ -285,7 +289,7 @@ const ProductRefund = () => {
 																style={{
 																	color: "#1dbbbe",
 																}}>
-																لا يوجد نشاطات أو تصنيفات فرعية
+																لا يوجد أنشطة فرعية
 															</div>
 														) : (
 															fetchedData?.data?.products?.subcategory?.map(
@@ -321,9 +325,10 @@ const ProductRefund = () => {
 											{/* Selling Price */}
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
-													الكمية المراد استيرادها من المنتج
-													<span style={{ color: "#ff3838" }}> * </span>{" "}
-													<span>(قم بإضافة الكمية الخاص بك)</span>
+													أقل كمية يمكنك استيراها من هذا المنتج
+													<span style={{ color: "#ff3838" }}> * </span>
+													<span>
+													({fetchedData?.data?.products?.less_qty} قطعة)</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex align-items-center p-2 gap-3'>
@@ -358,15 +363,26 @@ const ProductRefund = () => {
 
 												{Number(productInfo?.qty) >
 													Number(fetchedData?.data?.products?.stock) && (
-													<span className='fs-6 text-danger'>
-														الكمية المطلوبة غير متوفرة
-													</span>
-												)}
-
+														<span className='fs-6 text-danger'>
+															الكمية المطلوبة غير متوفرة
+														</span>
+													)}
+												{Number(productInfo?.qty) <
+													Number(fetchedData?.data?.products?.less_qty) && (
+														<>
+															<br />
+															<span className='fs-6 text-danger'>
+																أقل كمية طلب للمنتج هي {fetchedData?.data?.products?.less_qty}
+															</span>
+														</>
+													)}
 												{productErrors?.qty && (
-													<span className='fs-6 text-danger'>
-														{productErrors?.qty}
-													</span>
+													<>
+														<br />
+														<span className='fs-6 text-danger'>
+															{productErrors?.qty}
+														</span>
+													</>
 												)}
 											</div>
 
@@ -391,7 +407,7 @@ const ProductRefund = () => {
 											onClick={() => {
 												importProduct();
 											}}>
-											اضافه المنتج الي سلة الاستيراد
+											اضافه المنتج إلى سلة الاستيراد
 										</button>
 									</div>
 								</div>

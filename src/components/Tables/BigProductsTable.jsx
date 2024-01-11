@@ -64,7 +64,7 @@ function EnhancedTableHead(props) {
 					اسم المنتج
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					النشاط أو التصنيف
+					النشاط
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					السعر
@@ -73,7 +73,7 @@ function EnhancedTableHead(props) {
 					الكمية
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					مميز
+					المميزة
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					نشر
@@ -185,7 +185,7 @@ function EnhancedTableToolbar(props) {
 							<button
 								className='edit-all-categories-btn'
 								onClick={handleOpenChangeCategoriesModal}>
-								تعديل التصنيفات
+								تعديل الأنشطة
 							</button>
 						</Tooltip>
 					</div>
@@ -483,9 +483,9 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 		height: "56px",
 		color: "#6790a6",
 		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-			{
-				paddingRight: "20px",
-			},
+		{
+			paddingRight: "20px",
+		},
 		"&:hover": {
 			"& .MuiOutlinedInput-notchedOutline": {
 				borderColor: " #6790a6",
@@ -582,7 +582,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 												fontWeight: 400,
 												whiteSpace: "normal",
 											}}>
-											تعديل تصنيفات مجموعة من المنتجات
+											تعديل أنشطة مجموعة من المنتجات
 										</h5>
 
 										<div className='close-icon-video-modal ps-2'>
@@ -601,7 +601,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
 										<IoMdInformationCircleOutline />
 										<span>
-											بإمكانك تعديل تصنيفات المنتجات التي قمت بتحديدها
+											بإمكانك تعديل أنشطة المنتجات التي قمت بتحديدها
 										</span>
 									</div>
 								</div>
@@ -610,7 +610,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 								<div className='col-12'>
 									<label htmlFor='product-category'>
 										{" "}
-										النشاط أو التصنيف الرئيسي
+										النشاط الرئيسي
 										<span className='important-hint'>*</span>
 									</label>
 								</div>
@@ -632,7 +632,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 												if (category_id === "" || !selected) {
 													return (
 														<p className='text-[#02466a]'>
-															اختر النشاط أو التصنيف
+															اختر النشاط
 														</p>
 													);
 												}
@@ -674,17 +674,17 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 							<div className='row mb-md-5 mb-3'>
 								<div className=' col-12'>
 									<label htmlFor='sub-category labeles'>
-										النشاط أو التصنيف الفرعي
+										النشاط الفرعي
 									</label>
 								</div>
 								<div className=' col-12'>
 									<FormControl sx={formControlStyle}>
 										{category_id !== "" &&
-										subcategory[0]?.subcategory?.length === 0 ? (
+											subcategory[0]?.subcategory?.length === 0 ? (
 											<div
 												className='d-flex justify-content-center align-items-center'
 												style={{ color: "#02466a" }}>
-												لا يوجد تصنيفات فرعية للتصنيف الرئيسي الذي اخترتة
+												لا يوجد أنشطة فرعية للنشاط الرئيسي الذي اخترتة
 											</div>
 										) : (
 											<Select
@@ -699,7 +699,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 													if (subcategory_id?.length === 0) {
 														return (
 															<p className='text-[#02466a]'>
-																النشاط أو التصنيف الفرعي
+																النشاط الفرعي
 															</p>
 														);
 													}
@@ -799,7 +799,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															sx={{
 																backgroundColor:
 																	row?.type === "importProduct" ||
-																	row?.is_import
+																		row?.is_import
 																		? "#dfe2aa"
 																		: "",
 															}}
@@ -866,7 +866,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															</TableCell>
 															<TableCell align='center'>
 																{row?.discount_price &&
-																row?.discount_price !== "0" ? (
+																	row?.discount_price !== "0" ? (
 																	<>
 																		<span className='me-1 d-block'>
 																			{row?.discount_price} ر.س
@@ -992,7 +992,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																	<Link
 																		to={
 																			row?.type === "importProduct" ||
-																			row?.is_import
+																				row?.is_import
 																				? `ShowImportEtlobhaProduct/${row?.id}`
 																				: `EditProduct/${row?.id}`
 																		}

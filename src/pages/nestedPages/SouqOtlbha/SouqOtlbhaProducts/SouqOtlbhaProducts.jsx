@@ -88,9 +88,9 @@ const SouqOtlbhaProducts = ({ data, loading, page, rowsPerPage }) => {
 											</div>
 										</div>
 										<div className='product-price'>
-											<div className='label mb-1'> الكمية في المخزن</div>
+											<div className='label mb-1'>أقل كمية للطلب</div>
 											<div className='input d-flex justify-content-center align-items-center'>
-												<div className='count'>{product?.stock}</div>
+												<div className='count'>{product?.less_qty}</div>
 											</div>
 										</div>
 										<div className='recovery-button'>

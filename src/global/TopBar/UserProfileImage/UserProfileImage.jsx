@@ -118,7 +118,7 @@ const UserProfileImage = () => {
 					<div className='dropdown-title d-md-flex align-items-center d-none'>
 						<span className='me-1 '>
 							{userInfo?.name !== null
-								? userInfo?.name
+								? userInfo?.name === "null" ? userInfo?.username : userInfo?.name
 								: userInfo?.username || "اسم التاجر"}
 						</span>
 						<IoIosArrowDown />

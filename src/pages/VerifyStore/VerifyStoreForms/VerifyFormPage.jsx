@@ -298,10 +298,10 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						</div>
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
-						<div className='col-4 d-flex '>
-							<h5 className='label'>نوع النشاط أو التصنيف الرئيسي</h5>
+						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
+							<h5 className='label'>نوع النشاط الرئيسي</h5>
 						</div>
-						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
+						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1'>
 							<div className='main-categories w-100'>
 								{selectedActivity?.map((activity, index) => (
 									<div key={index} className='categories'>
@@ -312,14 +312,13 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						</div>
 					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-md-4'>
-						<div className='col-4 d-flex '>
-							<h5 className='label'>نوع النشاط أو التصنيف الفرعي</h5>
+						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
+							<h5 className='label'>نوع النشاط الفرعي</h5>
 						</div>
-						<div className='col-8 d-flex justify-content-start flex-wrap gap-1'>
+						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1'>
 							{selectedSubActivities?.length === 0 ? (
 								<div style={{ fontSize: "16px", color: "#1dbbbe" }}>
-									{" "}
-									لا توجد تصنيفات فرعية{" "}
+									لا توجد أنشطة فرعية
 								</div>
 							) : (
 								<div className='main-categories w-100'>
@@ -333,64 +332,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						</div>
 					</div>
 
-					<div className='row d-flex justify-content-between align-items-center pt-4'>
-						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex'>
-							<h5 className='label'>
-								رقم الجوال <span className='important-hint mx-1'>(اجباري)</span>
-							</h5>
-						</div>
-						<div className='col-md-8 col-12'>
-							<div
-								style={{
-									width: "100%",
-									background: "#FFF",
-									borderRadius: "4px",
-									color: "#00000",
-									fontSize: "16px",
-									fontWeight: "400",
-								}}>
-								<input
-									className='ps-5 '
-									name='phonenumber'
-									value={data?.phonenumber}
-									onChange={(e) => {
-										handleOnChange(e);
-									}}
-									type='text'
-									style={inputStyle}
-									dir='ltr'
-									maxLength='9'
-									required
-									aria-invalid={validUserPhoneNumber ? "false" : "true"}
-									aria-describedby='userPhoneNumber'
-									onFocus={() => setUserPhoneNumberFocus(true)}
-									onBlur={() => setUserPhoneNumberFocus(true)}
-								/>
-
-								<span className='Country_Key'>+966</span>
-							</div>
-							<div
-								id='userPhoneNumber'
-								className={
-									userPhoneNumberFocus &&
-									data?.phonenumber &&
-									!validUserPhoneNumber
-										? " d-block important-hint me-1 "
-										: "d-none"
-								}
-								style={{ fontSize: "16px", whiteSpace: "normal" }}>
-								تأكد ان رقم الجوال يبدأ برقم 5 ولا يقل عن 9 أرقام
-							</div>
-
-							{dataErrors?.phonenumber && (
-								<div
-									className=' important-hint me-1 '
-									style={{ fontSize: "16px", whiteSpace: "normal" }}>
-									{dataErrors?.phonenumber}
-								</div>
-							)}
-						</div>
-					</div>
 					<div className='row d-flex justify-content-between align-items-center pt-4'>
 						<div className='col-4 d-flex justify-content-start gap-3 align-items-center'>
 							<RadioGroup

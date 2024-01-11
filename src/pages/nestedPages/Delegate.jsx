@@ -63,7 +63,7 @@ const Delegate = () => {
 					id='select-delegate'
 					className='select-delegate px-md-5 pt-md-4 pb-md-0 mb-md-5 mb-3'>
 					<h4 className='select-delegate-title text-center mb-4'>
-						قم باختيار المدينة التي تحتاج فيها الى مندوبين
+						قم باختيار المدينة التي تحتاج فيها إلى مندوبين
 					</h4>
 					<div className='select-delegate-input'>
 						<FormControl

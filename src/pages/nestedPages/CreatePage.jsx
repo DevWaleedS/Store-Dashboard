@@ -20,15 +20,11 @@ import { TextEditor } from "../../components/TextEditor";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Checkbox } from "@mui/material";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import FormGroup from "@mui/material/FormGroup";
-import FormControl from "@mui/material/FormControl";
 import { CloseOutlined } from "@mui/icons-material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
 // Icons
-import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { DocsIcon, PaperIcon } from "../../data/Icons";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
@@ -64,9 +60,6 @@ const CreatePage = () => {
 	const { fetchedData: pageCategories, loading } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/page-categories"
 	);
-	const { fetchedData: postCategories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/post-categories"
-	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 
@@ -99,7 +92,6 @@ const CreatePage = () => {
 	const [page, setPage] = useState({
 		tags: [],
 		pageCategory: [],
-		postCategory_id: "",
 	});
 
 	const [pageError, setPageError] = useState({
@@ -282,8 +274,7 @@ const CreatePage = () => {
 			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
 		}
 
-		formData.append("postCategory_id", itsPost ? page?.postCategory_id : null);
-		formData.append("image", itsPost ? images[0] || null : null);
+		formData.append("image", itsPost ? images[0] || "" : "");
 
 		if (type === "push") {
 			setLoadingTitle("جاري نشر الصفحة");
@@ -463,7 +454,7 @@ const CreatePage = () => {
 													<textarea
 														name='page_desc'
 														className='w-100 h-auto p-3'
-														placeholder='اكتب وصف قصير للصفحة لا يتعدي 100 حرف'
+														placeholder='اكتب وصف قصير للصفحة لا يتعدى 100 حرف'
 														rows={5}
 														value={value}
 														onChange={(e) => {
@@ -483,7 +474,7 @@ const CreatePage = () => {
 												</span>
 												{descriptionLength && (
 													<span className='fs-6 text-danger'>
-														الوصف يجب إلا يتعدي 100 حرف
+														الوصف لا يتجاوز 100 حرف
 													</span>
 												)}
 											</div>
@@ -700,78 +691,6 @@ const CreatePage = () => {
 												<div className='col-md-6 col-12'>
 													<div className='wrapper h-auto'>
 														<div className='title'>
-															<h4>
-																تصنيف المدونة
-																<span className='important-hint'> * </span>
-															</h4>
-														</div>
-														<FormControl sx={{ m: 0, width: "100%" }}>
-															<Select
-																name='postCategory_id'
-																value={page?.postCategory_id}
-																onChange={(e) => {
-																	handleOnChange(e);
-																}}
-																sx={{
-																	fontSize: "18px",
-																	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
-																	"& .MuiOutlinedInput-root": {
-																		"& :hover": {
-																			border: "none",
-																		},
-																	},
-																	"& .MuiOutlinedInput-notchedOutline": {
-																		border: "none",
-																	},
-																	"& .MuiSelect-icon": {
-																		right: "92%",
-																	},
-																}}
-																IconComponent={IoIosArrowDown}
-																displayEmpty
-																inputProps={{ "aria-label": "Without label" }}
-																renderValue={(selected) => {
-																	if (page?.postCategory_id === "") {
-																		return (
-																			<p className='text-[#ADB5B9]'>
-																				اختر التصنيف
-																			</p>
-																		);
-																	}
-																	const result =
-																		postCategories?.data?.categories?.filter(
-																			(item) => item?.id === parseInt(selected)
-																		) || "";
-																	return result[0]?.name;
-																}}>
-																{postCategories?.data?.categories?.map(
-																	(cat, index) => {
-																		return (
-																			<MenuItem
-																				key={index}
-																				className='souq_storge_category_filter_items'
-																				sx={{
-																					backgroundColor:
-																						"rgba(211, 211, 211, 1)",
-																					height: "3rem",
-																					"&:hover": {},
-																				}}
-																				value={cat?.id}>
-																				{cat?.name}
-																			</MenuItem>
-																		);
-																	}
-																)}
-															</Select>
-														</FormControl>
-													</div>
-												</div>
-												<div className='col-md-6 col-12'>
-													<div className='wrapper h-auto'>
-														<div className='title'>
 															<h4 className='mb-3'>
 																صورة المدونة
 																<span className='important-hint'> * </span>
@@ -849,6 +768,24 @@ const CreatePage = () => {
 																</ul>
 															)}
 														</div>
+														{images?.length > 0 && images !== undefined && (
+															<div
+																className='p-3 d-flex justify-conent-center align-items-center'
+																style={{
+																	width: "100%",
+
+																	borderRadius: "8px",
+																}}>
+																<img
+																	style={{
+																		borderRadius: "8px",
+																	}}
+																	className='img-fluid'
+																	src={images?.[0]?.preview}
+																	alt='img-page'
+																/>
+															</div>
+														)}
 													</div>
 													<div className='col-12'>
 														<span

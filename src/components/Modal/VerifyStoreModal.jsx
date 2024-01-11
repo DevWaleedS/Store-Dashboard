@@ -60,7 +60,7 @@ const VerifyStore = () => {
 			);
 		}
 	}, [fetchedData?.data?.stores]);
-	console.log(verificationStatus);
+	
 	return (
 		<div>
 			{verificationStatus === "" ||
@@ -136,7 +136,7 @@ const VerifyStore = () => {
 													{userInfo?.name === null
 														? userInfo?.user_name || "صديقي التاجر"
 														: userInfo?.name}{" "}
-													طلب توثيقك مرفوض الرجاء التوجه الى التوثيق لتعديل
+													طلب توثيقك مرفوض الرجاء التوجه إلى التوثيق لتعديل
 													البيانات
 												</p>
 												<div className='btns-box' style={{ width: "250px" }}>

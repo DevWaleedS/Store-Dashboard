@@ -107,7 +107,7 @@ const SouqOtlobha = () => {
 									onClick={() => {
 										navigate("/Products");
 									}}>
-									العودة الى لوحة التحكم
+									العودة إلى لوحة التحكم
 								</button>
 							</div>
 						</div>

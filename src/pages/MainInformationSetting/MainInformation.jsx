@@ -102,7 +102,7 @@ const MainInformation = () => {
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
 	 *  ------------------------------------------------- */
-	const USER_REGEX = /^[A-Za-z]+$/;
+	const USER_REGEX = /^[A-Za-z0-9_]+$/;
 	const PHONE_REGEX = /^(5\d{8})$/;
 
 	const [validPhoneNumber, setValidPhoneNumber] = useState(false);
@@ -332,8 +332,6 @@ const MainInformation = () => {
 	};
 	// -----------------------------------------------------------------------------
 
-	console.log(country);
-
 	return (
 		<>
 			<Helmet>
@@ -434,14 +432,14 @@ const MainInformation = () => {
 											</label>
 										</div>
 										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
-											<div className='main-domain-hint'>atlbha.com/</div>
+											<div className='main-domain-hint'>template.atlbha.com/</div>
 											<input
 												type='text'
 												name='domain'
 												id='domain'
 												value={domain}
 												onChange={(e) => {
-													setDomain(e.target.value.replace(/[^A-Za-z]/g, ""));
+													setDomain(e.target.value.replace(/[^A-Za-z0-9_]/g, ""));
 													setDomainNameFocus(true);
 												}}
 												aria-describedby='domainName'
@@ -476,7 +474,7 @@ const MainInformation = () => {
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											يجب أن يكون الدومين حروف انجليزية فقط.-
+											يجب أن يكون الدومين حروف انجليزية وأرقام فقط.-
 										</div>
 
 										{settingErr?.domain && (

@@ -89,7 +89,7 @@ const Report = () => {
 									value={dateValue}
 									onChange={setDateValue}
 									dir='rtl'
-									placeholder='اختر الفترة من - إلي'
+									placeholder='اختر الفترة من - إلى'
 								/>
 							</div>
 						</div>

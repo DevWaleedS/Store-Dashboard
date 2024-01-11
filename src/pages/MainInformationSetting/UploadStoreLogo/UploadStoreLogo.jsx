@@ -159,7 +159,7 @@ const UploadStoreLogo = ({
 									<span className='d-flex justify-content-center align-items-center gap-1 flex-wrap'>
 										رفع الشعار
 										<div className='tax-text'>
-											(المقاس الأنسب 160 بكسل عرض أو 114 بكسل الارتفاع)
+											(المقاس الأنسب 160 بكسل عرض و 114 بكسل الارتفاع)
 										</div>
 									</span>
 

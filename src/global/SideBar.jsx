@@ -111,7 +111,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					onClick={() => closeSidebar()}>
 					<MenuItem>
 						<Category />
-						<span className='me-2'> النشاطات و التصنيفات</span>
+						<span className='me-2'> الأنشطة</span>
 					</MenuItem>
 				</NavLink>
 				<NavLink
@@ -149,7 +149,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						onClick={() => closeSidebar()}>
 						<MenuItem>
 							<Discoint />
-							<span className='me-2'> الكوبونات</span>
+							<span className='me-2'> أكواد الخصم</span>
 						</MenuItem>
 					</NavLink>
 					{/**

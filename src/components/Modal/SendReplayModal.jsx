@@ -104,6 +104,8 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 			});
 	};
 
+	console.log(commentDetails);
+
 	return (
 		<div className='send-replay-modal' open={isOpenReplyModal}>
 			<Modal

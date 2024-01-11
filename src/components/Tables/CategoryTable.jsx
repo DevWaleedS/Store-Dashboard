@@ -36,20 +36,20 @@ function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='left' sx={{ color: "#02466a", minWidth: "73px" }}>
+				<TableCell align='left' sx={{ color: "#02466a", minWidth: "73px", textAlign: "center" }}>
 					م
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a", minWidth: "80px" }}>
 					ID
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a", minWidth: "300px" }}>
-					النشاط و التصنيف الأساسي
+					النشاط الأساسي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					فرعي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					النشاطات و التصنيفات الفرعية
+					الأنشطة الفرعية
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					نشر
@@ -91,12 +91,12 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع النشاطات و التصنيفات وهذة الخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع الأنشطة وهذة الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
 							<IconButton>
-								<DeleteIcon title='حذف جميع النشاطات و التصنيفات' />
+								<DeleteIcon title='حذف جميع الأنشطة' />
 								حذف الكل
 							</IconButton>
 						</Tooltip>
@@ -105,7 +105,7 @@ function EnhancedTableToolbar(props) {
 							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم تعطيل جميع النشاطات و التصنيفات التي قمت بتحديدهم"
+									"سيتم تعطيل جميع الأنشطة التي قمت بتحديدهم"
 								);
 								setActionTitle("changeStatus");
 							}}>
@@ -503,12 +503,31 @@ export default function EnhancedTable({
 														<TableCell align='right'>
 															{row?.subcategory?.length === 0 ? (
 																<div className='w-100 text-center'>
-																	لا يوجد تصنيفات او نشاطات فرعية{" "}
+																	لا يوجد أنشطة فرعية
 																</div>
 															) : (
 																<div className='sub-categories'>
 																	{row?.subcategory?.length <= 2
 																		? row?.subcategory?.map((tag) => {
+																			return (
+																				<div
+																					key={tag?.id}
+																					style={{
+																						background:
+																							row?.store === null
+																								? "#FFFF"
+																								: "#dcdcdc",
+																						minWidth: "40%",
+																					}}>
+																					<span className='w-100 text-center text-overflow'>
+																						{tag?.name}
+																					</span>
+																				</div>
+																			);
+																		})
+																		: row?.subcategory
+																			.slice(0, 2)
+																			.map((tag) => {
 																				return (
 																					<div
 																						key={tag?.id}
@@ -517,32 +536,13 @@ export default function EnhancedTable({
 																								row?.store === null
 																									? "#FFFF"
 																									: "#dcdcdc",
-																							minWidth: "40%",
 																						}}>
 																						<span className='w-100 text-center text-overflow'>
 																							{tag?.name}
 																						</span>
 																					</div>
 																				);
-																		  })
-																		: row?.subcategory
-																				.slice(0, 2)
-																				.map((tag) => {
-																					return (
-																						<div
-																							key={tag?.id}
-																							style={{
-																								background:
-																									row?.store === null
-																										? "#FFFF"
-																										: "#dcdcdc",
-																							}}>
-																							<span className='w-100 text-center text-overflow'>
-																								{tag?.name}
-																							</span>
-																						</div>
-																					);
-																				})}
+																			})}
 
 																	{row?.subcategory?.length > 2 && (
 																		<div
@@ -556,7 +556,7 @@ export default function EnhancedTable({
 																			<Link
 																				to={`EditCategory/${row?.id}`}
 																				style={{ cursor: "pointer" }}
-																				title='المزيد من التصنيفات'>
+																				title='المزيد من الأنشطة'>
 																				...
 																			</Link>
 																		</div>
@@ -623,15 +623,15 @@ export default function EnhancedTable({
 																	<Link
 																		to={`EditCategory/${row?.id}`}
 																		style={{ cursor: "pointer" }}>
-																		<EditIcon title='تعديل التصنيف' />
+																		<EditIcon title='تعديل النشاط' />
 																	</Link>
 																</span>
 																<span>
 																	<DeleteIcon
-																		title='حذف التصنيف'
+																		title='حذف النشاط'
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف النشاط أو التصنيف وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف النشاط وهذة الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

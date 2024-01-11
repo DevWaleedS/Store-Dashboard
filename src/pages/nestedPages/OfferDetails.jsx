@@ -1378,7 +1378,7 @@ const OfferDetails = () => {
 															}}
 														/>
 													}
-													label='تفعيل العرض مع وجود كوبون'
+													label='تفعيل العرض مع وجود كود خصم'
 												/>
 											</FormGroup>
 										</div>
@@ -1822,7 +1822,7 @@ const OfferDetails = () => {
 															}}
 														/>
 													}
-													label='تفعيل العرض مع وجود كوبون'
+													label='تفعيل العرض مع وجود كود خصم'
 												/>
 											</FormGroup>
 										</div>

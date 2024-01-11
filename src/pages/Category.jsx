@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -29,27 +29,39 @@ const Category = () => {
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [category_id, setCategory_id] = useState("");
+	const [tabSelected, setTabSelected] = useState(1);
+	const [categoriesData, setCategoriesData] = useState([]);
+	const [categoriesFilterSearch, setCategoriesFilterSearch] = useState([]);
+	const [categoriesResult, setCategoriesResult] = useState([]);
 
-	let categoriesResult = fetchedData?.data?.categories;
-	let filterCategories = categoriesResult;
+	useEffect(() => {
+		if (tabSelected === 1) {
+			setCategoriesData(fetchedData?.data?.categories?.filter((category) => category?.store !== null));
+		}
+		else {
+			setCategoriesData(fetchedData?.data?.categories?.filter((category) => category?.store === null));
+		}
+
+	}, [fetchedData?.data?.categories, tabSelected]);
 
 	// Search
-	if (search !== "") {
-		categoriesResult = fetchedData?.data?.categories?.filter((item) =>
-			item?.name.includes(search)
-		);
-	} else {
-		categoriesResult = fetchedData?.data?.categories;
-	}
+	useEffect(() => {
+		if (search !== "") {
+			setCategoriesFilterSearch(categoriesData?.filter((item) => item?.name?.toLowerCase()?.includes(search?.toLowerCase())));
+		} else {
+			setCategoriesFilterSearch(categoriesData);
+		}
+	}, [categoriesData, search])
 
 	// Filter by
-	if (category_id !== "") {
-		filterCategories = categoriesResult?.filter(
-			(item) => item?.id === category_id
-		);
-	} else {
-		filterCategories = fetchedData?.data?.categories;
-	}
+	useEffect(() => {
+		if (category_id !== "") {
+			setCategoriesResult(categoriesFilterSearch?.filter((item) => item?.id === category_id));
+		} else {
+			setCategoriesResult(categoriesFilterSearch);
+		}
+	}, [categoriesFilterSearch, category_id]);
+
 	// ----------------------------------------------------
 
 	const handleSubmit = (event) => {
@@ -59,7 +71,7 @@ const Category = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | النشاطات و التصنيفات</title>
+				<title>لوحة تحكم أطلبها | الأنشطة</title>
 			</Helmet>
 			<div className='category p-lg-3'>
 				<div className='head-category'>
@@ -73,7 +85,7 @@ const Category = () => {
 									</Link>
 								</li>
 								<li className='breadcrumb-item active ' aria-current='page'>
-									النشاطات و التصنيفات
+									الأنشطة
 								</li>
 							</ol>
 						</nav>
@@ -82,7 +94,7 @@ const Category = () => {
 
 				<div className='mb-3'>
 					<div className='shipping-company-hint mb-2'>
-						سوف تظهر هذه التصنيفات بمجرد استخدامها في اضافة المنتجات الخاصة بك
+						سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك
 					</div>
 					<div className='add-category'>
 						<form onSubmit={handleSubmit}>
@@ -95,7 +107,7 @@ const Category = () => {
 										name='search'
 										id='search'
 										autoComplete='false'
-										placeholder='ابحث في النشاطات و التصنيفات'
+										placeholder='ابحث في الأنشطة'
 									/>
 									<BsSearch />
 								</div>
@@ -112,9 +124,9 @@ const Category = () => {
 												fontSize: "18px",
 												backgroundColor: "#ededed",
 												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-													{
-														paddingRight: "20px",
-													},
+												{
+													paddingRight: "20px",
+												},
 												"& .MuiOutlinedInput-root": {
 													"& :hover": {
 														border: "none",
@@ -137,7 +149,7 @@ const Category = () => {
 												if (category_id === "") {
 													return (
 														<p className='text-[#ADB5B9]'>
-															اختر النشاط أو التصنيف
+															اختر النشاط
 														</p>
 													);
 												}
@@ -186,17 +198,27 @@ const Category = () => {
 											navigate("AddCategory");
 										}}>
 										<MdAdd />
-										<span className='me-2'> اضافه نشاط أو تصنيف</span>
+										<span className='me-2'> اضافه نشاط</span>
 									</button>
 								</div>
 							</div>
 						</form>
 					</div>
 				</div>
+				<div className="filters-btn">
+					<button
+						className={`btn ${tabSelected === 1 ? 'active' : ''}`}
+						onClick={() => setTabSelected(1)}
+					>أنشطة التاجر</button>
+					<button
+						className={`btn ${tabSelected !== 1 ? 'active' : ''}`}
+						onClick={() => setTabSelected(2)}
+					>أنشطة منصة أطلبها</button>
+				</div>
 				<div className='row'>
 					<div className='category-table'>
 						<CategoryTable
-							fetchedData={filterCategories}
+							fetchedData={categoriesResult}
 							loading={loading}
 							reload={reload}
 							setReload={setReload}
