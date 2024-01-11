@@ -61,12 +61,19 @@ const Products = () => {
 
 	useEffect(() => {
 		if (tabSelected === 1) {
-			setProductsData(fetchedData?.data?.products?.filter((product) => product?.is_import === false));
+			setProductsData(
+				fetchedData?.data?.products?.filter(
+					(product) => product?.is_import === false
+				)
+			);
+		} else {
+			setProductsData(
+				fetchedData?.data?.products?.filter(
+					(product) =>
+						product?.type === "importProduct" || product?.is_import === true
+				)
+			);
 		}
-		else {
-			setProductsData(fetchedData?.data?.products?.filter((product) => product?.type === "importProduct" || product?.is_import === true));
-		}
-
 	}, [fetchedData?.data?.products, tabSelected]);
 
 	const getSearchInput = (value) => {
@@ -79,7 +86,11 @@ const Products = () => {
 	// Search
 	useEffect(() => {
 		if (search !== "") {
-			setProductsFilterSearch(productsData?.filter((item) => item?.name?.toLowerCase()?.includes(search?.toLowerCase())));
+			setProductsFilterSearch(
+				productsData?.filter((item) =>
+					item?.name?.toLowerCase()?.includes(search?.toLowerCase())
+				)
+			);
 		} else {
 			setProductsFilterSearch(productsData);
 		}
@@ -88,7 +99,11 @@ const Products = () => {
 	// Filter by
 	useEffect(() => {
 		if (category_id !== "") {
-			setProductsResult(productsFilterSearch?.filter((item) => item?.category?.id === category_id));
+			setProductsResult(
+				productsFilterSearch?.filter(
+					(item) => item?.category?.id === category_id
+				)
+			);
 		} else {
 			setProductsResult(productsFilterSearch);
 		}
@@ -102,6 +117,7 @@ const Products = () => {
 				name: item?.name,
 				description: item?.description,
 				short_description: item?.short_description,
+				SEOdescription: item?.SEOdescription.map((seo) => seo),
 				selling_price: item?.selling_price,
 				category_id: item?.category?.name,
 				discount_price: item?.discount_price,
@@ -197,22 +213,25 @@ const Products = () => {
 						</div>
 					</div>
 				</div>
-				<div className="filters-btn">
+				<div className='filters-btn'>
 					<button
-						className={`btn ${tabSelected === 1 ? 'active' : ''}`}
-						onClick={() => setTabSelected(1)}
-					>منتجات التاجر</button>
+						className={`btn ${tabSelected === 1 ? "active" : ""}`}
+						onClick={() => setTabSelected(1)}>
+						منتجات التاجر
+					</button>
 					<button
-						className={`btn ${tabSelected !== 1 ? 'active' : ''}`}
-						onClick={() => setTabSelected(2)}
-					>منتجات سوق أطلبها</button>
+						className={`btn ${tabSelected !== 1 ? "active" : ""}`}
+						onClick={() => setTabSelected(2)}>
+						منتجات سوق أطلبها
+					</button>
 				</div>
 				<div className='category-table'>
 					<BigProductsTable
-						data={productsResult}
-						loading={loading}
 						reload={reload}
+						loading={loading}
 						setReload={setReload}
+						data={productsResult}
+						tabSelected={tabSelected}
 					/>
 				</div>
 

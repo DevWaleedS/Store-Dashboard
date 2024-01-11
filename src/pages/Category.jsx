@@ -36,27 +36,39 @@ const Category = () => {
 
 	useEffect(() => {
 		if (tabSelected === 1) {
-			setCategoriesData(fetchedData?.data?.categories?.filter((category) => category?.store !== null));
+			setCategoriesData(
+				fetchedData?.data?.categories?.filter(
+					(category) => category?.store !== null
+				)
+			);
+		} else {
+			setCategoriesData(
+				fetchedData?.data?.categories?.filter(
+					(category) => category?.store === null
+				)
+			);
 		}
-		else {
-			setCategoriesData(fetchedData?.data?.categories?.filter((category) => category?.store === null));
-		}
-
 	}, [fetchedData?.data?.categories, tabSelected]);
 
 	// Search
 	useEffect(() => {
 		if (search !== "") {
-			setCategoriesFilterSearch(categoriesData?.filter((item) => item?.name?.toLowerCase()?.includes(search?.toLowerCase())));
+			setCategoriesFilterSearch(
+				categoriesData?.filter((item) =>
+					item?.name?.toLowerCase()?.includes(search?.toLowerCase())
+				)
+			);
 		} else {
 			setCategoriesFilterSearch(categoriesData);
 		}
-	}, [categoriesData, search])
+	}, [categoriesData, search]);
 
 	// Filter by
 	useEffect(() => {
 		if (category_id !== "") {
-			setCategoriesResult(categoriesFilterSearch?.filter((item) => item?.id === category_id));
+			setCategoriesResult(
+				categoriesFilterSearch?.filter((item) => item?.id === category_id)
+			);
 		} else {
 			setCategoriesResult(categoriesFilterSearch);
 		}
@@ -124,9 +136,9 @@ const Category = () => {
 												fontSize: "18px",
 												backgroundColor: "#ededed",
 												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-												{
-													paddingRight: "20px",
-												},
+													{
+														paddingRight: "20px",
+													},
 												"& .MuiOutlinedInput-root": {
 													"& :hover": {
 														border: "none",
@@ -147,11 +159,7 @@ const Category = () => {
 											inputProps={{ "aria-label": "Without label" }}
 											renderValue={(selected) => {
 												if (category_id === "") {
-													return (
-														<p className='text-[#ADB5B9]'>
-															اختر النشاط
-														</p>
-													);
+													return <p className='text-[#ADB5B9]'>اختر النشاط</p>;
 												}
 												const result =
 													categories?.data?.categories?.filter(
@@ -205,15 +213,17 @@ const Category = () => {
 						</form>
 					</div>
 				</div>
-				<div className="filters-btn">
+				<div className='filters-btn'>
 					<button
-						className={`btn ${tabSelected === 1 ? 'active' : ''}`}
-						onClick={() => setTabSelected(1)}
-					>أنشطة التاجر</button>
+						className={`btn ${tabSelected === 1 ? "active" : ""}`}
+						onClick={() => setTabSelected(1)}>
+						أنشطة التاجر
+					</button>
 					<button
-						className={`btn ${tabSelected !== 1 ? 'active' : ''}`}
-						onClick={() => setTabSelected(2)}
-					>أنشطة منصة أطلبها</button>
+						className={`btn ${tabSelected !== 1 ? "active" : ""}`}
+						onClick={() => setTabSelected(2)}>
+						أنشطة منصة أطلبها
+					</button>
 				</div>
 				<div className='row'>
 					<div className='category-table'>
