@@ -213,6 +213,7 @@ const Products = () => {
 						loading={loading}
 						reload={reload}
 						setReload={setReload}
+						tabSelectedId={tabSelected}
 					/>
 				</div>
 
