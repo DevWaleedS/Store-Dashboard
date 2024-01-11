@@ -215,10 +215,9 @@ function CartPage() {
 																			Number(product?.product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${
-																					+product?.product?.stock === 1
-																						? "قطعة واحدة "
-																						: +product?.product?.stock === 2
+																				`الكمية المتوفرة ${+product?.product?.stock === 1
+																					? "قطعة واحدة "
+																					: +product?.product?.stock === 2
 																						? " قطعتين "
 																						: ` ${+product?.product?.stock} قطع`
 																				} فقط `
@@ -240,22 +239,33 @@ function CartPage() {
 																			Number(product?.product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${
-																					+product?.product?.stock === 1
-																						? "قطعة واحدة "
-																						: +product?.product?.stock === 2
+																				`الكمية المتوفرة ${+product?.product?.stock === 1
+																					? "قطعة واحدة "
+																					: +product?.product?.stock === 2
 																						? " قطعتين "
 																						: ` ${+product?.product?.stock} قطع`
 																				} فقط `
 																			);
-																		} else {
+																		} else if (Number(e.target.value) < Number(product?.product?.less_qty)) {
+																			toast.error(
+																				`أقل كمية للطلب هي ${+product?.product?.less_qty}`
+																			);
+																		}
+																		else {
 																			updateQtyValue(index, e);
 																		}
 																	}}
 																/>
 																<button
-																	onClick={() => {
-																		handleDecrement(index);
+																	onClick={(e) => {
+																		if (Number(product?.qty) - 1 < Number(product?.product?.less_qty)) {
+																			toast.error(
+																				`أقل كمية للطلب هي ${+product?.product?.less_qty}`
+																			);
+																		}
+																		else {
+																			handleDecrement(index);
+																		}
 																	}}
 																	disabled={Number(product?.qty) <= 0}>
 																	-

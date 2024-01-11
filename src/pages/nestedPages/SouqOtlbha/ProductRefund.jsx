@@ -321,6 +321,20 @@ const ProductRefund = () => {
 												</div>
 											</div>
 
+											{/* Stock */}
+											<div className='product-price mb-3'>
+												<div className='label mb-1'>أقل كمية للطلب</div>
+												<div className='input d-flex justify-content-center align-items-center'>
+													<div className='price-icon d-flex  p-2 gap-3'>
+														<div
+															className='price w-100 d-flex justify-content-center align-items-center'
+															style={{ color: "#67747B" }}>
+															{fetchedData?.data?.products?.less_qty}
+														</div>
+													</div>
+												</div>
+											</div>
+
 											{/* Selling Price */}
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>

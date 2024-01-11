@@ -324,9 +324,7 @@ const Notifications = () => {
 																</div>
 
 																<div className='d-flex flex-row align-items-center gap-2'>
-																	{not?.message?.length > 20 &&
-																		<Reports title="قراءة المزيد" className="show-more" onClick={() => setShowMore(not?.message)} />
-																	}
+																	<Reports title="قراءة المزيد" className="show-more" onClick={() => setShowMore(not?.message)} />
 																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(

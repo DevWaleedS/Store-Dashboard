@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 // Third Party
 import axios from "axios";
@@ -48,15 +48,26 @@ const Products = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
+	const [tabSelected, setTabSelected] = useState(1);
 	const [fileError, setFileError] = useState("");
 	const [category_id, setCategory_id] = useState("");
+	const [productsData, setProductsData] = useState([]);
+	const [productsFilterSearch, setProductsFilterSearch] = useState([]);
+	const [productsResult, setProductsResult] = useState([]);
 
 	const handleFile = (file) => {
 		setFile(file[0]);
 	};
 
-	let products = fetchedData?.data?.products;
-	let filterProducts = products;
+	useEffect(() => {
+		if (tabSelected === 1) {
+			setProductsData(fetchedData?.data?.products?.filter((product) => product?.is_import === false));
+		}
+		else {
+			setProductsData(fetchedData?.data?.products?.filter((product) => product?.type === "importProduct" || product?.is_import === true));
+		}
+
+	}, [fetchedData?.data?.products, tabSelected]);
 
 	const getSearchInput = (value) => {
 		setSearch(value);
@@ -65,26 +76,28 @@ const Products = () => {
 		setCategory_id(value);
 	};
 
-	if (search !== "") {
-		products = fetchedData?.data?.products?.filter((item) =>
-			item?.name.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		products = fetchedData?.data?.products;
-	}
+	// Search
+	useEffect(() => {
+		if (search !== "") {
+			setProductsFilterSearch(productsData?.filter((item) => item?.name?.toLowerCase()?.includes(search?.toLowerCase())));
+		} else {
+			setProductsFilterSearch(productsData);
+		}
+	}, [productsData, search]);
 
-	if (category_id !== "") {
-		filterProducts = products?.filter(
-			(item) => item?.category?.id === category_id
-		);
-	} else {
-		filterProducts = products;
-	}
+	// Filter by
+	useEffect(() => {
+		if (category_id !== "") {
+			setProductsResult(productsFilterSearch?.filter((item) => item?.category?.id === category_id));
+		} else {
+			setProductsResult(productsFilterSearch);
+		}
+	}, [productsFilterSearch, category_id]);
 
 	// Export the product file
 	const exportToCSV = () => {
 		const ws = XLSX.utils.json_to_sheet(
-			filterProducts?.map((item) => ({
+			productsResult?.map((item) => ({
 				id: item?.id,
 				name: item?.name,
 				description: item?.description,
@@ -184,9 +197,19 @@ const Products = () => {
 						</div>
 					</div>
 				</div>
+				<div className="filters-btn">
+					<button
+						className={`btn ${tabSelected === 1 ? 'active' : ''}`}
+						onClick={() => setTabSelected(1)}
+					>منتجات التاجر</button>
+					<button
+						className={`btn ${tabSelected !== 1 ? 'active' : ''}`}
+						onClick={() => setTabSelected(2)}
+					>منتجات سوق أطلبها</button>
+				</div>
 				<div className='category-table'>
 					<BigProductsTable
-						data={filterProducts}
+						data={productsResult}
 						loading={loading}
 						reload={reload}
 						setReload={setReload}

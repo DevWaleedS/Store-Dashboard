@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -29,27 +29,39 @@ const Category = () => {
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [category_id, setCategory_id] = useState("");
+	const [tabSelected, setTabSelected] = useState(1);
+	const [categoriesData, setCategoriesData] = useState([]);
+	const [categoriesFilterSearch, setCategoriesFilterSearch] = useState([]);
+	const [categoriesResult, setCategoriesResult] = useState([]);
 
-	let categoriesResult = fetchedData?.data?.categories;
-	let filterCategories = categoriesResult;
+	useEffect(() => {
+		if (tabSelected === 1) {
+			setCategoriesData(fetchedData?.data?.categories?.filter((category) => category?.store !== null));
+		}
+		else {
+			setCategoriesData(fetchedData?.data?.categories?.filter((category) => category?.store === null));
+		}
+
+	}, [fetchedData?.data?.categories, tabSelected]);
 
 	// Search
-	if (search !== "") {
-		categoriesResult = fetchedData?.data?.categories?.filter((item) =>
-			item?.name.includes(search)
-		);
-	} else {
-		categoriesResult = fetchedData?.data?.categories;
-	}
+	useEffect(() => {
+		if (search !== "") {
+			setCategoriesFilterSearch(categoriesData?.filter((item) => item?.name?.toLowerCase()?.includes(search?.toLowerCase())));
+		} else {
+			setCategoriesFilterSearch(categoriesData);
+		}
+	}, [categoriesData, search])
 
 	// Filter by
-	if (category_id !== "") {
-		filterCategories = categoriesResult?.filter(
-			(item) => item?.id === category_id
-		);
-	} else {
-		filterCategories = fetchedData?.data?.categories;
-	}
+	useEffect(() => {
+		if (category_id !== "") {
+			setCategoriesResult(categoriesFilterSearch?.filter((item) => item?.id === category_id));
+		} else {
+			setCategoriesResult(categoriesFilterSearch);
+		}
+	}, [categoriesFilterSearch, category_id]);
+
 	// ----------------------------------------------------
 
 	const handleSubmit = (event) => {
@@ -112,9 +124,9 @@ const Category = () => {
 												fontSize: "18px",
 												backgroundColor: "#ededed",
 												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-													{
-														paddingRight: "20px",
-													},
+												{
+													paddingRight: "20px",
+												},
 												"& .MuiOutlinedInput-root": {
 													"& :hover": {
 														border: "none",
@@ -193,10 +205,20 @@ const Category = () => {
 						</form>
 					</div>
 				</div>
+				<div className="filters-btn">
+					<button
+						className={`btn ${tabSelected === 1 ? 'active' : ''}`}
+						onClick={() => setTabSelected(1)}
+					>أنشطة التاجر</button>
+					<button
+						className={`btn ${tabSelected !== 1 ? 'active' : ''}`}
+						onClick={() => setTabSelected(2)}
+					>أنشطة منصة أطلبها</button>
+				</div>
 				<div className='row'>
 					<div className='category-table'>
 						<CategoryTable
-							fetchedData={filterCategories}
+							fetchedData={categoriesResult}
 							loading={loading}
 							reload={reload}
 							setReload={setReload}
