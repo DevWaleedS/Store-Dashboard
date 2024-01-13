@@ -204,7 +204,6 @@ EnhancedTableToolbar.propTypes = {
 
 // Start Pages Table
 export default function PagesTable({ data, loading, reload, setReload }) {
-
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -423,9 +422,8 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 														selected={isItemSelected}
 														style={{
 															backgroundColor:
-																row?.default_page === "1" ? "#dfe2aa" : "",
-														}}
-													>
+																row?.default_page === 1 ? "#dfe2aa" : "",
+														}}>
 														<TableCell
 															component='th'
 															id={labelId}
@@ -493,8 +491,12 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																	checked={
 																		row?.status === "تم النشر" ? true : false
 																	}
-																	title={row?.default_page === "1" ? "لايمكنك تعديل الحالة" : "تعديل الحالة"}
-																	disabled={row?.default_page === "1"}
+																	title={
+																		row?.default_page === 1
+																			? "لايمكنك تعديل الحالة"
+																			: "تعديل الحالة"
+																	}
+																	disabled={row?.default_page === 1}
 																	sx={{
 																		width: "50px",
 																		"& .MuiSwitch-track": {
@@ -503,7 +505,10 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																			opacity: 1,
 																			backgroundColor: "rgba(0,0,0,.25)",
 																			boxSizing: "border-box",
-																			cursor: row?.default_page === "1" ? "not-allowed" : "pointer",
+																			cursor:
+																				row?.default_page === 1
+																					? "not-allowed"
+																					: "pointer",
 																		},
 																		"& .MuiSwitch-thumb": {
 																			boxShadow: "none",
@@ -534,9 +539,13 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																	}}
 																/>
 																<DeleteIcon
-																	title={row?.default_page === "1" ? "لايمكنك حذف الصفحة" : "حذف الصفحة"}
+																	title={
+																		row?.default_page === 1
+																			? "لايمكنك حذف الصفحة"
+																			: "حذف الصفحة"
+																	}
 																	onClick={() => {
-																		if (row?.default_page !== "1") {
+																		if (row?.default_page !== 1) {
 																			setActionDelete(
 																				"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
 																			);
@@ -550,7 +559,10 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																		paddingRight: "10px",
 																		width: "40px",
 																		color: "red",
-																		cursor: row?.default_page === "1" ? "not-allowed" : "pointer",
+																		cursor:
+																			row?.default_page === 1
+																				? "not-allowed"
+																				: "pointer",
 																	}}
 																/>
 															</div>
