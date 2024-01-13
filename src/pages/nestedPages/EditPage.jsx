@@ -107,6 +107,7 @@ const EditPage = () => {
 	});
 
 	const [tag, setTag] = useState("");
+	const [titleLength, setTitleLength] = useState(false);
 	const [descriptionLength, setDescriptionLength] = useState(false);
 	const itsPost = page?.pageCategory?.includes(1);
 
@@ -411,25 +412,45 @@ const EditPage = () => {
 													<div className='input-icon'>
 														<DocsIcon />
 													</div>
-													<input
-														name='title'
-														type='text'
-														className='w-100'
-														placeholder='عنوان الصفحة'
-														{...register("title", {
+													<Controller
+														name={"title"}
+														control={control}
+														rules={{
 															required: " حقل العنوان مطلوب",
 															pattern: {
 																value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
 																message:
 																	"يجب أن يكون العنوان عبارة عن نصاً ولا يحتوي علي حروف خاصه مثل الأقوس والرموز",
 															},
-														})}
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='title'
+																type='text'
+																className='w-100'
+																placeholder='عنوان الصفحة'
+																value={value}
+																onChange={(e) => {
+																	if (e.target.value.length <= 15) {
+																		onChange(e.target.value.substring(0, 15));
+																		setTitleLength(false);
+																	} else {
+																		setTitleLength(true);
+																	}
+																}}
+															/>
+														)}
 													/>
 													<div className='col-12'>
 														<span className='fs-6 text-danger'>
 															{pageError?.title}
 															{errors?.title && errors.title.message}
 														</span>
+														{titleLength && (
+															<span className='fs-6 text-danger'>
+																العنوان لا يتجاوز 15 حرف
+															</span>
+														)}
 													</div>
 												</div>
 												<div className='col-12 mt-3'>
@@ -443,7 +464,7 @@ const EditPage = () => {
 															<textarea
 																name='page_desc'
 																className='w-100 h-auto p-3'
-																placeholder='اكتب وصف قصير للصفحة لا يتعدى 100 حرف'
+																placeholder='اكتب وصف قصير للصفحة لا يتجاوز 100 حرف'
 																rows={5}
 																value={value}
 																onChange={(e) => {
@@ -453,7 +474,9 @@ const EditPage = () => {
 																	} else {
 																		setDescriptionLength(true);
 																	}
-																}}></textarea>
+																}}
+															>
+															</textarea>
 														)}
 													/>
 													<div

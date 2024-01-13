@@ -14,10 +14,10 @@ import { HomeIcon, Check9x7Svg } from "../../data/Icons";
 
 function CheckoutPage() {
 
-		const store_token = document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1];
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/showImportCart"
 	);
@@ -259,7 +259,7 @@ function CheckoutPage() {
 									<div className='col-12 col-lg-6 col-xl-7'>
 										<div className='card mb-lg-0'>
 											<div className='card-body'>
-												<h3 className='card-title'>تفاصيل الفاتورة</h3>
+												<h3 className='card-title'>تفاصيل العنوان</h3>
 												<div className='form-group mt-3'>
 													<label htmlFor='country'>
 														المنطقة
@@ -268,14 +268,16 @@ function CheckoutPage() {
 													<select
 														value={shipping?.district}
 														onChange={(e) => {
-															setShipping({
-																...shipping,
-																district: e.target.value,
-															});
+															if (e.target.value !== "") {
+																setShipping({
+																	...shipping,
+																	district: e.target.value,
+																});
+															}
 														}}
 														id='country'
 														className='form-control'>
-														<option value='' disabled={true}>
+														<option value=''>
 															اختر المنطقة...
 														</option>
 														{removeDuplicates(citiesData?.data?.cities)?.map(
@@ -303,8 +305,11 @@ function CheckoutPage() {
 													</label>
 													<select
 														value={shipping?.city}
-														onChange={(e) =>
-															setShipping({ ...shipping, city: e.target.value })
+														onChange={(e) => {
+															if (e.target.value !== "") {
+																setShipping({ ...shipping, city: e.target.value })
+															}
+														}
 														}
 														id='city'
 														className='form-control'>
@@ -404,7 +409,7 @@ function CheckoutPage() {
 												<h3 className='card-title'>تفاصيل الشحن</h3>
 												<div className='form-group'>
 													<label htmlFor='note'>
-														ملاحظات الطلب <span className='required'>*</span>
+														ملاحظات الطلب
 													</label>
 													<textarea
 														id='note'

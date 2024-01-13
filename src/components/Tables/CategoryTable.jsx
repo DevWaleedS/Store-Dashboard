@@ -77,7 +77,6 @@ function EnhancedTableToolbar(props) {
 	const { setNotificationTitle, setActionTitle } = NotificationStore;
 
 	return (
-		tabSelectedId === 1 &&
 		<Toolbar
 			sx={{
 				pl: { sm: 2 },
@@ -87,104 +86,107 @@ function EnhancedTableToolbar(props) {
 				justifyContent: "space-between",
 				flexDirection: "row-reverse",
 			}}>
-			<div className=' d-flex flex-row-reverse  justify-content-between align-items-center '>
-				<div></div>
-				{numSelected > 0 && (
-					<div>
-						<Tooltip
-							className='delete-all'
-							onClick={() => {
-								setNotificationTitle(
-									"سيتم حذف جميع الأنشطة وهذة الخطوة غير قابلة للرجوع"
-								);
-								setActionTitle("Delete");
-							}}>
-							<IconButton>
-								<DeleteIcon title='حذف جميع الأنشطة' />
-								حذف الكل
-							</IconButton>
-						</Tooltip>
+			{tabSelectedId === 1 &&
+				<div className=' d-flex flex-row-reverse  justify-content-between align-items-center '>
+					<div></div>
+					{numSelected > 0 && (
+						<div>
+							<Tooltip
+								className='delete-all'
+								onClick={() => {
+									setNotificationTitle(
+										"سيتم حذف جميع الأنشطة وهذة الخطوة غير قابلة للرجوع"
+									);
+									setActionTitle("Delete");
+								}}>
+								<IconButton>
+									<DeleteIcon title='حذف جميع الأنشطة' />
+									حذف الكل
+								</IconButton>
+							</Tooltip>
 
-						<Tooltip
-							className='switch-all'
-							onClick={() => {
-								setNotificationTitle(
-									"سيتم تعطيل جميع الأنشطة التي قمت بتحديدهم"
-								);
-								setActionTitle("changeStatus");
-							}}>
-							<IconButton>
-								<Switch
-									sx={{
-										width: "50px",
-										"& .MuiSwitch-track": {
-											width: 26,
-											height: 14,
-											opacity: 1,
-											backgroundColor: "#ff9f1a",
-											boxSizing: "border-box",
-										},
-										"& .MuiSwitch-thumb": {
-											boxShadow: "none",
-											width: 10,
-											height: 10,
-											borderRadius: 5,
-											transform: "translate(6px,6px)",
-											color: "#fff",
-										},
-										"&:hover": {
+							<Tooltip
+								className='switch-all'
+								onClick={() => {
+									setNotificationTitle(
+										"سيتم تعطيل جميع الأنشطة التي قمت بتحديدهم"
+									);
+									setActionTitle("changeStatus");
+								}}>
+								<IconButton>
+									<Switch
+										sx={{
+											width: "50px",
+											"& .MuiSwitch-track": {
+												width: 26,
+												height: 14,
+												opacity: 1,
+												backgroundColor: "#ff9f1a",
+												boxSizing: "border-box",
+											},
 											"& .MuiSwitch-thumb": {
 												boxShadow: "none",
-											},
-										},
-
-										"& .MuiSwitch-switchBase": {
-											padding: 1,
-											"&.Mui-checked": {
-												transform: "translateX(11px)",
+												width: 10,
+												height: 10,
+												borderRadius: 5,
+												transform: "translate(6px,6px)",
 												color: "#fff",
-												"& + .MuiSwitch-track": {
-													opacity: 1,
-													backgroundColor: "#3AE374",
+											},
+											"&:hover": {
+												"& .MuiSwitch-thumb": {
+													boxShadow: "none",
 												},
 											},
-										},
-									}}
-								/>
-								تعطيل الكل
-							</IconButton>
-						</Tooltip>
-					</div>
-				)}
-			</div>
 
-			<div className=' d-flex align-items-center flex-row-reverse pe-0'>
-				<h2
-					className='h4'
-					style={{
-						fontSize: "20px",
-						fontWeight: "500",
-						color: "#02466a",
-						marginBottom: 0,
-					}}>
-					تحديد الكل
-				</h2>
+											"& .MuiSwitch-switchBase": {
+												padding: 1,
+												"&.Mui-checked": {
+													transform: "translateX(11px)",
+													color: "#fff",
+													"& + .MuiSwitch-track": {
+														opacity: 1,
+														backgroundColor: "#3AE374",
+													},
+												},
+											},
+										}}
+									/>
+									تعطيل الكل
+								</IconButton>
+							</Tooltip>
+						</div>
+					)}
+				</div>
+			}
+			{tabSelectedId === 1 &&
+				<div className=' d-flex align-items-center flex-row-reverse pe-0'>
+					<h2
+						className='h4'
+						style={{
+							fontSize: "20px",
+							fontWeight: "500",
+							color: "#02466a",
+							marginBottom: 0,
+						}}>
+						تحديد الكل
+					</h2>
 
-				<Checkbox
-					sx={{
-						color: "#356b88",
-						"& .MuiSvgIcon-root": {
+					<Checkbox
+						sx={{
 							color: "#356b88",
-						},
-					}}
-					indeterminate={numSelected > 0 && numSelected < rowCount}
-					checked={rowCount > 0 && numSelected === rowCount}
-					onChange={onSelectAllClick}
-					inputProps={{
-						"aria-label": "select all desserts",
-					}}
-				/>
-			</div>
+							"& .MuiSvgIcon-root": {
+								color: "#356b88",
+							},
+						}}
+						indeterminate={numSelected > 0 && numSelected < rowCount}
+						checked={rowCount > 0 && numSelected === rowCount}
+						onChange={onSelectAllClick}
+						inputProps={{
+							"aria-label": "select all desserts",
+						}}
+					/>
+				</div>
+			}
 		</Toolbar>
 	);
 }
