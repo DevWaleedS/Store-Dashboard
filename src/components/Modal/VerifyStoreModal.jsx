@@ -52,7 +52,8 @@ const VerifyStore = () => {
 		maxWidth: "100%",
 		bgcolor: verificationStatus === "تم التوثيق" ? "#07bc0c" : "#ffdd00",
 		boxShadow: 24,
-		p: 4,
+		px: 4,
+		py: 2,
 		"@media(max-width:768px)": {
 			top: "70px",
 			left: 0,

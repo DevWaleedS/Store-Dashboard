@@ -172,10 +172,10 @@ const MainInformation = () => {
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-							"00966"
-					  )
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-					: fetchedData?.data?.setting_store?.user?.phonenumber
+						"00966"
+					)
+						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+						: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
@@ -427,9 +427,10 @@ const MainInformation = () => {
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
 										<div className='store_email'>
-											<label htmlFor='domain' className='setting_label d-block'>
+											<label htmlFor='domain' className='setting_label d-block mb-0'>
 												الدومين(رابط المتجر)
 											</label>
+											<span style={{ display: "block", fontSize: "1rem", color: "#ff3838", marginBottom: "8px" }}>قم بكتابة اسم المتجر بدون .com</span>
 										</div>
 										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
 											<div className='main-domain-hint'>template.atlbha.com/</div>
@@ -465,7 +466,6 @@ const MainInformation = () => {
 											قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور او عدم ظهور-
 											المتجر الخاص بك.
 										</div>
-
 										<div
 											id='domainName'
 											className={
@@ -474,7 +474,7 @@ const MainInformation = () => {
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											يجب أن يكون الدومين حروف انجليزية وأرقام فقط.-
+											- يجب أن يكون الدومين حروف انجليزية وأرقام فقط.
 										</div>
 
 										{settingErr?.domain && (
