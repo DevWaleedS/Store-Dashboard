@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 
 // Icons
-import { Verification } from "../../data/Icons";
+import { MdVerified } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
 // Context
@@ -45,15 +45,15 @@ const VerifyStore = () => {
 	// styles
 	const style = {
 		position: "absolute",
-		top: "18%",
+		top: "15%",
 		left: "50%",
 		transform: "translate(-50%, -50%)",
 		width: "100%",
 		maxWidth: "100%",
 		bgcolor: verificationStatus === "تم التوثيق" ? "#07bc0c" : "#ffdd00",
-		boxShadow: 24,
+
 		px: 4,
-		py: 2,
+		pb: 2,
 		"@media(max-width:768px)": {
 			top: "70px",
 			left: 0,
@@ -182,6 +182,9 @@ const VerifyStore = () => {
 										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 											<p className='verify-message text-white'>
 												تهانينا... المتجر الخاص بك مكتمل التوثيق
+												<MdVerified
+													style={{ fill: "#fff", marginRight: "5px" }}
+												/>
 											</p>
 											<IoMdCloseCircleOutline
 												style={{ cursor: "pointer", fill: "#fff" }}
