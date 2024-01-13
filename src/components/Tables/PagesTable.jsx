@@ -205,10 +205,10 @@ EnhancedTableToolbar.propTypes = {
 // Start Pages Table
 export default function PagesTable({ data, loading, reload, setReload }) {
 
-		const store_token = document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1];
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const NotificationStore = useContext(NotificationContext);
@@ -420,7 +420,12 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 														aria-checked={isItemSelected}
 														tabIndex={-1}
 														key={index}
-														selected={isItemSelected}>
+														selected={isItemSelected}
+														style={{
+															backgroundColor:
+																row?.default_page === "1" ? "#dfe2aa" : "",
+														}}
+													>
 														<TableCell
 															component='th'
 															id={labelId}
@@ -488,6 +493,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																	checked={
 																		row?.status === "تم النشر" ? true : false
 																	}
+																	disabled={row?.default_page === "1"}
 																	sx={{
 																		width: "50px",
 																		"& .MuiSwitch-track": {
@@ -528,19 +534,21 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																<DeleteIcon
 																	title='حذف الصفحة'
 																	onClick={() => {
-																		setActionDelete(
-																			"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
-																		);
-																		setDeleteMethod("delete");
-																		setUrl(
-																			`https://backend.atlbha.com/api/Store/page/${row?.id}`
-																		);
+																		if(row?.default_page !== "1"){
+																			setActionDelete(
+																				"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
+																			);
+																			setDeleteMethod("delete");
+																			setUrl(
+																				`https://backend.atlbha.com/api/Store/page/${row?.id}`
+																			);
+																		}
 																	}}
 																	style={{
 																		paddingRight: "10px",
 																		width: "40px",
-																		cursor: "pointer",
 																		color: "red",
+																		cursor: row?.default_page === "1" ? "" : "pointer",
 																	}}
 																/>
 															</div>
