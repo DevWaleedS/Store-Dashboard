@@ -45,13 +45,12 @@ const VerifyStore = () => {
 	// styles
 	const style = {
 		position: "absolute",
-		top: "15%",
+		top: "114px",
 		left: "50%",
 		transform: "translate(-50%, -50%)",
 		width: "100%",
 		maxWidth: "100%",
 		bgcolor: verificationStatus === "تم التوثيق" ? "#07bc0c" : "#ffdd00",
-
 		px: 4,
 		pb: 2,
 		"@media(max-width:768px)": {
