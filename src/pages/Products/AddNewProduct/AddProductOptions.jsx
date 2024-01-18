@@ -1,10 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 
 // Third party
-import axios from "axios";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
-import { v4 as uuidv4 } from "uuid";
+import { SketchPicker } from "react-color";
 
 import { useNavigate } from "react-router-dom";
 
@@ -12,17 +11,23 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { closeProductOptionModal } from "../../../store/slices/ProductOptionModal";
 
+// Context
+import Context from "../../../Context/context";
+
 // Icons
 import { FiPlus } from "react-icons/fi";
 import { TfiWrite } from "react-icons/tfi";
 import { MdStorage } from "react-icons/md";
 import { DeleteIcon } from "../../../data/Icons";
 import { IoPricetagsOutline } from "react-icons/io5";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import { IoMdInformationCircleOutline } from "react-icons/io";
+import { AiOutlineCloseCircle, AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { TiDeleteOutline } from "react-icons/ti";
+import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
 // MUI
 import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Modal from "@mui/material/Modal";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -128,6 +133,8 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 	borderRadius: "0 0 4px 4px",
 }));
 
+const select_value_options = ["نص", "اللون"];
+
 const AddProductOptionsModal = () => {
 	const { isProductOptionOpen } = useSelector(
 		(state) => state.ProductOptionModal
@@ -136,141 +143,183 @@ const AddProductOptionsModal = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 
-	const [activeOptions, setActiveOptions] = useState(false);
-	const [quantityIsUnlimited, setQuantityIsUnlimited] = useState(false);
-
+	const contextStore = useContext(Context);
+	const {
+		productHasOptions,
+		setProductHasOptions,
+		quantityIsUnlimited,
+		setQuantityIsUnlimited,
+		attributes,
+		setAttributes,
+		optionsSection,
+		setOptionsSection,
+		clearOptions
+	} = contextStore;
+	const [showColorPicker, setShowColorPicker] = useState(null);
 	/** to handle the option-section */
-	const [optionsSection, setOptionsSection] = useState([
-		{
-			id: uuidv4(),
-			name: "",
-			values: [{ id: uuidv4(), value: "" }],
-			attributes: [{ id: uuidv4(), name: "", price: "", quantity: "" }],
-		},
-	]);
 
-	/** handle set option name */
-	const handleSetOptionName = (e, index) => {
-		const updatedOptionsInputs = [...optionsSection];
-		updatedOptionsInputs[index].name = e.target.value;
-		setOptionsSection(updatedOptionsInputs);
+	/** Create Product options according  */
+	const [expanded, setExpanded] = useState(false);
+	const handleChange = (panel) => (event, newExpanded) => {
+		setExpanded(newExpanded ? panel : false);
 	};
 
-	/** handle set option values inputs value */
-	const handleSetValuesInputsValue = (
-		e,
-		section,
-		sectionIndex,
-		item,
-		itemIndex
-	) => {
-		console.log(section);
-		console.log(optionsSection);
-		// const updatedOptionsSections = [...optionsSection];
-
-		// // Update values array
-		// updatedOptionsSections[sectionIndex].values[itemIndex].value =
-		// 	e.target.value;
-
-		// // Update attributes array
-		// const attributeValues = updatedOptionsSections[sectionIndex].values.map(
-		// 	(val) => val.value || ""
-		// );
-		// const newValue = attributeValues;
-
-		// // Check if a new item was added
-		// const newSectionIndex = section.length;
-
-		// console.log(`section: ${section}`);
-		// console.log(sectionIndex === newSectionIndex);
-		// console.log(
-		// 	`sectionIndex: ${sectionIndex}`,
-		// 	`newSectionIndex : ${newSectionIndex}`
-		// );
-
-		// if (sectionIndex === newSectionIndex) {
-		// 	updatedOptionsSections[sectionIndex].attributes.forEach((attr, index) => {
-		// 		attr.name = newValue[index];
-		// 	});
-		// } else {
-		// 	// If a new item was added, merge its name with the existing names
-		// 	const existingAttributeNames = updatedOptionsSections
-		// 		.slice(0, newSectionIndex)
-		// 		.flatMap((section) =>
-		// 			section.attributes.map((attr) => attr.name || "")
-		// 		);
-		// 	const mergedNames = [...existingAttributeNames, newValue].join("/");
-
-		// 	updatedOptionsSections[newSectionIndex].attributes.forEach((attr) => {
-		// 		attr.name = mergedNames;
-		// 	});
-		// }
+	//handle name of section
+	const handleSetTitleInput = (e, index) => {
+		const updatedPackInfoInput = [...optionsSection];
+		updatedPackInfoInput[index].name = e.target.value;
+		setOptionsSection(updatedPackInfoInput);
 	};
 
-	// handle Add New value Input
-	const handleAddNewValueInput = (sectionIndex) => {
-		const updatedOptionsSection = [...optionsSection];
-		updatedOptionsSection[sectionIndex].values.push({
-			id: uuidv4(),
-			value: "",
+	//handle value selected value of section
+	const handleSetSelectValue = (e, index) => {
+		const updatedPackInfoInput = [...optionsSection];
+		updatedPackInfoInput[index].select_value = e.target.value;
+		setOptionsSection(updatedPackInfoInput);
+	}
+
+	//handle value title of block
+	const handleSetValueTitleInput = (e, blockIndex, valueIndex) => {
+		const updatedBlocks = [...optionsSection];
+		updatedBlocks[blockIndex].values[valueIndex].title = e.target.value;
+		setOptionsSection(updatedBlocks);
+		// Generate Attributes
+		const newAttributes = generateAttributes(updatedBlocks);
+		setAttributes(newAttributes);
+	};
+
+	//handle value color of block
+	const handleSetValueColorInput = (e, blockIndex, valueIndex) => {
+		const updatedBlocks = [...optionsSection];
+		updatedBlocks[blockIndex].values[valueIndex].color = e.hex;
+		setOptionsSection(updatedBlocks);
+	}
+
+	//handle add new value to block
+	const handleAddNewValue = (blockIndex) => {
+		const updatedBlocks = [...optionsSection];
+		updatedBlocks[blockIndex].values.push({
+			id: updatedBlocks[blockIndex].values.length + 1,
+			title: "",
+			color: "#000000",
 		});
-		setOptionsSection(updatedOptionsSection);
-	};
+		setOptionsSection(updatedBlocks);
+	}
 
-	// handle Add New product attributes according item
-	const handleAddAttributesAccording = (sectionIndex) => {
-		const updatedOptionsSection = [...optionsSection];
-		updatedOptionsSection[sectionIndex].attributes.push({
-			id: uuidv4(),
+	const handleDeleteValue = (valueIndex, blockIndex) => {
+		const updatedBlocks = [...optionsSection];
+		updatedBlocks[blockIndex]?.values?.splice(valueIndex, 1);
+		setOptionsSection(updatedBlocks);
+		// Generate new Attributes based on the updated productOptions
+		const newAttributes = generateAttributes(updatedBlocks);
+		setAttributes(newAttributes);
+	}
+
+	const handleAddNewBlock = () => {
+		// Create a new block with default values
+		const newBlock = {
 			name: "",
-			price: "",
-			quantity: "",
-		});
-		setOptionsSection(updatedOptionsSection);
-	};
-
-	/** handle delete value input */
-	const handleDeleteValueInput = (sectionIndex, inputItemIndex) => {
-		setOptionsSection((prevOptionsSection) => {
-			return prevOptionsSection.map((section, index) => {
-				if (index === sectionIndex) {
-					return {
-						...section,
-						values: section.values.filter((item, i) => i !== inputItemIndex),
-						attributes: section.attributes.filter(
-							(item, i) => i !== inputItemIndex
-						),
-					};
+			select_value: "نص",
+			values: [
+				{
+					id: 1,
+					title: "",
+					color: "#000000"
 				}
-				return section;
-			});
-		});
-	};
-
-	/** handle add new option section */
-	const handleAddNewOptionsSection = () => {
-		const updatedOptionsSections = [...optionsSection];
-		const newItem = {
-			id: uuidv4(),
-			name: "", // Set the initial name to an empty string
-			values: [{ id: uuidv4(), value: "" }],
-			attributes: [{ id: uuidv4(), name: "", price: "", quantity: "" }],
+			],
 		};
 
-		// Add the new item to the optionsSection
-		updatedOptionsSections.push(newItem);
+		// Clone the existing productOptions array and add the new block
+		const updatedBlocks = [...optionsSection, newBlock];
 
-		setOptionsSection(updatedOptionsSections);
-	};
+		// Update the state with the new array of blocks
+		setOptionsSection(updatedBlocks);
+
+	}
 
 	/** handle delete options section */
-	const handleDeleteOptionsSection = (sectionIndex) => {
-		setOptionsSection((prevOptionsSection) => {
-			return prevOptionsSection.filter(
-				(section, index) => index !== sectionIndex
-			);
-		});
+	const handleDeleteBlock = (blockIndex) => {
+		const updatedBlocks = optionsSection?.filter((__item, index) => index !== blockIndex);
+		setOptionsSection(updatedBlocks);
+		// Generate new Attributes based on the updated productOptions
+		const newAttributes = generateAttributes(updatedBlocks);
+		setAttributes(newAttributes);
+	}
+
+	const generateAttributes = (blocks) => {
+		const attributes = [];
+
+		const backtrack = (currentAttribute, blockIndex) => {
+			if (blockIndex === blocks.length) {
+				attributes.push({ values: [...currentAttribute], qty: 0 });
+				return;
+			}
+
+			const block = blocks[blockIndex];
+
+			for (const value of block.values) {
+				currentAttribute[blockIndex] = { id: blockIndex, title: value.title };
+				backtrack(currentAttribute, blockIndex + 1);
+			}
+		};
+
+		backtrack(new Array(blocks.length), 0);
+		return attributes;
 	};
+
+	const addPriceToAttributes = (e, blockIndex) => {
+		if (!quantityIsUnlimited) {
+			const updatedAttributes = [...attributes];
+			updatedAttributes[blockIndex].price = Number(e.target.value.replace(/[^0-9]/g, ""));
+			setAttributes(updatedAttributes);
+		}
+	};
+
+	const changeQtyToAttributes = (e, blockIndex) => {
+		const updatedAttributes = [...attributes];
+		updatedAttributes[blockIndex].qty = Number(e.target.value.replace(/[^0-9]/g, ""));
+		setAttributes(updatedAttributes);
+	}
+
+	const increaseQtyToAttributes = (blockIndex) => {
+		const updatedAttributes = [...attributes];
+		updatedAttributes[blockIndex].qty += 1;
+		setAttributes(updatedAttributes);
+	}
+
+	const decreaseQtyToAttributes = (blockIndex) => {
+		const updatedAttributes = [...attributes];
+		if (updatedAttributes[blockIndex].qty > 0) {
+			updatedAttributes[blockIndex].qty -= 1;
+			setAttributes(updatedAttributes);
+		}
+	}
+
+	const saveOptions = () => {
+		if (productHasOptions === true) {
+			const nameNotEmpty = optionsSection?.every(section => section?.name !== '');
+			const valuesNotEmpty = optionsSection?.every(section => section?.values?.some(value => value?.title === ''));
+			if (nameNotEmpty) {
+				if (valuesNotEmpty) {
+					toast.warning("يرجى ملاء حقل القيمة بالأول", {
+						theme: "light",
+					});
+				} else {
+					dispatch(closeProductOptionModal());
+					toast.success("تم حفظ خيارات المنتج", {
+						theme: "light",
+					});
+				}
+			} else {
+				toast.warning("يرجى ملاء حقل مسمى الخيار بالأول", {
+					theme: "light",
+				});
+			}
+		}
+		else {
+			dispatch(closeProductOptionModal());
+		}
+	}
 
 	/** Handle mapping the options sections */
 	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
@@ -284,13 +333,64 @@ const AddProductOptionsModal = () => {
 						type='text'
 						placeholder='مسمى الخيار (مثل اللون، القياس)'
 						value={section?.name}
-						onChange={(e) => handleSetOptionName(e, sectionIndex)}
+						onChange={(e) => handleSetTitleInput(e, sectionIndex)}
 					/>
+				</div>
+				<div className='option-select-input d-flex justify-content-start align-items-center gap-2'>
+					<Select
+						value={section?.select_value}
+						IconComponent={() => {
+							return <IoIosArrowDown size={"1rem"} />;
+						}}
+						onChange={(e) => handleSetSelectValue(e, sectionIndex)}
+						displayEmpty
+						inputProps={{ "aria-label": "Without label" }}
+						renderValue={(selected) => {
+							return selected;
+						}}
+						className={"font-medium"}
+						sx={{
+							height: '100%',
+							pl: '1rem',
+							width: '100%',
+
+							'& .MuiSelect-select.MuiSelect-outlined': {
+								p: 0,
+								display: 'flex',
+								alignItems: 'center',
+							},
+							'& .MuiOutlinedInput-notchedOutline': {
+								border: 'none',
+							},
+							'&  svg': {
+								display: 'block',
+							},
+						}}
+					>
+						{select_value_options?.map((option, index) => (
+							<MenuItem
+								key={index}
+								className="souq_storge_category_filter_items "
+								sx={{
+									backgroundColor: "#FAFAFA",
+									color: "#011723",
+									"ul:has(&) li:hover": {
+										backgroundColor: "#B4EDEE",
+									},
+									height: "3rem",
+									"&:hover": {},
+								}}
+								value={`${option}`}
+							>
+								{option}
+							</MenuItem>
+						))}
+					</Select>
 				</div>
 				{optionsSection?.length > 1 && (
 					<div className='delete-icon delete-option-section-icon'>
 						<DeleteIcon
-							onClick={() => handleDeleteOptionsSection(sectionIndex)}
+							onClick={() => handleDeleteBlock(sectionIndex)}
 						/>
 					</div>
 				)}
@@ -301,32 +401,59 @@ const AddProductOptionsModal = () => {
 					<section
 						key={itemIndex + 1}
 						className='mb-3 d-flex justify-content-start align-items-center gap-3'>
-						<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
+						<div className='option-color-input d-flex justify-content-start align-items-center gap-2'>
 							<div className='input-icon'>
 								<TfiWrite />
 							</div>
 							<input
 								type='text'
-								value={item?.value}
-								onChange={(e) => {
-									handleSetValuesInputsValue(
-										e,
-										section,
-										sectionIndex,
-										item,
-										itemIndex
-									);
-								}}
-								placeholder={`القيمة رقم ${itemIndex + 1}`}
+								placeholder={`القيمة ${itemIndex + 1}`}
+								value={item?.title}
+								onChange={(e) => { handleSetValueTitleInput(e, sectionIndex, itemIndex); }}
 							/>
+							{section?.select_value === "اللون" && (
+								<div
+									onClick={() => {
+										setShowColorPicker(item?.id);
+									}}
+									style={{
+										position: "absolute",
+										left: "15px",
+										width: "1.5rem",
+										height: "1.5rem",
+										backgroundColor: item?.color,
+										borderRadius: "50%",
+										cursor: "pointer",
+									}}
+								></div>
+							)}
+							{showColorPicker === item?.id && section?.select_value === "اللون" && (
+								<div style={{ position: "absolute", left: "0", bottom: "0", zIndex: "50", transform: "translateY(100%)" }}>
+									<SketchPicker
+										color={item?.color}
+										onChange={(e) => { handleSetValueColorInput(e, sectionIndex, itemIndex) }}
+									>
+									</SketchPicker>
+									<div style={{ position: "absolute", top: "0", right: "0", zIndex: "50", transform: "translateY(-100%)" }}>
+										<TiDeleteOutline
+											onClick={() => {
+												setShowColorPicker(null);
+											}}
+											size={'1.5rem'}
+											color={"#000000"}
+										>
+										</TiDeleteOutline>
+									</div>
+								</div>
+							)}
 						</div>
 
 						{section?.values?.length > 1 && (
 							<div className='delete-icon '>
 								<DeleteIcon
-									onClick={() =>
-										handleDeleteValueInput(sectionIndex, itemIndex)
-									}
+									onClick={() => {
+										handleDeleteValue(itemIndex, sectionIndex)
+									}}
 								/>
 							</div>
 						)}
@@ -336,10 +463,7 @@ const AddProductOptionsModal = () => {
 				{/* Add more item button */}
 				<div>
 					<button
-						onClick={() => {
-							handleAddAttributesAccording(sectionIndex);
-							handleAddNewValueInput(sectionIndex);
-						}}
+						onClick={() => handleAddNewValue(sectionIndex)}
 						className='w-100 add-new-value-btn d-flex justify-content-center align-items-center cursor-pointer'>
 						<FiPlus className='add-icon' />
 						إضافة قيمة جديدة
@@ -350,106 +474,133 @@ const AddProductOptionsModal = () => {
 	));
 	/** ----------------------------------------------------------------------------------------------------------------------------- */
 
-	/** Create Product options according  */
-	const [expanded, setExpanded] = React.useState("");
-	const handleChange = (panel) => (event, newExpanded) => {
-		setExpanded(newExpanded ? panel : false);
-	};
-
-	/** handle set option name */
-	const handleSetOptionPrice = (e, index) => {
-		const updatedOptionsInputs = [...optionsSection];
-		updatedOptionsInputs[index].price = e.target.value;
-		setOptionsSection(updatedOptionsInputs);
-	};
-
-	/** handle set option values inputs value */
-	const handleSetValuesInputsQuantity = (e, index) => {
-		const updatedOptionsInputs = [...optionsSection];
-		updatedOptionsInputs[index].quantity = e.target.value;
-		setOptionsSection(updatedOptionsInputs);
-	};
-
 	/** product Options According */
-	const productOptionsAccording = optionsSection?.map((section, sectionIndex) =>
-		section?.attributes?.map((item, itemIndex) => (
-			<>
-				{item?.name !== "" && (
-					<section
-						key={itemIndex + 1}
-						className=' flex justify-start items-center gap-3 mb-3'>
-						<Accordion
-							expanded={expanded === `panel${item?.id}`}
-							onChange={handleChange(`panel${item?.id}`)}>
-							<AccordionSummary
-								aria-controls={`panel${item?.id}-content`}
-								id={`panel${item?.id}-header`}
-								expandIcon={
-									<FaRegSquarePlus
-										style={{
-											fontSize: "1.2rem",
-											fill: "#023855",
-											marginLeft: "5px",
-										}}
-									/>
-								}>
-								<div className=' d-flex justify-content-between align-items-center  w-100'>
-									<Typography
-										sx={{
-											fontSize: "18px",
-											fontWeight: "400",
-											fontFamily: "Tajawal",
-											color: "#023855",
-										}}>
-										{item?.name}
-									</Typography>
-
-									<Typography
-										sx={{
-											fontSize: "16px",
-											fontWeight: "400",
-											fontFamily: "Tajawal",
-											color: "#023855",
-										}}>
-										متوفر عدد {item?.quantity}
-									</Typography>
+	const attributesAccording = attributes?.map((attribute, attributeIndex) => (
+		<>
+			<section
+				key={attributeIndex + 1}
+				className=' flex justify-start items-center gap-3 mb-3'>
+				<Accordion
+					expanded={expanded === attributeIndex}
+					onChange={handleChange(attributeIndex)}
+				>
+					<AccordionSummary
+						aria-controls={`${attributeIndex}-content`}
+						id={`${attributeIndex}-header`}
+						expandIcon={
+							<FaRegSquarePlus
+								style={{
+									fontSize: "1.2rem",
+									fill: "#023855",
+									marginLeft: "5px",
+								}}
+							/>
+						}>
+						<div className=' d-flex justify-content-between align-items-center w-100'>
+							<div className="d-flex flex-row align-items-center gap-1">
+								{attribute?.values?.map((value, index) => (
+									<>
+										{value?.id === index && index !== 0 && <span>/</span>}
+										<Typography
+											key={index + 1}
+											sx={{
+												fontSize: "18px",
+												fontWeight: "400",
+												fontFamily: "Tajawal",
+												color: "#023855",
+											}}>
+											{value?.title}
+										</Typography>
+									</>
+								))}
+							</div>
+							<Typography
+								sx={{
+									fontSize: "16px",
+									fontWeight: "400",
+									fontFamily: "Tajawal",
+									color: "#023855",
+								}}>
+								متوفر عدد {attribute?.qty}
+							</Typography>
+						</div>
+					</AccordionSummary>
+					<AccordionDetails>
+						<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+							<div className='input-icon'>
+								<IoPricetagsOutline />
+							</div>
+							<input
+								type='text'
+								placeholder='السعر'
+								value={attribute?.price}
+								onChange={(e) => {
+									addPriceToAttributes(e, attributeIndex);
+								}}
+								disabled={quantityIsUnlimited}
+							/>
+							<div className='input-type'>ر.س</div>
+						</div>
+						<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+							<div className='input-icon'>
+								<MdStorage />
+							</div>
+							<span style={{ flex: "1", fontSize: "1rem", fontWeight: "500", color: "#000000" }}>الكمية المتوفرة</span>
+							<Box
+								sx={{
+									display: "flex",
+									height: "46px",
+									'& div': {
+										width: '56px',
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+										justifyContent: "center",
+										height: '100%',
+										border: '1px solid #ADB5B966',
+									},
+								}}
+							>
+								<div
+									onClick={() => {
+										if (!quantityIsUnlimited) {
+											increaseQtyToAttributes(attributeIndex)
+										}
+									}}
+									style={{ cursor: "pointer" }}
+								>
+									<AiOutlinePlus></AiOutlinePlus>
 								</div>
-							</AccordionSummary>
-							<AccordionDetails>
-								<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
-									<div className='input-icon'>
-										<IoPricetagsOutline />
-									</div>
-									<input
-										type='text'
-										placeholder='السعر'
-										value={item?.price}
-										onChange={(e) => handleSetOptionPrice(e, itemIndex)}
-									/>
-
-									<div className='input-type'>ر.س</div>
-								</div>
-								<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
-									<div className='input-icon'>
-										<MdStorage />
-									</div>
+								<div>
 									<input
 										type='text'
 										placeholder='الكمية'
-										value={item?.quantity}
-										onChange={(e) =>
-											handleSetValuesInputsQuantity(e, itemIndex)
-										}
+										value={attribute?.qty}
+										onChange={(e) => {
+											if (!quantityIsUnlimited) {
+												changeQtyToAttributes(e, attributeIndex)
+											}
+										}}
+										style={{ textAlign: "center" }}
 									/>
-									<div className='input-type'>قطعة</div>
 								</div>
-							</AccordionDetails>
-						</Accordion>
-					</section>
-				)}
-			</>
-		))
-	);
+								<div
+									onClick={() => {
+										if (!quantityIsUnlimited) {
+											decreaseQtyToAttributes(attributeIndex);
+										}
+									}}
+									style={{ cursor: "pointer" }}
+								>
+									<AiOutlineMinus></AiOutlineMinus>
+								</div>
+							</Box>
+						</div>
+					</AccordionDetails>
+				</Accordion>
+			</section >
+		</>
+	));
 
 	return (
 		<Modal open={isProductOptionOpen}>
@@ -475,7 +626,10 @@ const AddProductOptionsModal = () => {
 								<div className='close-icon-video-modal ps-2'>
 									<AiOutlineCloseCircle
 										style={{ cursor: "pointer", color: "white" }}
-										onClick={() => dispatch(closeProductOptionModal())}
+										onClick={() => {
+											dispatch(closeProductOptionModal());
+											clearOptions();
+										}}
 									/>
 								</div>
 							</div>
@@ -497,8 +651,8 @@ const AddProductOptionsModal = () => {
 								<div className='d-flex justify-content-start align-items-center  active-options-switch'>
 									<Switch
 										sx={switchStyle}
-										checked={activeOptions}
-										onChange={() => setActiveOptions(!activeOptions)}
+										checked={productHasOptions}
+										onChange={() => setProductHasOptions(!productHasOptions)}
 									/>
 									<span className='switch-label'>تفعيل خيارات المنتج</span>
 								</div>
@@ -506,53 +660,56 @@ const AddProductOptionsModal = () => {
 						</div>
 
 						<section
-							className={`${activeOptions ? "d-flex" : "d-none"} row mb-4`}>
+							className={`${productHasOptions ? "d-flex" : "d-none"} row mb-4`}>
 							<div className='col-12 mb-4'>
 								{/* the product options section */}
 								{productOptionsSection}
 
 								<div>
 									<button
-										onClick={handleAddNewOptionsSection}
+										onClick={handleAddNewBlock}
 										className='w-100 add-new-option-section-btn d-flex justify-content-center align-items-center cursor-pointer'>
 										<FiPlus className='add-icon' />
 										إضافة خيار جديد
 									</button>
 								</div>
 							</div>
-							<div className='col-12 border mb-3'></div>
+							{attributesAccording?.length > 0 &&
+								<>
+									<div className='col-12 border mb-3'></div>
 
-							<div className='col-12 p-0 mb-2'>
-								<div className='d-flex justify-content-between align-items-center'>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={quantityIsUnlimited}
-												onChange={() =>
-													setQuantityIsUnlimited(!quantityIsUnlimited)
+									<div className='col-12 p-0 mb-2'>
+										<div className='d-flex justify-content-between align-items-center'>
+											<FormControlLabel
+												control={
+													<Checkbox
+														checked={quantityIsUnlimited}
+														onChange={() =>
+															setQuantityIsUnlimited(!quantityIsUnlimited)
+														}
+														sx={{
+															color: "#76e8cd",
+															"& .MuiSvgIcon-root": {
+																color: "#76e8cd",
+																fontSize: "1.6rem",
+															},
+														}}
+													/>
 												}
-												sx={{
-													color: "#76e8cd",
-													"& .MuiSvgIcon-root": {
-														color: "#76e8cd",
-														fontSize: "1.6rem",
-													},
-												}}
+												label='كميات غير محدودة'
 											/>
-										}
-										label='الكمية غير محدودة'
-									/>
-									<div
-										className={`${
-											quantityIsUnlimited ? "d-none" : "d-block"
-										} total-quantity ps-2`}>
-										إجمالي الكمية 0
+											<div
+												className={`${quantityIsUnlimited ? "d-none" : "d-block"
+													} total-quantity ps-2`}>
+												إجمالي الكمية <span>{attributes?.reduce((total, attribute) => total + attribute?.qty, 0) || 0}</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
+								</>
+							}
 
 							<div className='col-12 mb-2'>
-								{productOptionsAccording && productOptionsAccording}
+								{attributesAccording && attributesAccording}
 							</div>
 						</section>
 					</div>
@@ -562,14 +719,18 @@ const AddProductOptionsModal = () => {
 						style={{ borderRadius: "0 0 16px 16px" }}>
 						<div className='row d-flex justify-content-center align-items-center'>
 							<div className='col-lg-4 col-6'>
-								<button className='save-btn' onClick={console.log("")}>
+								<button className='save-btn' onClick={() => saveOptions()}>
 									حفظ
 								</button>
 							</div>
 							<div className='col-lg-4 col-6'>
 								<button
 									className='close-btn'
-									onClick={() => dispatch(closeProductOptionModal())}>
+									onClick={() => {
+										dispatch(closeProductOptionModal());
+										clearOptions();
+									}}
+								>
 									إلغاء
 								</button>
 							</div>

@@ -41,7 +41,7 @@ const UploadStoreLogo = ({
 		const errorMes = `
 				<span> - الحد الأدني للأبعاد هو 110 عرض و 110 ارتفاع</span>
 				 <br />
-				<span> - الحد الأقصي للأبعاد هو 160 بكسل عرض و 114 ارتفاع</span> `;
+				<span> - الحد الأقصى للأبعاد هو 160 بكسل عرض و 114 ارتفاع</span> `;
 
 		// Check if the image size is valid
 		const isSizeValid = imageList.every(
@@ -150,7 +150,7 @@ const UploadStoreLogo = ({
 
 								{/** upload btn */}
 								<span className='tax-text w-100'>
-									الحد الأقصي للشعار هو 1MB
+									الحد الأقصى للشعار هو 1MB
 								</span>
 								<button
 									className='upload-log-btn'

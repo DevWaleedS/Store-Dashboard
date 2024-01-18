@@ -354,7 +354,7 @@ function CheckoutPage() {
 												</div>
 												<div className='form-group'>
 													<label htmlFor='post_code'>
-														رمز البريدي / ZIP (اختياري)
+														الرمز البريدي / ZIP (اختياري)
 													</label>
 													<input
 														value={shipping?.postCode}

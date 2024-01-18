@@ -592,7 +592,7 @@ const ClientData = () => {
 
 														{fetchedData?.data?.cart?.overweight !== 0 &&
 															fetchedData?.data?.cart?.overweight_price !==
-																0 && (
+															0 && (
 																<TableRow>
 																	<TableCell
 																		colSpan={3}
@@ -822,7 +822,7 @@ const ClientData = () => {
 																		)}
 																	{discount_type === "percent" &&
 																		cartDetails?.total - discountPercentValue <
-																			0 && (
+																		0 && (
 																			<div>
 																				<span className='fs-6 text-danger'>
 																					قيمة النسبة اكبر من اجمالي السلة
@@ -831,8 +831,8 @@ const ClientData = () => {
 																		)}
 																	{discount_type === "percent" &&
 																		cartDetails?.total -
-																			discountPercentValue ===
-																			0 && (
+																		discountPercentValue ===
+																		0 && (
 																			<div>
 																				<span className='fs-6 text-danger'>
 																					قيمة النسبة متساوية من اجمالي السلة
@@ -947,7 +947,7 @@ const ClientData = () => {
 													</span>
 												</div>
 											)}
-											<div className='send-offer-btn'>
+											<div className='send-offer-btn gap-3'>
 												<button
 													onClick={sendOfferCart}
 													disabled={
@@ -955,6 +955,12 @@ const ClientData = () => {
 													}>
 													<Communication />
 													<span className='me-2'>ارسال العرض</span>
+												</button>
+												<button
+													onClick={() => { navigate("/Carts") }}
+													style={{ backgroundColor: "transparent", border: "1px solid #02466a" }}
+												>
+													<span style={{ color: "#02466a" }} className='me-2'>الغاء</span>
 												</button>
 											</div>
 										</div>

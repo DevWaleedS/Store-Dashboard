@@ -32,9 +32,9 @@ const selectMenuStyles = {
 
 const selectCategoriesStyles = {
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+	{
+		paddingRight: "20px",
+	},
 	"& .MuiOutlinedInput-notchedOutline": {
 		border: "none",
 	},
@@ -79,19 +79,21 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 	// create category filter function
 	const onClickFilter = () => {
 		if (mainCategory !== "") {
-			setProductsData(
-				fetchedData?.data?.products?.filter(
-					(item) => item?.category?.name === mainCategory
-				)
-			);
-		} else if (subCategory?.length !== 0) {
-			setProductsData(
-				resultData.filter((category) => {
-					return subCategory.some((sub) => {
-						return category?.subcategory?.some((item) => item?.name === sub);
-					});
-				})
-			);
+			if (subCategory?.length !== 0) {
+				setProductsData(
+					resultData?.filter((category) => {
+						return subCategory?.some((sub) => {
+							return category?.subcategory?.some((item) => item?.name === sub);
+						});
+					})
+				);
+			} else {
+				setProductsData(
+					fetchedData?.data?.products?.filter(
+						(item) => item?.category?.name === mainCategory
+					)
+				);
+			}
 		} else {
 			setProductsData(resultData);
 		}
@@ -104,9 +106,8 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 
 	return (
 		<div
-			className={`row ${
-				showFilteringOptions ? "d-none" : "d-flex"
-			} align-items-end`}>
+			className={`row ${showFilteringOptions ? "d-none" : "d-flex"
+				} align-items-end`}>
 			<div className='col-md-4 col-12 mb-md-0 mb-3'>
 				<FormControl sx={selectMenuStyles}>
 					<label

@@ -506,7 +506,7 @@ const EditUserDetails = () => {
 													htmlFor='upload-user-image'>
 													الصورة الشخصية{" "}
 													<span className='tax-text '>
-														(الحد الأقصي للصورة 1MB)
+														(الحد الأقصى للصورة 1MB)
 													</span>
 												</label>
 												<div

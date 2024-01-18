@@ -149,6 +149,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			"file/*": [".pdf"],
 		},
 		onDrop: (acceptedFiles) => {
+			setDataErrors({ ...dataErrors, file: "" });
 			setFile(
 				acceptedFiles.map((file) =>
 					Object.assign(file, {
@@ -175,8 +176,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			phonenumber: fetchedData?.data?.phonenumber?.startsWith("+966")
 				? fetchedData?.data?.phonenumber.slice(4)
 				: fetchedData?.data?.phonenumber?.startsWith("00966")
-				? fetchedData?.data?.phonenumber.slice(5)
-				: fetchedData?.data?.phonenumber,
+					? fetchedData?.data?.phonenumber.slice(5)
+					: fetchedData?.data?.phonenumber,
 		});
 	}, [fetchedData?.data]);
 
@@ -189,9 +190,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const uploadVerifyStoreOrder = () => {
 		resetDataErrors();
 		setLoadingTitle("جاري ارسال طلب التوثيق");
-
 		let formData = new FormData();
-
 		formData.append(
 			"phonenumber",
 			data?.phonenumber?.startsWith("+966") ||
@@ -493,9 +492,9 @@ const VerifyFormPage = forwardRef((props, ref) => {
 														height: "350px",
 													},
 													"& .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper":
-														{
-															height: "350px",
-														},
+													{
+														height: "350px",
+													},
 												},
 											}}
 											sx={{
@@ -592,7 +591,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
-											وتأكد ان صيغة الملف pdf
+											<span className="mx-1">وتأكد ان صيغة الملف pdf</span>
 										</div>
 									)}
 
@@ -800,7 +799,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											className='important-hint me-1'
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
-											وتأكد ان صيغة الملف pdf
+											<span className="mx-1">وتأكد ان صيغة الملف pdf</span>
 										</div>
 									)}
 									{files?.length === 0 && (

@@ -284,7 +284,7 @@ const EditCategory = () => {
 																		( سيتم قبول الصور jpeg & png & jpg)
 																	</span>
 																	<div className='tax-text '>
-																		(الحد الأقصي للصورة 1MB)
+																		(الحد الأقصى للصورة 1MB)
 																	</div>
 																</div>
 															</div>

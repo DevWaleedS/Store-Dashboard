@@ -322,25 +322,25 @@ const router = createBrowserRouter([
 				path: "MainInformation",
 				element: <MainInformation />,
 			},
-			{
-				path: "Management",
-				element: <Management />,
-			},
-			// nested add user page
-			{
-				path: "Management/AddUser",
-				element: <AddNewUser />,
-			},
-			// nested add users page
-			{
-				path: "Management/user/:id",
-				element: <EditUserPage />,
-			},
-			// nested add users page
-			{
-				path: "Management/info/:id",
-				element: <UserData />,
-			},
+			// {
+			// 	path: "Management",
+			// 	element: <Management />,
+			// },
+			// // nested add user page
+			// {
+			// 	path: "Management/AddUser",
+			// 	element: <AddNewUser />,
+			// },
+			// // nested add users page
+			// {
+			// 	path: "Management/user/:id",
+			// 	element: <EditUserPage />,
+			// },
+			// // nested add users page
+			// {
+			// 	path: "Management/info/:id",
+			// 	element: <UserData />,
+			// },
 
 			// Nested EditUserDetails
 			{
@@ -349,21 +349,21 @@ const router = createBrowserRouter([
 			},
 
 			// nested job title page
-			{
-				path: "Management/JobTitles",
-				element: <JobTitles />,
-			},
-			// nested job title page
-			{
-				path: "Management/JobTitles/EditRole/:id",
-				element: <EditRole />,
-			},
+			// {
+			// 	path: "Management/JobTitles",
+			// 	element: <JobTitles />,
+			// },
+			// // nested job title page
+			// {
+			// 	path: "Management/JobTitles/EditRole/:id",
+			// 	element: <EditRole />,
+			// },
 
-			// CreateRole page
-			{
-				path: "Management/JobTitles/CreateRole",
-				element: <CreateRole />,
-			},
+			// // CreateRole page
+			// {
+			// 	path: "Management/JobTitles/CreateRole",
+			// 	element: <CreateRole />,
+			// },
 
 			{
 				path: "VerifyStore",

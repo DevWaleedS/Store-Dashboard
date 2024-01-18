@@ -114,7 +114,7 @@ const UploadStoreIcon = ({
 							)}
 						</ImageUploading>
 					</div>
-					<span className='tax-text w-100'>الحد الأقصي للايقونة هو 1MB</span>
+					<span className='tax-text w-100'>الحد الأقصى للايقونة هو 1MB</span>
 				</div>
 				{iconErrors && (
 					<div className='d-flex flex-wrap'>
