@@ -66,9 +66,9 @@ const style = {
 const selectStyle = {
 	fontSize: "18px",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-	{
-		paddingRight: "20px",
-	},
+		{
+			paddingRight: "20px",
+		},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -108,7 +108,7 @@ const EditProduct = () => {
 		setAttributes,
 		optionsSection,
 		setOptionsSection,
-		clearOptions
+		clearOptions,
 	} = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -183,7 +183,9 @@ const EditProduct = () => {
 			setMultiImages(fetchedData?.data?.product?.images?.map((image) => image));
 
 			setProductHasOptions(fetchedData?.data?.product?.product_has_options);
-			setQuantityIsUnlimited(fetchedData?.data?.product?.amount === 0 ? true : false);
+			setQuantityIsUnlimited(
+				fetchedData?.data?.product?.amount === 0 ? true : false
+			);
 			setOptionsSection(
 				fetchedData?.data?.product?.attributes?.map((attribute) => ({
 					id: attribute?.id,
@@ -193,19 +195,20 @@ const EditProduct = () => {
 						id: value?.id,
 						title: value?.value?.[0],
 						color: value?.value?.[1] || "",
-					}))
+					})),
 				}))
 			);
-			setAttributes(fetchedData?.data?.product?.options?.map((option) => ({
-				id: option?.id,
-				price: Number(option?.price),
-				qty: Number(option?.quantity),
-				values: option?.name?.ar?.split(",")?.map((item, index) => ({
-					id: index + 1,
-					title: `${index === 0 ? item : `/ ${item}`}`
+			setAttributes(
+				fetchedData?.data?.product?.options?.map((option) => ({
+					id: option?.id,
+					price: Number(option?.price),
+					qty: Number(option?.quantity),
+					values: option?.name?.ar?.split(",")?.map((item, index) => ({
+						id: index + 1,
+						title: `${index === 0 ? item : `/ ${item}`}`,
+					})),
 				}))
-			})))
-
+			);
 		}
 	}, [fetchedData?.data?.product]);
 
@@ -374,7 +377,10 @@ const EditProduct = () => {
 		formData.append("discount_price", data?.discount_price);
 		formData.append("stock", data?.stock);
 		formData.append("weight", data?.weight);
-		formData.append("SEOdescription", SEOdescription?.length === 0 ? "" : SEOdescription?.join(","));
+		formData.append(
+			"SEOdescription",
+			SEOdescription?.length === 0 ? "" : SEOdescription?.join(",")
+		);
 		for (let i = 0; i < product?.subcategory_id?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
 		}
@@ -395,17 +401,31 @@ const EditProduct = () => {
 		if (productHasOptions === true) {
 			for (let i = 0; i < optionsSection?.length; i++) {
 				formData.append([`attribute[${i}][title]`], optionsSection[i]?.name);
-				formData.append([`attribute[${i}][type]`], optionsSection[i]?.select_value);
+				formData.append(
+					[`attribute[${i}][type]`],
+					optionsSection[i]?.select_value
+				);
 				for (let v = 0; v < optionsSection[i]?.values?.length; v++) {
-					formData.append([`attribute[${i}][value][${v}][title]`], optionsSection[i]?.values[v]?.title);
-					formData.append([`attribute[${i}][value][${v}][color]`], optionsSection[i]?.select_value === "اللون" ? optionsSection[i]?.values[v]?.color : "");
+					formData.append(
+						[`attribute[${i}][value][${v}][title]`],
+						optionsSection[i]?.values[v]?.title
+					);
+					formData.append(
+						[`attribute[${i}][value][${v}][color]`],
+						optionsSection[i]?.select_value === "اللون"
+							? optionsSection[i]?.values[v]?.color
+							: ""
+					);
 				}
 			}
 			for (let i = 0; i < attributes?.length; i++) {
 				formData.append([`data[${i}][price]`], attributes[i]?.price || 0);
 				formData.append([`data[${i}][quantity]`], attributes[i]?.qty);
 				for (let v = 0; v < attributes[i]?.values?.length; v++) {
-					formData.append([`data[${i}][name][${v}]`], attributes[i]?.values[v]?.title);
+					formData.append(
+						[`data[${i}][name][${v}]`],
+						attributes[i]?.values[v]?.title
+					);
 				}
 			}
 		}
@@ -725,14 +745,12 @@ const EditProduct = () => {
 										{/* Sub catagories */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='sub-category'>
-													النشاط الفرعي
-												</label>
+												<label htmlFor='sub-category'>النشاط الفرعي</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-														subcategory[0]?.subcategory?.length === 0 ? (
+													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -742,9 +760,9 @@ const EditProduct = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -992,16 +1010,16 @@ const EditProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-														<span className='fs-6' style={{ color: "red" }}>
-															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-														</span>
-													)}
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-														product?.selling_price === ""
+													product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -1127,9 +1145,9 @@ const EditProduct = () => {
 																const isVideo =
 																	image?.data_url?.includes(
 																		"video/mp4" ||
-																		"video/avi" ||
-																		"video/mov" ||
-																		"video/mkv"
+																			"video/avi" ||
+																			"video/mov" ||
+																			"video/mkv"
 																	) ||
 																	image?.image?.includes(
 																		".mp4" || ".avi" || ".mov" || ".mkv"
@@ -1231,11 +1249,10 @@ const EditProduct = () => {
 											</div>
 										</div>
 
-
 										{/* Add Product options */}
 
-
-										<div className='row mb-md-5 mb-3'>
+										{/*
+<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<button
@@ -1247,7 +1264,7 @@ const EditProduct = () => {
 												</button>
 											</div>
 										</div>
-
+*/}
 									</div>
 
 									{/* Save and cancle buttons */}

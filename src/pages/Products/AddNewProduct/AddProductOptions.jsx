@@ -20,7 +20,11 @@ import { TfiWrite } from "react-icons/tfi";
 import { MdStorage } from "react-icons/md";
 import { DeleteIcon } from "../../../data/Icons";
 import { IoPricetagsOutline } from "react-icons/io5";
-import { AiOutlineCloseCircle, AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import {
+	AiOutlineCloseCircle,
+	AiOutlinePlus,
+	AiOutlineMinus,
+} from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
@@ -153,7 +157,7 @@ const AddProductOptionsModal = () => {
 		setAttributes,
 		optionsSection,
 		setOptionsSection,
-		clearOptions
+		clearOptions,
 	} = contextStore;
 	const [showColorPicker, setShowColorPicker] = useState(null);
 	/** to handle the option-section */
@@ -176,7 +180,7 @@ const AddProductOptionsModal = () => {
 		const updatedPackInfoInput = [...optionsSection];
 		updatedPackInfoInput[index].select_value = e.target.value;
 		setOptionsSection(updatedPackInfoInput);
-	}
+	};
 
 	//handle value title of block
 	const handleSetValueTitleInput = (e, blockIndex, valueIndex) => {
@@ -193,7 +197,7 @@ const AddProductOptionsModal = () => {
 		const updatedBlocks = [...optionsSection];
 		updatedBlocks[blockIndex].values[valueIndex].color = e.hex;
 		setOptionsSection(updatedBlocks);
-	}
+	};
 
 	//handle add new value to block
 	const handleAddNewValue = (blockIndex) => {
@@ -204,7 +208,7 @@ const AddProductOptionsModal = () => {
 			color: "#000000",
 		});
 		setOptionsSection(updatedBlocks);
-	}
+	};
 
 	const handleDeleteValue = (valueIndex, blockIndex) => {
 		const updatedBlocks = [...optionsSection];
@@ -213,7 +217,7 @@ const AddProductOptionsModal = () => {
 		// Generate new Attributes based on the updated productOptions
 		const newAttributes = generateAttributes(updatedBlocks);
 		setAttributes(newAttributes);
-	}
+	};
 
 	const handleAddNewBlock = () => {
 		// Create a new block with default values
@@ -224,8 +228,8 @@ const AddProductOptionsModal = () => {
 				{
 					id: 1,
 					title: "",
-					color: "#000000"
-				}
+					color: "#000000",
+				},
 			],
 		};
 
@@ -234,17 +238,18 @@ const AddProductOptionsModal = () => {
 
 		// Update the state with the new array of blocks
 		setOptionsSection(updatedBlocks);
-
-	}
+	};
 
 	/** handle delete options section */
 	const handleDeleteBlock = (blockIndex) => {
-		const updatedBlocks = optionsSection?.filter((__item, index) => index !== blockIndex);
+		const updatedBlocks = optionsSection?.filter(
+			(__item, index) => index !== blockIndex
+		);
 		setOptionsSection(updatedBlocks);
 		// Generate new Attributes based on the updated productOptions
 		const newAttributes = generateAttributes(updatedBlocks);
 		setAttributes(newAttributes);
-	}
+	};
 
 	const generateAttributes = (blocks) => {
 		const attributes = [];
@@ -268,24 +273,29 @@ const AddProductOptionsModal = () => {
 	};
 
 	const addPriceToAttributes = (e, blockIndex) => {
-		if (!quantityIsUnlimited) {
-			const updatedAttributes = [...attributes];
-			updatedAttributes[blockIndex].price = Number(e.target.value.replace(/[^0-9]/g, ""));
-			setAttributes(updatedAttributes);
-		}
+		// if (!quantityIsUnlimited) {
+
+		// }
+		const updatedAttributes = [...attributes];
+		updatedAttributes[blockIndex].price = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
+		setAttributes(updatedAttributes);
 	};
 
 	const changeQtyToAttributes = (e, blockIndex) => {
 		const updatedAttributes = [...attributes];
-		updatedAttributes[blockIndex].qty = Number(e.target.value.replace(/[^0-9]/g, ""));
+		updatedAttributes[blockIndex].qty = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
 		setAttributes(updatedAttributes);
-	}
+	};
 
 	const increaseQtyToAttributes = (blockIndex) => {
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].qty += 1;
 		setAttributes(updatedAttributes);
-	}
+	};
 
 	const decreaseQtyToAttributes = (blockIndex) => {
 		const updatedAttributes = [...attributes];
@@ -293,12 +303,16 @@ const AddProductOptionsModal = () => {
 			updatedAttributes[blockIndex].qty -= 1;
 			setAttributes(updatedAttributes);
 		}
-	}
+	};
 
 	const saveOptions = () => {
 		if (productHasOptions === true) {
-			const nameNotEmpty = optionsSection?.every(section => section?.name !== '');
-			const valuesNotEmpty = optionsSection?.every(section => section?.values?.some(value => value?.title === ''));
+			const nameNotEmpty = optionsSection?.every(
+				(section) => section?.name !== ""
+			);
+			const valuesNotEmpty = optionsSection?.every((section) =>
+				section?.values?.some((value) => value?.title === "")
+			);
 			if (nameNotEmpty) {
 				if (valuesNotEmpty) {
 					toast.warning("يرجى ملاء حقل القيمة بالأول", {
@@ -315,11 +329,10 @@ const AddProductOptionsModal = () => {
 					theme: "light",
 				});
 			}
-		}
-		else {
+		} else {
 			dispatch(closeProductOptionModal());
 		}
-	}
+	};
 
 	/** Handle mapping the options sections */
 	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
@@ -350,27 +363,26 @@ const AddProductOptionsModal = () => {
 						}}
 						className={"font-medium"}
 						sx={{
-							height: '100%',
-							pl: '1rem',
-							width: '100%',
+							height: "100%",
+							pl: "1rem",
+							width: "100%",
 
-							'& .MuiSelect-select.MuiSelect-outlined': {
+							"& .MuiSelect-select.MuiSelect-outlined": {
 								p: 0,
-								display: 'flex',
-								alignItems: 'center',
+								display: "flex",
+								alignItems: "center",
 							},
-							'& .MuiOutlinedInput-notchedOutline': {
-								border: 'none',
+							"& .MuiOutlinedInput-notchedOutline": {
+								border: "none",
 							},
-							'&  svg': {
-								display: 'block',
+							"&  svg": {
+								display: "block",
 							},
-						}}
-					>
+						}}>
 						{select_value_options?.map((option, index) => (
 							<MenuItem
 								key={index}
-								className="souq_storge_category_filter_items "
+								className='souq_storge_category_filter_items '
 								sx={{
 									backgroundColor: "#FAFAFA",
 									color: "#011723",
@@ -380,8 +392,7 @@ const AddProductOptionsModal = () => {
 									height: "3rem",
 									"&:hover": {},
 								}}
-								value={`${option}`}
-							>
+								value={`${option}`}>
 								{option}
 							</MenuItem>
 						))}
@@ -389,9 +400,7 @@ const AddProductOptionsModal = () => {
 				</div>
 				{optionsSection?.length > 1 && (
 					<div className='delete-icon delete-option-section-icon'>
-						<DeleteIcon
-							onClick={() => handleDeleteBlock(sectionIndex)}
-						/>
+						<DeleteIcon onClick={() => handleDeleteBlock(sectionIndex)} />
 					</div>
 				)}
 			</section>
@@ -409,7 +418,9 @@ const AddProductOptionsModal = () => {
 								type='text'
 								placeholder={`القيمة ${itemIndex + 1}`}
 								value={item?.title}
-								onChange={(e) => { handleSetValueTitleInput(e, sectionIndex, itemIndex); }}
+								onChange={(e) => {
+									handleSetValueTitleInput(e, sectionIndex, itemIndex);
+								}}
 							/>
 							{section?.select_value === "اللون" && (
 								<div
@@ -424,35 +435,47 @@ const AddProductOptionsModal = () => {
 										backgroundColor: item?.color,
 										borderRadius: "50%",
 										cursor: "pointer",
-									}}
-								></div>
+									}}></div>
 							)}
-							{showColorPicker === item?.id && section?.select_value === "اللون" && (
-								<div style={{ position: "absolute", left: "0", bottom: "0", zIndex: "50", transform: "translateY(100%)" }}>
-									<SketchPicker
-										color={item?.color}
-										onChange={(e) => { handleSetValueColorInput(e, sectionIndex, itemIndex) }}
-									>
-									</SketchPicker>
-									<div style={{ position: "absolute", top: "0", right: "0", zIndex: "50", transform: "translateY(-100%)" }}>
-										<TiDeleteOutline
-											onClick={() => {
-												setShowColorPicker(null);
-											}}
-											size={'1.5rem'}
-											color={"#000000"}
-										>
-										</TiDeleteOutline>
+							{showColorPicker === item?.id &&
+								section?.select_value === "اللون" && (
+									<div
+										style={{
+											position: "absolute",
+											left: "0",
+											bottom: "0",
+											zIndex: "50",
+											transform: "translateY(100%)",
+										}}>
+										<SketchPicker
+											color={item?.color}
+											onChange={(e) => {
+												handleSetValueColorInput(e, sectionIndex, itemIndex);
+											}}></SketchPicker>
+										<div
+											style={{
+												position: "absolute",
+												top: "0",
+												right: "0",
+												zIndex: "50",
+												transform: "translateY(-100%)",
+											}}>
+											<TiDeleteOutline
+												onClick={() => {
+													setShowColorPicker(null);
+												}}
+												size={"1.5rem"}
+												color={"#000000"}></TiDeleteOutline>
+										</div>
 									</div>
-								</div>
-							)}
+								)}
 						</div>
 
 						{section?.values?.length > 1 && (
 							<div className='delete-icon '>
 								<DeleteIcon
 									onClick={() => {
-										handleDeleteValue(itemIndex, sectionIndex)
+										handleDeleteValue(itemIndex, sectionIndex);
 									}}
 								/>
 							</div>
@@ -482,8 +505,7 @@ const AddProductOptionsModal = () => {
 				className=' flex justify-start items-center gap-3 mb-3'>
 				<Accordion
 					expanded={expanded === attributeIndex}
-					onChange={handleChange(attributeIndex)}
-				>
+					onChange={handleChange(attributeIndex)}>
 					<AccordionSummary
 						aria-controls={`${attributeIndex}-content`}
 						id={`${attributeIndex}-header`}
@@ -497,7 +519,7 @@ const AddProductOptionsModal = () => {
 							/>
 						}>
 						<div className=' d-flex justify-content-between align-items-center w-100'>
-							<div className="d-flex flex-row align-items-center gap-1">
+							<div className='d-flex flex-row align-items-center gap-1'>
 								{attribute?.values?.map((value, index) => (
 									<>
 										{value?.id === index && index !== 0 && <span>/</span>}
@@ -537,7 +559,7 @@ const AddProductOptionsModal = () => {
 								onChange={(e) => {
 									addPriceToAttributes(e, attributeIndex);
 								}}
-								disabled={quantityIsUnlimited}
+								// disabled={quantityIsUnlimited}
 							/>
 							<div className='input-type'>ر.س</div>
 						</div>
@@ -545,30 +567,36 @@ const AddProductOptionsModal = () => {
 							<div className='input-icon'>
 								<MdStorage />
 							</div>
-							<span style={{ flex: "1", fontSize: "1rem", fontWeight: "500", color: "#000000" }}>الكمية المتوفرة</span>
+							<span
+								style={{
+									flex: "1",
+									fontSize: "1rem",
+									fontWeight: "500",
+									color: "#000000",
+								}}>
+								الكمية المتوفرة
+							</span>
 							<Box
 								sx={{
 									display: "flex",
 									height: "46px",
-									'& div': {
-										width: '56px',
+									"& div": {
+										width: "56px",
 										display: "flex",
 										flexDirection: "column",
 										alignItems: "center",
 										justifyContent: "center",
-										height: '100%',
-										border: '1px solid #ADB5B966',
+										height: "100%",
+										border: "1px solid #ADB5B966",
 									},
-								}}
-							>
+								}}>
 								<div
 									onClick={() => {
 										if (!quantityIsUnlimited) {
-											increaseQtyToAttributes(attributeIndex)
+											increaseQtyToAttributes(attributeIndex);
 										}
 									}}
-									style={{ cursor: "pointer" }}
-								>
+									style={{ cursor: "pointer" }}>
 									<AiOutlinePlus></AiOutlinePlus>
 								</div>
 								<div>
@@ -578,7 +606,7 @@ const AddProductOptionsModal = () => {
 										value={attribute?.qty}
 										onChange={(e) => {
 											if (!quantityIsUnlimited) {
-												changeQtyToAttributes(e, attributeIndex)
+												changeQtyToAttributes(e, attributeIndex);
 											}
 										}}
 										style={{ textAlign: "center" }}
@@ -590,15 +618,14 @@ const AddProductOptionsModal = () => {
 											decreaseQtyToAttributes(attributeIndex);
 										}
 									}}
-									style={{ cursor: "pointer" }}
-								>
+									style={{ cursor: "pointer" }}>
 									<AiOutlineMinus></AiOutlineMinus>
 								</div>
 							</Box>
 						</div>
 					</AccordionDetails>
 				</Accordion>
-			</section >
+			</section>
 		</>
 	));
 
@@ -674,7 +701,7 @@ const AddProductOptionsModal = () => {
 									</button>
 								</div>
 							</div>
-							{attributesAccording?.length > 0 &&
+							{attributesAccording?.length > 0 && (
 								<>
 									<div className='col-12 border mb-3'></div>
 
@@ -699,14 +726,21 @@ const AddProductOptionsModal = () => {
 												label='كميات غير محدودة'
 											/>
 											<div
-												className={`${quantityIsUnlimited ? "d-none" : "d-block"
-													} total-quantity ps-2`}>
-												إجمالي الكمية <span>{attributes?.reduce((total, attribute) => total + attribute?.qty, 0) || 0}</span>
+												className={`${
+													quantityIsUnlimited ? "d-none" : "d-block"
+												} total-quantity ps-2`}>
+												إجمالي الكمية{" "}
+												<span>
+													{attributes?.reduce(
+														(total, attribute) => total + attribute?.qty,
+														0
+													) || 0}
+												</span>
 											</div>
 										</div>
 									</div>
 								</>
-							}
+							)}
 
 							<div className='col-12 mb-2'>
 								{attributesAccording && attributesAccording}
@@ -729,8 +763,7 @@ const AddProductOptionsModal = () => {
 									onClick={() => {
 										dispatch(closeProductOptionModal());
 										clearOptions();
-									}}
-								>
+									}}>
 									إلغاء
 								</button>
 							</div>
