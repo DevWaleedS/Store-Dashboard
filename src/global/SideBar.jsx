@@ -484,7 +484,7 @@ const SideBar = ({ open, closeSidebar }) => {
 							<span className='me-2'>وضع الصيانة</span>
 						</MenuItem>
 					</Link>
-					<NavLink
+					{/*<NavLink
 						className='sub-menu-link'
 						to='Management'
 						onClick={() => {
@@ -497,7 +497,7 @@ const SideBar = ({ open, closeSidebar }) => {
 							<FaCircle style={{ width: "14px" }} />
 							<span className='me-2'> الإدارة و المستخدمين </span>
 						</MenuItem>
-					</NavLink>
+					</NavLink>*/}
 					<NavLink
 						className='sub-menu-link'
 						to='Notifications'

@@ -295,6 +295,7 @@ const ShippingCompanies = () => {
 														setValidPriceFocus(true);
 													}}
 													aria-invalid={validPriceFocus ? "false" : "true"}
+													disabled={!otherShipCompDetails?.status}
 												/>
 
 												<div className='currency p-2'>ر.س</div>
@@ -331,6 +332,7 @@ const ShippingCompanies = () => {
 													onChange={(e) => handleOnChangeDetails(e)}
 													placeholder='حدد مدة التوصيل '
 													className='shipping-price'
+													disabled={!otherShipCompDetails?.status}
 												/>
 												<div className='currency p-2'>
 													{otherShipCompDetails?.time === "" ||

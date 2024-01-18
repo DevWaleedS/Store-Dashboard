@@ -43,13 +43,13 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#02466a", minWidth: "80px" }}>
 					ID
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a", minWidth: "300px" }}>
+				<TableCell align='center' sx={{ color: "#02466a", minWidth: "300px", textAlign: "right" }}>
 					النشاط الأساسي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					فرعي
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a" }}>
+				<TableCell align='center' sx={{ color: "#02466a", textAlign: "right" }}>
 					الأنشطة الفرعية
 				</TableCell>
 				{tabSelectedId === 1 && <TableCell align='center' sx={{ color: "#02466a" }}>
@@ -464,7 +464,6 @@ export default function EnhancedTable({
 																className='cate-prim d-flex align-items-center justify-content-start'
 																style={{
 																	minWidth: " 300px",
-																	marginRight: "30px",
 																}}>
 																<img
 																	className='img_icons'
@@ -495,7 +494,7 @@ export default function EnhancedTable({
 
 														<TableCell align='right'>
 															{row?.subcategory?.length === 0 ? (
-																<div className='w-100 text-center'>
+																<div className='w-100 text-justfiy'>
 																	لا يوجد أنشطة فرعية
 																</div>
 															) : (
@@ -546,12 +545,16 @@ export default function EnhancedTable({
 																						: "#dcdcdc",
 																				minWidth: "max-content",
 																			}}>
-																			<Link
-																				to={`EditCategory/${row?.id}`}
-																				style={{ cursor: "pointer" }}
-																				title='المزيد من الأنشطة'>
-																				...
-																			</Link>
+																			{tabSelectedId === 1 ?
+																				<Link
+																					to={`EditCategory/${row?.id}`}
+																					style={{ cursor: "pointer" }}
+																					title='المزيد من الأنشطة'>
+																					...
+																				</Link>
+																				:
+																				<span>...</span>
+																			}
 																		</div>
 																	)}
 																</div>

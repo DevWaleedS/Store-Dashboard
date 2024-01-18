@@ -70,9 +70,9 @@ const style = {
 const selectStyle = {
 	fontSize: "18px",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+	{
+		paddingRight: "20px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -99,7 +99,14 @@ const AddNewProduct = () => {
 	const [reload, setReload] = useState(false);
 
 	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+	const {
+		setEndActionTitle,
+		productHasOptions,
+		quantityIsUnlimited,
+		attributes,
+		optionsSection,
+		clearOptions
+	} = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 
 	const { setLoadingTitle } = LoadingStore;
@@ -313,6 +320,29 @@ const AddNewProduct = () => {
 				formData.append([`images[${i}]`], multiImages[i]?.file);
 			}
 		}
+
+		formData.append("SEOdescription", SEOdescription?.length === 0 ? "" : SEOdescription?.join(","));
+
+		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
+		formData.append("amount", quantityIsUnlimited === true ? 0 : 1);
+		if (productHasOptions === true) {
+			for (let i = 0; i < optionsSection?.length; i++) {
+				formData.append([`attribute[${i}][title]`], optionsSection[i]?.name);
+				formData.append([`attribute[${i}][type]`], optionsSection[i]?.select_value);
+				for (let v = 0; v < optionsSection[i]?.values?.length; v++) {
+					formData.append([`attribute[${i}][value][${v}][title]`], optionsSection[i]?.values[v]?.title);
+					formData.append([`attribute[${i}][value][${v}][color]`], optionsSection[i]?.select_value === "اللون" ? optionsSection[i]?.values[v]?.color : "");
+				}
+			}
+			for (let i = 0; i < attributes?.length; i++) {
+				formData.append([`data[${i}][price]`], attributes[i]?.price || 0);
+				formData.append([`data[${i}][quantity]`], attributes[i]?.qty);
+				for (let v = 0; v < attributes[i]?.values?.length; v++) {
+					formData.append([`data[${i}][name][${v}]`], attributes[i]?.values[v]?.title);
+				}
+			}
+		}
+
 		axios
 			.post(`https://backend.atlbha.com/api/Store/product`, formData, {
 				headers: {
@@ -327,7 +357,9 @@ const AddNewProduct = () => {
 					navigate("/Products");
 					setReload(!reload);
 					setEditorValue(null);
+					clearOptions();
 				} else {
+					clearOptions();
 					setLoadingTitle("");
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],
@@ -541,7 +573,7 @@ const AddNewProduct = () => {
 													<span>( سيتم قبول الصور jpeg & png & jpg )</span>
 
 													<div className='tax-text '>
-														(الحد الأقصي للصورة 1MB)
+														(الحد الأقصى للصورة 1MB)
 													</div>
 												</div>
 											</div>
@@ -572,7 +604,7 @@ const AddNewProduct = () => {
 												<div
 													className='tax-text'
 													style={{ whiteSpace: "normal" }}>
-													(الحد الأقصي للصورة أو الفيديو 1MB)
+													(الحد الأقصى للصورة أو الفيديو 1MB)
 												</div>
 											</label>
 										</div>
@@ -610,9 +642,9 @@ const AddNewProduct = () => {
 															const isVideo =
 																image?.data_url?.includes(
 																	"video/mp4" ||
-																		"video/avi" ||
-																		"video/mov" ||
-																		"video/mkv"
+																	"video/avi" ||
+																	"video/mov" ||
+																	"video/mkv"
 																) || image?.data_url?.endsWith(".mp4");
 															if (isVideo) {
 																return (
@@ -779,10 +811,10 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-												subcategory[0]?.subcategory.length === 0 ? (
+													subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
-														style={{ color: "#1dbbbe",whiteSpace:"break-spaces" }}>
+														style={{ color: "#1dbbbe", whiteSpace: "break-spaces" }}>
 														لا يوجد أنشطة فرعية للنشاط الرئيسي الذي
 														اخترتة
 													</div>
@@ -791,9 +823,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+															{
+																paddingRight: "20px",
+															},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -945,10 +977,10 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 										)}
 
@@ -1093,19 +1125,23 @@ const AddNewProduct = () => {
 
 									{/* Add Product options */}
 
-									{/*
+
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<button
 												className='product-option-btn w-100'
-												onClick={() => dispatch(openProductOptionModal())}>
+												type='button'
+												onClick={() => {
+													dispatch(openProductOptionModal());
+													clearOptions();
+												}}>
 												<FiPlus />
 												إضافة خيارات المنتج
 											</button>
 										</div>
 									</div>
-								*/}
+
 								</div>
 
 								{/* Save and cancle buttons */}

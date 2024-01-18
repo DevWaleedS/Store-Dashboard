@@ -20,7 +20,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 		<div className='academy-widget'>
 			<div className='row h-100 flex-grow-1'>
 				{/** video-preview */}
-				<div className='col-md-3 col-4'>
+				<div className='col-md-3 col-5'>
 					<div className='video-preview'>
 						<div className='img-wrapper'>
 							<img className='img-fluid' src={image} alt={""} loading='lazy' />
@@ -36,12 +36,12 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 				</div>
 
 				{/**course info */}
-				<div className='col-md-9 col-8 course-bx'>
+				<div className='col-md-9 col-7 course-bx'>
 					<div className='row course-details d-flex justify-content-start align-items-start text-overflow'>
 						<h5 className='mb-4 text-overflow'> {name} </h5>
 					</div>
 					<div className='row course-info'>
-						<div className='col-md-2 col-sm-3 col-6'>
+						<div className='col-md-2 col-sm-6 col-12'>
 							<div className='video-count'>
 								<BsPlayBtn />
 								<span className='text me-2 align-self-center'>
@@ -49,7 +49,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 								</span>
 							</div>
 						</div>
-						<div className='col-md-2 col-sm-3 col-6'>
+						<div className='col-md-2 col-sm-6 col-12'>
 							<div className='video-hours '>
 								<RiTimerLine />
 								<span className='text me-2 align-self-center'>

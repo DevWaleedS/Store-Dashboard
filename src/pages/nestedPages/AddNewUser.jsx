@@ -532,7 +532,7 @@ const AddNewUser = () => {
 										<div className='col-lg-2 col-12'>
 											<label htmlFor='personal-image' className=''>
 												الصورة الشخصية<span className='important-hint'>*</span>
-												<div className='tax-text'>(الحد الأقصي للصورة 1MB)</div>
+												<div className='tax-text'>(الحد الأقصى للصورة 1MB)</div>
 											</label>
 										</div>
 										<div className='col-lg-9 col-12'>

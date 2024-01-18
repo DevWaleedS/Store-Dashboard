@@ -254,7 +254,7 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 								)}
 							</div>
 							<div className='tax-text w-100 hint'>
-								الحد الأقصي للبنر الواحد هو 1MB
+								الحد الأقصى للبنر الواحد هو 1MB
 							</div>
 						</div>
 					</div>
