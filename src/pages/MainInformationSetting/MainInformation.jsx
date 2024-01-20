@@ -45,7 +45,6 @@ const selectStyle = {
 
 	"& .MuiSelect-select.MuiSelect-outlined": {
 		paddingRight: "50px !important",
-		border: "1px solid #ededed",
 	},
 
 	"& .MuiOutlinedInput-root": {
@@ -53,12 +52,9 @@ const selectStyle = {
 		"& :hover": {
 			border: "none",
 		},
-		"& :foucs": {
-			border: "none",
-		}
 	},
 	"& .MuiOutlinedInput-notchedOutline": {
-		border: "none",
+		border: "1px solid #ededed",
 	},
 	"& .MuiSelect-icon": {
 		right: "95%",
@@ -123,7 +119,7 @@ const MainInformation = () => {
 	const [storeIcon, setStoreIcon] = useState([]);
 	const [storeName, setStoreName] = useState("");
 	const [domain, setDomain] = useState("");
-	const [country, setCountry] = useState("السعودية");
+	const [country, setCountry] = useState(1);
 	const [city, setCity] = useState("");
 	const [storeEmail, setStoreEmail] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
@@ -169,17 +165,17 @@ const MainInformation = () => {
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setStoreName(fetchedData?.data?.setting_store?.store_name);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
-			setCountry(fetchedData?.data?.setting_store?.country?.name);
+			setCountry(fetchedData?.data?.setting_store?.country?.id);
 			setCity(fetchedData?.data?.setting_store?.city?.id);
 			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
 			setPhoneNumber(
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-						"00966"
-					)
-						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-						: fetchedData?.data?.setting_store?.user?.phonenumber
+							"00966"
+					  )
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
@@ -431,17 +427,8 @@ const MainInformation = () => {
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
 										<div className='store_email'>
-											<label
-												htmlFor='domain'
-												className='setting_label mb-0'>
-												الدومين(رابط المتجر){" "}
-												<span
-													style={{
-														fontSize: "14px",
-														color: "#ff3838",
-													}}>
-													(قم بكتابة اسم الدومين بدون com.)
-												</span>
+											<label htmlFor='domain' className='setting_label d-block'>
+												الدومين(رابط المتجر)
 											</label>
 										</div>
 										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -482,6 +469,7 @@ const MainInformation = () => {
 											قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور او عدم ظهور-
 											المتجر الخاص بك.
 										</div>
+
 										<div
 											id='domainName'
 											className={
@@ -490,7 +478,7 @@ const MainInformation = () => {
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											- يجب أن يكون الدومين حروف انجليزية وأرقام فقط.
+											يجب أن يكون الدومين حروف انجليزية وأرقام فقط.-
 										</div>
 
 										{settingErr?.domain && (
@@ -516,17 +504,60 @@ const MainInformation = () => {
 											<div className='select-icon'>
 												<CountryIcon />
 											</div>
-											<input
-												className='text-right store-email-input w-100 '
-												type='text'
-												name='country_id'
+
+											<Select
+												readOnly
 												id='country_id'
+												name='country_id'
 												value={country}
-												onChange={(e) => setCountry(e.target.value)}
-												placeholder='قم بكتابة اسم الدولة'
-												disabled={true}
-												style={{ cursor:"default" }}
-											/>
+												onChange={(e) => {
+													setCountry(e.target.value);
+												}}
+												MenuProps={{
+													sx: {
+														"& .MuiPaper-root ": {
+															height: "350px",
+														},
+													},
+												}}
+												sx={selectStyle}
+												IconComponent={IoIosArrowDown}
+												displayEmpty
+												inputProps={{ "aria-label": "Without label" }}
+												renderValue={(selected) => {
+													if (
+														country === "" ||
+														!selected ||
+														country === "undefined"
+													) {
+														return (
+															<span style={{ color: "#7d7d7d" }}>
+																اختر الدولة
+															</span>
+														);
+													}
+													const result = countryList?.data?.countries?.filter(
+														(item) => parseInt(item?.id) === parseInt(selected)
+													);
+													setCountryAddress(result?.[0]?.name || "");
+													return result?.[0]?.name;
+												}}>
+												{countryList?.data?.countries?.map((item, idx) => {
+													return (
+														<MenuItem
+															key={idx}
+															className='souq_storge_category_filter_items'
+															sx={{
+																backgroundColor: "inherit",
+																height: "3rem",
+																"&:hover": {},
+															}}
+															value={`${item?.id}`}>
+															{item?.name}
+														</MenuItem>
+													);
+												})}
+											</Select>
 										</div>
 										{settingErr?.country_id && (
 											<span className='fs-6 w-100 text-danger'>
