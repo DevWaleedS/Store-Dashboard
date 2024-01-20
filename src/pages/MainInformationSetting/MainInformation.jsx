@@ -165,7 +165,7 @@ const MainInformation = () => {
 			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
 			setStoreName(fetchedData?.data?.setting_store?.store_name);
 			setDomain([fetchedData?.data?.setting_store?.domain]);
-			setCountry(fetchedData?.data?.setting_store?.country?.id);
+			setCountry(fetchedData?.data?.setting_store?.country?.id || 1);
 			setCity(fetchedData?.data?.setting_store?.city?.id);
 			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
 			setPhoneNumber(
