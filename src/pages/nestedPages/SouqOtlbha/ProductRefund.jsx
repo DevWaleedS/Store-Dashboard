@@ -75,14 +75,14 @@ const ProductRefund = () => {
 	const [productErrors, setProductErrors] = useState({
 		price: "",
 		qty: "",
-		less_qty: ""
+		less_qty: "",
 	});
 
 	const resetProductErrors = () => {
 		setProductErrors({
 			price: "",
 			qty: "",
-			less_qty: ""
+			less_qty: "",
 		});
 	};
 
@@ -146,6 +146,18 @@ const ProductRefund = () => {
 					});
 				}
 			});
+	};
+
+	const handleQut = (less_qty) => {
+		if (less_qty === 1) {
+			return "قطعة واحدة";
+		} else if (less_qty === 2) {
+			return "قطعتين";
+		} else if (less_qty >= 3 && less_qty <= 10) {
+			return `${less_qty} قطع `;
+		} else if (less_qty > 10) {
+			return `${less_qty} قطعة `;
+		}
 	};
 
 	return (
@@ -223,8 +235,9 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`video_wrapper ${isActive === index ? "active" : ""
-																			}`}>
+																		className={`video_wrapper ${
+																			isActive === index ? "active" : ""
+																		}`}>
 																		<video
 																			onClick={() => {
 																				setImagesPreview(item?.image);
@@ -243,8 +256,9 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`${isActive === index ? "active" : ""
-																			}`}>
+																		className={`${
+																			isActive === index ? "active" : ""
+																		}`}>
 																		<img
 																			style={{
 																				cursor: "pointer",
@@ -266,21 +280,15 @@ const ProductRefund = () => {
 											</div>
 
 											<div className='product-category'>
-												<h3 className='text-center mb-3'>
-													أنشطة المنتج
-												</h3>
+												<h3 className='text-center mb-3'>أنشطة المنتج</h3>
 												<div className='main-category category mb-3'>
-													<div className='label mb-2'>
-														النشاط الرئيسي
-													</div>
+													<div className='label mb-2'>النشاط الرئيسي</div>
 													<div className='input'>
 														{fetchedData?.data?.products?.category?.name}
 													</div>
 												</div>
 												<div className='sub-category category'>
-													<div className='label mb-2'>
-														الأنشطة الفرعية{" "}
-													</div>
+													<div className='label mb-2'>الأنشطة الفرعية </div>
 													<div className='d-flex flex-wrap align-items-center justify-content-start flex-wrap gap-1'>
 														{fetchedData?.data?.products?.subcategory
 															?.length === 0 ? (
@@ -326,9 +334,13 @@ const ProductRefund = () => {
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
 													أقل كمية يمكنك استيراها من هذا المنتج
-													<span style={{ color: "#ff3838" }}> * </span>
+													<span style={{ color: "#ff3838", marginLeft: "5px" }}>
+														{" "}
+														*{" "}
+													</span>
 													<span>
-													({fetchedData?.data?.products?.less_qty} قطعة)</span>
+														({handleQut(fetchedData?.data?.products?.less_qty)})
+													</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex align-items-center p-2 gap-3'>
@@ -363,19 +375,20 @@ const ProductRefund = () => {
 
 												{Number(productInfo?.qty) >
 													Number(fetchedData?.data?.products?.stock) && (
-														<span className='fs-6 text-danger'>
-															الكمية المطلوبة غير متوفرة
-														</span>
-													)}
+													<span className='fs-6 text-danger'>
+														الكمية المطلوبة غير متوفرة
+													</span>
+												)}
 												{Number(productInfo?.qty) <
 													Number(fetchedData?.data?.products?.less_qty) && (
-														<>
-															<br />
-															<span className='fs-6 text-danger'>
-																أقل كمية طلب للمنتج هي {fetchedData?.data?.products?.less_qty}
-															</span>
-														</>
-													)}
+													<>
+														<br />
+														<span className='fs-6 text-danger'>
+															أقل كمية طلب للمنتج هي{" "}
+															{fetchedData?.data?.products?.less_qty}
+														</span>
+													</>
+												)}
 												{productErrors?.qty && (
 													<>
 														<br />

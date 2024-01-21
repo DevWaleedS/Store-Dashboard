@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from "react";
 
-import CircularLoading from '../../HelperComponents/CircularLoading';
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 const SalesReports = ({ salesReport, loading }) => {
 	return (
@@ -9,7 +9,9 @@ const SalesReports = ({ salesReport, loading }) => {
 				<h4>المبيعات</h4>
 			</div>
 			{loading ? (
-				<div className='d-flex justify-content-center align-items-center' style={{ height: '200px' }}>
+				<div
+					className='d-flex justify-content-center align-items-center'
+					style={{ height: "200px" }}>
 					<CircularLoading />
 				</div>
 			) : (
@@ -22,7 +24,9 @@ const SalesReports = ({ salesReport, loading }) => {
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>{salesReport?.data?.total_sales}</span>
+										<span className='number ms-2'>
+											{salesReport?.data?.total_sales}
+										</span>
 										<span className='currency'> ر.س</span>
 									</h5>
 								</div>
@@ -35,7 +39,9 @@ const SalesReports = ({ salesReport, loading }) => {
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>{salesReport?.data?.products_costs}</span>
+										<span className='number ms-2'>
+											{salesReport?.data?.products_costs}
+										</span>
 										<span className='currency'> ر.س</span>
 									</h5>
 								</div>
@@ -44,11 +50,13 @@ const SalesReports = ({ salesReport, loading }) => {
 						<div className='total-wrapper  mb-2'>
 							<div className='row'>
 								<div className='col-5'>
-									<h6>كود خصمات التخفيض</h6>
+									<h6>كود خصم التخفيض</h6>
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>{salesReport?.data?.discount_coupons}</span>
+										<span className='number ms-2'>
+											{salesReport?.data?.discount_coupons}
+										</span>
 										<span className='currency'> ر.س</span>
 									</h5>
 								</div>
@@ -61,7 +69,9 @@ const SalesReports = ({ salesReport, loading }) => {
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>{salesReport?.data?.shipping_price}</span>
+										<span className='number ms-2'>
+											{salesReport?.data?.shipping_price}
+										</span>
 										<span className=' currency'> ر.س</span>
 									</h5>
 								</div>
@@ -74,7 +84,9 @@ const SalesReports = ({ salesReport, loading }) => {
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>{salesReport?.data?.taxs}</span>
+										<span className='number ms-2'>
+											{salesReport?.data?.taxs}
+										</span>
 										<span className=' currency'> ر.س</span>
 									</h5>
 								</div>
@@ -87,7 +99,9 @@ const SalesReports = ({ salesReport, loading }) => {
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>{salesReport?.data?.payment}</span>
+										<span className='number ms-2'>
+											{salesReport?.data?.payment}
+										</span>
 										<span className=' currency'> ر.س</span>
 									</h5>
 								</div>
@@ -100,7 +114,13 @@ const SalesReports = ({ salesReport, loading }) => {
 								<h5>صافي المبيعات</h5>
 							</div>
 							<div className='col-5'>
-								<h5 style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '5px' }}>
+								<h5
+									style={{
+										display: "flex",
+										justifyContent: "flex-end",
+										alignItems: "center",
+										gap: "5px",
+									}}>
 									<span className='number'>{salesReport?.data?.sales}</span>
 									ر.س
 								</h5>
