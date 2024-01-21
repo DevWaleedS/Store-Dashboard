@@ -37,13 +37,22 @@ function EnhancedTableHead(props) {
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
-				<TableCell align='left' sx={{ color: "#02466a", minWidth: "73px", textAlign: "center" }}>
+				<TableCell
+					align='left'
+					sx={{ color: "#02466a", minWidth: "73px", textAlign: "center" }}>
 					م
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a", minWidth: "80px" }}>
 					ID
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a", minWidth: "300px", textAlign: "right" }}>
+				<TableCell
+					align='center'
+					sx={{
+						color: "#02466a",
+						minWidth: "300px",
+						textAlign: "right",
+						paddingRight: "68px !important",
+					}}>
 					النشاط الأساسي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
@@ -52,14 +61,16 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#02466a", textAlign: "right" }}>
 					الأنشطة الفرعية
 				</TableCell>
-				{tabSelectedId === 1 && <TableCell align='center' sx={{ color: "#02466a" }}>
-					نشر
-				</TableCell>
-				}
-				{tabSelectedId === 1 && <TableCell sx={{ color: "#02466a" }} align='center'>
-					اجراء
-				</TableCell>
-				}
+				{tabSelectedId === 1 && (
+					<TableCell align='center' sx={{ color: "#02466a" }}>
+						نشر
+					</TableCell>
+				)}
+				{tabSelectedId === 1 && (
+					<TableCell sx={{ color: "#02466a" }} align='center'>
+						اجراء
+					</TableCell>
+				)}
 			</TableRow>
 		</TableHead>
 	);
@@ -86,7 +97,7 @@ function EnhancedTableToolbar(props) {
 				justifyContent: "space-between",
 				flexDirection: "row-reverse",
 			}}>
-			{tabSelectedId === 1 &&
+			{tabSelectedId === 1 && (
 				<div className=' d-flex flex-row-reverse  justify-content-between align-items-center '>
 					<div></div>
 					{numSelected > 0 && (
@@ -157,8 +168,8 @@ function EnhancedTableToolbar(props) {
 						</div>
 					)}
 				</div>
-			}
-			{tabSelectedId === 1 &&
+			)}
+			{tabSelectedId === 1 && (
 				<div className=' d-flex align-items-center flex-row-reverse pe-0'>
 					<h2
 						className='h4'
@@ -186,7 +197,7 @@ function EnhancedTableToolbar(props) {
 						}}
 					/>
 				</div>
-			}
+			)}
 		</Toolbar>
 	);
 }
@@ -428,7 +439,8 @@ export default function EnhancedTable({
 																className='flex items-center '
 																style={{
 																	display: "flex",
-																	justifyContent: tabSelectedId === 1 ? "start" : "center",
+																	justifyContent:
+																		tabSelectedId === 1 ? "start" : "center",
 																	alignItems: "center",
 																	gap: "7px",
 																}}>
@@ -501,25 +513,6 @@ export default function EnhancedTable({
 																<div className='sub-categories'>
 																	{row?.subcategory?.length <= 2
 																		? row?.subcategory?.map((tag) => {
-																			return (
-																				<div
-																					key={tag?.id}
-																					style={{
-																						background:
-																							row?.store === null
-																								? "#FFFF"
-																								: "#dcdcdc",
-																						minWidth: "40%",
-																					}}>
-																					<span className='w-100 text-center text-overflow'>
-																						{tag?.name}
-																					</span>
-																				</div>
-																			);
-																		})
-																		: row?.subcategory
-																			.slice(0, 2)
-																			.map((tag) => {
 																				return (
 																					<div
 																						key={tag?.id}
@@ -528,13 +521,32 @@ export default function EnhancedTable({
 																								row?.store === null
 																									? "#FFFF"
 																									: "#dcdcdc",
+																							minWidth: "40%",
 																						}}>
 																						<span className='w-100 text-center text-overflow'>
 																							{tag?.name}
 																						</span>
 																					</div>
 																				);
-																			})}
+																		  })
+																		: row?.subcategory
+																				.slice(0, 2)
+																				.map((tag) => {
+																					return (
+																						<div
+																							key={tag?.id}
+																							style={{
+																								background:
+																									row?.store === null
+																										? "#FFFF"
+																										: "#dcdcdc",
+																							}}>
+																							<span className='w-100 text-center text-overflow'>
+																								{tag?.name}
+																							</span>
+																						</div>
+																					);
+																				})}
 
 																	{row?.subcategory?.length > 2 && (
 																		<div
@@ -545,108 +557,116 @@ export default function EnhancedTable({
 																						: "#dcdcdc",
 																				minWidth: "max-content",
 																			}}>
-																			{tabSelectedId === 1 ?
+																			{tabSelectedId === 1 ? (
 																				<Link
 																					to={`EditCategory/${row?.id}`}
 																					style={{ cursor: "pointer" }}
 																					title='المزيد من الأنشطة'>
 																					...
 																				</Link>
-																				:
+																			) : (
 																				<span>...</span>
-																			}
+																			)}
 																		</div>
 																	)}
 																</div>
 															)}
 														</TableCell>
 
-														{tabSelectedId === 1 && <TableCell align='center'>
-															<div
-																className='form-check form-switch'
-																style={{ margin: "0 auto" }}>
-																<Switch
-																	disabled={row?.store === null ? true : false}
-																	onChange={() => changeCategoryStatus(row?.id)}
-																	checked={row?.status === "نشط" ? true : false}
-																	sx={{
-																		width: "50px",
-																		"& .MuiSwitch-track": {
-																			width: 26,
-																			height: 14,
-																			opacity: 1,
-																			backgroundColor: "rgba(0,0,0,.25)",
-																			boxSizing: "border-box",
-																		},
-																		"& .MuiSwitch-thumb": {
-																			boxShadow: "none",
-																			width: 10,
-																			height: 10,
-																			borderRadius: 5,
-																			transform: "translate(6px,6px)",
-																			color: "#fff",
-																		},
-
-																		"&:hover": {
+														{tabSelectedId === 1 && (
+															<TableCell align='center'>
+																<div
+																	className='form-check form-switch'
+																	style={{ margin: "0 auto" }}>
+																	<Switch
+																		disabled={
+																			row?.store === null ? true : false
+																		}
+																		onChange={() =>
+																			changeCategoryStatus(row?.id)
+																		}
+																		checked={
+																			row?.status === "نشط" ? true : false
+																		}
+																		sx={{
+																			width: "50px",
+																			"& .MuiSwitch-track": {
+																				width: 26,
+																				height: 14,
+																				opacity: 1,
+																				backgroundColor: "rgba(0,0,0,.25)",
+																				boxSizing: "border-box",
+																			},
 																			"& .MuiSwitch-thumb": {
 																				boxShadow: "none",
-																			},
-																		},
-
-																		"& .MuiSwitch-switchBase": {
-																			padding: 1,
-																			"&.Mui-checked": {
-																				transform: "translateX(11px)",
+																				width: 10,
+																				height: 10,
+																				borderRadius: 5,
+																				transform: "translate(6px,6px)",
 																				color: "#fff",
-																				"& + .MuiSwitch-track": {
-																					opacity: 1,
-																					backgroundColor: "#3AE374",
+																			},
+
+																			"&:hover": {
+																				"& .MuiSwitch-thumb": {
+																					boxShadow: "none",
 																				},
 																			},
-																		},
-																	}}
-																/>
-															</div>
-														</TableCell>
-														}
 
-														{tabSelectedId === 1 && <TableCell align='right'>
-															<div className='actions d-flex justify-content-center gap-1'>
-																<span
-																	style={{
-																		pointerEvents:
-																			row?.store === null ? "none" : "",
-																	}}>
-																	<Link
-																		to={`EditCategory/${row?.id}`}
-																		style={{ cursor: "pointer" }}>
-																		<EditIcon title='تعديل النشاط' />
-																	</Link>
-																</span>
-																<span>
-																	<DeleteIcon
-																		title='حذف النشاط'
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف النشاط وهذة الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("get");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
-																			);
+																			"& .MuiSwitch-switchBase": {
+																				padding: 1,
+																				"&.Mui-checked": {
+																					transform: "translateX(11px)",
+																					color: "#fff",
+																					"& + .MuiSwitch-track": {
+																						opacity: 1,
+																						backgroundColor: "#3AE374",
+																					},
+																				},
+																			},
 																		}}
+																	/>
+																</div>
+															</TableCell>
+														)}
+
+														{tabSelectedId === 1 && (
+															<TableCell align='right'>
+																<div className='actions d-flex justify-content-center gap-1'>
+																	<span
 																		style={{
 																			pointerEvents:
 																				row?.store === null ? "none" : "",
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
-																		}}
-																	/>
-																</span>
-															</div>
-														</TableCell>
-														}
+																		}}>
+																		<Link
+																			to={`EditCategory/${row?.id}`}
+																			style={{ cursor: "pointer" }}>
+																			<EditIcon title='تعديل النشاط' />
+																		</Link>
+																	</span>
+																	<span>
+																		<DeleteIcon
+																			title='حذف النشاط'
+																			onClick={() => {
+																				setActionDelete(
+																					"سيتم حذف النشاط وهذة الخطوة غير قابلة للرجوع"
+																				);
+																				setDeleteMethod("get");
+																				setUrl(
+																					`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
+																				);
+																			}}
+																			style={{
+																				pointerEvents:
+																					row?.store === null ? "none" : "",
+																				cursor: "pointer",
+																				color: "red",
+																				fontSize: "1.2rem",
+																			}}
+																		/>
+																	</span>
+																</div>
+															</TableCell>
+														)}
 													</TableRow>
 												);
 											})

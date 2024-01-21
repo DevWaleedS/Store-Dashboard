@@ -55,12 +55,19 @@ function EnhancedTableHead(props) {
 					sx={{
 						color: "#02466a",
 						width: "68px",
-						textAlign: "center"
+						textAlign: "center",
 					}}>
 					م
 				</TableCell>
 
-				<TableCell align='center' sx={{ color: "#02466a", width: "300px", textAlign: "right" }}>
+				<TableCell
+					align='center'
+					sx={{
+						color: "#02466a",
+						width: "300px",
+						textAlign: "right",
+						paddingRight: "70px !important",
+					}}>
 					اسم المنتج
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
@@ -485,9 +492,9 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 		height: "56px",
 		color: "#6790a6",
 		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+			{
+				paddingRight: "20px",
+			},
 		"&:hover": {
 			"& .MuiOutlinedInput-notchedOutline": {
 				borderColor: " #6790a6",
@@ -676,7 +683,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 								<div className=' col-12'>
 									<FormControl sx={formControlStyle}>
 										{category_id !== "" &&
-											subcategory[0]?.subcategory?.length === 0 ? (
+										subcategory[0]?.subcategory?.length === 0 ? (
 											<div
 												className='d-flex justify-content-center align-items-center'
 												style={{ color: "#1dbbbe" }}>
@@ -793,7 +800,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															sx={{
 																backgroundColor:
 																	row?.type === "importProduct" ||
-																		row?.is_import
+																	row?.is_import
 																		? "#dfe2aa"
 																		: "",
 															}}
@@ -859,7 +866,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 															</TableCell>
 															<TableCell align='center'>
 																{row?.discount_price &&
-																	row?.discount_price !== "0" ? (
+																row?.discount_price !== "0" ? (
 																	<>
 																		<span className='me-1 d-block'>
 																			{row?.discount_price} ر.س
@@ -985,7 +992,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																	<Link
 																		to={
 																			row?.type === "importProduct" ||
-																				row?.is_import
+																			row?.is_import
 																				? `ShowImportEtlobhaProduct/${row?.id}`
 																				: `EditProduct/${row?.id}`
 																		}
