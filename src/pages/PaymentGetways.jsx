@@ -106,7 +106,7 @@ const PaymentGetways = () => {
 													className='img-fluid'
 													src={item?.image}
 													alt={item?.name}
-													style={{ padding: "30px" }}
+													style={{ width: "110px" }}
 												/>
 											</div>
 										</div>
