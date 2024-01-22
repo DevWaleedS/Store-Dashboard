@@ -144,7 +144,6 @@ const AddProductOptionsModal = () => {
 		(state) => state.ProductOptionModal
 	);
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 
 	const contextStore = useContext(Context);
@@ -269,20 +268,19 @@ const AddProductOptionsModal = () => {
 		};
 
 		backtrack(new Array(blocks.length), 0);
+
 		return attributes;
 	};
 
+	/** handle add price value for attr */
 	const addPriceToAttributes = (e, blockIndex) => {
-		// if (!quantityIsUnlimited) {
-
-		// }
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].price = Number(
 			e.target.value.replace(/[^0-9]/g, "")
 		);
 		setAttributes(updatedAttributes);
 	};
-
+	/** handle add qty value for attr */
 	const changeQtyToAttributes = (e, blockIndex) => {
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].qty = Number(
@@ -304,7 +302,9 @@ const AddProductOptionsModal = () => {
 			setAttributes(updatedAttributes);
 		}
 	};
+	/** ---------------------------------------------- */
 
+	/** handle save Options  */
 	const saveOptions = () => {
 		if (productHasOptions === true) {
 			const nameNotEmpty = optionsSection?.every(
@@ -315,7 +315,7 @@ const AddProductOptionsModal = () => {
 			);
 			if (nameNotEmpty) {
 				if (valuesNotEmpty) {
-					toast.warning("يرجى ملاء حقل القيمة بالأول", {
+					toast.warning("يرجى ملء حقل القيمة أولاً", {
 						theme: "light",
 					});
 				} else {

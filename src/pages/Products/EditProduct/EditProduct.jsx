@@ -1251,20 +1251,18 @@ const EditProduct = () => {
 
 										{/* Add Product options */}
 
-										{/*
-<div className='row mb-md-5 mb-3'>
+										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<button
 													className='product-option-btn w-100'
 													type='button'
 													onClick={() => dispatch(openProductOptionModal())}>
+													تعديل خيارات المنتج
 													<FiPlus />
-													إضافة خيارات المنتج
 												</button>
 											</div>
 										</div>
-*/}
 									</div>
 
 									{/* Save and cancle buttons */}
