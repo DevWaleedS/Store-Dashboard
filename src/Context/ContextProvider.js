@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Context from "./context";
-// Redux
-import { useDispatch } from "react-redux";
-import { closeProductOptionModal } from "../store/slices/ProductOptionModal";
 
 const ContextProvider = (props) => {
 	const [access_token, setAccess_token] = useState();
-	const dispatch = useDispatch(false);
+
 	const [title, setEndActionTitle] = useState(null);
 	const [subCategories, setSubCategories] = useState([]);
 	const [productsData, setProductsData] = React.useState();
 	const [actionWarning, setActionWarning] = useState(false);
 	const [navbarZindex, setNavbarZindex] = useState(false);
+
 	// to handle CoursesTraining and Explain in Academy Section
 	const [togglePage, setTogglePag] = useState(1);
 	const [email, setEmail] = useState(null);
@@ -30,7 +28,7 @@ const ContextProvider = (props) => {
 			values: [{ id: 1, title: "", color: "#000000" }],
 		},
 	]);
-	
+
 	const clearOptions = () => {
 		setProductHasOptions(false);
 		setQuantityIsUnlimited(true);
@@ -42,7 +40,7 @@ const ContextProvider = (props) => {
 				values: [{ id: 1, title: "", color: "#000000" }],
 			},
 		]);
-	}
+	};
 
 	useEffect(() => {
 		if (title) {
