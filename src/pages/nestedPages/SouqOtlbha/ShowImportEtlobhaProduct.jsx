@@ -67,6 +67,7 @@ const ShowImportEtlobhaProduct = () => {
 		selling_price: "",
 		discount_price: "",
 		price: "",
+		discount_price_import: "",
 		stock: "",
 		qty: "",
 	});
@@ -85,6 +86,7 @@ const ShowImportEtlobhaProduct = () => {
 			short_description: "",
 			selling_price: "",
 			price: "",
+			discount_price_import: "",
 			stock: "",
 			qty: "",
 		},
@@ -104,6 +106,7 @@ const ShowImportEtlobhaProduct = () => {
 		name: "",
 		cover: "",
 		price: "",
+		discount_price_import: "",
 		qty: "",
 		selling_price: "",
 		category_id: "",
@@ -121,6 +124,7 @@ const ShowImportEtlobhaProduct = () => {
 
 			selling_price: "",
 			price: "",
+			discount_price_import: "",
 			qty: "",
 			category_id: "",
 			discount_price: "",
@@ -145,6 +149,8 @@ const ShowImportEtlobhaProduct = () => {
 				description: fetchedData?.data?.product?.description,
 				short_description: fetchedData?.data?.product?.short_description,
 				price: fetchedData?.data?.product?.selling_price,
+				discount_price_import:
+					fetchedData?.data?.product?.discount_price_import,
 				qty: fetchedData?.data?.product?.stock,
 			});
 			setImagesPreview(fetchedData?.data?.product?.cover);
@@ -160,6 +166,7 @@ const ShowImportEtlobhaProduct = () => {
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("price", data?.price);
+		formData.append("discount_price_import", data?.discount_price_import);
 		formData.append("qty", data?.qty);
 
 		axios
@@ -181,11 +188,16 @@ const ShowImportEtlobhaProduct = () => {
 				} else {
 					setProductError({
 						price: res?.data?.message?.en?.price?.[0],
+						discount_price_import: res?.data?.message?.en?.[0],
 						qty: res?.data?.message?.en?.qty?.[0],
 					});
 					toast.error(res?.data?.message?.en?.price?.[0], {
 						theme: "light",
 					});
+					toast.error(res?.data?.message?.en?.discount_price_import?.[0], {
+						theme: "light",
+					});
+
 					toast.error(res?.data?.message?.en?.qty?.[0], {
 						theme: "light",
 					});
@@ -356,7 +368,6 @@ const ShowImportEtlobhaProduct = () => {
 														background: "#eeeeef",
 														border: "1px solid #a7a7a71a",
 														height: "48px",
-														overflowY: "auto",
 													}}>
 													<div
 														style={{ whiteSpace: "normal" }}
@@ -422,10 +433,7 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Main category */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='product-category'>
-													{" "}
-													النشاط الرئيسي
-												</label>
+												<label htmlFor='product-category'>النشاط الرئيسي</label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div
@@ -447,10 +455,7 @@ const ShowImportEtlobhaProduct = () => {
 										{/* sub category */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='sub-category'>
-													{" "}
-													الأنشطة الفرعية{" "}
-												</label>
+												<label htmlFor='sub-category'> الأنشطة الفرعية </label>
 											</div>
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
@@ -599,8 +604,109 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 										</div>
 
-										{/* Stock */}
+										{/* Discount price */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
+												<label htmlFor='low-price'>سعر البيع بعد الخصم</label>
+											</div>
 
+											<div className='col-md-7 col-12'>
+												<div className='tax-text'>السعر يشمل الضريبة</div>
+												<div
+													className='d-flex justify-content-center align-items-center'
+													style={{ background: "#FFF" }}>
+													<div className='currency_icon d-flex justify-content-center align-items-center'>
+														<CurrencyIcon />
+													</div>
+													<Controller
+														name={"discount_price_import"}
+														control={control}
+														rules={{
+															pattern: {
+																value: /^[0-9.]+$/i,
+																message:
+																	"يجب أن يكون سعر البيع بعد الخصم رقمًا",
+															},
+															min: {
+																value: 1,
+																message:
+																	"يجب أن يكونسعر البيع بعد الخصم أكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																className='import_products_input'
+																style={{
+																	background: "#FFF",
+																	height: "48px",
+																}}
+																name={"discount_price_import"}
+																type='text'
+																id='discount_price_import'
+																value={value}
+																onChange={(e) => {
+																	setProduct({
+																		...product,
+																		discount_price_import:
+																			e.target.value.replace(
+																				/[^\d.]|\.(?=.*\.)/g,
+																				""
+																			),
+																	});
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	);
+																}}
+															/>
+														)}
+													/>
+
+													<div
+														className='currency d-flex justify-content-center align-items-center'
+														style={{ fontSize: "18px" }}>
+														ر.س
+													</div>
+												</div>
+											</div>
+
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											{product?.discount_price_import && product?.price && (
+												<div className='col-lg-7 col-md-9 col-12'>
+													{Number(product?.price) -
+														Number(product?.discount_price_import) <=
+														0 && (
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر البيع بعد الخصم اقل من السعر
+															الأساسي
+														</span>
+													)}
+												</div>
+											)}
+
+											{product?.discount_price_import &&
+												product?.price === "" && (
+													<div className='col-lg-7 col-md-9 col-12'>
+														<span className='fs-6' style={{ color: "red" }}>
+															يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
+															سعر البيع بعد الخصم
+														</span>
+													</div>
+												)}
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span
+													className='fs-6 text-danger'
+													style={{ whiteSpace: "normal" }}>
+													{productError?.discount_price_import}
+													{errors?.discount_price_import &&
+														errors.discount_price_import.message}
+												</span>
+											</div>
+										</div>
+
+										{/* Stock */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
 												<label htmlFor='price'>

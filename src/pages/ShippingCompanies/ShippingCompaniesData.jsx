@@ -52,6 +52,7 @@ const ShippingCompaniesData = ({
 	changeStatus,
 	checked,
 	image,
+	hideSwitch,
 }) => {
 	const daysDefinition = (time) => {
 		let timeValue = Number(time);
@@ -70,7 +71,12 @@ const ShippingCompaniesData = ({
 		<div className='data-widget'>
 			<div className='data'>
 				<div className='shipping-image-box'>
-					<img src={image} alt='' loading='lazy' />
+					<img
+						src={image}
+						alt=''
+						loading='lazy'
+						style={{ width: hideSwitch ? "120px" : "" }}
+					/>
 
 					{currentShippingPrice && (
 						<div className='current-price mt-1 w-100 d-flex justify-content-center'>
@@ -92,9 +98,11 @@ const ShippingCompaniesData = ({
 					)}
 				</div>
 			</div>
-			<div className='switch-box'>
-				<Switch onChange={changeStatus} checked={checked} sx={switchStyle} />
-			</div>
+			{!hideSwitch && (
+				<div className='switch-box'>
+					<Switch onChange={changeStatus} checked={checked} sx={switchStyle} />
+				</div>
+			)}
 		</div>
 	);
 };

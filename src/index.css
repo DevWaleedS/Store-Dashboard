@@ -1736,7 +1736,7 @@ nav.navigation {
 .product-options .close-icon-video-modal {
 	left: 14px;
 }
-
+.option-info-label,
 .product-options .option-info-label,
 .change-categories-modal-content .option-info-label {
 	background-color: rgba(81, 150, 243, 0.1);
@@ -1746,16 +1746,17 @@ nav.navigation {
 	color: #0b4aa0;
 }
 
+.option-info-label span,
 .product-options .option-info-label span,
 .change-categories-modal-content .option-info-label span {
 	white-space: normal !important;
 }
-
+.option-info-label span,
 .product-options .option-info-label span {
 	font-size: 14px;
 	font-weight: 400;
 }
-
+.option-info-label svg,
 .product-options .option-info-label svg {
 	font-size: 18px;
 }
@@ -3319,17 +3320,6 @@ nav.navigation {
 	align-items: center;
 	height: 150px;
 	gap: 0.5rem;
-}
-
-/* shipping-company-hint */
-.shipping-company-hint {
-	background-color: var(--second-300);
-	width: clamp(70%, 100%, 100%);
-	padding: 10px 12px;
-	font-weight: 400;
-	font-size: 18px;
-	color: #fff;
-	white-space: pre-wrap;
 }
 
 .other-shipping-company {

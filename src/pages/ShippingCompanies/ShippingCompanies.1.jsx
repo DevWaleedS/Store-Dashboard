@@ -1,71 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-
-// Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
-// Components
 import useFetch from "../../Hooks/UseFetch";
 import { TopBarSearchInput } from "../../global";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-
-// Context
 import Context from "../../Context/context";
-
-// Icons
 import { HomeIcon } from "../../data/Icons";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Switch } from "@mui/material";
+import { switchStyle } from "./ShippingCompanies";
 
-// switch style
-const switchStyle = {
-	"& .MuiSwitch-track": {
-		width: 36,
-		height: 22,
-		opacity: 1,
-		backgroundColor: "rgba(0,0,0,.25)",
-		boxSizing: "border-box",
-		borderRadius: 20,
-	},
-	"& .MuiSwitch-thumb": {
-		boxShadow: "none",
-		backgroundColor: "#EBEBEB",
-		width: 16,
-		height: 16,
-		borderRadius: 4,
-		transform: "translate(6px,7px)",
-	},
-	"&:hover": {
-		"& .MuiSwitch-thumb": {
-			boxShadow: "none",
-		},
-	},
-
-	"& .MuiSwitch-switchBase": {
-		"&:hover": {
-			boxShadow: "none",
-			backgroundColor: "none",
-		},
-		padding: 1,
-		"&.Mui-checked": {
-			transform: "translateX(12px)",
-			color: "#fff",
-			"& + .MuiSwitch-track": {
-				opacity: 1,
-				backgroundColor: "#3AE374",
-			},
-			"&:hover": {
-				boxShadow: "none",
-				backgroundColor: "none",
-			},
-		},
-	},
-};
-
-const ShippingCompanies = () => {
+export const ShippingCompanies = () => {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -107,21 +55,14 @@ const ShippingCompanies = () => {
 		}
 	}, [fetchedData]);
 	// ------------------------
-
 	useEffect(() => {
 		if (otherShippingCompany) {
 			setOtherShipCompDetails((prevDetails) => ({
 				...prevDetails,
 				id: otherShippingCompany[0]?.id,
 				status: otherShippingCompany[0]?.status === "نشط" ? true : false,
-				price:
-					otherShippingCompany[0]?.price === "0"
-						? ""
-						: otherShippingCompany[0]?.price,
-				time:
-					otherShippingCompany[0]?.time === "0"
-						? ""
-						: otherShippingCompany[0]?.time,
+				price: otherShippingCompany[0]?.price,
+				time: otherShippingCompany[0]?.time,
 				currentPrice: otherShippingCompany[0]?.price,
 				currentTime: otherShippingCompany[0]?.time,
 			}));
@@ -176,33 +117,25 @@ const ShippingCompanies = () => {
 
 	// Change OtherShipping Company Status And Add Price
 	const changeOtherShippingCompanyStatusAndAddPrice = (id) => {
-		if (allShippingCompanies?.some((item) => item?.status === "نشط")) {
-			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-						setReload(!reload);
-					}
-				});
-		} else {
-			toast.error("يجب تفعيل شركة شحن واحدة علي الاقل", {
-				theme: "light",
+		axios
+			.get(
+				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				} else {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+				}
 			});
-		}
 	};
 
 	const updatePrice = () => {
@@ -305,16 +238,17 @@ const ShippingCompanies = () => {
 									))}
 							</div>
 
-							<div className='row other-shipping-company '>
-								<div className='mb-4 option-info-label d-flex  justify-content-start align-items-center gap-2'>
-									<IoMdInformationCircleOutline />
-									<span>
-										من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة في
-										توصيل الطلبات وتحديد تكلفة الشحن المناسبة.
-									</span>
-								</div>
+							<div className='row other-shipping-company'>
 								{otherShippingCompany?.map((item) => (
 									<div key={item?.id} className='col-xl-3 col-lg-4 col-12'>
+										<div className='mb-2 option-info-label d-flex d-lg-none  justify-content-start align-items-center gap-2 mb-2'>
+											<IoMdInformationCircleOutline />
+											<span>
+												من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة في
+												توصيل الطلبات وتحديد تكلفة الشحن المناسبة.
+											</span>
+										</div>
+
 										<ShippingCompaniesData
 											shippingCompanyName={item?.name}
 											currentShippingPrice={
@@ -326,32 +260,39 @@ const ShippingCompanies = () => {
 												otherShipCompDetails?.currentTime
 											}
 											image={item?.image}
-											hideSwitch={true}
+											changeStatus={() =>
+												changeOtherShippingCompanyStatusAndAddPrice(item?.id)
+											}
+											checked={item?.status === "نشط" ? true : false}
 										/>
 									</div>
 								))}
 								{otherShippingCompany?.length !== 0 && (
 									<div className='col-xl-7 col-lg-6 col-12'>
 										<div className=''>
-											<div
-												className='switch-box d-flex justify-content-center align-content-center mb-2'
-												style={{
-													height: "50px",
-													backgroundColor: "#f7f8f8",
-												}}>
-												<Switch
-													onChange={() => {
-														changeOtherShippingCompanyStatusAndAddPrice(
-															otherShippingCompany[0]?.id
-														);
-													}}
-													checked={
-														otherShippingCompany[0]?.status === "نشط"
-															? true
-															: false
-													}
-													sx={switchStyle}
-												/>
+											<div>
+												<div className='switch-box'>
+													<Switch
+														onChange={() =>
+															changeOtherShippingCompanyStatusAndAddPrice(
+																otherShippingCompany[0]?.id
+															)
+														}
+														checked={
+															otherShippingCompany[0]?.status === "نشط"
+																? true
+																: false
+														}
+														sx={switchStyle}
+													/>
+												</div>
+											</div>
+											<div className='mb-2 option-info-label d-lg-flex d-none  justify-content-start align-items-center gap-2 mb-2 '>
+												<IoMdInformationCircleOutline />
+												<span>
+													من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة
+													في توصيل الطلبات وتحديد تكلفة الشحن المناسبة.
+												</span>
 											</div>
 
 											<div
@@ -440,5 +381,3 @@ const ShippingCompanies = () => {
 		</>
 	);
 };
-
-export default ShippingCompanies;
