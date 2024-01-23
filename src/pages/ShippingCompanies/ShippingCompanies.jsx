@@ -333,6 +333,7 @@ const ShippingCompanies = () => {
 								{otherShippingCompany?.length !== 0 && (
 									<div className='col-xl-7 col-lg-6 col-12'>
 										<div className=''>
+											<div className='tax-text'>تفعيل/تعطيل الشحن الخاص </div>
 											<div
 												className='switch-box d-flex justify-content-center align-content-center mb-2'
 												style={{
