@@ -19,25 +19,29 @@ const ContextProvider = (props) => {
 	const [message, setMessage] = useState("");
 	//product Options
 	const [productHasOptions, setProductHasOptions] = useState(false);
-	const [quantityIsUnlimited, setQuantityIsUnlimited] = useState(true);
+
 	const [attributes, setAttributes] = useState([]);
 	const [optionsSection, setOptionsSection] = useState([
 		{
 			name: "",
 			select_value: "نص",
-			values: [{ id: 1, title: "", color: "#000000" }],
+			values: [
+				{ id: 1, title: "", color: "#000000", image: "", previewImage: "" },
+			],
 		},
 	]);
 
 	const clearOptions = () => {
 		setProductHasOptions(false);
-		setQuantityIsUnlimited(true);
+
 		setAttributes([]);
 		setOptionsSection([
 			{
 				name: "",
 				select_value: "نص",
-				values: [{ id: 1, title: "", color: "#000000" }],
+				values: [
+					{ id: 1, title: "", color: "#000000", image: "", previewImage: "" },
+				],
 			},
 		]);
 	};
@@ -79,8 +83,7 @@ const ContextProvider = (props) => {
 		//product Options
 		productHasOptions,
 		setProductHasOptions,
-		quantityIsUnlimited,
-		setQuantityIsUnlimited,
+
 		attributes,
 		setAttributes,
 		optionsSection,

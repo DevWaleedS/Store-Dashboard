@@ -25,7 +25,6 @@ import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Components
-
 import useFetch from "../../../Hooks/UseFetch";
 import AddProductOptions from "./AddProductOptions";
 import { TextEditor } from "../../../components/TextEditor";
@@ -102,7 +101,7 @@ const AddNewProduct = () => {
 	const {
 		setEndActionTitle,
 		productHasOptions,
-		quantityIsUnlimited,
+
 		attributes,
 		optionsSection,
 		clearOptions,
@@ -327,7 +326,7 @@ const AddNewProduct = () => {
 		);
 
 		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
-		formData.append("amount", quantityIsUnlimited === true ? 0 : 1);
+		formData.append("amount", 1);
 		if (productHasOptions === true) {
 			for (let i = 0; i < optionsSection?.length; i++) {
 				formData.append([`attribute[${i}][title]`], optionsSection[i]?.name);
@@ -340,10 +339,18 @@ const AddNewProduct = () => {
 						[`attribute[${i}][value][${v}][title]`],
 						optionsSection[i]?.values[v]?.title
 					);
+
 					formData.append(
 						[`attribute[${i}][value][${v}][color]`],
-						optionsSection[i]?.select_value === "اللون"
+						optionsSection[i]?.select_value === "نص و لون"
 							? optionsSection[i]?.values[v]?.color
+							: ""
+					);
+
+					formData.append(
+						[`attribute[${i}][value][${v}][image]`],
+						optionsSection[i]?.select_value === "نص و صورة"
+							? optionsSection[i]?.values[v]?.image
 							: ""
 					);
 				}

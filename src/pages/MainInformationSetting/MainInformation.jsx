@@ -402,7 +402,7 @@ const MainInformation = () => {
 											<label
 												htmlFor='storeName'
 												className='setting_label d-block'>
-												اسم المتجر
+												اسم المتجر <span className='important-hint'>*</span>
 											</label>
 											<input
 												className='text-right store-email-input w-100 '
@@ -427,8 +427,16 @@ const MainInformation = () => {
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
 										<div className='store_email'>
-											<label htmlFor='domain' className='setting_label d-block'>
+											<label htmlFor='domain' className='setting_label mb-0'>
 												الدومين(رابط المتجر)
+												<span className='important-hint'>*</span>
+												<span
+													style={{
+														fontSize: "14px",
+														color: "#ff3838",
+													}}>
+													(قم بكتابة اسم الدومين بدون com.)
+												</span>
 											</label>
 										</div>
 										<div className='domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -497,7 +505,7 @@ const MainInformation = () => {
 											<label
 												htmlFor='country_id'
 												className='setting_label d-block'>
-												الدولة
+												الدولة<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='select-country'>
@@ -575,7 +583,7 @@ const MainInformation = () => {
 											<label
 												htmlFor='city_id'
 												className='setting_label d-block'>
-												المدينة
+												المدينة<span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='select-country'>

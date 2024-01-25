@@ -5,8 +5,6 @@ import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
 
-import { useNavigate } from "react-router-dom";
-
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeProductOptionModal } from "../../../store/slices/ProductOptionModal";
@@ -20,6 +18,8 @@ import { TfiWrite } from "react-icons/tfi";
 import { MdStorage } from "react-icons/md";
 import { DeleteIcon } from "../../../data/Icons";
 import { IoPricetagsOutline } from "react-icons/io5";
+import CloseIcon from "@mui/icons-material/Close";
+import { FaEye } from "react-icons/fa";
 import {
 	AiOutlineCloseCircle,
 	AiOutlinePlus,
@@ -136,31 +136,78 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 	borderTop: "none",
 	borderRadius: "0 0 4px 4px",
 }));
+/**----------------------------------------------------------------------------- */
 
-const select_value_options = ["نص", "اللون"];
+const select_value_options = ["نص", "نص و لون", "نص و صورة"];
 
 const AddProductOptionsModal = () => {
+	const dispatch = useDispatch(false);
 	const { isProductOptionOpen } = useSelector(
 		(state) => state.ProductOptionModal
 	);
-
-	const dispatch = useDispatch(false);
-
 	const contextStore = useContext(Context);
 	const {
 		productHasOptions,
 		setProductHasOptions,
-		quantityIsUnlimited,
-		setQuantityIsUnlimited,
+
 		attributes,
 		setAttributes,
 		optionsSection,
 		setOptionsSection,
 		clearOptions,
 	} = contextStore;
-	const [showColorPicker, setShowColorPicker] = useState(null);
-	/** to handle the option-section */
 
+	const [showColorPicker, setShowColorPicker] = useState(null);
+
+	/** handle upload product images  */
+	const fileInputRef = React.createRef();
+	// Function to open the file input dialog
+	const handleButtonClick = () => {
+		fileInputRef.current.click();
+	};
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const handleCancel = () => setPreviewOpen(false);
+
+	/** preview product image */
+	const ProductImageModal = (previewImage) => {
+
+		console.log(previewImage);
+		return (
+			previewOpen && (
+				<>
+					<div onClick={handleCancel} className='imageprev-modal'></div>
+					<div className='ProductImageModal-content'>
+						<CloseIcon className='close_video_icon' onClick={handleCancel} />
+						<div className='product-option-img-wrap'>
+							<img src={previewImage} alt='' />
+						</div>
+					</div>
+				</>
+			)
+		);
+	};
+
+	/** ------------------------------------------------------------- */
+	const handleChangeImage = (e, blockIndex, valueIndex) => {
+		const file = e?.target?.files[0];
+		const imgConvert = URL.createObjectURL(file);
+		const updatedBlocks = [...optionsSection];
+
+		updatedBlocks[blockIndex].values[valueIndex].image = file;
+		updatedBlocks[blockIndex].values[valueIndex].previewImage = imgConvert;
+		setOptionsSection(updatedBlocks);
+	};
+
+	const handleDeleteImages = (e, blockIndex, valueIndex) => {
+		const updatedBlocks = [...optionsSection];
+		updatedBlocks[blockIndex].values[valueIndex].image = "";
+		updatedBlocks[blockIndex].values[valueIndex].previewImage = "";
+		fileInputRef.current.value = null;
+
+		setOptionsSection(updatedBlocks);
+	};
+
+	// -----------------------------------------------------------------------------------------------------
 	/** Create Product options according  */
 	const [expanded, setExpanded] = useState(false);
 	const handleChange = (panel) => (event, newExpanded) => {
@@ -205,6 +252,8 @@ const AddProductOptionsModal = () => {
 			id: updatedBlocks[blockIndex].values.length + 1,
 			title: "",
 			color: "#000000",
+			image: "",
+			previewImage: "",
 		});
 		setOptionsSection(updatedBlocks);
 	};
@@ -228,6 +277,8 @@ const AddProductOptionsModal = () => {
 					id: 1,
 					title: "",
 					color: "#000000",
+					image: "",
+					previewImage: "",
 				},
 			],
 		};
@@ -325,7 +376,7 @@ const AddProductOptionsModal = () => {
 					});
 				}
 			} else {
-				toast.warning("يرجى ملاء حقل مسمى الخيار بالأول", {
+				toast.warning("يرجى ملء حقل مسمى الخيار أولاً", {
 					theme: "light",
 				});
 			}
@@ -410,7 +461,7 @@ const AddProductOptionsModal = () => {
 					<section
 						key={itemIndex + 1}
 						className='mb-3 d-flex justify-content-start align-items-center gap-3'>
-						<div className='option-color-input d-flex justify-content-start align-items-center gap-2'>
+						<div className='option-color-input d-flex justify-content-start align-items-center gap-2 position-relative'>
 							<div className='input-icon'>
 								<TfiWrite />
 							</div>
@@ -422,7 +473,7 @@ const AddProductOptionsModal = () => {
 									handleSetValueTitleInput(e, sectionIndex, itemIndex);
 								}}
 							/>
-							{section?.select_value === "اللون" && (
+							{section?.select_value === "نص و لون" && (
 								<div
 									onClick={() => {
 										setShowColorPicker(item?.id);
@@ -438,7 +489,7 @@ const AddProductOptionsModal = () => {
 									}}></div>
 							)}
 							{showColorPicker === item?.id &&
-								section?.select_value === "اللون" && (
+								section?.select_value === "نص و لون" && (
 									<div
 										style={{
 											position: "absolute",
@@ -469,6 +520,52 @@ const AddProductOptionsModal = () => {
 										</div>
 									</div>
 								)}
+
+							{section?.select_value === "نص و صورة" && (
+								<>
+									<input
+										type='file'
+										accept='image/*'
+										ref={fileInputRef}
+										onChange={(e) => {
+											handleChangeImage(e, sectionIndex, itemIndex);
+										}}
+										name='image'
+										style={{ display: "none" }}
+									/>
+									{item?.previewImage ? (
+										<>
+											<div className='wrapper d-flex justify-content-center align-items-center gap-2 px-2'>
+												<div className='item-previewImage'>
+													<img src={item?.previewImage} alt='' />
+												</div>
+												<div className='d-flex justify-content-center align-items-center gap-2 '>
+													<FaEye
+														className='prev-img-icon'
+														onClick={(e) => {
+															setPreviewOpen(true);
+															ProductImageModal(item?.previewImage);
+														}}
+													/>
+													<CloseIcon
+														className='prev-img-icon'
+														onClick={(e) => {
+															handleDeleteImages(e, sectionIndex, itemIndex);
+														}}
+													/>
+												</div>
+											</div>
+										</>
+									) : (
+										<button
+											type='button'
+											onClick={handleButtonClick}
+											className='w-full h-full flex justify-center items-center add-product-image'>
+											استعراض...
+										</button>
+									)}
+								</>
+							)}
 						</div>
 
 						{section?.values?.length > 1 && (
@@ -559,7 +656,6 @@ const AddProductOptionsModal = () => {
 								onChange={(e) => {
 									addPriceToAttributes(e, attributeIndex);
 								}}
-								// disabled={quantityIsUnlimited}
 							/>
 							<div className='input-type'>ر.س</div>
 						</div>
@@ -592,9 +688,7 @@ const AddProductOptionsModal = () => {
 								}}>
 								<div
 									onClick={() => {
-										if (!quantityIsUnlimited) {
-											increaseQtyToAttributes(attributeIndex);
-										}
+										increaseQtyToAttributes(attributeIndex);
 									}}
 									style={{ cursor: "pointer" }}>
 									<AiOutlinePlus></AiOutlinePlus>
@@ -605,18 +699,14 @@ const AddProductOptionsModal = () => {
 										placeholder='الكمية'
 										value={attribute?.qty}
 										onChange={(e) => {
-											if (!quantityIsUnlimited) {
-												changeQtyToAttributes(e, attributeIndex);
-											}
+											changeQtyToAttributes(e, attributeIndex);
 										}}
 										style={{ textAlign: "center" }}
 									/>
 								</div>
 								<div
 									onClick={() => {
-										if (!quantityIsUnlimited) {
-											decreaseQtyToAttributes(attributeIndex);
-										}
+										decreaseQtyToAttributes(attributeIndex);
 									}}
 									style={{ cursor: "pointer" }}>
 									<AiOutlineMinus></AiOutlineMinus>
@@ -706,8 +796,10 @@ const AddProductOptionsModal = () => {
 									<div className='col-12 border mb-3'></div>
 
 									<div className='col-12 p-0 mb-2'>
-										<div className='d-flex justify-content-between align-items-center'>
-											<FormControlLabel
+										<div className='d-flex justify-content-end align-items-center'>
+											{/* سيتم تعطيله بشكل مؤقت */}
+											{/*
+										<FormControlLabel
 												control={
 													<Checkbox
 														checked={quantityIsUnlimited}
@@ -725,11 +817,10 @@ const AddProductOptionsModal = () => {
 												}
 												label='كميات غير محدودة'
 											/>
-											<div
-												className={`${
-													quantityIsUnlimited ? "d-none" : "d-block"
-												} total-quantity ps-2`}>
-												إجمالي الكمية{" "}
+										*/}
+
+											<div className='d-block total-quantity ps-2'>
+												إجمالي الكمية:{" "}
 												<span>
 													{attributes?.reduce(
 														(total, attribute) => total + attribute?.qty,
