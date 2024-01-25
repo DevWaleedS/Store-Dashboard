@@ -536,7 +536,7 @@ const AddProductOptionsModal = () => {
 									/>
 									{item?.previewImage ? (
 										<>
-											<div className='wrapper d-flex justify-content-center align-items-center gap-2 px-2'>
+											<div className='product-options-img-wrapper d-flex justify-content-center align-items-center gap-2 px-2'>
 												<div className='item-previewImage'>
 													<img src={item?.previewImage} alt='' />
 												</div>
