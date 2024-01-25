@@ -166,24 +166,25 @@ const AddProductOptionsModal = () => {
 		fileInputRef.current.click();
 	};
 	const [previewOpen, setPreviewOpen] = useState(false);
-	const handleCancel = () => setPreviewOpen(false);
+	const [previewImage, setPreviewImage] = useState("");
+
+	const handleCancel = () => {
+		setPreviewOpen(false);
+		setPreviewImage("");
+	};
 
 	/** preview product image */
-	const ProductImageModal = (previewImage) => {
-
-		console.log(previewImage);
+	const ProductImageModal = () => {
 		return (
-			previewOpen && (
-				<>
-					<div onClick={handleCancel} className='imageprev-modal'></div>
-					<div className='ProductImageModal-content'>
-						<CloseIcon className='close_video_icon' onClick={handleCancel} />
-						<div className='product-option-img-wrap'>
-							<img src={previewImage} alt='' />
-						</div>
+			<>
+				<div onClick={handleCancel} className='imageprev-modal'></div>
+				<div className='ProductImageModal-content'>
+					<CloseIcon className='close_video_icon' onClick={handleCancel} />
+					<div className='product-option-img-wrap'>
+						<img src={previewImage} alt='' />
 					</div>
-				</>
-			)
+				</div>
+			</>
 		);
 	};
 
@@ -206,8 +207,8 @@ const AddProductOptionsModal = () => {
 
 		setOptionsSection(updatedBlocks);
 	};
+	// ----------------------------------------------------------------
 
-	// -----------------------------------------------------------------------------------------------------
 	/** Create Product options according  */
 	const [expanded, setExpanded] = useState(false);
 	const handleChange = (panel) => (event, newExpanded) => {
@@ -542,9 +543,9 @@ const AddProductOptionsModal = () => {
 												<div className='d-flex justify-content-center align-items-center gap-2 '>
 													<FaEye
 														className='prev-img-icon'
-														onClick={(e) => {
+														onClick={() => {
 															setPreviewOpen(true);
-															ProductImageModal(item?.previewImage);
+															setPreviewImage(item?.previewImage);
 														}}
 													/>
 													<CloseIcon
@@ -720,85 +721,89 @@ const AddProductOptionsModal = () => {
 	));
 
 	return (
-		<Modal open={isProductOptionOpen}>
-			<Box component={"div"} sx={style}>
-				<div
-					className='add-form-wrapper product-options bg-white'
-					style={{ borderRadius: "16px" }}>
-					<div className='row'>
-						<div className='col-12'>
-							<div
-								className='form-title  d-flex justify-content-center align-content-center'
-								style={{
-									borderRadius: "16px 16px 0 0",
-									backgroundColor: "#1DBBBE",
-									padding: "20px ",
-								}}>
-								<h5
-									className='text-white text-center'
-									style={{ fontSize: "22px", fontWeight: 400 }}>
-									إدارة الكميات
-								</h5>
-
-								<div className='close-icon-video-modal ps-2'>
-									<AiOutlineCloseCircle
-										style={{ cursor: "pointer", color: "white" }}
-										onClick={() => {
-											dispatch(closeProductOptionModal());
-											clearOptions();
-										}}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div className='form-body bg-white'>
-						<div className='row  mb-2'>
-							<div className='col-12 '>
-								<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-									<IoMdInformationCircleOutline />
-									<span>بإمكانك إدارة الكمية بناء على خيارات المنتج</span>
-								</div>
-							</div>
-						</div>
-
-						<div className='row mb-2'>
+		<>
+			{previewOpen && <ProductImageModal />}
+			<Modal open={isProductOptionOpen}>
+				<Box component={"div"} sx={style}>
+					<div
+						className='add-form-wrapper product-options bg-white position-relative'
+						style={{ borderRadius: "16px" }}>
+						<div className='row'>
 							<div className='col-12'>
-								<div className='d-flex justify-content-start align-items-center  active-options-switch'>
-									<Switch
-										sx={switchStyle}
-										checked={productHasOptions}
-										onChange={() => setProductHasOptions(!productHasOptions)}
-									/>
-									<span className='switch-label'>تفعيل خيارات المنتج</span>
+								<div
+									className='form-title  d-flex justify-content-center align-content-center'
+									style={{
+										borderRadius: "16px 16px 0 0",
+										backgroundColor: "#1DBBBE",
+										padding: "20px ",
+									}}>
+									<h5
+										className='text-white text-center'
+										style={{ fontSize: "22px", fontWeight: 400 }}>
+										إدارة الكميات
+									</h5>
+
+									<div className='close-icon-video-modal ps-2'>
+										<AiOutlineCloseCircle
+											style={{ cursor: "pointer", color: "white" }}
+											onClick={() => {
+												dispatch(closeProductOptionModal());
+												clearOptions();
+											}}
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<section
-							className={`${productHasOptions ? "d-flex" : "d-none"} row mb-4`}>
-							<div className='col-12 mb-4'>
-								{/* the product options section */}
-								{productOptionsSection}
-
-								<div>
-									<button
-										onClick={handleAddNewBlock}
-										className='w-100 add-new-option-section-btn d-flex justify-content-center align-items-center cursor-pointer'>
-										<FiPlus className='add-icon' />
-										إضافة خيار جديد
-									</button>
+						<div className='form-body bg-white'>
+							<div className='row  mb-2'>
+								<div className='col-12 '>
+									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
+										<IoMdInformationCircleOutline />
+										<span>بإمكانك إدارة الكمية بناء على خيارات المنتج</span>
+									</div>
 								</div>
 							</div>
-							{attributesAccording?.length > 0 && (
-								<>
-									<div className='col-12 border mb-3'></div>
 
-									<div className='col-12 p-0 mb-2'>
-										<div className='d-flex justify-content-end align-items-center'>
-											{/* سيتم تعطيله بشكل مؤقت */}
-											{/*
+							<div className='row mb-2'>
+								<div className='col-12'>
+									<div className='d-flex justify-content-start align-items-center  active-options-switch'>
+										<Switch
+											sx={switchStyle}
+											checked={productHasOptions}
+											onChange={() => setProductHasOptions(!productHasOptions)}
+										/>
+										<span className='switch-label'>تفعيل خيارات المنتج</span>
+									</div>
+								</div>
+							</div>
+
+							<section
+								className={`${
+									productHasOptions ? "d-flex" : "d-none"
+								} row mb-4`}>
+								<div className='col-12 mb-4'>
+									{/* the product options section */}
+									{productOptionsSection}
+
+									<div>
+										<button
+											onClick={handleAddNewBlock}
+											className='w-100 add-new-option-section-btn d-flex justify-content-center align-items-center cursor-pointer'>
+											<FiPlus className='add-icon' />
+											إضافة خيار جديد
+										</button>
+									</div>
+								</div>
+								{attributesAccording?.length > 0 && (
+									<>
+										<div className='col-12 border mb-3'></div>
+
+										<div className='col-12 p-0 mb-2'>
+											<div className='d-flex justify-content-end align-items-center'>
+												{/* سيتم تعطيله بشكل مؤقت */}
+												{/*
 										<FormControlLabel
 												control={
 													<Checkbox
@@ -819,50 +824,51 @@ const AddProductOptionsModal = () => {
 											/>
 										*/}
 
-											<div className='d-block total-quantity ps-2'>
-												إجمالي الكمية:{" "}
-												<span>
-													{attributes?.reduce(
-														(total, attribute) => total + attribute?.qty,
-														0
-													) || 0}
-												</span>
+												<div className='d-block total-quantity ps-2'>
+													إجمالي الكمية:{" "}
+													<span>
+														{attributes?.reduce(
+															(total, attribute) => total + attribute?.qty,
+															0
+														) || 0}
+													</span>
+												</div>
 											</div>
 										</div>
-									</div>
-								</>
-							)}
+									</>
+								)}
 
-							<div className='col-12 mb-2'>
-								{attributesAccording && attributesAccording}
-							</div>
-						</section>
-					</div>
+								<div className='col-12 mb-2'>
+									{attributesAccording && attributesAccording}
+								</div>
+							</section>
+						</div>
 
-					<div
-						className='form-footer bg-white'
-						style={{ borderRadius: "0 0 16px 16px" }}>
-						<div className='row d-flex justify-content-center align-items-center'>
-							<div className='col-lg-4 col-6'>
-								<button className='save-btn' onClick={() => saveOptions()}>
-									حفظ
-								</button>
-							</div>
-							<div className='col-lg-4 col-6'>
-								<button
-									className='close-btn'
-									onClick={() => {
-										dispatch(closeProductOptionModal());
-										clearOptions();
-									}}>
-									إلغاء
-								</button>
+						<div
+							className='form-footer bg-white'
+							style={{ borderRadius: "0 0 16px 16px" }}>
+							<div className='row d-flex justify-content-center align-items-center'>
+								<div className='col-lg-4 col-6'>
+									<button className='save-btn' onClick={() => saveOptions()}>
+										حفظ
+									</button>
+								</div>
+								<div className='col-lg-4 col-6'>
+									<button
+										className='close-btn'
+										onClick={() => {
+											dispatch(closeProductOptionModal());
+											clearOptions();
+										}}>
+										إلغاء
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</Box>
-		</Modal>
+				</Box>
+			</Modal>
+		</>
 	);
 };
 
