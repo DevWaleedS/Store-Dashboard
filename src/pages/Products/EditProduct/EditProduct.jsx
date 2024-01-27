@@ -181,22 +181,40 @@ const EditProduct = () => {
 			);
 			setMultiImages(fetchedData?.data?.product?.images?.map((image) => image));
 
-			setProductHasOptions(fetchedData?.data?.product?.product_has_options);
+			setProductHasOptions(
+				fetchedData?.data?.product?.product_has_options === 1 ? true : false
+			);
 
 			setOptionsSection(
-				fetchedData?.data?.product?.attributes?.map((attribute) => ({
-					id: attribute?.id,
-					name: attribute?.name,
-					select_value: attribute?.type,
-					values: attribute?.values?.map((value) => ({
-						id: value?.id,
-						title: value?.value?.[0],
-						color: attribute?.type === "نص و لون" ? value?.value?.[1] : "",
-						image: attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
-						previewImage:
-							attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
-					})),
-				}))
+				fetchedData?.data?.product?.attributes?.length !== 0
+					? fetchedData?.data?.product?.attributes?.map((attribute) => ({
+							id: attribute?.id,
+							name: attribute?.name,
+							select_value: attribute?.type,
+							values: attribute?.values?.map((value) => ({
+								id: value?.id,
+								title: value?.value?.[0],
+								color: attribute?.type === "نص و لون" ? value?.value?.[1] : "",
+								image: attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
+								previewImage:
+									attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
+							})),
+					  }))
+					: [
+							{
+								name: "",
+								select_value: "نص",
+								values: [
+									{
+										id: 9828394,
+										title: "",
+										color: "",
+										image: "",
+										previewImage: "",
+									},
+								],
+							},
+					  ]
 			);
 			setAttributes(
 				fetchedData?.data?.product?.options?.map((option) => ({
@@ -212,6 +230,7 @@ const EditProduct = () => {
 		}
 	}, [fetchedData?.data?.product]);
 
+	console.log(productHasOptions);
 	// ---------------------------------------------
 
 	// Handle Errors

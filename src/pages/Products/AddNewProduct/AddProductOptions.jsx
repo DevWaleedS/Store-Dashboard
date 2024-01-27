@@ -380,7 +380,7 @@ const AddProductOptionsModal = () => {
 
 	/** Handle mapping the options sections */
 	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
-		<section key={sectionIndex + 1} className='options-section'>
+		<section key={section?.id} className='options-section'>
 			<section className='mb-4 d-flex justify-content-start align-items-center gap-3'>
 				<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
 					<div className='input-icon'>
@@ -452,7 +452,7 @@ const AddProductOptionsModal = () => {
 			<section className='mb-6'>
 				{section?.values?.map((item, itemIndex) => (
 					<section
-						key={itemIndex + 1}
+						key={item?.id}
 						className='mb-3 d-flex justify-content-start align-items-center gap-3'>
 						<div className='option-color-input d-flex justify-content-start align-items-center gap-2 position-relative'>
 							<div className='input-icon'>
@@ -605,7 +605,7 @@ const AddProductOptionsModal = () => {
 	const attributesAccording = attributes?.map((attribute, attributeIndex) => (
 		<>
 			<section
-				key={attributeIndex + 1}
+				key={attributeIndex}
 				className=' flex justify-start items-center gap-3 mb-3'>
 				<Accordion
 					expanded={expanded === attributeIndex}
@@ -628,7 +628,7 @@ const AddProductOptionsModal = () => {
 									<>
 										{value?.id === index && index !== 0 && <span>/</span>}
 										<Typography
-											key={index + 1}
+											key={value?.id}
 											sx={{
 												fontSize: "18px",
 												fontWeight: "400",
