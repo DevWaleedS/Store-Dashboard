@@ -102,8 +102,7 @@ const EditProduct = () => {
 		setEndActionTitle,
 		productHasOptions,
 		setProductHasOptions,
-		quantityIsUnlimited,
-		setQuantityIsUnlimited,
+
 		attributes,
 		setAttributes,
 		optionsSection,
@@ -183,9 +182,7 @@ const EditProduct = () => {
 			setMultiImages(fetchedData?.data?.product?.images?.map((image) => image));
 
 			setProductHasOptions(fetchedData?.data?.product?.product_has_options);
-			setQuantityIsUnlimited(
-				fetchedData?.data?.product?.amount === 0 ? true : false
-			);
+
 			setOptionsSection(
 				fetchedData?.data?.product?.attributes?.map((attribute) => ({
 					id: attribute?.id,
@@ -194,7 +191,10 @@ const EditProduct = () => {
 					values: attribute?.values?.map((value) => ({
 						id: value?.id,
 						title: value?.value?.[0],
-						color: value?.value?.[1] || "",
+						color: attribute?.type === "نص و لون" ? value?.value?.[1] : "",
+						image: attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
+						previewImage:
+							attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
 					})),
 				}))
 			);
@@ -397,7 +397,7 @@ const EditProduct = () => {
 			}
 		}
 		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
-		formData.append("amount", quantityIsUnlimited === true ? 0 : 1);
+		formData.append("amount", 1);
 		if (productHasOptions === true) {
 			for (let i = 0; i < optionsSection?.length; i++) {
 				formData.append([`attribute[${i}][title]`], optionsSection[i]?.name);
@@ -410,12 +410,19 @@ const EditProduct = () => {
 						[`attribute[${i}][value][${v}][title]`],
 						optionsSection[i]?.values[v]?.title
 					);
-					formData.append(
-						[`attribute[${i}][value][${v}][color]`],
-						optionsSection[i]?.select_value === "اللون"
-							? optionsSection[i]?.values[v]?.color
-							: ""
-					);
+					optionsSection[i]?.values[v]?.color &&
+						optionsSection[i]?.select_value === "نص و لون" &&
+						formData.append(
+							[`attribute[${i}][value][${v}][color]`],
+							optionsSection[i]?.values[v]?.color
+						);
+					optionsSection[i]?.values[v]?.image &&
+						optionsSection[i]?.select_value === "نص و صورة" &&
+						formData.append(
+							[`attribute[${i}][value][${v}][image]`],
+
+							optionsSection[i]?.values[v]?.image
+						);
 				}
 			}
 			for (let i = 0; i < attributes?.length; i++) {

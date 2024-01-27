@@ -4,6 +4,7 @@ import React, { Fragment, useContext, useState } from "react";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
+import ImageUploading from "react-images-uploading";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +40,7 @@ import { FaRegSquarePlus } from "react-icons/fa6";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { Checkbox, FormControlLabel, Switch } from "@mui/material";
+import { Switch } from "@mui/material";
 
 /* Modal Styles */
 const style = {
@@ -159,12 +160,6 @@ const AddProductOptionsModal = () => {
 
 	const [showColorPicker, setShowColorPicker] = useState(null);
 
-	/** handle upload product images  */
-	const fileInputRef = React.createRef();
-	// Function to open the file input dialog
-	const handleButtonClick = () => {
-		fileInputRef.current.click();
-	};
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
 
@@ -190,12 +185,10 @@ const AddProductOptionsModal = () => {
 
 	/** ------------------------------------------------------------- */
 	const handleChangeImage = (e, blockIndex, valueIndex) => {
-		const file = e?.target?.files[0];
-		const imgConvert = URL.createObjectURL(file);
 		const updatedBlocks = [...optionsSection];
 
-		updatedBlocks[blockIndex].values[valueIndex].image = file;
-		updatedBlocks[blockIndex].values[valueIndex].previewImage = imgConvert;
+		updatedBlocks[blockIndex].values[valueIndex].image = e[0]?.file;
+		updatedBlocks[blockIndex].values[valueIndex].previewImage = e[0]?.data_url;
 		setOptionsSection(updatedBlocks);
 	};
 
@@ -203,7 +196,6 @@ const AddProductOptionsModal = () => {
 		const updatedBlocks = [...optionsSection];
 		updatedBlocks[blockIndex].values[valueIndex].image = "";
 		updatedBlocks[blockIndex].values[valueIndex].previewImage = "";
-		fileInputRef.current.value = null;
 
 		setOptionsSection(updatedBlocks);
 	};
@@ -252,7 +244,7 @@ const AddProductOptionsModal = () => {
 		updatedBlocks[blockIndex].values.push({
 			id: updatedBlocks[blockIndex].values.length + 1,
 			title: "",
-			color: "#000000",
+			color: "",
 			image: "",
 			previewImage: "",
 		});
@@ -277,7 +269,7 @@ const AddProductOptionsModal = () => {
 				{
 					id: 1,
 					title: "",
-					color: "#000000",
+					color: "",
 					image: "",
 					previewImage: "",
 				},
@@ -484,7 +476,7 @@ const AddProductOptionsModal = () => {
 										left: "15px",
 										width: "1.5rem",
 										height: "1.5rem",
-										backgroundColor: item?.color,
+										backgroundColor: `${item?.color ? item?.color : "#000000"}`,
 										borderRadius: "50%",
 										cursor: "pointer",
 									}}></div>
@@ -524,47 +516,61 @@ const AddProductOptionsModal = () => {
 
 							{section?.select_value === "نص و صورة" && (
 								<>
-									<input
-										type='file'
-										accept='image/*'
-										ref={fileInputRef}
+									<ImageUploading
+										value={item?.image}
 										onChange={(e) => {
 											handleChangeImage(e, sectionIndex, itemIndex);
 										}}
-										name='image'
-										style={{ display: "none" }}
-									/>
-									{item?.previewImage ? (
-										<>
-											<div className='product-options-img-wrapper d-flex justify-content-center align-items-center gap-2 px-2'>
-												<div className='item-previewImage'>
-													<img src={item?.previewImage} alt='' />
-												</div>
-												<div className='d-flex justify-content-center align-items-center gap-2 '>
-													<FaEye
-														className='prev-img-icon'
-														onClick={() => {
-															setPreviewOpen(true);
-															setPreviewImage(item?.previewImage);
-														}}
-													/>
-													<CloseIcon
-														className='prev-img-icon'
-														onClick={(e) => {
-															handleDeleteImages(e, sectionIndex, itemIndex);
-														}}
-													/>
-												</div>
-											</div>
-										</>
-									) : (
-										<button
-											type='button'
-											onClick={handleButtonClick}
-											className='w-full h-full flex justify-center items-center add-product-image'>
-											استعراض...
-										</button>
-									)}
+										maxNumber={1}
+										dataURLKey='data_url'
+										acceptType={["jpg", "png", "jpeg"]}
+										allowNonImageType={true}>
+										{({
+											imageList,
+											onImageUpload,
+											onImageRemoveAll,
+											onImageUpdate,
+											onImageRemove,
+											isDragging,
+											dragProps,
+										}) =>
+											item?.previewImage ? (
+												<>
+													<div className='product-options-img-wrapper d-flex justify-content-center align-items-center gap-2 px-2'>
+														<div className='item-previewImage'>
+															<img src={item?.previewImage} alt='' />
+														</div>
+														<div className='d-flex justify-content-center align-items-center gap-2 '>
+															<FaEye
+																className='prev-img-icon'
+																onClick={() => {
+																	setPreviewOpen(true);
+																	setPreviewImage(item?.previewImage);
+																}}
+															/>
+															<CloseIcon
+																className='prev-img-icon'
+																onClick={(e) => {
+																	handleDeleteImages(
+																		e,
+																		sectionIndex,
+																		itemIndex
+																	);
+																}}
+															/>
+														</div>
+													</div>
+												</>
+											) : (
+												<button
+													type='button'
+													onClick={onImageUpload}
+													className='w-full h-full flex justify-center items-center add-product-image'>
+													استعراض...
+												</button>
+											)
+										}
+									</ImageUploading>
 								</>
 							)}
 						</div>

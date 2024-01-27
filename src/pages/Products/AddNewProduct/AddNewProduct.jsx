@@ -339,20 +339,19 @@ const AddNewProduct = () => {
 						[`attribute[${i}][value][${v}][title]`],
 						optionsSection[i]?.values[v]?.title
 					);
+					optionsSection[i]?.values[v]?.color &&
+						optionsSection[i]?.select_value === "نص و لون" &&
+						formData.append(
+							[`attribute[${i}][value][${v}][color]`],
+							optionsSection[i]?.values[v]?.color
+						);
+					optionsSection[i]?.values[v]?.image &&
+						optionsSection[i]?.select_value === "نص و صورة" &&
+						formData.append(
+							[`attribute[${i}][value][${v}][image]`],
 
-					formData.append(
-						[`attribute[${i}][value][${v}][color]`],
-						optionsSection[i]?.select_value === "نص و لون"
-							? optionsSection[i]?.values[v]?.color
-							: ""
-					);
-
-					formData.append(
-						[`attribute[${i}][value][${v}][image]`],
-						optionsSection[i]?.select_value === "نص و صورة"
-							? optionsSection[i]?.values[v]?.image
-							: ""
-					);
+							optionsSection[i]?.values[v]?.image
+						);
 				}
 			}
 			for (let i = 0; i < attributes?.length; i++) {

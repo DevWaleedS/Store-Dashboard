@@ -4,8 +4,7 @@ import React, { Fragment, useContext, useState } from "react";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
-
-import { useNavigate } from "react-router-dom";
+import ImageUploading from "react-images-uploading";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -16,11 +15,17 @@ import Context from "../../../Context/context";
 
 // Icons
 import { FiPlus } from "react-icons/fi";
+import { FaEye } from "react-icons/fa";
 import { TfiWrite } from "react-icons/tfi";
 import { MdStorage } from "react-icons/md";
+import CloseIcon from "@mui/icons-material/Close";
 import { DeleteIcon } from "../../../data/Icons";
 import { IoPricetagsOutline } from "react-icons/io5";
-import { AiOutlineCloseCircle, AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import {
+	AiOutlineCloseCircle,
+	AiOutlinePlus,
+	AiOutlineMinus,
+} from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
@@ -35,7 +40,7 @@ import { FaRegSquarePlus } from "react-icons/fa6";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { Checkbox, FormControlLabel, Switch } from "@mui/material";
+import { Switch } from "@mui/material";
 
 /* Modal Styles */
 const style = {
@@ -133,29 +138,68 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 	borderRadius: "0 0 4px 4px",
 }));
 
-const select_value_options = ["نص", "اللون"];
+const select_value_options = ["نص", "نص و لون", "نص و صورة"];
 
 const AddProductOptionsModal = () => {
 	const { isProductOptionOpen } = useSelector(
 		(state) => state.ProductOptionModal
 	);
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 
 	const contextStore = useContext(Context);
 	const {
 		productHasOptions,
 		setProductHasOptions,
-		quantityIsUnlimited,
-		setQuantityIsUnlimited,
+
 		attributes,
 		setAttributes,
 		optionsSection,
 		setOptionsSection,
 	} = contextStore;
 	const [showColorPicker, setShowColorPicker] = useState(null);
-	/** to handle the option-section */
+
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [previewImage, setPreviewImage] = useState("");
+
+	const handleCancel = () => {
+		setPreviewOpen(false);
+		setPreviewImage("");
+	};
+
+	/** preview product image */
+	const ProductImageModal = () => {
+		return (
+			<>
+				<div onClick={handleCancel} className='imageprev-modal'></div>
+				<div className='ProductImageModal-content'>
+					<CloseIcon className='close_video_icon' onClick={handleCancel} />
+					<div className='product-option-img-wrap'>
+						<img src={previewImage} alt='' />
+					</div>
+				</div>
+			</>
+		);
+	};
+
+	/** ------------------------------------------------------------- */
+	const handleChangeImage = (e, blockIndex, valueIndex) => {
+		const updatedBlocks = [...optionsSection];
+
+		updatedBlocks[blockIndex].values[valueIndex].image = e[0]?.file;
+		updatedBlocks[blockIndex].values[valueIndex].previewImage = e[0]?.data_url;
+		setOptionsSection(updatedBlocks);
+	};
+
+	const handleDeleteImages = (e, blockIndex, valueIndex) => {
+		const updatedBlocks = [...optionsSection];
+		updatedBlocks[blockIndex].values[valueIndex].image = "";
+		updatedBlocks[blockIndex].values[valueIndex].previewImage = "";
+
+		setOptionsSection(updatedBlocks);
+	};
+
+	// ----------------------------------------------------------------
 
 	/** Create Product options according  */
 	const [expanded, setExpanded] = useState(false);
@@ -175,7 +219,7 @@ const AddProductOptionsModal = () => {
 		const updatedPackInfoInput = [...optionsSection];
 		updatedPackInfoInput[index].select_value = e.target.value;
 		setOptionsSection(updatedPackInfoInput);
-	}
+	};
 
 	//handle value title of block
 	const handleSetValueTitleInput = (e, blockIndex, valueIndex) => {
@@ -192,18 +236,21 @@ const AddProductOptionsModal = () => {
 		const updatedBlocks = [...optionsSection];
 		updatedBlocks[blockIndex].values[valueIndex].color = e.hex;
 		setOptionsSection(updatedBlocks);
-	}
+	};
 
 	//handle add new value to block
+
 	const handleAddNewValue = (blockIndex) => {
 		const updatedBlocks = [...optionsSection];
 		updatedBlocks[blockIndex].values.push({
 			id: updatedBlocks[blockIndex].values.length + 1,
 			title: "",
-			color: "#000000",
+			color: "",
+			image: "",
+			previewImage: "",
 		});
 		setOptionsSection(updatedBlocks);
-	}
+	};
 
 	const handleDeleteValue = (valueIndex, blockIndex) => {
 		const updatedBlocks = [...optionsSection];
@@ -212,7 +259,7 @@ const AddProductOptionsModal = () => {
 		// Generate new Attributes based on the updated productOptions
 		const newAttributes = generateAttributes(updatedBlocks);
 		setAttributes(newAttributes);
-	}
+	};
 
 	const handleAddNewBlock = () => {
 		// Create a new block with default values
@@ -223,8 +270,10 @@ const AddProductOptionsModal = () => {
 				{
 					id: 1,
 					title: "",
-					color: "#000000"
-				}
+					color: "",
+					image: "",
+					previewImage: "",
+				},
 			],
 		};
 
@@ -233,17 +282,18 @@ const AddProductOptionsModal = () => {
 
 		// Update the state with the new array of blocks
 		setOptionsSection(updatedBlocks);
-
-	}
+	};
 
 	/** handle delete options section */
 	const handleDeleteBlock = (blockIndex) => {
-		const updatedBlocks = optionsSection?.filter((__item, index) => index !== blockIndex);
+		const updatedBlocks = optionsSection?.filter(
+			(__item, index) => index !== blockIndex
+		);
 		setOptionsSection(updatedBlocks);
 		// Generate new Attributes based on the updated productOptions
 		const newAttributes = generateAttributes(updatedBlocks);
 		setAttributes(newAttributes);
-	}
+	};
 
 	const generateAttributes = (blocks) => {
 		const attributes = [];
@@ -267,24 +317,26 @@ const AddProductOptionsModal = () => {
 	};
 
 	const addPriceToAttributes = (e, blockIndex) => {
-		if (!quantityIsUnlimited) {
-			const updatedAttributes = [...attributes];
-			updatedAttributes[blockIndex].price = Number(e.target.value.replace(/[^0-9]/g, ""));
-			setAttributes(updatedAttributes);
-		}
+		const updatedAttributes = [...attributes];
+		updatedAttributes[blockIndex].price = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
+		setAttributes(updatedAttributes);
 	};
 
 	const changeQtyToAttributes = (e, blockIndex) => {
 		const updatedAttributes = [...attributes];
-		updatedAttributes[blockIndex].qty = Number(e.target.value.replace(/[^0-9]/g, ""));
+		updatedAttributes[blockIndex].qty = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
 		setAttributes(updatedAttributes);
-	}
+	};
 
 	const increaseQtyToAttributes = (blockIndex) => {
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].qty += 1;
 		setAttributes(updatedAttributes);
-	}
+	};
 
 	const decreaseQtyToAttributes = (blockIndex) => {
 		const updatedAttributes = [...attributes];
@@ -292,15 +344,19 @@ const AddProductOptionsModal = () => {
 			updatedAttributes[blockIndex].qty -= 1;
 			setAttributes(updatedAttributes);
 		}
-	}
+	};
 
 	const saveOptions = () => {
 		if (productHasOptions === true) {
-			const nameNotEmpty = optionsSection?.every(section => section?.name !== '');
-			const valuesNotEmpty = optionsSection?.every(section => section?.values?.some(value => value?.title === ''));
+			const nameNotEmpty = optionsSection?.every(
+				(section) => section?.name !== ""
+			);
+			const valuesNotEmpty = optionsSection?.every((section) =>
+				section?.values?.some((value) => value?.title === "")
+			);
 			if (nameNotEmpty) {
 				if (valuesNotEmpty) {
-					toast.warning("يرجى ملاء حقل القيمة بالأول", {
+					toast.warning("يرجى ملء حقل القيمة أولاً", {
 						theme: "light",
 					});
 				} else {
@@ -310,15 +366,14 @@ const AddProductOptionsModal = () => {
 					});
 				}
 			} else {
-				toast.warning("يرجى ملاء حقل مسمى الخيار بالأول", {
+				toast.warning("يرجى ملء حقل مسمى الخيار أولاً", {
 					theme: "light",
 				});
 			}
-		}
-		else {
+		} else {
 			dispatch(closeProductOptionModal());
 		}
-	}
+	};
 
 	/** Handle mapping the options sections */
 	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
@@ -349,27 +404,26 @@ const AddProductOptionsModal = () => {
 						}}
 						className={"font-medium"}
 						sx={{
-							height: '100%',
-							pl: '1rem',
-							width: '100%',
+							height: "100%",
+							pl: "1rem",
+							width: "100%",
 
-							'& .MuiSelect-select.MuiSelect-outlined': {
+							"& .MuiSelect-select.MuiSelect-outlined": {
 								p: 0,
-								display: 'flex',
-								alignItems: 'center',
+								display: "flex",
+								alignItems: "center",
 							},
-							'& .MuiOutlinedInput-notchedOutline': {
-								border: 'none',
+							"& .MuiOutlinedInput-notchedOutline": {
+								border: "none",
 							},
-							'&  svg': {
-								display: 'block',
+							"&  svg": {
+								display: "block",
 							},
-						}}
-					>
+						}}>
 						{select_value_options?.map((option, index) => (
 							<MenuItem
 								key={index}
-								className="souq_storge_category_filter_items "
+								className='souq_storge_category_filter_items '
 								sx={{
 									backgroundColor: "#FAFAFA",
 									color: "#011723",
@@ -379,8 +433,7 @@ const AddProductOptionsModal = () => {
 									height: "3rem",
 									"&:hover": {},
 								}}
-								value={`${option}`}
-							>
+								value={`${option}`}>
 								{option}
 							</MenuItem>
 						))}
@@ -388,9 +441,7 @@ const AddProductOptionsModal = () => {
 				</div>
 				{optionsSection?.length > 1 && (
 					<div className='delete-icon delete-option-section-icon'>
-						<DeleteIcon
-							onClick={() => handleDeleteBlock(sectionIndex)}
-						/>
+						<DeleteIcon onClick={() => handleDeleteBlock(sectionIndex)} />
 					</div>
 				)}
 			</section>
@@ -408,9 +459,11 @@ const AddProductOptionsModal = () => {
 								type='text'
 								placeholder={`القيمة ${itemIndex + 1}`}
 								value={item?.title}
-								onChange={(e) => { handleSetValueTitleInput(e, sectionIndex, itemIndex); }}
+								onChange={(e) => {
+									handleSetValueTitleInput(e, sectionIndex, itemIndex);
+								}}
 							/>
-							{section?.select_value === "اللون" && (
+							{section?.select_value === "نص و لون" && (
 								<div
 									onClick={() => {
 										setShowColorPicker(item?.id);
@@ -420,30 +473,101 @@ const AddProductOptionsModal = () => {
 										left: "15px",
 										width: "1.5rem",
 										height: "1.5rem",
-										backgroundColor: item?.color,
+										backgroundColor: `${item?.color ? item?.color : "#000000"}`,
 										borderRadius: "50%",
 										cursor: "pointer",
-									}}
-								></div>
+									}}></div>
 							)}
-							{showColorPicker === item?.id && section?.select_value === "اللون" && (
-								<div style={{ position: "absolute", left: "0", bottom: "0", zIndex: "50", transform: "translateY(100%)" }}>
-									<SketchPicker
-										color={item?.color}
-										onChange={(e) => { handleSetValueColorInput(e, sectionIndex, itemIndex) }}
-									>
-									</SketchPicker>
-									<div style={{ position: "absolute", top: "0", right: "0", zIndex: "50", transform: "translateY(-100%)" }}>
-										<TiDeleteOutline
-											onClick={() => {
-												setShowColorPicker(null);
-											}}
-											size={'1.5rem'}
-											color={"#000000"}
-										>
-										</TiDeleteOutline>
+							{showColorPicker === item?.id &&
+								section?.select_value === "نص و لون" && (
+									<div
+										style={{
+											position: "absolute",
+											left: "0",
+											bottom: "0",
+											zIndex: "50",
+											transform: "translateY(100%)",
+										}}>
+										<SketchPicker
+											color={`${item?.color ? item?.color : "#000000"}`}
+											onChange={(e) => {
+												handleSetValueColorInput(e, sectionIndex, itemIndex);
+											}}></SketchPicker>
+										<div
+											style={{
+												position: "absolute",
+												top: "0",
+												right: "0",
+												zIndex: "50",
+												transform: "translateY(-100%)",
+											}}>
+											<TiDeleteOutline
+												onClick={() => {
+													setShowColorPicker(null);
+												}}
+												size={"1.5rem"}
+												color={"#000000"}></TiDeleteOutline>
+										</div>
 									</div>
-								</div>
+								)}
+							{section?.select_value === "نص و صورة" && (
+								<>
+									<ImageUploading
+										value={item?.image}
+										onChange={(e) => {
+											handleChangeImage(e, sectionIndex, itemIndex);
+										}}
+										maxNumber={1}
+										dataURLKey='data_url'
+										acceptType={["jpg", "png", "jpeg"]}
+										allowNonImageType={true}>
+										{({
+											imageList,
+											onImageUpload,
+											onImageRemoveAll,
+											onImageUpdate,
+											onImageRemove,
+											isDragging,
+											dragProps,
+										}) =>
+											item?.previewImage ? (
+												<>
+													<div className='product-options-img-wrapper d-flex justify-content-center align-items-center gap-2 px-2'>
+														<div className='item-previewImage'>
+															<img src={item?.previewImage} alt='' />
+														</div>
+														<div className='d-flex justify-content-center align-items-center gap-2 '>
+															<FaEye
+																className='prev-img-icon'
+																onClick={() => {
+																	setPreviewOpen(true);
+																	setPreviewImage(item?.previewImage);
+																}}
+															/>
+															<CloseIcon
+																className='prev-img-icon'
+																onClick={(e) => {
+																	handleDeleteImages(
+																		e,
+																		sectionIndex,
+																		itemIndex
+																	);
+																}}
+															/>
+														</div>
+													</div>
+												</>
+											) : (
+												<button
+													type='button'
+													onClick={onImageUpload}
+													className='w-full h-full flex justify-center items-center add-product-image'>
+													استعراض...
+												</button>
+											)
+										}
+									</ImageUploading>
+								</>
 							)}
 						</div>
 
@@ -451,7 +575,7 @@ const AddProductOptionsModal = () => {
 							<div className='delete-icon '>
 								<DeleteIcon
 									onClick={() => {
-										handleDeleteValue(itemIndex, sectionIndex)
+										handleDeleteValue(itemIndex, sectionIndex);
 									}}
 								/>
 							</div>
@@ -481,8 +605,7 @@ const AddProductOptionsModal = () => {
 				className=' flex justify-start items-center gap-3 mb-3'>
 				<Accordion
 					expanded={expanded === attributeIndex}
-					onChange={handleChange(attributeIndex)}
-				>
+					onChange={handleChange(attributeIndex)}>
 					<AccordionSummary
 						aria-controls={`${attributeIndex}-content`}
 						id={`${attributeIndex}-header`}
@@ -496,7 +619,7 @@ const AddProductOptionsModal = () => {
 							/>
 						}>
 						<div className=' d-flex justify-content-between align-items-center w-100'>
-							<div className="d-flex flex-row align-items-center gap-1">
+							<div className='d-flex flex-row align-items-center gap-1'>
 								{attribute?.values?.map((value, index) => (
 									<>
 										{value?.id === index && index !== 0 && <span>/</span>}
@@ -536,7 +659,6 @@ const AddProductOptionsModal = () => {
 								onChange={(e) => {
 									addPriceToAttributes(e, attributeIndex);
 								}}
-								disabled={quantityIsUnlimited}
 							/>
 							<div className='input-type'>ر.س</div>
 						</div>
@@ -544,30 +666,34 @@ const AddProductOptionsModal = () => {
 							<div className='input-icon'>
 								<MdStorage />
 							</div>
-							<span style={{ flex: "1", fontSize: "1rem", fontWeight: "500", color: "#000000" }}>الكمية المتوفرة</span>
+							<span
+								style={{
+									flex: "1",
+									fontSize: "1rem",
+									fontWeight: "500",
+									color: "#000000",
+								}}>
+								الكمية المتوفرة
+							</span>
 							<Box
 								sx={{
 									display: "flex",
 									height: "46px",
-									'& div': {
-										width: '56px',
+									"& div": {
+										width: "56px",
 										display: "flex",
 										flexDirection: "column",
 										alignItems: "center",
 										justifyContent: "center",
-										height: '100%',
-										border: '1px solid #ADB5B966',
+										height: "100%",
+										border: "1px solid #ADB5B966",
 									},
-								}}
-							>
+								}}>
 								<div
 									onClick={() => {
-										if (!quantityIsUnlimited) {
-											increaseQtyToAttributes(attributeIndex)
-										}
+										increaseQtyToAttributes(attributeIndex);
 									}}
-									style={{ cursor: "pointer" }}
-								>
+									style={{ cursor: "pointer" }}>
 									<AiOutlinePlus></AiOutlinePlus>
 								</div>
 								<div>
@@ -576,107 +702,108 @@ const AddProductOptionsModal = () => {
 										placeholder='الكمية'
 										value={attribute?.qty}
 										onChange={(e) => {
-											if (!quantityIsUnlimited) {
-												changeQtyToAttributes(e, attributeIndex)
-											}
+											changeQtyToAttributes(e, attributeIndex);
 										}}
 										style={{ textAlign: "center" }}
 									/>
 								</div>
 								<div
 									onClick={() => {
-										if (!quantityIsUnlimited) {
-											decreaseQtyToAttributes(attributeIndex);
-										}
+										decreaseQtyToAttributes(attributeIndex);
 									}}
-									style={{ cursor: "pointer" }}
-								>
+									style={{ cursor: "pointer" }}>
 									<AiOutlineMinus></AiOutlineMinus>
 								</div>
 							</Box>
 						</div>
 					</AccordionDetails>
 				</Accordion>
-			</section >
+			</section>
 		</>
 	));
-
+	console.log(optionsSection);
+	console.log(productHasOptions === 1 ? true : false);
 	return (
-		<Modal open={isProductOptionOpen}>
-			<Box component={"div"} sx={style}>
-				<div
-					className='add-form-wrapper product-options bg-white'
-					style={{ borderRadius: "16px" }}>
-					<div className='row'>
-						<div className='col-12'>
-							<div
-								className='form-title  d-flex justify-content-center align-content-center'
-								style={{
-									borderRadius: "16px 16px 0 0",
-									backgroundColor: "#1DBBBE",
-									padding: "20px ",
-								}}>
-								<h5
-									className='text-white text-center'
-									style={{ fontSize: "22px", fontWeight: 400 }}>
-									إدارة الكميات
-								</h5>
-
-								<div className='close-icon-video-modal ps-2'>
-									<AiOutlineCloseCircle
-										style={{ cursor: "pointer", color: "white" }}
-										onClick={() => dispatch(closeProductOptionModal())}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div className='form-body bg-white'>
-						<div className='row  mb-2'>
-							<div className='col-12 '>
-								<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-									<IoMdInformationCircleOutline />
-									<span>بإمكانك إدارة الكمية بناء على خيارات المنتج</span>
-								</div>
-							</div>
-						</div>
-
-						<div className='row mb-2'>
+		<>
+			{previewOpen && <ProductImageModal />}
+			<Modal open={isProductOptionOpen}>
+				<Box component={"div"} sx={style}>
+					<div
+						className='add-form-wrapper product-options bg-white'
+						style={{ borderRadius: "16px" }}>
+						<div className='row'>
 							<div className='col-12'>
-								<div className='d-flex justify-content-start align-items-center  active-options-switch'>
-									<Switch
-										sx={switchStyle}
-										checked={productHasOptions}
-										onChange={() => setProductHasOptions(!productHasOptions)}
-									/>
-									<span className='switch-label'>تفعيل خيارات المنتج</span>
+								<div
+									className='form-title  d-flex justify-content-center align-content-center'
+									style={{
+										borderRadius: "16px 16px 0 0",
+										backgroundColor: "#1DBBBE",
+										padding: "20px ",
+									}}>
+									<h5
+										className='text-white text-center'
+										style={{ fontSize: "22px", fontWeight: 400 }}>
+										إدارة الكميات
+									</h5>
+
+									<div className='close-icon-video-modal ps-2'>
+										<AiOutlineCloseCircle
+											style={{ cursor: "pointer", color: "white" }}
+											onClick={() => dispatch(closeProductOptionModal())}
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<section
-							className={`${productHasOptions ? "d-flex" : "d-none"} row mb-4`}>
-							<div className='col-12 mb-4'>
-								{/* the product options section */}
-								{productOptionsSection}
-
-								<div>
-									<button
-										onClick={handleAddNewBlock}
-										className='w-100 add-new-option-section-btn d-flex justify-content-center align-items-center cursor-pointer'>
-										<FiPlus className='add-icon' />
-										إضافة خيار جديد
-									</button>
+						<div className='form-body bg-white'>
+							<div className='row  mb-2'>
+								<div className='col-12 '>
+									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
+										<IoMdInformationCircleOutline />
+										<span>بإمكانك إدارة الكمية بناء على خيارات المنتج</span>
+									</div>
 								</div>
 							</div>
-							{attributesAccording?.length > 0 &&
-								<>
-									<div className='col-12 border mb-3'></div>
 
-									<div className='col-12 p-0 mb-2'>
-										<div className='d-flex justify-content-between align-items-center'>
-											<FormControlLabel
+							<div className='row mb-2'>
+								<div className='col-12'>
+									<div className='d-flex justify-content-start align-items-center  active-options-switch'>
+										<Switch
+											sx={switchStyle}
+											checked={productHasOptions === 1 ? true : false}
+											onChange={() => setProductHasOptions(!productHasOptions)}
+										/>
+										<span className='switch-label'>تفعيل خيارات المنتج</span>
+									</div>
+								</div>
+							</div>
+
+							<section
+								className={`${
+									productHasOptions ? "d-flex" : "d-none"
+								} row mb-4`}>
+								<div className='col-12 mb-4'>
+									{/* the product options section */}
+									{productOptionsSection}
+
+									<div>
+										<button
+											onClick={handleAddNewBlock}
+											className='w-100 add-new-option-section-btn d-flex justify-content-center align-items-center cursor-pointer'>
+											<FiPlus className='add-icon' />
+											إضافة خيار جديد
+										</button>
+									</div>
+								</div>
+								{attributesAccording?.length > 0 && (
+									<>
+										<div className='col-12 border mb-3'></div>
+
+										<div className='col-12 p-0 mb-2'>
+											<div className='d-flex justify-content-end align-items-center'>
+												{/* سيتم تعطيله بشكل مؤقت */}
+												{/*<FormControlLabel
 												control={
 													<Checkbox
 														checked={quantityIsUnlimited}
@@ -693,44 +820,50 @@ const AddProductOptionsModal = () => {
 													/>
 												}
 												label='كميات غير محدودة'
-											/>
-											<div
-												className={`${quantityIsUnlimited ? "d-none" : "d-block"
-													} total-quantity ps-2`}>
-												إجمالي الكمية <span>{attributes?.reduce((total, attribute) => total + attribute?.qty, 0) || 0}</span>
+											/>*/}
+
+												<div className='d-block total-quantity ps-2'>
+													إجمالي الكمية:{" "}
+													<span>
+														{attributes?.reduce(
+															(total, attribute) => total + attribute?.qty,
+															0
+														) || 0}
+													</span>
+												</div>
 											</div>
 										</div>
-									</div>
-								</>
-							}
+									</>
+								)}
 
-							<div className='col-12 mb-2'>
-								{attributesAccording && attributesAccording}
-							</div>
-						</section>
-					</div>
+								<div className='col-12 mb-2'>
+									{attributesAccording && attributesAccording}
+								</div>
+							</section>
+						</div>
 
-					<div
-						className='form-footer bg-white'
-						style={{ borderRadius: "0 0 16px 16px" }}>
-						<div className='row d-flex justify-content-center align-items-center'>
-							<div className='col-lg-4 col-6'>
-								<button className='save-btn' onClick={() => saveOptions()}>
-									حفظ
-								</button>
-							</div>
-							<div className='col-lg-4 col-6'>
-								<button
-									className='close-btn'
-									onClick={() => dispatch(closeProductOptionModal())}>
-									إلغاء
-								</button>
+						<div
+							className='form-footer bg-white'
+							style={{ borderRadius: "0 0 16px 16px" }}>
+							<div className='row d-flex justify-content-center align-items-center'>
+								<div className='col-lg-4 col-6'>
+									<button className='save-btn' onClick={() => saveOptions()}>
+										حفظ
+									</button>
+								</div>
+								<div className='col-lg-4 col-6'>
+									<button
+										className='close-btn'
+										onClick={() => dispatch(closeProductOptionModal())}>
+										إلغاء
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</Box>
-		</Modal>
+				</Box>
+			</Modal>
+		</>
 	);
 };
 
