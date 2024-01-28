@@ -352,7 +352,7 @@ const EditPage = () => {
 				}
 			});
 	};
-
+	console.log(images[0]?.preview, page?.image);
 	return (
 		<>
 			<Helmet>
@@ -781,9 +781,9 @@ const EditPage = () => {
 																	)}
 																</div>
 
-																{page?.image !== "" && (
+																{(images[0]?.preview || page?.image) && (
 																	<div
-																		className='p-3 d-flex justify-conent-center align-items-center'
+																		className='p-3 d-flex justify-content-center align-items-center'
 																		style={{
 																			width: "100%",
 
