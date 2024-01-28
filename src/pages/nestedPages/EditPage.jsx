@@ -274,22 +274,6 @@ const EditPage = () => {
 		},
 	});
 
-	const files = acceptedFiles.map((file, index) => (
-		<li
-			key={index}
-			style={{
-				overflow: "hidden",
-				textOverflow: "ellipsis",
-				whiteSpace: "nowrap",
-			}}>
-			{file.path}
-		</li>
-	));
-
-	const handleOnChange = (e) => {
-		setPage({ ...page, [e.target.name]: e.target.value });
-	};
-
 	const updatePage = (data) => {
 		setLoadingTitle("جاري تعديل الصفحة");
 		resetCouponError();
@@ -474,9 +458,7 @@ const EditPage = () => {
 																	} else {
 																		setDescriptionLength(true);
 																	}
-																}}
-															>
-															</textarea>
+																}}></textarea>
 														)}
 													/>
 													<div
@@ -764,7 +746,7 @@ const EditPage = () => {
 																		id='personal-image'
 																		name='personal-image'
 																	/>
-																	{files.length <= 0 ? (
+																	{images?.length <= 0 ? (
 																		<p
 																			role='button'
 																			style={{ fontSize: "16px" }}>
@@ -787,14 +769,14 @@ const EditPage = () => {
 																		{" "}
 																		استعراض
 																	</span>
-																	{files?.length !== 0 && (
+																	{images?.length !== 0 && (
 																		<ul
 																			style={{
 																				fontSize: "14px",
 																				overflow: "hidden",
 																			}}
 																			className='m-0'>
-																			{files}
+																			{images[0]?.name}
 																		</ul>
 																	)}
 																</div>

@@ -73,7 +73,6 @@ const CreatePage = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
-	const [type, setType] = useState("");
 	const {
 		register,
 		handleSubmit,
@@ -241,26 +240,11 @@ const CreatePage = () => {
 		},
 	});
 
-	const files = acceptedFiles.map((file, index) => (
-		<li
-			key={index}
-			style={{
-				overflow: "hidden",
-				textOverflow: "ellipsis",
-				whiteSpace: "nowrap",
-			}}>
-			{file.path}
-		</li>
-	));
 	// ----------------------------------------------------------------------
-
-	// On change page values
-	const handleOnChange = (e) => {
-		setPage({ ...page, [e.target.name]: e.target.value });
-	};
 
 	// Handle create new page
 	const handlePage = (data) => {
+		setLoadingTitle("جاري حفظ الصفحة");
 		resetCouponError();
 		let formData = new FormData();
 		formData.append("title", data?.title);
@@ -277,118 +261,59 @@ const CreatePage = () => {
 
 		formData.append("image", itsPost ? images[0] || "" : "");
 
-		if (type === "push") {
-			setLoadingTitle("جاري نشر الصفحة");
-			axios
-				.post(`https://backend.atlbha.com/api/Store/page-publish`, formData, {
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setLoadingTitle("");
-						setEndActionTitle(res?.data?.message?.ar);
-						navigate("/Pages");
-						setReload(!reload);
-					} else {
-						setLoadingTitle("");
+		axios
+			.post(`https://backend.atlbha.com/api/Store/page-publish`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
+			.then((res) => {
+				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					setLoadingTitle("");
+					setEndActionTitle(res?.data?.message?.ar);
+					navigate("/Pages");
+					setReload(!reload);
+					setEditorValue(null);
+				} else {
+					setLoadingTitle("");
+					setPageError({
+						title: res?.data?.message?.en?.title?.[0],
+						page_desc: res?.data?.message?.en?.page_desc?.[0],
+						page_content: res?.data?.message?.en?.page_content?.[0],
+						seo_title: res?.data?.message?.en?.seo_title?.[0],
+						seo_link: res?.data?.message?.en?.seo_link?.[0],
+						seo_desc: res?.data?.message?.en?.seo_desc?.[0],
+						tags: res?.data?.message?.en?.tags?.[0],
+						images: res?.data?.message?.en?.image?.[0],
+					});
 
-						setPageError({
-							title: res?.data?.message?.en?.title?.[0],
-							page_desc: res?.data?.message?.en?.page_desc?.[0],
-							page_content: res?.data?.message?.en?.page_content?.[0],
-							seo_title: res?.data?.message?.en?.seo_title?.[0],
-							seo_link: res?.data?.message?.en?.seo_link?.[0],
-							seo_desc: res?.data?.message?.en?.seo_desc?.[0],
-							tags: res?.data?.message?.en?.tags?.[0],
-							images: res?.data?.message?.en?.image?.[0],
-						});
-
-						toast.error(res?.data?.message?.en?.title?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.page_desc?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.page_content?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.seo_title?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.seo_link?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.seo_desc?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.tags?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.image?.[0], {
-							theme: "light",
-						});
-					}
-				});
-		} else {
-			setLoadingTitle("جاري حفظ الصفحة");
-			axios
-				.post(`https://backend.atlbha.com/api/Store/page`, formData, {
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setLoadingTitle("");
-						setEndActionTitle(res?.data?.message?.ar);
-						navigate("/Pages");
-						setReload(!reload);
-						setEditorValue(null);
-					} else {
-						setLoadingTitle("");
-
-						setPageError({
-							title: res?.data?.message?.en?.title?.[0],
-							page_desc: res?.data?.message?.en?.page_desc?.[0],
-							page_content: res?.data?.message?.en?.page_content?.[0],
-							seo_title: res?.data?.message?.en?.seo_title?.[0],
-							seo_link: res?.data?.message?.en?.seo_link?.[0],
-							seo_desc: res?.data?.message?.en?.seo_desc?.[0],
-							tags: res?.data?.message?.en?.tags?.[0],
-							images: res?.data?.message?.en?.image?.[0],
-						});
-
-						toast.error(res?.data?.message?.en?.title?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.page_desc?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.page_content?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.seo_title?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.seo_link?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.seo_desc?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.tags?.[0], {
-							theme: "light",
-						});
-						toast.error(res?.data?.message?.en?.image?.[0], {
-							theme: "light",
-						});
-					}
-				});
-		}
+					toast.error(res?.data?.message?.en?.title?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.page_desc?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.page_content?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.seo_title?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.seo_link?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.seo_desc?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.tags?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.image?.[0], {
+						theme: "light",
+					});
+				}
+			});
 	};
 
 	return (
@@ -485,9 +410,7 @@ const CreatePage = () => {
 															} else {
 																setDescriptionLength(true);
 															}
-														}}
-													>
-													</textarea>
+														}}></textarea>
 												)}
 											/>
 											<div className='col-12' style={{ marginTop: "-13px" }}>
@@ -760,7 +683,7 @@ const CreatePage = () => {
 																id='personal-image'
 																name='personal-image'
 															/>
-															{files.length <= 0 ? (
+															{images?.length <= 0 ? (
 																<p role='button' style={{ fontSize: "16px" }}>
 																	اختر صورة PNG أو JPG فقط{" "}
 																</p>
@@ -780,14 +703,14 @@ const CreatePage = () => {
 																}}>
 																استعراض
 															</span>
-															{files?.length !== 0 && (
+															{images?.length !== 0 && (
 																<ul
 																	style={{
 																		fontSize: "14px",
 																		overflow: "hidden",
 																	}}
 																	className='m-0'>
-																	{files}
+																	{images[0]?.name}
 																</ul>
 															)}
 														</div>
@@ -834,9 +757,9 @@ const CreatePage = () => {
 									</div>
 									<div className='col-md-2 col-6'>
 										<button
-											className='create-page-btn share-btn'
-											onClick={() => setType("push")}>
-											نشر
+											onClick={() => navigate("/Pages")}
+											className='create-page-btn share-btn'>
+											الغاء
 										</button>
 									</div>
 								</div>

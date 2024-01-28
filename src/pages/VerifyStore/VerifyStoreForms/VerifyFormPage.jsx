@@ -144,29 +144,47 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		React.useState(false);
 
 	//  use dropzone to get personal image
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"file/*": [".pdf"],
 		},
+
 		onDrop: (acceptedFiles) => {
-			setDataErrors({ ...dataErrors, file: "" });
-			setFile(
-				acceptedFiles.map((file) =>
-					Object.assign(file, {
-						preview: URL.createObjectURL(file),
-					})
-				)
-			);
+			const updatedFile = acceptedFiles?.map((file) => {
+				const isSizeValid = file.size <= maxFileSize;
+				const errorMessage = "حجم الملف يجب أن لا يزيد عن 2 ميجابايت.";
+				setDataErrors({ ...dataErrors, file: "" });
+				if (!isSizeValid) {
+					toast.warning(errorMessage, {
+						theme: "light",
+					});
+					setDataErrors({
+						...dataErrors,
+						file: errorMessage,
+					});
+					setFile([]);
+				} else {
+					setDataErrors({
+						...dataErrors,
+						file: null,
+					});
+				}
+
+				return isSizeValid
+					? Object.assign(file, { preview: URL.createObjectURL(file) })
+					: null;
+			});
+
+			setFile(updatedFile?.filter((file) => file !== null));
 		},
 	});
-
-	const files = acceptedFiles.map((file) => (
-		<li key={file.path}>{file.path}</li>
-	));
 
 	const handleOnChange = (e) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 	};
+
+	console.log(file[0]?.name);
 
 	// To get the the owner phone number
 	useEffect(() => {
@@ -176,8 +194,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			phonenumber: fetchedData?.data?.phonenumber?.startsWith("+966")
 				? fetchedData?.data?.phonenumber.slice(4)
 				: fetchedData?.data?.phonenumber?.startsWith("00966")
-					? fetchedData?.data?.phonenumber.slice(5)
-					: fetchedData?.data?.phonenumber,
+				? fetchedData?.data?.phonenumber.slice(5)
+				: fetchedData?.data?.phonenumber,
 		});
 	}, [fetchedData?.data]);
 
@@ -368,7 +386,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								{dataErrors?.verification_type && (
 									<div
 										className='important-hint me-1'
-										style={{ fontSize: "16px", whiteSpace: "normal" }}>
+										style={{ fontSize: "14px", whiteSpace: "normal" }}>
 										{dataErrors?.verification_type}
 									</div>
 								)}
@@ -492,9 +510,9 @@ const VerifyFormPage = forwardRef((props, ref) => {
 														height: "350px",
 													},
 													"& .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper":
-													{
-														height: "350px",
-													},
+														{
+															height: "350px",
+														},
 												},
 											}}
 											sx={{
@@ -552,6 +570,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
+									<div className='tax-text '>الحد الأقصى للملف 2MB</div>
+
 									<div
 										style={{
 											width: "100%",
@@ -572,7 +592,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											id='upload-docs-input'
 											name='upload-docs-input'
 										/>
-										<p className={files?.length <= 0 ? "helper" : "d-none"}>
+										<p className={file?.length <= 0 ? "helper" : "d-none"}>
 											قم رفع السجل التجاري{" "}
 										</p>
 										<span
@@ -583,19 +603,16 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											}}>
 											<UploadIcon className='upload-docs-icon' />
 										</span>
-										<ul>{files}</ul>
+										<ul>{file[0]?.name}</ul>
 									</div>
-
 									{dataErrors?.file && (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											style={{ fontSize: "1٤px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
-											<span className="mx-1">وتأكد ان صيغة الملف pdf</span>
 										</div>
 									)}
-
-									{files?.length === 0 && (
+									{!dataErrors?.file && (
 										<div className='important-hint'>
 											يجب ان تكون صيغة الملف pdf
 										</div>
@@ -644,7 +661,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						{dataErrors?.verification_type && (
 							<div
 								className='important-hint me-1'
-								style={{ fontSize: "16px", whiteSpace: "normal" }}>
+								style={{ fontSize: "14px", whiteSpace: "normal" }}>
 								{dataErrors?.verification_type}
 							</div>
 						)}
@@ -746,7 +763,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									{dataErrors?.city_id && (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											style={{ fontSize: "14px", whiteSpace: "normal" }}>
 											{dataErrors?.city_id}
 										</div>
 									)}
@@ -760,6 +777,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
+									<div className='tax-text '>الحد الأقصى للملف 2MB</div>
 									<div
 										style={{
 											width: "100%",
@@ -780,7 +798,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											id='upload-docs-input'
 											name='upload-docs-input'
 										/>
-										<p className={files.length <= 0 ? "helper" : "d-none"}>
+										<p className={file.length <= 0 ? "helper" : "d-none"}>
 											قم برفع الوثيقة
 										</p>
 
@@ -792,17 +810,16 @@ const VerifyFormPage = forwardRef((props, ref) => {
 											}}>
 											<UploadIcon className='upload-docs-icon' />
 										</span>
-										<ul>{files}</ul>
+										<ul>{file[0]?.name}</ul>
 									</div>
 									{dataErrors?.file && (
 										<div
 											className='important-hint me-1'
-											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											style={{ fontSize: "14px", whiteSpace: "normal" }}>
 											{dataErrors?.file}
-											<span className="mx-1">وتأكد ان صيغة الملف pdf</span>
 										</div>
 									)}
-									{files?.length === 0 && (
+									{!dataErrors?.file && (
 										<div className='important-hint'>
 											يجب ان تكون صيغة الملف pdf
 										</div>

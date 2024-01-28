@@ -1,26 +1,18 @@
-import React, { useState } from "react";
-
-// Third party
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-
-// Icons
 import { BiSearch } from "react-icons/bi";
 import { ArrowBack } from "../data/Icons";
-
-// Components
 import useFetch from "../Hooks/UseFetch";
 import SupportTable from "../components/Tables/SupportTable";
 
 const Support = () => {
 	const [search, setSearch] = useState("");
 
-	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/technicalSupport"
 	);
 
-	// Handle search
 	let Technicalsupports = fetchedData?.data?.Technicalsupports;
 
 	if (search !== "") {
@@ -30,6 +22,26 @@ const Support = () => {
 	} else {
 		Technicalsupports = fetchedData?.data?.Technicalsupports;
 	}
+
+	useEffect(() => {
+		window.chatId = "63e05209-0492-486a-b048-40a950fb5c25";
+		window.locale = "ar";
+		window.position = "bottom-left";
+		window.positionX = 30;
+		window.positionY = 30;
+		window.borderRadius = 3;
+		window.helpdeskURL = "https://help.atlbha.com";
+
+		const script = document.createElement("script");
+		script.src = "https://help.atlbha.com/assets/widget/zaetoon-widget.min.js";
+		script.async = true;
+		document.head.appendChild(script);
+
+		return () => {
+			document.head.removeChild(script);
+		};
+	}, []);
+
 	return (
 		<>
 			<Helmet>
@@ -55,7 +67,6 @@ const Support = () => {
 						</div>
 					</div>
 				</div>
-				{/* Search Input */}
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-md-6 col-12 d-flex justify-content-end'>
 						<div className='pages-search-bx'>
@@ -72,8 +83,6 @@ const Support = () => {
 						</div>
 					</div>
 				</div>
-				{/* Support Table */}
-
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable

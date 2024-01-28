@@ -130,7 +130,7 @@ const VerifyStore = () => {
 												{userInfo?.name === null
 													? userInfo?.user_name || "صديقي التاجر"
 													: userInfo?.name}{" "}
-												طلب توثيقك مرفوض الرجاء التوجه إلى التوثيق لتعديل
+												طلب التوثيق مرفوض الرجاء التوجه إلى التوثيق لتعديل
 												البيانات
 											</p>
 											<div className='btns-box' style={{ width: "250px" }}>
@@ -157,8 +157,7 @@ const VerifyStore = () => {
 												{userInfo?.name === null
 													? userInfo?.user_name || "صديقي التاجر"
 													: userInfo?.name}{" "}
-												المتجر الخاص بك غير مكتمل الرجاء اكمال البيانات الاساسية
-												للمتجر
+												برجاء اكمال البيانات الاساسية الخاصة بالمتجر (التوثيق)
 											</p>
 											<div className='btns-box' style={{ width: "250px" }}>
 												<Link
