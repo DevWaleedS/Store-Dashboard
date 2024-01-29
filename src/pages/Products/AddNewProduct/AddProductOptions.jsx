@@ -634,8 +634,8 @@ const AddProductOptionsModal = () => {
 								}}
 							/>
 						}>
-						<div className=' d-flex justify-content-between  align-items-center w-100'>
-							<div className='d-flex flex-row align-items-center gap-1'>
+						<div className=' d-flex justify-content-between flex-wrap  align-items-center w-100'>
+							<div className='d-flex flex-row align-items-center  gap-1'>
 								{attribute?.values?.map((value, index) => (
 									<>
 										{value?.id === index && index !== 0 && <span>/</span>}

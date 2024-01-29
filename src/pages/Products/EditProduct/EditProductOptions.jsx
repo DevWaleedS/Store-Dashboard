@@ -630,7 +630,7 @@ const AddProductOptionsModal = () => {
 								}}
 							/>
 						}>
-						<div className=' d-flex justify-content-between align-items-center w-100'>
+						<div className=' d-flex justify-content-between flex-wrap align-items-center w-100'>
 							<div className='d-flex flex-row align-items-center gap-1'>
 								{attribute?.values?.map((value, index) => (
 									<>
@@ -663,6 +663,7 @@ const AddProductOptionsModal = () => {
 									"@media(max-width:768px)": {
 										fontSize: "14px",
 										fontWeight: "500",
+										// margin: "0 auto 0 0",
 									},
 								}}>
 								متوفر عدد: {attribute?.qty}
