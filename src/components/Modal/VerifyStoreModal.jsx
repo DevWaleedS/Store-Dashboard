@@ -60,7 +60,7 @@ const VerifyStore = () => {
 			padding: "16px",
 		},
 	};
-
+	console.log(userInfo?.username);
 	return (
 		<div>
 			<Modal
@@ -81,10 +81,10 @@ const VerifyStore = () => {
 										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 											<p className='verify-message'>
 												مرحبا{" "}
-												<span className='text-bold'>
+												<span style={{ fontWeight: 600 }}>
 													{userInfo?.name === null
-														? "صديقي التاجر"
-														: userInfo?.name}
+														? userInfo?.username || "٠٠٠"
+														: userInfo?.name}{" "}
 												</span>{" "}
 												المتجر الخاص قيد المراجعة من قبل الجهات المختصة
 											</p>
@@ -100,9 +100,11 @@ const VerifyStore = () => {
 										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 											<p className='verify-message'>
 												مرحبا{" "}
-												{userInfo?.name === null
-													? userInfo?.user_name || "صديقي التاجر"
-													: userInfo?.name}{" "}
+												<span style={{ fontWeight: 600 }}>
+													{userInfo?.name === null
+														? userInfo?.username || "٠٠٠"
+														: userInfo?.name}{" "}
+												</span>
 												تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من الجهات
 												المختصة
 											</p>
@@ -127,9 +129,11 @@ const VerifyStore = () => {
 										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 											<p className='verify-message'>
 												مرحبا{" "}
-												{userInfo?.name === null
-													? userInfo?.user_name || "صديقي التاجر"
-													: userInfo?.name}{" "}
+												<span style={{ fontWeight: 600 }}>
+													{userInfo?.name === null
+														? userInfo?.username || "٠٠٠"
+														: userInfo?.name}{" "}
+												</span>
 												طلب التوثيق مرفوض الرجاء التوجه إلى التوثيق لتعديل
 												البيانات
 											</p>
@@ -154,10 +158,12 @@ const VerifyStore = () => {
 										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
 											<p className='verify-message'>
 												مرحبا{" "}
-												{userInfo?.name === null
-													? userInfo?.user_name || "صديقي التاجر"
-													: userInfo?.name}{" "}
-												برجاء اكمال البيانات الاساسية الخاصة بالمتجر (التوثيق)
+												<span style={{ fontWeight: 600 }}>
+													{userInfo?.name === null
+														? userInfo?.username || "٠٠٠"
+														: userInfo?.name}{" "}
+												</span>
+												فضلا اكمل البيانات الاساسية للمتجر لطلب التوثيق
 											</p>
 											<div className='btns-box' style={{ width: "250px" }}>
 												<Link

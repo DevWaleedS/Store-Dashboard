@@ -427,9 +427,12 @@ const MainInformation = () => {
 								<div className='row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-8 col-12'>
 										<div className='store_email'>
-											<label htmlFor='domain' className='setting_label mb-0'>
-												الدومين(رابط المتجر)
-												<span className='important-hint'>*</span>
+											<label
+												htmlFor='domain'
+												className='setting_label gap-0 mb-0'>
+												الدومين
+												<span className='important-hint ps-1'>*</span>
+												<span className='tax-text ps-1'>(رابط المتجر)</span>
 												<span
 													style={{
 														fontSize: "14px",
@@ -504,8 +507,10 @@ const MainInformation = () => {
 										<div className='store_email'>
 											<label
 												htmlFor='country_id'
-												className='setting_label d-block'>
-												الدولة<span className='important-hint'>*</span>
+												className='setting_label gap-0 d-block'>
+												الدولة
+												<span className='important-hint ps-1'>*</span>
+												<span className='tax-text '>(تلقائي)</span>
 											</label>
 										</div>
 										<div className='select-country'>
@@ -528,7 +533,28 @@ const MainInformation = () => {
 														},
 													},
 												}}
-												sx={selectStyle}
+												sx={{
+													width: "100%",
+													fontSize: "18px",
+
+													"& .MuiSelect-select.MuiSelect-outlined": {
+														paddingRight: "50px !important",
+														cursor: "auto",
+													},
+
+													"& .MuiOutlinedInput-root": {
+														border: "none",
+														"& :hover": {
+															border: "none",
+														},
+													},
+													"& .MuiOutlinedInput-notchedOutline": {
+														border: "1px solid #ededed",
+													},
+													"& .MuiSelect-icon": {
+														display: "none",
+													},
+												}}
 												IconComponent={IoIosArrowDown}
 												displayEmpty
 												inputProps={{ "aria-label": "Without label" }}

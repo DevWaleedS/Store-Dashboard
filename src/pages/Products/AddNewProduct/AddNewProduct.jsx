@@ -660,7 +660,7 @@ const AddNewProduct = () => {
 													dragProps,
 												}) => (
 													// write your building UI
-													<div className='d-flex flex-row align-items-center gap-4'>
+													<div className='d-flex flex-row align-items-center gap-1 gap-md-4'>
 														{imageList.map((image, index) => {
 															const isVideo =
 																image?.data_url?.includes(

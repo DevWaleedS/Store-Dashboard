@@ -335,7 +335,7 @@ const ShippingCompanies = () => {
 										<div className=''>
 											<div className='tax-text'>تفعيل/تعطيل الشحن الخاص </div>
 											<div
-												className='switch-box d-flex justify-content-center align-content-center mb-2'
+												className='switch-box d-flex justify-content-center align-items-center mb-2'
 												style={{
 													height: "50px",
 													backgroundColor: "#f7f8f8",
@@ -354,7 +354,9 @@ const ShippingCompanies = () => {
 													sx={switchStyle}
 												/>
 											</div>
-
+											<div className='shipping-price-hint d-flex d-md-none'>
+												تكلفة الشحن{" "}
+											</div>
 											<div
 												style={{
 													backgroundColor: !otherShipCompDetails?.status
@@ -362,7 +364,10 @@ const ShippingCompanies = () => {
 														: "#fffffff7",
 												}}
 												className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1 mb-2'>
-												<div className='shipping-price-hint'>تكلفة الشحن </div>
+												<div className='shipping-price-hint d-none d-md-flex'>
+													تكلفة الشحن{" "}
+												</div>
+
 												<input
 													type='text'
 													name='price'
@@ -398,7 +403,9 @@ const ShippingCompanies = () => {
 												تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد من
 												ذلك؟
 											</div>
-
+											<div className='shipping-price-hint d-flex d-md-none'>
+												مدة التوصيل{" "}
+											</div>
 											<div
 												style={{
 													backgroundColor: !otherShipCompDetails?.status
@@ -406,7 +413,9 @@ const ShippingCompanies = () => {
 														: "#fffffff7",
 												}}
 												className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1 mb-2'>
-												<div className='shipping-price-hint'>مدة التوصيل </div>
+												<div className='shipping-price-hint d-none d-md-flex'>
+													مدة التوصيل{" "}
+												</div>
 												<input
 													type='text'
 													name='time'

@@ -1848,8 +1848,8 @@ nav.navigation {
 	font-size: 16px !important;
 }
 .product-options .add-product-image svg,
-.product-options .add-product-image svg {
-	color: #efefef;
+.product-options .input-icon svg {
+	color: #cdcdcd;
 }
 
 .product-options .option-name-input input::placeholder,
@@ -3493,6 +3493,11 @@ nav.navigation {
 	width: 100%;
 	font-size: 20px;
 	font-weight: 500;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
 }
 
 .data-widget .switch-box {
@@ -10281,6 +10286,18 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		height: 45px;
 	}
 
+	.seo-store-page
+		.data-container
+		.inputs-group
+		.input
+		.rti--container
+		.rti--input,
+	.add-new-product-form .rti--container .rti--input {
+		width: 70%;
+		height: 35px !important;
+		padding: 0 10px !important;
+	}
+
 	.products .input-group .add-category-bt-box button {
 		height: 100%;
 		font-size: 14px;
@@ -10378,14 +10395,102 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		font-size: 18px !important;
 	}
 
-	/*  show import priducnt */
+	/* product options  */
+
+	.add-form-wrapper form .add-new-cate-btn,
+	.product-option-btn {
+		font-size: 16px;
+		font-weight: 500;
+		height: 44px;
+		padding: 10px;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+	}
+
+	.product-option-btn svg {
+		font-size: 20px;
+	}
+	.product-options .active-options-switch .switch-label {
+		height: 20px;
+		font-size: 16px;
+	}
+
+	/*  show import product  */
+
+	.product-options .options-section {
+		padding: 25px 10px 20px;
+	}
 	.import-product-multi-images div,
 	.import-product-multi-images .video_wrapper {
 		width: 70px;
 		height: 70px;
 		padding: 10px;
 	}
+	.product-options .option-name-input,
+	.product-options .option-name-input .MuiBox-root,
+	.product-options .option-select-input,
+	.product-options .option-name-input,
+	.product-options .option-color-input {
+		height: 45px;
+	}
+	.product-options .delete-option-section-icon {
+		height: 25px;
+		width: 25px;
+		padding: 5px;
+		top: -40px;
+		left: -18px;
+		position: absolute;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid #f2f5f7;
+		border-radius: 50%;
+		-webkit-border-radius: 50%;
+		-moz-border-radius: 50%;
+		-ms-border-radius: 50%;
+		-o-border-radius: 50%;
+	}
+	.product-options .delete-icon svg#icon-24-delete {
+		width: 20px;
+	}
+	.product-options .delete-option-section-icon svg#icon-24-delete {
+		width: 18px;
+	}
+	.product-options .option-name-input .input-type,
+	.product-options .option-color-input .input-type,
+	.product-options .option-name-input span,
+	.product-options .option-name-input .MuiBox-root {
+		font-size: 14px !important;
+	}
+	.product-options .option-name-input .MuiBox-root div {
+		width: 45px;
+	}
 
+	.product-options .options-section .add-new-value-btn,
+	.product-options .add-new-option-section-btn {
+		height: 44px;
+		padding: 10px;
+		font-size: 16px;
+		font-weight: 500;
+	}
+
+	.product-options .add-product-image {
+		font-size: 12px;
+		font-weight: 500;
+		padding: 0 3px;
+	}
+	.ProductImageModal-content {
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+		padding: 6px;
+		left: 11%;
+		top: 100px;
+	}
 	/* add-new-product */
 	.form-title {
 		padding: 20px 16px;
@@ -10432,6 +10537,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.add-form-wrapper .banners-preview-container {
 		width: 75px;
 		height: 70px;
+	}
+
+	.add-new-product-form .add-product-images {
+		width: 100px;
+		height: 60px;
 	}
 
 	.add-form-wrapper .banners-preview-container.import-product-PreviewImage {
@@ -12237,6 +12347,26 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.cart-page h3 {
 		font-size: 26px;
 		margin-bottom: 1.5rem;
+	}
+
+	.other-shipping-company .shipping-price-hint {
+		background: transparent;
+		justify-content: start;
+	}
+
+	.other-shipping-company .shipping-price-input-box {
+		height: 48px;
+	}
+
+	.other-shipping-company .shipping-price-input-box .currency {
+		font-size: 16px;
+	}
+
+	.other-shipping-company .save-price-btn {
+		height: 48px;
+
+		font-size: 18px;
+		font-weight: 500;
 	}
 }
 

@@ -50,6 +50,13 @@ const style = {
 	transform: "translate(-50%, 0%)",
 	width: "992px",
 	maxWidth: "90%",
+	paddingBottom: "30px",
+	"@media(max-width:768px)": {
+		position: "absolute",
+		top: "10px",
+
+		maxWidth: "95%",
+	},
 };
 
 /* switch style */
@@ -378,7 +385,12 @@ const AddProductOptionsModal = () => {
 	/** Handle mapping the options sections */
 	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
 		<section key={section?.id} className='options-section'>
-			<section className='mb-4 d-flex justify-content-start align-items-center gap-3'>
+			<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
+				{optionsSection?.length > 1 && (
+					<div className='delete-icon delete-option-section-icon d-flex d-md-none me-auto'>
+						<DeleteIcon onClick={() => handleDeleteBlock(sectionIndex)} />
+					</div>
+				)}
 				<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
 					<div className='input-icon'>
 						<TfiWrite />
@@ -440,7 +452,7 @@ const AddProductOptionsModal = () => {
 					</Select>
 				</div>
 				{optionsSection?.length > 1 && (
-					<div className='delete-icon delete-option-section-icon'>
+					<div className='delete-icon delete-option-section-icon d-none d-md-flex'>
 						<DeleteIcon onClick={() => handleDeleteBlock(sectionIndex)} />
 					</div>
 				)}
