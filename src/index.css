@@ -910,6 +910,7 @@ textarea {
 	fill: #02466a;
 	position: absolute;
 	top: 20px;
+	left: -115px;
 }
 
 .date-picker .rs-picker-toggle-textbox {
@@ -9476,6 +9477,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.checkout-page .block .card .card-body {
 		padding: 1rem;
 	}
+
+	.rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean svg {
+		left: -90px;
+	}
 }
 
 @media (max-width: 992px) {
@@ -9702,6 +9707,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.cart-page .card .card-body table td,
 	.cart-page .card .card-body table th {
 		font-size: 0.9rem;
+	}
+
+	.rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean svg {
+		left: -20px;
 	}
 }
 
@@ -12382,6 +12391,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 		font-size: 18px;
 		font-weight: 500;
+	}
+
+	.rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean svg {
+		top: 16px;
+		left: -128px;
 	}
 }
 
