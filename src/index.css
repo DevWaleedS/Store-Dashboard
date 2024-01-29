@@ -10419,7 +10419,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	/*  show import product  */
-
 	.product-options .options-section {
 		padding: 25px 10px 20px;
 	}
@@ -10491,6 +10490,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		left: 11%;
 		top: 100px;
 	}
+
+	.products-attr .MuiAccordionSummary-root {
+		padding: 0 5px !important;
+	}
+	
 	/* add-new-product */
 	.form-title {
 		padding: 20px 16px;
@@ -12356,6 +12360,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.other-shipping-company .shipping-price-input-box {
 		height: 48px;
+	}
+
+	.other-shipping-company .shipping-price {
+		font-size: 16px;
 	}
 
 	.other-shipping-company .shipping-price-input-box .currency {

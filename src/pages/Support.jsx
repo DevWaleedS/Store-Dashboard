@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { ArrowBack } from "../data/Icons";
 import useFetch from "../Hooks/UseFetch";
@@ -8,7 +8,6 @@ import SupportTable from "../components/Tables/SupportTable";
 
 const Support = () => {
 	const [search, setSearch] = useState("");
-	const SupportPageRef = React.useRef(true);
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/technicalSupport"
@@ -23,30 +22,6 @@ const Support = () => {
 	} else {
 		Technicalsupports = fetchedData?.data?.Technicalsupports;
 	}
-	useEffect(() => {
-		if (SupportPageRef.current) {
-			SupportPageRef.current = false;
-
-			window.chatId = "1fdb1fc2-e162-4b7b-aeb4-0c0cabc03cd0";
-			window.locale = "ar";
-			window.position = "bottom-left";
-			window.positionX = 30;
-			window.positionY = 30;
-			window.borderRadius = 3;
-			window.helpdeskURL = "https://help.atlbha.com";
-
-			const script = document.createElement("script");
-			script.src =
-				"https://help.atlbha.com/assets/widget/zaetoon-widget.min.js";
-
-			script.async = true;
-			document.head.appendChild(script);
-
-			return () => {
-				document.head.removeChild(script);
-			};
-		}
-	}, [SupportPageRef]);
 
 	return (
 		<>

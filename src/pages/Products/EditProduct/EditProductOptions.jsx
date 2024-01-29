@@ -614,7 +614,7 @@ const AddProductOptionsModal = () => {
 		<>
 			<section
 				key={attributeIndex}
-				className=' flex justify-start items-center gap-3 mb-3'>
+				className=' flex justify-start items-center gap-3 mb-3 products-attr'>
 				<Accordion
 					expanded={expanded === attributeIndex}
 					onChange={handleChange(attributeIndex)}>
@@ -642,6 +642,11 @@ const AddProductOptionsModal = () => {
 												fontWeight: "400",
 												fontFamily: "Tajawal",
 												color: "#023855",
+
+												"@media(max-width:768px)": {
+													fontSize: "15px",
+													fontWeight: "500",
+												},
 											}}>
 											{value?.title}
 										</Typography>
@@ -654,8 +659,13 @@ const AddProductOptionsModal = () => {
 									fontWeight: "400",
 									fontFamily: "Tajawal",
 									color: "#023855",
+
+									"@media(max-width:768px)": {
+										fontSize: "14px",
+										fontWeight: "500",
+									},
 								}}>
-								متوفر عدد {attribute?.qty}
+								متوفر عدد: {attribute?.qty}
 							</Typography>
 						</div>
 					</AccordionSummary>
