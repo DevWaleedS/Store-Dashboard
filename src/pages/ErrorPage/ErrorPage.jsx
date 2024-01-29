@@ -8,7 +8,7 @@ export default function ErrorPage() {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | صفحة غير موجودة</title>
+				<title>لوحة تحكم اطلبها | صفحة غير موجودة</title>
 			</Helmet>
 			<div
 				id='error-page'

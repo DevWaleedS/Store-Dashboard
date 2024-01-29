@@ -555,7 +555,7 @@ const EditProduct = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل منتج</title>
+				<title>لوحة تحكم اطلبها | تعديل منتج</title>
 			</Helmet>
 			{url !== "" && videoModal()}
 			<div className='add-category-form' open={true}>

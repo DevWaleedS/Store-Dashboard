@@ -144,7 +144,7 @@ const EditRole = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل دور</title>
+				<title>لوحة تحكم اطلبها | تعديل دور</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal

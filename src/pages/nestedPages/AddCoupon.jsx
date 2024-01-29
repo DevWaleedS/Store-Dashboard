@@ -32,7 +32,7 @@ import "react-datepicker/dist/react-datepicker.css";
 // icons
 import { IoIosArrowDown } from "react-icons/io";
 import { DateIcon, SearchIcon } from "../../data/Icons";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 // Modal Style
 const style = {
@@ -160,7 +160,9 @@ const AddCoupon = () => {
 			(product) => product.id === productId
 		);
 		setSelectedProducts((prevSelectedProducts) =>
-			prevSelectedProducts?.some((product) => product?.id === selectedProduct?.id)
+			prevSelectedProducts?.some(
+				(product) => product?.id === selectedProduct?.id
+			)
 				? prevSelectedProducts
 				: [...prevSelectedProducts, selectedProduct]
 		);
@@ -257,14 +259,16 @@ const AddCoupon = () => {
 	};
 
 	const deleteItemFromSelectedProduct = (id) => {
-		const newLists = selectedProducts?.filter((__product, index) => index !== id);
+		const newLists = selectedProducts?.filter(
+			(__product, index) => index !== id
+		);
 		setSelectedProducts(newLists);
-	}
-	
+	};
+
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | اضافة كود خصم</title>
+				<title>لوحة تحكم اطلبها | اضافة كود خصم</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -596,7 +600,7 @@ const AddCoupon = () => {
 													<input
 														type='text'
 														id='add-ptice'
-														placeholder='ادخل مبلغ الحد الأدني من المشتريات'
+														placeholder='ادخل مبلغ الحد الأدنى من المشتريات'
 														name='total_price'
 														value={value}
 														onChange={(e) =>
@@ -802,9 +806,20 @@ const AddCoupon = () => {
 
 													<ul className='purchase_products_selected'>
 														{selectedProducts?.map((product, index) => (
-															<li className="d-flex flex-row align-items-center gap-2" key={product?.id}>
+															<li
+																className='d-flex flex-row align-items-center gap-2'
+																key={product?.id}>
 																<span>_ {product?.name}</span>
-																<CloseOutlinedIcon style={{ fontSize: "1.2rem", color: "#ff0000", cursor: "pointer" }} onClick={() => deleteItemFromSelectedProduct(index)} />
+																<CloseOutlinedIcon
+																	style={{
+																		fontSize: "1.2rem",
+																		color: "#ff0000",
+																		cursor: "pointer",
+																	}}
+																	onClick={() =>
+																		deleteItemFromSelectedProduct(index)
+																	}
+																/>
 															</li>
 														))}
 													</ul>
@@ -822,9 +837,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",
@@ -897,9 +912,9 @@ const AddCoupon = () => {
 															sx={{
 																fontSize: "18px",
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+																	{
+																		paddingRight: "20px",
+																	},
 																"& .MuiOutlinedInput-root": {
 																	"& :hover": {
 																		border: "none",

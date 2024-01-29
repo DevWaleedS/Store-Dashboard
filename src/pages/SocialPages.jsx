@@ -149,7 +149,7 @@ const SocialPages = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | التواصل الاجتماعي</title>
+				<title>لوحة تحكم اطلبها | التواصل الاجتماعي</title>
 			</Helmet>
 			<section className='social-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

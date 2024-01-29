@@ -75,7 +75,7 @@ const UploadStoreIcon = ({
 					<label htmlFor='upload-icon' className='setting_label'>
 						ايقونة تبويب المتجر في المتصفح
 						<span className='tax-text'>
-							(المقاس الأنسب 32 بكسل عرض 32 بكسل الارتفاع)
+							(المقاس الأنسب 32 بكسل عرض و 32 بكسل الارتفاع)
 						</span>
 					</label>
 					<div>

@@ -238,7 +238,7 @@ const OfferDetails = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | بيانات العرض</title>
+				<title>لوحة تحكم اطلبها | بيانات العرض</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal

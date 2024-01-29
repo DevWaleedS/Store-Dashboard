@@ -384,7 +384,7 @@ const OrderDetails = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تفاصيل الطلب</title>
+				<title>لوحة تحكم اطلبها | تفاصيل الطلب</title>
 			</Helmet>
 
 			<section className='order-details-page orders-pages p-md-3' id='report'>

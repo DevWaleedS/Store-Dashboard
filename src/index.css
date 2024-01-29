@@ -2286,7 +2286,7 @@ nav.navigation {
 	margin: 0 auto;
 }
 
-/* Seo key words  input srtyle  */
+/* Seo key words  input style  */
 .rti--container {
 	height: 200px !important;
 	align-items: flex-start !important;
@@ -2296,6 +2296,7 @@ nav.navigation {
 	--rti-border: var(--gray-100) !important;
 	--rti-radius: "4px" !important;
 	font-size: 20px !important;
+	overflow-y: auto;
 }
 
 .rti--container input::placeholder {
@@ -10117,7 +10118,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		flex: 1;
 		flex: auto;
 	}
-
+	.order-toolbar .search-input-box input {
+		padding-right: 5px;
+		font-size: 16px;
+	}
+	.order-toolbar .search-input-box input::placeholder {
+		font-size: 12px;
+	}
 	.order-toolbar .select-input-box {
 		flex: 1;
 		height: 46px;

@@ -26,7 +26,7 @@ const Support = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الدعم الفني</title>
+				<title>لوحة تحكم اطلبها | الدعم الفني</title>
 			</Helmet>
 			<section className='pages-page p-lg-3'>
 				<div className='head-category mb-md-4 mb-3'>

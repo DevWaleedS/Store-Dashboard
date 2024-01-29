@@ -197,7 +197,7 @@ const EditPage = () => {
 				const img = new Image();
 
 				const errorMes = `
-				<span> - الحد الأدني للأبعاد هو 300بكسل عرض و 150بكسل ارتفاع</span>
+				<span> - الحد الأدنى للأبعاد هو 300بكسل عرض و 150بكسل ارتفاع</span>
 				 <br />
 				<span> - الحد الأقصى للأبعاد هو 600بكسل عرض و 300بكسل ارتفاع</span> `;
 
@@ -356,7 +356,7 @@ const EditPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل صفحة</title>
+				<title>لوحة تحكم اطلبها | تعديل صفحة</title>
 			</Helmet>
 			<div open={true}>
 				<Modal

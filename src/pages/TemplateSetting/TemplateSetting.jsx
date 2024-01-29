@@ -13,7 +13,7 @@ const TemplateSetting = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | القالب</title>
+				<title>لوحة تحكم اطلبها | القالب</title>
 			</Helmet>
 			<section className='template-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

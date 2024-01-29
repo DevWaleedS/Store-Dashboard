@@ -73,7 +73,7 @@ const EvaluationThePlatform = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تقييم المنصة</title>
+				<title>لوحة تحكم اطلبها | تقييم المنصة</title>
 			</Helmet>
 			<section className='academy-page evaluationThePlatform p-lg-3'>
 				{/** pagination  */}
@@ -100,7 +100,7 @@ const EvaluationThePlatform = () => {
 				<div className='row mb-5'>
 					<div className='col-12'>
 						<div className='label d-flex align-items-center justify-content-center text-center'>
-							قم بتقييم تجربة استخدامك لمنصة أطلبها
+							قم بتقييم تجربة استخدامك لمنصة اطلبها
 						</div>
 						<div className='evaluation-the-platform'>
 							<TextEditor

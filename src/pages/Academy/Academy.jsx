@@ -30,7 +30,7 @@ const Academy = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الأكاديمية</title>
+				<title>لوحة تحكم اطلبها | الأكاديمية</title>
 			</Helmet>
 			<section className='academy-page p-lg-3'>
 				<div className='head-category mb-md-5 mb-3'>

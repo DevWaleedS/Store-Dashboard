@@ -39,7 +39,7 @@ const UploadStoreLogo = ({
 		const img = new Image();
 
 		const errorMes = `
-				<span> - الحد الأدني للأبعاد هو 110 عرض و 110 ارتفاع</span>
+				<span> - الحد الأدنى للأبعاد هو 110 عرض و 110 ارتفاع</span>
 				 <br />
 				<span> - الحد الأقصى للأبعاد هو 160 بكسل عرض و 114 ارتفاع</span> `;
 
@@ -117,35 +117,31 @@ const UploadStoreLogo = ({
 												className='img-fluid'
 											/>
 										</div>
-									) :
-										defaultStoreLogo ?
-											(
-												<div className='upload-image-bx mb-2'>
-													<img
-														src={defaultStoreLogo}
-														alt={""}
-														className='img-fluid'
-													/>
-												</div>
-											)
-											:
-											(
-												<div
-													style={{ cursor:"pointer" }}
-													onClick={() => {
-														onImageUpload();
-													}}
-													className='h-100 d-flex flex-column align-items-center justify-content-center gap-3'
-													{...dragProps}
-												>
-													<UploadIcon width="40px" height="40px" />
-													<div className='add-image-btn'>
-														<label htmlFor='add-image'> اسحب الصورة هنا</label>
-													</div>
-													<span style={{ fontSize: "1rem", color: "#7d7d7d" }}>( سيتم قبول الصور jpeg & png & jpg )</span>
-												</div>
-											)
-									}
+									) : defaultStoreLogo ? (
+										<div className='upload-image-bx mb-2'>
+											<img
+												src={defaultStoreLogo}
+												alt={""}
+												className='img-fluid'
+											/>
+										</div>
+									) : (
+										<div
+											style={{ cursor: "pointer" }}
+											onClick={() => {
+												onImageUpload();
+											}}
+											className='h-100 d-flex flex-column align-items-center justify-content-center gap-3'
+											{...dragProps}>
+											<UploadIcon width='40px' height='40px' />
+											<div className='add-image-btn'>
+												<label htmlFor='add-image'> اسحب الصورة هنا</label>
+											</div>
+											<span style={{ fontSize: "1rem", color: "#7d7d7d" }}>
+												( سيتم قبول الصور jpeg & png & jpg )
+											</span>
+										</div>
+									)}
 								</div>
 
 								{/** upload btn */}

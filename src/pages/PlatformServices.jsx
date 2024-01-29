@@ -130,7 +130,7 @@ const PlatformServices = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | خدمات المنصة</title>
+				<title>لوحة تحكم اطلبها | خدمات المنصة</title>
 			</Helmet>
 			<section className='PlatformServices-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

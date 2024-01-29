@@ -142,7 +142,7 @@ function CartPage() {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | سلة الاستيراد </title>
+				<title>لوحة تحكم اطلبها | سلة الاستيراد </title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
 				<div className='head-category'>
@@ -157,7 +157,7 @@ function CartPage() {
 								</li>
 								<li className='breadcrumb-item' aria-current='page'>
 									<Link to='/Products/SouqOtlobha' className='me-2'>
-										سوق أطلبها
+										سوق اطلبها
 									</Link>
 								</li>
 								<li className='breadcrumb-item active' aria-current='page'>
@@ -168,7 +168,7 @@ function CartPage() {
 					</div>
 				</div>
 				<div className='cart-page'>
-					<h3>سلة استيراد منتجات سوق أطلبها</h3>
+					<h3>سلة استيراد منتجات سوق اطلبها</h3>
 					<div className='block'>
 						<div className='container'>
 							{loading ? (
@@ -215,9 +215,10 @@ function CartPage() {
 																			Number(product?.product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${+product?.product?.stock === 1
-																					? "قطعة واحدة "
-																					: +product?.product?.stock === 2
+																				`الكمية المتوفرة ${
+																					+product?.product?.stock === 1
+																						? "قطعة واحدة "
+																						: +product?.product?.stock === 2
 																						? " قطعتين "
 																						: ` ${+product?.product?.stock} قطع`
 																				} فقط `
@@ -239,31 +240,38 @@ function CartPage() {
 																			Number(product?.product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${+product?.product?.stock === 1
-																					? "قطعة واحدة "
-																					: +product?.product?.stock === 2
+																				`الكمية المتوفرة ${
+																					+product?.product?.stock === 1
+																						? "قطعة واحدة "
+																						: +product?.product?.stock === 2
 																						? " قطعتين "
 																						: ` ${+product?.product?.stock} قطع`
 																				} فقط `
 																			);
-																		} else if (Number(e.target.value) < Number(product?.product?.less_qty)) {
+																		} else if (
+																			Number(e.target.value) <
+																			Number(product?.product?.less_qty)
+																		) {
 																			toast.error(
-																				`أقل كمية للطلب هي ${+product?.product?.less_qty}`
+																				`أقل كمية للطلب هي ${+product?.product
+																					?.less_qty}`
 																			);
-																		}
-																		else {
+																		} else {
 																			updateQtyValue(index, e);
 																		}
 																	}}
 																/>
 																<button
 																	onClick={(e) => {
-																		if (Number(product?.qty) - 1 < Number(product?.product?.less_qty)) {
+																		if (
+																			Number(product?.qty) - 1 <
+																			Number(product?.product?.less_qty)
+																		) {
 																			toast.error(
-																				`أقل كمية للطلب هي ${+product?.product?.less_qty}`
+																				`أقل كمية للطلب هي ${+product?.product
+																					?.less_qty}`
 																			);
-																		}
-																		else {
+																		} else {
 																			handleDecrement(index);
 																		}
 																	}}
@@ -290,7 +298,7 @@ function CartPage() {
 									</div>
 									<div className='actions'>
 										<div className='buttons'>
-											<Link to='/Products/SouqOtlobha'>العودة لسوق أطلبها</Link>
+											<Link to='/Products/SouqOtlobha'>العودة لسوق اطلبها</Link>
 											<button
 												onClick={() => updateCart()}
 												type='button'
@@ -349,7 +357,7 @@ function CartPage() {
 							) : (
 								<div className='empty'>
 									<span>سلة الاستيراد الخاصة بك فارغة!</span>
-									<Link to='/Products/SouqOtlobha'>العودة إلى سوق أطلبها</Link>
+									<Link to='/Products/SouqOtlobha'>العودة إلى سوق اطلبها</Link>
 								</div>
 							)}
 						</div>

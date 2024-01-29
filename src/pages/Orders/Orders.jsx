@@ -36,9 +36,7 @@ const Orders = () => {
 				order?.shippingtypes?.name
 					?.toLowerCase()
 					?.includes(search?.toLowerCase()) ||
-				order?.user?.name
-					?.toLowerCase()
-					?.includes(search?.toLowerCase())
+				order?.user?.name?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
 		orders = fetchedData?.data?.orders;
@@ -78,7 +76,7 @@ const Orders = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الطلبات</title>
+				<title>لوحة تحكم اطلبها | الطلبات</title>
 			</Helmet>
 			<section className='orders-pages p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

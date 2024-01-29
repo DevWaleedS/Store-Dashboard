@@ -139,6 +139,7 @@ function EnhancedTableToolbar(props) {
 						</div>
 						<div className='w-100 d-flex flex-row align-items-center gap-3 flex-wrap justify-content-end'>
 							<div></div>
+
 							<div className='search-input-box'>
 								<FiSearch />
 								<input

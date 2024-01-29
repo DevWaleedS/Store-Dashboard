@@ -306,7 +306,7 @@ const EditUserDetails = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل حسابي</title>
+				<title>لوحة تحكم اطلبها | تعديل حسابي</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal

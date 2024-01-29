@@ -52,7 +52,7 @@ const Management = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الإدارة و المستخدمين</title>
+				<title>لوحة تحكم اطلبها | الإدارة و المستخدمين</title>
 			</Helmet>
 			<section className='management-page p-lg-3'>
 				<div className='head-category mb-md-4'>

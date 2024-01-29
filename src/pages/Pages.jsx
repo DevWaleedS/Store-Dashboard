@@ -114,7 +114,7 @@ const Pages = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الصفحات</title>
+				<title>لوحة تحكم اطلبها | الصفحات</title>
 			</Helmet>
 			<section className='pages-page p-lg-3'>
 				<div className='head-category mb-md-4 mb-3'>

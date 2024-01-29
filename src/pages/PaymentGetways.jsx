@@ -59,7 +59,7 @@ const PaymentGetways = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | بوابات الدفع</title>
+				<title>لوحة تحكم اطلبها | بوابات الدفع</title>
 			</Helmet>
 			<section className='payment-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

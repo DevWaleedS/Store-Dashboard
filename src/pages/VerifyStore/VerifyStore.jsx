@@ -52,7 +52,7 @@ const VerifyStore = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | توثيق المتجر</title>
+				<title>لوحة تحكم اطلبها | توثيق المتجر</title>
 			</Helmet>
 			<section className='verify-store-page p-lg-3'>
 				<div className='head-category mb-md-4 mb-2'>

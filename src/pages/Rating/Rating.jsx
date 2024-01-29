@@ -140,7 +140,7 @@ const Rating = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الأسئلة والتقييمات </title>
+				<title>لوحة تحكم اطلبها | الأسئلة والتقييمات </title>
 			</Helmet>
 			<section className='rating-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

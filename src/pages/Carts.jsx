@@ -31,7 +31,7 @@ const Carts = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | السلات المتروكة</title>
+				<title>لوحة تحكم اطلبها | السلات المتروكة</title>
 			</Helmet>
 			<section className='carts-page p-lg-3'>
 				<div className='head-category mb-md-4'>

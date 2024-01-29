@@ -79,10 +79,10 @@ const userStatusArray = [
 	{ id: 2, nameAr: "غير مفعل", nameEn: "not_active" },
 ];
 const EditUserPage = () => {
-		const store_token = document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1];
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { id } = useParams();
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
@@ -321,7 +321,7 @@ const EditUserPage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل مستخدم</title>
+				<title>لوحة تحكم اطلبها | تعديل مستخدم</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal

@@ -163,7 +163,7 @@ const CreatePage = () => {
 				const img = new Image();
 
 				const errorMes = `
-				<span> - الحد الأدني للأبعاد هو 300بكسل عرض و 150بكسل ارتفاع</span>
+				<span> - الحد الأدنى للأبعاد هو 300بكسل عرض و 150بكسل ارتفاع</span>
 				 <br />
 				<span> - الحد الأقصى للأبعاد هو 600بكسل عرض و 300بكسل ارتفاع</span> `;
 
@@ -319,7 +319,7 @@ const CreatePage = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | اضافة صفحة</title>
+				<title>لوحة تحكم اطلبها | اضافة صفحة</title>
 			</Helmet>
 			<div open={true}>
 				<Modal

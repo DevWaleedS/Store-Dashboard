@@ -335,7 +335,7 @@ const MainInformation = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | بيانات المتجر الأساسية</title>
+				<title>لوحة تحكم اطلبها | بيانات المتجر الأساسية</title>
 			</Helmet>
 
 			<section className='main-info-page p-lg-3'>

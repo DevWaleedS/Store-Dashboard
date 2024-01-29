@@ -53,7 +53,7 @@ const Report = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | التقارير</title>
+				<title>لوحة تحكم اطلبها | التقارير</title>
 			</Helmet>
 			<section className='reports-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

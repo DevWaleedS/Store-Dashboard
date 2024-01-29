@@ -241,7 +241,7 @@ const ShippingCompanies = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | شركات الشحن</title>
+				<title>لوحة تحكم اطلبها | شركات الشحن</title>
 			</Helmet>
 			<section className='shipping-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

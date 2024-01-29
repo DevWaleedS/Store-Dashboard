@@ -21,7 +21,7 @@ const DashboardHomePage = () => {
 	return (
 		<Fragment>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الرئيسية</title>
+				<title>لوحة تحكم اطلبها | الرئيسية</title>
 			</Helmet>
 			{/** TOP SECTION */}
 			<section className='top-section mt-md-5 mb-md-5 mb-4'>

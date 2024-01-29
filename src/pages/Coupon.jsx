@@ -39,9 +39,9 @@ const selectFilterStyles = {
 	backgroundColor: "aliceblue",
 	color: "#02466a",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-	{
-		paddingRight: "35px",
-	},
+		{
+			paddingRight: "35px",
+		},
 
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
@@ -122,7 +122,7 @@ const Coupon = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | أكواد الخصم</title>
+				<title>لوحة تحكم اطلبها | أكواد الخصم</title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
 				<div className='head-category'>

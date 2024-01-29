@@ -21,7 +21,7 @@ const PackageUpgrade = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تطوير الباقة</title>
+				<title>لوحة تحكم اطلبها | تطوير الباقة</title>
 			</Helmet>
 			<section className='carts-page p-lg-3'>
 				<div className='col-12 d-md-none d-flex'>

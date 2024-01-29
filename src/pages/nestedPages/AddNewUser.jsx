@@ -82,11 +82,10 @@ const userStatusArray = [
 ];
 
 const AddNewUser = () => {
-
-		const store_token = document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1];
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const { fetchedData: roles } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/roles"
 	);
@@ -274,7 +273,7 @@ const AddNewUser = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | اضافة مستخدم</title>
+				<title>لوحة تحكم اطلبها | اضافة مستخدم</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal

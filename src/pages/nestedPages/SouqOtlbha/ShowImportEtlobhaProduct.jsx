@@ -211,7 +211,7 @@ const ShowImportEtlobhaProduct = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل منتج مستورد</title>
+				<title>لوحة تحكم اطلبها | تعديل منتج مستورد</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal

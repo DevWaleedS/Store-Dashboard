@@ -52,7 +52,7 @@ const PostalSubscriptions = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الاشتراكات البريدية</title>
+				<title>لوحة تحكم اطلبها | الاشتراكات البريدية</title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
 				<div className='head-category'>

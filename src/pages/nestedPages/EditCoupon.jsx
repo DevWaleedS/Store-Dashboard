@@ -34,7 +34,7 @@ import { FormControlLabel, Switch } from "@mui/material";
 import { IoIosArrowDown } from "react-icons/io";
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 // Modal Style
 const style = {
@@ -229,12 +229,12 @@ const EditCoupon = () => {
 			fetchedData?.data?.Coupons?.coupon_apply === "selected_product"
 				? "selected_product"
 				: fetchedData?.data?.Coupons?.coupon_apply === "selected_category"
-					? "selected_category"
-					: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
-						? "selected_payment"
-						: fetchedData?.data?.Coupons?.coupon_apply === "all"
-							? "all"
-							: null
+				? "selected_category"
+				: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
+				? "selected_payment"
+				: fetchedData?.data?.Coupons?.coupon_apply === "all"
+				? "all"
+				: null
 		);
 
 		setSelectedProducts(
@@ -383,14 +383,16 @@ const EditCoupon = () => {
 	};
 
 	const deleteItemFromSelectedProduct = (id) => {
-		const newLists = selectedProducts?.filter((__product, index) => index !== id);
+		const newLists = selectedProducts?.filter(
+			(__product, index) => index !== id
+		);
 		setSelectedProducts(newLists);
-	}
+	};
 
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل كود خصم</title>
+				<title>لوحة تحكم اطلبها | تعديل كود خصم</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -431,9 +433,9 @@ const EditCoupon = () => {
 													</button>
 												</Fragment>
 											) : moment(
-												fetchedData?.data?.Coupons?.expire_date,
-												"YYYY-MM-DD"
-											).toDate() < currentDate ? (
+													fetchedData?.data?.Coupons?.expire_date,
+													"YYYY-MM-DD"
+											  ).toDate() < currentDate ? (
 												<Fragment>
 													<div className='coupon-status disabled'>منتهي</div>
 
@@ -447,8 +449,8 @@ const EditCoupon = () => {
 													</button>
 													{activeCoupon && (
 														<div style={{ fontSize: "16px", color: "red" }}>
-															يرجي تحديث تاريخ الانتهاء لكي يتم إعادة تفعيل
-															كود الخصم
+															يرجي تحديث تاريخ الانتهاء لكي يتم إعادة تفعيل كود
+															الخصم
 														</div>
 													)}
 												</Fragment>
@@ -552,14 +554,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='discount_type'
-															// disabled={isEnable === "نشط" ? false : true}
+																// disabled={isEnable === "نشط" ? false : true}
 															>
 																<div className='radio-box'>
 																	<FormControlLabel
 																		value='percent'
 																		id='percent-price'
 																		control={<Radio />}
-																	// disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -576,7 +578,7 @@ const EditCoupon = () => {
 																		value='fixed'
 																		id='fixed-price'
 																		control={<Radio />}
-																	// disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -735,14 +737,14 @@ const EditCoupon = () => {
 																value={value}
 																onChange={onChange}
 																name='free_shipping'
-															// disabled={isEnable === "نشط" ? false : true}
+																// disabled={isEnable === "نشط" ? false : true}
 															>
 																<div className='radio-box '>
 																	<FormControlLabel
 																		value={1}
 																		id='accept-free-shipping'
 																		control={<Radio />}
-																	// disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -757,7 +759,7 @@ const EditCoupon = () => {
 																		value={0}
 																		id='no-free-shipping'
 																		control={<Radio />}
-																	// disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -799,7 +801,7 @@ const EditCoupon = () => {
 																type='text'
 																name='total_price'
 																id='add-ptice'
-																placeholder=' ادخل مبلغ الحد الأدني من المشتريات'
+																placeholder=' ادخل مبلغ الحد الأدنى من المشتريات'
 																// disabled={isEnable === "نشط" ? false : true}
 																value={value}
 																onChange={(e) =>
@@ -907,7 +909,7 @@ const EditCoupon = () => {
 																		value='all'
 																		id='all'
 																		control={<Radio />}
-																	// disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -924,7 +926,7 @@ const EditCoupon = () => {
 																		value='selected_product'
 																		id='selected_product'
 																		control={<Radio />}
-																	// disabled={isEnable === "نشط" ? false : true}
+																		// disabled={isEnable === "نشط" ? false : true}
 																	/>
 																	<label
 																		className={
@@ -1020,9 +1022,20 @@ const EditCoupon = () => {
 
 															<ul className='purchase_products_selected'>
 																{selectedProducts?.map((product, index) => (
-																	<li className="d-flex flex-row align-items-center gap-2" key={product?.id}>
+																	<li
+																		className='d-flex flex-row align-items-center gap-2'
+																		key={product?.id}>
 																		<span>_ {product?.name}</span>
-																		<CloseOutlinedIcon style={{ fontSize: "1.2rem", color: "#ff0000", cursor: "pointer" }} onClick={() => deleteItemFromSelectedProduct(index)} />
+																		<CloseOutlinedIcon
+																			style={{
+																				fontSize: "1.2rem",
+																				color: "#ff0000",
+																				cursor: "pointer",
+																			}}
+																			onClick={() =>
+																				deleteItemFromSelectedProduct(index)
+																			}
+																		/>
 																	</li>
 																))}
 															</ul>
@@ -1041,9 +1054,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																			{
+																				paddingRight: "20px",
+																			},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",
@@ -1118,9 +1131,9 @@ const EditCoupon = () => {
 																	sx={{
 																		fontSize: "18px",
 																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																		{
-																			paddingRight: "20px",
-																		},
+																			{
+																				paddingRight: "20px",
+																			},
 																		"& .MuiOutlinedInput-root": {
 																			"& :hover": {
 																				border: "none",

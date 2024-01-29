@@ -48,7 +48,7 @@ const Offers = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | العروض الخاصة</title>
+				<title>لوحة تحكم اطلبها | العروض الخاصة</title>
 			</Helmet>
 			<section className='offers-page p-lg-3'>
 				<div className='head-category'>

@@ -65,7 +65,7 @@ const JobTitles = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الأدوار الوظيفية</title>
+				<title>لوحة تحكم اطلبها | الأدوار الوظيفية</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal

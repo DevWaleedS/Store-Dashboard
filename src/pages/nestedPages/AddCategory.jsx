@@ -52,10 +52,10 @@ const style = {
 };
 
 const AddCategory = () => {
-		const store_token = document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1];
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
@@ -177,7 +177,7 @@ const AddCategory = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | اضافة نشاط</title>
+				<title>لوحة تحكم اطلبها | اضافة نشاط</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal
@@ -194,9 +194,7 @@ const AddCategory = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> اضافة نشاط</h5>
-										<p>
-											قم بتحديث النشاط والمعلومات الضرورية من هنا
-										</p>
+										<p>قم بتحديث النشاط والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>

@@ -68,7 +68,7 @@ const UserData = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تفاصيل المستخدم</title>
+				<title>لوحة تحكم اطلبها | تفاصيل المستخدم</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal

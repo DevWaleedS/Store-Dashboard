@@ -78,7 +78,7 @@ function Main() {
 		<>
 			<Helmet>
 				<meta />
-				<title>أطلبها</title>
+				<title>اطلبها</title>
 				<meta name='description' content='معنى جديد للتجارة الإلكترونية' />
 			</Helmet>
 			<div className='main-in-box' dir='ltr'>

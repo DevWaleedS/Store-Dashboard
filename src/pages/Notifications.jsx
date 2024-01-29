@@ -20,8 +20,8 @@ import { NotificationContext } from "../Context/NotificationProvider";
 import Checkbox from "@mui/material/Checkbox";
 
 // Icons
-import { CheckedSquare, DeleteIcon,Reports } from "../data/Icons";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { CheckedSquare, DeleteIcon, Reports } from "../data/Icons";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 const Notifications = () => {
 	const store_token = document.cookie
@@ -173,23 +173,26 @@ const Notifications = () => {
 	}, [confirm]);
 
 	const readMoreModal = () => {
-		return <div className="read-more-modal">
-			<div className="modal">
-				<div className="header">
-					<CloseOutlinedIcon onClick={() => setShowMore("")} />
-				</div>
-				<div className="body" dangerouslySetInnerHTML={{
-					__html: showMore,
-				}}>
+		return (
+			<div className='read-more-modal'>
+				<div className='modal'>
+					<div className='header'>
+						<CloseOutlinedIcon onClick={() => setShowMore("")} />
+					</div>
+					<div
+						className='body'
+						dangerouslySetInnerHTML={{
+							__html: showMore,
+						}}></div>
 				</div>
 			</div>
-		</div>
-	}
+		);
+	};
 
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الاشعارات</title>
+				<title>لوحة تحكم اطلبها | الاشعارات</title>
 			</Helmet>
 			{showMore !== "" && readMoreModal()}
 			<section className='notifications'>
@@ -236,12 +239,12 @@ const Notifications = () => {
 														indeterminate={
 															selected.length > 0 &&
 															selected.length <
-															fetchedData?.data?.notifications?.length
+																fetchedData?.data?.notifications?.length
 														}
 														checked={
 															fetchedData?.data?.notifications?.length > 0 &&
 															selected.length ===
-															fetchedData?.data?.notifications?.length
+																fetchedData?.data?.notifications?.length
 														}
 														onChange={handleSelectAllClick}
 													/>
@@ -302,13 +305,12 @@ const Notifications = () => {
 																/>
 																<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
 																	<div className='d-flex flex-column gap-1'>
-																		<div className="d-flex flex-row align-items-center">
+																		<div className='d-flex flex-row align-items-center'>
 																			<h2
 																				className='notifications-title'
 																				dangerouslySetInnerHTML={{
 																					__html: not?.message,
-																				}}>
-																			</h2>
+																				}}></h2>
 																		</div>
 																		<p className='notification-user-name'>
 																			{not?.user[0]?.name}
@@ -324,7 +326,11 @@ const Notifications = () => {
 																</div>
 
 																<div className='d-flex flex-row align-items-center gap-2'>
-																	<Reports title="قراءة المزيد" className="show-more" onClick={() => setShowMore(not?.message)} />
+																	<Reports
+																		title='قراءة المزيد'
+																		className='show-more'
+																		onClick={() => setShowMore(not?.message)}
+																	/>
 																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
@@ -336,7 +342,7 @@ const Notifications = () => {
 																			);
 																		}}
 																		style={{ cursor: "pointer" }}
-																		title="حذف الإشعار"
+																		title='حذف الإشعار'
 																	/>
 																</div>
 															</div>

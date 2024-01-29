@@ -62,7 +62,7 @@ const SupportDetails = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تفاصيل الدعم الفني</title>
+				<title>لوحة تحكم اطلبها | تفاصيل الدعم الفني</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -228,8 +228,7 @@ const SupportDetails = () => {
 														className='replay-btn'
 														onClick={() => {
 															dispatch(openReplyModal());
-														}}
-														>
+														}}>
 														<ReplayIcon />
 														<span className='user-name me-2 align-self-center'>
 															رد

@@ -13,7 +13,6 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { HomeIcon, Check9x7Svg } from "../../data/Icons";
 
 function CheckoutPage() {
-
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -223,7 +222,7 @@ function CheckoutPage() {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الدفع </title>
+				<title>لوحة تحكم اطلبها | الدفع </title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
 				<div className='head-category'>
@@ -238,7 +237,7 @@ function CheckoutPage() {
 								</li>
 								<li className='breadcrumb-item' aria-current='page'>
 									<Link to='/Products/SouqOtlobha' className='me-2'>
-										سوق أطلبها
+										سوق اطلبها
 									</Link>
 								</li>
 								<li className='breadcrumb-item active' aria-current='page'>
@@ -277,9 +276,7 @@ function CheckoutPage() {
 														}}
 														id='country'
 														className='form-control'>
-														<option value=''>
-															اختر المنطقة...
-														</option>
+														<option value=''>اختر المنطقة...</option>
 														{removeDuplicates(citiesData?.data?.cities)?.map(
 															(district, index) => (
 																<option
@@ -307,10 +304,12 @@ function CheckoutPage() {
 														value={shipping?.city}
 														onChange={(e) => {
 															if (e.target.value !== "") {
-																setShipping({ ...shipping, city: e.target.value })
+																setShipping({
+																	...shipping,
+																	city: e.target.value,
+																});
 															}
-														}
-														}
+														}}
 														id='city'
 														className='form-control'>
 														<option value=''>اختر المدينة...</option>
@@ -408,9 +407,7 @@ function CheckoutPage() {
 											<div className='card-body'>
 												<h3 className='card-title'>تفاصيل الشحن</h3>
 												<div className='form-group'>
-													<label htmlFor='note'>
-														ملاحظات الطلب
-													</label>
+													<label htmlFor='note'>ملاحظات الطلب</label>
 													<textarea
 														id='note'
 														className='form-control'
@@ -512,7 +509,7 @@ function CheckoutPage() {
 							) : (
 								<div className='empty'>
 									<span>لاتوجد منتجات في سلة الاستيراد</span>
-									<Link to='/Products/SouqOtlobha'>العودة إلى سوق أطلبها</Link>
+									<Link to='/Products/SouqOtlobha'>العودة إلى سوق اطلبها</Link>
 								</div>
 							)}
 						</div>

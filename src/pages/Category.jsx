@@ -83,7 +83,7 @@ const Category = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | الأنشطة</title>
+				<title>لوحة تحكم اطلبها | الأنشطة</title>
 			</Helmet>
 			<div className='category p-lg-3'>
 				<div className='head-category'>
@@ -222,7 +222,7 @@ const Category = () => {
 					<button
 						className={`btn ${tabSelected !== 1 ? "active" : ""}`}
 						onClick={() => setTabSelected(2)}>
-						أنشطة منصة أطلبها
+						أنشطة منصة اطلبها
 					</button>
 				</div>
 				<div className='row'>

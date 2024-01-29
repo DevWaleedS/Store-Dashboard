@@ -30,7 +30,7 @@ const Delegate = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | المندوبين</title>
+				<title>لوحة تحكم اطلبها | المندوبين</title>
 			</Helmet>
 			<section className=' delegate-page p-md-3'>
 				<div className='col-12 d-md-none d-flex'>

@@ -212,7 +212,7 @@ const EditCategory = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تعديل نشاط</title>
+				<title>لوحة تحكم اطلبها | تعديل نشاط</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -229,9 +229,7 @@ const EditCategory = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> تعديل نشاط</h5>
-										<p>
-											قم بتحديث النشاط والمعلومات الضرورية من هنا
-										</p>
+										<p>قم بتحديث النشاط والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>

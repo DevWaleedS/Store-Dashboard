@@ -156,7 +156,7 @@ const PaintStore = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | تحسينات SEO</title>
+				<title>لوحة تحكم اطلبها | تحسينات SEO</title>
 			</Helmet>
 			<section className='seo-store-page'>
 				<div className='head-category mb-3'>

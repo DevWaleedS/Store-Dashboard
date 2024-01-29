@@ -114,7 +114,7 @@ const CreateRole = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | اضافة دور</title>
+				<title>لوحة تحكم اطلبها | اضافة دور</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal

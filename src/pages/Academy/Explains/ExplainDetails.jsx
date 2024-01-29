@@ -35,7 +35,7 @@ const ExplainDetails = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم أطلبها | محتوى الكورس</title>
+				<title>لوحة تحكم اطلبها | محتوى الكورس</title>
 			</Helmet>
 			<section className='course-details-page explain-details-page academy-page p-md-3'>
 				<div className='head-category mb-md-5 mb-3 pt-md-4'>
