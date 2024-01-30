@@ -384,7 +384,7 @@ const CreatePage = () => {
 												</span>
 												{titleLength && (
 													<span className='fs-6 text-danger'>
-														العنوان يجب ان لا يتجاوز 15 حرف
+														العنوان يجب ان لا يتجاوز 26 حرف
 													</span>
 												)}
 											</div>
