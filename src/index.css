@@ -953,12 +953,12 @@ textarea {
 
 .rs-calendar-header-has-month:not(.rs-calendar-header-has-time)
 	.rs-calendar-header-backward {
-	float: right;
+	float: right !important;
 }
 
 .rs-calendar-header-has-month:not(.rs-calendar-header-has-time)
 	.rs-calendar-header-forward {
-	float: left;
+	float: left !important;
 }
 
 .css-1ynch81-MuiInputBase-root-MuiOutlinedInput-root {
@@ -3367,7 +3367,7 @@ nav.navigation {
 .data-container {
 	background: var(--gray-100);
 	width: 100%;
-	padding: 50px 100px 50px;
+	padding: 50px 50px 25px 50px;
 }
 
 .data-widget {
@@ -12395,7 +12395,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean svg {
 		top: 16px;
-		left: -128px;
+		left: -115px;
 	}
 }
 
@@ -12458,10 +12458,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.rs-picker-daterange-calendar-group {
 		width: 100%;
-		min-width: 100%;
-		height: auto;
+		min-width: 100% !important;
+		height: auto !important;
 		display: flex;
 		flex-direction: column;
+	}
+	.rs-picker-daterange-menu .rs-calendar:first-child {
+		border-right: none !important;
+	}
+	.rs-picker-menu .rs-calendar {
+		margin: 0 !important;
 	}
 
 	.rs-picker-daterange-menu .rs-calendar {

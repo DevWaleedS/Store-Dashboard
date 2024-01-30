@@ -367,8 +367,8 @@ const CreatePage = () => {
 														name='title'
 														value={value}
 														onChange={(e) => {
-															if (e.target.value.length <= 15) {
-																onChange(e.target.value.substring(0, 15));
+															if (e.target.value.length <= 26) {
+																onChange(e.target.value.substring(0, 26));
 																setTitleLength(false);
 															} else {
 																setTitleLength(true);

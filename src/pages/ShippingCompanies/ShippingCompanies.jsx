@@ -289,23 +289,7 @@ const ShippingCompanies = () => {
 						</div>
 					) : (
 						<>
-							<div className='row'>
-								{allShippingCompanies?.length !== 0 &&
-									allShippingCompanies?.map((item) => (
-										<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
-											<ShippingCompaniesData
-												shippingCompanyName=''
-												currentShippingPrice=''
-												currentShippingTime={0}
-												image={item?.image}
-												changeStatus={() => changeStatus(item?.id)}
-												checked={item?.status === "نشط" ? true : false}
-											/>
-										</div>
-									))}
-							</div>
-
-							<div className='row other-shipping-company '>
+							<div className='row other-shipping-company mb-4'>
 								<div className='mb-4 option-info-label d-flex  justify-content-start align-items-center gap-2'>
 									<IoMdInformationCircleOutline />
 									<span>
@@ -442,6 +426,22 @@ const ShippingCompanies = () => {
 										</div>
 									</div>
 								)}
+							</div>
+
+							<div className='row'>
+								{allShippingCompanies?.length !== 0 &&
+									allShippingCompanies?.map((item) => (
+										<div className='col-xl-3 col-lg-4 col-6' key={item?.id}>
+											<ShippingCompaniesData
+												shippingCompanyName=''
+												currentShippingPrice=''
+												currentShippingTime={0}
+												image={item?.image}
+												changeStatus={() => changeStatus(item?.id)}
+												checked={item?.status === "نشط" ? true : false}
+											/>
+										</div>
+									))}
 							</div>
 						</>
 					)}
