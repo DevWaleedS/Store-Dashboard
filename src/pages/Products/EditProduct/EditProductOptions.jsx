@@ -353,32 +353,58 @@ const AddProductOptionsModal = () => {
 		}
 	};
 
+	/** handle save Options  */
 	const saveOptions = () => {
 		if (productHasOptions === true) {
+			// to check if the name of option in not empty or no
 			const nameNotEmpty = optionsSection?.every(
 				(section) => section?.name !== ""
 			);
+
+			// to check if the qtyAttrNotEmpty of option in not empty or no
 			const valuesNotEmpty = optionsSection?.every((section) =>
-				section?.values?.some((value) => value?.title === "")
+				section?.values?.some((value) => value?.title !== "")
 			);
-			if (nameNotEmpty) {
-				if (valuesNotEmpty) {
+
+			// to check if the qtyAttrNotEmpty of option in not empty or no
+			const priceAttrNotEmpty = attributes?.every((attr) => attr?.price !== 0);
+
+			// to check if the qtyAttrNotEmpty of option in not empty or no
+			const qtyAttrNotEmpty = attributes?.every((attr) => attr?.qty !== 0);
+
+			if (
+				nameNotEmpty &&
+				valuesNotEmpty &&
+				priceAttrNotEmpty &&
+				qtyAttrNotEmpty
+			) {
+				dispatch(closeProductOptionModal());
+				toast.success("تم حفظ خيارات المنتج", {
+					theme: "light",
+				});
+			} else {
+				!nameNotEmpty &&
+					toast.warning("يرجى ملء حقل مسمى الخيار أولاً", {
+						theme: "light",
+					});
+				!valuesNotEmpty &&
 					toast.warning("يرجى ملء حقل القيمة أولاً", {
 						theme: "light",
 					});
-				} else {
-					dispatch(closeProductOptionModal());
-					toast.success("تم حفظ خيارات المنتج", {
+				!priceAttrNotEmpty &&
+					toast.warning("يرجى ملء حقل السعر أولاً", {
 						theme: "light",
 					});
-				}
-			} else {
-				toast.warning("يرجى ملء حقل مسمى الخيار أولاً", {
-					theme: "light",
-				});
+				!qtyAttrNotEmpty &&
+					toast.warning("يرجى ملء حقل الكمية أولاً", {
+						theme: "light",
+					});
 			}
 		} else {
 			dispatch(closeProductOptionModal());
+			toast.warning("  لم يتم اضافه اي خيارات ليتم حفظها", {
+				theme: "light",
+			});
 		}
 	};
 
@@ -869,7 +895,10 @@ const AddProductOptionsModal = () => {
 							style={{ borderRadius: "0 0 16px 16px" }}>
 							<div className='row d-flex justify-content-center align-items-center'>
 								<div className='col-lg-4 col-6'>
-									<button className='save-btn' onClick={() => saveOptions()}>
+									<button
+										className='save-btn'
+										disabled={!productHasOptions}
+										onClick={() => saveOptions()}>
 										حفظ
 									</button>
 								</div>
