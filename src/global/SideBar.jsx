@@ -19,6 +19,7 @@ import Context from "../Context/context";
 
 // Icons
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import { IoWallet } from "react-icons/io5";
 import {
 	Academy,
 	BsCart,
@@ -454,6 +455,21 @@ const SideBar = ({ open, closeSidebar }) => {
 					<MenuItem>
 						<Payment />
 						<span className='me-2'> بوابات الدفع</span>
+					</MenuItem>
+				</NavLink>
+
+				<NavLink
+					className='menu-link'
+					to='wallet'
+					onClick={() => {
+						closeSidebar();
+						if (verificationStoreStatus !== "تم التوثيق") {
+							dispatchVerifyModal(openVerifyModal());
+						}
+					}}>
+					<MenuItem>
+						<IoWallet />
+						<span className='me-2'> المحفظة و الفواتير</span>
 					</MenuItem>
 				</NavLink>
 				{/** Setting Sub menu */}

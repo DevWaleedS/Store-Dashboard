@@ -3517,10 +3517,82 @@ nav.navigation {
 .payment-page .image-box {
 	padding: 40px;
 }
-
 /* -------------------------------------------------------------------------------------------------------------------------------- */
 
-/* Setting styles */
+/* bank-accounts and wallet */
+
+.data-container.wallet-data-container {
+	background: #e7e7e729;
+	width: 100%;
+	padding: 25px;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
+}
+
+.bank-accounts {
+	padding: 16px 14px;
+	border: 1px solid #f4f4f4;
+	background-color: #fdfdfd;
+	border-radius: 6px 6px 0 0;
+}
+
+.bank-accounts button {
+	background-color: var(--second-500);
+	color: white;
+	padding: 10px 12px;
+	border-radius: 6px;
+	font-size: 18px;
+	font-weight: 500;
+}
+.bank-accounts button span svg {
+	font-size: 18px;
+	font-weight: 500;
+}
+
+/* add bank account */
+.add-bank-Account .form-body {
+	padding: 20px 50px;
+	border-radius: 16px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-ms-border-radius: 16px;
+	-o-border-radius: 16px;
+}
+.add-bank-Account form label {
+	font-size: 18px;
+	font-weight: 400;
+}
+.add-bank-Account form .inputs-wrapper {
+	width: 100%;
+	max-width: 100%;
+	height: 50px;
+	padding: 18px 14px;
+	background: #ffffff;
+	border: 1px solid var(--gray-200) !important;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-ms-border-radius: 6px;
+	-o-border-radius: 6px;
+	white-space: normal !important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+.add-bank-Account form .inputs-wrapper input {
+	background-color: transparent;
+	width: 100%;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.add-bank-Account form .inputs-wrapper svg {
+	color: var(--black-100);
+}
 
 /* MAIN INFO PAGE */
 
@@ -4309,6 +4381,7 @@ textarea {
 }
 
 /* ------------------- */
+.add-bank-Account .form-footer button,
 .add-form-wrapper .form-footer button {
 	width: 100%;
 	height: 60px;
@@ -4321,12 +4394,14 @@ textarea {
 	-o-border-radius: 8px;
 }
 
-.add-form-wrapper .form-footer button.save-btn {
+.add-form-wrapper .form-footer button.save-btn,
+.add-bank-Account .form-footer button.save-btn {
 	background-color: var(--second-500);
 	color: var(--white-100);
 }
 
-.add-form-wrapper .form-footer button.close-btn {
+.add-form-wrapper .form-footer button.close-btn,
+.add-bank-Account .form-footer button.close-btn {
 	background-color: transparent;
 	border: 1px solid var(--second-500);
 	color: var(--second-500);
@@ -10517,7 +10592,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.form-title h5 {
-		font-size: 20px;
+		font-size: 20px !important;
 	}
 
 	.form-title p {
@@ -12176,6 +12251,57 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.payment-form .MuiInputBase-root {
 		height: 45px !important;
 		font-size: 16px !important;
+	}
+
+	/* wallet  */
+
+	.add-bank-Account .form-body {
+		padding: 18px;
+		border-radius: 9px;
+		-webkit-border-radius: 9px;
+		-moz-border-radius: 9px;
+		-ms-border-radius: 9px;
+		-o-border-radius: 9px;
+	}
+	.bank-accounts .bank-acc-title {
+		font-size: 18px;
+		font-weight: 400;
+	}
+	.add-bank-Account form .inputs-wrapper {
+		height: 45px;
+		padding: 16px 12px;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+		gap: 8px;
+	}
+
+	.add-bank-Account form label {
+		font-size: 16px;
+	}
+	.bank-accounts button {
+		width: 100%;
+		padding: 10px 12px;
+		border-radius: 4px;
+		font-size: 16px;
+		font-weight: 400;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+	}
+
+	.add-bank-Account .form-footer button,
+	.add-form-wrapper .form-footer button {
+		height: 48px;
+		font-size: 18px;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
 	}
 
 	.add-coupon-form .coupon-status-wrapper,

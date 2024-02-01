@@ -114,6 +114,7 @@ import { CreateNewPassword } from "./pages/Authentication/Login/ResetPasswordPag
 import SendVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
 import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
+import { Wallet } from "./pages/Wallet";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -385,6 +386,10 @@ const router = createBrowserRouter([
 			{
 				path: "PaymentGetways",
 				element: <PaymentGetways />,
+			},
+			{
+				path: "wallet",
+				element: <Wallet />,
 			},
 			{
 				path: "Template",

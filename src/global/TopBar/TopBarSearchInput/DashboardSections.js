@@ -31,6 +31,7 @@ import {
 	Template,
 	Verification,
 } from "../../../data/Icons";
+import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
@@ -266,6 +267,12 @@ export const dashboardSections = [
 		id: 24,
 		sectionName: "بوابات الدفع",
 		route: "PaymentGetways",
+		icon: <IoWallet />,
+	},
+	{
+		id: 9908293892,
+		sectionName: "المحفظة و الفواتير",
+		route: "wallet",
 		icon: <Payment />,
 	},
 	{
