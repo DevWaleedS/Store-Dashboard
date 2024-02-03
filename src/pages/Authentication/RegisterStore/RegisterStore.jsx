@@ -276,8 +276,7 @@ const RegisterBox = () => {
 										borderRadius: "8px",
 									}}>
 									<MdErrorOutline className='ms-1' />
-									تأكد من ان البريد الالكتروني يتكون من حرف واحد او اكثر ويحتوي
-									علي علامة الـ @
+									تأكد من كتابة الايميل الصحيح
 								</p>
 								{emailError && (
 									<span

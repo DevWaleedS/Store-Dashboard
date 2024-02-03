@@ -333,7 +333,7 @@ const ProductRefund = () => {
 											{/* Selling Price */}
 											<div className='product-price mb-3'>
 												<div className='label selling-price-label mb-1'>
-													أقل كمية يمكنك استيراها من هذا المنتج
+													أقل كمية يمكنك استيرادها من هذا المنتج
 													<span style={{ color: "#ff3838", marginLeft: "5px" }}>
 														{" "}
 														*{" "}

@@ -234,6 +234,7 @@ const EditProduct = () => {
 	// ---------------------------------------------
 
 	// Handle Errors
+	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
@@ -590,14 +591,29 @@ const EditProduct = () => {
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												<input
-													name='name'
-													type='text'
-													id='product-name'
-													placeholder=' اسم المنتج'
-													{...register("name", {
-														required: "حقل الاسم مطلوب",
-													})}
+												<Controller
+													name={"title"}
+													control={control}
+													rules={{
+														required: "حقل اسم المنتج مطلوب ",
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															placeholder=' اسم المنتج'
+															type='text'
+															name='name'
+															id='product-name'
+															value={value}
+															onChange={(e) => {
+																if (e.target.value.length <= 25) {
+																	onChange(e.target.value.substring(0, 25));
+																	setProductNameLength(false);
+																} else {
+																	setProductNameLength(true);
+																}
+															}}
+														/>
+													)}
 												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -606,6 +622,12 @@ const EditProduct = () => {
 													{productError?.name}
 													{errors?.name && errors.name.message}
 												</span>
+
+												{productNameLength && (
+													<span className='fs-6 text-danger'>
+														اسم المنتج يجب ان لا يتجاوز 25 حرف
+													</span>
+												)}
 											</div>
 										</div>
 
@@ -957,7 +979,6 @@ const EditProduct = () => {
 													}}
 													render={({ field: { onChange, value } }) => (
 														<input
-															disabled={product?.discount_price}
 															name={"selling_price"}
 															type='text'
 															id='price'

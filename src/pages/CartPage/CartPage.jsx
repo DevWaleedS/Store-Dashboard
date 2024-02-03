@@ -27,12 +27,15 @@ function CartPage() {
 	const { setEndActionTitle } = contextStore;
 
 	const [productInfo, setProductInfo] = useState([]);
+	const [discountCode, setDiscountCode] = useState("");
+	const [cartId, setCartId] = useState("");
 	const [newproductInfo, setNewProductInfo] = useState([]);
 
 	useEffect(() => {
 		if (fetchedData?.data?.cart?.cartDetail) {
 			setProductInfo(fetchedData?.data?.cart?.cartDetail);
 			setNewProductInfo(fetchedData?.data?.cart?.cartDetail);
+			setCartId(fetchedData?.data?.cart?.id);
 		}
 	}, [fetchedData?.data?.cart?.cartDetail]);
 
@@ -138,6 +141,40 @@ function CartPage() {
 			(product) => Number(product?.qty) === Number(item?.qty)
 		)
 	);
+
+	// handle apply code
+	const applyDiscountCode = () => {
+		setDiscountCode("");
+
+		let formData = new FormData();
+		formData.append("code", discountCode);
+
+		axios
+			.post(
+				`https://backend.atlbha.com/api/Store/applyCoupon/${cartId}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${store_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (
+					res?.data?.success === true &&
+					res?.data?.message?.en !== "The coupon is invalid"
+				) {
+					setReload(!reload);
+
+					setEndActionTitle(res?.data?.message?.ar);
+				} else {
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+				}
+			});
+	};
 
 	return (
 		<>
@@ -298,6 +335,25 @@ function CartPage() {
 									</div>
 									<div className='actions'>
 										<div className='buttons'>
+											<input
+												type='text'
+												name='discountCode'
+												className='discount-code-input'
+												value={discountCode}
+												onChange={(e) => {
+													setDiscountCode(e.target.value);
+												}}
+												placeholder='كوبون الخصم'
+											/>
+											<button
+												onClick={() => applyDiscountCode()}
+												type='button'
+												className='update'
+												disabled={!discountCode}>
+												تطبيق الكوبون
+											</button>
+										</div>
+										<div className='buttons update-cart-btn'>
 											<Link to='/Products/SouqOtlobha'>العودة لسوق اطلبها</Link>
 											<button
 												onClick={() => updateCart()}
@@ -331,6 +387,33 @@ function CartPage() {
 																	{fetchedData?.data?.cart?.shipping_price} ر.س
 																</td>
 															</tr>
+
+															{fetchedData?.data?.cart?.discount_total && (
+																<tr>
+																	<th>
+																		الخصم
+																		{fetchedData?.data?.cart?.discount_type ===
+																		"fixed" ? null : (
+																			<span
+																				style={{
+																					fontSize: "0.85rem",
+																					color: "#7e7e7e",
+																				}}>
+																				(
+																				{
+																					fetchedData?.data?.cart
+																						?.discount_price
+																				}
+																				%)
+																			</span>
+																		)}
+																	</th>
+																	<td>
+																		{fetchedData?.data?.cart?.discount_total}{" "}
+																		ر.س
+																	</td>
+																</tr>
+															)}
 														</tbody>
 														<tfoot>
 															<tr>

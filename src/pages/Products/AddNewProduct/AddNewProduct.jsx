@@ -139,6 +139,7 @@ const AddNewProduct = () => {
 		subcategory_id: [],
 	});
 
+	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
@@ -483,19 +484,33 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-name'>
-												{" "}
 												اسم المنتج <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<input
-												type='text'
-												name='name'
-												id='product-name'
-												placeholder=' اسم المنتج'
-												{...register("name", {
-													required: "حقل الاسم مطلوب",
-												})}
+											<Controller
+												name={"title"}
+												control={control}
+												rules={{
+													required: "حقل اسم المنتج مطلوب ",
+												}}
+												render={({ field: { onChange, value } }) => (
+													<input
+														placeholder=' اسم المنتج'
+														type='text'
+														name='name'
+														id='product-name'
+														value={value}
+														onChange={(e) => {
+															if (e.target.value.length <= 25) {
+																onChange(e.target.value.substring(0, 25));
+																setProductNameLength(false);
+															} else {
+																setProductNameLength(true);
+															}
+														}}
+													/>
+												)}
 											/>
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
@@ -504,6 +519,12 @@ const AddNewProduct = () => {
 												{productError?.name}
 												{errors?.name && errors.name.message}
 											</span>
+
+											{productNameLength && (
+												<span className='fs-6 text-danger'>
+													اسم المنتج يجب ان لا يتجاوز 25 حرف
+												</span>
+											)}
 										</div>
 									</div>
 
@@ -932,7 +953,6 @@ const AddNewProduct = () => {
 												}}
 												render={({ field: { onChange, value } }) => (
 													<input
-														disabled={product?.discount_price}
 														name={"selling_price"}
 														type='text'
 														id='price'

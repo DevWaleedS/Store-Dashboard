@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import { HomeIcon } from "../data/Icons";
 import { BsSearch } from "react-icons/bs";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -105,8 +105,11 @@ const Category = () => {
 				</div>
 
 				<div className='mb-3'>
-					<div className='shipping-company-hint mb-2'>
-						سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك
+					<div className='mb-4 option-info-label d-flex  justify-content-start align-items-center gap-2'>
+						<IoMdInformationCircleOutline />
+						<span>
+							سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك
+						</span>
 					</div>
 					<div className='add-category'>
 						<form onSubmit={handleSubmit}>
