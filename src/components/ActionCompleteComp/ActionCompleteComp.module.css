@@ -30,12 +30,12 @@
 .title {
 	letter-spacing: 0.24px;
 	color: #011723;
-	white-space: "nowrap";
+	white-space: normal !important;
 	font-weight: 400;
 	font-size: 24px;
 }
 .action_box {
-	gap: 2rem;
+	gap: 1rem;
 }
 .line_anim {
 	height: 16px;

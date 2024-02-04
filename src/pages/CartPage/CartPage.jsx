@@ -163,11 +163,10 @@ function CartPage() {
 			.then((res) => {
 				if (
 					res?.data?.success === true &&
-					res?.data?.message?.en !== "The coupon is invalid"
+					res?.data?.message?.en === "coupon updated successfully"
 				) {
-					setReload(!reload);
-
 					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
 				} else {
 					toast.error(res?.data?.message?.ar, {
 						theme: "light",
@@ -388,12 +387,12 @@ function CartPage() {
 																</td>
 															</tr>
 
-															{fetchedData?.data?.cart?.discount_total && (
+															{fetchedData?.data?.cart?.discount_total ? (
 																<tr>
 																	<th>
 																		الخصم
 																		{fetchedData?.data?.cart?.discount_type ===
-																		"fixed" ? null : (
+																		"percent" ? (
 																			<span
 																				style={{
 																					fontSize: "0.85rem",
@@ -402,18 +401,18 @@ function CartPage() {
 																				(
 																				{
 																					fetchedData?.data?.cart
-																						?.discount_price
+																						?.discount_value
 																				}
 																				%)
 																			</span>
-																		)}
+																		) : null}
 																	</th>
 																	<td>
 																		{fetchedData?.data?.cart?.discount_total}{" "}
 																		ر.س
 																	</td>
 																</tr>
-															)}
+															) : null}
 														</tbody>
 														<tfoot>
 															<tr>

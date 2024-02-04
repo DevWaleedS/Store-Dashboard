@@ -51,7 +51,7 @@ const ActionComplete = ({ cancelEarly }) => {
 					style={{
 						backgroundColor: actionWarning ? "rgba(255, 56, 56, 1)" : "#3AE374",
 					}}></div>
-				<div className={`${styles.action_box} d-flex align-items-center`}>
+				<div className={`${styles.action_box} d-flex align-items-baseline`}>
 					<Box
 						sx={{
 							"& svg": {

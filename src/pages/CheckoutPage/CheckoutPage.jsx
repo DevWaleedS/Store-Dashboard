@@ -130,7 +130,10 @@ function CheckoutPage() {
 					if (res?.data?.message?.en === "order send successfully") {
 						setBtnLoading(false);
 						setEndActionTitle(res?.data?.message?.ar);
-						window.location.replace(`/`);
+						setTimeout(() => {
+							window.location.replace(`/`);
+						}, 1000);
+
 						setReload(!reload);
 					} else {
 						setBtnLoading(false);
@@ -483,7 +486,30 @@ function CheckoutPage() {
 																{fetchedData?.data?.cart?.shipping_price} ر.س
 															</td>
 														</tr>
+
+														{fetchedData?.data?.cart?.discount_total ? (
+															<tr>
+																<th>
+																	الخصم
+																	{fetchedData?.data?.cart?.discount_type ===
+																	"percent" ? (
+																		<span
+																			style={{
+																				fontSize: "0.85rem",
+																				color: "#7e7e7e",
+																			}}>
+																			({fetchedData?.data?.cart?.discount_value}
+																			%)
+																		</span>
+																	) : null}
+																</th>
+																<td>
+																	{fetchedData?.data?.cart?.discount_total} ر.س
+																</td>
+															</tr>
+														) : null}
 													</tbody>
+
 													<tfoot>
 														<tr>
 															<th>
