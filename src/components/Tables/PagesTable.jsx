@@ -50,9 +50,7 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					العنوان
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a" }}>
-					الناشر
-				</TableCell>
+
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					تاريخ النشر
 				</TableCell>
@@ -458,9 +456,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 															</div>
 														</TableCell>
 														<TableCell align='center'>{row?.title}</TableCell>
-														<TableCell align='center'>
-															{row?.user?.name}
-														</TableCell>
+
 														<TableCell align='center'>
 															{moment(row?.created_at).format("YYYY-MM-DD")}
 														</TableCell>

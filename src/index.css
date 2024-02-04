@@ -11577,21 +11577,27 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.academy-widget .course-details h5 {
 		font-size: 16px;
-		margin-bottom: 10px !important;
+		margin-bottom: 8px !important;
 	}
 
 	.academy-widget .watch-course-btn {
 		padding: 0;
-		padding-top: 10px;
+		padding-top: 8px;
 	}
 
 	.academy-widget .watch-course-btn .btn-wrapper {
 		width: 100%;
 	}
 
+	.academy-widget .course-info .text {
+		font-size: 12px;
+		font-weight: 400;
+	}
+
 	.academy-widget .watch-course-btn button {
 		font-size: 14px;
 		width: 100%;
+		height: 30px;
 	}
 
 	.academy-widget .watch-course-btn button svg {
@@ -12785,16 +12791,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		object-position: center;
 	}
 
-	/* .video-preview .play-video-icon {
-		background-color: rgba(0, 0, 0, 0.1);
-		width: 0;
-		height: 0;
-		left: 50%;
-		top: 50%;
-	} */
-
 	.academy-widget .watch-course-btn {
-		padding-top: 13px;
 		position: relative;
 		width: 100%;
 	}
@@ -12937,10 +12934,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.academy-widget .watch-course-btn {
 		padding: 5px;
-	}
-
-	.academy-widget .watch-course-btn button {
-		height: 30px;
 	}
 
 	.academy-widget .watch-course-btn span {

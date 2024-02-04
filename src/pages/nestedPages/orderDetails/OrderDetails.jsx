@@ -1230,7 +1230,7 @@ const OrderDetails = () => {
 											data-bs-target='#collapseOne'
 											aria-expanded='true'
 											aria-controls='collapseOne'>
-											<div className='action-title w-100'>
+											<div className='action-title w-100 d-flex flex-wrap'>
 												<ListIcon className='list-icon' />
 												<span className='me-2' style={{ fontSize: "18px" }}>
 													{" "}

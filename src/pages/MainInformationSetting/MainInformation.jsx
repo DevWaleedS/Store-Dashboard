@@ -73,7 +73,7 @@ const MainInformation = () => {
 
 	// Hours Works
 	const [openHoursWork, setOpenHoursWork] = useState(false);
-	const [openAlawys, setOpenAlawys] = useState();
+	const [openAlawys, setOpenAlawys] = useState(true);
 	const [workDays, setWorkDays] = useState([
 		{
 			day: {

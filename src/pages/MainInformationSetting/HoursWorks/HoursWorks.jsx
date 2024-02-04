@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -43,6 +43,49 @@ const contentStyle = {
 	overflowX: "hidden",
 };
 
+const switchStyle = {
+	width: "36px !important",
+	height: "22px !important",
+	padding: "0 !important",
+	borderRadius: "20px !important",
+	"& .MuiSwitch-track": {
+		width: "36px !important",
+		height: "22px !important",
+		opacity: 1,
+		backgroundColor: "rgba(0,0,0,.25)",
+		boxSizing: "border-box",
+		borderRadius: "20px !important",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: "16px !important",
+		height: "16px !important",
+		borderRadius: "50% !important",
+		transform: "translate(3px,3px) !important",
+		color: "#fff",
+	},
+
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none !important",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: "0px !important",
+		top: "0px !important",
+		left: "0px !important",
+		"&.Mui-checked": {
+			transform: "translateX(12px) !important",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
+
 const HoursWorks = ({
 	setWorkDays,
 	setOpenHoursWork,
@@ -53,6 +96,8 @@ const HoursWorks = ({
 }) => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
+	console.log(workDays);
 
 	// To show the store info that come from api
 	const { fetchedData } = useFetch(
@@ -156,48 +201,7 @@ const HoursWorks = ({
 								updateAll(e.target.checked);
 							}}
 							checked={!openAlawys}
-							sx={{
-								width: "36px !important",
-								height: "22px !important",
-								padding: "0 !important",
-								borderRadius: "20px !important",
-								"& .MuiSwitch-track": {
-									width: "36px !important",
-									height: "22px !important",
-									opacity: 1,
-									backgroundColor: "rgba(0,0,0,.25)",
-									boxSizing: "border-box",
-									borderRadius: "20px !important",
-								},
-								"& .MuiSwitch-thumb": {
-									boxShadow: "none",
-									width: "16px !important",
-									height: "16px !important",
-									borderRadius: "50% !important",
-									transform: "translate(3px,3px) !important",
-									color: "#fff",
-								},
-
-								"&:hover": {
-									"& .MuiSwitch-thumb": {
-										boxShadow: "none !important",
-									},
-								},
-
-								"& .MuiSwitch-switchBase": {
-									padding: "0px !important",
-									top: "0px !important",
-									left: "0px !important",
-									"&.Mui-checked": {
-										transform: "translateX(12px) !important",
-										color: "#fff",
-										"& + .MuiSwitch-track": {
-											opacity: 1,
-											backgroundColor: "#3AE374",
-										},
-									},
-								},
-							}}
+							sx={switchStyle}
 						/>
 						مفتوح دائماً
 					</div>

@@ -1,6 +1,7 @@
 import React from "react";
 
 // Third Party
+import moment from "moment";
 import { Helmet } from "react-helmet";
 import useFetch from "../../Hooks/UseFetch";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -15,7 +16,7 @@ import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 
 // Components
-import GetDateOnly from "../../HelperComponents/GetDateOnly";
+
 import { SendSupportReplayModal } from "../../components/Modal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
@@ -186,10 +187,10 @@ const SupportDetails = () => {
 																	</div>
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
-																			{GetDateOnly(
+																			{moment(
 																				fetchedData?.data?.technicalSupports
 																					?.created_at
-																			)}
+																			).format("DD-MM-YYYY")}
 																		</span>
 																	</div>
 																</div>

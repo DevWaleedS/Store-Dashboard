@@ -20,6 +20,7 @@ import { Button } from "@mui/material";
 
 // Icons
 import {
+	TiktokIcon,
 	Facebock,
 	HomeIcon,
 	Instagram,
@@ -27,6 +28,8 @@ import {
 	Twitter,
 	Youtube,
 } from "../data/Icons";
+
+import { JacoImage } from "../data/images";
 
 const SocialPages = () => {
 	const store_token = document.cookie
@@ -48,6 +51,8 @@ const SocialPages = () => {
 		twiter: "",
 		youtube: "",
 		instegram: "",
+		tiktok: "",
+		jaco: "",
 	});
 
 	// To handle all errors
@@ -57,6 +62,8 @@ const SocialPages = () => {
 		twiter: "",
 		youtube: "",
 		instegram: "",
+		tiktok: "",
+		jaco: "",
 	});
 
 	const resetError = () => {
@@ -66,6 +73,8 @@ const SocialPages = () => {
 			twiter: "",
 			youtube: "",
 			instegram: "",
+			tiktok: "",
+			jaco: "",
 		});
 	};
 
@@ -87,6 +96,8 @@ const SocialPages = () => {
 			twiter: fetchedData?.data?.twiter,
 			youtube: fetchedData?.data?.youtube,
 			instegram: fetchedData?.data?.instegram,
+			tiktok: fetchedData?.data?.tiktok,
+			jaco: fetchedData?.data?.jaco,
 		});
 	}, [fetchedData]);
 
@@ -100,6 +111,8 @@ const SocialPages = () => {
 		formData.append("twiter", socialValue?.twiter || "");
 		formData.append("youtube", socialValue?.youtube || "");
 		formData.append("instegram", socialValue?.instegram || "");
+		formData.append("tiktok", socialValue?.tiktok || "");
+		formData.append("jaco", socialValue?.jaco || "");
 
 		axios
 			.post(
@@ -126,6 +139,8 @@ const SocialPages = () => {
 						twiter: res?.data?.message?.en?.twiter?.[0],
 						youtube: res?.data?.message?.en?.youtube?.[0],
 						instegram: res?.data?.message?.en?.instegram?.[0],
+						tiktok: res?.data?.message?.en?.tiktok?.[0],
+						jaco: res?.data?.message?.en?.jaco?.[0],
 					});
 					toast.error(res?.data?.message?.en?.snapchat?.[0], {
 						theme: "light",
@@ -140,6 +155,12 @@ const SocialPages = () => {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.instegram?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.tiktok?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.jaco?.[0], {
 						theme: "light",
 					});
 				}
@@ -308,6 +329,73 @@ const SocialPages = () => {
 												<span className='fs-6 text-danger'>
 													{error?.facebook}
 												</span>
+											</div>
+										)}
+									</div>
+								</div>
+
+								<div className='row mb-5'>
+									<div className='col-12'>
+										<label htmlFor='snap-chat d-block'>
+											<TiktokIcon
+												style={{ width: "19.17px", height: "19px" }}
+											/>
+											<span className='me-2'>تيك توك</span>
+										</label>
+									</div>
+									<div className='col-12'>
+										<input
+											type='text'
+											name='tiktok'
+											id='tiktok'
+											className='text-start direction-ltr'
+											value={socialValue?.tiktok}
+											onChange={handleSocialLinks}
+										/>
+										{error?.tiktok && (
+											<div>
+												<span className='fs-6 text-danger'>
+													{error?.tiktok}
+												</span>
+											</div>
+										)}
+									</div>
+								</div>
+
+								<div className='row mb-5'>
+									<div className='col-12'>
+										<label htmlFor='snap-chat d-block'>
+											<span
+												style={{
+													background: "#acb5b8",
+													borderRadius: "50%",
+													width: "19px",
+													height: "19px",
+													display: "inline-flex",
+												}}>
+												<img
+													src={JacoImage}
+													alt=''
+													width='100%'
+													height='100%'
+												/>
+											</span>
+
+											<span className='me-2'>جاكو</span>
+										</label>
+									</div>
+									<div className='col-12'>
+										<input
+											type='text'
+											name='jaco'
+											id='jaco'
+											className='text-start direction-ltr'
+											value={socialValue?.jaco}
+											onChange={handleSocialLinks}
+										/>
+										{error?.jaco && (
+											<div>
+												<span className='fs-6 text-danger'>{error?.jaco}</span>
 											</div>
 										)}
 									</div>

@@ -100,7 +100,7 @@ const CourseDetails = () => {
 													data-bs-target={`#collapse${unit?.id}`}
 													aria-expanded='true'
 													aria-controls={`collapse${unit?.id}`}>
-													<div className='action-title w-100'>
+													<div className='action-title w-100 d-flex flex-wrap'>
 														<span className='unite-name'>
 															{" "}
 															{unit?.title} :{" "}
