@@ -27,9 +27,8 @@ import {
 	SnaChat,
 	Twitter,
 	Youtube,
+	JacoLiveIcon,
 } from "../data/Icons";
-
-import { JacoImage } from "../data/images";
 
 const SocialPages = () => {
 	const store_token = document.cookie
@@ -365,21 +364,7 @@ const SocialPages = () => {
 								<div className='row mb-5'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
-											<span
-												style={{
-													background: "#acb5b8",
-													borderRadius: "50%",
-													width: "19px",
-													height: "19px",
-													display: "inline-flex",
-												}}>
-												<img
-													src={JacoImage}
-													alt=''
-													width='100%'
-													height='100%'
-												/>
-											</span>
+											<JacoLiveIcon style={{ height: "26px" }} />
 
 											<span className='me-2'>جاكو</span>
 										</label>

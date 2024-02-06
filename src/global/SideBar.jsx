@@ -122,7 +122,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='Products'
+					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Products"}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -150,7 +150,9 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='PlatformServices'
+					to={
+						verificationStoreStatus !== "تم التوثيق" ? "/" : "PlatformServices"
+					}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -267,7 +269,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='Delegate'
+					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Delegate"}
 					onClick={() => {
 						closeSidebar();
 						dispatch(openDelegateRequestAlert());
@@ -296,7 +298,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='Academy'
+					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Academy"}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -417,7 +419,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</SubMenu>
 				<NavLink
 					className='menu-link'
-					to='Support'
+					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Support"}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -445,7 +447,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='PaymentGetways'
+					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "PaymentGetways"}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -546,7 +548,11 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='EvaluationThePlatform'
+					to={
+						verificationStoreStatus !== "تم التوثيق"
+							? "/"
+							: "EvaluationThePlatform"
+					}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {

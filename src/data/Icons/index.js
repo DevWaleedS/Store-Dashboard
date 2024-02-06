@@ -117,3 +117,4 @@ export { ReactComponent as UploadUserImageIcon } from "./icon-24-upload_outlined
 export { ReactComponent as MyAccountIcon } from "./icon-24-client.svg";
 export { ReactComponent as Cross10 } from "./cross-10.svg";
 export { ReactComponent as Check9x7Svg } from "./check-9x7.svg";
+export { ReactComponent as JacoLiveIcon } from "./jacoLive.svg";

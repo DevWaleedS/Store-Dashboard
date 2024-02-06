@@ -42,6 +42,43 @@ const style = {
 	},
 };
 
+const switchStyle = {
+	"& .MuiSwitch-track": {
+		width: 32,
+		height: 18,
+		opacity: 1,
+		borderRadius: 8,
+		backgroundColor: "rgba(0,0,0,.25)",
+		boxSizing: "border-box",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: 14,
+		height: 14,
+		borderRadius: 5,
+		transform: "translate(8px,6px)",
+		color: "#fff",
+	},
+
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: 1,
+		"&.Mui-checked": {
+			transform: "translateX(14px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
+
 const MaintenanceModeModal = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -199,53 +236,20 @@ const MaintenanceModeModal = () => {
 														بتسجيل الخروج من لوحة التحكم
 													</p>
 												</div>
+											</div>
+										</div>
+										<div className='row maintenance-modal-form mx-0'>
+											<div className='col-12 mb-3'>
 												<Switch
 													name='status'
 													onChange={(e) => {
 														setMaintenanceStatus(e.target.checked);
 													}}
 													checked={maintenanceStatus}
-													className='d-flex align-self-start mb-md-2 mb-3 mx-md-0 mx-auto'
-													sx={{
-														"& .MuiSwitch-track": {
-															width: 32,
-															height: 18,
-															opacity: 1,
-															borderRadius: 8,
-															backgroundColor: "rgba(0,0,0,.25)",
-															boxSizing: "border-box",
-														},
-														"& .MuiSwitch-thumb": {
-															boxShadow: "none",
-															width: 14,
-															height: 14,
-															borderRadius: 5,
-															transform: "translate(8px,6px)",
-															color: "#fff",
-														},
-
-														"&:hover": {
-															"& .MuiSwitch-thumb": {
-																boxShadow: "none",
-															},
-														},
-
-														"& .MuiSwitch-switchBase": {
-															padding: 1,
-															"&.Mui-checked": {
-																transform: "translateX(14px)",
-																color: "#fff",
-																"& + .MuiSwitch-track": {
-																	opacity: 1,
-																	backgroundColor: "#3AE374",
-																},
-															},
-														},
-													}}
+													className='d-flex mx-auto'
+													sx={switchStyle}
 												/>
 											</div>
-										</div>
-										<div className='row maintenance-modal-form mx-0'>
 											<div className='col-12 mb-3'>
 												<div className='modal-input-group'>
 													<label htmlFor=' maintenance-title-input'>
