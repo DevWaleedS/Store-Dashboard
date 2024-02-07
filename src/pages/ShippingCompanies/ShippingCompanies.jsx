@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
@@ -14,6 +14,9 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Context
 import Context from "../../Context/context";
+
+// Redux
+import { useSelector } from "react-redux";
 
 // Icons
 import { HomeIcon } from "../../data/Icons";
@@ -89,6 +92,18 @@ const ShippingCompanies = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/shippingtype`
 	);
+
+	// -----------------------------------------------------------
+
+	//  handle if the store is not verified navigate to home page
+	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+	// -----------------------------------------------------------
 
 	// Side Effects
 	useEffect(() => {

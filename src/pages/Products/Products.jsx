@@ -6,7 +6,7 @@ import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
 import * as FileSaver from "file-saver";
 import useFetch from "../../Hooks/UseFetch";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import { DropCSVFiles, FormSearchWeight } from "./index";
@@ -21,6 +21,9 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
+
+// Redux
+import { useSelector } from "react-redux";
 
 const Products = () => {
 	const store_token = document.cookie
@@ -38,7 +41,19 @@ const Products = () => {
 		"https://backend.atlbha.com/api/Store/selector/mainCategories"
 	);
 
+	// ------------------------------------------------------------------------------
+
+	//  handle if the store is not verified navigate to home page
 	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+
+	// ---------------------------------------------------------------------
+
 	const [file, setFile] = useState("");
 	const [search, setSearch] = useState("");
 

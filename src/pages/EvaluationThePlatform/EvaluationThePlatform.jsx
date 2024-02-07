@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
@@ -19,6 +19,9 @@ import "./EvaluationThePlatform.css";
 import { TextEditor } from "../../components/TextEditor";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
+// Redux
+import { useSelector } from "react-redux";
+
 const EvaluationThePlatform = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -29,7 +32,17 @@ const EvaluationThePlatform = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-	// const [commentText, setCommentText] = useState("");
+	// -----------------------------------------------------------
+
+	//  handle if the store is not verified navigate to home page
+	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+	// -----------------------------------------------------------
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -17,6 +17,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { CouponTable } from "../components/Tables";
+
+// Redux
+import { useSelector } from "react-redux";
 
 // filter Coupon by
 const filtersTypes = [
@@ -81,7 +84,17 @@ const Coupon = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/coupons"
 	);
+	// -----------------------------------------------------------
+
+	//  handle if the store is not verified navigate to home page
 	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+	// -----------------------------------------------------------
 
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");

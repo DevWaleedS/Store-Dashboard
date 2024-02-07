@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -26,6 +26,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
+
+// Redux
+import { useSelector } from "react-redux";
 // ---------------------------------------------
 
 // Select Style
@@ -69,7 +72,17 @@ const PlatformServices = () => {
 	const { fetchedData: services } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/services"
 	);
-	// -----------------------------------------
+	// -----------------------------------------------------------
+
+	//  handle if the store is not verified navigate to home page
+	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+	// -----------------------------------------------------------
 
 	const [data, setData] = useState({
 		store_name: "",

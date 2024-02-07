@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // CONTEXT
 import Context from "../Context/context";
@@ -16,7 +16,8 @@ import { Switch } from "@mui/material";
 import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
-
+// Redux
+import { useSelector } from "react-redux";
 // Icons
 import { HomeIcon } from "../data/Icons";
 
@@ -31,6 +32,18 @@ const PaymentGetways = () => {
 	);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
+	// -----------------------------------------------------------
+
+	//  handle if the store is not verified navigate to home page
+	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+	// -----------------------------------------------------------
 
 	// change Status function
 	const changeStatus = (id, e) => {

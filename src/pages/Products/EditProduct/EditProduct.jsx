@@ -476,7 +476,6 @@ const EditProduct = () => {
 					setEditorValue(null);
 					clearOptions();
 				} else {
-					clearOptions();
 					setLoadingTitle("");
 					setProductError({
 						name: res?.data?.message?.en?.name?.[0],

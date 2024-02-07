@@ -121,8 +121,9 @@ const SideBar = ({ open, closeSidebar }) => {
 					</MenuItem>
 				</NavLink>
 				<NavLink
+					// location.pathname.slice(1)
+					to='Products'
 					className='menu-link'
-					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Products"}
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -150,9 +151,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to={
-						verificationStoreStatus !== "تم التوثيق" ? "/" : "PlatformServices"
-					}
+					to='PlatformServices'
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -269,12 +268,14 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Delegate"}
+					to='Delegate'
 					onClick={() => {
 						closeSidebar();
-						dispatch(openDelegateRequestAlert());
+
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
+						} else {
+							dispatch(openDelegateRequestAlert());
 						}
 					}}>
 					<MenuItem>
@@ -298,7 +299,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Academy"}
+					to='Academy'
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -419,7 +420,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</SubMenu>
 				<NavLink
 					className='menu-link'
-					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "Support"}
+					to='Support'
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -447,7 +448,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to={verificationStoreStatus !== "تم التوثيق" ? "/" : "PaymentGetways"}
+					to='PaymentGetways'
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -548,11 +549,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to={
-						verificationStoreStatus !== "تم التوثيق"
-							? "/"
-							: "EvaluationThePlatform"
-					}
+					to='EvaluationThePlatform'
 					onClick={() => {
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {

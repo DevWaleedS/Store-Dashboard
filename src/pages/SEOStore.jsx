@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -18,6 +18,8 @@ import { LoadingContext } from "../Context/LoadingProvider";
 // MUI
 import Button from "@mui/material/Button";
 import { TagsInput } from "react-tag-input-component";
+// Redux
+import { useSelector } from "react-redux";
 
 // Icons
 import {
@@ -49,6 +51,15 @@ const PaintStore = () => {
 	const [tiktok, setTiktok] = useState("");
 	const [instagram, setInstagram] = useState("");
 	const [keyWord, setKeyWord] = useState([]);
+
+	//  handle if the store is not verified navigate to home page
+	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
 
 	// to handle errors
 	const LINK_REGEX =
