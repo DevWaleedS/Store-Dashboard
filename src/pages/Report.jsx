@@ -41,7 +41,6 @@ const Report = () => {
 					"YYYY-MM-DD"
 				)}`
 			);
-			console.log(url);
 		} else {
 			console.log("data not found");
 		}

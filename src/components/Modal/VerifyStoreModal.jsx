@@ -60,7 +60,7 @@ const VerifyStore = () => {
 			padding: "16px",
 		},
 	};
-	console.log(userInfo?.username);
+
 	return (
 		<div>
 			<Modal

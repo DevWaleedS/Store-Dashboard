@@ -97,8 +97,6 @@ const HoursWorks = ({
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
-	console.log(workDays);
-
 	// To show the store info that come from api
 	const { fetchedData } = useFetch(
 		"https://backend.atlbha.com/api/Store/setting_store_show"

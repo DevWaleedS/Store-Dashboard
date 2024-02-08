@@ -230,7 +230,6 @@ const EditProduct = () => {
 		}
 	}, [fetchedData?.data?.product]);
 
-	console.log(productHasOptions);
 	// ---------------------------------------------
 
 	// Handle Errors

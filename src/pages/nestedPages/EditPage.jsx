@@ -352,7 +352,7 @@ const EditPage = () => {
 				}
 			});
 	};
-	console.log(images[0]?.preview, page?.image);
+
 	return (
 		<>
 			<Helmet>

@@ -6,7 +6,7 @@ import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
 import * as FileSaver from "file-saver";
 import useFetch from "../../Hooks/UseFetch";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Components
 import { DropCSVFiles, FormSearchWeight } from "./index";

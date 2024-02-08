@@ -3532,6 +3532,22 @@ nav.navigation {
 	-o-border-radius: 8px;
 }
 
+.wallet-data-box.data-box .icon svg {
+	width: 22px;
+	height: 22px;
+}
+
+.wallet-data-box.data-box .icon {
+	width: 30px;
+	height: 30px;
+	padding: 18px;
+}
+
+.wallet-data-box.data-box .data p {
+	font-size: 18px;
+	width: 100%;
+}
+
 .bank-accounts {
 	padding: 16px 14px;
 	border: 1px solid #f4f4f4;
@@ -3649,6 +3665,30 @@ nav.navigation {
 	color: var(--black-200);
 }
 
+/* verification alert style */
+.verification-alert-btns button {
+	width: 45%;
+	font-size: 22px;
+	font-weight: 400;
+	height: 56px;
+
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
+}
+
+.verification-alert-btns button.verification-now-btn {
+	background-color: #1dbbbe;
+	color: #fff;
+}
+.verification-alert-btns button.verification-later-btn {
+	color: #1dbbbe;
+
+	background-color: #fff;
+	border: 1px solid #1dbbbe;
+}
 /* -------------------------------------------------------------------------------------------------------------------------------- */
 
 /* select-country */
@@ -12220,11 +12260,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		padding: 50px 20px !important;
 	}
 
-	.store-alert-footer button {
-		font-size: 18px !important;
-		height: 45px !important;
-	}
-
 	/* social-links-page */
 	.social-links-form {
 		background-color: #f4f5f7;
@@ -12496,6 +12531,19 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		-moz-border-radius: 4px;
 		-ms-border-radius: 4px;
 		-o-border-radius: 4px;
+	}
+
+	/* verification alert style */
+	.verification-alert-btns button {
+		width: 100%;
+		font-size: 20px;
+
+		height: 46px;
+		border-radius: 6px;
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		-ms-border-radius: 6px;
+		-o-border-radius: 6px;
 	}
 
 	.select-icon {

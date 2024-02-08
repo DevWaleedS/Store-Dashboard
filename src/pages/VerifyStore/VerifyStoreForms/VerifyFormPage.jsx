@@ -184,8 +184,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 	};
 
-	console.log(file[0]?.name);
-
 	// To get the the owner phone number
 	useEffect(() => {
 		setData({

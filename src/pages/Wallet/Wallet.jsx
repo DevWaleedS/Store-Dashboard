@@ -33,12 +33,18 @@ const Wallet = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/paymenttype`
-	);
+
+	// get supplierDashboard
+	const {
+		fetchedData: supplierDashboard,
+		loading,
+		reload,
+		setReload,
+	} = useFetch(`https://backend.atlbha.com/api/Store/showSupplierDashboard`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
+	console.log(supplierDashboard?.data?.SupplierDashboard);
 
 	// // change Status function
 	// const changeStatus = (id, e) => {
@@ -106,7 +112,12 @@ const Wallet = () => {
 							<>
 								{/* Wallet quick details component */}
 								<section className='row mb-3 mb-md-5'>
-									<WalletQuickDetails />
+									<WalletQuickDetails
+										loading={loading}
+										supplierDashboard={
+											supplierDashboard?.data?.SupplierDashboard
+										}
+									/>
 								</section>
 
 								{/* Bank Accounts */}

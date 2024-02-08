@@ -1,6 +1,11 @@
 import React, { Fragment } from "react";
 import ReactDom from "react-dom";
+// Icons
+import { CiCircleCheck } from "react-icons/ci";
 
+import { toast } from "react-toastify";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAfterMainModal-slice";
 import { useNavigate } from "react-router-dom";
@@ -45,25 +50,42 @@ const VerifayAfterMainInfoAlert = () => {
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='store-alert-body text-center' style={contentStyle}>
-						<p>تم حفظ البيانات بنجاح</p>
-						<p className='text-bold'>يرجى اكمال بيانات التوثيق</p>
+						<p className='mb-2'>
+							{" "}
+							تم حفظ البيانات بنجاح
+							<CiCircleCheck />
+						</p>
+						<p
+							style={{
+								whiteSpace: "normal",
+								color: "#006e87",
+								fontWeight: "500",
+							}}>
+							{" "}
+							هل تريد استكمال بيانات التوثيق لأنشاء المتجر؟
+						</p>
 					</div>
-					<div className='store-alert-footer d-flex justify-between '>
+					<div className='store-alert-footer d-flex flex-column flex-md-row  justify-content-center p-md-4 p-2 py-4 align-content-center verification-alert-btns gap-2'>
 						<button
 							onClick={() => {
 								navigate("/VerifyStore");
 								dispatch(closeVerifyAfterMainModal());
 							}}
-							style={{
-								color: "#fff",
-								fontSize: "24px",
-								fontWight: 500,
-								height: "70px",
-								backgroundColor: "#1DBBBE",
-								borderRadius: " 0 0 16px 16px",
+							className=' verification-now-btn'>
+							الآن
+						</button>
+						<button
+							onClick={() => {
+								toast.warning(
+									"سيتم حذف بيانات المتجر اذا لم يتم التوثيق خلال 3 أيام",
+									{
+										theme: "light",
+									}
+								);
+								dispatch(closeVerifyAfterMainModal());
 							}}
-							className='w-100'>
-							التوجه إلى الصفحة التوثيق
+							className=' verification-later-btn'>
+							وقت اخر
 						</button>
 					</div>
 				</Box>

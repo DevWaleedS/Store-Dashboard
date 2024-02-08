@@ -25,6 +25,8 @@ import { TopBarSearchInput } from "../../global";
 import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
 import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+// Redux
+import { useSelector } from "react-redux";
 
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
@@ -98,6 +100,9 @@ const MainInformation = () => {
 	const { fetchedData: citiesList } = useFetch(
 		"https://backend.atlbha.com/api/Store/selector/cities"
 	);
+
+	//  to handle disabled or enable phone number based verificationStoreStatus
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
@@ -686,7 +691,7 @@ const MainInformation = () => {
 											<label
 												htmlFor='address'
 												className='setting_label d-block'>
-												عنوان المتجر
+												عنوان المتجر <span className='tax-text '>(تلقائي)</span>
 											</label>
 
 											<div className='select-country'>
@@ -730,15 +735,7 @@ const MainInformation = () => {
 												htmlFor='store_email'
 												className='setting_label d-block'>
 												البريد الالكتروني
-												<span
-													style={{
-														color: "red",
-														fontSize: "14px",
-														whiteSpace: "pre-line",
-													}}>
-													{" "}
-													(تعديل البريد الالكتروني يكون عبر الدعم الفني){" "}
-												</span>
+												<span className='important-hint ps-1'>*</span>
 											</label>
 											<input
 												className='direction-ltr text-right store-email-input w-100'
@@ -747,8 +744,6 @@ const MainInformation = () => {
 												placeholder=' البريد الالكتروني'
 												value={storeEmail}
 												onChange={(e) => setStoreEmail(e.target.value)}
-												disabled={true}
-												readOnly
 											/>
 										</div>
 										{settingErr?.storeEmail && (
@@ -770,15 +765,29 @@ const MainInformation = () => {
 												htmlFor='phonenumber'
 												className='setting_label d-block'>
 												رقم الهاتف
-												<span
-													style={{
-														color: "red",
-														fontSize: "14px",
-														whiteSpace: "pre-line",
-													}}>
-													{" "}
-													( تعديل رقم الهاتف يكون عبر الدعم الفني ){" "}
-												</span>
+												<span className='important-hint ps-1'>*</span>
+												{verificationStoreStatus === "تم التوثيق" ? (
+													<span
+														style={{
+															color: "red",
+															fontSize: "14px",
+															whiteSpace: "pre-line",
+														}}>
+														{" "}
+														( تعديل رقم الهاتف يكون عبر الدعم الفني ){" "}
+													</span>
+												) : (
+													<span
+														style={{
+															color: "red",
+															fontSize: "14px",
+															whiteSpace: "pre-line",
+														}}>
+														{" "}
+														( تأكد أن رقم الهاتف هو الرقم الموجود بوثيقة العمل
+														الحر. ){" "}
+													</span>
+												)}
 											</label>
 
 											<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -796,8 +805,16 @@ const MainInformation = () => {
 													aria-describedby='phoneNumber'
 													onFocus={() => setPhoneNumberFocus(true)}
 													onBlur={() => setPhoneNumberFocus(true)}
-													disabled={true}
-													readOnly
+													disabled={
+														verificationStoreStatus === "تم التوثيق"
+															? true
+															: false
+													}
+													readOnly={
+														verificationStoreStatus === "تم التوثيق"
+															? true
+															: false
+													}
 												/>
 											</div>
 										</div>
@@ -827,6 +844,7 @@ const MainInformation = () => {
 									<div className='col-lg-8 col-12'>
 										<label htmlFor='address' className='setting_label d-block'>
 											وصف المتجر
+											<span className='important-hint ps-1'>*</span>
 										</label>
 										<div className='select-country'>
 											<div className='select-icon'>
