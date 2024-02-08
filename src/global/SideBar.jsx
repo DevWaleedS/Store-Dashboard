@@ -380,43 +380,6 @@ const SideBar = ({ open, closeSidebar }) => {
 							<span className='me-2'> ترقية الباقة</span>
 						</MenuItem>
 					</NavLink>*/}
-
-					{/*<NavLink
-						className='sub-menu-link disabled-menu-link'
-						to='BranchesAndWarehouses'
-						onClick={() => closeSidebar()}>
-						<MenuItem>
-							<BranchesAndWarehouses />
-							<span className='me-2'>الفروع والمستودعات </span>
-						</MenuItem>
-					</NavLink>*/}
-					{/*<NavLink
-						className='sub-menu-link disabled-menu-link'
-						to='BranchesAndWarehouses'
-						onClick={() => closeSidebar()}>
-						<MenuItem>
-							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> المحفظة والفواتير </span>
-						</MenuItem>
-					</NavLink>*/}
-					{/*<NavLink
-						className='sub-menu-link disabled-menu-link'
-						to='BranchesAndWarehouses'
-						onClick={() => closeSidebar()}>
-						<MenuItem>
-							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> نشاط المتجر </span>
-						</MenuItem>
-					</NavLink>*/}
-					{/*<NavLink
-						className='sub-menu-link disabled-menu-link'
-						to='BranchesAndWarehouses'
-						onClick={() => closeSidebar()}>
-						<MenuItem>
-							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> خيارات المتجر </span>
-						</MenuItem>
-					</NavLink>*/}
 				</SubMenu>
 				<NavLink
 					className='menu-link'
@@ -461,7 +424,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					</MenuItem>
 				</NavLink>
 
-				<NavLink
+				{/*
+			<NavLink
 					className='menu-link'
 					to='wallet'
 					onClick={() => {
@@ -475,6 +439,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> المحفظة و الفواتير</span>
 					</MenuItem>
 				</NavLink>
+			*/}
+
 				{/** Setting Sub menu */}
 				<SubMenu label=' الاعدادات' icon={<Setting />} as='li'>
 					<NavLink
