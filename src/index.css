@@ -240,7 +240,7 @@ svg:not(:root) {
 
 /* Reset some styles  */
 .important-hint {
-	font-size: 16px;
+	font-size: 14px;
 	color: #ff3838;
 }
 

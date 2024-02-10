@@ -55,11 +55,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	/** -----------------------------------------------------------------------------------------------------------
-	 *  	=> TO HANDLE THE REG_EXPRESS <=
-	 *  ------------------------------------------------- */
-	const PHONE_REGEX = /^(5\d{8})$/;
-	const [validUserPhoneNumber, setValidUserPhoneNumber] = useState(false);
+	/** ----------------------------------------------------*/
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/verification_show"
@@ -79,6 +75,10 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const navigate = useNavigate();
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
+	/** ------------------------------------------------------------------------- */
+	// handle add activity
+
 	const { activity } = useSelector((state) => state.AddActivity);
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
 
@@ -102,11 +102,10 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			});
 		}
 	);
+	/** ------------------------------------------------------------------------- */
 
-	// to handle data
 	const [file, setFile] = useState([]);
 	const [data, setData] = useState({
-		phonenumber: "",
 		verification_type: "",
 		verification_code: "",
 		owner_name: "",
@@ -115,9 +114,10 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		freelancing_city_id: "",
 	});
 
+	/** ------------------------------------------------------------------------- */
+
 	// errors
 	const [dataErrors, setDataErrors] = useState({
-		phonenumber: "",
 		verification_type: "",
 		verification_code: "",
 		owner_name: "",
@@ -128,7 +128,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 
 	const resetDataErrors = () => {
 		setDataErrors({
-			phonenumber: "",
 			verification_type: "",
 			verification_code: "",
 			owner_name: "",
@@ -138,6 +137,8 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		});
 	};
 
+	/** ------------------------------------------------------------------------- */
+
 	// to set radio input
 	const [
 		openCommercialRegisterInputGroup,
@@ -145,6 +146,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	] = React.useState(false);
 	const [openFreeLaborDocumentInputGroup, setOpenFreeLaborDocumentInputGroup] =
 		React.useState(false);
+	/** ------------------------------------------------------------------------- */
 
 	//  use dropzone to get personal image
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
@@ -187,36 +189,12 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 	};
 
-	// To get the the owner phone number
-	useEffect(() => {
-		setData({
-			...data,
-
-			phonenumber: fetchedData?.data?.phonenumber?.startsWith("+966")
-				? fetchedData?.data?.phonenumber.slice(4)
-				: fetchedData?.data?.phonenumber?.startsWith("00966")
-				? fetchedData?.data?.phonenumber.slice(5)
-				: fetchedData?.data?.phonenumber,
-		});
-	}, [fetchedData?.data]);
-
-	// TO HANDLE VALIDATION USER PHONE NUMBER
-	useEffect(() => {
-		const userPhoneNumberValidation = PHONE_REGEX.test(data?.phonenumber);
-		setValidUserPhoneNumber(userPhoneNumberValidation);
-	}, [data?.phonenumber]);
+	/** ------------------------------------------------------------------------- */
 
 	const uploadVerifyStoreOrder = () => {
 		resetDataErrors();
 		setLoadingTitle("جاري ارسال طلب التوثيق");
 		let formData = new FormData();
-		formData.append(
-			"phonenumber",
-			data?.phonenumber?.startsWith("+966") ||
-				data?.phonenumber?.startsWith("00966")
-				? data?.phonenumber
-				: `+966${data?.phonenumber}`
-		);
 
 		formData.append("verification_type", data?.verification_type);
 		formData.append("verification_code", data.verification_code);
@@ -268,7 +246,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					setLoadingTitle("");
 					setDataErrors({
 						name: res?.data?.message?.en?.name?.[0],
-						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
+
 						verification_type: res?.data?.message?.en?.verification_type?.[0],
 						commercial_name: res?.data?.message?.en?.commercial_name?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
@@ -277,9 +255,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					toast.error(res?.data?.message?.en?.name?.[0], {
 						theme: "light",
 					});
-					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
-						theme: "light",
-					});
+
 					toast.error(res?.data?.message?.en?.verification_type?.[0], {
 						theme: "light",
 					});
