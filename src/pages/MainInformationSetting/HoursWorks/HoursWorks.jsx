@@ -26,10 +26,15 @@ const ModalStyle = {
 	border: "1px solid #707070",
 	borderRadius: "16px",
 	boxShadow: 24,
+	"@media(max-width:768px)": {
+		top: "75px",
+		borderRadius: "8px",
+		transform: "translate(-50%, 0%)",
+	},
 };
 
 const contentStyle = {
-	height: "500px",
+	height: "550px",
 	display: "flex",
 	flexDirection: "column",
 	gap: "18px",
@@ -238,28 +243,26 @@ const HoursWorks = ({
 								</button>
 							</div>
 
-							{day?.status === "active" && (
-								<div className='choose-time'>
-									<div className='time-input'>
-										<input
-											value={day?.from}
-											onChange={(e) => updateFromTime(index, e.target.value)}
-											type='time'
-											style={{ color: "#000000" }}
-											disabled={!openAlawys}
-										/>
-									</div>
-									<div className='time-input'>
-										<input
-											value={day?.to}
-											onChange={(e) => updateToTime(index, e.target.value)}
-											type='time'
-											style={{ color: "#000000" }}
-											disabled={!openAlawys}
-										/>
-									</div>
+							<div className='choose-time'>
+								<div className='time-input'>
+									<input
+										value={day?.from}
+										onChange={(e) => updateFromTime(index, e.target.value)}
+										type='time'
+										style={{ color: "#000000" }}
+										disabled={!openAlawys || day?.status !== "active"}
+									/>
 								</div>
-							)}
+								<div className='time-input'>
+									<input
+										value={day?.to}
+										onChange={(e) => updateToTime(index, e.target.value)}
+										type='time'
+										style={{ color: "#000000" }}
+										disabled={!openAlawys || day?.status !== "active"}
+									/>
+								</div>
+							</div>
 						</div>
 					))}
 

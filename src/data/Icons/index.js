@@ -69,6 +69,7 @@ export { ReactComponent as UploadIcon } from "./icon-24-uplad.svg";
 export { ReactComponent as SearchIcon } from "./icon_24_search.svg";
 export { ReactComponent as LinkIcon } from "./link.svg";
 export { ReactComponent as TwitterIcon } from "./Xx.svg";
+export { ReactComponent as TiktokIconColored } from "./blue-tiktok.svg";
 export { ReactComponent as TiktokIcon } from "./tiktok.svg";
 export { ReactComponent as InstagramIcon } from "./instagramm.svg";
 export { ReactComponent as SnapchatIcon } from "./icon-24-snapchat-yellow.svg";

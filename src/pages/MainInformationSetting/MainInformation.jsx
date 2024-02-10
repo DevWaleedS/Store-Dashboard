@@ -216,8 +216,9 @@ const MainInformation = () => {
 
 		let formData = new FormData();
 
-		formData.append("logo", storeLogo[0]?.file || defaultStoreLogo || "");
-		formData.append("icon", storeIcon[0]?.file || defaultStoreIcon || "");
+		formData.append("logo", storeLogo[0]?.file || "");
+		formData.append("icon", storeIcon[0]?.file || "");
+
 		formData.append("store_name", storeName);
 		formData.append("domain", domain);
 		formData.append("country_id", country);
@@ -768,6 +769,7 @@ const MainInformation = () => {
 												<span className='important-hint ps-1'>*</span>
 												{verificationStoreStatus === "تم التوثيق" ? (
 													<span
+														className='phone-hint'
 														style={{
 															color: "red",
 															fontSize: "14px",
@@ -778,6 +780,7 @@ const MainInformation = () => {
 													</span>
 												) : (
 													<span
+														className='phone-hint'
 														style={{
 															color: "red",
 															fontSize: "14px",

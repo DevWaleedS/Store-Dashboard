@@ -8506,6 +8506,9 @@ textarea.new-service-input {
 .choose-time .time-input input {
 	background-color: transparent;
 }
+.choose-time .time-input input:disabled {
+	opacity: 0.3;
+}
 
 .day-switch {
 	display: flex;
@@ -11964,6 +11967,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.setting_label {
 		font-size: 16px;
+	}
+	.setting_label .phone-hint {
+		display: block;
 	}
 
 	.upload-icon-hint {

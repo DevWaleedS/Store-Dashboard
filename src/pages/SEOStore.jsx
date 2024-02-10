@@ -28,7 +28,7 @@ import {
 	InstagramIcon,
 	LinkIcon,
 	SnapchatIcon,
-	TiktokIcon,
+	TiktokIconColored,
 	TwitterIcon,
 } from "../data/Icons";
 
@@ -294,7 +294,7 @@ const PaintStore = () => {
 						<div className='d-flex flex-column gap-3'>
 							<div className='social-media-inputs'>
 								<div className='label'>
-									<TiktokIcon />
+									<TiktokIconColored />
 									<label>تيك توك بكسل</label>
 								</div>
 								<div className='input'>

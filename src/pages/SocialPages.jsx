@@ -102,7 +102,7 @@ const SocialPages = () => {
 
 	// to update Seo values
 	const updateSocialMedia = () => {
-		setLoadingTitle("جاري تعديل التواصل الاجتماعي");
+		setLoadingTitle("جاري تعديل حسابات التواصل الاجتماعي");
 		resetError();
 		let formData = new FormData();
 		formData.append("snapchat", socialValue?.snapchat || "");

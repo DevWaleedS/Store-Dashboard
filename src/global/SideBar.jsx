@@ -424,8 +424,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					</MenuItem>
 				</NavLink>
 
-				{/*
-			<NavLink
+				<NavLink
 					className='menu-link'
 					to='wallet'
 					onClick={() => {
@@ -439,7 +438,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> المحفظة و الفواتير</span>
 					</MenuItem>
 				</NavLink>
-			*/}
 
 				{/** Setting Sub menu */}
 				<SubMenu label=' الاعدادات' icon={<Setting />} as='li'>

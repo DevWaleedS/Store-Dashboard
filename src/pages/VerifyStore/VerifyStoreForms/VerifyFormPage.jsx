@@ -60,7 +60,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	 *  ------------------------------------------------- */
 	const PHONE_REGEX = /^(5\d{8})$/;
 	const [validUserPhoneNumber, setValidUserPhoneNumber] = useState(false);
-	const [userPhoneNumberFocus, setUserPhoneNumberFocus] = useState(false);
+
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		"https://backend.atlbha.com/api/Store/verification_show"
 	);
@@ -108,6 +108,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const [data, setData] = useState({
 		phonenumber: "",
 		verification_type: "",
+		verification_code: "",
 		owner_name: "",
 		commercial_name: "",
 		city_id: "",
@@ -118,6 +119,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const [dataErrors, setDataErrors] = useState({
 		phonenumber: "",
 		verification_type: "",
+		verification_code: "",
 		owner_name: "",
 		commercial_name: "",
 		city_id: "",
@@ -128,6 +130,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		setDataErrors({
 			phonenumber: "",
 			verification_type: "",
+			verification_code: "",
 			owner_name: "",
 			commercial_name: "",
 			city_id: "",
@@ -216,7 +219,9 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		);
 
 		formData.append("verification_type", data?.verification_type);
+		formData.append("verification_code", data.verification_code);
 		formData.append("owner_name", data?.owner_name);
+
 		formData.append(
 			"commercial_name",
 			data?.verification_type === "commercialregister"
@@ -410,6 +415,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 								<div className='col-md-8 col-12'>
 									<input
+										type='text'
 										name='owner_name'
 										value={data?.owner_name}
 										onChange={(e) => {
@@ -445,6 +451,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 								<div className='col-md-8 col-12'>
 									<input
+										type='text'
 										name='commercial_name'
 										value={data?.commercial_name}
 										onChange={(e) => {
@@ -561,7 +568,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 							</div>
 
-							<div className='row d-flex justify-content-between align-items-center '>
+							<div className='row d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
 										رفع السجل التجاري <span className='important-hint'>*</span>
@@ -613,6 +620,47 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									{!dataErrors?.file && (
 										<div className='important-hint'>
 											يجب ان تكون صيغة الملف pdf
+										</div>
+									)}
+								</div>
+							</div>
+
+							<div className='row d-flex justify-content-between align-items-center'>
+								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
+									<h5 className='label upload-docs-label'>
+										رقم السجل التجاري <span className='important-hint'>*</span>
+									</h5>
+								</div>
+
+								<div className='col-md-8 col-12'>
+									<div className='tax-text '>
+										رقم السجل التجاري مكون من 10 أرقام
+									</div>
+									<input
+										name='verification_code'
+										type='text'
+										value={data?.verification_code}
+										onChange={(e) => {
+											handleOnChange(e);
+										}}
+										placeholder='قم بكتابة رقم السجل التجاري كما هو موضح في السجل التجاري'
+										style={{
+											width: "100%",
+											height: "50px",
+											padding: "18px",
+											background: "#FAFAFA",
+											color: "#00000",
+											fontSize: "16px",
+											fontWeight: "400",
+											borderRadius: "4px",
+										}}
+									/>
+
+									{dataErrors?.verification_code && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.verification_code}
 										</div>
 									)}
 								</div>
@@ -683,6 +731,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 								<div className='col-md-8 col-12'>
 									<input
+										type='text'
 										name='owner_name'
 										value={data?.owner_name}
 										onChange={(e) => {
@@ -767,7 +816,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									)}
 								</div>
 							</div>
-							<div className='row d-flex justify-content-between align-items-center '>
+							<div className='row d-flex justify-content-between align-items-center mb-3'>
 								<div className='col-4 col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
 										رفع وثيقة العمل الحر
@@ -820,6 +869,47 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									{!dataErrors?.file && (
 										<div className='important-hint'>
 											يجب ان تكون صيغة الملف pdf
+										</div>
+									)}
+								</div>
+							</div>
+
+							<div className='row d-flex justify-content-between align-items-center'>
+								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
+									<h5 className='label upload-docs-label'>
+										رقم التوثيق <span className='important-hint'>*</span>
+									</h5>
+								</div>
+
+								<div className='col-md-8 col-12'>
+									<div className='tax-text '>
+										رقم التوثيق الصادر من نظام التوثيقات
+									</div>
+									<input
+										name='verification_code'
+										value={data?.verification_code}
+										type='text'
+										onChange={(e) => {
+											handleOnChange(e);
+										}}
+										placeholder='قم بكتابة رقم التوثيق  كما هو موضح في وثيقة العمل الحر'
+										style={{
+											width: "100%",
+											height: "50px",
+											padding: "18px",
+											background: "#FAFAFA",
+											color: "#00000",
+											fontSize: "16px",
+											fontWeight: "400",
+											borderRadius: "4px",
+										}}
+									/>
+
+									{dataErrors?.verification_code && (
+										<div
+											className='important-hint me-1'
+											style={{ fontSize: "16px", whiteSpace: "normal" }}>
+											{dataErrors?.verification_code}
 										</div>
 									)}
 								</div>

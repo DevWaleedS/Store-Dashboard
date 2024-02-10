@@ -590,7 +590,7 @@ const EditProduct = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<Controller
-													name={"title"}
+													name={"name"}
 													control={control}
 													rules={{
 														required: "حقل اسم المنتج مطلوب ",
