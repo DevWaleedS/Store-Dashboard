@@ -32,20 +32,6 @@ const ModalStyle = {
 		maxWidth: "95%",
 	},
 };
-// const contentStyle = {
-// 	height: "550px",
-// 	display: "flex",
-// 	flexDirection: "column",
-// 	gap: "18px",
-// 	fontSize: "20px",
-// 	fontWight: 400,
-// 	letterSpacing: "0.2px",
-// 	color: "#FFFFFF",
-// 	padding: "30px 80px 20px",
-// 	whiteSpace: "normal",
-// 	overflowY: "auto",
-// 	overflowX: "hidden",
-// };
 
 const switchStyle = {
 	width: "36px !important",
