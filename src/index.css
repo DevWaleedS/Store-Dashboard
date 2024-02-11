@@ -12600,6 +12600,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		-o-border-radius: 4px;
 	}
 
+	.choose-time {
+ 
+    flex-direction: column;
+   
+    justify-content: center;
+    
+}
+
 	.choose-time .time-input {
 		width: 100%;
 		max-width: 100%;
