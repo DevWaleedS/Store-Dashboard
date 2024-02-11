@@ -12566,6 +12566,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.choose-time .time-input {
 		width: 120px;
+		max-width: 100%;
 	}
 
 	.seo-store-page .data-container .social-media-inputs {

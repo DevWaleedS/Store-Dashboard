@@ -461,7 +461,10 @@ const AddNewProduct = () => {
 			<div className='add-category-form' open={true}>
 				<Modal
 					open={true}
-					onClose={() => navigate("/Products")}
+					onClose={() => {
+						navigate("/Products");
+						setEditorValue(null);
+					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box component={"div"} sx={style}>
@@ -488,7 +491,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<Controller
-												name={"title"}
+												name={"name"}
 												control={control}
 												rules={{
 													required: "حقل اسم المنتج مطلوب ",
