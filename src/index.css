@@ -8514,6 +8514,10 @@ textarea.new-service-input {
 	-moz-border-radius: 0 0 8px 8px;
 	-ms-border-radius: 0 0 8px 8px;
 	-o-border-radius: 0 0 8px 8px;
+
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
 }
 
 .work-day {
