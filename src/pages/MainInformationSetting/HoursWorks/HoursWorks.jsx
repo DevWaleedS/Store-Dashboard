@@ -15,30 +15,14 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import Context from "../../../Context/context";
 
 // -------------------------------------------------------------
-// const ModalStyle = {
-// 	position: "absolute",
-// 	top: "55%",
-// 	left: "50%",
-// 	transform: "translate(-50%, -50%)",
-// 	width: "900px",
-// 	maxWidth: "90%",
-// 	bgcolor: "#fff",
-// 	border: "1px solid #707070",
-// 	borderRadius: "16px",
-// 	boxShadow: 24,
-// 	"@media(max-width:768px)": {
-// 		top: "75px",
-// 		borderRadius: "8px",
-// 		transform: "translate(-50%, 0%)",
-// 	},
-// };
+
 /* Modal Styles */
 const ModalStyle = {
 	position: "absolute",
 	top: "120px",
 	left: "50%",
 	transform: "translate(-50%, 0%)",
-	width: "992px",
+	width: "850px",
 	maxWidth: "90%",
 	paddingBottom: "30px",
 	"@media(max-width:768px)": {

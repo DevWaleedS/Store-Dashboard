@@ -8507,6 +8507,7 @@ textarea.new-service-input {
 	-o-border-radius: 8px;
 }
 .work-hours-wrapper {
+	width: 100%;
 	background: #ffffff;
 	padding: 20px;
 	border-radius: 0 0 8px 8px;
@@ -8517,7 +8518,7 @@ textarea.new-service-input {
 }
 
 .work-day {
-	min-width: max-content;
+	width: 100%;
 	min-height: 80px;
 	background-color: #ffffff;
 	box-shadow: 0px 3px 20px #0000000f;
@@ -13067,10 +13068,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.delegate-request-alert {
 		padding: 10px !important;
-	}
-
-	.work-day {
-		min-width: 100% !important;
 	}
 
 	.day-switch {
