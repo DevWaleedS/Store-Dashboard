@@ -8514,10 +8514,6 @@ textarea.new-service-input {
 	-moz-border-radius: 0 0 8px 8px;
 	-ms-border-radius: 0 0 8px 8px;
 	-o-border-radius: 0 0 8px 8px;
-
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
 }
 
 .work-day {
@@ -8549,14 +8545,16 @@ textarea.new-service-input {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 180px;
-	height: 56px;
+	padding: 0 18px;
+	height: 48px;
 	border-radius: 4px;
 	border: 1px solid rgb(173, 181, 185);
 }
 
 .choose-time .time-input input {
 	background-color: transparent;
+
+	max-width: 100%;
 }
 .choose-time .time-input input:disabled {
 	opacity: 0.3;
@@ -9863,11 +9861,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.add-user-form .form-body input#email {
 		padding-left: 17px;
-	}
-
-	.choose-time .time-input {
-		width: 150px;
-		height: 48px;
 	}
 
 	.souqOtlobha-page .total-products {
@@ -12605,8 +12598,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.choose-time .time-input {
-		width: 150px;
 		max-width: 100%;
+		padding: 0 9px;
 		height: 45px;
 	}
 
@@ -12644,11 +12637,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.pm-am {
 		font-size: 16px !important;
-	}
-
-	.choose-time .time-input {
-		width: 120px;
-		max-width: 100%;
 	}
 
 	.seo-store-page .data-container .social-media-inputs {
@@ -12818,10 +12806,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.work-day {
 		min-height: auto !important;
-	}
-
-	.choose-time {
-		width: 100%;
 	}
 
 	.choose-time .time-input {
