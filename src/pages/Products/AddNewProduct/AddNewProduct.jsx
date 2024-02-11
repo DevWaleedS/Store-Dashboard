@@ -1178,7 +1178,6 @@ const AddNewProduct = () => {
 												type='button'
 												onClick={() => {
 													dispatch(openProductOptionModal());
-													clearOptions();
 												}}>
 												إضافة خيارات المنتج
 												<FiPlus />
