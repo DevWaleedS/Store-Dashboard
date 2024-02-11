@@ -3633,19 +3633,19 @@ nav.navigation {
 }
 .main-info-form .simple-img {
 	background: var(--gray-200);
-	width: 30px;
-	height: 30px;
+	width: 20px;
+	height: 20px;
 	display: inline-block;
 }
 .main-info-form .wrapper {
-	width: 60px;
-	height: 30px;
+	width: 50px;
+	height: 20px;
 	display: flex;
 	justify-content: flex-end;
 }
 .main-info-form .simple-img.rectangle-logo {
-	width: 60px;
-	height: 30px;
+	width: 50px;
+	height: 20px;
 }
 .main-info-form .upload-image-wrapper {
 	width: 100%;
