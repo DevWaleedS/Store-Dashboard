@@ -22,7 +22,7 @@ const ModalStyle = {
 	top: "120px",
 	left: "50%",
 	transform: "translate(-50%, 0%)",
-	width: "850px",
+	width: "750px",
 	maxWidth: "90%",
 	paddingBottom: "30px",
 	"@media(max-width:768px)": {

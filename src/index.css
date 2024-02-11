@@ -8538,7 +8538,9 @@ textarea.new-service-input {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: flex-end;
 	gap: 1rem;
+	width: 100%;
 }
 
 .choose-time .time-input {
@@ -12599,6 +12601,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.choose-time .time-input {
+		width: 100%;
 		max-width: 100%;
 		padding: 0 9px;
 		height: 45px;
@@ -12807,10 +12810,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.work-day {
 		min-height: auto !important;
-	}
-
-	.choose-time .time-input {
-		width: 100%;
 	}
 
 	.banners-preview-container {
