@@ -8485,6 +8485,54 @@ textarea.new-service-input {
 	color: #02466a;
 }
 
+/* style works hours modal  */
+.work-hours-head {
+	background-color: #1dbbbe;
+	border-radius: 8px 8px 0 0;
+	-webkit-border-radius: 8px 8px 0 0;
+	-moz-border-radius: 8px 8px 0 0;
+	-ms-border-radius: 8px 8px 0 0;
+	-o-border-radius: 8px 8px 0 0;
+}
+.work-hours-wrapper .works-switch {
+	font-size: 20px;
+	padding: 14px;
+	color: #fff;
+	border-radius: 8px;
+	margin-bottom: 20px;
+
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
+}
+.work-hours-wrapper {
+	background: #ffffff;
+	padding: 20px;
+	border-radius: 0 0 8px 8px;
+	-webkit-border-radius: 0 0 8px 8px;
+	-moz-border-radius: 0 0 8px 8px;
+	-ms-border-radius: 0 0 8px 8px;
+	-o-border-radius: 0 0 8px 8px;
+}
+
+.work-day {
+	min-width: max-content;
+	min-height: 80px;
+	background-color: #ffffff;
+	box-shadow: 0px 3px 20px #0000000f;
+	border: 1px solid #0000000f;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
+	margin-bottom: 10px;
+}
+.work-day:last-of-type {
+	margin-bottom: 30px;
+}
+
 .choose-time {
 	display: flex;
 	flex-direction: row;
@@ -8543,6 +8591,19 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	background: url("./data/Icons/down-arrow.svg") no-repeat;
 	background-size: 100%;
 	cursor: pointer;
+}
+
+.save-work-hours {
+	height: 56px;
+	color: #fff;
+	font-size: 20px;
+	font-weight: 500;
+	background-color: #1dbbbe;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
 }
 
 .add-new-product-form .add-product-images {
@@ -12537,6 +12598,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		-moz-border-radius: 4px;
 		-ms-border-radius: 4px;
 		-o-border-radius: 4px;
+	}
+
+	.choose-time .time-input {
+		width: 150px;
+		max-width: 100%;
+		height: 45px;
+	}
+
+	.save-work-hours {
+		height: 45px;
+		font-size: 18px;
+		border-radius: 6px;
+
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		-ms-border-radius: 6px;
+		-o-border-radius: 6px;
 	}
 
 	/* verification alert style */

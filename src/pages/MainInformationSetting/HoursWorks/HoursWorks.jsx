@@ -15,38 +15,53 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import Context from "../../../Context/context";
 
 // -------------------------------------------------------------
+// const ModalStyle = {
+// 	position: "absolute",
+// 	top: "55%",
+// 	left: "50%",
+// 	transform: "translate(-50%, -50%)",
+// 	width: "900px",
+// 	maxWidth: "90%",
+// 	bgcolor: "#fff",
+// 	border: "1px solid #707070",
+// 	borderRadius: "16px",
+// 	boxShadow: 24,
+// 	"@media(max-width:768px)": {
+// 		top: "75px",
+// 		borderRadius: "8px",
+// 		transform: "translate(-50%, 0%)",
+// 	},
+// };
+/* Modal Styles */
 const ModalStyle = {
 	position: "absolute",
-	top: "55%",
+	top: "120px",
 	left: "50%",
-	transform: "translate(-50%, -50%)",
-	width: "900px",
+	transform: "translate(-50%, 0%)",
+	width: "992px",
 	maxWidth: "90%",
-	bgcolor: "#fff",
-	border: "1px solid #707070",
-	borderRadius: "16px",
-	boxShadow: 24,
+	paddingBottom: "30px",
 	"@media(max-width:768px)": {
-		top: "75px",
-		borderRadius: "8px",
-		transform: "translate(-50%, 0%)",
+		position: "absolute",
+		top: "10px",
+
+		maxWidth: "95%",
 	},
 };
-
-const contentStyle = {
-	height: "550px",
-	display: "flex",
-	flexDirection: "column",
-	gap: "18px",
-	fontSize: "20px",
-	fontWight: 400,
-	letterSpacing: "0.2px",
-	color: "#FFFFFF",
-	padding: "30px 80px 20px",
-	whiteSpace: "normal",
-	overflowY: "auto",
-	overflowX: "hidden",
-};
+// const contentStyle = {
+// 	height: "550px",
+// 	display: "flex",
+// 	flexDirection: "column",
+// 	gap: "18px",
+// 	fontSize: "20px",
+// 	fontWight: 400,
+// 	letterSpacing: "0.2px",
+// 	color: "#FFFFFF",
+// 	padding: "30px 80px 20px",
+// 	whiteSpace: "normal",
+// 	overflowY: "auto",
+// 	overflowX: "hidden",
+// };
 
 const switchStyle = {
 	width: "36px !important",
@@ -165,9 +180,7 @@ const HoursWorks = ({
 			aria-labelledby='modal-modal-title'
 			aria-describedby='modal-modal-description'>
 			<Box component={"div"} sx={ModalStyle}>
-				<div
-					className='d-flex flex-row align-items-center justify-content-between p-4'
-					style={{ backgroundColor: "#1DBBBE", borderRadius: "8px" }}>
+				<div className='d-flex flex-row align-items-center justify-content-between p-3 p-md-4 work-hours-head'>
 					<h6 style={{ color: "#F7FCFF" }}>ساعات العمل</h6>
 					<AiOutlineCloseCircle
 						onClick={() => {
@@ -187,16 +200,11 @@ const HoursWorks = ({
 						}}
 					/>
 				</div>
-				<div
-					className='delegate-request-alert text-center'
-					style={contentStyle}>
+				<div className='text-center work-hours-wrapper'>
 					<div
-						className='d-flex flex-row align-items-center justify-content-center gap-3'
+						className='d-flex flex-row align-items-center justify-content-center gap-3 works-switch'
 						style={{
 							backgroundColor: !openAlawys ? "#011723" : "#ADB5B9",
-							borderRadius: "8px",
-							fontSize: "20px",
-							padding: "14px",
 						}}>
 						<Switch
 							onChange={(e) => {
@@ -211,14 +219,7 @@ const HoursWorks = ({
 					{workDays?.map((day, index) => (
 						<div
 							key={index}
-							className='work-day d-flex flex-sm-row flex-column align-items-center justify-content-between px-3 py-2 gap-3'
-							style={{
-								minWidth: "max-content",
-								minHeight: "80px",
-								backgroundColor: "#FFFFFF",
-								boxShadow: "0px 3px 6px #0000000F",
-								borderRadius: "8px",
-							}}>
+							className='work-day d-flex flex-sm-row flex-column align-items-center justify-content-between px-3 py-2 gap-3'>
 							<div className='d-flex flex-row align-items-center gap-3'>
 								<span
 									style={{
@@ -271,15 +272,7 @@ const HoursWorks = ({
 							setEndActionTitle("تم حفظ تحديث ساعات العمل");
 							setOpenHoursWork(false);
 						}}
-						style={{
-							minHeight: "56px",
-							color: "#fff",
-							fontSize: "20px",
-							fontWight: 500,
-							backgroundColor: "#1DBBBE",
-							borderRadius: " 8px",
-						}}
-						className='w-100'>
+						className='w-100 save-work-hours'>
 						حفظ ساعات العمل
 					</button>
 				</div>
