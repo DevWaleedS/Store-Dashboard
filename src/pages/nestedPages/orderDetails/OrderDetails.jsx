@@ -1209,7 +1209,7 @@ const OrderDetails = () => {
 					<div className='mb-md-5 mb-4'>
 						<div className='order-details-box'>
 							<div className='title mb-4'>
-								<h5> خيارات الطلب</h5>
+								<h5> خيارات الشحنه</h5>
 							</div>
 							<div className='px-md-3'>
 								<div
@@ -1234,7 +1234,7 @@ const OrderDetails = () => {
 												<ListIcon className='list-icon' />
 												<span className='me-2' style={{ fontSize: "18px" }}>
 													{" "}
-													تعديل حالة الطلب
+													تعديل حالة الشحنه
 												</span>
 											</div>
 											<div className='action-icon'>
