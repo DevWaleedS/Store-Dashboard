@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 
 // Third party
 import axios from "axios";
@@ -8,8 +8,8 @@ import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 
 // Context
-import Context from "../../Context/context";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import Context from "../../../Context/context";
+import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -20,7 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { closeAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
+import { closeAddBankAccountModal } from "../../../store/slices/AddBankAccountModal";
 
 // Icons
 import { CiUser, CiBank } from "react-icons/ci";
@@ -32,7 +32,7 @@ import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
 import { useForm, Controller } from "react-hook-form";
 
-import useFetch from "../../Hooks/UseFetch";
+import useFetch from "../../../Hooks/UseFetch";
 
 /* Modal Styles */
 const style = {
@@ -95,12 +95,23 @@ const AddBankAccountModal = () => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
-
 	const { setLoadingTitle } = LoadingStore;
+
+	const [bankAccountInfo, setBankAccountInfo] = useState({
+		bankId: "",
+		bankAccountHolderName: "",
+		bankAccount: "",
+		iban: "",
+		supplierCode: "",
+		civil_id: "",
+		bankAccountLetter: "",
+		website_image: "",
+	});
 
 	const {
 		register,
 		handleSubmit,
+
 		control,
 		formState: { errors },
 	} = useForm({
@@ -112,17 +123,6 @@ const AddBankAccountModal = () => {
 			iban: "",
 			supplierCode: "",
 		},
-	});
-
-	const [bankAccountInfo, setBankAccountInfo] = useState({
-		bankId: "",
-		bankAccountHolderName: "",
-		bankAccount: "",
-		iban: "",
-		supplierCode: "",
-		civil_id: "",
-		bankAccountLetter: "",
-		website_image: "",
 	});
 
 	/** handle onchange function  */
@@ -157,6 +157,7 @@ const AddBankAccountModal = () => {
 			website_image: "",
 		});
 	};
+
 	/** ----------------------------------------------------------- */
 
 	//  Handler upload bank account docs
@@ -279,7 +280,7 @@ const AddBankAccountModal = () => {
 							</span>
 						) : (
 							<span className='tax-text pe-2'>
-								برجاء ارفاق صوره واضحه من شهاده الايبان
+								برجاء ارفاق صوره واضحه من شهاده الآيبان
 							</span>
 						)}
 					</div>
@@ -295,6 +296,7 @@ const AddBankAccountModal = () => {
 			</>
 		);
 	};
+
 	// handle WebsiteImageUploader
 	const WebsiteImageUploader = () => {
 		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
@@ -430,7 +432,7 @@ const AddBankAccountModal = () => {
 								</div>
 							</div>
 
-							<form onSubmit={handleSubmit(addBankAccount)} className=''>
+							<form onSubmit={handleSubmit(addBankAccount)}>
 								<div className='row  mb-3'>
 									<div className='col-12'>
 										<label>
@@ -510,6 +512,7 @@ const AddBankAccountModal = () => {
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
 											<CiUser />
+
 											<input
 												type='text'
 												name='bankAccountHolderName'
@@ -627,7 +630,7 @@ const AddBankAccountModal = () => {
 								<div className='row  mb-5'>
 									<div className='col-12'>
 										<label>
-											شهاده الايبان
+											شهاده الآيبان
 											<span className='important-hint'>*</span>{" "}
 										</label>
 									</div>

@@ -1,16 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-
-// CONTEXT
-import Context from "../../Context/context";
-
-// MUI
-import { Switch } from "@mui/material";
 
 // components
 import useFetch from "../../Hooks/UseFetch";
@@ -18,6 +11,7 @@ import { TopBarSearchInput } from "../../global";
 import {
 	WalletQuickDetails,
 	AddBankAccountModal,
+	EditBankAccountModal,
 	BankAccountsTable,
 } from "./index.js";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -33,13 +27,6 @@ import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal"
 
 const Wallet = () => {
 	const dispatch = useDispatch();
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 
 	// get supplierDashboard
 	const { fetchedData: supplierDashboard } = useFetch(
@@ -47,12 +34,11 @@ const Wallet = () => {
 	);
 
 	// showSupplier bank account
-	const {
-		fetchedData: showSupplier,
-		loading,
-		reload,
-		setReload,
-	} = useFetch(`https://backend.atlbha.com/api/Store/showSupplier`);
+	const { fetchedData: currentBankAccount, loading } = useFetch(
+		`https://backend.atlbha.com/api/Store/indexSupplier`
+	);
+
+	//
 
 	return (
 		<>
@@ -127,8 +113,8 @@ const Wallet = () => {
 										</div>
 									</div>
 
-									<div className=' bank-accounts-table'>
-										<BankAccountsTable bankAccount={showSupplier?.data} />
+									<div className=' bank-accounts-box'>
+										<BankAccountsTable bankAccount={currentBankAccount?.data} />
 									</div>
 								</section>
 							</>
@@ -136,9 +122,9 @@ const Wallet = () => {
 					</>
 				</div>
 			</section>
-
-			{/* Add Bank Account Modal */}
+			{/* Add & Edit Bank Account Modal */}
 			<AddBankAccountModal />
+			<EditBankAccountModal />
 		</>
 	);
 };

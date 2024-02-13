@@ -13,6 +13,7 @@ import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
 import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
 import ProductOptionModal from "./slices/ProductOptionModal";
 import AddBankAccountModal from "./slices/AddBankAccountModal";
+import EditBankAccountModal from "./slices/EditBankAccountModal";
 
 // store
 export const store = configureStore({
@@ -31,6 +32,7 @@ export const store = configureStore({
 		MaintenanceModeModal: MaintenanceModeModal,
 		DelegateRequestAlert: DelegateRequestAlert,
 		AddBankAccountModal: AddBankAccountModal,
+		EditBankAccountModal: EditBankAccountModal,
 		ImportProductHintModal: ImportProductHintModal,
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,

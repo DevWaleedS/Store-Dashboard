@@ -3549,9 +3549,16 @@ nav.navigation {
 }
 
 .bank-accounts {
-	padding: 16px 14px;
-	border: 1px solid #f4f4f4;
 	background-color: #fdfdfd;
+	border-radius: 6px 6px 0 0;
+	box-shadow: 3px 3px 6px #00000005;
+	border: 1px solid #cccccc;
+}
+.bank-accounts .bank-accounts-head {
+	padding: 16px 14px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 20px;
+
 	border-radius: 6px 6px 0 0;
 }
 
@@ -3608,6 +3615,32 @@ nav.navigation {
 
 .add-bank-Account form .inputs-wrapper svg {
 	color: var(--black-100);
+}
+.add-bank-Account form .inputs-wrapper .sa-iban-hint {
+	font-size: 16px;
+	font-weight: 500;
+	height: 50px;
+	padding: 0 14px 0 0;
+	border-right: 1px solid var(--gray-200) !important;
+}
+
+.add-bank-Account form .inputs-wrapper.upload-civil-id {
+	cursor: pointer;
+}
+
+/*  bank table style */
+.bank-accounts-box .MuiTableCell-head {
+	font-size: 16px !important;
+	font-weight: 500 !important;
+}
+.bank-accounts-box .MuiTableCell-body {
+	font-size: 16px !important;
+}
+.bank-account-table .bank-row {
+	font-size: 18px;
+	font-weight: 400;
+
+	color: var(--black-400);
 }
 
 /* MAIN INFO PAGE */
