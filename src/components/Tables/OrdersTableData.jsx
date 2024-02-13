@@ -111,23 +111,23 @@ const OrdersTableData = ({ ordersDetails }) => {
 													className='status'
 													style={{
 														backgroundColor:
-															order?.status === "تم التوصيل"
+															order?.status === "تم الشحن"
 																? "#ebfcf1"
 																: order?.status === "جديد"
 																? "#d4ebf7"
-																: order?.status === "ملغي"
+																: order?.status === "الغاء الشحنة"
 																? "#ffebeb"
-																: order?.status === "جاهز للشحن"
+																: order?.status === "قيد التجهيز"
 																? "#ffecd1c7"
 																: "#9df1ba",
 														color:
-															order?.status === "تم التوصيل"
+															order?.status === "تم الشحن"
 																? "##9df1ba"
 																: order?.status === "جديد"
 																? "#0077ff"
-																: order?.status === "ملغي"
+																: order?.status === "الغاء الشحنة"
 																? "#ff7b7b"
-																: order?.status === "جاهز للشحن"
+																: order?.status === "قيد التجهيز"
 																? "#ff9f1a"
 																: "#07b543",
 													}}>
@@ -148,10 +148,12 @@ const OrdersTableData = ({ ordersDetails }) => {
 															<Link
 																className='dropdown-item'
 																to={`/Orders/OrderDetails/${order?.id}`}>
-																<Reports className='report-icon' title='تفاصيل الطلب'/>
+																<Reports
+																	className='report-icon'
+																	title='تفاصيل الطلب'
+																/>
 															</Link>
 														</li>
-														
 													</ul>
 												</div>
 											</td>

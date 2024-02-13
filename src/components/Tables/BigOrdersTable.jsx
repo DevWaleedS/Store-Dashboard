@@ -31,9 +31,9 @@ import { TablePagination } from "./TablePagination";
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
 	{ id: 2, ar_name: "جديد", en_name: "new" },
-	{ id: 3, ar_name: "ملغي", en_name: "canceled" },
+	{ id: 3, ar_name: "الغاء الشحنة", en_name: "canceled" },
 	{ id: 4, ar_name: "مكتمل", en_name: "completed" },
-	{ id: 5, ar_name: "جاهز للشحن", en_name: "ready" },
+	{ id: 5, ar_name: "قيد التجهيز", en_name: "ready" },
 ];
 
 // Style The MUI Select
@@ -335,23 +335,23 @@ export default function BigOrdersTable({
 																	className='status d-flex justify-content-center align-items-center'
 																	style={{
 																		backgroundColor:
-																			row?.status === "تم التوصيل"
+																			row?.status === "تم الشحن"
 																				? "#ebfcf1"
 																				: row?.status === "جديد"
 																				? "#d4ebf7"
-																				: row?.status === "ملغي"
+																				: row?.status === "الغاء الشحنة"
 																				? "#ffebeb"
-																				: row?.status === "جاهز للشحن"
+																				: row?.status === "قيد التجهيز"
 																				? "#ffecd1c7"
 																				: "#9df1ba",
 																		color:
-																			row?.status === "تم التوصيل"
+																			row?.status === "تم الشحن"
 																				? "##9df1ba"
 																				: row?.status === "جديد"
 																				? "#0077ff"
-																				: row?.status === "ملغي"
+																				: row?.status === "الغاء الشحنة"
 																				? "#ff7b7b"
-																				: row?.status === "جاهز للشحن"
+																				: row?.status === "قيد التجهيز"
 																				? "#ff9f1a"
 																				: "#07b543",
 																		borderRadius: "16px",

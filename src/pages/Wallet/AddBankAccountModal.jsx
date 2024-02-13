@@ -1,9 +1,11 @@
 import React, { Fragment, useContext, useState } from "react";
 
 // Third party
+import axios from "axios";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+
+import { useDropzone } from "react-dropzone";
 
 // Context
 import Context from "../../Context/context";
@@ -21,11 +23,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
 
 // Icons
-import { CiUser } from "react-icons/ci";
+import { CiUser, CiBank } from "react-icons/ci";
 import { BsCreditCard } from "react-icons/bs";
-import { CiBank } from "react-icons/ci";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-
+import { FaCloudUploadAlt } from "react-icons/fa";
+import { BsFileEarmarkArrowUp } from "react-icons/bs";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
 import { useForm, Controller } from "react-hook-form";
@@ -118,6 +120,9 @@ const AddBankAccountModal = () => {
 		bankAccount: "",
 		iban: "",
 		supplierCode: "",
+		civil_id: "",
+		bankAccountLetter: "",
+		website_image: "",
 	});
 
 	/** handle onchange function  */
@@ -128,13 +133,16 @@ const AddBankAccountModal = () => {
 		});
 	};
 
-	/** handle errors  */
+	/** ---------------- handle errors ----------------------------  */
 	const [bankAccountErr, setBankAccountErr] = useState({
 		bankId: "",
 		bankAccountHolderName: "",
 		bankAccount: "",
 		iban: "",
 		supplierCode: "",
+		civil_id: "",
+		bankAccountLetter: "",
+		website_image: "",
 	});
 
 	const resetErrors = () => {
@@ -144,11 +152,196 @@ const AddBankAccountModal = () => {
 			bankAccount: "",
 			iban: "",
 			supplierCode: "",
+			civil_id: "",
+			bankAccountLetter: "",
+			website_image: "",
+		});
+	};
+	/** ----------------------------------------------------------- */
+
+	//  Handler upload bank account docs
+	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
+
+	const handleFileUpload = (
+		acceptedFiles,
+		fileType,
+		setBankAccountErr,
+		setBankAccountInfo,
+		toast
+	) => {
+		const updatedFile = acceptedFiles?.map((file) => {
+			const isSizeValid = file.size <= maxFileSize;
+			const errorMessage = "حجم الملف يجب أن لا يزيد عن 1 ميجابايت.";
+			setBankAccountErr({ ...bankAccountErr, [fileType]: "" });
+
+			if (!isSizeValid) {
+				toast.warning(errorMessage, {
+					theme: "light",
+				});
+				setBankAccountErr({
+					...bankAccountErr,
+					[fileType]: errorMessage,
+				});
+				setBankAccountInfo({
+					...bankAccountInfo,
+					[fileType]: "",
+				});
+			} else {
+				setBankAccountErr({
+					...bankAccountErr,
+					[fileType]: null,
+				});
+			}
+
+			return isSizeValid
+				? Object.assign(file, { preview: URL.createObjectURL(file) })
+				: null;
+		});
+
+		setBankAccountInfo({
+			...bankAccountInfo,
+			[fileType]: updatedFile?.filter((file) => file !== null),
 		});
 	};
 
-	/** handle save Options  */
+	// handle CivilIdUploader
+	const CivilIdUploader = () => {
+		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+			onDrop: (files) =>
+				handleFileUpload(
+					files,
+					"civil_id",
+					setBankAccountErr,
+					setBankAccountInfo,
+					toast
+				),
+		});
 
+		return (
+			<>
+				{" "}
+				<div
+					{...getRootProps({
+						className:
+							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
+					})}>
+					<div>
+						<BsFileEarmarkArrowUp />
+						{bankAccountInfo?.civil_id[0]?.name ? (
+							<span className='tax-text pe-2'>
+								{bankAccountInfo?.civil_id[0]?.name}
+							</span>
+						) : (
+							<span className='tax-text pe-2'>
+								برجاء ارفاق صوره واضحه للهويه الوطنيه
+							</span>
+						)}
+					</div>
+
+					<input
+						{...getInputProps()}
+						id='upload-docs-input'
+						name='upload-docs-input'
+					/>
+
+					<FaCloudUploadAlt />
+				</div>
+			</>
+		);
+	};
+
+	// handle BankAccountLetterUploader
+	const BankAccountLetterUploader = () => {
+		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+			onDrop: (files) =>
+				handleFileUpload(
+					files,
+					"bankAccountLetter",
+					setBankAccountErr,
+					setBankAccountInfo,
+					toast
+				),
+		});
+
+		return (
+			<>
+				{" "}
+				<div
+					{...getRootProps({
+						className:
+							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
+					})}>
+					<div>
+						<BsFileEarmarkArrowUp />
+						{bankAccountInfo?.bankAccountLetter[0]?.name ? (
+							<span className='tax-text pe-2'>
+								{bankAccountInfo?.bankAccountLetter[0]?.name}
+							</span>
+						) : (
+							<span className='tax-text pe-2'>
+								برجاء ارفاق صوره واضحه من شهاده الايبان
+							</span>
+						)}
+					</div>
+
+					<input
+						{...getInputProps()}
+						id='upload-docs-input'
+						name='upload-docs-input'
+					/>
+
+					<FaCloudUploadAlt />
+				</div>
+			</>
+		);
+	};
+	// handle WebsiteImageUploader
+	const WebsiteImageUploader = () => {
+		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+			onDrop: (files) =>
+				handleFileUpload(
+					files,
+					"website_image",
+					setBankAccountErr,
+					setBankAccountInfo,
+					toast
+				),
+		});
+
+		return (
+			<>
+				{" "}
+				<div
+					{...getRootProps({
+						className:
+							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
+					})}>
+					<div>
+						<BsFileEarmarkArrowUp />
+						{bankAccountInfo?.website_image[0]?.name ? (
+							<span className='tax-text pe-2'>
+								{bankAccountInfo?.website_image[0]?.name}
+							</span>
+						) : (
+							<span className='tax-text pe-2'>
+								برجاء ارفاق صوره واضحه للمتجر الخاص بك
+							</span>
+						)}
+					</div>
+
+					<input
+						{...getInputProps()}
+						id='upload-docs-input'
+						name='upload-docs-input'
+					/>
+
+					<FaCloudUploadAlt />
+				</div>
+			</>
+		);
+	};
+
+	/** handle save Options  */
 	const addBankAccount = (data) => {
 		setLoadingTitle("جاري اضافة الحساب البنكي");
 		resetErrors();
@@ -157,8 +350,10 @@ const AddBankAccountModal = () => {
 		formData.append("bankId", data?.bankId);
 		formData.append("bankAccountHolderName", data?.bankAccountHolderName);
 		formData.append("bankAccount", data?.bankAccount);
-		formData.append("iban", data?.iban);
-		formData.append("supplierCode", data?.supplierCode);
+		formData.append("iban", `SA${data?.iban}`);
+		formData.append("civil_id", bankAccountInfo?.civil_id[0]);
+		formData.append("bankAccountLetter", bankAccountInfo?.bankAccountLetter[0]);
+		formData.append("website_image", bankAccountInfo?.website_image[0]);
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/createSupplier`, formData, {
@@ -184,42 +379,7 @@ const AddBankAccountModal = () => {
 						iban: res?.data?.message?.en?.iban?.[0],
 						supplierCode: res?.data?.message?.en?.supplierCode?.[0],
 					});
-					toast.error(res?.data?.message?.en?.name?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.short_description?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.cover?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.description?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.selling_price?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.category_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount_price?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.subcategory_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.stock?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.weight?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.SEOdescription?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.images?.[0], {
+					toast.error(res?.data?.message?.ar, {
 						theme: "light",
 					});
 				}
@@ -415,17 +575,107 @@ const AddBankAccountModal = () => {
 												type='text'
 												name='iban'
 												id='iban'
+												maxLength={22}
 												placeholder='ادخل رقم الآيبان كما الخاص بالحساب البنكي '
 												{...register("iban", {
 													required: "حقل رقم الآيبان الحساب مطلوب",
 												})}
 											/>
+											<span className='sa-iban-hint d-flex justify-content-center align-content-center flex-wrap'>
+												SA
+											</span>
 										</div>
 
 										{(bankAccountErr?.iban || errors?.iban) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.iban}
 												{errors?.iban.message}
+											</div>
+										)}
+									</div>
+								</div>
+
+								{/* CivilIdUploader */}
+								<div className='row  mb-5'>
+									<div className='col-12'>
+										<label>
+											الهويه الوطنيه
+											<span className='important-hint'>*</span>{" "}
+										</label>
+									</div>
+									<div className='col-12'>
+										<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+
+										<CivilIdUploader
+											bankAccountInfo={bankAccountInfo}
+											bankAccountErr={bankAccountErr}
+											setBankAccountInfo={setBankAccountInfo}
+											setBankAccountErr={setBankAccountErr}
+											toast={toast}
+										/>
+
+										{(bankAccountErr?.civil_id || errors?.civil_id) && (
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.civil_id}
+												{errors?.civil_id.message}
+											</div>
+										)}
+									</div>
+								</div>
+
+								{/* BankAccountLetterUploader */}
+								<div className='row  mb-5'>
+									<div className='col-12'>
+										<label>
+											شهاده الايبان
+											<span className='important-hint'>*</span>{" "}
+										</label>
+									</div>
+									<div className='col-12'>
+										<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+
+										<BankAccountLetterUploader
+											bankAccountInfo={bankAccountInfo}
+											bankAccountErr={bankAccountErr}
+											setBankAccountInfo={setBankAccountInfo}
+											setBankAccountErr={setBankAccountErr}
+											toast={toast}
+										/>
+
+										{(bankAccountErr?.bankAccountLetter ||
+											errors?.bankAccountLetter) && (
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.bankAccountLetter}
+												{errors?.bankAccountLetter.message}
+											</div>
+										)}
+									</div>
+								</div>
+
+								{/* WebsiteImageUploader */}
+								<div className='row  mb-5'>
+									<div className='col-12'>
+										<label>
+											صوره من المتجر الخاص بك
+											<span className='important-hint'>*</span>{" "}
+										</label>
+									</div>
+									<div className='col-12'>
+										<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+
+										<WebsiteImageUploader
+											bankAccountInfo={bankAccountInfo}
+											bankAccountErr={bankAccountErr}
+											setBankAccountInfo={setBankAccountInfo}
+											setBankAccountErr={setBankAccountErr}
+											toast={toast}
+										/>
+
+										{(bankAccountErr?.website_image ||
+											errors?.website_image) && (
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.website_image}
+												{errors?.website_image.message}
 											</div>
 										)}
 									</div>

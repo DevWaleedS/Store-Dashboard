@@ -234,7 +234,7 @@ const OrderDetails = () => {
 		setPrintError("");
 
 		if (
-			fetchedData?.data?.orders?.shipping?.status === "ملغي" ||
+			fetchedData?.data?.orders?.shipping?.status === "الغاء الشحنة" ||
 			fetchedData?.data?.orders?.shipping?.status === "جديد"
 		) {
 			axios
@@ -1031,9 +1031,9 @@ const OrderDetails = () => {
 													IconComponent={IoIosArrowDown}
 													displayEmpty
 													disabled={
+														fetchedData?.data?.orders?.status === "تم الشحن" ||
 														fetchedData?.data?.orders?.status ===
-															"تم التوصيل" ||
-														fetchedData?.data?.orders?.status === "ملغي" ||
+															"الغاء الشحنة" ||
 														fetchedData?.data?.orders?.status === "مكتمل"
 															? true
 															: false
@@ -1113,9 +1113,9 @@ const OrderDetails = () => {
 													IconComponent={IoIosArrowDown}
 													displayEmpty
 													disabled={
+														fetchedData?.data?.orders?.status === "تم الشحن" ||
 														fetchedData?.data?.orders?.status ===
-															"تم التوصيل" ||
-														fetchedData?.data?.orders?.status === "ملغي" ||
+															"الغاء الشحنة" ||
 														fetchedData?.data?.orders?.status === "مكتمل"
 															? true
 															: false
@@ -1164,9 +1164,9 @@ const OrderDetails = () => {
 											<div className='col-lg-9 col-md-9 col-12'>
 												<input
 													disabled={
+														fetchedData?.data?.orders?.status === "تم الشحن" ||
 														fetchedData?.data?.orders?.status ===
-															"تم التوصيل" ||
-														fetchedData?.data?.orders?.status === "ملغي" ||
+															"الغاء الشحنة" ||
 														fetchedData?.data?.orders?.status === "مكتمل"
 															? true
 															: false
@@ -1209,7 +1209,7 @@ const OrderDetails = () => {
 					<div className='mb-md-5 mb-4'>
 						<div className='order-details-box'>
 							<div className='title mb-4'>
-								<h5> خيارات الشحنه</h5>
+								<h5> حالة الشحن</h5>
 							</div>
 							<div className='px-md-3'>
 								<div
@@ -1218,8 +1218,8 @@ const OrderDetails = () => {
 									<div className='accordion-item w-100'>
 										<button
 											disabled={
-												fetchedData?.data?.orders?.status === "تم التوصيل" ||
-												fetchedData?.data?.orders?.status === "ملغي" ||
+												fetchedData?.data?.orders?.status === "تم الشحن" ||
+												fetchedData?.data?.orders?.status === "الغاء الشحنة" ||
 												fetchedData?.data?.orders?.status === "مكتمل"
 													? true
 													: false
@@ -1234,7 +1234,7 @@ const OrderDetails = () => {
 												<ListIcon className='list-icon' />
 												<span className='me-2' style={{ fontSize: "18px" }}>
 													{" "}
-													تعديل حالة الشحنه
+													اختيار حالة الشحن
 												</span>
 											</div>
 											<div className='action-icon'>
@@ -1242,8 +1242,9 @@ const OrderDetails = () => {
 													style={{
 														cursor:
 															fetchedData?.data?.orders?.status ===
-																"تم التوصيل" ||
-															fetchedData?.data?.orders?.status === "ملغي" ||
+																"تم الشحن" ||
+															fetchedData?.data?.orders?.status ===
+																"الغاء الشحنة" ||
 															fetchedData?.data?.orders?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",
@@ -1260,15 +1261,10 @@ const OrderDetails = () => {
 											<div className='accordion-body'>
 												<ul className='select-status p-0'>
 													<li
-														onClick={() => updateOrderStatus("new")}
-														style={{ cursor: "pointer" }}>
-														جديد
-													</li>
-
-													<li
 														onClick={() => updateOrderStatus("ready")}
 														style={
-															fetchedData?.data?.orders?.status === "جاهز للشحن"
+															fetchedData?.data?.orders?.status ===
+															"قيد التجهيز"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1276,12 +1272,12 @@ const OrderDetails = () => {
 																  }
 																: { cursor: "pointer" }
 														}>
-														جاهز للشحن
+														قيد التجهيز
 														{fetchedData?.data?.orders?.status ===
-														"جاهز للشحن" ? (
+														" قيد التجهيز" ? (
 															<span style={{ fontSize: "1rem" }}>
 																{" "}
-																(تم تغيير حالة الطلب إلى جاهز للشحن من قبل ){" "}
+																(تم تغيير حالة الطلب إلى قيد التجهيز من قبل ){" "}
 															</span>
 														) : (
 															<span style={{ fontSize: "1rem" }}>
@@ -1294,13 +1290,13 @@ const OrderDetails = () => {
 													<li
 														onClick={() => updateOrderStatus("completed")}
 														style={{ cursor: "pointer" }}>
-														تم التوصيل
+														تم الشحن
 													</li>
 
 													<li
 														onClick={() => updateOrderStatus("canceled")}
 														style={{ cursor: "pointer" }}>
-														ملغي
+														الغاء الشحنة
 														<span style={{ fontSize: "1rem", color: "red" }}>
 															{" "}
 															(إلغاء الطلب بالكامل){" "}
@@ -1329,16 +1325,17 @@ const OrderDetails = () => {
 									fetchedData?.data?.orders?.shippingtypes?.name !== "اخرى" && (
 										<button
 											disabled={
-												fetchedData?.data?.orders?.status === "تم التوصيل" ||
-												fetchedData?.data?.orders?.status === "ملغي" ||
+												fetchedData?.data?.orders?.status === "تم الشحن" ||
+												fetchedData?.data?.orders?.status === "الغاء الشحنة" ||
 												fetchedData?.data?.orders?.status === "مكتمل"
 													? true
 													: false
 											}
 											style={{
 												cursor:
-													fetchedData?.data?.orders?.status === "تم التوصيل" ||
-													fetchedData?.data?.orders?.status === "ملغي" ||
+													fetchedData?.data?.orders?.status === "تم الشحن" ||
+													fetchedData?.data?.orders?.status ===
+														"الغاء الشحنة" ||
 													fetchedData?.data?.orders?.status === "مكتمل"
 														? "not-allowed"
 														: "pointer",
@@ -1364,8 +1361,9 @@ const OrderDetails = () => {
 													style={{
 														cursor:
 															fetchedData?.data?.orders?.status ===
-																"تم التوصيل" ||
-															fetchedData?.data?.orders?.status === "ملغي" ||
+																"تم الشحن" ||
+															fetchedData?.data?.orders?.status ===
+																"الغاء الشحنة" ||
 															fetchedData?.data?.orders?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",

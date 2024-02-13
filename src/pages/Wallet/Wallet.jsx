@@ -15,7 +15,11 @@ import { Switch } from "@mui/material";
 // components
 import useFetch from "../../Hooks/UseFetch";
 import { TopBarSearchInput } from "../../global";
-import { WalletQuickDetails, AddBankAccountModal } from "./index.js";
+import {
+	WalletQuickDetails,
+	AddBankAccountModal,
+	BankAccountsTable,
+} from "./index.js";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
@@ -34,41 +38,21 @@ const Wallet = () => {
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
 
-	// get supplierDashboard
-	const {
-		fetchedData: supplierDashboard,
-		loading,
-		reload,
-		setReload,
-	} = useFetch(`https://backend.atlbha.com/api/Store/showSupplierDashboard`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
-	console.log(supplierDashboard?.data?.SupplierDashboard);
+	// get supplierDashboard
+	const { fetchedData: supplierDashboard } = useFetch(
+		`https://backend.atlbha.com/api/Store/showSupplierDashboard`
+	);
 
-	// // change Status function
-	// const changeStatus = (id, e) => {
-	// 	axios
-	// 		.get(
-	// 			`https://backend.atlbha.com/api/Store/changePaymenttypeStatus/${id}`,
-	// 			{
-	// 				headers: {
-	// 					"Content-Type": "application/json",
-	// 					Authorization: `Bearer ${store_token}`,
-	// 				},
-	// 			}
-	// 		)
-	// 		.then((res) => {
-	// 			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-	// 				setEndActionTitle(res?.data?.message?.ar);
-	// 				setReload(!reload);
-	// 			} else {
-	// 				toast.error(res?.data?.message?.ar, {
-	// 					theme: "light",
-	// 				});
-	// 			}
-	// 		});
-	// };
+	// showSupplier bank account
+	const {
+		fetchedData: showSupplier,
+		loading,
+		reload,
+		setReload,
+	} = useFetch(`https://backend.atlbha.com/api/Store/showSupplier`);
 
 	return (
 		<>
@@ -121,10 +105,9 @@ const Wallet = () => {
 								</section>
 
 								{/* Bank Accounts */}
-
 								<section className='bank-accounts'>
-									<div className='row'>
-										<div className='col-12 col-md-6 d-flex align-items-center mb-3 mb-md-0'>
+									<div className='d-flex justify-content-between bank-accounts-head'>
+										<div className='d-flex align-items-center mb-3 mb-md-0'>
 											<div className=' d-flex justify-content-start align-items-center gap-1 bank-acc-title'>
 												<span>
 													<RiBankFill />
@@ -132,7 +115,7 @@ const Wallet = () => {
 												<span>الحسابات البنكية</span>
 											</div>
 										</div>
-										<div className='col-12 col-md-6'>
+										<div className=''>
 											<button
 												onClick={() => dispatch(openAddBankAccountModal())}
 												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
@@ -142,6 +125,10 @@ const Wallet = () => {
 												<span>اضافة حساب جديد</span>
 											</button>
 										</div>
+									</div>
+
+									<div className=' bank-accounts-table'>
+										<BankAccountsTable bankAccount={showSupplier?.data} />
 									</div>
 								</section>
 							</>

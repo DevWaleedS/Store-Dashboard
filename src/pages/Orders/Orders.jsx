@@ -47,11 +47,11 @@ const Orders = () => {
 	if (select === "new") {
 		filterOrders = orders?.filter((order) => order?.status === "جديد");
 	} else if (select === "canceled") {
-		filterOrders = orders?.filter((order) => order?.status === "ملغي");
+		filterOrders = orders?.filter((order) => order?.status === "الغاء الشحنة");
 	} else if (select === "completed") {
 		filterOrders = orders?.filter((order) => order?.status === "مكتمل");
 	} else if (select === "ready") {
-		filterOrders = orders?.filter((order) => order?.status === "جاهز للشحن");
+		filterOrders = orders?.filter((order) => order?.status === "قيد التجهيز");
 	} else if (select === "Imile") {
 		filterOrders = orders?.filter(
 			(order) => order?.shippingtypes?.name === "Imile"

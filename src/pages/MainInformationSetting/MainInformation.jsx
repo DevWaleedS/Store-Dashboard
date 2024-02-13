@@ -767,30 +767,6 @@ const MainInformation = () => {
 												className='setting_label d-block'>
 												رقم الهاتف
 												<span className='important-hint ps-1'>*</span>
-												{verificationStoreStatus === "تم التوثيق" ? (
-													<span
-														className='phone-hint'
-														style={{
-															color: "red",
-															fontSize: "14px",
-															whiteSpace: "pre-line",
-														}}>
-														{" "}
-														( تعديل رقم الهاتف يكون عبر الدعم الفني ){" "}
-													</span>
-												) : (
-													<span
-														className='phone-hint'
-														style={{
-															color: "red",
-															fontSize: "14px",
-															whiteSpace: "pre-line",
-														}}>
-														{" "}
-														( تأكد أن رقم الهاتف هو الرقم الموجود بوثيقة العمل
-														الحر. ){" "}
-													</span>
-												)}
 											</label>
 
 											<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
@@ -808,16 +784,6 @@ const MainInformation = () => {
 													aria-describedby='phoneNumber'
 													onFocus={() => setPhoneNumberFocus(true)}
 													onBlur={() => setPhoneNumberFocus(true)}
-													disabled={
-														verificationStoreStatus === "تم التوثيق"
-															? true
-															: false
-													}
-													readOnly={
-														verificationStoreStatus === "تم التوثيق"
-															? true
-															: false
-													}
 												/>
 											</div>
 										</div>

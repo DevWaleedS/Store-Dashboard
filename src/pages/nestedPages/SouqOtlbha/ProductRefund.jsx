@@ -92,7 +92,6 @@ const ProductRefund = () => {
 			setProductInfo({
 				...productInfo,
 				price: fetchedData?.data?.products?.purchasing_price,
-				qty: fetchedData?.data?.products?.qty,
 			});
 
 			setImagesPreview(fetchedData?.data?.products?.cover);
@@ -355,15 +354,19 @@ const ProductRefund = () => {
 																name='qty'
 																placeholder='حدد الكمية الخاص بك'
 																value={productInfo?.qty}
-																onChange={(e) =>
+																onChange={(e) => {
 																	setProductInfo({
 																		...productInfo,
 																		qty: e.target.value.replace(
 																			/[^\d.]|\.(?=.*\.)/g,
 																			""
 																		),
-																	})
-																}
+																	});
+																	setProductErrors({
+																		...productErrors,
+																		qty: "",
+																	});
+																}}
 															/>
 														</div>
 													</div>
@@ -379,20 +382,20 @@ const ProductRefund = () => {
 														الكمية المطلوبة غير متوفرة
 													</span>
 												)}
-												{Number(productInfo?.qty) <
-													Number(fetchedData?.data?.products?.less_qty) && (
-													<>
-														<br />
-														<span className='fs-6 text-danger'>
-															أقل كمية طلب للمنتج هي{" "}
-															{fetchedData?.data?.products?.less_qty}
-														</span>
-													</>
-												)}
+
+												{productInfo?.qty &&
+													Number(productInfo?.qty) <
+														Number(fetchedData?.data?.products?.less_qty) && (
+														<>
+															<span className='fs-6 text-danger'>
+																أقل كمية طلب للمنتج هي{" "}
+																{fetchedData?.data?.products?.less_qty}
+															</span>
+														</>
+													)}
 												{productErrors?.qty && (
 													<>
-														<br />
-														<span className='fs-6 text-danger'>
+														<span className='fs-6 text-danger d-block'>
 															{productErrors?.qty}
 														</span>
 													</>

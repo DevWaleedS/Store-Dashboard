@@ -2,7 +2,6 @@ import React, {
 	useContext,
 	Fragment,
 	useState,
-	useEffect,
 	forwardRef,
 	useImperativeHandle,
 } from "react";
@@ -38,17 +37,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
 import { UploadIcon, WebsiteIcon } from "../../../data/Icons";
-
-const inputStyle = {
-	width: "100%",
-	height: "56px",
-	background: "#FFFFFF ",
-	borderRadius: "4px",
-	color: "#00000",
-	padding: "20px",
-	fontSize: "16px",
-	fontWeight: "400",
-};
 
 const VerifyFormPage = forwardRef((props, ref) => {
 	const store_token = document.cookie
@@ -158,7 +146,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		onDrop: (acceptedFiles) => {
 			const updatedFile = acceptedFiles?.map((file) => {
 				const isSizeValid = file.size <= maxFileSize;
-				const errorMessage = "حجم الملف يجب أن لا يزيد عن 2 ميجابايت.";
+				const errorMessage = "حجم الملف يجب أن لا يزيد عن 1 ميجابايت.";
 				setDataErrors({ ...dataErrors, file: "" });
 				if (!isSizeValid) {
 					toast.warning(errorMessage, {
@@ -551,7 +539,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
-									<div className='tax-text '>الحد الأقصى للملف 2MB</div>
+									<div className='tax-text '>الحد الأقصى للملف 1MB</div>
 
 									<div
 										style={{
@@ -800,7 +788,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
-									<div className='tax-text '>الحد الأقصى للملف 2MB</div>
+									<div className='tax-text '>الحد الأقصى للملف 1MB</div>
 									<div
 										style={{
 											width: "100%",
