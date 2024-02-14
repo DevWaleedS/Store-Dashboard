@@ -6,12 +6,12 @@ import useFetch from "../../Hooks/UseFetch";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
-import Paper from "@mui/material/Paper";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -47,7 +47,7 @@ EnhancedTableHead.propTypes = {
 	rowCount: PropTypes.number,
 };
 
-const BankAccountsTable = ({ bankAccount }) => {
+const BankAccountsTable = ({ bankAccount, loading }) => {
 	const dispatch = useDispatch();
 
 	// get banks api
@@ -65,7 +65,11 @@ const BankAccountsTable = ({ bankAccount }) => {
 			<Box className='bank-accounts-table' sx={{ width: "100%" }}>
 				<TableContainer>
 					<Table>
-						{!bankAccount ? (
+						{loading ? (
+							<TableCell colSpan={5}>
+								<CircularLoading />
+							</TableCell>
+						) : !bankAccount ? (
 							<TableCell className='text-center' colSpan={5}>
 								لا يوجد لديك حساب بنكي
 							</TableCell>
@@ -84,7 +88,68 @@ const BankAccountsTable = ({ bankAccount }) => {
 										{bankAccount?.supplierUser?.iban}
 									</TableCell>
 									<TableCell align='center'>
-										{bankAccount?.SupplierDetails?.SupplierStatus}
+										<div className='sub-categories'>
+											<span
+												className='status d-flex justify-content-center align-items-center'
+												style={{
+													backgroundColor:
+														bankAccount?.SupplierDetails?.SupplierStatus ===
+														"Active"
+															? "#9df1ba"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Pending"
+															? "#ffecd1c7"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Rejected"
+															? "#ffebeb"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Closed"
+															? "#ffecd1c7"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Dormant"
+															? "#d4ebf7"
+															: null,
+													color:
+														bankAccount?.SupplierDetails?.SupplierStatus ===
+														"Active"
+															? "##9df1ba"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Pending"
+															? "#ff9f1a"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Rejected"
+															? "#ff7b7b"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Closed"
+															? "#0077ff"
+															: bankAccount?.SupplierDetails?.SupplierStatus ===
+															  "Dormant"
+															? "#07b543"
+															: null,
+													borderRadius: "16px",
+													padding: "4px 22px",
+													fontWeight: 500,
+													width: "120px",
+													maxWidth: "130px",
+												}}>
+												{bankAccount?.SupplierDetails?.SupplierStatus ===
+												"Pending"
+													? "قيد المراجعه"
+													: bankAccount?.SupplierDetails?.SupplierStatus ===
+													  "Active"
+													? "نشط"
+													: bankAccount?.SupplierDetails?.SupplierStatus ===
+													  "Rejected"
+													? "مرفوض"
+													: bankAccount?.SupplierDetails?.SupplierStatus ===
+													  "Closed"
+													? "مغلق"
+													: bankAccount?.SupplierDetails?.SupplierStatus ===
+													  "Dormant"
+													? "مجمد"
+													: null}
+											</span>
+										</div>
 									</TableCell>
 									<TableCell align='center'>
 										<button

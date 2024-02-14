@@ -22,7 +22,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		{
 			id: 4,
 			icon: <IoWallet />,
-			title: "إجمالي الانتظار للتحويل",
+			title: "بانتظار التحويل",
 			numbers: supplierDashboard?.TotalAwaitingToTransfer,
 			color: "#b6be34",
 		},
@@ -30,7 +30,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		{
 			id: 7,
 			icon: <IoWallet />,
-			title: "إجمالي المورد إنفويسي",
+			title: "إجمالي الفاتوره ",
 			numbers: supplierDashboard?.TotalDepositedAmount,
 			color: "#02466a",
 		},
@@ -40,8 +40,8 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		{
 			id: 3,
 			icon: <IoWallet />,
-			title: "إجمالي المبلغ المودع",
-			numbers: supplierDashboard?.TotalDepositedAmount,
+			title: "اجمالي الرصيد المودع",
+			numbers: supplierDashboard?.TotalSupplierInvoiceShare,
 			color: "#02466a",
 		},
 		{
@@ -58,8 +58,8 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 			{details?.map((detail) => (
 				<div className='col-xl-3 col-lg-6 col-sm-6' key={detail.id}>
 					<div className='wallet-data-box data-box mb-4'>
-						<div className='d-flex flex-row align-items-center'>
-							<div className='col-3 d-flex justify-content-md-start justify-content-center align-items-center'>
+						<div className='d-flex flex-row align-items-center gap-1'>
+							<div className='col-2 d-flex justify-content-md-start justify-content-center align-items-center'>
 								<div
 									className='icon'
 									style={{ backgroundColor: `${detail.color}` }}>
@@ -67,7 +67,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 								</div>
 							</div>
 
-							<div className='col-9'>
+							<div className='col-10'>
 								<div className='data'>
 									<h4>{loading ? "..." : detail.numbers}</h4>
 									<p>{detail.title}</p>
@@ -81,8 +81,8 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 			{walletTotalBalance?.map((wallet) => (
 				<div className=' col-lg-6 col-md-12' key={wallet.id}>
 					<div className='wallet-data-box data-box mb-4'>
-						<div className='d-flex flex-row align-items-center'>
-							<div className='col-3 d-flex justify-content-md-start justify-content-center align-items-center'>
+						<div className='d-flex flex-row align-items-center gap-1'>
+							<div className='col-2 d-flex justify-content-md-start justify-content-center align-items-center'>
 								<div
 									className='icon'
 									style={{ backgroundColor: `${wallet.color}` }}>
@@ -90,7 +90,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 								</div>
 							</div>
 
-							<div className='col-9'>
+							<div className='col-10'>
 								<div className='data'>
 									<h4>{loading ? "..." : wallet.numbers}</h4>
 									<p>{wallet.title}</p>

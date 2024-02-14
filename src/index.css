@@ -3542,7 +3542,10 @@ nav.navigation {
 	height: 30px;
 	padding: 18px;
 }
-
+.wallet-data-box.data-box .data {
+	width: 200px;
+	max-width: 200px;
+}
 .wallet-data-box.data-box .data p {
 	font-size: 18px;
 	width: 100%;
@@ -3551,23 +3554,22 @@ nav.navigation {
 .bank-accounts {
 	background-color: #fdfdfd;
 	border-radius: 6px 6px 0 0;
-	box-shadow: 3px 3px 6px #00000005;
-	border: 1px solid #cccccc;
+	border: 1px solid #f8f8f8;
+	box-shadow: 0px 0px 6px 6px #00000005;
 }
 .bank-accounts .bank-accounts-head {
 	padding: 16px 14px;
-	border-bottom: 1px solid #cccccc;
+	border-bottom: 1px solid #f8f8f8;
 	margin-bottom: 20px;
-
 	border-radius: 6px 6px 0 0;
 }
 
 .bank-accounts button {
 	background-color: var(--second-500);
 	color: white;
-	padding: 10px 12px;
+	padding: 10px 14px;
 	border-radius: 6px;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 500;
 }
 .bank-accounts button span svg {

@@ -269,7 +269,7 @@ const MainInformation = () => {
 						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
 					} else {
 						setEndActionTitle(res?.data?.message?.ar);
-						// window.location.reload();
+						window.location.reload();
 					}
 				} else {
 					setLoadingTitle("");

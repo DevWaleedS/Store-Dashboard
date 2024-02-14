@@ -38,8 +38,6 @@ const Wallet = () => {
 		`https://backend.atlbha.com/api/Store/indexSupplier`
 	);
 
-	//
-
 	return (
 		<>
 			<Helmet>
@@ -101,20 +99,25 @@ const Wallet = () => {
 												<span>الحسابات البنكية</span>
 											</div>
 										</div>
-										<div className=''>
-											<button
-												onClick={() => dispatch(openAddBankAccountModal())}
-												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>
-													<FiPlus />
-												</span>
-												<span>اضافة حساب جديد</span>
-											</button>
-										</div>
+										{!currentBankAccount?.data ? (
+											<div className=''>
+												<button
+													onClick={() => dispatch(openAddBankAccountModal())}
+													className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+													<span>
+														<FiPlus />
+													</span>
+													<span>اضافة حساب جديد</span>
+												</button>
+											</div>
+										) : null}
 									</div>
 
 									<div className=' bank-accounts-box'>
-										<BankAccountsTable bankAccount={currentBankAccount?.data} />
+										<BankAccountsTable
+											bankAccount={currentBankAccount?.data}
+											loading={loading}
+										/>
 									</div>
 								</section>
 							</>

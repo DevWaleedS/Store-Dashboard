@@ -132,9 +132,9 @@ const EditBankAccountModal = () => {
 				currentCivilIdFile:
 					showSupplier?.data?.SupplierDocumentUser[0]?.file || "",
 				currentBankAccountLetterFile:
-					showSupplier?.data?.SupplierDocumentUser[2]?.file | "",
+					showSupplier?.data?.SupplierDocumentUser[1]?.file || "",
 				currentWebsiteImageFile:
-					showSupplier?.data?.SupplierDocumentUser[3]?.file || "",
+					showSupplier?.data?.SupplierDocumentUser[2]?.file || "",
 			});
 		}
 	}, [showSupplier]);
@@ -379,7 +379,7 @@ const EditBankAccountModal = () => {
 	};
 
 	/** handle save Options  */
-	const addBankAccount = (data) => {
+	const EditBankAccount = (data) => {
 		setLoadingTitle("جاري تعديل بيانات الحساب البنكي");
 		resetErrors();
 
@@ -476,7 +476,7 @@ const EditBankAccountModal = () => {
 								</div>
 							</div>
 
-							<form onSubmit={handleSubmit(addBankAccount)}>
+							<form onSubmit={handleSubmit(EditBankAccount)}>
 								<div className='row  mb-3'>
 									<div className='col-12'>
 										<label>
@@ -564,6 +564,10 @@ const EditBankAccountModal = () => {
 												placeholder='ادخل الاسم كما هو موجود في الحساب البنكي '
 												{...register("bankAccountHolderName", {
 													required: "حقل اسم صاحب الحساب مطلوب",
+													pattern: {
+														value: /^[a-zA-Z\s]*$/,
+														message: "الاسم يجب ان يكون باللغه الانجليزيه",
+													},
 												})}
 											/>
 										</div>
@@ -654,7 +658,15 @@ const EditBankAccountModal = () => {
 										{bankAccountInfo?.currentCivilIdFile ? (
 											<div className='d-flex justify-content-between'>
 												<div className='tax-text'>الحد الأقصى للملف 1MB</div>
-												<div className='tax-text'> تحميل الملف الحالي </div>
+												<div className='tax-text'>
+													<a
+														href={bankAccountInfo?.currentCivilIdFile}
+														download={bankAccountInfo?.currentCivilIdFile}
+														target='_blank'
+														rel='noreferrer'>
+														تحميل الملف الحالي{" "}
+													</a>
+												</div>
 											</div>
 										) : (
 											<div className='tax-text'>الحد الأقصى للملف 1MB</div>
@@ -686,7 +698,24 @@ const EditBankAccountModal = () => {
 										</label>
 									</div>
 									<div className='col-12'>
-										<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+										{bankAccountInfo?.currentBankAccountLetterFile ? (
+											<div className='d-flex justify-content-between'>
+												<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+												<div className='tax-text'>
+													<a
+														href={bankAccountInfo?.currentBankAccountLetterFile}
+														download={
+															bankAccountInfo?.currentBankAccountLetterFile
+														}
+														target='_blank'
+														rel='noreferrer'>
+														تحميل الملف الحالي{" "}
+													</a>
+												</div>
+											</div>
+										) : (
+											<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+										)}
 
 										<BankAccountLetterUploader
 											bankAccountInfo={bankAccountInfo}
@@ -715,7 +744,22 @@ const EditBankAccountModal = () => {
 										</label>
 									</div>
 									<div className='col-12'>
-										<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+										{bankAccountInfo.currentWebsiteImageFile ? (
+											<div className='d-flex justify-content-between'>
+												<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+												<div className='tax-text'>
+													<a
+														href={bankAccountInfo?.currentWebsiteImageFile}
+														download={bankAccountInfo?.currentWebsiteImageFile}
+														target='_blank'
+														rel='noreferrer'>
+														تحميل الملف الحالي{" "}
+													</a>
+												</div>
+											</div>
+										) : (
+											<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+										)}
 
 										<WebsiteImageUploader
 											bankAccountInfo={bankAccountInfo}

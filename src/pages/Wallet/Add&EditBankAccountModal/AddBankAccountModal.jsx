@@ -134,6 +134,7 @@ const AddBankAccountModal = () => {
 	};
 
 	/** ---------------- handle errors ----------------------------  */
+
 	const [bankAccountErr, setBankAccountErr] = useState({
 		bankId: "",
 		bankAccountHolderName: "",
@@ -436,7 +437,6 @@ const AddBankAccountModal = () => {
 								<div className='row  mb-3'>
 									<div className='col-12'>
 										<label>
-											{" "}
 											البنك
 											<span className='important-hint'>*</span>{" "}
 										</label>
@@ -512,7 +512,6 @@ const AddBankAccountModal = () => {
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
 											<CiUser />
-
 											<input
 												type='text'
 												name='bankAccountHolderName'
@@ -520,6 +519,10 @@ const AddBankAccountModal = () => {
 												placeholder='ادخل الاسم كما هو موجود في الحساب البنكي '
 												{...register("bankAccountHolderName", {
 													required: "حقل اسم صاحب الحساب مطلوب",
+													pattern: {
+														value: /^[a-zA-Z\s]*$/,
+														message: "الاسم يجب ان يكون باللغه الانجليزيه",
+													},
 												})}
 											/>
 										</div>
