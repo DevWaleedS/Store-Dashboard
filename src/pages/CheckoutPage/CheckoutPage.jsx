@@ -1,18 +1,23 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // Third party
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../../Hooks/UseFetch";
 import axios from "axios";
 import { toast } from "react-toastify";
-// Context
-import Context from "../../Context/context";
+
 // Components
+
 import CircularLoading from "../../HelperComponents/CircularLoading";
 // Icons
 import { HomeIcon, Check9x7Svg } from "../../data/Icons";
+import { useDispatch } from "react-redux";
+import { openMessage } from "../../store/slices/SuccessMessageModalSlice";
 
 function CheckoutPage() {
+	const dispatch = useDispatch(true);
+	const navigate = useNavigate();
+
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -30,8 +35,6 @@ function CheckoutPage() {
 		"https://backend.atlbha.com/api/show_default_address"
 	);
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [shipping, setShipping] = useState({
@@ -111,7 +114,10 @@ function CheckoutPage() {
 		formData.append("city", shipping?.city);
 		formData.append("street_address", shipping?.address);
 		// formData.append("postal_code", shipping?.postCode);
-		formData.append("paymentype_id", JSON.parse(paymentSelect)?.id);
+		formData.append(
+			"paymentype_id",
+			JSON.parse(paymentSelect) ? JSON.parse(paymentSelect)?.id : ""
+		);
 		formData.append(
 			"cod",
 			JSON.parse(paymentSelect)?.name === "الدفع عند الاستلام" ? 1 : 0
@@ -129,10 +135,8 @@ function CheckoutPage() {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					if (res?.data?.message?.en === "order send successfully") {
 						setBtnLoading(false);
-						setEndActionTitle(res?.data?.message?.ar);
-						setTimeout(() => {
-							window.location.replace(`/`);
-						}, 1000);
+						dispatch(openMessage());
+						navigate("/Products/SouqOtlobha");
 
 						setReload(!reload);
 					} else {

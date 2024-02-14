@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Switch from "@mui/material/Switch";
 
 // Components
 import useFetch from "../../../Hooks/UseFetch";
@@ -19,12 +18,13 @@ import Context from "../../../Context/context";
 /* Modal Styles */
 const ModalStyle = {
 	position: "absolute",
-	top: "120px",
+	top: "90px",
 	left: "50%",
 	transform: "translate(-50%, 0%)",
 	width: "750px",
 	maxWidth: "90%",
 	paddingBottom: "30px",
+
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: "10px",
@@ -33,55 +33,10 @@ const ModalStyle = {
 	},
 };
 
-const switchStyle = {
-	width: "36px !important",
-	height: "22px !important",
-	padding: "0 !important",
-	borderRadius: "20px !important",
-	"& .MuiSwitch-track": {
-		width: "36px !important",
-		height: "22px !important",
-		opacity: 1,
-		backgroundColor: "rgba(0,0,0,.25)",
-		boxSizing: "border-box",
-		borderRadius: "20px !important",
-	},
-	"& .MuiSwitch-thumb": {
-		boxShadow: "none",
-		width: "16px !important",
-		height: "16px !important",
-		borderRadius: "50% !important",
-		transform: "translate(3px,3px) !important",
-		color: "#fff",
-	},
-
-	"&:hover": {
-		"& .MuiSwitch-thumb": {
-			boxShadow: "none !important",
-		},
-	},
-
-	"& .MuiSwitch-switchBase": {
-		padding: "0px !important",
-		top: "0px !important",
-		left: "0px !important",
-		"&.Mui-checked": {
-			transform: "translateX(12px) !important",
-			color: "#fff",
-			"& + .MuiSwitch-track": {
-				opacity: 1,
-				backgroundColor: "#3AE374",
-			},
-		},
-	},
-};
-
 const HoursWorks = ({
 	setWorkDays,
 	setOpenHoursWork,
 	openHoursWork,
-	setOpenAlawys,
-	openAlawys,
 	workDays,
 }) => {
 	const contextStore = useContext(Context);
@@ -155,11 +110,7 @@ const HoursWorks = ({
 					<AiOutlineCloseCircle
 						onClick={() => {
 							setOpenHoursWork(false);
-							setOpenAlawys(
-								fetchedData?.data?.setting_store?.working_status === "active"
-									? true
-									: false
-							);
+
 							setWorkDays(fetchedData?.data?.setting_store?.workDays);
 						}}
 						style={{
@@ -171,21 +122,6 @@ const HoursWorks = ({
 					/>
 				</div>
 				<div className='text-center work-hours-wrapper'>
-					<div
-						className='d-flex flex-row align-items-center justify-content-center gap-3 works-switch'
-						style={{
-							backgroundColor: !openAlawys ? "#011723" : "#ADB5B9",
-						}}>
-						<Switch
-							onChange={(e) => {
-								setOpenAlawys(!openAlawys);
-								updateAll(e.target.checked);
-							}}
-							checked={!openAlawys}
-							sx={switchStyle}
-						/>
-						مفتوح دائماً
-					</div>
 					{workDays?.map((day, index) => (
 						<div
 							key={index}
@@ -201,7 +137,6 @@ const HoursWorks = ({
 									{day?.day?.name}
 								</span>
 								<button
-									disabled={!openAlawys}
 									onClick={() => updateState(index)}
 									className='day-switch'
 									style={{
@@ -221,7 +156,7 @@ const HoursWorks = ({
 										onChange={(e) => updateFromTime(index, e.target.value)}
 										type='time'
 										style={{ color: "#000000" }}
-										disabled={!openAlawys || day?.status !== "active"}
+										disabled={day?.status !== "active"}
 									/>
 								</div>
 								<div className='time-input'>
@@ -230,7 +165,7 @@ const HoursWorks = ({
 										onChange={(e) => updateToTime(index, e.target.value)}
 										type='time'
 										style={{ color: "#000000" }}
-										disabled={!openAlawys || day?.status !== "active"}
+										disabled={day?.status !== "active"}
 									/>
 								</div>
 							</div>

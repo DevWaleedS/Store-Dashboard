@@ -27,6 +27,7 @@ import {
 	MdOutlineArrowForwardIos,
 } from "react-icons/md";
 import { TopBarSearchInput } from "../../../global";
+import SuccessMessageModal from "../../CheckoutPage/SuccessMessageModal";
 
 const SouqOtlobha = () => {
 	const navigate = useNavigate();
@@ -312,6 +313,9 @@ const SouqOtlobha = () => {
 					)}
 				</div>
 			</section>
+
+			{/* This will be open after checkout */}
+			<SuccessMessageModal />
 		</>
 	);
 };

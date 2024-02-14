@@ -75,7 +75,7 @@ const MainInformation = () => {
 
 	// Hours Works
 	const [openHoursWork, setOpenHoursWork] = useState(false);
-	const [openAlawys, setOpenAlawys] = useState(true);
+
 	const [workDays, setWorkDays] = useState([
 		{
 			day: {
@@ -184,11 +184,6 @@ const MainInformation = () => {
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
-			setOpenAlawys(
-				fetchedData?.data?.setting_store?.working_status === "active"
-					? true
-					: false
-			);
 			setWorkDays(fetchedData?.data?.setting_store?.workDays);
 		}
 	}, [fetchedData?.data?.setting_store]);
@@ -238,7 +233,7 @@ const MainInformation = () => {
 		);
 
 		formData.append("description", descriptionValue);
-		formData.append("working_status", openAlawys ? "active" : "not_active");
+
 		for (let i = 0; i < workDays?.length; i++) {
 			formData.append([`data[${i}][status]`], workDays?.[i]?.status);
 			formData.append([`data[${i}][id]`], workDays?.[i]?.day?.id);
@@ -873,9 +868,7 @@ const MainInformation = () => {
 			{/* Hours Works Modal */}
 			<HoursWorks
 				workDays={workDays}
-				openAlawys={openAlawys}
 				setWorkDays={setWorkDays}
-				setOpenAlawys={setOpenAlawys}
 				openHoursWork={openHoursWork}
 				setOpenHoursWork={setOpenHoursWork}
 			/>
