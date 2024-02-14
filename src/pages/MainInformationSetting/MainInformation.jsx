@@ -211,8 +211,8 @@ const MainInformation = () => {
 
 		let formData = new FormData();
 
-		formData.append("logo", storeLogo[0]?.file || "");
-		formData.append("icon", storeIcon[0]?.file || "");
+		if (storeLogo?.length !== 0) formData.append("logo", storeLogo[0]?.file);
+		if (storeIcon?.length !== 0) formData.append("icon", storeIcon[0]?.file);
 
 		formData.append("store_name", storeName);
 		formData.append("domain", domain);
@@ -269,7 +269,7 @@ const MainInformation = () => {
 						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
 					} else {
 						setEndActionTitle(res?.data?.message?.ar);
-						window.location.reload();
+						// window.location.reload();
 					}
 				} else {
 					setLoadingTitle("");
