@@ -340,6 +340,10 @@ const AddNewProduct = () => {
 						[`attribute[${i}][value][${v}][title]`],
 						optionsSection[i]?.values[v]?.title
 					);
+					formData.append(
+						[`attribute[${i}][value][${v}][default_option]`],
+						optionsSection[i]?.values[v]?.defaultOption === true ? 1 : 0
+					);
 					optionsSection[i]?.values[v]?.color &&
 						optionsSection[i]?.select_value === "نص و لون" &&
 						formData.append(

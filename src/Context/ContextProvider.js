@@ -26,7 +26,7 @@ const ContextProvider = (props) => {
 			name: "",
 			select_value: "نص",
 			values: [
-				{ id: 9828394, title: "", color: "", image: "", previewImage: "" },
+				{ id: 9828394, title: "", color: "", image: "", previewImage: "",defaultOption: false, },
 			],
 		},
 	]);
@@ -40,7 +40,7 @@ const ContextProvider = (props) => {
 				name: "",
 				select_value: "نص",
 				values: [
-					{ id: 9828394, title: "", color: "", image: "", previewImage: "" },
+					{ id: 9828394, title: "", color: "", image: "", previewImage: "",defaultOption: false, },
 				],
 			},
 		]);
