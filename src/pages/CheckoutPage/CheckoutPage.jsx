@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../../Hooks/UseFetch";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+// Context
+import Context from "../../Context/context";
 // Components
-
 import CircularLoading from "../../HelperComponents/CircularLoading";
 // Icons
 import { HomeIcon, Check9x7Svg } from "../../data/Icons";
 import { useDispatch } from "react-redux";
 import { openMessage } from "../../store/slices/SuccessMessageModalSlice";
+import { CiDiscount1 } from "react-icons/ci";
 
 function CheckoutPage() {
 	const dispatch = useDispatch(true);
@@ -35,6 +36,9 @@ function CheckoutPage() {
 		"https://backend.atlbha.com/api/show_default_address"
 	);
 
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [shipping, setShipping] = useState({
@@ -46,6 +50,12 @@ function CheckoutPage() {
 		notes: "",
 		defaultAddress: true,
 	});
+
+	// coupon
+	const [showCoupon, setShowCoupon] = useState(false);
+    const [loadingCoupon, setLoadingCoupon] = useState(false);
+    const [coupon, setCoupon] = useState(null);
+    const [couponError, setCouponError] = useState(null);
 
 	/** set the default address */
 	useEffect(() => {
@@ -173,6 +183,74 @@ function CheckoutPage() {
 				}
 			});
 	};
+
+	// handle apply code
+	const applyDiscountCode = () => {
+		setCoupon("");
+		setLoadingCoupon(true);
+		setCouponError(null);
+		let formData = new FormData();
+		formData.append("code", coupon);
+		axios
+			.post(
+				`https://backend.atlbha.com/api/Store/applyCoupon/${fetchedData?.data?.cart?.id}`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+						Authorization: `Bearer ${store_token}`,
+					},
+				}
+			)
+			.then((res) => {
+				if (
+					res?.data?.success === true &&
+					res?.data?.message?.en === "coupon updated successfully"
+				) {
+					setEndActionTitle(res?.data?.message?.ar);
+					setReload(!reload);
+					setLoadingCoupon(false);
+				} else {
+					toast.error(res?.data?.message?.ar, {
+						theme: "light",
+					});
+					setCouponError(res?.data?.message?.ar);
+					setLoadingCoupon(false);
+				}
+			});
+	};
+
+	const renderCouponInput = () => {
+        return (
+            <div className="apply-coupon">
+                <div className="coupon" onClick={() => {
+                    setShowCoupon(!showCoupon);
+                    setCouponError(null);
+                }}>
+                    <CiDiscount1 />
+                    <h6>لديك كوبون خصم ؟</h6>
+                </div>
+                {showCoupon &&
+                    <div className="coupon-wrapper">
+                        <form className="coupon-form">
+                            <input
+                                value={coupon}
+                                onChange={(e) => setCoupon(e.target.value)}
+                                type="text"
+                                className="form-control"
+                                id="input-coupon-code"
+                                placeholder="كود الخصم"
+                            />
+                            <button onClick={applyDiscountCode} type="button" className="btn btn-primary" disabled={loadingCoupon}>
+                                تطبيق
+                            </button>
+                        </form>
+                        {couponError && <span className="error">{couponError}</span>}
+                    </div>
+                }
+            </div>
+        )
+    }
 
 	const renderPaymentsList = () => {
 		const paymentsData = paymentMethods?.data?.payment_types?.map((payment) => {
@@ -524,6 +602,8 @@ function CheckoutPage() {
 														</tr>
 													</tfoot>
 												</table>
+
+												{renderCouponInput()}
 												{renderPaymentsList()}
 
 												<button

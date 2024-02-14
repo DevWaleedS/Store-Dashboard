@@ -66,9 +66,9 @@ const style = {
 const selectStyle = {
 	fontSize: "18px",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+	{
+		paddingRight: "20px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -188,33 +188,35 @@ const EditProduct = () => {
 			setOptionsSection(
 				fetchedData?.data?.product?.attributes?.length !== 0
 					? fetchedData?.data?.product?.attributes?.map((attribute) => ({
-							id: attribute?.id,
-							name: attribute?.name,
-							select_value: attribute?.type,
-							values: attribute?.values?.map((value) => ({
-								id: value?.id,
-								title: value?.value?.[0],
-								color: attribute?.type === "نص و لون" ? value?.value?.[1] : "",
-								image: attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
-								previewImage:
-									attribute?.type === "نص و صورة" ? value?.value?.[1] : "",
-							})),
-					  }))
+						id: attribute?.id,
+						name: attribute?.name,
+						select_value: attribute?.type,
+						values: attribute?.values?.map((value) => ({
+							id: value?.id,
+							title: value?.value?.[0],
+							defaultOption: value?.value?.[1] === "1" ? true : false,
+							color: attribute?.type === "نص و لون" ? value?.value?.[2] : "",
+							image: attribute?.type === "نص و صورة" ? value?.value?.[2] : "",
+							previewImage:
+								attribute?.type === "نص و صورة" ? value?.value?.[2] : "",
+						})),
+					}))
 					: [
-							{
-								name: "",
-								select_value: "نص",
-								values: [
-									{
-										id: 9828394,
-										title: "",
-										color: "",
-										image: "",
-										previewImage: "",
-									},
-								],
-							},
-					  ]
+						{
+							name: "",
+							select_value: "نص",
+							values: [
+								{
+									id: 9828394,
+									title: "",
+									color: "",
+									image: "",
+									previewImage: "",
+									defaultOption:false,
+								},
+							],
+						},
+					]
 			);
 			setAttributes(
 				fetchedData?.data?.product?.options?.map((option) => ({
@@ -428,6 +430,10 @@ const EditProduct = () => {
 					formData.append(
 						[`attribute[${i}][value][${v}][title]`],
 						optionsSection[i]?.values[v]?.title
+					);
+					formData.append(
+						[`attribute[${i}][value][${v}][default_option]`],
+						optionsSection[i]?.values[v]?.defaultOption === true ? 1 : 0
 					);
 					optionsSection[i]?.values[v]?.color &&
 						optionsSection[i]?.select_value === "نص و لون" &&
@@ -799,7 +805,7 @@ const EditProduct = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
 													{product?.category_id !== "" &&
-													subcategory[0]?.subcategory?.length === 0 ? (
+														subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
 															style={{ color: "#1dbbbe" }}>
@@ -809,9 +815,9 @@ const EditProduct = () => {
 														<Select
 															sx={{
 																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
+																{
+																	paddingRight: "20px",
+																},
 															}}
 															IconComponent={IoIosArrowDown}
 															multiple
@@ -1058,16 +1064,16 @@ const EditProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
+														<span className='fs-6' style={{ color: "red" }}>
+															يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 
 											<div
 												className={
 													product?.discount_price &&
-													product?.selling_price === ""
+														product?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -1193,9 +1199,9 @@ const EditProduct = () => {
 																const isVideo =
 																	image?.data_url?.includes(
 																		"video/mp4" ||
-																			"video/avi" ||
-																			"video/mov" ||
-																			"video/mkv"
+																		"video/avi" ||
+																		"video/mov" ||
+																		"video/mkv"
 																	) ||
 																	image?.image?.includes(
 																		".mp4" || ".avi" || ".mov" || ".mkv"
@@ -1327,6 +1333,7 @@ const EditProduct = () => {
 													onClick={() => {
 														navigate("/Products");
 														setEditorValue(null);
+														clearOptions();
 													}}>
 													إلغاء
 												</button>

@@ -41,6 +41,8 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Switch } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
+import ToggleButton from '@mui/material/ToggleButton';
 
 /* Modal Styles */
 const style = {
@@ -238,6 +240,35 @@ const AddProductOptionsModal = () => {
 		setAttributes(newAttributes);
 	};
 
+	//handle default value of block
+	const handleSetValueDefaultOption = (value, blockIndex, valueIndex) => {
+		const updatedBlocks = optionsSection?.map((block, currentIndex) => {
+			if (currentIndex === blockIndex) {
+				const updatedValues = block?.values?.map((valueObj, index) => {
+					if (index === valueIndex) {
+						return {
+							...valueObj,
+							defaultOption: value,
+						};
+					}
+					return {
+						...valueObj,
+						defaultOption: false,
+					};
+				});
+
+				return {
+					...block,
+					values: updatedValues,
+				};
+			}
+
+			return block;
+		});
+
+		setOptionsSection(updatedBlocks);
+	};
+
 	//handle value color of block
 	const handleSetValueColorInput = (e, blockIndex, valueIndex) => {
 		const updatedBlocks = [...optionsSection];
@@ -255,6 +286,7 @@ const AddProductOptionsModal = () => {
 			color: "",
 			image: "",
 			previewImage: "",
+			defaultOption: false,
 		});
 		setOptionsSection(updatedBlocks);
 	};
@@ -280,6 +312,7 @@ const AddProductOptionsModal = () => {
 					color: "",
 					image: "",
 					previewImage: "",
+					defaultOption: false,
 				},
 			],
 		};
@@ -366,6 +399,9 @@ const AddProductOptionsModal = () => {
 				section?.values?.some((value) => value?.title !== "")
 			);
 
+			// to check if the one of some option is default
+			const notSelectDefaultOption = optionsSection?.every((section) => section?.values?.some((value) => value?.defaultOption === true));
+
 			// to check if the qtyAttrNotEmpty of option in not empty or no
 			const priceAttrNotEmpty = attributes?.every((attr) => attr?.price !== 0);
 
@@ -375,6 +411,7 @@ const AddProductOptionsModal = () => {
 			if (
 				nameNotEmpty &&
 				valuesNotEmpty &&
+				notSelectDefaultOption &&
 				priceAttrNotEmpty &&
 				qtyAttrNotEmpty
 			) {
@@ -389,6 +426,10 @@ const AddProductOptionsModal = () => {
 					});
 				!valuesNotEmpty &&
 					toast.warning("يرجى ملء حقل القيمة أولاً", {
+						theme: "light",
+					});
+				!notSelectDefaultOption &&
+					toast.warning("يرجى تعيين قيمة افتراضية أولاً", {
 						theme: "light",
 					});
 				!priceAttrNotEmpty &&
@@ -490,6 +531,16 @@ const AddProductOptionsModal = () => {
 						key={item?.id}
 						className='mb-3 d-flex justify-content-start align-items-center gap-3'>
 						<div className='option-color-input d-flex justify-content-start align-items-center gap-2'>
+							<ToggleButton
+								title='تعيينه كخيار افتراضي'
+								value="check"
+								selected={item?.defaultOption}
+								onChange={() => {
+									handleSetValueDefaultOption(true, sectionIndex, itemIndex);
+								}}
+							>
+								<CheckIcon />
+							</ToggleButton>
 							<div className='input-icon'>
 								<TfiWrite />
 							</div>
@@ -828,9 +879,8 @@ const AddProductOptionsModal = () => {
 							</div>
 
 							<section
-								className={`${
-									productHasOptions ? "d-flex" : "d-none"
-								} row mb-4`}>
+								className={`${productHasOptions ? "d-flex" : "d-none"
+									} row mb-4`}>
 								<div className='col-12 mb-4'>
 									{/* the product options section */}
 									{productOptionsSection}

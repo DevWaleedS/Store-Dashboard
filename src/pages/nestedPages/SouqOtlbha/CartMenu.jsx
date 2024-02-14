@@ -84,6 +84,27 @@ function CartMenu({ data, reload, setReload }) {
 									<th>الشحن</th>
 									<td>{data?.shipping_price} ر.س</td>
 								</tr>
+								{data?.discount_total ? (
+									<tr>
+										<th>
+											الخصم
+											{data?.discount_type ===
+											"percent" ? (
+												<span
+													style={{
+														fontSize: "0.85rem",
+														color: "#7e7e7e",
+													}}>
+													({data?.discount_value}
+													%)
+												</span>
+											) : null}
+										</th>
+										<td>
+											{data?.discount_total} ر.س
+										</td>
+									</tr>
+								) : null}
 								<tr>
 									<th>
 										الاجمالي <span className='tax-text'>(شامل الضريبة)</span>
