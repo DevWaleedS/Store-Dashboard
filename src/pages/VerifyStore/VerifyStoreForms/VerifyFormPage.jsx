@@ -841,13 +841,13 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							<div className='row d-flex justify-content-between align-items-center'>
 								<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 									<h5 className='label upload-docs-label'>
-										رقم التوثيق <span className='important-hint'>*</span>
+										رقم الوثيقة <span className='important-hint'>*</span>
 									</h5>
 								</div>
 
 								<div className='col-md-8 col-12'>
 									<div className='tax-text '>
-										رقم التوثيق الصادر من نظام التوثيقات
+										رقم الوثيقة الصادر من نظام التوثيقات
 									</div>
 									<input
 										name='verification_code'
@@ -856,7 +856,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
-										placeholder='قم بكتابة رقم التوثيق  كما هو موضح في وثيقة العمل الحر'
+										placeholder='قم بكتابة رقم الوثيقة  كما هو موضح في وثيقة العمل الحر'
 										style={{
 											width: "100%",
 											height: "50px",
