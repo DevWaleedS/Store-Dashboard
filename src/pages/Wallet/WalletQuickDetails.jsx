@@ -40,14 +40,14 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		{
 			id: 3,
 			icon: <IoWallet />,
-			title: "اجمالي الرصيد المودع",
+			title: "إجمالي الرصيد المودع",
 			numbers: supplierDashboard?.TotalSupplierInvoiceShare,
 			color: "#02466a",
 		},
 		{
 			id: 8,
 			icon: <IoWallet />,
-			title: "اجمالي رصيد المحفظة",
+			title: "إجمالي رصيد المحفظة",
 			numbers: supplierDashboard?.TotalBalance,
 			color: "#b6be34",
 		},

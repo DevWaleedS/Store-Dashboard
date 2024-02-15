@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
@@ -53,9 +53,9 @@ function CheckoutPage() {
 
 	// coupon
 	const [showCoupon, setShowCoupon] = useState(false);
-    const [loadingCoupon, setLoadingCoupon] = useState(false);
-    const [coupon, setCoupon] = useState(null);
-    const [couponError, setCouponError] = useState(null);
+	const [loadingCoupon, setLoadingCoupon] = useState(false);
+	const [coupon, setCoupon] = useState(null);
+	const [couponError, setCouponError] = useState(null);
 
 	/** set the default address */
 	useEffect(() => {
@@ -221,36 +221,42 @@ function CheckoutPage() {
 	};
 
 	const renderCouponInput = () => {
-        return (
-            <div className="apply-coupon">
-                <div className="coupon" onClick={() => {
-                    setShowCoupon(!showCoupon);
-                    setCouponError(null);
-                }}>
-                    <CiDiscount1 />
-                    <h6>لديك كوبون خصم ؟</h6>
-                </div>
-                {showCoupon &&
-                    <div className="coupon-wrapper">
-                        <form className="coupon-form">
-                            <input
-                                value={coupon}
-                                onChange={(e) => setCoupon(e.target.value)}
-                                type="text"
-                                className="form-control"
-                                id="input-coupon-code"
-                                placeholder="كود الخصم"
-                            />
-                            <button onClick={applyDiscountCode} type="button" className="btn btn-primary" disabled={loadingCoupon}>
-                                تطبيق
-                            </button>
-                        </form>
-                        {couponError && <span className="error">{couponError}</span>}
-                    </div>
-                }
-            </div>
-        )
-    }
+		return (
+			<div className='apply-coupon'>
+				<div
+					className='coupon'
+					onClick={() => {
+						setShowCoupon(!showCoupon);
+						setCouponError(null);
+					}}>
+					<CiDiscount1 />
+					<h6>هل لديك كود خصم ؟</h6>
+				</div>
+				{showCoupon && (
+					<div className='coupon-wrapper'>
+						<form className='coupon-form'>
+							<input
+								value={coupon}
+								onChange={(e) => setCoupon(e.target.value)}
+								type='text'
+								className='form-control'
+								id='input-coupon-code'
+								placeholder='كود الخصم'
+							/>
+							<button
+								onClick={applyDiscountCode}
+								type='button'
+								className='btn btn-primary'
+								disabled={loadingCoupon}>
+								تطبيق
+							</button>
+						</form>
+						{couponError && <span className='error'>{couponError}</span>}
+					</div>
+				)}
+			</div>
+		);
+	};
 
 	const renderPaymentsList = () => {
 		const paymentsData = paymentMethods?.data?.payment_types?.map((payment) => {
@@ -523,7 +529,7 @@ function CheckoutPage() {
 													<thead>
 														<tr>
 															<th>المنتج</th>
-															<th>الاجمالي</th>
+															<th>الإجمالي</th>
 														</tr>
 													</thead>
 													<tbody className='products'>
@@ -595,7 +601,7 @@ function CheckoutPage() {
 													<tfoot>
 														<tr>
 															<th>
-																الاجمالي{" "}
+																الإجمالي{" "}
 																<span className='tax-text'>(شامل الضريبة)</span>
 															</th>
 															<td>{fetchedData?.data?.cart?.total} ر.س</td>

@@ -3556,8 +3556,33 @@ nav.navigation {
 	padding-left: 5px;
 }
 
+.payments-hint {
+	padding: 10px 15px;
+}
+.payments-hint.pending {
+	background-color: #ffecd1c7;
+	border: 1px solid #ffecd1c7;
+	color: #ff9f1a;
+}
+.payments-hint.rejected {
+	background-color: #ffebeb;
+	border: 1px solid #ffebeb;
+	color: #ff7b7b;
+}
+.payments-hint.closed {
+	background-color: #ffecd1c7;
+	border: 1px solid #ffecd1c7;
+	color: #ff9f1a;
+}
+.payments-hint.dormant {
+	background-color: #ffecd1c7;
+	border: 1px solid #ffecd1c7;
+	color: #ff9f1a;
+}
+
 .payments-hint button {
 	background-color: var(--second-500);
+
 	color: white;
 	padding: 10px 14px;
 	border-radius: 6px;
@@ -3646,6 +3671,7 @@ nav.navigation {
 	width: 100%;
 	max-width: 100%;
 	height: 50px;
+	overflow: hidden;
 	padding: 18px 14px;
 	background: #ffffff;
 	border: 1px solid var(--gray-200) !important;
@@ -4339,14 +4365,16 @@ textarea {
 	align-items: center;
 	cursor: pointer;
 	border: 2px dashed var(--black-200);
-	margin-bottom: 25px;
+
 	border-radius: 8px;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	-ms-border-radius: 8px;
 	-o-border-radius: 8px;
 }
-
+.uplod-wrap .tax-text {
+	margin: 10px 0 25px 0;
+}
 .add-form-wrapper .add-image-btn-box svg {
 	width: 36px;
 	height: 36px;
@@ -9729,6 +9757,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.souqOtlobha-page .total-products {
 		width: 100%;
 	}
+
+	.banners-box .hint {
+		padding-right: 28px;
+	}
 }
 
 @media (max-width: 1200px) {
@@ -9886,6 +9918,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.rs-picker-daterange .rs-picker-toggle.rs-btn .rs-picker-toggle-clean svg {
 		left: -90px;
+	}
+
+	.banners-box .hint {
+		padding-right: 23px;
 	}
 }
 
@@ -11039,8 +11075,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	/*  change product cateories  */
 
 	.MuiToolbar-root .edit-all-categories-btn {
-		margin-top: 10px;
-		width: 100%;
+		margin: 10px auto;
+		font-size: 16px;
+		font-weight: 500;
 	}
 
 	.change-categories-modal-content {
@@ -11968,7 +12005,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.banners-box .hint {
-		margin-right: 120px;
+		margin-right: 98px;
 	}
 
 	.banners-preview-container img {
@@ -12601,14 +12638,39 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.add-coupon-form .date-icon {
 		height: 45px;
 	}
+	/*  payemnt */
 
+	.data-container.wallet-data-container {
+		padding: 16px;
+	}
 	.payment-form input,
 	.payment-form .MuiInputBase-root {
 		height: 45px !important;
 		font-size: 16px !important;
 	}
+	.payment-page .current-price {
+		padding-bottom: 10px;
+		font-size: 14px;
+	}
+
+	.payments-hint button {
+		width: 100%;
+	}
 
 	/* wallet  */
+	/* wallet style */
+	.bank-accounts .bank-accounts-head {
+		margin-bottom: 0;
+	}
+
+	.add-bank-Account form .inputs-wrapper input::placeholder {
+		font-size: 13px;
+	}
+
+	.add-bank-Account form .inputs-wrapper .sa-iban-hint {
+		font-size: 14px;
+		padding: 0 12px 0 0;
+	}
 
 	.add-bank-Account .form-body {
 		padding: 18px;
@@ -12654,7 +12716,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.add-bank-Account .form-footer button,
 	.add-form-wrapper .form-footer button {
 		height: 48px;
-		font-size: 18px;
+		font-size: 16px;
 		border-radius: 4px;
 		-webkit-border-radius: 4px;
 		-moz-border-radius: 4px;

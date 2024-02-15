@@ -50,7 +50,7 @@ function EnhancedTableHead(props) {
 					عدد المنتجات
 				</TableCell>
 				<TableCell sx={{ color: "#67747B" }} align='center'>
-					اجمالي السلة
+					إجمالي السلة
 				</TableCell>
 				<TableCell sx={{ color: "#67747B" }} align='center'>
 					الحالة

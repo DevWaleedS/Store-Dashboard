@@ -12,10 +12,12 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 // Redux
 import { useDispatch } from "react-redux";
 import { openEditBankAccountModal } from "../../store/slices/EditBankAccountModal";
+import { openCommentModal } from "../../store/slices/BankAccStatusCommentModal";
 
 function EnhancedTableHead(props) {
 	return (
@@ -65,7 +67,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 			<Box className='bank-accounts-table' sx={{ width: "100%" }}>
 				<TableContainer>
 					<Table>
-						{loading ? (
+						{loading || !bankAccountName ? (
 							<TableCell colSpan={5}>
 								<CircularLoading />
 							</TableCell>
@@ -130,24 +132,54 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 													padding: "4px 22px",
 													fontWeight: 500,
 													width: "120px",
-													maxWidth: "130px",
+													maxWidth: "132px",
 												}}>
 												{bankAccount?.SupplierDetails?.SupplierStatus ===
-												"Pending"
-													? "قيد المراجعه"
-													: bankAccount?.SupplierDetails?.SupplierStatus ===
-													  "Active"
-													? "نشط"
-													: bankAccount?.SupplierDetails?.SupplierStatus ===
-													  "Rejected"
-													? "مرفوض"
-													: bankAccount?.SupplierDetails?.SupplierStatus ===
-													  "Closed"
-													? "مغلق"
-													: bankAccount?.SupplierDetails?.SupplierStatus ===
-													  "Dormant"
-													? "مجمد"
-													: null}
+												"Pending" ? (
+													<>قيد المراجعه</>
+												) : bankAccount?.SupplierDetails?.SupplierStatus ===
+												  "Active" ? (
+													"نشط"
+												) : bankAccount?.SupplierDetails?.SupplierStatus ===
+												  "Rejected" ? (
+													<>
+														مرفوض
+														{bankAccount?.SupplierDetails?.SupplierStatus
+															?.Comment && (
+															<IoMdInformationCircleOutline
+																className='me-1'
+																style={{ cursor: "pointer" }}
+																onClick={() => dispatch(openCommentModal())}
+															/>
+														)}
+													</>
+												) : bankAccount?.SupplierDetails?.SupplierStatus ===
+												  "Closed" ? (
+													<>
+														مغلق
+														{bankAccount?.SupplierDetails?.SupplierStatus
+															?.Comment && (
+															<IoMdInformationCircleOutline
+																className='me-1'
+																style={{ cursor: "pointer" }}
+																onClick={() => dispatch(openCommentModal())}
+															/>
+														)}
+													</>
+												) : bankAccount?.SupplierDetails?.SupplierStatus ===
+												  "Dormant" ? (
+													<>
+														مجمد
+														{bankAccount?.SupplierDetails?.SupplierStatus
+															?.Comment && (
+															<IoMdInformationCircleOutline
+																className='me-1'
+																style={{ cursor: "pointer" }}
+																onClick={() => dispatch(openCommentModal())}
+															/>
+														)}
+													</>
+												) : null}
 											</span>
 										</div>
 									</TableCell>

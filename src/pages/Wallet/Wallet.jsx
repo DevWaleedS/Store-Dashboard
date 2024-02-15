@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Third party
 
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // components
 import useFetch from "../../Hooks/UseFetch";
@@ -22,11 +22,22 @@ import { FiPlus } from "react-icons/fi";
 import { RiBankFill } from "react-icons/ri";
 
 // Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
+import BankAccStatusComment from "./Add&EditBankAccountModal/BankAccStatusComment.jsx";
 
 const Wallet = () => {
 	const dispatch = useDispatch();
+
+	//  handle if the store is not verified navigate to home page
+	const navigate = useNavigate();
+	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
+	useEffect(() => {
+		if (verificationStoreStatus !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [verificationStoreStatus, navigate]);
+	// -----------------------------------------------------------
 
 	// get supplierDashboard
 	const { fetchedData: supplierDashboard } = useFetch(
@@ -90,7 +101,7 @@ const Wallet = () => {
 
 								{/* Bank Accounts */}
 								<section className='bank-accounts'>
-									<div className='d-flex justify-content-between bank-accounts-head'>
+									<div className='d-flex justify-content-between flex-column flex-md-row bank-accounts-head'>
 										<div className='d-flex align-items-center mb-3 mb-md-0'>
 											<div className=' d-flex justify-content-start align-items-center gap-1 bank-acc-title'>
 												<span>
@@ -128,6 +139,9 @@ const Wallet = () => {
 			{/* Add & Edit Bank Account Modal */}
 			<AddBankAccountModal />
 			<EditBankAccountModal />
+			<BankAccStatusComment
+				comment={currentBankAccount?.data?.SupplierDetails?.Comment}
+			/>
 		</>
 	);
 };

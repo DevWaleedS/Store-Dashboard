@@ -17,11 +17,13 @@ import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 // Redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
+import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
 
 const switchStyle = {
 	"& .MuiSwitch-track": {
@@ -68,14 +70,23 @@ const switchStyle = {
 };
 
 const PaymentGetways = () => {
+	const dispatch = useDispatch();
+
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
+
 	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
 		`https://backend.atlbha.com/api/Store/paymenttype`
 	);
+
+	// showSupplier bank account
+	const { fetchedData: currentBankAccount } = useFetch(
+		`https://backend.atlbha.com/api/Store/indexSupplier`
+	);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
@@ -163,6 +174,16 @@ const PaymentGetways = () => {
 		}
 	};
 
+	// handle open create bank account
+	const handleOpenBankAccount = () => {
+		dispatch(openAddBankAccountModal());
+		navigate("/wallet");
+	};
+	// handle open create bank account
+	const handleOpenBankComment = () => {
+		dispatch(openCommentModal());
+		navigate("/wallet");
+	};
 	return (
 		<>
 			<Helmet>
@@ -192,35 +213,94 @@ const PaymentGetways = () => {
 						</nav>
 					</div>
 				</div>
-				<div className='row  mb-2 '>
-					<div className='col-12 '>
-						<div className='mb-2 payments-hint option-info-label d-flex justify-content-start align-items-center gap-2 '>
-							<IoMdInformationCircleOutline />
-							<span>برجاء اضافه بيانات الحساب البنكي </span>
-
-							<button
-								onClick={() => navigate("/wallet")}
-								className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-								<span>
-									<IoWallet />
-								</span>
-								<span>اضافة حساب بنكي</span>
-							</button>
+				{loading || !currentBankAccount ? (
+					<div className='row'>
+						<div
+							className='d-flex justify-content-center align-items-center col-12'
+							style={{ minHeight: "250px" }}>
+							<CircularLoading />
 						</div>
 					</div>
-				</div>
+				) : (
+					<>
+						<div className='row  mb-2 '>
+							<div className='col-12 '>
+								{!currentBankAccount?.data ? (
+									<div className='mb-2 payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
+										<div className='d-flex gap-1'>
+											<IoMdInformationCircleOutline />
+											<span>
+												قم باضافه الحساب البنك الخاص بك لكي تتمكن من استخدام
+												بوابات الدفع
+											</span>
+										</div>
 
-				<div className='data-container '>
-					{loading ? (
-						<div className='row'>
-							<div
-								className='d-flex justify-content-center align-items-center col-12'
-								style={{ minHeight: "250px" }}>
-								<CircularLoading />
+										<button
+											onClick={() => handleOpenBankAccount()}
+											className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto '>
+											<span>
+												<IoWallet />
+											</span>
+											<span>اضافة حساب بنكي</span>
+										</button>
+									</div>
+								) : currentBankAccount?.data?.SupplierDetails
+										?.SupplierStatus === "Pending" ? (
+									<div className='mb-2 pending payments-hint option-info-label d-flex justify-content-start align-items-center gap-2 '>
+										<IoMdInformationCircleOutline />
+										<span>حسابك البنكي قيد المراجعه الآن</span>
+									</div>
+								) : currentBankAccount?.data?.SupplierDetails
+										?.SupplierStatus === "rejected" ? (
+									<div className='mb-2 rejected payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2 '>
+										<div className='d-flex gap-1'>
+											<IoMdInformationCircleOutline />
+											<span>تم رفض حسابك البنكي </span>
+										</div>
+										{currentBankAccount?.data?.SupplierDetails?.Comment && (
+											<button
+												onClick={() => handleOpenBankComment()}
+												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+												<span>الاطلاع علي سبب الرفض</span>
+											</button>
+										)}
+									</div>
+								) : currentBankAccount?.data?.SupplierDetails
+										?.SupplierStatus === "Closed" ? (
+									<div className='mb-2 closed payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
+										<div className='d-flex gap-1'>
+											<IoMdInformationCircleOutline />
+											<span>تم اغلاق حسابك البنكي </span>
+										</div>
+										{currentBankAccount?.data?.SupplierDetails?.Comment && (
+											<button
+												onClick={() => handleOpenBankComment()}
+												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+												<span>الاطلاع علي سبب الغلق</span>
+											</button>
+										)}
+									</div>
+								) : currentBankAccount?.data?.SupplierDetails
+										?.SupplierStatus === "Dormant" ? (
+									<div className='mb-2 dormant payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
+										<div className='d-flex gap-1'>
+											<IoMdInformationCircleOutline />
+											<span>تم تجميد حسابك البنكي </span>
+										</div>
+
+										{currentBankAccount?.data?.SupplierDetails?.Comment && (
+											<button
+												onClick={() => handleOpenBankComment()}
+												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+												<span>الاطلاع علي سبب التجميد</span>
+											</button>
+										)}
+									</div>
+								) : null}
 							</div>
 						</div>
-					) : (
-						<>
+
+						<div className='data-container '>
 							<div className='row other-shipping-company mb-4'>
 								<div className='mb-4 option-info-label d-flex d-md-none  justify-content-start align-items-center gap-2'>
 									<IoMdInformationCircleOutline />
@@ -241,9 +321,9 @@ const PaymentGetways = () => {
 														style={{ width: "110px" }}
 													/>
 												</div>
-												{item?.description ? (
+												{item?.name ? (
 													<div className='current-price mt-1 w-100 d-flex justify-content-center'>
-														<span>الرسوم:</span> {item?.description}
+														{item?.name}
 													</div>
 												) : null}
 											</div>
@@ -316,9 +396,9 @@ const PaymentGetways = () => {
 										</div>
 									))}
 							</div>
-						</>
-					)}
-				</div>
+						</div>
+					</>
+				)}
 			</section>
 		</>
 	);

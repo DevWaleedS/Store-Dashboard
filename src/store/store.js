@@ -15,6 +15,7 @@ import ProductOptionModal from "./slices/ProductOptionModal";
 import AddBankAccountModal from "./slices/AddBankAccountModal";
 import EditBankAccountModal from "./slices/EditBankAccountModal";
 import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
+import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
 
 // store
 export const store = configureStore({
@@ -38,5 +39,6 @@ export const store = configureStore({
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
 		SuccessMessage: SuccessMessageModalSlice,
+		BankAccStatusCommentModal,
 	},
 });

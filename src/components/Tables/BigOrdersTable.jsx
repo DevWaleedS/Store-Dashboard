@@ -109,7 +109,7 @@ function EnhancedTableHead(props) {
 					الكمية
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='center'>
-					اجمالي الطلب
+					إجمالي الطلب
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الاجراء

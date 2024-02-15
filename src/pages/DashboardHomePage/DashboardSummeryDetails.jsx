@@ -8,28 +8,28 @@ const DashboardSummeryDetails = ({ summeryDetails, loading }) => {
 		{
 			id: 1,
 			icon: <Eye />,
-			title: "اجمالي الزيارات ",
+			title: "إجمالي الزيارات ",
 			numbers: summeryDetails?.visits || 0,
 			color: "#A4A1FB",
 		},
 		{
 			id: 2,
 			icon: <User />,
-			title: "اجمالي الطلبات",
+			title: "إجمالي الطلبات",
 			numbers: summeryDetails?.orders_count || 0,
 			color: "#5EBFF2",
 		},
 		{
 			id: 3,
 			icon: <Sales />,
-			title: "اجمالي المبيعات",
+			title: "إجمالي المبيعات",
 			numbers: summeryDetails?.sales || 0,
 			color: "#02466A",
 		},
 		{
 			id: 4,
 			icon: <Product />,
-			title: "اجمالي المنتجات",
+			title: "إجمالي المنتجات",
 			numbers: summeryDetails?.products_count || 0,
 			color: "#B6BE34",
 		},
@@ -54,7 +54,7 @@ const DashboardSummeryDetails = ({ summeryDetails, loading }) => {
 										<h4>
 											{loading
 												? 0
-												: detail?.title === "اجمالي المبيعات"
+												: detail?.title === "إجمالي المبيعات"
 												? ` ${detail?.numbers} ر.س `
 												: detail?.numbers}
 										</h4>

@@ -20,7 +20,7 @@ const SalesReports = ({ salesReport, loading }) => {
 						<div className='total-wrapper mb-2'>
 							<div className='row'>
 								<div className='col-5'>
-									<h6>اجمالي المبيعات</h6>
+									<h6>إجمالي المبيعات</h6>
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>

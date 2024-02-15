@@ -183,7 +183,7 @@ function CartPage() {
 													<th style={{ textAlign: "justify" }}>اسم المنتج</th>
 													<th>السعر</th>
 													<th>الكيمة</th>
-													<th>الاجمالي</th>
+													<th>الإجمالي</th>
 													<th></th>
 												</tr>
 											</thead>
@@ -312,7 +312,7 @@ function CartPage() {
 										<div className='col-12 col-md-7 col-lg-6 col-xl-5'>
 											<div className='card'>
 												<div className='card-body'>
-													<h3>اجمالي السلة</h3>
+													<h3>إجمالي السلة</h3>
 													<table>
 														<thead>
 															<tr>
@@ -362,7 +362,7 @@ function CartPage() {
 														<tfoot>
 															<tr>
 																<th>
-																	الاجمالي{" "}
+																	الإجمالي{" "}
 																	<span className='tax-text'>
 																		(شامل الضريبة)
 																	</span>

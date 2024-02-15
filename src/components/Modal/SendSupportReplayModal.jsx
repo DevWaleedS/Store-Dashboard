@@ -167,6 +167,7 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 					<div className='d-flex justify-content-center gap-4 mb-4 '>
 						<button
 							onClick={() => sendReplayComment()}
+							disabled={!editorValue}
 							style={{
 								color: "#EFF9FF",
 								fontSize: "24px",

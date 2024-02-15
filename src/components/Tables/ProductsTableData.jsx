@@ -75,7 +75,7 @@ const ProductsTableData = ({ productsDetails }) => {
 											background: "#E6F5F6",
 											color: "#52575D",
 										}}>
-										اجمالي المبيعات
+										إجمالي المبيعات
 									</th>
 								</tr>
 							</thead>

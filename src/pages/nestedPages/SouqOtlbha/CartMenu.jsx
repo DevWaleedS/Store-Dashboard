@@ -88,8 +88,7 @@ function CartMenu({ data, reload, setReload }) {
 									<tr>
 										<th>
 											الخصم
-											{data?.discount_type ===
-											"percent" ? (
+											{data?.discount_type === "percent" ? (
 												<span
 													style={{
 														fontSize: "0.85rem",
@@ -100,14 +99,12 @@ function CartMenu({ data, reload, setReload }) {
 												</span>
 											) : null}
 										</th>
-										<td>
-											{data?.discount_total} ر.س
-										</td>
+										<td>{data?.discount_total} ر.س</td>
 									</tr>
 								) : null}
 								<tr>
 									<th>
-										الاجمالي <span className='tax-text'>(شامل الضريبة)</span>
+										الإجمالي <span className='tax-text'>(شامل الضريبة)</span>
 									</th>
 									<td>{data?.total} ر.س</td>
 								</tr>

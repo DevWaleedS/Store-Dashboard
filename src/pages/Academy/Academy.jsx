@@ -73,7 +73,7 @@ const Academy = () => {
 											type='text'
 											name='search'
 											id='search'
-											placeholder='ابحث عن دورة معينة'
+											placeholder='البحث عن دورة معينة'
 										/>
 									</div>
 								) : (
@@ -85,7 +85,7 @@ const Academy = () => {
 											type='text'
 											name='search'
 											id='search'
-											placeholder='ابحث عن شرح معينة'
+											placeholder='البحث عن شرح معين'
 										/>
 									</div>
 								)}

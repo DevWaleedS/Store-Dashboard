@@ -101,7 +101,6 @@ const AddNewProduct = () => {
 	const {
 		setEndActionTitle,
 		productHasOptions,
-
 		attributes,
 		optionsSection,
 		clearOptions,
@@ -114,6 +113,7 @@ const AddNewProduct = () => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		control,
 		formState: { errors },
 	} = useForm({
@@ -138,6 +138,25 @@ const AddNewProduct = () => {
 		category_id: "",
 		subcategory_id: [],
 	});
+
+	useEffect(() => {
+		if (attributes?.length !== 0) {
+			const qty = attributes?.reduce(
+				(accumulator, attr) => accumulator + attr.qty,
+				0
+			);
+
+			console.log(qty);
+			setProduct({ ...product, stock: qty });
+		}
+	}, [attributes]);
+
+	// console.log(attributes);
+	// console.log(product);
+
+	useEffect(() => {
+		reset(product);
+	}, [product, reset]);
 
 	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
@@ -1062,6 +1081,9 @@ const AddNewProduct = () => {
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='tax-text'>
+												تأكد ان المخزون يشمل إجمالي الكميه الخاصه بخيارات المنتج
+											</div>
 											<Controller
 												name={"stock"}
 												control={control}
@@ -1083,9 +1105,9 @@ const AddNewProduct = () => {
 														placeholder='اضف الكمية'
 														name='stock'
 														value={value}
-														onChange={(e) =>
-															onChange(e.target.value.replace(/[^0-9]/g, ""))
-														}
+														onChange={(e) => {
+															onChange(e.target.value.replace(/[^0-9]/g, ""));
+														}}
 													/>
 												)}
 											/>

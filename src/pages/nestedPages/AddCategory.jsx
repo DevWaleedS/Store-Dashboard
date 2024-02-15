@@ -210,7 +210,7 @@ const AddCategory = () => {
 											</label>
 										</div>
 										<div className='col-md-7 col-12'>
-											<div>
+											<div className='uplod-wrap'>
 												<ImageUploading
 													value={icons}
 													onChange={onChange}
@@ -249,6 +249,9 @@ const AddCategory = () => {
 																		(الحد الأقصى للصورة 1MB)
 																	</div>
 																</div>
+															</div>
+															<div className='tax-text '>
+																المقاس الأنسب 110 بكسل عرض و 110 بكسل ارتفاع
 															</div>
 														</div>
 													)}

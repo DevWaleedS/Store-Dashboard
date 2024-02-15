@@ -36,7 +36,7 @@ const OrdersQuickDetails = ({
 		{
 			id: 4,
 			icon: <Product />,
-			title: "اجمالي الطلبات",
+			title: "إجمالي الطلبات",
 			numbers: all,
 			color: "#b6be34",
 		},
