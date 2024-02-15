@@ -851,9 +851,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 								</div>
 
 								<div className='col-md-8 col-12'>
-									<div className='tax-text '>
-										رقم الوثيقة الصادر من نظام التوثيقات
-									</div>
+									<div className='tax-text '>الرقم المسجل في الوثيقة</div>
 									<input
 										name='verification_code'
 										value={data?.verification_code}
@@ -861,7 +859,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										onChange={(e) => {
 											handleOnChange(e);
 										}}
-										placeholder='قم بكتابة رقم الوثيقة  كما هو موضح في وثيقة العمل الحر'
+										placeholder='FL-000000000'
 										style={{
 											width: "100%",
 											height: "50px",
