@@ -236,6 +236,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						name: res?.data?.message?.en?.name?.[0],
 
 						verification_type: res?.data?.message?.en?.verification_type?.[0],
+						verification_code: res?.data?.message?.en?.verification_code?.[0],
 						commercial_name: res?.data?.message?.en?.commercial_name?.[0],
 						city_id: res?.data?.message?.en?.city_id?.[0],
 						file: res?.data?.message?.en?.file?.[0],
@@ -247,6 +248,10 @@ const VerifyFormPage = forwardRef((props, ref) => {
 					toast.error(res?.data?.message?.en?.verification_type?.[0], {
 						theme: "light",
 					});
+					toast.error(res?.data?.message?.en?.verification_code?.[0], {
+						theme: "light",
+					});
+
 					toast.error(res?.data?.message?.en?.commercial_name?.[0], {
 						theme: "light",
 					});
