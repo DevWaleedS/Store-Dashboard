@@ -233,7 +233,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 				} else {
 					setLoadingTitle("");
 					setDataErrors({
-						name: res?.data?.message?.en?.name?.[0],
+						owner_name: res?.data?.message?.en?.owner_name?.[0],
 
 						verification_type: res?.data?.message?.en?.verification_type?.[0],
 						verification_code: res?.data?.message?.en?.verification_code?.[0],
@@ -241,7 +241,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						city_id: res?.data?.message?.en?.city_id?.[0],
 						file: res?.data?.message?.en?.file?.[0],
 					});
-					toast.error(res?.data?.message?.en?.name?.[0], {
+					toast.error(res?.data?.message?.en?.owner_name?.[0], {
 						theme: "light",
 					});
 
