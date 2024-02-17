@@ -13,7 +13,7 @@ import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
-import AddSubCategory from "./AddSubCategory";
+import AddSubCategory from "../nestedPages/AddSubCategory";
 
 // Redux
 import { useDispatch } from "react-redux";

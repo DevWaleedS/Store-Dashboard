@@ -9,11 +9,11 @@ export { default as AddNewUser } from "./AddNewUser";
 export { default as CreatePage } from "./CreatePage";
 export { default as ClientData } from "./ClientData";
 export { default as CreateRole } from "./CreateRole";
-export { default as AddCategory } from "./AddCategory";
+
 export { default as CreateOffer } from "./CreateOffer";
 export { default as EditUserPage } from "./EditUserPage";
 export { default as OfferDetails } from "./OfferDetails";
-export { default as EditCategory } from "./EditCategory";
+
 export { default as SalesReports } from "./SalesReports";
 export { default as AddSubCategory } from "./AddSubCategory";
 export { default as SupportDetails } from "./SupportDetails";

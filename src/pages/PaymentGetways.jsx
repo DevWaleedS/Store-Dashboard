@@ -145,7 +145,10 @@ const PaymentGetways = () => {
 	};
 
 	const changeCashOnDeliveryStatus = (id) => {
-		if (allPayments?.some((item) => item?.status === "نشط")) {
+		if (
+			allPayments?.some((item) => item?.status === "نشط") ||
+			allPayments?.length === 0
+		) {
 			axios
 				.get(
 					`https://backend.atlbha.com/api/Store/changePaymenttypeStatus/${id}`,
@@ -230,7 +233,7 @@ const PaymentGetways = () => {
 										<div className='d-flex gap-1'>
 											<IoMdInformationCircleOutline />
 											<span>
-												قم باضافه الحساب البنك الخاص بك لكي تتمكن من استخدام
+												قم باضافه الحساب البنكي الخاص بك لكي تتمكن من استخدام
 												بوابات الدفع
 											</span>
 										</div>

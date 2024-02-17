@@ -69,7 +69,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 	const [messageError, serMessageError] = useState("");
 
 	const resetsMessage = () => {
-		setEditorValue(null);
+		setEditorValue("");
 	};
 
 	// to send Replay Comment

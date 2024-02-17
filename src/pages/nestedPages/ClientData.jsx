@@ -288,7 +288,7 @@ const ClientData = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Carts");
 					setReload(!reload);
-					setEditorValue(null);
+					setEditorValue("");
 				} else {
 					setLoadingTitle("");
 					setErrors({

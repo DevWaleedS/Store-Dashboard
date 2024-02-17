@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 
 // Third party
 import axios from "axios";
@@ -20,8 +20,8 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-// to download order details as pdf file
-import { usePDF } from "react-to-pdf";
+// TO print this page
+import ReactToPrint from "react-to-print";
 
 // Icons
 import { PiTrafficSign } from "react-icons/pi";
@@ -379,7 +379,7 @@ const OrderDetails = () => {
 	// -------------------------------------------------
 
 	// Handle print this page as pdf file
-	const { toPDF, targetRef } = usePDF({ filename: "order-details-report.pdf" });
+	const componentRef = useRef();
 
 	return (
 		<>
@@ -394,7 +394,7 @@ const OrderDetails = () => {
 					</div>
 				</div>
 
-				<section ref={targetRef}>
+				<section ref={componentRef}>
 					{/* Order Details Header */}
 					<div className='head-category mb-5 pt-md-4'>
 						<div className='row '>
@@ -417,7 +417,7 @@ const OrderDetails = () => {
 									</ol>
 								</nav>
 							</div>
-							<div className='col-md-5 col-12 d-flex justify-content-md-end justify-content-center'>
+							<div className='col-md-5 col-12 d-flex justify-content-md-end justify-content-center order__number'>
 								<div className='order-number'>
 									<div className='title'>
 										<h5>رقم الطلب</h5>
@@ -605,7 +605,7 @@ const OrderDetails = () => {
 														<>(قطعتين)</>
 													)}
 													{fetchedData?.data?.orders?.totalCount > 2 && (
-														<>(fetchedData?.data?.orders?.totalCount قطعة)</>
+														<>({fetchedData?.data?.orders?.totalCount} قطعة)</>
 													)}
 												</p>
 											</div>
@@ -1316,9 +1316,19 @@ const OrderDetails = () => {
 											تصدير الطلب
 										</span>
 									</div>
-									<div className='action-icon'>
-										<PDFIcon className='pdf-icon' onClick={() => toPDF()} />
-									</div>
+
+									<ReactToPrint
+										trigger={() => {
+											return (
+												<div className='action-icon'>
+													<PDFIcon className='pdf-icon' />
+												</div>
+											);
+										}}
+										content={() => componentRef.current}
+										documentTitle='order-details-report'
+										bodyClass='order-details-print'
+									/>
 								</div>
 
 								{fetchedData?.data?.orders?.shipping &&

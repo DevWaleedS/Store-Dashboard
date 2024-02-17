@@ -102,7 +102,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع الصفحات وهذة الخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع الصفحات وهذه الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -543,7 +543,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																	onClick={() => {
 																		if (row?.default_page !== 1) {
 																			setActionDelete(
-																				"سيتم حذف الصفحة وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف الصفحة وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("delete");
 																			setUrl(

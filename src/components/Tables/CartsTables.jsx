@@ -103,7 +103,7 @@ function EnhancedTableToolbar(props) {
 						<Tooltip
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع السلات وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع السلات وهذهالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}
@@ -398,7 +398,7 @@ export default function CartsTables({
 																	style={{ cursor: "pointer" }}
 																	onClick={() => {
 																		setActionDelete(
-																			"سيتم حذف السلة وهذة الخطوة غير قابلة للرجوع"
+																			"سيتم حذف السلة وهذه الخطوة غير قابلة للرجوع"
 																		);
 																		setDeleteMethod("get");
 																		setUrl(

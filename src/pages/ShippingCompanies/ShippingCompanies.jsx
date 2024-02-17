@@ -191,7 +191,10 @@ const ShippingCompanies = () => {
 
 	// Change OtherShipping Company Status And Add Price
 	const changeOtherShippingCompanyStatusAndAddPrice = (id) => {
-		if (allShippingCompanies?.some((item) => item?.status === "نشط")) {
+		if (
+			allShippingCompanies?.some((item) => item?.status === "نشط") ||
+			allShippingCompanies?.length === 0
+		) {
 			axios
 				.get(
 					`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,

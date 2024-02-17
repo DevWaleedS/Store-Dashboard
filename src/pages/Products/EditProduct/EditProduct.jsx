@@ -209,7 +209,7 @@ const EditProduct = () => {
 									{
 										id: 9828394,
 										title: "",
-										color: "",
+										color: "#000000",
 										image: "",
 										previewImage: "",
 										defaultOption: false,
@@ -225,7 +225,8 @@ const EditProduct = () => {
 					qty: Number(option?.quantity),
 					values: option?.name?.ar?.split(",")?.map((item, index) => ({
 						id: index + 1,
-						title: `${index === 0 ? item : `/ ${item}`}`,
+
+						title: item,
 					})),
 				}))
 			);
@@ -490,7 +491,7 @@ const EditProduct = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Products");
 					setReload(!reload);
-					setEditorValue(null);
+					setEditorValue("");
 					clearOptions();
 				} else {
 					setLoadingTitle("");
@@ -580,7 +581,7 @@ const EditProduct = () => {
 					open={true}
 					onClose={() => {
 						navigate("/Products");
-						setEditorValue(null);
+						setEditorValue("");
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -1351,7 +1352,7 @@ const EditProduct = () => {
 													className='close-btn'
 													onClick={() => {
 														navigate("/Products");
-														setEditorValue(null);
+														setEditorValue("");
 														clearOptions();
 													}}>
 													إلغاء

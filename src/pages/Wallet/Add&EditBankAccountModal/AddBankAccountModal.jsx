@@ -159,6 +159,19 @@ const AddBankAccountModal = () => {
 		});
 	};
 
+	const restValues = () => {
+		setBankAccountInfo({
+			bankId: "",
+			bankAccountHolderName: "",
+			bankAccount: "",
+			iban: "",
+			supplierCode: "",
+			civil_id: "",
+			bankAccountLetter: "",
+			website_image: "",
+		});
+	};
+
 	/** ----------------------------------------------------------- */
 
 	//  Handler upload bank account docs
@@ -372,6 +385,7 @@ const AddBankAccountModal = () => {
 
 					setReload(!reload);
 					dispatch(closeAddBankAccountModal());
+					restValues();
 				} else {
 					setLoadingTitle("");
 					setBankAccountErr({
@@ -416,6 +430,7 @@ const AddBankAccountModal = () => {
 											style={{ cursor: "pointer", color: "white" }}
 											onClick={() => {
 												dispatch(closeAddBankAccountModal());
+												restValues();
 											}}
 										/>
 									</div>
@@ -582,9 +597,9 @@ const AddBankAccountModal = () => {
 												name='iban'
 												id='iban'
 												maxLength={22}
-												placeholder='ادخل رقم الآيبان كما الخاص بالحساب البنكي '
+												placeholder='ادخل رقم الآيبان الخاص بالحساب البنكي '
 												{...register("iban", {
-													required: "حقل رقم الآيبان الحساب مطلوب",
+													required: "حقل رقم آيبان الحساب مطلوب",
 												})}
 											/>
 											<span className='sa-iban-hint d-flex justify-content-center align-content-center flex-wrap'>
@@ -701,6 +716,7 @@ const AddBankAccountModal = () => {
 											className='close-btn'
 											onClick={() => {
 												dispatch(closeAddBankAccountModal());
+												restValues();
 											}}>
 											إلغاء
 										</button>

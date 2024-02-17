@@ -221,7 +221,7 @@ const RatingWeight = ({
 																className='delete-btn '
 																onClick={() => {
 																	setActionDelete(
-																		"سيتم حذف التعليق وهذة الخطوة غير قابلة للرجوع"
+																		"سيتم حذف التعليق وهذه الخطوة غير قابلة للرجوع"
 																	);
 																	setDeleteMethod("delete");
 																	setUrl(

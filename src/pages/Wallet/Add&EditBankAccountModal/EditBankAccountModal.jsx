@@ -627,9 +627,9 @@ const EditBankAccountModal = () => {
 												name='iban'
 												id='iban'
 												maxLength={22}
-												placeholder='ادخل رقم الآيبان كما الخاص بالحساب البنكي '
+												placeholder='ادخل رقم الآيبان الخاص بالحساب البنكي '
 												{...register("iban", {
-													required: "حقل رقم الآيبان الحساب مطلوب",
+													required: "حقل رقم آيبان الحساب مطلوب",
 												})}
 											/>
 											<span className='sa-iban-hint d-flex justify-content-center align-content-center flex-wrap'>

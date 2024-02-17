@@ -4,18 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Icons
 import { MdAdd } from "react-icons/md";
-import { HomeIcon } from "../data/Icons";
+import { HomeIcon } from "../../data/Icons";
 import { BsSearch } from "react-icons/bs";
 import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
+import useFetch from "../../Hooks/UseFetch";
 
 //Mui
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { CategoryTable } from "../components/Tables";
+import { CategoryTable } from "../../components/Tables";
+import DeleteCategoryAlert from "./DeleteCategoryAlert";
 
 const Category = () => {
 	// to get all  data from server
@@ -240,6 +241,10 @@ const Category = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* DeleteCategoryAlert */}
+
+			<DeleteCategoryAlert />
 		</>
 	);
 };

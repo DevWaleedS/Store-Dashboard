@@ -109,9 +109,7 @@ const FormSearchWeight = ({
 								inputProps={{ "aria-label": "Without label" }}
 								renderValue={(selected) => {
 									if (category_id === "") {
-										return (
-											<p style={{ color: "#ADB5B9" }}>اختر النشاط</p>
-										);
+										return <p style={{ color: "#ADB5B9" }}>اختر النشاط</p>;
 									}
 									const result =
 										categories?.filter(
@@ -135,7 +133,10 @@ const FormSearchWeight = ({
 											key={index}
 											className='souq_storge_category_filter_items'
 											sx={{
-												backgroundColor: "rgba(211, 211, 211, 1)",
+												backgroundColor:
+													cat?.store === null
+														? " #dfe2aa"
+														: " rgba(211, 211, 211, 1)",
 												height: "3rem",
 												"&:hover": {},
 											}}

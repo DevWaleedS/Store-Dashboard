@@ -94,7 +94,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع المستخدمين وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع المستخدمين وهذهالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -529,7 +529,7 @@ export default function UserAndManagementTable({
 																		title='حذف المستخدم'
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف المستخدم وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف المستخدم وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

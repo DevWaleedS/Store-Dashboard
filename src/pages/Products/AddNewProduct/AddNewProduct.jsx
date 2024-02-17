@@ -155,8 +155,8 @@ const AddNewProduct = () => {
 	// console.log(product);
 
 	useEffect(() => {
-		reset(product);
-	}, [product, reset]);
+		reset(product?.stock);
+	}, [product?.stock, reset]);
 
 	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
@@ -403,7 +403,7 @@ const AddNewProduct = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Products");
 					setReload(!reload);
-					setEditorValue(null);
+					setEditorValue("");
 					clearOptions();
 				} else {
 					setLoadingTitle("");
@@ -486,7 +486,7 @@ const AddNewProduct = () => {
 					open={true}
 					onClose={() => {
 						navigate("/Products");
-						setEditorValue(null);
+						setEditorValue("");
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -1225,7 +1225,7 @@ const AddNewProduct = () => {
 												className='close-btn'
 												onClick={() => {
 													navigate("/Products");
-													setEditorValue(null);
+													setEditorValue("");
 												}}>
 												إلغاء
 											</button>

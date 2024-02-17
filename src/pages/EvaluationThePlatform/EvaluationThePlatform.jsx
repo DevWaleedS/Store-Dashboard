@@ -69,7 +69,7 @@ const EvaluationThePlatform = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
-					setEditorValue(null);
+					setEditorValue("");
 				} else {
 					setLoadingTitle("");
 					setEvaluationError(res?.data?.message?.en?.comment_text?.[0]);
@@ -147,7 +147,7 @@ const EvaluationThePlatform = () => {
 									alt=''
 								/>
 							</div>
-							{editorValue === null || editorValue === "<p><br></p>" ? (
+							{editorValue === "" || editorValue === "<p><br></p>" ? (
 								<div className='evaluation-content'>
 									منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة الإلكترونية
 								</div>
@@ -166,7 +166,7 @@ const EvaluationThePlatform = () => {
 						<div className=' d-flex flex-column justify-content-center align-items-center'>
 							<button
 								disabled={
-									editorValue === null || editorValue === "<p><br></p>"
+									editorValue === "" || editorValue === "<p><br></p>"
 										? true
 										: false
 								}

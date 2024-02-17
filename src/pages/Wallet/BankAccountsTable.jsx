@@ -67,7 +67,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 			<Box className='bank-accounts-table' sx={{ width: "100%" }}>
 				<TableContainer>
 					<Table>
-						{loading || !bankAccountName ? (
+						{loading ? (
 							<TableCell colSpan={5}>
 								<CircularLoading />
 							</TableCell>

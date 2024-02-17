@@ -71,7 +71,7 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 	const navigate = useNavigate();
 
 	const resetsMessage = () => {
-		setEditorValue(null);
+		setEditorValue("");
 	};
 
 	// Handle errors

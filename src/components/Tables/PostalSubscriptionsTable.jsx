@@ -81,7 +81,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع الايميلات وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع الايميلات وهذهالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -343,7 +343,7 @@ export default function PostalSubscriptionsTable({
 																		title='حذف الايميل'
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف الايميل وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف الايميل وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

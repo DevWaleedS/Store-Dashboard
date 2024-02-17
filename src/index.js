@@ -25,7 +25,6 @@ import "./index.css";
 
 import {
 	Carts,
-	Category,
 	Coupon,
 	Offers,
 	Pages,
@@ -72,9 +71,7 @@ import {
 	JobTitles,
 	EditRole,
 	UserData,
-	EditCategory,
 	CreateRole,
-	AddCategory,
 	AddNewUser,
 	EditUserDetails,
 	Delegate,
@@ -115,6 +112,7 @@ import SendVerificationCode from "./pages/Authentication/Login/ResetPasswordPage
 import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
 import { Wallet } from "./pages/Wallet";
+import { Category, AddCategory, EditCategory } from "./pages/Categories";
 
 /**
  * ----------------------------------------------------------------------------------------------

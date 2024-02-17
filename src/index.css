@@ -1258,11 +1258,11 @@ table,
 	--bs-dropdown-min-width: none !important;
 	border: none;
 	padding: 0;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-ms-border-radius: 5px;
-	-o-border-radius: 5px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-ms-border-radius: 6px;
+	-o-border-radius: 6px;
 }
 
 .new-orders-dropdown-menu li,
@@ -4328,6 +4328,45 @@ textarea {
 	.customers-BarChart .recharts-text {
 		font-size: 16px;
 		font-weight: 400;
+	}
+
+	/* order details in print screen */
+	.order-details-print {
+		direction: rtl;
+		padding: 20px;
+	}
+
+	.order-details-print .head-category .row {
+		display: flex;
+		flex-direction: row !important;
+		justify-content: space-between !important;
+	}
+
+	.order-details-print .head-category .row .order__number {
+		justify-content: flex-end !important;
+	}
+
+	.order-details-print .head-category .row .order-number .title h5 {
+		font-size: 20px;
+		font-weight: 400;
+		margin-bottom: 8px;
+		color: var(--gray-700);
+	}
+	.order-details-print .head-category .row .order-number .number {
+		background: #b1bc10;
+		color: var(--white-100);
+		font-size: 30px;
+		font-weight: 400;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 190px;
+		height: 65px;
+		border-radius: 8px;
+	}
+
+	.order-details-print .head-category .breadcrumb {
+		display: none;
 	}
 }
 
@@ -9452,9 +9491,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .seo-store-page .data-container .social-media-inputs {
 	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 3rem;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 0.5rem;
 }
 
 .seo-store-page .data-container .social-media-inputs .label {
@@ -9660,6 +9699,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	cursor: pointer;
 }
 
+/* ----------------------------------------------------------------------- */
 @media (min-width: 1400px) {
 	.container,
 	.container-lg,
@@ -9670,9 +9710,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		max-width: 1380px;
 	}
 }
-
-/* ---------------------------------------------------------------- */
-/* Media queries */
 @media (max-width: 1600px) {
 	.category,
 	.products,
@@ -12930,12 +12967,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.pm-am {
 		font-size: 16px !important;
-	}
-
-	.seo-store-page .data-container .social-media-inputs {
-		flex-direction: column;
-		align-items: stretch;
-		gap: 0.5rem;
 	}
 
 	/* cart-page */

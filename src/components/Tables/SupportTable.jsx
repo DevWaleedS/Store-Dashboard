@@ -103,7 +103,7 @@ function EnhancedTableToolbar(props) {
 								className='delete-all'
 								onClick={() => {
 									setNotificationTitle(
-										"سيتم حذف جميع الشكاوي وهذةالخطوة غير قابلة للرجوع"
+										"سيتم حذف جميع الشكاوي وهذهالخطوة غير قابلة للرجوع"
 									);
 									setActionTitle("Delete");
 								}}>
@@ -409,8 +409,8 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			row?.supportstatus === "منتهية"
 																				? "#3ae374"
 																				: row?.supportstatus === "غير منتهية "
-																					? "#ff9f1a"
-																					: "#d3d3d3",
+																				? "#ff9f1a"
+																				: "#d3d3d3",
 																		color: "#fff",
 																	}}>
 																	{row?.supportstatus === "منتهية" ? (
@@ -431,8 +431,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																	onClick={() => {
 																		dispatch(openReplyModal());
 																		setUserDetails(row);
-																	}}
-																>
+																	}}>
 																	<ReplayIcon title='الرد على الشكوى' />
 																</span>
 
@@ -496,7 +495,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																		title='حذف  الشكوى'
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف الشكوى وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف الشكوى وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

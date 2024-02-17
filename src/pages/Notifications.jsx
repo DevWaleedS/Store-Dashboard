@@ -269,7 +269,7 @@ const Notifications = () => {
 															}}
 															onClick={() => {
 																setNotificationTitle(
-																	"سيتم حذف جميع الاشعارات وهذةالخطوة غير قابلة للرجوع"
+																	"سيتم حذف جميع الاشعارات وهذهالخطوة غير قابلة للرجوع"
 																);
 																setActionTitle("Delete");
 															}}>
@@ -334,7 +334,7 @@ const Notifications = () => {
 																	<DeleteIcon
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف النشاط وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

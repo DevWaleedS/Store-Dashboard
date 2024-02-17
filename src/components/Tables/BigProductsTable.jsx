@@ -128,7 +128,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع المنتجات وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع المنتجات وهذهالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -1004,7 +1004,7 @@ export default function BigProductsTable({ data, loading, reload, setReload }) {
 																			title='حذف المنتج'
 																			onClick={() => {
 																				setActionDelete(
-																					"سيتم حذف المنتج وهذة الخطوة غير قابلة للرجوع"
+																					"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
 																				);
 																				setDeleteMethod("get");
 																				setUrl(

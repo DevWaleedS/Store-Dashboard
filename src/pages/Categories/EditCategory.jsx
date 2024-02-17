@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 
 // Components
-import AddSubCategory from "./AddSubCategory";
+import AddSubCategory from "../nestedPages/AddSubCategory";
 
 // Icons
 import { AiOutlinePlus } from "react-icons/ai";

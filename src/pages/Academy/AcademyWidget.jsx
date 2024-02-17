@@ -67,7 +67,7 @@ const AcademyWidget = ({ name, image, count, duration, url, id }) => {
 											navigate(`CourseDetails/${id}`);
 										}}>
 										<AiOutlineEye />
-										<span className='me-2'>مشاهدة المحتوي </span>
+										<span className='me-2'>مشاهدة المحتوى </span>
 									</Button>
 								</div>
 							</div>

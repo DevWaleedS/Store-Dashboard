@@ -271,7 +271,6 @@ const PaintStore = () => {
 							)}
 						</div>
 
-						{/**/}
 						{/* Pixel code*/}
 						<div className='d-flex flex-column gap-3'>
 							<div className='social-media-inputs'>

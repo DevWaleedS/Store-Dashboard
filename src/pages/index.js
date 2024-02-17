@@ -5,7 +5,7 @@ export { default as Coupon } from "./Coupon";
 export { default as Report } from "./Report";
 export { default as Support } from "./Support";
 export { default as SEOStore } from "./SEOStore";
-export { default as Category } from "./Category";
+
 export { default as RootLayOut } from "./RootLayout";
 export { default as Management } from "./Management";
 export { default as PaintStore } from "./PaintStore";

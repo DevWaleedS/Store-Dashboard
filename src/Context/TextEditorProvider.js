@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export const TextEditorContext = React.createContext({});
 
 const TextEditorProvider = (props) => {
-	const [editorValue, setEditorValue] = useState(null);
+	const [editorValue, setEditorValue] = useState("");
 
 	const editorContent = {
 		editorValue,

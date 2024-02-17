@@ -308,7 +308,7 @@ const AddProductOptionsModal = () => {
 				{
 					id: 1,
 					title: "",
-					color: "",
+					color: "#000000",
 					image: "",
 					previewImage: "",
 					defaultOption: false,

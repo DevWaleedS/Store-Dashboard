@@ -94,7 +94,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع أكواد الخصم وهذةالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع أكواد الخصم وهذهالخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
@@ -534,7 +534,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																		title='حذف كود الخصم'
 																		onClick={() => {
 																			setActionDelete(
-																				"سيتم حذف كود الخصم وهذة الخطوة غير قابلة للرجوع"
+																				"سيتم حذف كود الخصم وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
 																			setUrl(

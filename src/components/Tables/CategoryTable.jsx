@@ -106,7 +106,7 @@ function EnhancedTableToolbar(props) {
 								className='delete-all'
 								onClick={() => {
 									setNotificationTitle(
-										"سيتم حذف جميع الأنشطة وهذة الخطوة غير قابلة للرجوع"
+										"سيتم حذف جميع الأنشطة وهذه الخطوة غير قابلة للرجوع"
 									);
 									setActionTitle("Delete");
 								}}>
@@ -223,12 +223,14 @@ export default function EnhancedTable({
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
+
 	const {
 		setUrl,
 		setActionDelete,
 		deleteReload,
 		setDeleteReload,
 		setDeleteMethod,
+		setPossibilityOfDelete,
 	} = DeleteStore;
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -644,25 +646,51 @@ export default function EnhancedTable({
 																		</Link>
 																	</span>
 																	<span>
-																		<DeleteIcon
-																			title='حذف النشاط'
-																			onClick={() => {
-																				setActionDelete(
-																					"سيتم حذف النشاط وهذة الخطوة غير قابلة للرجوع"
-																				);
-																				setDeleteMethod("get");
-																				setUrl(
-																					`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
-																				);
-																			}}
-																			style={{
-																				pointerEvents:
-																					row?.store === null ? "none" : "",
-																				cursor: "pointer",
-																				color: "red",
-																				fontSize: "1.2rem",
-																			}}
-																		/>
+																		{row?.possibility_of_delete ? (
+																			<DeleteIcon
+																				title='حذف النشاط'
+																				onClick={() => {
+																					setActionDelete(
+																						"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
+																					);
+																					setDeleteMethod("get");
+																					setUrl(
+																						`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
+																					);
+																				}}
+																				style={{
+																					pointerEvents:
+																						row?.store === null ? "none" : "",
+																					cursor: "pointer",
+																					color: "red",
+																					fontSize: "1.2rem",
+																				}}
+																			/>
+																		) : (
+																			<DeleteIcon
+																				title='حذف النشاط'
+																				onClick={() => {
+																					setActionDelete(
+																						"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
+																					);
+																					setDeleteMethod("get");
+																					setPossibilityOfDelete(
+																						row?.possibility_of_delete
+																					);
+
+																					setUrl(
+																						`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
+																					);
+																				}}
+																				style={{
+																					pointerEvents:
+																						row?.store === null ? "none" : "",
+																					cursor: "pointer",
+																					color: "red",
+																					fontSize: "1.2rem",
+																				}}
+																			/>
+																		)}
 																	</span>
 																</div>
 															</TableCell>

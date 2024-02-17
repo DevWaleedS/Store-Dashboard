@@ -41,8 +41,8 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Switch } from "@mui/material";
-import CheckIcon from '@mui/icons-material/Check';
-import ToggleButton from '@mui/material/ToggleButton';
+import CheckIcon from "@mui/icons-material/Check";
+import ToggleButton from "@mui/material/ToggleButton";
 
 /* Modal Styles */
 const style = {
@@ -309,7 +309,7 @@ const AddProductOptionsModal = () => {
 				{
 					id: 1,
 					title: "",
-					color: "",
+					color: "#000000",
 					image: "",
 					previewImage: "",
 					defaultOption: false,
@@ -400,7 +400,9 @@ const AddProductOptionsModal = () => {
 			);
 
 			// to check if the one of some option is default
-			const notSelectDefaultOption = optionsSection?.every((section) => section?.values?.some((value) => value?.defaultOption === true));
+			const notSelectDefaultOption = optionsSection?.every((section) =>
+				section?.values?.some((value) => value?.defaultOption === true)
+			);
 
 			// to check if the qtyAttrNotEmpty of option in not empty or no
 			const priceAttrNotEmpty = attributes?.every((attr) => attr?.price !== 0);
@@ -533,12 +535,11 @@ const AddProductOptionsModal = () => {
 						<div className='option-color-input d-flex justify-content-start align-items-center gap-2'>
 							<ToggleButton
 								title='تعيينه كخيار افتراضي'
-								value="check"
+								value='check'
 								selected={item?.defaultOption}
 								onChange={() => {
 									handleSetValueDefaultOption(true, sectionIndex, itemIndex);
-								}}
-							>
+								}}>
 								<CheckIcon />
 							</ToggleButton>
 							<div className='input-icon'>
@@ -711,7 +712,7 @@ const AddProductOptionsModal = () => {
 							<div className='d-flex flex-row align-items-center gap-1'>
 								{attribute?.values?.map((value, index) => (
 									<>
-										{value?.id === index && index !== 0 && <span>/</span>}
+										{index !== 0 && <span>/</span>}
 										<Typography
 											key={value?.id}
 											sx={{
@@ -879,8 +880,9 @@ const AddProductOptionsModal = () => {
 							</div>
 
 							<section
-								className={`${productHasOptions ? "d-flex" : "d-none"
-									} row mb-4`}>
+								className={`${
+									productHasOptions ? "d-flex" : "d-none"
+								} row mb-4`}>
 								<div className='col-12 mb-4'>
 									{/* the product options section */}
 									{productOptionsSection}

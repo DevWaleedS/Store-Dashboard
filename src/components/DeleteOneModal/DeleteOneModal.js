@@ -8,6 +8,10 @@ import ReactDom from "react-dom";
 import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 
+// Redux
+import { useDispatch } from "react-redux";
+import { openDeleteCategoryAlert } from "../../store/slices/DeleteCategoryAlertModal";
+
 // Styles
 import styles from "./DeleteOneModal.module.css";
 
@@ -20,6 +24,7 @@ const BackDrop = () => {
 };
 
 const DeleteOneModal = () => {
+	const dispatch = useDispatch(true);
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -37,6 +42,8 @@ const DeleteOneModal = () => {
 		setDeleteReload,
 		deleteReload,
 		deleteMethod,
+		possibilityOfDelete,
+		setPossibilityOfDelete,
 	} = DeleteProvider;
 
 	const confirm = () => {
@@ -76,12 +83,17 @@ const DeleteOneModal = () => {
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
+
 						setDeleteReload(!deleteReload);
+
 						setActionDelete(null);
 						setUrl(null);
 						setLoading(false);
 					} else {
-						setEndActionTitle(res?.data?.message?.ar);
+						possibilityOfDelete
+							? setEndActionTitle(res?.data?.message?.ar)
+							: dispatch(openDeleteCategoryAlert(res?.data?.message?.ar));
+						setPossibilityOfDelete(false);
 						setDeleteReload(!deleteReload);
 						setActionDelete(null);
 						setUrl(null);

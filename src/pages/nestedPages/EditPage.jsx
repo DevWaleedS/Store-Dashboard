@@ -308,7 +308,7 @@ const EditPage = () => {
 					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Pages");
 					setReload(!reload);
-					setEditorValue(null);
+					setEditorValue("");
 				} else {
 					setLoadingTitle("");
 					setPageError({
@@ -363,7 +363,7 @@ const EditPage = () => {
 					open={true}
 					onClose={() => {
 						navigate("/Pages");
-						setEditorValue(null);
+						setEditorValue("");
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -378,7 +378,7 @@ const EditPage = () => {
 											<AiOutlineCloseCircle
 												onClick={() => {
 													navigate("/Pages");
-													setEditorValue(null);
+													setEditorValue("");
 												}}
 											/>
 										</div>
@@ -721,7 +721,7 @@ const EditPage = () => {
 
 																			whiteSpace: "break-spaces",
 																		}}>
-																		- (الحد الادني للابعاد 300 بكسل عرض - 150
+																		- (الحد الأدنى للابعاد 300 بكسل عرض - 150
 																		بكسل ارتفاع)
 																	</span>
 																	<span

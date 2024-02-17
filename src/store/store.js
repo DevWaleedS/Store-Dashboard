@@ -16,6 +16,7 @@ import AddBankAccountModal from "./slices/AddBankAccountModal";
 import EditBankAccountModal from "./slices/EditBankAccountModal";
 import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
 import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
+import DeleteCategoryAlertModal from "./slices/DeleteCategoryAlertModal";
 
 // store
 export const store = configureStore({
@@ -40,5 +41,6 @@ export const store = configureStore({
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
 		SuccessMessage: SuccessMessageModalSlice,
 		BankAccStatusCommentModal,
+		DeleteCategoryAlertModal,
 	},
 });

@@ -16,12 +16,19 @@ const DropCSVFiles = ({ handleFile, fileError, file }) => {
 
 	return (
 		<>
-			<div {...getRootProps({ className: "dropzone" })}>
+			<div
+				{...getRootProps({ className: "dropzone" })}
+				style={{
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+				}}>
 				<input {...getInputProps()} />
-				<ul>{file?.name || <p>Drop CSV file</p>}</ul>
+				<ul className='text-overflow' style={{ margin: "0" }}>
+					{file?.name || <p>Drop CSV file</p>}
+				</ul>
+				<div className='fs-6 text-danger'>{fileError && fileError}</div>
 			</div>
-			<br />
-			<span className='fs-6 text-danger'>{fileError && fileError}</span>
 		</>
 	);
 };

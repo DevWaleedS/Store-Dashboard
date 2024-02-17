@@ -128,7 +128,7 @@ const JobTitles = () => {
 														<button
 															onClick={() => {
 																setActionDelete(
-																	"سيتم حذف الدور وهذة الخطوة غير قابلة للرجوع"
+																	"سيتم حذف الدور وهذه الخطوة غير قابلة للرجوع"
 																);
 																setDeleteMethod("delete");
 																setUrl(
