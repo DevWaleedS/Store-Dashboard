@@ -222,16 +222,19 @@ const EditProduct = () => {
 				fetchedData?.data?.product?.options?.map((option) => ({
 					id: option?.id,
 					price: Number(option?.price),
+					discount_price: Number(option?.discount_price),
+
 					qty: Number(option?.quantity),
 					values: option?.name?.ar?.split(",")?.map((item, index) => ({
 						id: index + 1,
-
 						title: item,
 					})),
 				}))
 			);
 		}
 	}, [fetchedData?.data?.product]);
+
+	console.log("editproduct:", attributes);
 
 	// ---------------------------------------------
 
@@ -278,8 +281,6 @@ const EditProduct = () => {
 			setProduct({ ...product, stock: qty });
 		}
 	}, [attributes]);
-
-	console.log(product?.stock);
 
 	// To Handle Errors
 	useEffect(() => {
@@ -465,6 +466,11 @@ const EditProduct = () => {
 			}
 			for (let i = 0; i < attributes?.length; i++) {
 				formData.append([`data[${i}][price]`], attributes[i]?.price || 0);
+				formData.append(
+					[`data[${i}][discount_price]`],
+					attributes[i]?.discount_price || 0
+				);
+
 				formData.append([`data[${i}][quantity]`], attributes[i]?.qty);
 				for (let v = 0; v < attributes[i]?.values?.length; v++) {
 					formData.append(

@@ -154,10 +154,6 @@ const AddNewProduct = () => {
 	// console.log(attributes);
 	// console.log(product);
 
-	useEffect(() => {
-		reset(product?.stock);
-	}, [product?.stock, reset]);
-
 	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
 		name: "",
@@ -380,6 +376,10 @@ const AddNewProduct = () => {
 			}
 			for (let i = 0; i < attributes?.length; i++) {
 				formData.append([`data[${i}][price]`], attributes[i]?.price || 0);
+				formData.append(
+					[`data[${i}][discount_price]`],
+					attributes[i]?.discount_price || 0
+				);
 				formData.append([`data[${i}][quantity]`], attributes[i]?.qty);
 				for (let v = 0; v < attributes[i]?.values?.length; v++) {
 					formData.append(
@@ -474,6 +474,8 @@ const AddNewProduct = () => {
 			</>
 		);
 	};
+
+	console.log("add product:", attributes);
 
 	return (
 		<>
@@ -1046,7 +1048,7 @@ const AddNewProduct = () => {
 													Number(product?.discount_price) <=
 													0 && (
 													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+														يجب ان يكون سعر الخصم اقل من السعر الأساسي
 													</span>
 												)}
 											</div>

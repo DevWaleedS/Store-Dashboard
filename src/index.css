@@ -1331,6 +1331,12 @@ table,
 	content: var(--bs-breadcrumb-divider, "/");
 }
 
+.delete-category-alert {
+	font-size: 22px;
+	white-space: normal !important;
+	padding: 10px 10px 20px 10px;
+}
+
 /* add category form */
 .add-category {
 	background: #ededed38;
@@ -10191,6 +10197,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 @media (max-width: 768px) {
 	.loading-text {
 		font-size: 16px;
+	}
+
+	.delete-category-alert {
+		font-size: 18px;
 	}
 
 	.add-user-form .form-body input[name="phonenumber"] {

@@ -39,7 +39,7 @@ const DeleteCategoryAlert = () => {
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
-					<div className='d-flex p-2 justify-content-end'>
+					<div className='d-flex pt-2 px-2 justify-content-end'>
 						{" "}
 						<CloseIcon
 							className='close_video_icon'
@@ -49,17 +49,13 @@ const DeleteCategoryAlert = () => {
 							}}
 						/>
 					</div>
-					<div
-						className='text-center add-product-from-store'
-						style={{
-							height: "100%",
-						}}>
+					<div className='text-center delete-category-alert'>
 						<div>
 							<FiAlertTriangle
+								className='mb-2 mb-md-3'
 								style={{
 									color: "#ffb248",
 									fontSize: "45px",
-									marginBottom: "20px",
 								}}
 							/>
 						</div>

@@ -346,7 +346,10 @@ const AddProductOptionsModal = () => {
 			const block = blocks[blockIndex];
 
 			for (const value of block.values) {
-				currentAttribute[blockIndex] = { id: blockIndex, title: value.title };
+				currentAttribute[blockIndex] = {
+					id: blockIndex,
+					title: value.title,
+				};
 				backtrack(currentAttribute, blockIndex + 1);
 			}
 		};
@@ -360,6 +363,15 @@ const AddProductOptionsModal = () => {
 	const addPriceToAttributes = (e, blockIndex) => {
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].price = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
+		setAttributes(updatedAttributes);
+	};
+
+	/** handle add discount_price for attr */
+	const addDiscountPrice = (e, blockIndex) => {
+		const updatedAttributes = [...attributes];
+		updatedAttributes[blockIndex].discount_price = Number(
 			e.target.value.replace(/[^0-9]/g, "")
 		);
 		setAttributes(updatedAttributes);
@@ -565,7 +577,7 @@ const AddProductOptionsModal = () => {
 										left: "15px",
 										width: "1.5rem",
 										height: "1.5rem",
-										backgroundColor: `${item?.color ? item?.color : "#000000"}`,
+										backgroundColor: item?.color,
 										borderRadius: "50%",
 										cursor: "pointer",
 									}}></div>
@@ -764,6 +776,43 @@ const AddProductOptionsModal = () => {
 							/>
 							<div className='input-type'>ر.س</div>
 						</div>
+
+						<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+							<div className='input-icon'>
+								<IoPricetagsOutline />
+							</div>
+							<input
+								type='text'
+								placeholder='السعر بعد الخصم'
+								value={attribute?.discount_price}
+								onChange={(e) => {
+									addDiscountPrice(e, attributeIndex);
+								}}
+							/>
+							<div className='input-type'>ر.س</div>
+						</div>
+						{attribute?.discount_price && attribute?.price && (
+							<div className='col-lg-7 col-md-9 col-12'>
+								{Number(attribute?.price) - Number(attribute?.discount_price) <=
+								0 ? (
+									<span style={{ color: "red", fontSize: "14px" }}>
+										يجب ان يكون سعر الخصم اقل من السعر الأساسي
+									</span>
+								) : null}
+							</div>
+						)}
+
+						{attribute?.discount_price && !attribute?.price ? (
+							<div className='col-lg-7 col-md-9 col-12'>
+								<span
+									style={{
+										color: "red",
+										fontSize: "14px",
+									}}>
+									يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
+								</span>
+							</div>
+						) : null}
 						<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
 							<div className='input-icon'>
 								<MdStorage />
@@ -965,6 +1014,7 @@ const AddProductOptionsModal = () => {
 										className='close-btn'
 										onClick={() => {
 											dispatch(closeProductOptionModal());
+											clearOptions();
 										}}>
 										إلغاء
 									</button>
