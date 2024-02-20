@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 
 // Third party
 import axios from "axios";
@@ -21,6 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeAddBankAccountModal } from "../../../store/slices/AddBankAccountModal";
+import { openMessageAlert } from "../../../store/slices/BankAccountAlert";
 
 // Icons
 import { CiUser, CiBank } from "react-icons/ci";
@@ -30,7 +31,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { BsFileEarmarkArrowUp } from "react-icons/bs";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import useFetch from "../../../Hooks/UseFetch";
 
@@ -92,8 +93,6 @@ const AddBankAccountModal = () => {
 
 	/** ----------- */
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -111,7 +110,7 @@ const AddBankAccountModal = () => {
 	const {
 		register,
 		handleSubmit,
-
+		reset,
 		control,
 		formState: { errors },
 	} = useForm({
@@ -160,6 +159,7 @@ const AddBankAccountModal = () => {
 	};
 
 	const restValues = () => {
+		reset(bankAccountInfo);
 		setBankAccountInfo({
 			bankId: "",
 			bankAccountHolderName: "",
@@ -243,7 +243,7 @@ const AddBankAccountModal = () => {
 					<div>
 						<BsFileEarmarkArrowUp />
 						{bankAccountInfo?.civil_id[0]?.name ? (
-							<span className='tax-text pe-2'>
+							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.civil_id[0]?.name}
 							</span>
 						) : (
@@ -289,7 +289,7 @@ const AddBankAccountModal = () => {
 					<div>
 						<BsFileEarmarkArrowUp />
 						{bankAccountInfo?.bankAccountLetter[0]?.name ? (
-							<span className='tax-text pe-2'>
+							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.bankAccountLetter[0]?.name}
 							</span>
 						) : (
@@ -335,7 +335,7 @@ const AddBankAccountModal = () => {
 					<div>
 						<BsFileEarmarkArrowUp />
 						{bankAccountInfo?.website_image[0]?.name ? (
-							<span className='tax-text pe-2'>
+							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.website_image[0]?.name}
 							</span>
 						) : (
@@ -381,7 +381,7 @@ const AddBankAccountModal = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+					dispatch(openMessageAlert(res?.data?.message?.ar));
 
 					setReload(!reload);
 					dispatch(closeAddBankAccountModal());
@@ -459,61 +459,53 @@ const AddBankAccountModal = () => {
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
 											<CiBank />
-											<Controller
-												name={"bankId"}
+											<Select
+												name='bankId'
+												displayEmpty
 												control={control}
-												rules={{
+												sx={selectStyle}
+												value={bankAccountInfo?.bankId}
+												{...register("bankId", {
 													required: "حقل اختيار البنك  مطلوب",
+												})}
+												onChange={(e) => {
+													handleOnChange(e);
 												}}
-												render={({ field: { onChange, value } }) => (
-													<Select
-														name='bankId'
-														value={value}
-														onChange={(e) => {
-															handleOnChange(e);
-															onChange(e);
-														}}
-														sx={selectStyle}
-														IconComponent={IoIosArrowDown}
-														displayEmpty
-														inputProps={{ "aria-label": "Without label" }}
-														renderValue={(selected) => {
-															if (bankAccountInfo?.bankId === "" || !selected) {
-																return (
-																	<p className='text-[#ADB5B9]'>اختر البنك</p>
-																);
-															}
-															const result =
-																banks?.data?.Banks?.filter(
-																	(item) => item?.Value === parseInt(selected)
-																) || "";
-															return result[0]?.Text;
-														}}>
-														{banks?.data?.Banks?.map((item, index) => {
-															return (
-																<MenuItem
-																	key={index}
-																	className='souq_storge_category_filter_items'
-																	sx={{
-																		backgroundColor: " rgba(211, 211, 211, 1)",
-																		height: "3rem",
-																		"&:hover": {},
-																	}}
-																	value={item?.Value}>
-																	{item?.Text}
-																</MenuItem>
-															);
-														})}
-													</Select>
-												)}
-											/>
-											{(bankAccountErr?.bankId || errors?.bankId) && (
-												<div className='fs-6 text-danger'>
-													{bankAccountErr?.bankId}
-													{errors?.bankId.message}
-												</div>
-											)}
+												IconComponent={IoIosArrowDown}
+												inputProps={{ "aria-label": "Without label" }}
+												renderValue={(selected) => {
+													if (bankAccountInfo?.bankId === "" || !selected) {
+														return <p className='text-[#ADB5B9]'>اختر البنك</p>;
+													}
+													const result =
+														banks?.data?.Banks?.filter(
+															(item) => item?.Value === parseInt(selected)
+														) || "";
+													return result[0]?.Text;
+												}}>
+												{banks?.data?.Banks?.map((item, index) => {
+													return (
+														<MenuItem
+															key={index}
+															className='souq_storge_category_filter_items'
+															sx={{
+																backgroundColor: " rgba(211, 211, 211, 1)",
+																height: "3rem",
+																"&:hover": {},
+															}}
+															value={item?.Value}>
+															{item?.Text}
+														</MenuItem>
+													);
+												})}
+											</Select>
 										</div>
+										{(bankAccountErr?.bankId || errors?.bankId) && (
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.bankId}
+												{errors?.bankId.message}
+											</div>
+										)}
 									</div>
 								</div>
 

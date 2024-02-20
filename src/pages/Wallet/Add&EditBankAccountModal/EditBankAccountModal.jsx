@@ -21,6 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeEditBankAccountModal } from "../../../store/slices/EditBankAccountModal";
+import { openMessageAlert } from "../../../store/slices/BankAccountAlert";
 
 // Icons
 import { CiUser, CiBank } from "react-icons/ci";
@@ -411,7 +412,7 @@ const EditBankAccountModal = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+					dispatch(openMessageAlert(res?.data?.message?.ar));
 
 					setReload(!reload);
 					dispatch(closeEditBankAccountModal());
@@ -536,13 +537,13 @@ const EditBankAccountModal = () => {
 													</Select>
 												)}
 											/>
-											{(bankAccountErr?.bankId || errors?.bankId) && (
-												<div className='fs-6 text-danger'>
-													{bankAccountErr?.bankId}
-													{errors?.bankId.message}
-												</div>
-											)}
 										</div>
+										{(bankAccountErr?.bankId || errors?.bankId) && (
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.bankId}
+												{errors?.bankId.message}
+											</div>
+										)}
 									</div>
 								</div>
 

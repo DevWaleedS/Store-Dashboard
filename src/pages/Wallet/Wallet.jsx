@@ -25,6 +25,7 @@ import { RiBankFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
 import BankAccStatusComment from "./Add&EditBankAccountModal/BankAccStatusComment.jsx";
+import AlertMessage from "./Add&EditBankAccountModal/AlerMessage.jsx";
 
 const Wallet = () => {
 	const dispatch = useDispatch();
@@ -139,6 +140,7 @@ const Wallet = () => {
 			{/* Add & Edit Bank Account Modal */}
 			<AddBankAccountModal />
 			<EditBankAccountModal />
+			<AlertMessage />
 			<BankAccStatusComment
 				comment={currentBankAccount?.data?.SupplierDetails?.Comment}
 			/>

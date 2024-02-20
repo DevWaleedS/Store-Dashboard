@@ -3700,6 +3700,16 @@ nav.navigation {
 	font-weight: 400;
 }
 
+.add-bank-Account form .inputs-wrapper input::placeholder,
+.add-bank-Account form .inputs-wrapper .tax-text {
+	font-size: 16px;
+	color: var(--gray-300);
+}
+
+.add-bank-Account form .inputs-wrapper .tax-text.docs-file-name {
+	color: #727272;
+}
+
 .add-bank-Account form .inputs-wrapper svg {
 	color: var(--black-100);
 }

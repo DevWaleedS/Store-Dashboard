@@ -140,7 +140,7 @@ const AddNewProduct = () => {
 	});
 	const {
 		handleSubmit,
-		reset,
+
 		control,
 		formState: { errors },
 	} = useForm({
