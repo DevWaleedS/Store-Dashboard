@@ -12710,7 +12710,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		margin-bottom: 0;
 	}
 
-	.add-bank-Account form .inputs-wrapper input::placeholder {
+	.add-bank-Account form .inputs-wrapper input::placeholder,
+	.add-bank-Account form .inputs-wrapper .tax-text {
 		font-size: 13px;
 	}
 
@@ -13310,6 +13311,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.tax-text {
 		font-size: 0.6rem;
 		white-space: normal;
+	}
+
+	.add-bank-Account form .inputs-wrapper .tax-text {
+		font-size: 13px;
 	}
 
 	.explain-boxes .box {

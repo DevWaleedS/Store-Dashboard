@@ -140,7 +140,7 @@
 }
 
 .quill .ql-snow .ql-tooltip::before {
-	content: " الرابط الحالي (اضغط علي الرابط للمعاينة)";
+	content: " الرابط الحالي (اضغط على الرابط للمعاينة)";
 	line-height: 26px;
 	margin-right: 8px;
 }

@@ -270,7 +270,7 @@ const EditBankAccountModal = () => {
 							</span>
 						) : (
 							<span className='tax-text pe-2'>
-								برجاء ارفاق صوره واضحه للهويه الوطنيه
+								برجاء ارفاق صوره واضحه للهويه الوطنية
 							</span>
 						)}
 					</div>
@@ -650,7 +650,7 @@ const EditBankAccountModal = () => {
 								<div className='row  mb-5'>
 									<div className='col-12'>
 										<label>
-											الهويه الوطنيه
+											الهوية الوطنية
 											<span className='important-hint'>*</span>{" "}
 										</label>
 									</div>

@@ -39,7 +39,7 @@ function EnhancedTableHead(props) {
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#67747B" }}>
-					المدينه
+					المدينة
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#67747B" }}>
 					التقييم

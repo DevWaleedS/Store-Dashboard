@@ -53,7 +53,7 @@ const EvaluationThePlatform = () => {
 
 	// send add Evaluation The Platform Function
 	const addEvaluationThePlatform = () => {
-		setLoadingTitle("جاري إضافة تعليقك لمنصة اطلبها ");
+		setLoadingTitle("جاري إضافة تعلىقك لمنصة اطلبها ");
 		setEvaluationError("");
 		let formData = new FormData();
 		formData.append("comment_text", editorValue);

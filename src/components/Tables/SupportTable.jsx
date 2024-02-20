@@ -61,7 +61,7 @@ function EnhancedTableHead(props) {
 					محتوى الرسالة
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					الحاله
+					الحالة
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الاجراء

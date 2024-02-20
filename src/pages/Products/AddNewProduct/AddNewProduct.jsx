@@ -8,11 +8,13 @@ import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 import { TagsInput } from "react-tag-input-component";
+import { useForm, Controller } from "react-hook-form";
 
 // Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 import { TextEditorContext } from "../../../Context/TextEditorProvider";
+
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -20,9 +22,12 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import { useForm, Controller } from "react-hook-form";
+import IconButton from "@mui/material/IconButton";
+import Zoom from "@mui/material/Zoom";
+import { styled } from "@mui/material/styles";
 import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // Components
 import useFetch from "../../../Hooks/UseFetch";
@@ -31,6 +36,7 @@ import { TextEditor } from "../../../components/TextEditor";
 
 // icons and images
 import { FiPlus } from "react-icons/fi";
+import { MdInfoOutline } from "react-icons/md";
 import { UploadIcon } from "../../../data/Icons";
 import { PlayVideo } from "../../../data/images";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -85,6 +91,19 @@ const selectStyle = {
 	},
 };
 
+const BootstrapTooltip = styled(({ className, ...props }) => (
+	<Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+	[`& .${tooltipClasses.arrow}`]: {
+		color: "#1dbbbe",
+	},
+	[`& .${tooltipClasses.tooltip}`]: {
+		backgroundColor: "#1dbbbe",
+
+		whiteSpace: "normal",
+	},
+}));
+
 const AddNewProduct = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -110,8 +129,16 @@ const AddNewProduct = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
+
+	const [product, setProduct] = useState({
+		selling_price: "",
+		discount_price: "",
+		stock: "",
+		weight: "",
+		category_id: "",
+		subcategory_id: [],
+	});
 	const {
-		register,
 		handleSubmit,
 		reset,
 		control,
@@ -130,15 +157,8 @@ const AddNewProduct = () => {
 			SEOdescription: "",
 		},
 	});
-	const [product, setProduct] = useState({
-		selling_price: "",
-		discount_price: "",
-		stock: "",
-		weight: "",
-		category_id: "",
-		subcategory_id: [],
-	});
 
+	// Handle add stock, selling_price, and discount_price from product option to product info
 	useEffect(() => {
 		if (attributes?.length !== 0) {
 			const qty = attributes?.reduce(
@@ -146,13 +166,29 @@ const AddNewProduct = () => {
 				0
 			);
 
-			console.log(qty);
-			setProduct({ ...product, stock: qty });
+			// get the default option array
+			const defaultOptions = optionsSection?.map((option) =>
+				option?.values?.filter((value) => value?.defaultOption === true)
+			);
+
+			const defaultOptionsArray =
+				defaultOptions?.map((option) => option?.[0]?.title) || [];
+
+			const matchingObject = attributes?.find(
+				(obj) =>
+					obj?.values?.length === defaultOptions?.length &&
+					obj?.values?.every(
+						(value, index) => value?.title === defaultOptionsArray[index]
+					)
+			);
+			setProduct({
+				...product,
+				stock: qty,
+				discount_price: Number(matchingObject?.discount_price) || 0,
+				selling_price: Number(matchingObject?.price) || 0,
+			});
 		}
 	}, [attributes]);
-
-	// console.log(attributes);
-	// console.log(product);
 
 	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
@@ -474,8 +510,6 @@ const AddNewProduct = () => {
 			</>
 		);
 	};
-
-	console.log("add product:", attributes);
 
 	return (
 		<>
@@ -959,7 +993,17 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
-												السعر <span className='important-hint'>*</span>{" "}
+												السعر <span className='important-hint'>*</span>
+												<BootstrapTooltip
+													className={"p-0"}
+													TransitionProps={{ timeout: 300 }}
+													TransitionComponent={Zoom}
+													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													placement='top'>
+													<IconButton>
+														<MdInfoOutline color='#1DBBBE' size={"14px"} />
+													</IconButton>
+												</BootstrapTooltip>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -983,7 +1027,11 @@ const AddNewProduct = () => {
 														name={"selling_price"}
 														type='text'
 														id='price'
-														value={value}
+														value={
+															attributes?.length !== 0
+																? product?.selling_price
+																: value
+														}
 														onChange={(e) => {
 															setProduct({
 																...product,
@@ -1012,10 +1060,23 @@ const AddNewProduct = () => {
 									{/* Discount price */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-											<label htmlFor='low-price'>السعر بعد الخصم</label>
+											<label htmlFor='low-price'>
+												السعر بعد الخصم
+												<BootstrapTooltip
+													className={"p-0"}
+													TransitionProps={{ timeout: 300 }}
+													TransitionComponent={Zoom}
+													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													placement='top'>
+													<IconButton>
+														<MdInfoOutline color='#1DBBBE' size={"14px"} />
+													</IconButton>
+												</BootstrapTooltip>
+											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div className='tax-text'>السعر يشمل الضريبة</div>
+
 											<Controller
 												name={"discount_price"}
 												control={control}
@@ -1024,7 +1085,11 @@ const AddNewProduct = () => {
 														name={"discount_price"}
 														type='text'
 														id='low-price'
-														value={value}
+														value={
+															attributes?.length !== 0
+																? product?.discount_price
+																: value
+														}
 														onChange={(e) => {
 															setProduct({
 																...product,
@@ -1078,8 +1143,17 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
-												{" "}
 												المخزون <span className='important-hint'>*</span>
+												<BootstrapTooltip
+													className={"p-0"}
+													TransitionProps={{ timeout: 300 }}
+													TransitionComponent={Zoom}
+													title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
+													placement='top'>
+													<IconButton>
+														<MdInfoOutline color='#1DBBBE' size={"14px"} />
+													</IconButton>
+												</BootstrapTooltip>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -1106,7 +1180,9 @@ const AddNewProduct = () => {
 														id='stock'
 														placeholder='اضف الكمية'
 														name='stock'
-														value={value}
+														value={
+															attributes?.length !== 0 ? product?.stock : value
+														}
 														onChange={(e) => {
 															onChange(e.target.value.replace(/[^0-9]/g, ""));
 														}}

@@ -14,6 +14,7 @@ import useFetch from "../../../Hooks/UseFetch";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { TextEditor } from "../../../components/TextEditor";
 import EditProductOptions from "./EditProductOptions";
+import { useForm, Controller } from "react-hook-form";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -33,9 +34,14 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import { useForm, Controller } from "react-hook-form";
+
+import IconButton from "@mui/material/IconButton";
+import Zoom from "@mui/material/Zoom";
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // Icons
+import { MdInfoOutline } from "react-icons/md";
 import { UploadIcon } from "../../../data/Icons";
 import { PlayVideo } from "../../../data/images";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -81,6 +87,19 @@ const selectStyle = {
 		right: "95%",
 	},
 };
+
+const BootstrapTooltip = styled(({ className, ...props }) => (
+	<Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+	[`& .${tooltipClasses.arrow}`]: {
+		color: "#1dbbbe",
+	},
+	[`& .${tooltipClasses.tooltip}`]: {
+		backgroundColor: "#1dbbbe",
+
+		whiteSpace: "normal",
+	},
+}));
 
 const EditProduct = () => {
 	const store_token = document.cookie
@@ -234,8 +253,6 @@ const EditProduct = () => {
 		}
 	}, [fetchedData?.data?.product]);
 
-	console.log("editproduct:", attributes);
-
 	// ---------------------------------------------
 
 	// Handle Errors
@@ -278,7 +295,28 @@ const EditProduct = () => {
 				(accumulator, attr) => accumulator + attr.qty,
 				0
 			);
-			setProduct({ ...product, stock: qty });
+
+			// get the default option array
+			const defaultOptions = optionsSection?.map((option) =>
+				option?.values?.filter((value) => value?.defaultOption === true)
+			);
+
+			const defaultOptionsArray =
+				defaultOptions?.map((option) => option?.[0]?.title) || [];
+
+			const matchingObject = attributes?.find(
+				(obj) =>
+					obj?.values?.length === defaultOptions?.length &&
+					obj?.values?.every(
+						(value, index) => value?.title === defaultOptionsArray[index]
+					)
+			);
+			setProduct({
+				...product,
+				stock: qty,
+				discount_price: Number(matchingObject?.discount_price) || 0,
+				selling_price: Number(matchingObject?.price) || 0,
+			});
 		}
 	}, [attributes]);
 
@@ -727,399 +765,6 @@ const EditProduct = () => {
 											</div>
 										</div>
 
-										{/* Main catagories */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='product-category'>
-													{" "}
-													النشاط الرئيسي
-													<span className='important-hint'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<FormControl sx={{ m: 0, width: "100%" }}>
-													<Controller
-														name={"category_id"}
-														control={control}
-														rules={{
-															required: "حقل النشاط الرئيسي مطلوب",
-														}}
-														render={({ field: { onChange, value } }) => (
-															<Select
-																value={value}
-																name='category_id'
-																sx={selectStyle}
-																onChange={(e) => {
-																	if (product?.category_id !== e.target.value) {
-																		setProduct({
-																			...product,
-																			subcategory_id: [],
-																		});
-																	}
-																	handleOnChange(e);
-																	onChange(e);
-																}}
-																className='h-100'
-																IconComponent={IoIosArrowDown}
-																displayEmpty
-																inputProps={{ "aria-label": "Without label" }}
-																renderValue={(selected) => {
-																	if (
-																		product?.category_id === "" ||
-																		!selected
-																	) {
-																		return (
-																			<p className='text-[#ADB5B9]'>
-																				اختر النشاط
-																			</p>
-																		);
-																	}
-																	const result =
-																		categories?.data?.categories?.filter(
-																			(item) =>
-																				item?.id === parseInt(selected) ||
-																				item?.id === product?.category_id
-																		) || "";
-																	return result[0]?.name;
-																}}>
-																{categories?.data?.categories?.map(
-																	(cat, idx) => {
-																		return (
-																			<MenuItem
-																				key={idx}
-																				className='souq_storge_category_filter_items'
-																				sx={{
-																					backgroundColor:
-																						cat?.store === null
-																							? " #dfe2aa"
-																							: " rgba(211, 211, 211, 1)",
-																					height: "3rem",
-																					"&:hover": {},
-																				}}
-																				value={`${cat?.id}`}>
-																				{cat?.name}
-																			</MenuItem>
-																		);
-																	}
-																)}
-															</Select>
-														)}
-													/>
-												</FormControl>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.category_id}
-													{errors?.category_id && errors.category_id.message}
-												</span>
-											</div>
-										</div>
-
-										{/* Sub catagories */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='sub-category'>النشاط الفرعي</label>
-											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<FormControl sx={{ m: 0, width: "100%" }}>
-													{product?.category_id !== "" &&
-													subcategory[0]?.subcategory?.length === 0 ? (
-														<div
-															className='d-flex justify-content-center align-items-center'
-															style={{ color: "#1dbbbe" }}>
-															لا يوجد أنشطة فرعية للنشاط الرئيسي الذي اخترتة
-														</div>
-													) : (
-														<Select
-															sx={{
-																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
-															}}
-															IconComponent={IoIosArrowDown}
-															multiple
-															displayEmpty
-															inputProps={{ "aria-label": "Without label" }}
-															name='subcategory_id'
-															value={product?.subcategory_id || []}
-															onChange={(e) => handleOnChange(e)}
-															input={<OutlinedInput />}
-															renderValue={(selected) => {
-																if (product?.subcategory_id?.length === 0) {
-																	return "النشاط الفرعي";
-																}
-																return selected?.map((item) => {
-																	const result =
-																		subcategory[0]?.subcategory?.filter(
-																			(sub) => sub?.id === parseInt(item)
-																		) || product?.subcategory_id;
-																	return `${result[0]?.name} , `;
-																});
-															}}>
-															{subcategory[0]?.subcategory?.map(
-																(sub, index) => (
-																	<MenuItem key={index} value={sub?.id}>
-																		<Checkbox
-																			checked={
-																				product?.subcategory_id?.indexOf(
-																					sub?.id
-																				) > -1
-																			}
-																		/>
-																		<ListItemText primary={sub?.name} />
-																	</MenuItem>
-																)
-															)}
-														</Select>
-													)}
-												</FormControl>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												{productError?.subcategory_id && (
-													<span className='fs-6 text-danger'>
-														{productError?.subcategory_id}
-													</span>
-												)}
-											</div>
-										</div>
-
-										{/* Stock */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='price'>
-													{" "}
-													المخزون <span className='important-hint'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<div className='tax-text'>
-													تأكد ان المخزون يشمل إجمالي الكميه الخاصه بخيارات
-													المنتج
-												</div>
-												<Controller
-													name={"stock"}
-													control={control}
-													rules={{
-														required: "حقل المخزون مطلوب",
-														pattern: {
-															value: /^[0-9]+$/i,
-															message: "يجب على الحقل المخزون أن يكون رقمًا",
-														},
-														min: {
-															value: 1,
-															message: "  المخزون يجب ان يكون اكبر من 0",
-														},
-													}}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name='stock'
-															type='text'
-															id='stock'
-															placeholder='اضف الكمية'
-															value={value}
-															onChange={(e) =>
-																onChange(e.target.value.replace(/[^0-9]/g, ""))
-															}
-														/>
-													)}
-												/>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.stock}
-													{errors?.stock && errors.stock.message}
-												</span>
-											</div>
-										</div>
-
-										{/* Weight */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='price'>
-													{" "}
-													الوزن <span className='important-hint'>*</span>
-												</label>
-											</div>
-
-											<div className='col-lg-7 col-md-9 col-12'>
-												<div className='tax-text'>
-													ضع الوزن التقريبي للمنتج بالجرام
-												</div>
-												<Controller
-													name={"weight"}
-													control={control}
-													rules={{
-														required: "حقل الوزن مطلوب",
-														pattern: {
-															value: /^[0-9]+$/i,
-															message: "يجب على الحقل الوزن أن يكون رقمًا",
-														},
-														min: {
-															value: 1,
-															message: "  المخزون يجب ان يكون اكبر من 0",
-														},
-													}}
-													render={({ field: { onChange, value } }) => (
-														<input
-															type='text'
-															id='weight'
-															placeholder='1000 جرام'
-															name='weight'
-															value={value}
-															onChange={(e) =>
-																onChange(e.target.value.replace(/[^0-9]/g, ""))
-															}
-														/>
-													)}
-												/>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.weight}
-													{errors?.weight && errors.weight.message}
-												</span>
-											</div>
-										</div>
-
-										{/* Selling price */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='price'>
-													{" "}
-													السعر<span className='important-hint'>*</span>{" "}
-												</label>
-											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<div className='tax-text'>السعر يشمل الضريبة</div>
-												<Controller
-													name={"selling_price"}
-													control={control}
-													rules={{
-														required: "حقل سعر البيع مطلوب",
-														pattern: {
-															value: /^[0-9.]+$/i,
-															message: "يجب على الحقل سعر البيع أن يكون رقمًا",
-														},
-														min: {
-															value: 1,
-															message: " سعر البيع يجب ان يكون اكبر من 0",
-														},
-													}}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name={"selling_price"}
-															type='text'
-															id='price'
-															value={value}
-															onChange={(e) => {
-																setProduct({
-																	...product,
-																	selling_price: e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	),
-																});
-																onChange(
-																	e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	)
-																);
-															}}
-														/>
-													)}
-												/>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{productError?.selling_price}
-													{errors?.selling_price &&
-														errors.selling_price.message}
-												</span>
-											</div>
-										</div>
-
-										{/* Discount price */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='low-price'> السعر بعد الخصم </label>
-											</div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												<div className='tax-text'>السعر يشمل الضريبة</div>
-												<Controller
-													name={"discount_price"}
-													control={control}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name={"discount_price"}
-															type='text'
-															id='low-price'
-															value={value}
-															onChange={(e) => {
-																setProduct({
-																	...product,
-																	discount_price: e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	),
-																});
-																onChange(
-																	e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	)
-																);
-															}}
-														/>
-													)}
-												/>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div
-												className={
-													product?.discount_price && product?.selling_price
-														? "col-lg-7 col-md-9 col-12"
-														: "d-none"
-												}>
-												{Number(product?.selling_price) -
-													Number(product?.discount_price) <=
-													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
-														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
-													</span>
-												)}
-											</div>
-
-											<div
-												className={
-													product?.discount_price &&
-													product?.selling_price === ""
-														? "col-lg-7 col-md-9 col-12"
-														: "d-none"
-												}>
-												<span className='fs-6' style={{ color: "red" }}>
-													يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر
-													الخصم
-												</span>
-											</div>
-
-											<div className='col-lg-7 col-md-9 col-12'>
-												<span
-													className='fs-6 text-danger'
-													style={{ whiteSpace: "normal" }}>
-													{productError?.discount_price}
-													{errors?.discount_price &&
-														errors.discount_price.message}
-												</span>
-											</div>
-										</div>
-
 										{/* Product Cover image */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
@@ -1302,6 +947,427 @@ const EditProduct = () => {
 														{productError?.images}
 													</span>
 												)}
+											</div>
+										</div>
+
+										{/* Main catagories */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='product-category'>
+													{" "}
+													النشاط الرئيسي
+													<span className='important-hint'>*</span>
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<FormControl sx={{ m: 0, width: "100%" }}>
+													<Controller
+														name={"category_id"}
+														control={control}
+														rules={{
+															required: "حقل النشاط الرئيسي مطلوب",
+														}}
+														render={({ field: { onChange, value } }) => (
+															<Select
+																value={value}
+																name='category_id'
+																sx={selectStyle}
+																onChange={(e) => {
+																	if (product?.category_id !== e.target.value) {
+																		setProduct({
+																			...product,
+																			subcategory_id: [],
+																		});
+																	}
+																	handleOnChange(e);
+																	onChange(e);
+																}}
+																className='h-100'
+																IconComponent={IoIosArrowDown}
+																displayEmpty
+																inputProps={{ "aria-label": "Without label" }}
+																renderValue={(selected) => {
+																	if (
+																		product?.category_id === "" ||
+																		!selected
+																	) {
+																		return (
+																			<p className='text-[#ADB5B9]'>
+																				اختر النشاط
+																			</p>
+																		);
+																	}
+																	const result =
+																		categories?.data?.categories?.filter(
+																			(item) =>
+																				item?.id === parseInt(selected) ||
+																				item?.id === product?.category_id
+																		) || "";
+																	return result[0]?.name;
+																}}>
+																{categories?.data?.categories?.map(
+																	(cat, idx) => {
+																		return (
+																			<MenuItem
+																				key={idx}
+																				className='souq_storge_category_filter_items'
+																				sx={{
+																					backgroundColor:
+																						cat?.store === null
+																							? " #dfe2aa"
+																							: " rgba(211, 211, 211, 1)",
+																					height: "3rem",
+																					"&:hover": {},
+																				}}
+																				value={`${cat?.id}`}>
+																				{cat?.name}
+																			</MenuItem>
+																		);
+																	}
+																)}
+															</Select>
+														)}
+													/>
+												</FormControl>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.category_id}
+													{errors?.category_id && errors.category_id.message}
+												</span>
+											</div>
+										</div>
+
+										{/* Sub catagories */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='sub-category'>النشاط الفرعي</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<FormControl sx={{ m: 0, width: "100%" }}>
+													{product?.category_id !== "" &&
+													subcategory[0]?.subcategory?.length === 0 ? (
+														<div
+															className='d-flex justify-content-center align-items-center'
+															style={{ color: "#1dbbbe" }}>
+															لا يوجد أنشطة فرعية للنشاط الرئيسي الذي اخترتة
+														</div>
+													) : (
+														<Select
+															sx={{
+																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+																	{
+																		paddingRight: "20px",
+																	},
+															}}
+															IconComponent={IoIosArrowDown}
+															multiple
+															displayEmpty
+															inputProps={{ "aria-label": "Without label" }}
+															name='subcategory_id'
+															value={product?.subcategory_id || []}
+															onChange={(e) => handleOnChange(e)}
+															input={<OutlinedInput />}
+															renderValue={(selected) => {
+																if (product?.subcategory_id?.length === 0) {
+																	return "النشاط الفرعي";
+																}
+																return selected?.map((item) => {
+																	const result =
+																		subcategory[0]?.subcategory?.filter(
+																			(sub) => sub?.id === parseInt(item)
+																		) || product?.subcategory_id;
+																	return `${result[0]?.name} , `;
+																});
+															}}>
+															{subcategory[0]?.subcategory?.map(
+																(sub, index) => (
+																	<MenuItem key={index} value={sub?.id}>
+																		<Checkbox
+																			checked={
+																				product?.subcategory_id?.indexOf(
+																					sub?.id
+																				) > -1
+																			}
+																		/>
+																		<ListItemText primary={sub?.name} />
+																	</MenuItem>
+																)
+															)}
+														</Select>
+													)}
+												</FormControl>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												{productError?.subcategory_id && (
+													<span className='fs-6 text-danger'>
+														{productError?.subcategory_id}
+													</span>
+												)}
+											</div>
+										</div>
+
+										{/* Selling price */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
+												<label htmlFor='price'>
+													السعر<span className='important-hint'>*</span>
+													<BootstrapTooltip
+														className={"p-0"}
+														TransitionProps={{ timeout: 300 }}
+														TransitionComponent={Zoom}
+														title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+														placement='top'>
+														<IconButton>
+															<MdInfoOutline color='#1DBBBE' size={"14px"} />
+														</IconButton>
+													</BootstrapTooltip>
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>السعر يشمل الضريبة</div>
+												<Controller
+													name={"selling_price"}
+													control={control}
+													rules={{
+														required: "حقل سعر البيع مطلوب",
+														pattern: {
+															value: /^[0-9.]+$/i,
+															message: "يجب على الحقل سعر البيع أن يكون رقمًا",
+														},
+														min: {
+															value: 1,
+															message: " سعر البيع يجب ان يكون اكبر من 0",
+														},
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															name={"selling_price"}
+															type='text'
+															id='price'
+															value={value}
+															onChange={(e) => {
+																setProduct({
+																	...product,
+																	selling_price: e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	),
+																});
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																);
+															}}
+														/>
+													)}
+												/>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.selling_price}
+													{errors?.selling_price &&
+														errors.selling_price.message}
+												</span>
+											</div>
+										</div>
+
+										{/* Discount price */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
+												<label htmlFor='low-price'> السعر بعد الخصم </label>
+												<BootstrapTooltip
+													className={"p-0"}
+													TransitionProps={{ timeout: 300 }}
+													TransitionComponent={Zoom}
+													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													placement='top'>
+													<IconButton>
+														<MdInfoOutline color='#1DBBBE' size={"14px"} />
+													</IconButton>
+												</BootstrapTooltip>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>السعر يشمل الضريبة</div>
+												<Controller
+													name={"discount_price"}
+													control={control}
+													render={({ field: { onChange, value } }) => (
+														<input
+															name={"discount_price"}
+															type='text'
+															id='low-price'
+															value={value}
+															onChange={(e) => {
+																setProduct({
+																	...product,
+																	discount_price: e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	),
+																});
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																);
+															}}
+														/>
+													)}
+												/>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div
+												className={
+													product?.discount_price && product?.selling_price
+														? "col-lg-7 col-md-9 col-12"
+														: "d-none"
+												}>
+												{Number(product?.selling_price) -
+													Number(product?.discount_price) <=
+													0 && (
+													<span className='fs-6' style={{ color: "red" }}>
+														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
+													</span>
+												)}
+											</div>
+
+											<div
+												className={
+													product?.discount_price &&
+													product?.selling_price === ""
+														? "col-lg-7 col-md-9 col-12"
+														: "d-none"
+												}>
+												<span className='fs-6' style={{ color: "red" }}>
+													يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر
+													الخصم
+												</span>
+											</div>
+
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span
+													className='fs-6 text-danger'
+													style={{ whiteSpace: "normal" }}>
+													{productError?.discount_price}
+													{errors?.discount_price &&
+														errors.discount_price.message}
+												</span>
+											</div>
+										</div>
+
+										{/* Stock */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='price'>
+													المخزون <span className='important-hint'>*</span>
+													<BootstrapTooltip
+														className={"p-0"}
+														TransitionProps={{ timeout: 300 }}
+														TransitionComponent={Zoom}
+														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
+														placement='top'>
+														<IconButton>
+															<MdInfoOutline color='#1DBBBE' size={"14px"} />
+														</IconButton>
+													</BootstrapTooltip>
+												</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>
+													تأكد ان المخزون يشمل إجمالي الكميه الخاصه بخيارات
+													المنتج
+												</div>
+												<Controller
+													name={"stock"}
+													control={control}
+													rules={{
+														required: "حقل المخزون مطلوب",
+														pattern: {
+															value: /^[0-9]+$/i,
+															message: "يجب على الحقل المخزون أن يكون رقمًا",
+														},
+														min: {
+															value: 1,
+															message: "  المخزون يجب ان يكون اكبر من 0",
+														},
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															name='stock'
+															type='text'
+															id='stock'
+															placeholder='اضف الكمية'
+															value={value}
+															onChange={(e) =>
+																onChange(e.target.value.replace(/[^0-9]/g, ""))
+															}
+														/>
+													)}
+												/>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.stock}
+													{errors?.stock && errors.stock.message}
+												</span>
+											</div>
+										</div>
+
+										{/* Weight */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label htmlFor='price'>
+													{" "}
+													الوزن <span className='important-hint'>*</span>
+												</label>
+											</div>
+
+											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>
+													ضع الوزن التقريبي للمنتج بالجرام
+												</div>
+												<Controller
+													name={"weight"}
+													control={control}
+													rules={{
+														required: "حقل الوزن مطلوب",
+														pattern: {
+															value: /^[0-9]+$/i,
+															message: "يجب على الحقل الوزن أن يكون رقمًا",
+														},
+														min: {
+															value: 1,
+															message: "  المخزون يجب ان يكون اكبر من 0",
+														},
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															type='text'
+															id='weight'
+															placeholder='1000 جرام'
+															name='weight'
+															value={value}
+															onChange={(e) =>
+																onChange(e.target.value.replace(/[^0-9]/g, ""))
+															}
+														/>
+													)}
+												/>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span className='fs-6 text-danger'>
+													{productError?.weight}
+													{errors?.weight && errors.weight.message}
+												</span>
 											</div>
 										</div>
 

@@ -419,6 +419,11 @@ const VerifyFormPage = forwardRef((props, ref) => {
 									</h5>
 								</div>
 								<div className='col-md-8 col-12'>
+									<div className='tax-text '>
+										{" "}
+										يلزم يكون اسم المتجر مطابق لأسم السجل التجاري{" "}
+									</div>
+
 									<input
 										type='text'
 										name='commercial_name'

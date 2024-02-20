@@ -25,7 +25,9 @@ const DropCSVFiles = ({ handleFile, fileError, file }) => {
 				}}>
 				<input {...getInputProps()} />
 				<ul className='text-overflow' style={{ margin: "0" }}>
-					{file?.name || <p>Drop CSV file</p>}
+					{file?.name || (
+						<p style={{ marginTop: fileError ? "0" : "10px" }}>Drop CSV file</p>
+					)}
 				</ul>
 				<div className='fs-6 text-danger'>{fileError && fileError}</div>
 			</div>

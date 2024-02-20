@@ -57,7 +57,7 @@ const AddSubCategory = () => {
 						<div className='row'>
 							<div className='col-12'>
 								<div
-									className='form-title  '
+									className='form-title  d-flex justify-content-center align-content-center'
 									style={{
 										borderRadius: "16px 16px 0 0",
 										backgroundColor: "#1DBBBE",
@@ -68,19 +68,20 @@ const AddSubCategory = () => {
 										style={{ fontSize: "22px", fontWeight: 400 }}>
 										اضف نشاط فرعي
 									</h5>
-								</div>
-								<div className='close-icon-video-modal'>
-									<AiOutlineCloseCircle
-										style={{ cursor: "pointer", color: "white" }}
-										onClick={() => dispatch(closeAddSubCategory())}
-									/>
+
+									<div className='close-icon-video-modal ps-2 ps-md-4'>
+										<AiOutlineCloseCircle
+											style={{ cursor: "pointer", color: "white" }}
+											onClick={() => dispatch(closeAddSubCategory())}
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
 						<form onSubmit={handleSubmit}>
 							<div className='form-body bg-white'>
 								<div className='row mb-5 mt-5 d-flex justify-content-center'>
-									<div className='col-8 '>
+									<div className='col-12 col-md-8'>
 										<label htmlFor='category-name ' className='d-block mb-2'>
 											اسم النشاط الفرعي
 										</label>

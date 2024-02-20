@@ -30,7 +30,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		{
 			id: 7,
 			icon: <IoWallet />,
-			title: "إجمالي الفاتوره ",
+			title: "إجمالي الفاتورة ",
 			numbers: supplierDashboard?.TotalDepositedAmount,
 			color: "#02466a",
 		},

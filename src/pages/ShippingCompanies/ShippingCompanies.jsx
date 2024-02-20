@@ -217,7 +217,7 @@ const ShippingCompanies = () => {
 					}
 				});
 		} else {
-			toast.error("يجب تفعيل شركة شحن واحدة علي الاقل", {
+			toast.error("يجب تفعيل شركة شحن واحدة على الاقل", {
 				theme: "light",
 			});
 		}

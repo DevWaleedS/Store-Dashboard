@@ -23,6 +23,7 @@ const style = {
 	boxShadow: 24,
 	"@media(max-width:768px)": {
 		height: "auto",
+		top: "180px",
 	},
 };
 

@@ -858,7 +858,7 @@ const ClientData = () => {
 										</div>
 									</div>
 									{/** Products */}
-									<div className='mb-5 overflow-hidden'>
+									<div className='mb-5 '>
 										<div
 											style={contentStyles}
 											className='d-flex flex-row align-items-center gap-4 px-3 py-4'>
@@ -929,6 +929,15 @@ const ClientData = () => {
 														selected={discount_expire_date}
 														onChange={(date) => setDiscount_expire_date(date)}
 													/>
+													{errors?.discountExpireDateErr && (
+														<div className='text-center '>
+															<span
+																className='fs-6 text-danger'
+																style={{ whiteSpace: "normal" }}>
+																{errors?.discountExpireDateErr}
+															</span>
+														</div>
+													)}
 												</div>
 											)}
 										</div>
@@ -936,17 +945,6 @@ const ClientData = () => {
 									{/** Products */}
 									<div className='mb-md-5 mb-3'>
 										<div className='col-12 p-0'>
-											{errors?.discountExpireDateErr && (
-												<div
-													className='text-center '
-													style={{ marginTop: "-35px" }}>
-													<span
-														className='fs-6 text-danger'
-														style={{ whiteSpace: "normal" }}>
-														({errors?.discountExpireDateErr})
-													</span>
-												</div>
-											)}
 											<div className='send-offer-btn gap-3'>
 												<button
 													onClick={sendOfferCart}

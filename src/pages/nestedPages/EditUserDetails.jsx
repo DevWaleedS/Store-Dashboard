@@ -479,7 +479,6 @@ const EditUserDetails = () => {
 													<input
 														name='password'
 														type={passwordType}
-														placeholder='********'
 														className='d-block'
 														{...register("password", {})}
 													/>
@@ -548,7 +547,6 @@ const EditUserDetails = () => {
 													<input
 														name='confirm_password'
 														type={passwordConfirmType}
-														placeholder='********'
 														className='d-block'
 														{...register("confirm_password", {})}
 													/>

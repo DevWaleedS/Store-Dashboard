@@ -171,7 +171,7 @@ const PaymentGetways = () => {
 					}
 				});
 		} else {
-			toast.error("يجب تفعيل طريقه دفع واحدة علي الاقل", {
+			toast.error("يجب تفعيل طريقه دفع واحدة على الاقل", {
 				theme: "light",
 			});
 		}
@@ -264,7 +264,7 @@ const PaymentGetways = () => {
 											<button
 												onClick={() => handleOpenBankComment()}
 												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>الاطلاع علي سبب الرفض</span>
+												<span>الاطلاع على سبب الرفض</span>
 											</button>
 										)}
 									</div>
@@ -279,7 +279,7 @@ const PaymentGetways = () => {
 											<button
 												onClick={() => handleOpenBankComment()}
 												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>الاطلاع علي سبب الغلق</span>
+												<span>الاطلاع على سبب الغلق</span>
 											</button>
 										)}
 									</div>
@@ -295,7 +295,7 @@ const PaymentGetways = () => {
 											<button
 												onClick={() => handleOpenBankComment()}
 												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>الاطلاع علي سبب التجميد</span>
+												<span>الاطلاع على سبب التجميد</span>
 											</button>
 										)}
 									</div>
@@ -309,7 +309,7 @@ const PaymentGetways = () => {
 									<IoMdInformationCircleOutline />
 									<span>
 										يمكنك استخدام خيار الدفع عند الاستلام كطريقه من ضمن طرق
-										الدفع المختلفه التي نوفرها لك
+										الدفع المختلفة التي نوفرها لك
 									</span>
 								</div>
 								{cashOnDelivery?.map((item) => (
@@ -339,7 +339,7 @@ const PaymentGetways = () => {
 											<IoMdInformationCircleOutline />
 											<span>
 												يمكنك استخدام خيار الدفع عند الاستلام كطريقه من ضمن طرق
-												الدفع المختلفه التي نوفرها لك
+												الدفع المختلفة التي نوفرها لك
 											</span>
 										</div>
 										<div className=''>
