@@ -31,7 +31,7 @@ const PostalSubscriptions = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	const { fetchedData, loading, reload, setReload } = useFetch(

@@ -36,7 +36,7 @@ const Wallet = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	// get supplierDashboard

@@ -39,7 +39,7 @@ const Delegate = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 
 	// ---------------------------------------------------------------------
 	return (

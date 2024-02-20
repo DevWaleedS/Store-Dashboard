@@ -59,7 +59,7 @@ const PaintStore = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 
 	// to handle errors
 	const LINK_REGEX =

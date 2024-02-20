@@ -27,7 +27,7 @@ const Carts = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 	// to create search
 	const [search, setSearch] = useState("");

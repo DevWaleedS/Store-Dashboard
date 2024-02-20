@@ -82,7 +82,7 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{userInfo?.name === null
+													{!userInfo?.name
 														? userInfo?.username || "٠٠٠"
 														: userInfo?.name}{" "}
 												</span>{" "}
@@ -101,7 +101,7 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{userInfo?.name === null
+													{!userInfo?.name
 														? userInfo?.username || "٠٠٠"
 														: userInfo?.name}{" "}
 												</span>
@@ -130,7 +130,7 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{userInfo?.name === null
+													{!userInfo?.name
 														? userInfo?.username || "٠٠٠"
 														: userInfo?.name}{" "}
 												</span>
@@ -159,7 +159,7 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{userInfo?.name === null
+													{!userInfo?.name
 														? userInfo?.username || "٠٠٠"
 														: userInfo?.name}{" "}
 												</span>

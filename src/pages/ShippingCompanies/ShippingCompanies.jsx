@@ -102,7 +102,7 @@ const ShippingCompanies = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	// Side Effects

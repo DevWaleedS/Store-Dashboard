@@ -41,7 +41,7 @@ const EvaluationThePlatform = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus, navigate]);
+	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	// To get the editor content
