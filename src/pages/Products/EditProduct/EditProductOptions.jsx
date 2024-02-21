@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 
 // Third party
 
@@ -161,7 +161,7 @@ const AddProductOptionsModal = () => {
 	const {
 		productHasOptions,
 		setProductHasOptions,
-		clearOptions,
+
 		attributes,
 		setAttributes,
 		optionsSection,
@@ -376,6 +376,7 @@ const AddProductOptionsModal = () => {
 	/** handle add discount_price for attr */
 	const addDiscountPrice = (e, blockIndex) => {
 		const updatedAttributes = [...attributes];
+
 		updatedAttributes[blockIndex].discount_price = Number(
 			e.target.value.replace(/[^0-9]/g, "")
 		);

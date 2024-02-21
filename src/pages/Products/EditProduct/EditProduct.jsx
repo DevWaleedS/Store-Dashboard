@@ -125,7 +125,8 @@ const EditProduct = () => {
 		setEndActionTitle,
 		productHasOptions,
 		setProductHasOptions,
-
+		setDefaultOptionPrice,
+		defaultOptionPrice,
 		attributes,
 		setAttributes,
 		optionsSection,
@@ -156,7 +157,6 @@ const EditProduct = () => {
 	const [url, setUrl] = useState("");
 
 	const {
-		register,
 		handleSubmit,
 		reset,
 		control,
@@ -300,31 +300,45 @@ const EditProduct = () => {
 				0
 			);
 
-			// get the default option array
-			const defaultOptions = optionsSection?.map((option) =>
-				option?.values?.filter((value) => value?.defaultOption === true)
+			const defaultOptions = optionsSection?.map(
+				(option) =>
+					option?.values?.find((value) => value.defaultOption === true)?.title
 			);
-
-			const defaultOptionsArray =
-				defaultOptions?.map((option) => option?.[0]?.title) || [];
 
 			const matchingObject = attributes?.find(
 				(obj) =>
 					obj?.values?.length === defaultOptions?.length &&
 					obj?.values?.every(
-						(value, index) => value?.title === defaultOptionsArray[index]
+						(value, index) => value?.title === defaultOptions[index]
 					)
 			);
-			setProduct({
-				...product,
-				stock: qty,
-				discount_price: Number(matchingObject?.discount_price) || "",
-				selling_price: Number(matchingObject?.price) || "",
-			});
+
+			if (matchingObject) {
+				setProduct((prevProduct) => ({
+					...prevProduct,
+					stock: qty,
+					discount_price: Number(matchingObject.discount_price) || "",
+					selling_price: Number(matchingObject.price) || "",
+				}));
+			}
 		}
 	}, [attributes]);
 
+	// if (attributes?.length !== 0) {
+	// 	const defaultOptions = optionsSection?.map(
+	// 		(option) =>
+	// 			option?.values?.find((value) => value.defaultOption === true)?.title
+	// 	);
+
+	// 	const updatedAttributes = [...attributes];
+	// 	updatedAttributes[defaultOptions?.length - 1].price =
+	// 		Number(defaultOptionPrice);
+
+	// 	setAttributes(updatedAttributes);
+	// }
+
 	// To Handle Errors
+	//--------------------------------------------------
 	useEffect(() => {
 		reset(product);
 	}, [product, reset]);
@@ -1117,7 +1131,7 @@ const EditProduct = () => {
 										{/* Selling price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='price'>
+												<label>
 													السعر<span className='important-hint'>*</span>
 													<BootstrapTooltip
 														className={"p-0"}
@@ -1133,47 +1147,103 @@ const EditProduct = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>السعر يشمل الضريبة</div>
-												<Controller
-													name={"selling_price"}
-													control={control}
-													rules={{
-														required: "حقل سعر البيع مطلوب",
-														pattern: {
-															value: /^[0-9.]+$/i,
-															message: "يجب على الحقل سعر البيع أن يكون رقمًا",
-														},
-														min: {
-															value: 1,
-															message: " سعر البيع يجب ان يكون اكبر من 0",
-														},
-													}}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name={"selling_price"}
-															type='text'
-															id='price'
-															value={value}
-															onChange={(e) => {
-																setProduct({
-																	...product,
-																	selling_price: e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	),
-																});
-																onChange(
-																	e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	)
-																);
-															}}
-														/>
-													)}
-												/>
+												{attributes?.length !== 0 ? (
+													<Controller
+														name={"selling_price"}
+														control={control}
+														rules={{
+															required: "حقل سعر البيع مطلوب",
+															pattern: {
+																value: /^[0-9.]+$/i,
+																message:
+																	"يجب على الحقل سعر البيع أن يكون رقمًا",
+															},
+															min: {
+																value: 1,
+																message: " سعر البيع يجب ان يكون اكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name={"selling_price"}
+																type='text'
+																id='price'
+																readOnly='true'
+																style={{ cursor: "pointer" }}
+																onClick={() =>
+																	dispatch(openProductOptionModal())
+																}
+																title='قم بالضغط علي الحقل لتعديل السعر'
+																value={value}
+																onChange={(e) => {
+																	// setDefaultOptionPrice(e.target.value);
+																	setProduct({
+																		...product,
+																		selling_price: e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		),
+																	});
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	);
+																}}
+															/>
+														)}
+													/>
+												) : (
+													<Controller
+														name={"selling_price"}
+														control={control}
+														rules={{
+															required: "حقل سعر البيع مطلوب",
+															pattern: {
+																value: /^[0-9.]+$/i,
+																message:
+																	"يجب على الحقل سعر البيع أن يكون رقمًا",
+															},
+															min: {
+																value: 1,
+																message: " سعر البيع يجب ان يكون اكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name={"selling_price"}
+																type='text'
+																id='price'
+																value={value}
+																onChange={(e) => {
+																	// setDefaultOptionPrice(e.target.value);
+																	setProduct({
+																		...product,
+																		selling_price: e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		),
+																	});
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	);
+																}}
+															/>
+														)}
+													/>
+												)}
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
+												{attributes?.length !== 0 ? (
+													<div className='tax-text'>
+														لتعديل السعر قم بالدخول إلى خيارات المنتج
+													</div>
+												) : null}
 												<span className='fs-6 text-danger'>
 													{productError?.selling_price}
 													{errors?.selling_price &&
@@ -1185,7 +1255,7 @@ const EditProduct = () => {
 										{/* Discount price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='low-price'>
+												<label>
 													السعر بعد الخصم
 													<BootstrapTooltip
 														className={"p-0"}
@@ -1201,33 +1271,69 @@ const EditProduct = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>السعر يشمل الضريبة</div>
-												<Controller
-													name={"discount_price"}
-													control={control}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name={"discount_price"}
-															type='text'
-															id='low-price'
-															value={value}
-															onChange={(e) => {
-																setProduct({
-																	...product,
-																	discount_price: e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	),
-																});
-																onChange(
-																	e.target.value.replace(
-																		/[^\d.]|\.(?=.*\.)/g,
-																		""
-																	)
-																);
-															}}
-														/>
-													)}
-												/>
+												{attributes?.length !== 0 ? (
+													<Controller
+														name={"discount_price"}
+														control={control}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name={"discount_price"}
+																type='text'
+																id='low-price'
+																readOnly='true'
+																style={{ cursor: "pointer" }}
+																onClick={() =>
+																	dispatch(openProductOptionModal())
+																}
+																title='قم بالضغط علي الحقل لتعديل سعر الخصم'
+																value={value}
+																onChange={(e) => {
+																	setProduct({
+																		...product,
+																		discount_price: e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		),
+																	});
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	);
+																}}
+															/>
+														)}
+													/>
+												) : (
+													<Controller
+														name={"discount_price"}
+														control={control}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name={"discount_price"}
+																type='text'
+																id='low-price'
+																value={value}
+																onChange={(e) => {
+																	setProduct({
+																		...product,
+																		discount_price: e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		),
+																	});
+																	onChange(
+																		e.target.value.replace(
+																			/[^\d.]|\.(?=.*\.)/g,
+																			""
+																		)
+																	);
+																}}
+															/>
+														)}
+													/>
+												)}
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div
@@ -1236,6 +1342,11 @@ const EditProduct = () => {
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
+												{attributes?.length !== 0 ? (
+													<div className='tax-text'>
+														لتعديل سعرالخصم قم بالدخول إلى خيارات المنتج
+													</div>
+												) : null}
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
@@ -1272,13 +1383,13 @@ const EditProduct = () => {
 										{/* Stock */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='price'>
+												<label>
 													المخزون <span className='important-hint'>*</span>
 													<BootstrapTooltip
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
+														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمإلى  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1288,39 +1399,84 @@ const EditProduct = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
-													تأكد ان المخزون يشمل إجمالي الكميه الخاصه بخيارات
+													تأكد ان المخزون يشمل إجمإلى الكميه الخاصه بخيارات
 													المنتج
 												</div>
-												<Controller
-													name={"stock"}
-													control={control}
-													rules={{
-														required: "حقل المخزون مطلوب",
-														pattern: {
-															value: /^[0-9]+$/i,
-															message: "يجب على الحقل المخزون أن يكون رقمًا",
-														},
-														min: {
-															value: 1,
-															message: "  المخزون يجب ان يكون اكبر من 0",
-														},
-													}}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name='stock'
-															type='text'
-															id='stock'
-															placeholder='اضف الكمية'
-															value={value}
-															onChange={(e) =>
-																onChange(e.target.value.replace(/[^0-9]/g, ""))
-															}
-														/>
-													)}
-												/>
+												{attributes?.length !== 0 ? (
+													<Controller
+														name={"stock"}
+														control={control}
+														rules={{
+															required: "حقل المخزون مطلوب",
+															pattern: {
+																value: /^[0-9]+$/i,
+																message: "يجب على الحقل المخزون أن يكون رقمًا",
+															},
+															min: {
+																value: 1,
+																message: "  المخزون يجب ان يكون اكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='stock'
+																type='text'
+																id='stock'
+																readOnly='true'
+																style={{ cursor: "pointer" }}
+																onClick={() =>
+																	dispatch(openProductOptionModal())
+																}
+																title='قم بالضغط علي الحقل لتعديل  المخزون'
+																placeholder='اضف الكمية'
+																value={value}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
+															/>
+														)}
+													/>
+												) : (
+													<Controller
+														name={"stock"}
+														control={control}
+														rules={{
+															required: "حقل المخزون مطلوب",
+															pattern: {
+																value: /^[0-9]+$/i,
+																message: "يجب على الحقل المخزون أن يكون رقمًا",
+															},
+															min: {
+																value: 1,
+																message: "  المخزون يجب ان يكون اكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='stock'
+																type='text'
+																id='stock'
+																placeholder='اضف الكمية'
+																value={value}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
+															/>
+														)}
+													/>
+												)}
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
+												{attributes?.length !== 0 ? (
+													<div className='tax-text'>
+														لتعديل المخزون قم بالدخول إلى خيارات المنتج
+													</div>
+												) : null}
 												<span className='fs-6 text-danger'>
 													{productError?.stock}
 													{errors?.stock && errors.stock.message}
