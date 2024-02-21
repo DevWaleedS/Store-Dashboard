@@ -37,6 +37,7 @@ const style = {
 	backgroundColor: "#fff",
 	boxShadow: 24,
 	p: 0,
+
 	"@media(max-width:768px)": {
 		top: "50%",
 	},
@@ -293,13 +294,13 @@ const MaintenanceModeModal = () => {
 													</div>
 
 													<textarea
-														onResize={false}
+														name='message'
 														id='maintenance-message'
 														placeholder='نص الرسالة التي ستظهر للعملاء'
-														name='message'
 														{...register("message", {
-															required: "The message field is required",
-														})}></textarea>
+															required: "حقل الرسالة مطلوب",
+														})}
+													/>
 													<br />
 													<span className='fs-6 text-danger'>
 														{dataError?.message}

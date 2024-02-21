@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import './ConfirmPasswordField.css';
+import React, { useState } from "react";
+import "./ConfirmPasswordField.css";
 import { ReactComponent as EyeOPen } from "../../../data/Icons/eye_open.svg";
 import { ReactComponent as EyeClose } from "../../../data/Icons/eye_close.svg";
-import { MdErrorOutline } from 'react-icons/md';
+import { MdErrorOutline } from "react-icons/md";
 
 const ConfirmPasswordField = ({
 	password,
@@ -72,9 +72,7 @@ const ConfirmPasswordField = ({
 					كلمة المرور غير متطابقه
 				</p>
 				{confirmPasswordError && validPssWord && (
-					<span
-						className='wrong-text w-100 d-flex justify-content-start'
-						style={{ color: "red" }}>
+					<span className='wrong-text w-100 d-flex justify-content-start text-danger'>
 						{confirmPasswordError}
 					</span>
 				)}

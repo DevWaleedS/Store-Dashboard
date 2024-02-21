@@ -198,17 +198,13 @@ const Login = () => {
 					/>
 
 					{passwordError && (
-						<span
-							className='wrong-text w-100 d-flex justify-content-start'
-							style={{ color: "red" }}>
+						<span className='wrong-text text-danger w-100 d-flex justify-content-start'>
 							{passwordError}
 						</span>
 					)}
 				</div>
 			</div>
-			<div className='wrong-text' style={{ color: "red" }}>
-				{error}
-			</div>
+			<div className='wrong-text text-danger'>{error}</div>
 			<div className='top checkbox_row'>
 				<div className='check'>
 					<div className='form-check'>

@@ -221,14 +221,14 @@ const RatingWeight = ({
 																className='delete-btn '
 																onClick={() => {
 																	setActionDelete(
-																		"سيتم حذف التعلىق وهذه الخطوة غير قابلة للرجوع"
+																		"سيتم حذف التعليق وهذه الخطوة غير قابلة للرجوع"
 																	);
 																	setDeleteMethod("delete");
 																	setUrl(
 																		`https://backend.atlbha.com/api/Store/comment/${rate?.id}`
 																	);
 																}}>
-																<DeleteIcon title='حذف التعلىق' />
+																<DeleteIcon title='حذف التعليق' />
 																<span className='user-name me-2 align-self-center'>
 																	حذف{" "}
 																</span>
@@ -242,7 +242,7 @@ const RatingWeight = ({
 																	dispatch(openReplyModal());
 																	setCommentDetails(rate);
 																}}>
-																<ReplayIcon title='ارسال رد على التعلىق' />
+																<ReplayIcon title='ارسال رد على التعليق' />
 																<span className='user-name me-2 align-self-center'>
 																	رد{" "}
 																</span>

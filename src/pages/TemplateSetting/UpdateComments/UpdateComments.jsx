@@ -40,7 +40,7 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 
 	// Update comments function
 	const updateComments = () => {
-		setLoadingTitle("جاري تعديل التعلىقات والعملاء");
+		setLoadingTitle("جاري تعديل التعليقات والعملاء");
 		let formData = new FormData();
 		formData.append("commentstatus", commentStatus ? "active" : "not_active");
 		formData.append("clientstatus", clientStatus ? "active" : "not_active");
@@ -67,8 +67,8 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 		<div className='seo-weight-edit-box template-edit-box '>
 			<div className='title d-flex flex-md-row flex-column justify-content-between align-items-md-center flex-wrap gap-4'>
 				<h4>
-					التعلىقات والعملاء
-					<span> (تستطيع تفعيل وتعطيل العملاء المميزون والتعلىقات )</span>
+					التعليقات والعملاء
+					<span> (تستطيع تفعيل وتعطيل العملاء المميزون والتعليقات )</span>
 				</h4>
 				<div className='view-more-btn mx-md-4 mt-md-0 mt-3'>
 					<Link to='/Rating' variant='contained'>
@@ -85,7 +85,7 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 							<div className='switch-widget d-flex justify-content-between align-items-center'>
 								<div className='widget-text'>
 									<CommentIcon />
-									<span className='me-3'> تعلىقات العملاء</span>
+									<span className='me-3'> تعليقات العملاء</span>
 								</div>
 								<div className='switch-btn'>
 									<Switch

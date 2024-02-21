@@ -38,7 +38,7 @@ const style = {
 	overflow: "auto",
 	bgcolor: "#fff",
 	paddingBottom: "80px",
-	"@media(max-width:992px)": {
+	"@media(max-width:1400px)": {
 		width: "80%",
 	},
 	"@media(max-width:768px)": {

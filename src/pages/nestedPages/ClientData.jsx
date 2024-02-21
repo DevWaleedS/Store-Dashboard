@@ -52,7 +52,7 @@ const style = {
 	top: "80px",
 	left: "0%",
 	transform: "translate(0%, 0%)",
-	width: "85%",
+	width: "80%",
 	height: "100%",
 	overflow: "auto",
 	bgcolor: "#fff",
@@ -369,7 +369,7 @@ const ClientData = () => {
 														<li
 															className='breadcrumb-item active'
 															aria-current='page'>
-															# {cartDetails?.user?.name}
+															{cartDetails?.user?.name}
 														</li>
 													</ol>
 												</nav>

@@ -678,7 +678,7 @@ const ShowImportEtlobhaProduct = () => {
 													{Number(product?.price) -
 														Number(product?.discount_price_import) <=
 														0 && (
-														<span className='fs-6' style={{ color: "red" }}>
+														<span className='fs-6 text-danger'>
 															يجب ان يكون سعر البيع بعد الخصم اقل من السعر
 															الأساسي
 														</span>
@@ -689,8 +689,8 @@ const ShowImportEtlobhaProduct = () => {
 											{product?.discount_price_import &&
 												product?.price === "" && (
 													<div className='col-lg-7 col-md-9 col-12'>
-														<span className='fs-6' style={{ color: "red" }}>
-															يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
+														<span className='fs-6 text-danger'>
+															يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
 															سعر البيع بعد الخصم
 														</span>
 													</div>

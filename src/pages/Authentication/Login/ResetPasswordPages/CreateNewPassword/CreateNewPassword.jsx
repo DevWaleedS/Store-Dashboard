@@ -154,9 +154,7 @@ const CreateNewPassword = () => {
 								/>
 
 								{passwordError && (
-									<span
-										className='wrong-text w-100 d-flex justify-content-start'
-										style={{ color: "red" }}>
+									<span className='wrong-text text-danger w-100 d-flex justify-content-start'>
 										{passwordError}
 									</span>
 								)}
@@ -201,17 +199,13 @@ const CreateNewPassword = () => {
 								/>
 
 								{passwordError && (
-									<span
-										className='wrong-text w-100 d-flex justify-content-start'
-										style={{ color: "red" }}>
+									<span className='wrong-text text-danger w-100 d-flex justify-content-start'>
 										{passwordError}
 									</span>
 								)}
 
 								{confirmPassword && confirmPassword !== password && (
-									<span
-										className='wrong-text w-100 d-flex justify-content-start'
-										style={{ color: "red" }}>
+									<span className='wrong-text text-danger w-100 d-flex justify-content-start'>
 										كلمة المرور غير مطابقة!
 									</span>
 								)}

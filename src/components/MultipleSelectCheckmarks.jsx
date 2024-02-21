@@ -104,7 +104,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 					</FormControl>
 					{showErr && (
 						<div className='text-danger me-1' style={{ fontSize: "16px" }}>
-							يرجي اختيار نوع النشاط أولاّّ
+							يرجى اختيار نوع النشاط أولاّّ
 						</div>
 					)}
 				</div>
@@ -147,9 +147,7 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 							renderValue={(selected) => {
 								if (subActivities?.length === 0) {
 									return (
-										<span style={{ color: "#011723" }}>
-											نشاط المتجر الفرعي
-										</span>
+										<span style={{ color: "#011723" }}>نشاط المتجر الفرعي</span>
 									);
 								}
 								return selected?.map((item) => {

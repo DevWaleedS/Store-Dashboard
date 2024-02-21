@@ -707,7 +707,7 @@ const MainInformation = () => {
 													`
 													}
 													onChange={() => console.log("test")}
-													readonly
+													readOnly
 													rows='3'
 												/>
 											</div>

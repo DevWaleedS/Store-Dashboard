@@ -55,6 +55,62 @@ const style = {
 	},
 };
 
+const switchStyle = {
+	width: "50px",
+	"& .MuiSwitch-track": {
+		width: 26,
+		height: 14,
+		opacity: 1,
+		backgroundColor: "rgba(0,0,0,.25)",
+		boxSizing: "border-box",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		transform: "translate(6px,6px)",
+		color: "#fff",
+	},
+
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: 1,
+		"&.Mui-checked": {
+			transform: "translateX(11px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
+
+const selectStyle = {
+	fontSize: "18px",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "1px solid #eeeeee",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 const AddCoupon = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -78,13 +134,12 @@ const AddCoupon = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
-	const [coupon_apply, setCoupon_apply] = useState("");
+	const [startDate, setStartDate] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
+	const [coupon_apply, setCoupon_apply] = useState("");
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [selectedProductIds, setSelectProductId] = useState([]);
 	const [selectedProducts, setSelectedProducts] = useState([]);
-
-	const [startDate, setStartDate] = useState("");
 	const [select_category_id, setSelect_category_id] = useState("");
 	const [select_payment_id, setSelect_payment_id] = useState("");
 	const [isEnable, setIsEnable] = useState(true);
@@ -304,7 +359,7 @@ const AddCoupon = () => {
 													pattern: {
 														value: /^[A-Za-z][A-Za-z0-9]*$/i,
 														message:
-															"صيغة الحقل الكود غير صحيحة(يجب ان يكون من حروف انجليزيه او حروف انجليزيه وارقام او ارقام)",
+															"صيغة الحقل الكود غير صحيحة(يجب ان يكون من حروف انجليزيه او حروف انجليزيه وارقام )",
 													},
 												})}
 											/>
@@ -834,24 +889,7 @@ const AddCoupon = () => {
 															onChange={(e) => {
 																setSelect_category_id(e.target.value);
 															}}
-															sx={{
-																fontSize: "18px",
-																"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																	{
-																		paddingRight: "20px",
-																	},
-																"& .MuiOutlinedInput-root": {
-																	"& :hover": {
-																		border: "none",
-																	},
-																},
-																"& .MuiOutlinedInput-notchedOutline": {
-																	border: "1px solid #eeeeee",
-																},
-																"& .MuiSelect-icon": {
-																	right: "95%",
-																},
-															}}
+															sx={selectStyle}
 															IconComponent={IoIosArrowDown}
 															displayEmpty
 															inputProps={{ "aria-label": "Without label" }}
@@ -979,45 +1017,10 @@ const AddCoupon = () => {
 											</label>
 											<Switch
 												onClick={(e) => {
-													setIsEnable(e.target.checked);
+													setIsEnable(!isEnable);
 												}}
 												checked={isEnable}
-												sx={{
-													width: "50px",
-													"& .MuiSwitch-track": {
-														width: 26,
-														height: 14,
-														opacity: 1,
-														backgroundColor: "rgba(0,0,0,.25)",
-														boxSizing: "border-box",
-													},
-													"& .MuiSwitch-thumb": {
-														boxShadow: "none",
-														width: 10,
-														height: 10,
-														borderRadius: 5,
-														transform: "translate(6px,6px)",
-														color: "#fff",
-													},
-
-													"&:hover": {
-														"& .MuiSwitch-thumb": {
-															boxShadow: "none",
-														},
-													},
-
-													"& .MuiSwitch-switchBase": {
-														padding: 1,
-														"&.Mui-checked": {
-															transform: "translateX(11px)",
-															color: "#fff",
-															"& + .MuiSwitch-track": {
-																opacity: 1,
-																backgroundColor: "#3AE374",
-															},
-														},
-													},
-												}}
+												sx={switchStyle}
 											/>
 											<span className={`${isEnable ? "" : "disabled"} me-2`}>
 												تفعيل /{" "}

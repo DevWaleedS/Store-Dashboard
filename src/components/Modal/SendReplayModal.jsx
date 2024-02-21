@@ -32,6 +32,14 @@ const style = {
 	bgcolor: "#FAFAFA",
 	borderRadius: "16px",
 	boxShadow: 24,
+
+	"@media(max-width:1400px)": {
+		left: "45%",
+	},
+
+	"@media(max-width:768px)": {
+		left: "50%",
+	},
 };
 
 const headingStyle = {

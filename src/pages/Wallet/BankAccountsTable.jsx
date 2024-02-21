@@ -68,13 +68,17 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 				<TableContainer>
 					<Table>
 						{loading ? (
-							<TableCell colSpan={5}>
-								<CircularLoading />
-							</TableCell>
+							<TableBody>
+								<TableCell colSpan={5}>
+									<CircularLoading />
+								</TableCell>
+							</TableBody>
 						) : !bankAccount ? (
-							<TableCell className='text-center' colSpan={5}>
-								لا يوجد لديك حساب بنكي
-							</TableCell>
+							<TableBody>
+								<TableCell className='text-center' colSpan={5}>
+									لا يوجد لديك حساب بنكي
+								</TableCell>
+							</TableBody>
 						) : (
 							<>
 								<EnhancedTableHead />

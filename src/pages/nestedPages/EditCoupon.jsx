@@ -57,6 +57,62 @@ const style = {
 	},
 };
 
+const switchStyle = {
+	width: "50px",
+	"& .MuiSwitch-track": {
+		width: 26,
+		height: 14,
+		opacity: 1,
+		backgroundColor: "rgba(0,0,0,.25)",
+		boxSizing: "border-box",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		transform: "translate(6px,6px)",
+		color: "#fff",
+	},
+
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: 1,
+		"&.Mui-checked": {
+			transform: "translateX(11px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
+
+const selectStyle = {
+	fontSize: "18px",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "1px solid #eeeeee",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 const EditCoupon = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -449,7 +505,7 @@ const EditCoupon = () => {
 													</button>
 													{activeCoupon && (
 														<div style={{ fontSize: "16px", color: "red" }}>
-															يرجي تحديث تاريخ الانتهاء لكي يتم إعادة تفعيل كود
+															يرجى تحديث تاريخ الانتهاء لكي يتم إعادة تفعيل كود
 															الخصم
 														</div>
 													)}
@@ -479,7 +535,7 @@ const EditCoupon = () => {
 															pattern: {
 																value: /^[A-Za-z0-9]+$/i,
 																message:
-																	"صيغة الحقل الكود غير صحيحة(يجب ان يكون من حروف انجليزيه او حروف انجليزيه وارقام او ارقام)",
+																	"صيغة الحقل الكود غير صحيحة(يجب ان يكون من حروف انجليزيه او حروف انجليزيه وارقام)",
 															},
 														})}
 													/>
@@ -1051,24 +1107,7 @@ const EditCoupon = () => {
 																	onChange={(e) => {
 																		setSelect_category_id(e.target.value);
 																	}}
-																	sx={{
-																		fontSize: "18px",
-																		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																			{
-																				paddingRight: "20px",
-																			},
-																		"& .MuiOutlinedInput-root": {
-																			"& :hover": {
-																				border: "none",
-																			},
-																		},
-																		"& .MuiOutlinedInput-notchedOutline": {
-																			border: "1px solid #eeeeee",
-																		},
-																		"& .MuiSelect-icon": {
-																			right: "95%",
-																		},
-																	}}
+																	sx={selectStyle}
 																	IconComponent={IoIosArrowDown}
 																	displayEmpty
 																	inputProps={{ "aria-label": "Without label" }}
@@ -1198,47 +1237,12 @@ const EditCoupon = () => {
 														الحالة<span className='important-hint'>*</span>
 													</label>
 													<Switch
-														onClick={() => {
+														checked={isEnable}
+														sx={switchStyle}
+														onClick={(e) => {
 															setIsEnable(!isEnable);
 														}}
-														checked={isEnable}
 														// disabled={isEnable === "نشط" ? false : true}
-														sx={{
-															width: "50px",
-															"& .MuiSwitch-track": {
-																width: 26,
-																height: 14,
-																opacity: 1,
-																backgroundColor: "rgba(0,0,0,.25)",
-																boxSizing: "border-box",
-															},
-															"& .MuiSwitch-thumb": {
-																boxShadow: "none",
-																width: 10,
-																height: 10,
-																borderRadius: 5,
-																transform: "translate(6px,6px)",
-																color: "#fff",
-															},
-
-															"&:hover": {
-																"& .MuiSwitch-thumb": {
-																	boxShadow: "none",
-																},
-															},
-
-															"& .MuiSwitch-switchBase": {
-																padding: 1,
-																"&.Mui-checked": {
-																	transform: "translateX(11px)",
-																	color: "#fff",
-																	"& + .MuiSwitch-track": {
-																		opacity: 1,
-																		backgroundColor: "#3AE374",
-																	},
-																},
-															},
-														}}
 													/>
 													<span
 														className={`${isEnable ? "" : "disabled"} me-2`}>

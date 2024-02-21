@@ -59,6 +59,10 @@ const style = {
 	overflow: "auto",
 	bgcolor: "#fff",
 	paddingBottom: "80px",
+
+	"@media(max-width:1400px)": {
+		width: "80%",
+	},
 	"@media(max-width:768px)": {
 		position: "absolute",
 		top: 0,
@@ -314,8 +318,8 @@ const EditProduct = () => {
 			setProduct({
 				...product,
 				stock: qty,
-				discount_price: Number(matchingObject?.discount_price) || 0,
-				selling_price: Number(matchingObject?.price) || 0,
+				discount_price: Number(matchingObject?.discount_price) || "",
+				selling_price: Number(matchingObject?.price) || "",
 			});
 		}
 	}, [attributes]);
@@ -626,6 +630,7 @@ const EditProduct = () => {
 					onClose={() => {
 						navigate("/Products");
 						setEditorValue("");
+						clearOptions();
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -775,7 +780,7 @@ const EditProduct = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div {...getRootProps()}>
-													<div className='add-image-btn-box '>
+													<div className='add-image-btn-box mb-3'>
 														<UploadIcon />
 														<div className='add-image-btn'>
 															<label htmlFor='add-image'>
@@ -1019,7 +1024,7 @@ const EditProduct = () => {
 																					height: "3rem",
 																					"&:hover": {},
 																				}}
-																				value={`${cat?.id}`}>
+																				value={cat?.id}>
 																				{cat?.name}
 																			</MenuItem>
 																		);
@@ -1180,17 +1185,19 @@ const EditProduct = () => {
 										{/* Discount price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='low-price'> السعر بعد الخصم </label>
-												<BootstrapTooltip
-													className={"p-0"}
-													TransitionProps={{ timeout: 300 }}
-													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
-													placement='top'>
-													<IconButton>
-														<MdInfoOutline color='#1DBBBE' size={"14px"} />
-													</IconButton>
-												</BootstrapTooltip>
+												<label htmlFor='low-price'>
+													السعر بعد الخصم
+													<BootstrapTooltip
+														className={"p-0"}
+														TransitionProps={{ timeout: 300 }}
+														TransitionComponent={Zoom}
+														title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+														placement='top'>
+														<IconButton>
+															<MdInfoOutline color='#1DBBBE' size={"14px"} />
+														</IconButton>
+													</BootstrapTooltip>
+												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>السعر يشمل الضريبة</div>
@@ -1232,7 +1239,7 @@ const EditProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
+													<span className='fs-6 text-danger'>
 														يجب ان يكون سعر التخفيض اقل من السعر الأساسي
 													</span>
 												)}
@@ -1245,8 +1252,8 @@ const EditProduct = () => {
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
-												<span className='fs-6' style={{ color: "red" }}>
-													يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر
+												<span className='fs-6 text-danger'>
+													يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر
 													الخصم
 												</span>
 											</div>

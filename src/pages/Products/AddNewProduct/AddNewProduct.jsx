@@ -57,8 +57,7 @@ const style = {
 	overflow: "auto",
 	bgcolor: "#fff",
 	paddingBottom: "80px",
-
-	"@media(max-width:992px)": {
+	"@media(max-width:1400px)": {
 		width: "80%",
 	},
 
@@ -184,8 +183,8 @@ const AddNewProduct = () => {
 			setProduct({
 				...product,
 				stock: qty,
-				discount_price: Number(matchingObject?.discount_price) || 0,
-				selling_price: Number(matchingObject?.price) || 0,
+				discount_price: Number(matchingObject?.discount_price) || "",
+				selling_price: Number(matchingObject?.price) || "",
 			});
 		}
 	}, [attributes]);
@@ -356,10 +355,19 @@ const AddNewProduct = () => {
 		formData.append("name", data?.name);
 		formData.append("short_description", data?.short_description);
 		formData.append("description", editorValue);
-		formData.append("selling_price", data?.selling_price);
+		formData.append(
+			"selling_price",
+			attributes?.length !== 0 ? product?.selling_price : data?.selling_price
+		);
 		formData.append("category_id", data?.category_id);
-		formData.append("discount_price", data?.discount_price);
-		formData.append("stock", data?.stock);
+		formData.append(
+			"discount_price",
+			attributes?.length !== 0 ? product?.discount_price : data?.discount_price
+		);
+		formData.append(
+			"stock",
+			attributes?.length !== 0 ? product?.stock : data?.stock
+		);
 		formData.append("weight", data?.weight);
 
 		formData.append("cover", icons[0]);
@@ -523,6 +531,7 @@ const AddNewProduct = () => {
 					onClose={() => {
 						navigate("/Products");
 						setEditorValue("");
+						clearOptions();
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -669,7 +678,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div {...getRootProps()}>
-												<div className='add-image-btn-box'>
+												<div className='add-image-btn-box mb-3'>
 													<UploadIcon />
 													<div className='add-image-btn'>
 														<label htmlFor='add-image'> اسحب الصورة هنا</label>
@@ -779,11 +788,7 @@ const AddNewProduct = () => {
 																	<div
 																		key={index}
 																		className='add-product-images'>
-																		<img
-																			src={image.data_url}
-																			alt=''
-																			lazy={true}
-																		/>
+																		<img src={image.data_url} alt='' />
 																		<div
 																			onClick={() => onImageRemove(index)}
 																			className='delete-icon'>
@@ -886,7 +891,7 @@ const AddNewProduct = () => {
 																				height: "3rem",
 																				"&:hover": {},
 																			}}
-																			value={`${cat?.id}`}>
+																			value={cat?.id}>
 																			{cat?.name}
 																		</MenuItem>
 																	);
@@ -1112,7 +1117,7 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6' style={{ color: "red" }}>
+													<span className='fs-6 fs-6 text-danger'>
 														يجب ان يكون سعر الخصم اقل من السعر الأساسي
 													</span>
 												)}
@@ -1122,8 +1127,8 @@ const AddNewProduct = () => {
 										{product?.discount_price &&
 											product?.selling_price === "" && (
 												<div className='col-lg-7 col-md-9 col-12'>
-													<span className='fs-6' style={{ color: "red" }}>
-														يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
+													<span className='fs-6 text-danger'>
+														يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
 														سعر الخصم
 													</span>
 												</div>
@@ -1304,6 +1309,7 @@ const AddNewProduct = () => {
 												onClick={() => {
 													navigate("/Products");
 													setEditorValue("");
+													clearOptions();
 												}}>
 												إلغاء
 											</button>

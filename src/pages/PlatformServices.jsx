@@ -191,6 +191,7 @@ const PlatformServices = () => {
 								<div className='col-md-7 col-12'>
 									<input
 										value={data?.store_name}
+										onChange={(e) => console.log(e)}
 										className='w-100'
 										type='text'
 										disabled

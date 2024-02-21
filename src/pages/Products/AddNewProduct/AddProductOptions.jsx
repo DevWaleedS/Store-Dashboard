@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useState } from "react";
 
 // Third party
+import { v4 as uuid } from "uuid";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
@@ -467,7 +468,7 @@ const AddProductOptionsModal = () => {
 
 	/** Handle mapping the options sections */
 	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
-		<section key={section?.id} className='options-section'>
+		<section key={uuid()} className='options-section'>
 			<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
 				{optionsSection?.length > 1 && (
 					<div className='delete-icon delete-option-section-icon d-flex d-md-none me-auto'>
@@ -517,7 +518,7 @@ const AddProductOptionsModal = () => {
 						}}>
 						{select_value_options?.map((option, index) => (
 							<MenuItem
-								key={index}
+								key={uuid()}
 								className='souq_storge_category_filter_items '
 								sx={{
 									backgroundColor: "#FAFAFA",
@@ -544,7 +545,7 @@ const AddProductOptionsModal = () => {
 			<section className='mb-6'>
 				{section?.values?.map((item, itemIndex) => (
 					<section
-						key={item?.id}
+						key={uuid()}
 						className='mb-3 d-flex justify-content-start align-items-center gap-1 gap-md-gap3'>
 						<div className='option-color-input d-flex justify-content-start align-items-center gap-2 position-relative'>
 							<ToggleButton
@@ -706,7 +707,7 @@ const AddProductOptionsModal = () => {
 	const attributesAccording = attributes?.map((attribute, attributeIndex) => (
 		<>
 			<section
-				key={attributeIndex}
+				key={uuid()}
 				className=' flex justify-start items-center gap-3 mb-3 products-attr'>
 				<Accordion
 					expanded={expanded === attributeIndex}
@@ -729,7 +730,7 @@ const AddProductOptionsModal = () => {
 									<>
 										{value?.id === index && index !== 0 && <span>/</span>}
 										<Typography
-											key={value?.id}
+											key={uuid()}
 											sx={{
 												fontSize: "18px",
 												fontWeight: "400",
@@ -809,7 +810,7 @@ const AddProductOptionsModal = () => {
 										color: "red",
 										fontSize: "14px",
 									}}>
-									يرجي ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
+									يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
 								</span>
 							</div>
 						) : null}
