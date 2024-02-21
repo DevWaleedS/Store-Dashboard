@@ -26,7 +26,7 @@ const ProductsTableData = ({ productsDetails }) => {
 			<div className='row'>
 				<div
 					className='table-wrapper table-responsive'
-					style={{ minHeight: "400px" }}>
+					style={{ minHeight: "470px" }}>
 					{productsDetails?.length === 0 ? (
 						<div className='d-flex justify-content-center align-items-center h-100'>
 							لا يوجد منتجات حتى الآن
