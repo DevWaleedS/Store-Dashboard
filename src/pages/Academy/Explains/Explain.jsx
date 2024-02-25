@@ -41,7 +41,7 @@ const Explain = ({ searchExplain }) => {
 			) : (
 				<div className='explain-boxes'>
 					{explainvideos?.map((lesson) => (
-						<div className='box mb-md-4 mb-3' key={lesson?.id}>
+						<div className='box' key={lesson?.id}>
 							<figure className='course-figure'>
 								<div className='course-prev-image'>
 									<img
