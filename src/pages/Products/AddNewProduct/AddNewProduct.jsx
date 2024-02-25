@@ -585,13 +585,13 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.name}
 												{errors?.name && errors.name.message}
 											</span>
 
 											{productNameLength && (
-												<span className='fs-6 text-danger'>
+												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 													اسم المنتج يجب ان لا يتجاوز 25 حرف
 												</span>
 											)}
@@ -632,13 +632,13 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.short_description}
 												{errors?.short_description &&
 													errors.short_description.message}
 											</span>
 											{shortDescriptionLength && (
-												<span className='fs-6 text-danger'>
+												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 													الوصف لا يتجاوز 100 حرف
 												</span>
 											)}
@@ -661,7 +661,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.description}
 												{errors?.description && errors.description.message}
 											</span>
@@ -702,7 +702,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.cover && (
-												<span className='fs-6 text-danger'>
+												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 													{productError?.cover}
 												</span>
 											)}
@@ -821,7 +821,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.images && (
-												<span className='fs-6 text-danger'>
+												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 													{productError?.images}
 												</span>
 											)}
@@ -904,7 +904,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.category_id}
 												{errors?.category_id && errors.category_id.message}
 											</span>
@@ -987,7 +987,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.subcategory_id && (
-												<span className='fs-6 text-danger'>
+												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 													{productError?.subcategory_id}
 												</span>
 											)}
@@ -1055,7 +1055,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.selling_price}
 												{errors?.selling_price && errors.selling_price.message}
 											</span>
@@ -1117,7 +1117,7 @@ const AddNewProduct = () => {
 												{Number(product?.selling_price) -
 													Number(product?.discount_price) <=
 													0 && (
-													<span className='fs-6 fs-6 text-danger'>
+													<span className='fs-6 fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 														يجب ان يكون سعر الخصم اقل من السعر الأساسي
 													</span>
 												)}
@@ -1127,7 +1127,7 @@ const AddNewProduct = () => {
 										{product?.discount_price &&
 											product?.selling_price === "" && (
 												<div className='col-lg-7 col-md-9 col-12'>
-													<span className='fs-6 text-danger'>
+													<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 														يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
 														سعر الخصم
 													</span>
@@ -1197,7 +1197,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.stock}
 												{errors?.stock && errors.stock.message}
 											</span>
@@ -1246,7 +1246,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.weight}
 												{errors?.weight && errors.weight.message}
 											</span>
@@ -1269,7 +1269,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger'>
+											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
 												{productError?.SEOdescription}
 												{errors?.SEOdescription &&
 													errors.SEOdescription.message}

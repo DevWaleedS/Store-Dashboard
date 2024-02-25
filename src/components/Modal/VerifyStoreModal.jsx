@@ -78,7 +78,7 @@ const VerifyStore = () => {
 							) : (
 								<div className='d-flex justify-content-center align-items-center'>
 									{verificationStatus === "جاري التوثيق" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
@@ -97,7 +97,7 @@ const VerifyStore = () => {
 											/>
 										</div>
 									) : verificationStatus === "طلب جديد" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
@@ -126,7 +126,7 @@ const VerifyStore = () => {
 											</div>
 										</div>
 									) : verificationStatus === "التوثيق مرفوض" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
@@ -155,7 +155,7 @@ const VerifyStore = () => {
 											</div>
 										</div>
 									) : verificationStatus === "لم يتم الطلب" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
@@ -183,15 +183,15 @@ const VerifyStore = () => {
 											</div>
 										</div>
 									) : verificationStatus === "تم التوثيق" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-5'>
-											<p className='verify-message text-white'>
+										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+											<p className='verify-message text-white with-icon'>
 												تهانينا... المتجر الخاص بك مكتمل التوثيق
 												<MdVerified
-													style={{ fill: "#fff", marginRight: "5px" }}
+													style={{ fill: "#ffffff", marginRight: "5px" }}
 												/>
 											</p>
 											<IoMdCloseCircleOutline
-												style={{ cursor: "pointer", fill: "#fff" }}
+												style={{ cursor: "pointer", fill: "#ffffff" }}
 												fill='#fff'
 												onClick={() => {
 													dispatch(closeVerifyModal());
