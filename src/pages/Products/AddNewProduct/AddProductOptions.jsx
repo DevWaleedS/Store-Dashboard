@@ -283,7 +283,7 @@ const AddProductOptionsModal = () => {
 		updatedBlocks[blockIndex].values.push({
 			id: updatedBlocks[blockIndex].values.length + 1,
 			title: "",
-			color: "",
+			color: "#000000",
 			image: "",
 			previewImage: "",
 			defaultOption: false,
@@ -411,7 +411,7 @@ const AddProductOptionsModal = () => {
 
 			// to check if the qtyAttrNotEmpty of option in not empty or no
 			const valuesNotEmpty = optionsSection?.every((section) =>
-				section?.values?.some((value) => value?.title !== "")
+				section?.values?.every((value) => value?.title !== "")
 			);
 
 			// to check if the one of some option is default
@@ -581,6 +581,7 @@ const AddProductOptionsModal = () => {
 										backgroundColor: item?.color,
 										borderRadius: "50%",
 										cursor: "pointer",
+										border: item?.color === "#ffffff" ? "1px solid #d4d4d4" : "none"
 									}}></div>
 							)}
 							{showColorPicker === item?.id &&
@@ -597,7 +598,8 @@ const AddProductOptionsModal = () => {
 											color={item?.color}
 											onChange={(e) => {
 												handleSetValueColorInput(e, sectionIndex, itemIndex);
-											}}></SketchPicker>
+											}}>
+										</SketchPicker>
 										<div
 											style={{
 												position: "absolute",
@@ -796,7 +798,7 @@ const AddProductOptionsModal = () => {
 							<div className='col-lg-7 col-md-9 col-12'>
 								{Number(attribute?.price) - Number(attribute?.discount_price) <=
 								0 ? (
-									<span style={{ color: "red", fontSize: "14px" }}>
+									<span style={{ color: "red", fontSize: "14px",whiteSpace:"normal" }}>
 										يجب ان يكون سعر الخصم اقل من السعر الأساسي
 									</span>
 								) : null}
@@ -809,6 +811,7 @@ const AddProductOptionsModal = () => {
 									style={{
 										color: "red",
 										fontSize: "14px",
+										whiteSpace:"normal",
 									}}>
 									يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
 								</span>

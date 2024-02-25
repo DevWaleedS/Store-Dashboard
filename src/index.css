@@ -3151,6 +3151,13 @@ nav.navigation {
 	color: var(--primary-500);
 	font-weight: 500;
 }
+.verify-message-box .verify-message.with-icon{
+	white-space: pre-wrap;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.3rem;
+}
 
 .verify-message-box .btns-box {
 	display: flex;
@@ -12614,7 +12621,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	/* VerifyStoreModal */
 	.verify-message-box .verify-message {
 		margin: 0;
-		font-size: 16px;
+		font-size: 15px;
 		white-space: pre-wrap;
 	}
 
