@@ -209,7 +209,7 @@ const Products = () => {
 									navigate("AddProduct");
 								}}>
 								<MdAdd />
-								<span className='me-2'>إضافة منتج جديد</span>
+								<span className='me-2'>اضافة منتج جديد</span>
 							</button>
 						</div>
 					</div>

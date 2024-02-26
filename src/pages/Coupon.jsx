@@ -215,7 +215,7 @@ const Coupon = () => {
 										navigate("AddCoupon");
 									}}>
 									<MdAdd />
-									<span className='me-2'> اضافه كود خصم</span>
+									<span className='me-2'> اضافة كود خصم</span>
 								</button>
 							</div>
 						</div>

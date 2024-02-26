@@ -91,7 +91,7 @@ const SuccessMessageModal = () => {
 								borderRadius: " 0 0 16px 0",
 							}}
 							className='w-50'>
-							استيراد منتجات أخري
+							استيراد منتجات اخرى
 						</button>
 						<button
 							onClick={() => {

@@ -31,19 +31,19 @@ const FormSearchWeight = ({
 		case "product":
 			data = {
 				placeHolder: "ابحث عن منتج",
-				buttonValue: "  إضافه منتج من السوق",
+				buttonValue: "  اضافة منتج من السوق",
 			};
 			break;
 		case "coupon":
 			data = {
 				placeHolder: "ابحث عن طريق اسم كود الخصم",
-				buttonValue: "  اضافه كود خصم",
+				buttonValue: "  اضافة كود خصم",
 			};
 			break;
 		case "customer":
 			data = {
 				placeHolder: "ابحث بواسطة الرقم ID / الاسم/ رقم الجوال",
-				buttonValue: "  اضافه عميل",
+				buttonValue: "  اضافة عميل",
 			};
 			break;
 		default:

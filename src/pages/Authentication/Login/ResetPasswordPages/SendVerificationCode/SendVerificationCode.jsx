@@ -82,7 +82,7 @@ const SendVerificationCode = () => {
 
 					if (res?.data?.message?.en === "not verified") {
 						setVerError(
-							".لم يتم التحقق! برجاء ادخال الكود بشكل صحيح أو قم باعاة الارسال مره أخري"
+							".لم يتم التحقق! يرجى ادخال الكود بشكل صحيح أو قم باعاة الارسال مره اخرى"
 						);
 					} else if (
 						res?.data?.message?.en === "This password reset token is invalid."

@@ -274,7 +274,7 @@ const EditRole = () => {
 																		</TableCell>
 																		<TableCell align='center'>عرض</TableCell>
 																		<TableCell align='center'>تعديل</TableCell>
-																		<TableCell align='center'>إضافة</TableCell>
+																		<TableCell align='center'>اضافة</TableCell>
 																		<TableCell align='center'>حذف</TableCell>
 																		<TableCell align='center'>
 																			تفعيل-تعطيل

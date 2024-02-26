@@ -39,7 +39,7 @@ const AddSubCategory = () => {
 		if (subcat) {
 			dispatch(closeAddSubCategory());
 		} else {
-			setSubError("يرجى اضافه النشاط أولاً");
+			setSubError("يرجى اضافة النشاط أولاً");
 		}
 	};
 
