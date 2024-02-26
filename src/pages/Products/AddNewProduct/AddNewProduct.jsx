@@ -541,7 +541,7 @@ const AddNewProduct = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> اضافة منتج</h5>
-										<p>قم بإضافة منتجك والمعلومات الضرورية من هنا</p>
+										<p>قم باضافة منتجك والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>
@@ -1003,7 +1003,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1071,7 +1071,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1153,7 +1153,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
+													title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافة خيارات للمنتج'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1288,7 +1288,7 @@ const AddNewProduct = () => {
 												onClick={() => {
 													dispatch(openProductOptionModal());
 												}}>
-												إضافة خيارات المنتج
+												اضافة خيارات المنتج
 												<FiPlus />
 											</button>
 										</div>

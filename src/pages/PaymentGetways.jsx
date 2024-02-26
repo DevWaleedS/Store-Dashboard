@@ -233,7 +233,7 @@ const PaymentGetways = () => {
 										<div className='d-flex gap-1'>
 											<IoMdInformationCircleOutline />
 											<span>
-												قم باضافه الحساب البنكي الخاص بك لكي تتمكن من استخدام
+												قم باضافة الحساب البنكي الخاص بك لكي تتمكن من استخدام
 												بوابات الدفع
 											</span>
 										</div>

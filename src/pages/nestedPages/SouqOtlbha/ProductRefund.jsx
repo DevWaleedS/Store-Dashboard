@@ -423,7 +423,7 @@ const ProductRefund = () => {
 											onClick={() => {
 												importProduct();
 											}}>
-											اضافه المنتج إلى سلة الاستيراد
+											اضافة المنتج إلى سلة الاستيراد
 										</button>
 									</div>
 								</div>

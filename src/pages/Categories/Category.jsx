@@ -210,7 +210,7 @@ const Category = () => {
 											navigate("AddCategory");
 										}}>
 										<MdAdd />
-										<span className='me-2'> اضافه نشاط</span>
+										<span className='me-2'> اضافة نشاط</span>
 									</button>
 								</div>
 							</div>

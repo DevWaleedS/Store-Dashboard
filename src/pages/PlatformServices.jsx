@@ -274,7 +274,7 @@ const PlatformServices = () => {
 								</div>
 								<div className='col-md-7 col-12'>
 									<div className='new-service-hint'>
-										يمكنك إضافه خدمة جديدة في حال لم تكن موجودة في قائمة الخدمات
+										يمكنك اضافة خدمة جديدة في حال لم تكن موجودة في قائمة الخدمات
 										بالأعلى
 									</div>
 									<input

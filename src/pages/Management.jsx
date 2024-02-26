@@ -85,7 +85,7 @@ const Management = () => {
 										navigate("AddUser");
 									}}>
 									<MdAdd />
-									<span className='me-2'>إضافة مستخدم</span>
+									<span className='me-2'>اضافة مستخدم</span>
 								</Button>
 							</div>
 							<div className='add-page-btn d-flex-justify-content-center me-3'>

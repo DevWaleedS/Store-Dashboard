@@ -56,9 +56,9 @@ const selectStyle = {
 	fontSize: "16px",
 	width: "100%",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "0px",
-		},
+	{
+		paddingRight: "0px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -271,7 +271,7 @@ const EditBankAccountModal = () => {
 							</span>
 						) : (
 							<span className='tax-text pe-2'>
-								برجاء ارفاق صوره واضحه للهويه الوطنية
+								ارفق صورة من الهوية الوطنية
 							</span>
 						)}
 					</div>
@@ -290,6 +290,9 @@ const EditBankAccountModal = () => {
 	// handle BankAccountLetterUploader
 	const BankAccountLetterUploader = () => {
 		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+			accept: {
+				'application/pdf': ['.pdf'],
+			},
 			onDrop: (files) =>
 				handleFileUpload(
 					files,
@@ -316,7 +319,7 @@ const EditBankAccountModal = () => {
 							</span>
 						) : (
 							<span className='tax-text pe-2'>
-								برجاء ارفاق صوره واضحه من شهاده الآيبان
+								ارفق شهادة الايبان بالحساب البنكي pdf
 							</span>
 						)}
 					</div>
@@ -362,7 +365,7 @@ const EditBankAccountModal = () => {
 							</span>
 						) : (
 							<span className='tax-text pe-2'>
-								برجاء ارفاق صوره واضحه للمتجر الخاص بك
+								صورة واضحة من الصفحة الرئيسية للمتجر
 							</span>
 						)}
 					</div>
@@ -472,7 +475,7 @@ const EditBankAccountModal = () => {
 								<div className='col-12 '>
 									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
 										<IoMdInformationCircleOutline />
-										<span>بامكانك تعديل بيانات الحساب البنكي الخاص بك</span>
+										<span>يجب كتابة البيانات الصحيحة ليتم رفعها للجهات المختصة</span>
 									</div>
 								</div>
 							</div>
@@ -575,11 +578,11 @@ const EditBankAccountModal = () => {
 
 										{(bankAccountErr?.bankAccountHolderName ||
 											errors?.bankAccountHolderName) && (
-											<div className='fs-6 text-danger'>
-												{bankAccountErr?.bankAccountHolderName}
-												{errors?.bankAccountHolderName.message}
-											</div>
-										)}
+												<div className='fs-6 text-danger'>
+													{bankAccountErr?.bankAccountHolderName}
+													{errors?.bankAccountHolderName.message}
+												</div>
+											)}
 									</div>
 								</div>
 
@@ -628,10 +631,11 @@ const EditBankAccountModal = () => {
 												name='iban'
 												id='iban'
 												maxLength={22}
-												placeholder='ادخل رقم الآيبان الخاص بالحساب البنكي '
+												placeholder='12345678923456789'
 												{...register("iban", {
 													required: "حقل رقم آيبان الحساب مطلوب",
 												})}
+												style={{ direction: "ltr" }}
 											/>
 											<span className='sa-iban-hint d-flex justify-content-center align-content-center flex-wrap'>
 												SA
@@ -694,7 +698,7 @@ const EditBankAccountModal = () => {
 								<div className='row  mb-5'>
 									<div className='col-12'>
 										<label>
-											شهاده الآيبان
+											شهادة الآيبان
 											<span className='important-hint'>*</span>{" "}
 										</label>
 									</div>
@@ -728,11 +732,11 @@ const EditBankAccountModal = () => {
 
 										{(bankAccountErr?.bankAccountLetter ||
 											errors?.bankAccountLetter) && (
-											<div className='fs-6 text-danger'>
-												{bankAccountErr?.bankAccountLetter}
-												{errors?.bankAccountLetter.message}
-											</div>
-										)}
+												<div className='fs-6 text-danger'>
+													{bankAccountErr?.bankAccountLetter}
+													{errors?.bankAccountLetter.message}
+												</div>
+											)}
 									</div>
 								</div>
 
@@ -740,7 +744,7 @@ const EditBankAccountModal = () => {
 								<div className='row  mb-5'>
 									<div className='col-12'>
 										<label>
-											صوره من المتجر الخاص بك
+											صورة من المتجر الخاص بك
 											<span className='important-hint'>*</span>{" "}
 										</label>
 									</div>
@@ -772,11 +776,11 @@ const EditBankAccountModal = () => {
 
 										{(bankAccountErr?.website_image ||
 											errors?.website_image) && (
-											<div className='fs-6 text-danger'>
-												{bankAccountErr?.website_image}
-												{errors?.website_image.message}
-											</div>
-										)}
+												<div className='fs-6 text-danger'>
+													{bankAccountErr?.website_image}
+													{errors?.website_image.message}
+												</div>
+											)}
 									</div>
 								</div>
 

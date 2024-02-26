@@ -198,7 +198,7 @@ function RegisterDelegate() {
 										borderRadius: "8px",
 									}}>
 									<MdErrorOutline className='ms-1' />
-									برجاء كتابة الاسم بالكامل كما هو موجود في الهوية
+									يرجى كتابة الاسم بالكامل كما هو موجود في الهوية
 									<br />
 								</p>
 								{nameError && (

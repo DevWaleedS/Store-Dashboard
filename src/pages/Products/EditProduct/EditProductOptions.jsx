@@ -464,7 +464,7 @@ const AddProductOptionsModal = () => {
 			}
 		} else {
 			dispatch(closeProductOptionModal());
-			toast.warning("  لم يتم اضافه اي خيارات ليتم حفظها", {
+			toast.warning("  لم يتم اضافة اي خيارات ليتم حفظها", {
 				theme: "light",
 			});
 		}
@@ -699,7 +699,7 @@ const AddProductOptionsModal = () => {
 						onClick={() => handleAddNewValue(sectionIndex)}
 						className='w-100 add-new-value-btn d-flex justify-content-center align-items-center cursor-pointer'>
 						<FiPlus className='add-icon' />
-						إضافة قيمة جديدة
+						اضافة قيمة جديدة
 					</button>
 				</div>
 			</section>
@@ -953,7 +953,7 @@ const AddProductOptionsModal = () => {
 											onClick={handleAddNewBlock}
 											className='w-100 add-new-option-section-btn d-flex justify-content-center align-items-center cursor-pointer'>
 											<FiPlus className='add-icon' />
-											إضافة خيار جديد
+											اضافة خيار جديد
 										</button>
 									</div>
 								</div>

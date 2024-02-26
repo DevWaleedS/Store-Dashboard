@@ -218,7 +218,7 @@ const EditProduct = () => {
 								id: value?.id,
 								title: value?.value?.[0],
 								defaultOption: value?.value?.[1] === "1" ? true : false,
-								color: attribute?.type === "نص و لون" ? value?.value?.[2] : "",
+								color: attribute?.type === "نص و لون" ? value?.value?.[2] : "#000000",
 								image: attribute?.type === "نص و صورة" ? value?.value?.[2] : "",
 								previewImage:
 									attribute?.type === "نص و صورة" ? value?.value?.[2] : "",
@@ -1137,7 +1137,7 @@ const EditProduct = () => {
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+														title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1261,7 +1261,7 @@ const EditProduct = () => {
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+														title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1389,7 +1389,7 @@ const EditProduct = () => {
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمإلى  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
+														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمإلى  الكمية الخاصة بخيارات  المنتج  في حال تم اضافة خيارات للمنتج'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
