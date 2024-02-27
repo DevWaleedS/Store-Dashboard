@@ -63,9 +63,10 @@ const Products = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
+	const [tabSelected, setTabSelected] = useState(1);
+	const [productsData, setProductsData] = useState([]);
 	const [fileError, setFileError] = useState("");
 	const [category_id, setCategory_id] = useState("");
-	const [productsData, setProductsData] = useState([]);
 	const [productsFilterSearch, setProductsFilterSearch] = useState([]);
 	const [productsResult, setProductsResult] = useState([]);
 
@@ -73,16 +74,28 @@ const Products = () => {
 		setFile(file[0]);
 	};
 
-	useEffect(() => {
-		setProductsData(fetchedData?.data?.products);
-	}, [fetchedData?.data?.products]);
-
 	const getSearchInput = (value) => {
 		setSearch(value);
 	};
 	const getCategorySelected = (value) => {
 		setCategory_id(value);
 	};
+
+	useEffect(() => {
+		if (tabSelected === 1) {
+			setProductsData(
+				fetchedData?.data?.products?.filter(
+					(product) => product?.is_import === false && product?.type !== null
+				)
+			);
+		} else {
+			setProductsData(
+				fetchedData?.data?.products?.filter(
+					(product) => product?.is_import === true && product?.type === "importProduct"
+				)
+			);
+		}
+	}, [fetchedData?.data?.products, tabSelected]);
 
 	// Search
 	useEffect(() => {
@@ -214,12 +227,25 @@ const Products = () => {
 						</div>
 					</div>
 				</div>
+				<div className='filters-btn'>
+					<button
+						className={`btn ${tabSelected === 1 ? "active" : ""}`}
+						onClick={() => setTabSelected(1)}>
+						منتجات التاجر
+					</button>
+					<button
+						className={`btn ${tabSelected !== 1 ? "active" : ""}`}
+						onClick={() => setTabSelected(2)}>
+						منتجات سوق اطلبها
+					</button>
+				</div>
 				<div className='category-table'>
 					<BigProductsTable
 						data={productsResult}
 						loading={loading}
 						reload={reload}
 						setReload={setReload}
+						tabSelectedId={tabSelected}
 					/>
 				</div>
 

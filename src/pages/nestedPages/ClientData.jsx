@@ -203,6 +203,7 @@ const ClientData = () => {
 	useEffect(() => {
 		calculateDiscountValue();
 	}, [
+		free_shipping,
 		cartDetails,
 		discount_type,
 		discountFixedValue,
@@ -213,19 +214,23 @@ const ClientData = () => {
 	const calculateDiscountValue = () => {
 		let calculatedValue = "---";
 
-		if (openPercentMenu) {
-			if (discount_type === "fixed") {
-				calculatedValue = discountFixedValue <= 0 ? "---" : discountFixedValue;
-			} else if (discount_type === "percent") {
-				const totalAfterDiscount = (
-					cartDetails?.total - discountPercentValue
-				)?.toFixed(2);
-				calculatedValue = totalAfterDiscount <= 0 ? "---" : totalAfterDiscount;
+		if (free_shipping) {
+			calculatedValue = (cartDetails?.total - cartDetails?.shipping_price);
+		} else {
+			if (openPercentMenu) {
+				if (discount_type === "fixed") {
+					calculatedValue = discountFixedValue <= 0 ? "---" : discountFixedValue;
+				} else if (discount_type === "percent") {
+					const totalAfterDiscount = (
+						cartDetails?.total - discountPercentValue
+					)?.toFixed(2);
+					calculatedValue = totalAfterDiscount <= 0 ? "---" : totalAfterDiscount;
+				} else {
+					calculatedValue = cartDetails?.total <= 0 ? "---" : cartDetails?.total;
+				}
 			} else {
 				calculatedValue = cartDetails?.total <= 0 ? "---" : cartDetails?.total;
 			}
-		} else {
-			calculatedValue = cartDetails?.total <= 0 ? "---" : cartDetails?.total;
 		}
 
 		setDiscountValue(calculatedValue);
@@ -592,7 +597,7 @@ const ClientData = () => {
 
 														{fetchedData?.data?.cart?.overweight !== 0 &&
 															fetchedData?.data?.cart?.overweight_price !==
-																0 && (
+															0 && (
 																<TableRow>
 																	<TableCell
 																		colSpan={3}
@@ -822,7 +827,7 @@ const ClientData = () => {
 																		)}
 																	{discount_type === "percent" &&
 																		cartDetails?.total - discountPercentValue <
-																			0 && (
+																		0 && (
 																			<div>
 																				<span className='fs-6 text-danger'>
 																					قيمة النسبة اكبر من إجمالي السلة
@@ -831,8 +836,8 @@ const ClientData = () => {
 																		)}
 																	{discount_type === "percent" &&
 																		cartDetails?.total -
-																			discountPercentValue ===
-																			0 && (
+																		discountPercentValue ===
+																		0 && (
 																			<div>
 																				<span className='fs-6 text-danger'>
 																					قيمة النسبة متساوية من إجمالي السلة
