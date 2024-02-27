@@ -88,7 +88,7 @@ const Explain = ({ searchExplain }) => {
 									<div className='course-prev-image'>
 										<img
 											src={lesson?.thumbnail}
-											className='img-fluid rounded'
+											className='img-fluid'
 											alt={lesson?.title}
 										/>
 										<div className='play-video-icon'>
