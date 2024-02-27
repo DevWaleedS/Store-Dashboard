@@ -140,9 +140,9 @@ const Category = () => {
 												fontSize: "18px",
 												backgroundColor: "#ededed",
 												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-													{
-														paddingRight: "20px",
-													},
+												{
+													paddingRight: "20px",
+												},
 												"& .MuiOutlinedInput-root": {
 													"& :hover": {
 														border: "none",

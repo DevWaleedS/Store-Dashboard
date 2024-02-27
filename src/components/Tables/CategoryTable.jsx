@@ -256,6 +256,12 @@ export default function EnhancedTable({
 		setSelected([]);
 	};
 
+	useEffect(() => {
+		if (tabSelectedId) {
+			setPage(0);
+		}
+	}, [tabSelectedId]);
+
 	// Delete single item
 	useEffect(() => {
 		if (deleteReload === true) {
@@ -515,6 +521,25 @@ export default function EnhancedTable({
 																<div className='sub-categories'>
 																	{row?.subcategory?.length <= 2
 																		? row?.subcategory?.map((tag) => {
+																			return (
+																				<div
+																					key={tag?.id}
+																					style={{
+																						background:
+																							row?.store === null
+																								? "#FFFF"
+																								: "#dcdcdc",
+																						minWidth: "40%",
+																					}}>
+																					<span className='w-100 text-center text-overflow'>
+																						{tag?.name}
+																					</span>
+																				</div>
+																			);
+																		})
+																		: row?.subcategory
+																			.slice(0, 2)
+																			.map((tag) => {
 																				return (
 																					<div
 																						key={tag?.id}
@@ -523,32 +548,13 @@ export default function EnhancedTable({
 																								row?.store === null
 																									? "#FFFF"
 																									: "#dcdcdc",
-																							minWidth: "40%",
 																						}}>
 																						<span className='w-100 text-center text-overflow'>
 																							{tag?.name}
 																						</span>
 																					</div>
 																				);
-																		  })
-																		: row?.subcategory
-																				.slice(0, 2)
-																				.map((tag) => {
-																					return (
-																						<div
-																							key={tag?.id}
-																							style={{
-																								background:
-																									row?.store === null
-																										? "#FFFF"
-																										: "#dcdcdc",
-																							}}>
-																							<span className='w-100 text-center text-overflow'>
-																								{tag?.name}
-																							</span>
-																						</div>
-																					);
-																				})}
+																			})}
 
 																	{row?.subcategory?.length > 2 && (
 																		<div

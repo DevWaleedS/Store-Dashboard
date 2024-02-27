@@ -454,7 +454,7 @@ const MainInformation = () => {
 												value={domain}
 												onChange={(e) => {
 													setDomain(
-														e.target.value.replace(/[^A-Za-z0-9_]/g, "")
+														e.target.value.replace(/[^A-Za-z0-9_]/g, "").toLowerCase()
 													);
 													setDomainNameFocus(true);
 												}}
