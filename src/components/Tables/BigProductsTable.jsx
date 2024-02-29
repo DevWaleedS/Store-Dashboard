@@ -812,11 +812,9 @@ export default function BigProductsTable({
 													return (
 														<TableRow
 															sx={{
-																backgroundColor:
-																	row?.type === "importProduct" ||
-																	row?.is_import
-																		? "#dfe2aa"
-																		: "",
+																backgroundColor: row?.is_import
+																	? "#dfe2aa"
+																	: "",
 															}}
 															role='checkbox'
 															aria-checked={isItemSelected}
@@ -1005,7 +1003,6 @@ export default function BigProductsTable({
 																<div className='actions d-flex justify-content-evenly'>
 																	<Link
 																		to={
-																			row?.type === "importProduct" ||
 																			row?.is_import
 																				? `ShowImportEtlobhaProduct/${row?.id}`
 																				: `EditProduct/${row?.id}`

@@ -85,14 +85,13 @@ const Products = () => {
 		if (tabSelected === 1) {
 			setProductsData(
 				fetchedData?.data?.products?.filter(
-					(product) => product?.is_import === false && product?.type !== null
+					(product) => product?.is_import === false
 				)
 			);
 		} else {
 			setProductsData(
 				fetchedData?.data?.products?.filter(
-					(product) =>
-						product?.is_import === true && product?.type === "importProduct"
+					(product) => product?.is_import === true
 				)
 			);
 		}
