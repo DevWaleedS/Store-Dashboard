@@ -91,7 +91,8 @@ const Products = () => {
 		} else {
 			setProductsData(
 				fetchedData?.data?.products?.filter(
-					(product) => product?.is_import === true && product?.type === "importProduct"
+					(product) =>
+						product?.is_import === true && product?.type === "importProduct"
 				)
 			);
 		}

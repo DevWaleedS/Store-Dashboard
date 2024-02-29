@@ -8,10 +8,11 @@ import AcademyWidget from "../AcademyWidget";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Icons
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+
 import {
 	MdOutlineArrowBackIosNew,
 	MdOutlineArrowForwardIos,
+	MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
 import { Menu, MenuItem } from "@mui/material";
 

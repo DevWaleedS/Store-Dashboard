@@ -2884,13 +2884,13 @@ nav.navigation {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	gap: 1rem;
+	gap: 1.8rem;
 	flex-wrap: wrap;
 }
 
 .explain-boxes .box {
-	width: 260px;
-	height: 260px;
+	width: 340px;
+	height: auto;
 }
 
 .explain-boxes .box .course-figure {
@@ -2902,11 +2902,11 @@ nav.navigation {
 	max-height: 100%;
 	display: flex;
 	flex-direction: column;
-	border-radius: 8px;
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
-	-ms-border-radius: 8px;
-	-o-border-radius: 8px;
+	border-radius: 8px 8px 0 0;
+	-webkit-border-radius: 8px 8px 0 0;
+	-moz-border-radius: 8px 8px 0 0;
+	-ms-border-radius: 8px 8px 0 0;
+	-o-border-radius: 8px 8px 0 0;
 	box-shadow: 0px 3px 6px #0000000f;
 	overflow: hidden;
 }
@@ -10057,6 +10057,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.banners-box .hint {
 		padding-right: 28px;
 	}
+
+	.explain-boxes .box {
+		width: 270px;
+		height: auto;
+	}
 }
 
 @media (max-width: 1200px) {
@@ -10218,6 +10223,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	.banners-box .hint {
 		padding-right: 23px;
+	}
+
+	.explain-boxes .box {
+		width: 275px;
+		height: auto;
 	}
 }
 
@@ -13519,9 +13529,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		font-size: 13px;
 	}
 
+	.explain-boxes {
+		gap: 1.4rem;
+	}
+
 	.explain-boxes .box {
 		width: 100%;
-		height: 300px;
+		height: 320px;
 	}
 
 	.seo-weight-edit-box .title h4 {
@@ -13736,7 +13750,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.explain-boxes .box {
-		width: 350px;
+		width: 290px;
 		height: 350px;
 	}
 }

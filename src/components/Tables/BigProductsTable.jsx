@@ -106,6 +106,7 @@ function EnhancedTableToolbar(props) {
 		rowCount,
 		onSelectAllClick,
 		handleOpenChangeCategoriesModal,
+		tabSelectedId,
 	} = props;
 	const NotificationStore = useContext(NotificationContext);
 	const { setNotificationTitle, setActionTitle } = NotificationStore;
@@ -137,7 +138,6 @@ function EnhancedTableToolbar(props) {
 								حذف الكل
 							</IconButton>
 						</Tooltip>
-
 						<Tooltip
 							className='switch-all '
 							onClick={() => {
@@ -187,14 +187,15 @@ function EnhancedTableToolbar(props) {
 								تعطيل الكل
 							</IconButton>
 						</Tooltip>
-
-						<Tooltip>
-							<button
-								className='edit-all-categories-btn'
-								onClick={handleOpenChangeCategoriesModal}>
-								تعديل الأنشطة
-							</button>
-						</Tooltip>
+						{tabSelectedId === 1 && (
+							<Tooltip>
+								<button
+									className='edit-all-categories-btn'
+									onClick={handleOpenChangeCategoriesModal}>
+									تعديل الأنشطة
+								</button>
+							</Tooltip>
+						)}
 					</div>
 				)}
 			</div>
@@ -234,7 +235,13 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function BigProductsTable({ data, loading, reload, setReload, tabSelectedId }) {
+export default function BigProductsTable({
+	data,
+	loading,
+	reload,
+	setReload,
+	tabSelectedId,
+}) {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -498,9 +505,9 @@ export default function BigProductsTable({ data, loading, reload, setReload, tab
 		height: "56px",
 		color: "#6790a6",
 		"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+			{
+				paddingRight: "20px",
+			},
 		"&:hover": {
 			"& .MuiOutlinedInput-notchedOutline": {
 				borderColor: " #6790a6",
@@ -689,7 +696,7 @@ export default function BigProductsTable({ data, loading, reload, setReload, tab
 								<div className=' col-12'>
 									<FormControl sx={formControlStyle}>
 										{category_id !== "" &&
-											subcategory[0]?.subcategory?.length === 0 ? (
+										subcategory[0]?.subcategory?.length === 0 ? (
 											<div
 												className='d-flex justify-content-center align-items-center'
 												style={{ color: "#1dbbbe" }}>
@@ -763,6 +770,7 @@ export default function BigProductsTable({ data, loading, reload, setReload, tab
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					numSelected={selected.length}
+					tabSelectedId={tabSelectedId}
 					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
 					handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
@@ -806,7 +814,7 @@ export default function BigProductsTable({ data, loading, reload, setReload, tab
 															sx={{
 																backgroundColor:
 																	row?.type === "importProduct" ||
-																		row?.is_import
+																	row?.is_import
 																		? "#dfe2aa"
 																		: "",
 															}}
@@ -872,7 +880,7 @@ export default function BigProductsTable({ data, loading, reload, setReload, tab
 															</TableCell>
 															<TableCell align='center'>
 																{row?.discount_price &&
-																	row?.discount_price !== "0" ? (
+																row?.discount_price !== "0" ? (
 																	<>
 																		<span className='me-1 d-block'>
 																			{row?.discount_price} ر.س
@@ -998,7 +1006,7 @@ export default function BigProductsTable({ data, loading, reload, setReload, tab
 																	<Link
 																		to={
 																			row?.type === "importProduct" ||
-																				row?.is_import
+																			row?.is_import
 																				? `ShowImportEtlobhaProduct/${row?.id}`
 																				: `EditProduct/${row?.id}`
 																		}
