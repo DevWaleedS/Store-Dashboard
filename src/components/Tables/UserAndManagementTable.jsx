@@ -94,7 +94,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع المستخدمين وهذهالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع المستخدمين وهذه الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>

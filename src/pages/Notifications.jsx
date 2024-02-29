@@ -269,7 +269,7 @@ const Notifications = () => {
 															}}
 															onClick={() => {
 																setNotificationTitle(
-																	"سيتم حذف جميع الاشعارات وهذهالخطوة غير قابلة للرجوع"
+																	"سيتم حذف جميع الاشعارات وهذه الخطوة غير قابلة للرجوع"
 																);
 																setActionTitle("Delete");
 															}}>

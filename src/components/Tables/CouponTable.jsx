@@ -94,7 +94,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع أكواد الخصم وهذهالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع أكواد الخصم وهذه الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>

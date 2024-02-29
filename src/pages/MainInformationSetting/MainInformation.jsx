@@ -69,7 +69,7 @@ const MainInformation = () => {
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
 	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+	const { setEndActionTitle, setStoreLogo } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -120,7 +120,7 @@ const MainInformation = () => {
 	// ---------------------------------------------------------------
 	const [defaultStoreLogo, setDefaultStoreLogo] = useState("");
 	const [defaultStoreIcon, setDefaultStoreIcon] = useState("");
-	const [storeLogo, setStoreLogo] = useState([]);
+	const [storeLogoUpdate, setStoreLogoUpdate] = useState([]);
 	const [storeIcon, setStoreIcon] = useState([]);
 	const [storeName, setStoreName] = useState("");
 	const [domain, setDomain] = useState("");
@@ -177,10 +177,10 @@ const MainInformation = () => {
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-							"00966"
-					  )
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-					: fetchedData?.data?.setting_store?.user?.phonenumber
+						"00966"
+					)
+						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+						: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
@@ -206,12 +206,13 @@ const MainInformation = () => {
 	// -------------------------------------------------------------------
 	// to update UpdateMaintenanceMode values
 	const settingsStoreUpdate = () => {
+		localStorage.removeItem("storeLogo");
 		resetSettingError();
 		setLoadingTitle("جاري تعديل بيانات المتجر الأساسية");
 
 		let formData = new FormData();
 
-		if (storeLogo?.length !== 0) formData.append("logo", storeLogo[0]?.file);
+		if (storeLogoUpdate?.length !== 0) formData.append("logo", storeLogoUpdate[0]?.file);
 		if (storeIcon?.length !== 0) formData.append("icon", storeIcon[0]?.file);
 
 		formData.append("store_name", storeName);
@@ -262,6 +263,7 @@ const MainInformation = () => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
 					setReload(!reload);
+					setStoreLogo(res?.data?.data?.setting_store?.logo);
 					if (
 						res?.data?.data?.setting_store?.verification_status ===
 						"لم يتم الطلب"
@@ -269,11 +271,9 @@ const MainInformation = () => {
 						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
 					} else {
 						setEndActionTitle(res?.data?.message?.ar);
-						window.location.reload();
 					}
 				} else {
 					setLoadingTitle("");
-
 					setSettingErr({
 						logo: res?.data?.message?.en?.logo,
 						icon: res?.data?.message?.en?.icon,
@@ -379,8 +379,8 @@ const MainInformation = () => {
 							<div className='col-12 mb-4'>
 								{/** Upload logo */}
 								<UploadStoreLogo
-									storeLogo={storeLogo}
-									setStoreLogo={setStoreLogo}
+									storeLogoUpdate={storeLogoUpdate}
+									setStoreLogoUpdate={setStoreLogoUpdate}
 									defaultStoreLogo={defaultStoreLogo}
 									logoErrors={settingErr?.logo && settingErr?.logo}
 								/>

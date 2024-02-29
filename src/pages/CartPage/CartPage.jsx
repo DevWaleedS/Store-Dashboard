@@ -12,6 +12,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 // Icons
 import { HomeIcon, Cross10 } from "../../data/Icons";
+import OptionsModal from "./OptionsModal";
 
 function CartPage() {
 	const store_token = document.cookie
@@ -28,6 +29,8 @@ function CartPage() {
 
 	const [productInfo, setProductInfo] = useState([]);
 	const [newproductInfo, setNewProductInfo] = useState([]);
+	const [openModal, setOpenModal] = useState(false);
+	const [modalData, setModalData] = useState(null);
 
 	useEffect(() => {
 		if (fetchedData?.data?.cart?.cartDetail) {
@@ -97,6 +100,20 @@ function CartPage() {
 			});
 	};
 
+	const findMatchingSubArray = (nestedArray, array) => {
+		for (let i = 0; i < nestedArray?.length; i++) {
+			const subArray = nestedArray[i];
+			const subArrayValue = subArray?.name?.ar;
+			if (array?.every(value => subArrayValue?.includes(value))) {
+				return {
+					id: subArray?.id,
+				};
+			}
+		}
+
+		return null;
+	};
+
 	// Handle Update Cart
 	const updateCart = () => {
 		setLoadingTitle("جاري تحديث السلة");
@@ -108,6 +125,11 @@ function CartPage() {
 				Number(newproductInfo?.[i]?.price)
 			);
 			formData.append([`data[${i}][qty]`], newproductInfo?.[i]?.qty);
+			const optionNames = newproductInfo?.[i]?.product?.options?.map((option) => option);
+			const matchingSubArray = findMatchingSubArray(optionNames, newproductInfo?.[i]?.options);
+			if (Number(matchingSubArray?.id) !== null) {
+				formData.append([`data[${i}][option_id]`], Number(matchingSubArray?.id));
+			}
 		}
 		axios
 			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
@@ -138,6 +160,16 @@ function CartPage() {
 			(product) => Number(product?.qty) === Number(item?.qty)
 		)
 	);
+
+	const openOptionSModal = (item) => {
+		setOpenModal(true);
+		setModalData(item);
+	}
+
+	const colseOptionModal = () => {
+		setOpenModal(false);
+		setModalData(null);
+	}
 
 	return (
 		<>
@@ -204,6 +236,11 @@ function CartPage() {
 															<a href={`${product?.product?.id}`}>
 																{product?.product?.name}
 															</a>
+															<ul className="options">
+																{product?.options?.map((option, index) => (
+																	<li key={index} onClick={() => openOptionSModal(product)}>{`${index === 0 ? `${option}` : `/ ${option}`}`}</li>
+																))}
+															</ul>
 														</td>
 														<td>{Number(product?.price)} ر.س</td>
 														<td>
@@ -212,15 +249,14 @@ function CartPage() {
 																	onClick={() => {
 																		if (
 																			Number(product?.qty) + 1 >
-																			Number(product?.product?.stock)
+																			Number(product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${
-																					+product?.product?.stock === 1
-																						? "قطعة واحدة "
-																						: +product?.product?.stock === 2
+																				`الكمية المتوفرة ${+product?.stock === 1
+																					? "قطعة واحدة "
+																					: +product?.stock === 2
 																						? " قطعتين "
-																						: ` ${+product?.product?.stock} قطع`
+																						: ` ${+product?.stock} قطع`
 																				} فقط `
 																			);
 																		} else {
@@ -237,23 +273,22 @@ function CartPage() {
 																	onChange={(e) => {
 																		if (
 																			e.target.value >
-																			Number(product?.product?.stock)
+																			Number(product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${
-																					+product?.product?.stock === 1
-																						? "قطعة واحدة "
-																						: +product?.product?.stock === 2
+																				`الكمية المتوفرة ${+product?.stock === 1
+																					? "قطعة واحدة "
+																					: +product?.stock === 2
 																						? " قطعتين "
-																						: ` ${+product?.product?.stock} قطع`
+																						: ` ${+product?.stock} قطع`
 																				} فقط `
 																			);
 																		} else if (
 																			Number(e.target.value) <
-																			Number(product?.product?.less_qty)
+																			Number(product?.less_qty)
 																		) {
 																			toast.error(
-																				`أقل كمية للطلب هي ${+product?.product
+																				`أقل كمية للطلب هي ${+product
 																					?.less_qty}`
 																			);
 																		} else {
@@ -265,10 +300,10 @@ function CartPage() {
 																	onClick={(e) => {
 																		if (
 																			Number(product?.qty) - 1 <
-																			Number(product?.product?.less_qty)
+																			Number(product?.less_qty)
 																		) {
 																			toast.error(
-																				`أقل كمية للطلب هي ${+product?.product
+																				`أقل كمية للطلب هي ${+product
 																					?.less_qty}`
 																			);
 																		} else {
@@ -337,7 +372,7 @@ function CartPage() {
 																	<th>
 																		الخصم
 																		{fetchedData?.data?.cart?.discount_type ===
-																		"percent" ? (
+																			"percent" ? (
 																			<span
 																				style={{
 																					fontSize: "0.85rem",
@@ -391,6 +426,13 @@ function CartPage() {
 					</div>
 				</div>
 			</section>
+			<OptionsModal
+				modalData={modalData}
+				openModal={openModal}
+				colseOptionModal={colseOptionModal}
+				reload={reload}
+				setReload={setReload}
+			/>
 		</>
 	);
 }

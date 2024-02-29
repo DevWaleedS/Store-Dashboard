@@ -401,8 +401,6 @@ const AddProductOptionsModal = () => {
 	};
 	/** ---------------------------------------------- */
 
-	console.log(attributes);
-
 	/** handle save Options  */
 	const saveOptions = () => {
 		if (productHasOptions === true) {

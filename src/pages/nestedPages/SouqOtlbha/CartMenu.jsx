@@ -54,6 +54,11 @@ function CartMenu({ data, reload, setReload }) {
 										<a href={`${product?.product?.id}`}>
 											{product?.product?.name}
 										</a>
+										<ul className="product-options">
+											{product?.options?.map((option, index) => (
+												<li key={index}>{`${index === 0 ? `${option}` : `/ ${option}`}`}</li>
+											))}
+										</ul>
 									</div>
 									<div className='mate'>
 										<span>{product?.qty}</span>

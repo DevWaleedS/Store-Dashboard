@@ -7,8 +7,8 @@ import { MdFileUpload } from "react-icons/md";
 import { UploadIcon } from "../../../data/Icons";
 
 const UploadStoreLogo = ({
-	storeLogo,
-	setStoreLogo,
+	storeLogoUpdate,
+	setStoreLogoUpdate,
 	defaultStoreLogo,
 	logoErrors,
 }) => {
@@ -67,7 +67,7 @@ const UploadStoreLogo = ({
 							style={errMsgStyle}
 							dangerouslySetInnerHTML={{ __html: errorMes }}
 						/>,
-						() => setStoreLogo([])
+						() => setStoreLogoUpdate([])
 					);
 				}
 			};
@@ -84,14 +84,14 @@ const UploadStoreLogo = ({
 				"logo",
 				"حجم الشعار يجب أن لا يزيد عن 1 ميجابايت.",
 
-				() => setStoreLogo([])
+				() => setStoreLogoUpdate([])
 			);
 
 			return;
 		}
 
 		// If all checks are valid, update the state
-		setStoreLogo(imageList);
+		setStoreLogoUpdate(imageList);
 	};
 
 	return (
@@ -100,7 +100,7 @@ const UploadStoreLogo = ({
 				<div className='upload-logo-set d-flex justify-content-center align-items-center flex-column'>
 					{/** Upload Image  */}
 					<ImageUploading
-						value={storeLogo}
+						value={storeLogoUpdate}
 						onChange={onChangeStoreLogo}
 						dataURLKey='data_url'
 						acceptType={["jpg", "png", "jpeg"]}>
@@ -109,10 +109,10 @@ const UploadStoreLogo = ({
 							<Fragment>
 								{/** Preview Image Box */}
 								<div className='upload-image-wrapper'>
-									{storeLogo[0] ? (
+									{storeLogoUpdate[0] ? (
 										<div className='upload-image-bx mb-2'>
 											<img
-												src={storeLogo?.[0]?.data_url}
+												src={storeLogoUpdate?.[0]?.data_url}
 												alt={""}
 												className='img-fluid'
 											/>
