@@ -22,6 +22,7 @@ import Modal from "@mui/material/Modal";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { CurrencyIcon } from "../../../data/Icons";
 import { PlayVideo } from "../../../data/images";
+import ProductOptions from "./ProductOptions";
 
 // Select Styles
 const modalStyle = {
@@ -63,6 +64,20 @@ const ProductRefund = () => {
 	const [open, setOpen] = useState(true);
 	const [imagesPreview, setImagesPreview] = useState([]);
 	const [isActive, setIsActive] = useState(null);
+	const [optionID, setOptionID] = useState(null);
+	const [productPrice, setProductPrice] = useState(fetchedData?.data?.products?.purchasing_price);
+	const [productQty, setProductQty] = useState(fetchedData?.data?.products?.stock);
+	const [productLessQty, setProductLessQty] = useState(fetchedData?.data?.products?.less_qty);
+	const [selectedValues, setSelectedValues] = useState([]);
+
+	const handleChangeOptions = (e, index) => {
+		const { value } = e.target;
+		setSelectedValues((prevSelectedValues) => {
+			const updatedValues = [...prevSelectedValues];
+			updatedValues[index] = value;
+			return updatedValues;
+		});
+	};
 
 	// Handle product info
 	const [productInfo, setProductInfo] = useState({
@@ -86,6 +101,56 @@ const ProductRefund = () => {
 		});
 	};
 
+	useEffect(() => {
+		if (selectedValues?.length === 0) {
+			setSelectedValues(getOptions(fetchedData?.data?.products));
+		}
+	}, [fetchedData?.data?.products, selectedValues?.length]);
+
+	const findMatchingSubArray = (nestedArray, array) => {
+		for (let i = 0; i < nestedArray?.length; i++) {
+			const subArray = nestedArray[i];
+			const subArrayValue = subArray?.name?.ar;
+			if (array?.every(value => subArrayValue?.includes(value))) {
+				return {
+					id: subArray?.id,
+					price: subArray?.price,
+					less_qty: subArray?.less_qty,
+					quantity: subArray?.quantity,
+				};
+			}
+		}
+
+		return null;
+	};
+
+	useEffect(() => {
+		if (selectedValues?.filter(value => value !== "")?.length > 0 && fetchedData?.data?.products?.amount === 1) {
+			const optionNames = fetchedData?.data?.products?.options?.map((option) => option);
+			const matchingSubArray = findMatchingSubArray(optionNames, selectedValues?.filter(value => value !== ""));
+			setOptionID(Number(matchingSubArray?.id));
+			setProductPrice(Number(matchingSubArray?.price));
+			setProductQty(Number(matchingSubArray?.quantity));
+			setProductLessQty(Number(matchingSubArray?.less_qty));
+		} else {
+			setOptionID(null);
+			setProductPrice(fetchedData?.data?.products?.purchasing_price);
+			setProductQty(fetchedData?.data?.products?.stock);
+			setProductLessQty(fetchedData?.data?.products?.less_qty);
+		}
+	}, [selectedValues, fetchedData?.data?.products]);
+
+	const getOptions = (product) => {
+		const attributesName = product?.attributes?.map((attributes) => attributes?.values?.filter(item => item?.value?.[1] === "1"));
+		if (attributesName?.length > 0) {
+			return attributesName?.map(attribute => attribute?.[0]?.value?.[0]);
+		}
+		else {
+			return [];
+		}
+
+	}
+
 	// To Get All Info About Product
 	useEffect(() => {
 		if (fetchedData?.data?.products) {
@@ -106,8 +171,11 @@ const ProductRefund = () => {
 
 		let formData = new FormData();
 		formData.append("data[0][id]", productInfo?.id);
-		formData.append("data[0][price]", productInfo?.price);
+		formData.append("data[0][price]", productPrice);
 		formData.append("data[0][qty]", productInfo?.qty);
+		if(optionID !== null){
+			formData.append("data[0][option_id]", optionID);
+		}
 
 		axios
 			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
@@ -234,9 +302,8 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`video_wrapper ${
-																			isActive === index ? "active" : ""
-																		}`}>
+																		className={`video_wrapper ${isActive === index ? "active" : ""
+																			}`}>
 																		<video
 																			onClick={() => {
 																				setImagesPreview(item?.image);
@@ -255,9 +322,8 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`${
-																			isActive === index ? "active" : ""
-																		}`}>
+																		className={`${isActive === index ? "active" : ""
+																			}`}>
 																		<img
 																			style={{
 																				cursor: "pointer",
@@ -312,6 +378,15 @@ const ProductRefund = () => {
 											</div>
 										</div>
 										<div className='col-md-6 col-12'>
+											{fetchedData?.data?.products?.attributes?.length > 0 &&
+												(
+													<ProductOptions
+														attributes={fetchedData?.data?.products?.attributes}
+														selectedValues={selectedValues}
+														updateSelectOptions={handleChangeOptions}
+													/>
+												)
+											}
 											{/* purchasing_price */}
 											<div className='product-price mb-3'>
 												<div className='label mb-1'>سعر الشراء</div>
@@ -319,7 +394,7 @@ const ProductRefund = () => {
 													<div className='price-icon d-flex align-items-center  p-2 gap-3'>
 														<CurrencyIcon />
 														<div className='price w-100 d-flex justify-content-center align-items-center'>
-															{fetchedData?.data?.products?.purchasing_price}
+															{productPrice}
 														</div>
 													</div>
 
@@ -338,7 +413,7 @@ const ProductRefund = () => {
 														*{" "}
 													</span>
 													<span>
-														({handleQut(fetchedData?.data?.products?.less_qty)})
+														({handleQut(productLessQty)})
 													</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
@@ -377,19 +452,19 @@ const ProductRefund = () => {
 												</div>
 
 												{Number(productInfo?.qty) >
-													Number(fetchedData?.data?.products?.stock) && (
-													<span className='fs-6 text-danger'>
-														الكمية المطلوبة غير متوفرة
-													</span>
-												)}
+													Number(productQty) && (
+														<span className='fs-6 text-danger'>
+															الكمية المطلوبة غير متوفرة
+														</span>
+													)}
 
 												{productInfo?.qty &&
 													Number(productInfo?.qty) <
-														Number(fetchedData?.data?.products?.less_qty) && (
+													Number(productLessQty) && (
 														<>
 															<span className='fs-6 text-danger'>
-																أقل كمية طلب للمنتج هي{" "}
-																{fetchedData?.data?.products?.less_qty}
+																أقل كمية طلب للمنتج{" "}
+																{handleQut(productLessQty)}
 															</span>
 														</>
 													)}

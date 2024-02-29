@@ -489,9 +489,9 @@ const VerifyFormPage = forwardRef((props, ref) => {
 														height: "350px",
 													},
 													"& .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper":
-														{
-															height: "350px",
-														},
+													{
+														height: "350px",
+													},
 												},
 											}}
 											sx={{
@@ -615,7 +615,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 										type='text'
 										value={data?.verification_code}
 										onChange={(e) => {
-											handleOnChange(e);
+											setData({ ...data, verification_code: e?.target?.value?.replace(/[^0-9]/g, "")?.slice(0,10) })
 										}}
 										placeholder='قم بكتابة رقم السجل التجاري كما هو موضح في السجل التجاري'
 										style={{

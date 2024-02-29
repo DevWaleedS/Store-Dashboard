@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 // Use Sidebar Pro to create sidebar
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -57,7 +57,7 @@ const SideBar = ({ open, closeSidebar }) => {
 
 	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
-	const { setNavbarZindex } = Z_index;
+	const { setNavbarZindex,setStoreLogo } = Z_index;
 
 	/**
 	 * to set the domain name of store to local storage
@@ -68,7 +68,13 @@ const SideBar = ({ open, closeSidebar }) => {
 	const { fetchedData } = useFetch(
 		"https://backend.atlbha.com/api/Store/setting_store_show"
 	);
+	useEffect(()=>{
+		if(fetchedData){
+			setStoreLogo(fetchedData?.data?.setting_store?.logo);
+		}
+	},[fetchedData]);
 	localStorage.setItem("domain", fetchedData?.data?.setting_store?.domain);
+	localStorage.setItem("storeLogo", fetchedData?.data?.setting_store?.logo);
 	const domain = localStorage.getItem("domain");
 
 	return (

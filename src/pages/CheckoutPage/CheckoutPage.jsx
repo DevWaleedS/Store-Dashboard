@@ -539,20 +539,27 @@ function CheckoutPage() {
 																	<td
 																		style={{
 																			display: "flex",
-																			flexDirection: "row",
-																			alignItems: "center",
+																			flexDirection: "column",
+																			alignItems: "start",
 																			gap: "0.2rem",
 																		}}>
-																		<span
-																			style={{
-																				maxWidth: "170px",
-																				overflow: "hidden",
-																				textOverflow: "ellipsis",
-																				whiteSpace: "nowrap",
-																			}}>
-																			{item?.product?.name}
-																		</span>{" "}
-																		× <span>{item?.qty}</span>
+																		<div className="d-flex flex-row align-items-center gap-1">
+																			<span
+																				style={{
+																					maxWidth: "170px",
+																					overflow: "hidden",
+																					textOverflow: "ellipsis",
+																					whiteSpace: "nowrap",
+																				}}>
+																				{item?.product?.name}
+																			</span>{" "}
+																			× <span>{item?.qty}</span>
+																		</div>
+																		<ul className="product-options">
+																			{item?.options?.map((option, index) => (
+																				<li key={index}>{`${index === 0 ? `${option}` : `/ ${option}`}`}</li>
+																			))}
+																		</ul>
 																	</td>
 																	<td>{item?.sum} ر.س</td>
 																</tr>
@@ -580,7 +587,7 @@ function CheckoutPage() {
 																<th>
 																	الخصم
 																	{fetchedData?.data?.cart?.discount_type ===
-																	"percent" ? (
+																		"percent" ? (
 																		<span
 																			style={{
 																				fontSize: "0.85rem",

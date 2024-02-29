@@ -3,7 +3,7 @@ import Context from "./context";
 
 const ContextProvider = (props) => {
 	const [access_token, setAccess_token] = useState();
-
+	const [storeLogo, setStoreLogo] = useState(null);
 	const [title, setEndActionTitle] = useState(null);
 	const [subCategories, setSubCategories] = useState([]);
 	const [productsData, setProductsData] = React.useState();
@@ -72,6 +72,8 @@ const ContextProvider = (props) => {
 	const context = {
 		access_token,
 		setAccess_token,
+		storeLogo,
+		setStoreLogo,
 		title,
 		setEndActionTitle,
 		actionWarning,

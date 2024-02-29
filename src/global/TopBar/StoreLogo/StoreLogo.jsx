@@ -1,18 +1,12 @@
-import React from "react";
-
-// Third Party
-import useFetch from "../../../Hooks/UseFetch";
-
+import React, { useContext } from "react";
+// Context
+import Context from "../../../Context/context";
 // images and icons
 import { DefaultLogo } from "../../../data/images";
 
 const StoreLogo = () => {
-	const { fetchedData: store_Setting } = useFetch(
-		"https://backend.atlbha.com/api/Store/setting_store_show"
-	);
-
-	// to set the store logo to local storage
-	localStorage.setItem("storeLogo", store_Setting?.data?.setting_store?.logo);
+	const storeContext = useContext(Context);
+	const { storeLogo } = storeContext;
 	return (
 		<div
 			className='navbar-brand d-md-flex d-none'
@@ -20,11 +14,7 @@ const StoreLogo = () => {
 			<img
 				className=' img-fluid'
 				style={{ objectFit: "contain" }}
-				src={
-					localStorage.getItem("storeLogo")
-						? localStorage.getItem("storeLogo")
-						: DefaultLogo
-				}
+				src={storeLogo || localStorage.getItem("storeLogo")}
 				alt=''
 			/>
 		</div>

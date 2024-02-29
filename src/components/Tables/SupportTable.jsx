@@ -103,7 +103,7 @@ function EnhancedTableToolbar(props) {
 								className='delete-all'
 								onClick={() => {
 									setNotificationTitle(
-										"سيتم حذف جميع الشكاوي وهذهالخطوة غير قابلة للرجوع"
+										"سيتم حذف جميع الشكاوي وهذه الخطوة غير قابلة للرجوع"
 									);
 									setActionTitle("Delete");
 								}}>

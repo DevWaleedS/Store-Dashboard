@@ -103,7 +103,7 @@ function EnhancedTableToolbar(props) {
 						<Tooltip
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع السلات وهذهالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع السلات وهذه الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}

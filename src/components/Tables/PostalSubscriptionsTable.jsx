@@ -81,7 +81,7 @@ function EnhancedTableToolbar(props) {
 							className='delete-all'
 							onClick={() => {
 								setNotificationTitle(
-									"سيتم حذف جميع الايميلات وهذهالخطوة غير قابلة للرجوع"
+									"سيتم حذف جميع الايميلات وهذه الخطوة غير قابلة للرجوع"
 								);
 								setActionTitle("Delete");
 							}}>
