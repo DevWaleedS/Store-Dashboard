@@ -57,7 +57,7 @@ const SideBar = ({ open, closeSidebar }) => {
 
 	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
-	const { setNavbarZindex,setStoreLogo } = Z_index;
+	const { setNavbarZindex, setStoreLogo } = Z_index;
 
 	/**
 	 * to set the domain name of store to local storage
@@ -68,11 +68,11 @@ const SideBar = ({ open, closeSidebar }) => {
 	const { fetchedData } = useFetch(
 		"https://backend.atlbha.com/api/Store/setting_store_show"
 	);
-	useEffect(()=>{
-		if(fetchedData){
+	useEffect(() => {
+		if (fetchedData) {
 			setStoreLogo(fetchedData?.data?.setting_store?.logo);
 		}
-	},[fetchedData]);
+	}, [fetchedData]);
 	localStorage.setItem("domain", fetchedData?.data?.setting_store?.domain);
 	localStorage.setItem("storeLogo", fetchedData?.data?.setting_store?.logo);
 	const domain = localStorage.getItem("domain");
@@ -429,8 +429,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> بوابات الدفع</span>
 					</MenuItem>
 				</NavLink>
-
-				<NavLink
+				{/*
+<NavLink
 					className='menu-link'
 					to='wallet'
 					onClick={() => {
@@ -444,6 +444,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						<span className='me-2'> المحفظة و الفواتير</span>
 					</MenuItem>
 				</NavLink>
+
+*/}
 
 				{/** Setting Sub menu */}
 				<SubMenu label=' الاعدادات' icon={<Setting />} as='li'>

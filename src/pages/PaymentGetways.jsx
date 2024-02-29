@@ -216,7 +216,7 @@ const PaymentGetways = () => {
 						</nav>
 					</div>
 				</div>
-				{loading || !currentBankAccount ? (
+				{loading ? (
 					<div className='row'>
 						<div
 							className='d-flex justify-content-center align-items-center col-12'
@@ -226,7 +226,7 @@ const PaymentGetways = () => {
 					</div>
 				) : (
 					<>
-						<div className='row  mb-2 '>
+						{/*	<div className='row  mb-2 '>
 							<div className='col-12 '>
 								{!currentBankAccount?.data ? (
 									<div className='mb-2 payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
@@ -301,7 +301,7 @@ const PaymentGetways = () => {
 									</div>
 								) : null}
 							</div>
-						</div>
+						</div>*/}
 
 						<div className='data-container '>
 							<div className='row other-shipping-company mb-4'>

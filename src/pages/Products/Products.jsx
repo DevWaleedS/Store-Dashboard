@@ -50,7 +50,7 @@ const Products = () => {
 		if (verificationStoreStatus !== "تم التوثيق") {
 			navigate("/");
 		}
-	}, [verificationStoreStatus]);
+	}, [verificationStoreStatus, navigate]);
 
 	// ---------------------------------------------------------------------
 
