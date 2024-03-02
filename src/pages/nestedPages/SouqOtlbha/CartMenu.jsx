@@ -85,6 +85,14 @@ function CartMenu({ data, reload, setReload }) {
 									<th>الضريبة</th>
 									<td>{data?.tax} ر.س</td>
 								</tr>
+								{data?.overweight_price !== null && data?.overweight_price !== 0 && (
+									<tr>
+										<th>قيمة الوزن الزائد ({data?.overweight} kg)</th>
+										<td>
+											{data?.overweight_price} ر.س
+										</td>
+									</tr>
+								)}
 								<tr>
 									<th>الشحن</th>
 									<td>{data?.shipping_price} ر.س</td>

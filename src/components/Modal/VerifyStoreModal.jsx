@@ -163,7 +163,7 @@ const VerifyStore = () => {
 														? userInfo?.username || "٠٠٠"
 														: userInfo?.name}{" "}
 												</span>
-												فضلا اكمل البيانات الاساسية للمتجر لطلب التوثيق
+												فضلا أكمل البيانات الأساسية للمتجر لطلب التوثيق
 											</p>
 											<div className='btns-box' style={{ width: "250px" }}>
 												<Link
@@ -171,7 +171,7 @@ const VerifyStore = () => {
 													onClick={() => {
 														dispatch(closeVerifyModal());
 													}}>
-													اكمال البيانات
+													إكمال البيانات
 												</Link>
 												<IoMdCloseCircleOutline
 													style={{ cursor: "pointer", fill: "#02466a" }}

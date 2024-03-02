@@ -802,7 +802,7 @@ const OrderDetails = () => {
 																<span
 																	className='table-price_span'
 																	style={{ fontWeight: "500" }}>
-																	{fetchedData?.data?.orders?.codprice} ر.س
+																	{fetchedData?.data?.orders?.discount} ر.س
 																</span>
 															</TableCell>
 														</TableRow>

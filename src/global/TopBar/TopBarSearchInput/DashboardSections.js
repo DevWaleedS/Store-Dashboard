@@ -283,7 +283,7 @@ export const dashboardSections = [
 	},
 	{
 		id: 26,
-		sectionName: "إعدادت المتجر الاساسية",
+		sectionName: "إعدادت المتجر الأساسية",
 		route: "MainInformation",
 		icon: <FaCircle style={{ width: "14px" }} />,
 	},
