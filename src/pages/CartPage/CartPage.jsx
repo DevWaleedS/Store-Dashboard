@@ -214,7 +214,7 @@ function CartPage() {
 													<th style={{ width: "1px" }}>الصورة</th>
 													<th style={{ textAlign: "justify" }}>اسم المنتج</th>
 													<th>السعر</th>
-													<th>الكيمة</th>
+													<th>الكمية</th>
 													<th>الإجمالي</th>
 													<th></th>
 												</tr>
@@ -360,12 +360,21 @@ function CartPage() {
 																<th>الضريبة</th>
 																<td>{fetchedData?.data?.cart?.tax} ر.س</td>
 															</tr>
+															{fetchedData?.data?.cart?.overweight_price !== null && fetchedData?.data?.cart?.overweight_price !== 0 && (
+																<tr>
+																	<th>قيمة الوزن الزائد ({fetchedData?.data?.cart?.overweight} kg)</th>
+																	<td>
+																		{fetchedData?.data?.cart?.overweight_price} ر.س
+																	</td>
+																</tr>
+															)}
 															<tr>
 																<th>الشحن</th>
 																<td>
 																	{fetchedData?.data?.cart?.shipping_price} ر.س
 																</td>
 															</tr>
+															
 
 															{fetchedData?.data?.cart?.discount_total ? (
 																<tr>

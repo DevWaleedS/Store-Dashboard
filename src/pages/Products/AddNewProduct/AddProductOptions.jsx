@@ -340,7 +340,7 @@ const AddProductOptionsModal = () => {
 
 		const backtrack = (currentAttribute, blockIndex) => {
 			if (blockIndex === blocks.length) {
-				attributes.push({ values: [...currentAttribute], qty: 0 });
+				attributes.push({ values: [...currentAttribute], qty: 0, price: 0, discount_price: 0 });
 				return;
 			}
 
@@ -420,7 +420,7 @@ const AddProductOptionsModal = () => {
 			);
 
 			// to check if the qtyAttrNotEmpty of option in not empty or no
-			const priceAttrNotEmpty = attributes?.every((attr) => attr?.price !== 0);
+			const priceAttrNotEmpty = attributes?.every((attr) => attr?.price > 0);
 
 			// to check if the qtyAttrNotEmpty of option in not empty or no
 			const qtyAttrNotEmpty = attributes?.every((attr) => attr?.qty !== 0);
@@ -794,16 +794,14 @@ const AddProductOptionsModal = () => {
 							/>
 							<div className='input-type'>ر.س</div>
 						</div>
-						{attribute?.discount_price && attribute?.price && (
-							<div className='col-lg-7 col-md-9 col-12'>
-								{Number(attribute?.price) - Number(attribute?.discount_price) <=
-								0 ? (
-									<span style={{ color: "red", fontSize: "14px",whiteSpace:"normal" }}>
-										يجب ان يكون سعر الخصم اقل من السعر الأساسي
-									</span>
-								) : null}
-							</div>
-						)}
+
+						<div className='col-lg-7 col-md-9 col-12'>
+							{(Number(attribute?.price) - Number(attribute?.discount_price) <= 0) ? (
+								<span style={{ color: "red", fontSize: "14px", whiteSpace: "normal" }}>
+									يجب ان يكون سعر الخصم اقل من السعر الأساسي
+								</span>
+							) : null}
+						</div>
 
 						{attribute?.discount_price && !attribute?.price ? (
 							<div className='col-lg-7 col-md-9 col-12'>
@@ -811,7 +809,7 @@ const AddProductOptionsModal = () => {
 									style={{
 										color: "red",
 										fontSize: "14px",
-										whiteSpace:"normal",
+										whiteSpace: "normal",
 									}}>
 									يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
 								</span>
@@ -937,9 +935,8 @@ const AddProductOptionsModal = () => {
 							</div>
 
 							<section
-								className={`${
-									productHasOptions ? "d-flex" : "d-none"
-								} row mb-4`}>
+								className={`${productHasOptions ? "d-flex" : "d-none"
+									} row mb-4`}>
 								<div className='col-12 mb-4'>
 									{/* the product options section */}
 									{productOptionsSection}

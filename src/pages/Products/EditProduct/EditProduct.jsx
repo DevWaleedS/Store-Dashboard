@@ -317,8 +317,8 @@ const EditProduct = () => {
 				setProduct((prevProduct) => ({
 					...prevProduct,
 					stock: qty,
-					discount_price: Number(matchingObject.discount_price) || "",
-					selling_price: Number(matchingObject.price) || "",
+					discount_price: Number(matchingObject.discount_price) || 0,
+					selling_price: Number(matchingObject.price) || 0,
 				}));
 			}
 		}

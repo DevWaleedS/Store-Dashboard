@@ -460,7 +460,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
-							<span className='me-2'> إعدادت المتجر الاساسية</span>
+							<span className='me-2'> إعدادت المتجر الأساسية</span>
 						</MenuItem>
 					</NavLink>
 					<Link

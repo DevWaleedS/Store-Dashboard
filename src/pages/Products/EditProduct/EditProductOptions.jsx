@@ -344,6 +344,8 @@ const AddProductOptionsModal = () => {
 				attributes.push({
 					values: [...currentAttribute],
 					qty: 0,
+					price: 0,
+					discount_price: 0,
 				});
 				return;
 			}
@@ -799,16 +801,13 @@ const AddProductOptionsModal = () => {
 							<div className='input-type'>ر.س</div>
 						</div>
 
-						{attribute?.discount_price && attribute?.price && (
-							<div className='col-lg-7 col-md-9 col-12'>
-								{Number(attribute?.price) - Number(attribute?.discount_price) <=
-									0 ? (
-									<span style={{ color: "red", fontSize: "14px",whiteSpace:"normal" }}>
-										يجب ان يكون سعر الخصم اقل من السعر الأساسي
-									</span>
-								) : null}
-							</div>
-						)}
+						<div className='col-lg-7 col-md-9 col-12'>
+							{(Number(attribute?.price) - Number(attribute?.discount_price) <= 0) ? (
+								<span style={{ color: "red", fontSize: "14px", whiteSpace: "normal" }}>
+									يجب ان يكون سعر الخصم اقل من السعر الأساسي
+								</span>
+							) : null}
+						</div>
 
 						{attribute?.discount_price && !attribute?.price ? (
 							<div className='col-lg-7 col-md-9 col-12'>
@@ -816,7 +815,7 @@ const AddProductOptionsModal = () => {
 									style={{
 										color: "red",
 										fontSize: "14px",
-										whiteSpace:"normal",
+										whiteSpace: "normal",
 									}}>
 									يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
 								</span>

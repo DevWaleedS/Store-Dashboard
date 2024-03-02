@@ -62,7 +62,7 @@ const VerifayAfterMainInfoAlert = () => {
 								fontWeight: "500",
 							}}>
 							{" "}
-							هل تريد استكمال بيانات التوثيق لأنشاء المتجر؟
+							هل تريد استكمال بيانات التوثيق لإنشاء المتجر؟
 						</p>
 					</div>
 					<div className='store-alert-footer d-flex flex-column flex-md-row  justify-content-center p-md-4 p-2 py-4 align-content-center verification-alert-btns gap-2'>
@@ -77,7 +77,7 @@ const VerifayAfterMainInfoAlert = () => {
 						<button
 							onClick={() => {
 								toast.warning(
-									"سيتم حذف بيانات المتجر اذا لم يتم التوثيق خلال 3 أيام",
+									"سيتم حذف بيانات المتجر اذا لم يتم التوثيق خلال 7 أيام",
 									{
 										theme: "light",
 									}

@@ -74,9 +74,9 @@ const style = {
 const selectStyle = {
 	fontSize: "18px",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "20px",
-		},
+	{
+		paddingRight: "20px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -183,8 +183,8 @@ const AddNewProduct = () => {
 			setProduct({
 				...product,
 				stock: qty,
-				discount_price: Number(matchingObject?.discount_price) || "",
-				selling_price: Number(matchingObject?.price) || "",
+				discount_price: Number(matchingObject?.discount_price) || 0,
+				selling_price: Number(matchingObject?.price) || 0,
 			});
 		}
 	}, [attributes]);
@@ -541,7 +541,7 @@ const AddNewProduct = () => {
 								<div className='col-12'>
 									<div className='form-title'>
 										<h5 className='mb-3'> اضافة منتج</h5>
-										<p>قم باضافة منتجك والمعلومات الضرورية من هنا</p>
+										<p>قم بإضافة منتجك والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>
@@ -585,13 +585,13 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.name}
 												{errors?.name && errors.name.message}
 											</span>
 
 											{productNameLength && (
-												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+												<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 													اسم المنتج يجب ان لا يتجاوز 25 حرف
 												</span>
 											)}
@@ -632,13 +632,13 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.short_description}
 												{errors?.short_description &&
 													errors.short_description.message}
 											</span>
 											{shortDescriptionLength && (
-												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+												<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 													الوصف لا يتجاوز 100 حرف
 												</span>
 											)}
@@ -661,7 +661,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.description}
 												{errors?.description && errors.description.message}
 											</span>
@@ -702,7 +702,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.cover && (
-												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+												<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 													{productError?.cover}
 												</span>
 											)}
@@ -756,9 +756,9 @@ const AddNewProduct = () => {
 															const isVideo =
 																image?.data_url?.includes(
 																	"video/mp4" ||
-																		"video/avi" ||
-																		"video/mov" ||
-																		"video/mkv"
+																	"video/avi" ||
+																	"video/mov" ||
+																	"video/mkv"
 																) || image?.data_url?.endsWith(".mp4");
 															if (isVideo) {
 																return (
@@ -821,7 +821,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.images && (
-												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+												<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 													{productError?.images}
 												</span>
 											)}
@@ -904,7 +904,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.category_id}
 												{errors?.category_id && errors.category_id.message}
 											</span>
@@ -919,7 +919,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
 												{product?.category_id !== "" &&
-												subcategory[0]?.subcategory.length === 0 ? (
+													subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
 														style={{
@@ -933,9 +933,9 @@ const AddNewProduct = () => {
 														sx={{
 															fontSize: "18px",
 															"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-																{
-																	paddingRight: "20px",
-																},
+															{
+																paddingRight: "20px",
+															},
 															"& .MuiOutlinedInput-root": {
 																"& :hover": {
 																	border: "none",
@@ -987,7 +987,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											{productError?.subcategory_id && (
-												<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+												<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 													{productError?.subcategory_id}
 												</span>
 											)}
@@ -1003,7 +1003,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
+													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1055,7 +1055,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.selling_price}
 												{errors?.selling_price && errors.selling_price.message}
 											</span>
@@ -1071,7 +1071,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
+													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1112,27 +1112,27 @@ const AddNewProduct = () => {
 											/>
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
-										{product?.discount_price && product?.selling_price && (
-											<div className='col-lg-7 col-md-9 col-12'>
-												{Number(product?.selling_price) -
-													Number(product?.discount_price) <=
-													0 && (
-													<span className='fs-6 fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+										<div className='col-lg-7 col-md-9 col-12'>
+											{(Number(product?.selling_price) -
+												Number(product?.discount_price) <=
+												0) && (
+													<span className='fs-6 fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 														يجب ان يكون سعر الخصم اقل من السعر الأساسي
 													</span>
 												)}
-											</div>
-										)}
+										</div>
 
-										{product?.discount_price &&
-											product?.selling_price === "" && (
+										{(product?.discount_price && product?.selling_price === "") ? (
+											<>
+												<div className='col-lg-3 col-md-3 col-12'></div>
 												<div className='col-lg-7 col-md-9 col-12'>
-													<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+													<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 														يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
 														سعر الخصم
 													</span>
 												</div>
-											)}
+											</>
+										):null}
 										<div className='col-lg-7 col-md-9 col-12'>
 											<span
 												className='fs-6 text-danger'
@@ -1153,7 +1153,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافة خيارات للمنتج'
+													title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1197,7 +1197,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.stock}
 												{errors?.stock && errors.stock.message}
 											</span>
@@ -1246,7 +1246,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.weight}
 												{errors?.weight && errors.weight.message}
 											</span>
@@ -1269,7 +1269,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											<span className='fs-6 text-danger' style={{ whiteSpace:"normal" }}>
+											<span className='fs-6 text-danger' style={{ whiteSpace: "normal" }}>
 												{productError?.SEOdescription}
 												{errors?.SEOdescription &&
 													errors.SEOdescription.message}
@@ -1288,7 +1288,7 @@ const AddNewProduct = () => {
 												onClick={() => {
 													dispatch(openProductOptionModal());
 												}}>
-												اضافة خيارات المنتج
+												إضافة خيارات المنتج
 												<FiPlus />
 											</button>
 										</div>
