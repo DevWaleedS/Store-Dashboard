@@ -9,18 +9,31 @@ import { Link } from "react-router-dom";
 
 // Context
 import Context from "../../../Context/context";
+import { TextEditorContext } from "../../../Context/TextEditorProvider";
 
 // Components
 import useFetch from "../../../Hooks/UseFetch";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { TextEditor } from "../../../components/TextEditor";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import { FaRegSquarePlus } from "react-icons/fa6";
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import IconButton from "@mui/material/IconButton";
+import Zoom from "@mui/material/Zoom";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // icons and images
 import { Controller, useForm } from "react-hook-form";
 import { CurrencyIcon, PlayVideo } from "../../../data/Icons";
+import { IoPricetagsOutline } from "react-icons/io5";
+import { MdInfoOutline } from "react-icons/md";
 
 const style = {
 	position: "fixed",
@@ -45,6 +58,58 @@ const style = {
 	},
 };
 
+/** product options According  */
+const Accordion = styled((props) => (
+	<MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+	backgroundColor: "transparent",
+	marginBottom: "10px",
+
+	"&:not(:last-child)": {
+		borderBottom: 0,
+		marginBottom: "10px",
+	},
+	"&:before": {
+		display: "none",
+	},
+}));
+
+const AccordionSummary = styled((props) => <MuiAccordionSummary {...props} />)(
+	({ theme }) => ({
+		width: "100%",
+		backgroundColor: "#baf3e6",
+		borderRadius: "4px 4px 0 0",
+		flexDirection: "row-reverse",
+
+		"& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+			display: "none",
+		},
+		"& .MuiAccordionSummary-content": {
+			marginLeft: theme.spacing(1),
+		},
+	})
+);
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+	padding: "12px ",
+	border: "1px solid #1dbbbe",
+	borderTop: "none",
+	borderRadius: "0 0 4px 4px",
+}));
+
+const BootstrapTooltip = styled(({ className, ...props }) => (
+	<Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+	[`& .${tooltipClasses.arrow}`]: {
+		color: "#1dbbbe",
+	},
+	[`& .${tooltipClasses.tooltip}`]: {
+		backgroundColor: "#1dbbbe",
+
+		whiteSpace: "normal",
+	},
+}));
+
 const ShowImportEtlobhaProduct = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -57,6 +122,8 @@ const ShowImportEtlobhaProduct = () => {
 	);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+	const editorContent = useContext(TextEditorContext);
+	const { setEditorValue } = editorContent;
 
 	const [imagesPreview, setImagesPreview] = useState();
 	const [isActive, setIsActive] = useState(null);
@@ -71,6 +138,7 @@ const ShowImportEtlobhaProduct = () => {
 		stock: "",
 		qty: "",
 	});
+	const [productOptions, setProductOptions] = useState({});
 
 	const {
 		register,
@@ -121,7 +189,6 @@ const ShowImportEtlobhaProduct = () => {
 		setProductError({
 			name: "",
 			cover: "",
-
 			selling_price: "",
 			price: "",
 			discount_price_import: "",
@@ -135,6 +202,11 @@ const ShowImportEtlobhaProduct = () => {
 		});
 	};
 
+	const [expanded, setExpanded] = useState(false);
+	const handleChange = (panel) => (event, newExpanded) => {
+		setExpanded(newExpanded ? panel : false);
+	};
+
 	/**
 	 * --------------------------------------------------------------------
 	 * to set data that coming from api
@@ -144,18 +216,55 @@ const ShowImportEtlobhaProduct = () => {
 		if (fetchedData?.data?.product) {
 			setProduct({
 				...product,
-
 				name: fetchedData?.data?.product?.name,
-				description: fetchedData?.data?.product?.description,
 				short_description: fetchedData?.data?.product?.short_description,
-				price: fetchedData?.data?.product?.selling_price,
+				price: fetchedData?.data?.product?.options?.length > 0 ? fetchedData?.data?.product?.options?.[0]?.price : fetchedData?.data?.product?.selling_price,
 				discount_price_import:
-					fetchedData?.data?.product?.discount_price_import,
+					fetchedData?.data?.product?.options?.length > 0 ? fetchedData?.data?.product?.options?.[0]?.discount_price : fetchedData?.data?.product?.discount_price_import,
 				qty: fetchedData?.data?.product?.stock,
 			});
+			setEditorValue(fetchedData?.data?.product?.description);
 			setImagesPreview(fetchedData?.data?.product?.cover);
 		}
+		if (fetchedData?.data?.product?.options?.length > 0) {
+			setProductOptions(
+				fetchedData?.data?.product?.options?.map((option) => ({
+					id: option?.id,
+					price: Number(option?.price),
+					discount_price: Number(option?.discount_price),
+					qty: Number(option?.quantity),
+					values: option?.name?.ar?.split(",")?.map((item, index) => ({
+						id: index + 1,
+						title: item,
+					})),
+				}))
+			);
+		}
 	}, [fetchedData?.data?.product]);
+
+	const addPriceToAttributes = (e, index) => {
+		const updatedAttributes = [...productOptions];
+		updatedAttributes[index].price = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
+		setProductOptions(updatedAttributes);
+		if (index === 0) {
+			setProduct({ ...product, price: Number(e.target.value.replace(/[^0-9]/g, "")) })
+		}
+	};
+
+	/** handle add discount_price for attr */
+	const addDiscountPrice = (e, index) => {
+		const updatedAttributes = [...productOptions];
+
+		updatedAttributes[index].discount_price = Number(
+			e.target.value.replace(/[^0-9]/g, "")
+		);
+		setProductOptions(updatedAttributes);
+		if (index === 0) {
+			setProduct({ ...product, discount_price_import: Number(e.target.value.replace(/[^0-9]/g, "")) })
+		}
+	};
 
 	/**
 	 * --------------------------------------------------------------------
@@ -164,10 +273,19 @@ const ShowImportEtlobhaProduct = () => {
 	 */
 	const updateImportProduct = (data) => {
 		resetCouponError();
+		setEditorValue("");
 		let formData = new FormData();
 		formData.append("price", data?.price);
 		formData.append("discount_price_import", data?.discount_price_import);
 		formData.append("qty", data?.qty);
+		for (let i = 0; i < productOptions?.length; i++) {
+			formData.append([`data[${i}][option_id]`], productOptions[i]?.id);
+			formData.append([`data[${i}][price]`], productOptions[i]?.price || 0);
+			formData.append(
+				[`data[${i}][discount_price]`],
+				productOptions[i]?.discount_price || 0
+			);
+		}
 
 		axios
 			.post(
@@ -299,9 +417,8 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={`video_wrapper ${
-																				isActive === index ? "active" : ""
-																			}`}>
+																			className={`video_wrapper ${isActive === index ? "active" : ""
+																				}`}>
 																			<video
 																				onClick={() => {
 																					setImagesPreview(item?.image);
@@ -330,9 +447,8 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={` d-flex justify-content-center align-items-center ${
-																				isActive === index ? "active" : ""
-																			}`}>
+																			className={` d-flex justify-content-center align-items-center ${isActive === index ? "active" : ""
+																				}`}>
 																			<img
 																				style={{
 																					cursor: "pointer",
@@ -385,25 +501,12 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='product-desc'> وصف المنتج </label>
 											</div>
-											<div className='col-md-7 col-12'>
-												<div
-													className='d-flex justify-content-center align-items-start'
-													style={{
-														background: "#eeeeef",
-														border: "1px solid #a7a7a71a",
-														height: "140px",
-														overflowY: "auto",
-													}}>
-													<div
-														style={{ whiteSpace: "normal" }}
-														className='price w-100 d-flex justify-content-start align-items-start p-2'
-														dangerouslySetInnerHTML={{
-															__html: fetchedData?.data?.product?.description,
-														}}
-													/>
-												</div>
+											<div className='col-md-7 col-12 product-souq-texteditor'>
+												<TextEditor
+													ToolBar={"readOnly"}
+													readOnly={true}
+												/>
 											</div>
-
 											<div className='col-md-3 col-12'></div>
 										</div>
 
@@ -460,7 +563,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
 													{fetchedData?.data?.product?.subcategory?.length ===
-													0 ? (
+														0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -522,8 +625,18 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Selling Price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'>
+												<label htmlFor='price' className="d-flex flex-row align-items-center gap-1">
 													سعر البيع<span className='important-hint'>*</span>
+													<BootstrapTooltip
+														className={"p-0"}
+														TransitionProps={{ timeout: 300 }}
+														TransitionComponent={Zoom}
+														title='سيتم استبدال قيمة سعر البيع الحالية بقيمة سعر البيع للخيار الافتراضي عند وجود خيارات للمنتج ولايمكنك تعديله الا من خلال تعديل سعر الخيار'
+														placement='top'>
+														<IconButton>
+															<MdInfoOutline color='#1DBBBE' size={"14px"} />
+														</IconButton>
+													</BootstrapTooltip>
 												</label>
 												<br />
 											</div>
@@ -559,7 +672,10 @@ const ShowImportEtlobhaProduct = () => {
 																name={"price"}
 																type='text'
 																id='price'
-																value={value}
+																disabled={productOptions?.length !== 0}
+																value={productOptions?.length !== 0
+																	? productOptions?.[0]?.price
+																	: value}
 																onChange={(e) => {
 																	setProduct({
 																		...product,
@@ -592,11 +708,11 @@ const ShowImportEtlobhaProduct = () => {
 													Number(
 														fetchedData?.data?.product?.purchasing_price
 													) && (
-													<span className='fs-6 text-danger'>
-														السعر يجب ان يكون اكبر من او يساوي (
-														{fetchedData?.data?.product?.purchasing_price})
-													</span>
-												)}
+														<span className='fs-6 text-danger'>
+															السعر يجب ان يكون اكبر من او يساوي (
+															{fetchedData?.data?.product?.purchasing_price})
+														</span>
+													)}
 
 												<div className='fs-6 text-danger'>
 													{errors?.price && errors.price.message}
@@ -607,7 +723,19 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Discount price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='low-price'>سعر البيع بعد الخصم</label>
+												<label htmlFor='low-price' className="d-flex flex-row align-items-center gap-1">
+													سعر البيع بعد الخصم
+													<BootstrapTooltip
+														className={"p-0"}
+														TransitionProps={{ timeout: 300 }}
+														TransitionComponent={Zoom}
+														title='سيتم استبدال قيمة سعر البيع بعد الخصم الحالية بقيمة سعر البيع بعد الخصم للخيار الافتراضي عند وجود خيارات للمنتج ولايمكنك تعديله الا من خلال تعديل سعر الخيار'
+														placement='top'>
+														<IconButton>
+															<MdInfoOutline color='#1DBBBE' size={"14px"} />
+														</IconButton>
+													</BootstrapTooltip>
+												</label>
 											</div>
 
 											<div className='col-md-7 col-12'>
@@ -630,7 +758,7 @@ const ShowImportEtlobhaProduct = () => {
 															min: {
 																value: 1,
 																message:
-																	"يجب أن يكونسعر البيع بعد الخصم أكبر من 0",
+																	"يجب أن يكون سعر البيع بعد الخصم أكبر من 0",
 															},
 														}}
 														render={({ field: { onChange, value } }) => (
@@ -643,7 +771,10 @@ const ShowImportEtlobhaProduct = () => {
 																name={"discount_price_import"}
 																type='text'
 																id='discount_price_import'
-																value={value}
+																value={productOptions?.length !== 0
+																	? productOptions?.[0]?.discount_price
+																	: value}
+																disabled={productOptions?.length !== 0}
 																onChange={(e) => {
 																	setProduct({
 																		...product,
@@ -673,28 +804,30 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 
 											<div className='col-lg-3 col-md-3 col-12'></div>
-											{product?.discount_price_import && product?.price && (
-												<div className='col-lg-7 col-md-9 col-12'>
-													{Number(product?.price) -
-														Number(product?.discount_price_import) <=
-														0 && (
+											<div className='col-lg-7 col-md-9 col-12'>
+												{Number(product?.price) -
+													Number(product?.discount_price_import) <=
+													0 && (
 														<span className='fs-6 text-danger'>
 															يجب ان يكون سعر البيع بعد الخصم اقل من السعر
 															الأساسي
 														</span>
 													)}
-												</div>
-											)}
+											</div>
 
-											{product?.discount_price_import &&
-												product?.price === "" && (
+											{(product?.discount_price_import &&
+												product?.price === "") ? (
+												<>
+													<div className='col-lg-3 col-md-3 col-12'></div>
 													<div className='col-lg-7 col-md-9 col-12'>
 														<span className='fs-6 text-danger'>
 															يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال
 															سعر البيع بعد الخصم
 														</span>
 													</div>
-												)}
+												</>
+											) : null}
+											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<span
 													className='fs-6 text-danger'
@@ -709,8 +842,18 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Stock */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price'>
+												<label htmlFor='price' className="d-flex flex-row align-items-center gap-1">
 													الكمية التي قمت باستيرادها
+													<BootstrapTooltip
+														className={"p-0"}
+														TransitionProps={{ timeout: 300 }}
+														TransitionComponent={Zoom}
+														title='سيتم استبدال قيمة الكمية التي قمت باستيرادها الحالية بقيمة إجمإلي الكميات الخاصة بخيارات المنتج  في حال وجود خيارات للمنتج'
+														placement='top'>
+														<IconButton>
+															<MdInfoOutline color='#1DBBBE' size={"14px"} />
+														</IconButton>
+													</BootstrapTooltip>
 												</label>
 											</div>
 											<div className='col-md-7 col-12'>
@@ -722,12 +865,138 @@ const ShowImportEtlobhaProduct = () => {
 														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{product?.qty}
+														{fetchedData?.data?.product?.options?.length > 0 ? fetchedData?.data?.product?.options?.reduce((accumulator, option) => (Number(accumulator) + Number(option?.quantity)), 0) : product?.qty}
 													</div>
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
 										</div>
+
+										{productOptions?.length > 0 &&
+											(<div className='row mb-md-5 mb-3'>
+												<div className='col-md-3 col-12'>
+													<label htmlFor='price'>
+														خيارات المنتج
+													</label>
+												</div>
+												<div className='col-md-7 col-12'>
+													{productOptions?.map((option, index) => (
+														<div
+															key={index}
+															className=' flex justify-start items-center gap-3 mb-3 products-attr'>
+															<Accordion
+																expanded={expanded === index}
+																onChange={handleChange(index)}>
+																<AccordionSummary
+																	aria-controls={`${index}-content`}
+																	id={`${index}-header`}
+																	expandIcon={
+																		<FaRegSquarePlus
+																			style={{
+																				fontSize: "1.2rem",
+																				fill: "#023855",
+																				marginLeft: "5px",
+																			}}
+																		/>
+																	}>
+																	<div className=' d-flex justify-content-between flex-wrap align-items-center w-100'>
+																		<div className='d-flex flex-row align-items-center gap-1'>
+																			{option?.values?.map((value, index) => (
+																				<>
+																					{index !== 0 && <span>/</span>}
+																					<Typography
+																						key={value?.id}
+																						sx={{
+																							fontSize: "18px",
+																							fontWeight: "400",
+																							fontFamily: "Tajawal",
+																							color: "#023855",
+
+																							"@media(max-width:768px)": {
+																								fontSize: "15px",
+																								fontWeight: "500",
+																							},
+																						}}>
+																						{value?.title}
+																					</Typography>
+																				</>
+																			))}
+																		</div>
+																		<Typography
+																			sx={{
+																				fontSize: "16px",
+																				fontWeight: "400",
+																				fontFamily: "Tajawal",
+																				color: "#023855",
+
+																				"@media(max-width:768px)": {
+																					fontSize: "14px",
+																					fontWeight: "500",
+																					// margin: "0 auto 0 0",
+																				},
+																			}}>
+																			متوفر عدد: {option?.qty}
+																		</Typography>
+																	</div>
+																</AccordionSummary>
+																<AccordionDetails>
+																	<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+																		<div className='input-icon'>
+																			<IoPricetagsOutline />
+																		</div>
+																		<input
+																			type='text'
+																			placeholder='السعر'
+																			value={option?.price}
+																			onChange={(e) => {
+																				addPriceToAttributes(e, index);
+																			}}
+																		/>
+																		<div className='input-type'>ر.س</div>
+																	</div>
+
+																	<div className='option-name-input d-flex justify-content-start align-items-center gap-2 mb-2'>
+																		<div className='input-icon'>
+																			<IoPricetagsOutline />
+																		</div>
+																		<input
+																			type='text'
+																			placeholder='السعر بعد الخصم'
+																			value={option?.discount_price}
+																			onChange={(e) => {
+																				addDiscountPrice(e, index);
+																			}}
+																		/>
+																		<div className='input-type'>ر.س</div>
+																	</div>
+
+																	<div className='col-12'>
+																		{(Number(option?.price) - Number(option?.discount_price) <= 0) ? (
+																			<span style={{ color: "red", fontSize: "14px", whiteSpace: "normal" }}>
+																				يجب ان يكون سعر الخصم اقل من السعر الأساسي
+																			</span>
+																		) : null}
+																	</div>
+
+																	{option?.discount_price && !option?.price ? (
+																		<div className='col-12'>
+																			<span
+																				style={{
+																					color: "red",
+																					fontSize: "14px",
+																					whiteSpace: "normal",
+																				}}>
+																				يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
+																			</span>
+																		</div>
+																	) : null}
+																</AccordionDetails>
+															</Accordion>
+														</div>
+													))}
+												</div>
+											</div>
+											)}
 
 										{Number(fetchedData?.data?.product?.stock) <= 1 && (
 											<div className='row mb-md-5 mb-3'>
@@ -763,7 +1032,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-lg-4 col-6'>
 												<button
 													className='close-btn'
-													onClick={() => navigate("/Products")}>
+													onClick={() => { navigate("/Products"); setEditorValue(""); }}>
 													إلغاء
 												</button>
 											</div>
@@ -774,7 +1043,7 @@ const ShowImportEtlobhaProduct = () => {
 						</div>
 					</Box>
 				</Modal>
-			</div>
+			</div >
 		</>
 	);
 };

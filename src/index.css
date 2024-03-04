@@ -9381,6 +9381,19 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	height: 230px;
 }
 
+.product-souq-texteditor .quill .ql-toolbar.ql-snow{
+	display: none;
+}
+
+.product-souq-texteditor .quill .ql-container.ql-snow{
+	border: none;
+	height: 230px;
+}
+
+.product-souq-texteditor .quill .ql-container.ql-snow .ql-editor{
+	background-color: #eeeeef;
+}
+
 .product-texteditor .ql-toolbar.ql-snow {
 	border-color: #e6e4e4;
 }
