@@ -340,7 +340,12 @@ const AddProductOptionsModal = () => {
 
 		const backtrack = (currentAttribute, blockIndex) => {
 			if (blockIndex === blocks.length) {
-				attributes.push({ values: [...currentAttribute], qty: 0, price: 0, discount_price: 0 });
+				attributes.push({
+					values: [...currentAttribute],
+					qty: 0,
+					price: 0,
+					discount_price: 0,
+				});
 				return;
 			}
 
@@ -581,7 +586,8 @@ const AddProductOptionsModal = () => {
 										backgroundColor: item?.color,
 										borderRadius: "50%",
 										cursor: "pointer",
-										border: item?.color === "#ffffff" ? "1px solid #d4d4d4" : "none"
+										border:
+											item?.color === "#ffffff" ? "1px solid #d4d4d4" : "none",
 									}}></div>
 							)}
 							{showColorPicker === item?.id &&
@@ -598,8 +604,7 @@ const AddProductOptionsModal = () => {
 											color={item?.color}
 											onChange={(e) => {
 												handleSetValueColorInput(e, sectionIndex, itemIndex);
-											}}>
-										</SketchPicker>
+											}}></SketchPicker>
 										<div
 											style={{
 												position: "absolute",
@@ -796,8 +801,16 @@ const AddProductOptionsModal = () => {
 						</div>
 
 						<div className='col-lg-7 col-md-9 col-12'>
-							{(Number(attribute?.price) - Number(attribute?.discount_price) < 0) ? (
-								<span style={{ color: "red", fontSize: "14px", whiteSpace: "normal" }}>
+							{attribute?.price &&
+							attribute?.discount_price &&
+							Number(attribute?.price) - Number(attribute?.discount_price) <=
+								0 ? (
+								<span
+									style={{
+										color: "red",
+										fontSize: "14px",
+										whiteSpace: "normal",
+									}}>
 									يجب ان يكون سعر الخصم اقل من السعر الأساسي
 								</span>
 							) : null}
@@ -935,8 +948,9 @@ const AddProductOptionsModal = () => {
 							</div>
 
 							<section
-								className={`${productHasOptions ? "d-flex" : "d-none"
-									} row mb-4`}>
+								className={`${
+									productHasOptions ? "d-flex" : "d-none"
+								} row mb-4`}>
 								<div className='col-12 mb-4'>
 									{/* the product options section */}
 									{productOptionsSection}

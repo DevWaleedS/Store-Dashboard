@@ -803,8 +803,10 @@ const AddProductOptionsModal = () => {
 						</div>
 
 						<div className='col-lg-7 col-md-9 col-12'>
-							{Number(attribute?.price) - Number(attribute?.discount_price) <
-							0 ? (
+							{attribute?.price &&
+							attribute?.discount_price &&
+							Number(attribute?.price) - Number(attribute?.discount_price) <=
+								0 ? (
 								<span
 									style={{
 										color: "red",

@@ -125,8 +125,7 @@ const EditProduct = () => {
 		setEndActionTitle,
 		productHasOptions,
 		setProductHasOptions,
-		setDefaultOptionPrice,
-		defaultOptionPrice,
+
 		attributes,
 		setAttributes,
 		optionsSection,
@@ -310,7 +309,7 @@ const EditProduct = () => {
 
 			const matchingObject = attributes?.find(
 				(obj) =>
-					obj?.values?.length === defaultOptions?.length &&
+					obj?.values?.length === defaultOptions?.length ||
 					obj?.values?.every(
 						(value, index) => value?.title === defaultOptions[index]
 					)
@@ -326,19 +325,6 @@ const EditProduct = () => {
 			}
 		}
 	}, [attributes]);
-
-	// if (attributes?.length !== 0) {
-	// 	const defaultOptions = optionsSection?.map(
-	// 		(option) =>
-	// 			option?.values?.find((value) => value.defaultOption === true)?.title
-	// 	);
-
-	// 	const updatedAttributes = [...attributes];
-	// 	updatedAttributes[defaultOptions?.length - 1].price =
-	// 		Number(defaultOptionPrice);
-
-	// 	setAttributes(updatedAttributes);
-	// }
 
 	// To Handle Errors
 	//--------------------------------------------------
@@ -1370,15 +1356,17 @@ const EditProduct = () => {
 														لتعديل سعرالخصم قم بالدخول إلى خيارات المنتج
 													</div>
 												) : null}
-												{Number(product?.selling_price) -
-													Number(product?.discount_price) <
-													0 && (
-													<span
-														className='fs-6 text-danger'
-														style={{ whiteSpace: "normal" }}>
-														يجب ان يكون سعر الخصم اقل من السعر الأساسي
-													</span>
-												)}
+												{product?.selling_price &&
+													product?.discount_price &&
+													Number(product?.selling_price) -
+														Number(product?.discount_price) <=
+														0 && (
+														<span
+															className='fs-6 text-danger'
+															style={{ whiteSpace: "normal" }}>
+															يجب ان يكون سعر الخصم اقل من السعر الأساسي
+														</span>
+													)}
 											</div>
 
 											<div

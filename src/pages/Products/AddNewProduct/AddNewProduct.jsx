@@ -175,7 +175,7 @@ const AddNewProduct = () => {
 
 			const matchingObject = attributes?.find(
 				(obj) =>
-					obj?.values?.length === defaultOptions?.length &&
+					obj?.values?.length === defaultOptions?.length ||
 					obj?.values?.every(
 						(value, index) => value?.title === defaultOptionsArray[index]
 					)
@@ -314,7 +314,7 @@ const AddNewProduct = () => {
 		},
 	});
 
-	// get banners
+	// handle upload product image
 	const bannersImage = icons?.map((banner) => (
 		<div key={banner.name}>
 			<div className='banner-preview' key={banner.path}>
@@ -348,6 +348,7 @@ const AddNewProduct = () => {
 		return () => icons.forEach((banner) => URL.revokeObjectURL(banner.preview));
 	}, []);
 
+	// handle add new product
 	const addNewProduct = (data) => {
 		setLoadingTitle("جاري اضافة المنتج");
 		resetCouponError();
@@ -1133,15 +1134,17 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											{Number(product?.selling_price) -
-												Number(product?.discount_price) <
-												0 && (
-												<span
-													className='fs-6 fs-6 text-danger'
-													style={{ whiteSpace: "normal" }}>
-													يجب ان يكون سعر الخصم اقل من السعر الأساسي
-												</span>
-											)}
+											{product?.selling_price &&
+												product?.discount_price &&
+												Number(product?.selling_price) -
+													Number(product?.discount_price) <=
+													0 && (
+													<span
+														className='fs-6 fs-6 text-danger'
+														style={{ whiteSpace: "normal" }}>
+														يجب ان يكون سعر الخصم اقل من السعر الأساسي
+													</span>
+												)}
 										</div>
 
 										{product?.discount_price &&
