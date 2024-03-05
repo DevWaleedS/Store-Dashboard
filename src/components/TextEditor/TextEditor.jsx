@@ -39,6 +39,9 @@ const TextEditor = ({ ToolBar, placeholder, readOnly }) => {
 	} else if (ToolBar === "evaluationThePlatform") {
 		toolbarOptions = [["italic", "underline", "bold"]];
 	}
+	else if (ToolBar === "readOnly") {
+		toolbarOptions = [];
+	}
 
 	return (
 		<ReactQuill
