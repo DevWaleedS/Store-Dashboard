@@ -31,9 +31,9 @@ import { TablePagination } from "./TablePagination";
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
 	{ id: 2, ar_name: "جديد", en_name: "new" },
-	{ id: 3, ar_name: "الغاء الشحنة", en_name: "canceled" },
-	{ id: 4, ar_name: "مكتمل", en_name: "completed" },
 	{ id: 5, ar_name: "قيد التجهيز", en_name: "ready" },
+	{ id: 4, ar_name: "تم الشحن", en_name: "completed" },
+	{ id: 3, ar_name: "الغاء الشحنة", en_name: "canceled" },
 ];
 
 // Style The MUI Select
@@ -105,11 +105,18 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					شركة الشحن
 				</TableCell>
+
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الكمية
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='center'>
 					إجمالي الطلب
+				</TableCell>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
+					وسيلة الدفع
+				</TableCell>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
+					حالة الدفع
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الاجراء
@@ -355,9 +362,9 @@ export default function BigOrdersTable({
 																				? "#ff9f1a"
 																				: "#07b543",
 																		borderRadius: "16px",
-																		padding: "5px 25px",
+																		padding: "4px 12px",
 																		fontWeight: 500,
-																		width: "120px",
+																		fontSize: "16px",
 																	}}>
 																	{row?.status}
 																</span>
@@ -366,11 +373,46 @@ export default function BigOrdersTable({
 														<TableCell align='center'>
 															{row?.shippingtypes?.name}
 														</TableCell>
+
 														<TableCell align='center'>
 															{row?.quantity}
 														</TableCell>
+
 														<TableCell align='center'>
 															{row?.total_price} ر.س
+														</TableCell>
+														<TableCell align='center'>
+															{row?.paymenttypes?.paymentType}
+														</TableCell>
+														<TableCell align='right' sx={{ width: "90px" }}>
+															<div className='sub-categories'>
+																<span
+																	className='status d-flex justify-content-center align-items-center'
+																	style={{
+																		backgroundColor:
+																			row?.payment_status === " تم الدفع"
+																				? "#ebfcf1"
+																				: row?.payment_status === "فشل الدفع"
+																				? "#ffebeb"
+																				: row?.payment_status === "لم يتم الدفع"
+																				? "#ffecd1c7"
+																				: null,
+																		color:
+																			row?.payment_status === "تم الدفع"
+																				? "##9df1ba"
+																				: row?.payment_status === "فشل الدفع "
+																				? "#ff7b7b"
+																				: row?.payment_status === "لم يتم الدفع"
+																				? "#ff9f1a"
+																				: null,
+																		borderRadius: "16px",
+																		padding: "4px 12px",
+																		fontWeight: 500,
+																		fontSize: "16px",
+																	}}>
+																	{row?.payment_status}
+																</span>
+															</div>
 														</TableCell>
 
 														<TableCell align='right'>

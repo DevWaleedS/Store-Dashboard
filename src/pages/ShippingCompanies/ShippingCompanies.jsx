@@ -83,6 +83,9 @@ const ShippingCompanies = () => {
 		currentPrice: "",
 		time: "",
 		currentTime: "",
+
+		overprice: "",
+		currentOverprice: "",
 	});
 
 	const contextStore = useContext(Context);
@@ -105,7 +108,7 @@ const ShippingCompanies = () => {
 	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
-	// Side Effects
+	// Side Effects to filter other shipping
 	useEffect(() => {
 		if (fetchedData) {
 			setOtherShippingCompany(
@@ -129,14 +132,24 @@ const ShippingCompanies = () => {
 				...prevDetails,
 				id: otherShippingCompany[0]?.id,
 				status: otherShippingCompany[0]?.status === "نشط" ? true : false,
+
+				// shipment price
 				price:
 					otherShippingCompany[0]?.price === "0"
 						? ""
 						: otherShippingCompany[0]?.price,
+
+				// shipment time
 				time:
 					otherShippingCompany[0]?.time === "0"
 						? ""
 						: otherShippingCompany[0]?.time,
+				//shipment over price
+				overprice: !otherShippingCompany[0]?.overprice
+					? ""
+					: otherShippingCompany[0]?.overprice,
+
+				currentOverprice: otherShippingCompany[0]?.overprice,
 				currentPrice: otherShippingCompany[0]?.price,
 				currentTime: otherShippingCompany[0]?.time,
 			}));
@@ -227,6 +240,7 @@ const ShippingCompanies = () => {
 		let formData = new FormData();
 		formData.append("price", otherShipCompDetails?.price);
 		formData.append("time", otherShipCompDetails?.time);
+		formData.append("overprice", otherShipCompDetails?.overprice);
 		axios
 			.post(
 				`https://backend.atlbha.com/api/Store/updatePrice/${otherShipCompDetails?.id}`,
@@ -250,6 +264,9 @@ const ShippingCompanies = () => {
 						theme: "light",
 					});
 					toast.error(res?.data?.message?.en?.time?.[0], {
+						theme: "light",
+					});
+					toast.error(res?.data?.message?.en?.overprice?.[0], {
 						theme: "light",
 					});
 				}
@@ -326,6 +343,10 @@ const ShippingCompanies = () => {
 											currentShippingTime={
 												otherShipCompDetails?.status &&
 												otherShipCompDetails?.currentTime
+											}
+											currentShippingOverPrice={
+												otherShipCompDetails?.status &&
+												otherShipCompDetails?.currentOverprice
 											}
 											image={item?.image}
 											hideSwitch={true}
@@ -405,6 +426,7 @@ const ShippingCompanies = () => {
 												تكلفة الشحن 0 تعنى ان الشحن سيصبح مجاني هل انت متأكد من
 												ذلك؟
 											</div>
+
 											<div className='shipping-price-hint d-flex d-md-none'>
 												مدة التوصيل{" "}
 											</div>
@@ -434,7 +456,30 @@ const ShippingCompanies = () => {
 														: daysDefinition(otherShipCompDetails?.time)}
 												</div>
 											</div>
-
+											<div className='shipping-price-hint d-flex d-md-none'>
+												تكلفة الوزن الزائد
+											</div>
+											<div
+												style={{
+													backgroundColor: !otherShipCompDetails?.status
+														? "#fefefeef"
+														: "#fffffff7",
+												}}
+												className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1 mb-2'>
+												<div className='shipping-price-hint d-none d-md-flex'>
+													تكلفة الوزن الزائد
+												</div>
+												<input
+													type='text'
+													name='overprice'
+													value={otherShipCompDetails?.overprice}
+													onChange={(e) => handleOnChangeDetails(e)}
+													placeholder='حدد تكلفة الوزن الزائد لكل كيلو جرام  '
+													className='shipping-price'
+													disabled={!otherShipCompDetails?.status}
+												/>
+												<div className='currency p-2'> ر.س</div>
+											</div>
 											<button
 												className='save-price-btn'
 												disabled={!otherShipCompDetails?.status}

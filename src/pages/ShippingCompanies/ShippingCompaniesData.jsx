@@ -46,6 +46,7 @@ const switchStyle = {
 };
 
 const ShippingCompaniesData = ({
+	currentShippingOverPrice,
 	shippingCompanyName,
 	currentShippingPrice,
 	currentShippingTime,
@@ -66,7 +67,7 @@ const ShippingCompaniesData = ({
 			return `${timeValue} يوم`;
 		}
 	};
-
+	console.log(currentShippingOverPrice);
 	return (
 		<div className='data-widget'>
 			<div className='data'>
@@ -94,6 +95,11 @@ const ShippingCompaniesData = ({
 						<div className='current-price mt-1 w-100 d-flex justify-content-center'>
 							مدة التوصيل الحالية :{" "}
 							<span>{daysDefinition(currentShippingTime)}</span>
+						</div>
+					)}
+					{currentShippingOverPrice && (
+						<div className='current-price mt-1 w-100 d-flex justify-content-center'>
+							تكلفة الوزن الزائد : <span>{currentShippingOverPrice} ر.س</span>
 						</div>
 					)}
 				</div>
