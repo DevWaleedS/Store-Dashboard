@@ -196,7 +196,7 @@ const OrderDetails = () => {
 				},
 			})
 			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+				if (res?.data?.success === true) {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setReload(!reload);
