@@ -269,12 +269,12 @@ export const dashboardSections = [
 		route: "PaymentGetways",
 		icon: <IoWallet />,
 	},
-	// {
-	// 	id: 9908293892,
-	// 	sectionName: "المحفظة و الفواتير",
-	// 	route: "wallet",
-	// 	icon: <Payment />,
-	// },
+	{
+		id: 9908293892,
+		sectionName: "المحفظة و الفواتير",
+		route: "wallet",
+		icon: <Payment />,
+	},
 	{
 		id: 25,
 		sectionName: "الاعدادات",

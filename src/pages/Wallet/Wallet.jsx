@@ -13,6 +13,7 @@ import {
 	AddBankAccountModal,
 	EditBankAccountModal,
 	BankAccountsTable,
+	BillingTable,
 } from "./index.js";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
@@ -20,6 +21,7 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { HomeIcon } from "../../data/Icons";
 import { FiPlus } from "react-icons/fi";
 import { RiBankFill } from "react-icons/ri";
+import { FaFileInvoice } from "react-icons/fa";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -50,6 +52,11 @@ const Wallet = () => {
 		`https://backend.atlbha.com/api/Store/indexSupplier`
 	);
 
+	// Billing Data
+
+	const { fetchedData: Billing, loading: loadingBilling } = useFetch(
+		`https://backend.atlbha.com/api/Store/billing`
+	);
 	return (
 		<>
 			<Helmet>
@@ -101,7 +108,7 @@ const Wallet = () => {
 								</section>
 
 								{/* Bank Accounts */}
-								<section className='bank-accounts'>
+								<section className='bank-accounts mb-5'>
 									<div className='d-flex justify-content-between flex-column flex-md-row bank-accounts-head'>
 										<div className='d-flex align-items-center mb-3 mb-md-0'>
 											<div className=' d-flex justify-content-start align-items-center gap-1 bank-acc-title'>
@@ -125,10 +132,33 @@ const Wallet = () => {
 										) : null}
 									</div>
 
+									{/* Bank Account Table */}
 									<div className=' bank-accounts-box'>
 										<BankAccountsTable
 											bankAccount={currentBankAccount?.data}
 											loading={loading}
+										/>
+									</div>
+								</section>
+
+								{/* Billing Table */}
+								<section className='bank-accounts'>
+									<div className='d-flex justify-content-between flex-column flex-md-row bank-accounts-head'>
+										<div className='d-flex align-items-center mb-3 mb-md-0'>
+											<div className=' d-flex justify-content-start align-items-center gap-1 bank-acc-title'>
+												<span>
+													<FaFileInvoice />
+												</span>
+												<span>فواتير المبيعات</span>
+											</div>
+										</div>
+									</div>
+
+									{/* Billing Table */}
+									<div className=' bank-accounts-box'>
+										<BillingTable
+											billingInfo={Billing?.data?.billing}
+											loading={loadingBilling}
 										/>
 									</div>
 								</section>
