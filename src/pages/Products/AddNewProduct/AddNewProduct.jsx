@@ -175,11 +175,13 @@ const AddNewProduct = () => {
 
 			const matchingObject = attributes?.find(
 				(obj) =>
-					obj?.values?.length === defaultOptions?.length ||
+					obj?.values?.length === defaultOptions?.length &&
 					obj?.values?.every(
 						(value, index) => value?.title === defaultOptionsArray[index]
 					)
 			);
+
+			console.log("defaultOptions:- ", defaultOptions);
 			setProduct({
 				...product,
 				stock: qty,

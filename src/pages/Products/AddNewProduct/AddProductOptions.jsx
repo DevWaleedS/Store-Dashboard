@@ -367,6 +367,17 @@ const AddProductOptionsModal = () => {
 
 	/** handle add price value for attr */
 	const addPriceToAttributes = (e, blockIndex) => {
+		// to check if the one of some option is default
+		const notSelectDefaultOption = optionsSection?.every((section) =>
+			section?.values?.some((value) => value?.defaultOption === true)
+		);
+
+		if (!notSelectDefaultOption) {
+			toast.warning(".يرجى تعيين قيمة افتراضية أولاً لكي تتمكن من وضع السعر", {
+				theme: "light",
+			});
+			return;
+		}
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].price = Number(
 			e.target.value.replace(/[^0-9]/g, "")
@@ -376,6 +387,17 @@ const AddProductOptionsModal = () => {
 
 	/** handle add discount_price for attr */
 	const addDiscountPrice = (e, blockIndex) => {
+		// to check if the one of some option is default
+		const notSelectDefaultOption = optionsSection?.every((section) =>
+			section?.values?.some((value) => value?.defaultOption === true)
+		);
+
+		if (!notSelectDefaultOption) {
+			toast.warning(".يرجى تعيين قيمة افتراضية أولاً لكي تتمكن من وضع السعر", {
+				theme: "light",
+			});
+			return;
+		}
 		const updatedAttributes = [...attributes];
 		updatedAttributes[blockIndex].discount_price = Number(
 			e.target.value.replace(/[^0-9]/g, "")
@@ -424,7 +446,7 @@ const AddProductOptionsModal = () => {
 				section?.values?.some((value) => value?.defaultOption === true)
 			);
 
-			// to check if the qtyAttrNotEmpty of option in not empty or no
+			// to check if the Price of option in not empty or no
 			const priceAttrNotEmpty = attributes?.every((attr) => attr?.price > 0);
 
 			// to check if the qtyAttrNotEmpty of option in not empty or no

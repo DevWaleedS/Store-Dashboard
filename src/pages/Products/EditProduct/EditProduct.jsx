@@ -309,7 +309,7 @@ const EditProduct = () => {
 
 			const matchingObject = attributes?.find(
 				(obj) =>
-					obj?.values?.length === defaultOptions?.length ||
+					obj?.values?.length === defaultOptions?.length &&
 					obj?.values?.every(
 						(value, index) => value?.title === defaultOptions[index]
 					)
