@@ -218,9 +218,14 @@ const ShowImportEtlobhaProduct = () => {
 				...product,
 				name: fetchedData?.data?.product?.name,
 				short_description: fetchedData?.data?.product?.short_description,
-				price: fetchedData?.data?.product?.options?.length > 0 ? fetchedData?.data?.product?.options?.[0]?.price : fetchedData?.data?.product?.selling_price,
+				price:
+					fetchedData?.data?.product?.options?.length > 0
+						? fetchedData?.data?.product?.options?.[0]?.price
+						: fetchedData?.data?.product?.selling_price,
 				discount_price_import:
-					fetchedData?.data?.product?.options?.length > 0 ? fetchedData?.data?.product?.options?.[0]?.discount_price : fetchedData?.data?.product?.discount_price_import,
+					fetchedData?.data?.product?.options?.length > 0
+						? fetchedData?.data?.product?.options?.[0]?.discount_price
+						: fetchedData?.data?.product?.discount_price_import,
 				qty: fetchedData?.data?.product?.stock,
 			});
 			setEditorValue(fetchedData?.data?.product?.description);
@@ -249,7 +254,10 @@ const ShowImportEtlobhaProduct = () => {
 		);
 		setProductOptions(updatedAttributes);
 		if (index === 0) {
-			setProduct({ ...product, price: Number(e.target.value.replace(/[^0-9]/g, "")) })
+			setProduct({
+				...product,
+				price: Number(e.target.value.replace(/[^0-9]/g, "")),
+			});
 		}
 	};
 
@@ -262,7 +270,10 @@ const ShowImportEtlobhaProduct = () => {
 		);
 		setProductOptions(updatedAttributes);
 		if (index === 0) {
-			setProduct({ ...product, discount_price_import: Number(e.target.value.replace(/[^0-9]/g, "")) })
+			setProduct({
+				...product,
+				discount_price_import: Number(e.target.value.replace(/[^0-9]/g, "")),
+			});
 		}
 	};
 
@@ -417,8 +428,9 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={`video_wrapper ${isActive === index ? "active" : ""
-																				}`}>
+																			className={`video_wrapper ${
+																				isActive === index ? "active" : ""
+																			}`}>
 																			<video
 																				onClick={() => {
 																					setImagesPreview(item?.image);
@@ -447,8 +459,9 @@ const ShowImportEtlobhaProduct = () => {
 																		<div
 																			key={index}
 																			onClick={handleClick}
-																			className={` d-flex justify-content-center align-items-center ${isActive === index ? "active" : ""
-																				}`}>
+																			className={` d-flex justify-content-center align-items-center ${
+																				isActive === index ? "active" : ""
+																			}`}>
 																			<img
 																				style={{
 																					cursor: "pointer",
@@ -502,10 +515,7 @@ const ShowImportEtlobhaProduct = () => {
 												<label htmlFor='product-desc'> وصف المنتج </label>
 											</div>
 											<div className='col-md-7 col-12 product-souq-texteditor'>
-												<TextEditor
-													ToolBar={"readOnly"}
-													readOnly={true}
-												/>
+												<TextEditor ToolBar={"readOnly"} readOnly={true} />
 											</div>
 											<div className='col-md-3 col-12'></div>
 										</div>
@@ -563,7 +573,7 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
 													{fetchedData?.data?.product?.subcategory?.length ===
-														0 ? (
+													0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -625,7 +635,9 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Selling Price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price' className="d-flex flex-row align-items-center gap-1">
+												<label
+													htmlFor='price'
+													className='d-flex flex-row align-items-center gap-1'>
 													سعر البيع<span className='important-hint'>*</span>
 													<BootstrapTooltip
 														className={"p-0"}
@@ -673,9 +685,11 @@ const ShowImportEtlobhaProduct = () => {
 																type='text'
 																id='price'
 																disabled={productOptions?.length !== 0}
-																value={productOptions?.length !== 0
-																	? productOptions?.[0]?.price
-																	: value}
+																value={
+																	productOptions?.length !== 0
+																		? productOptions?.[0]?.price
+																		: value
+																}
 																onChange={(e) => {
 																	setProduct({
 																		...product,
@@ -708,11 +722,11 @@ const ShowImportEtlobhaProduct = () => {
 													Number(
 														fetchedData?.data?.product?.purchasing_price
 													) && (
-														<span className='fs-6 text-danger'>
-															السعر يجب ان يكون اكبر من او يساوي (
-															{fetchedData?.data?.product?.purchasing_price})
-														</span>
-													)}
+													<span className='fs-6 text-danger'>
+														السعر يجب ان يكون اكبر من او يساوي (
+														{fetchedData?.data?.product?.purchasing_price})
+													</span>
+												)}
 
 												<div className='fs-6 text-danger'>
 													{errors?.price && errors.price.message}
@@ -723,7 +737,9 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Discount price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label htmlFor='low-price' className="d-flex flex-row align-items-center gap-1">
+												<label
+													htmlFor='low-price'
+													className='d-flex flex-row align-items-center gap-1'>
 													سعر البيع بعد الخصم
 													<BootstrapTooltip
 														className={"p-0"}
@@ -771,9 +787,11 @@ const ShowImportEtlobhaProduct = () => {
 																name={"discount_price_import"}
 																type='text'
 																id='discount_price_import'
-																value={productOptions?.length !== 0
-																	? productOptions?.[0]?.discount_price
-																	: value}
+																value={
+																	productOptions?.length !== 0
+																		? productOptions?.[0]?.discount_price
+																		: value
+																}
 																disabled={productOptions?.length !== 0}
 																onChange={(e) => {
 																	setProduct({
@@ -808,15 +826,14 @@ const ShowImportEtlobhaProduct = () => {
 												{Number(product?.price) -
 													Number(product?.discount_price_import) <=
 													0 && (
-														<span className='fs-6 text-danger'>
-															يجب ان يكون سعر البيع بعد الخصم اقل من السعر
-															الأساسي
-														</span>
-													)}
+													<span className='fs-6 text-danger'>
+														يجب ان يكون سعر البيع بعد الخصم اقل من السعر الأساسي
+													</span>
+												)}
 											</div>
 
-											{(product?.discount_price_import &&
-												product?.price === "") ? (
+											{product?.discount_price_import &&
+											product?.price === "" ? (
 												<>
 													<div className='col-lg-3 col-md-3 col-12'></div>
 													<div className='col-lg-7 col-md-9 col-12'>
@@ -842,13 +859,15 @@ const ShowImportEtlobhaProduct = () => {
 										{/* Stock */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
-												<label htmlFor='price' className="d-flex flex-row align-items-center gap-1">
+												<label
+													htmlFor='price'
+													className='d-flex flex-row align-items-center gap-1'>
 													الكمية التي قمت باستيرادها
 													<BootstrapTooltip
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة الكمية التي قمت باستيرادها الحالية بقيمة إجمإلي الكميات الخاصة بخيارات المنتج  في حال وجود خيارات للمنتج'
+														title='سيتم استبدال قيمة الكمية التي قمت باستيرادها الحالية بقيمة إجمالي الكميات الخاصة بخيارات المنتج  في حال وجود خيارات للمنتج'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -865,19 +884,24 @@ const ShowImportEtlobhaProduct = () => {
 														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{fetchedData?.data?.product?.options?.length > 0 ? fetchedData?.data?.product?.options?.reduce((accumulator, option) => (Number(accumulator) + Number(option?.quantity)), 0) : product?.qty}
+														{fetchedData?.data?.product?.options?.length > 0
+															? fetchedData?.data?.product?.options?.reduce(
+																	(accumulator, option) =>
+																		Number(accumulator) +
+																		Number(option?.quantity),
+																	0
+															  )
+															: product?.qty}
 													</div>
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>
 										</div>
 
-										{productOptions?.length > 0 &&
-											(<div className='row mb-md-5 mb-3'>
+										{productOptions?.length > 0 && (
+											<div className='row mb-md-5 mb-3'>
 												<div className='col-md-3 col-12'>
-													<label htmlFor='price'>
-														خيارات المنتج
-													</label>
+													<label htmlFor='price'>خيارات المنتج</label>
 												</div>
 												<div className='col-md-7 col-12'>
 													{productOptions?.map((option, index) => (
@@ -971,9 +995,17 @@ const ShowImportEtlobhaProduct = () => {
 																	</div>
 
 																	<div className='col-12'>
-																		{(Number(option?.price) - Number(option?.discount_price) <= 0) ? (
-																			<span style={{ color: "red", fontSize: "14px", whiteSpace: "normal" }}>
-																				يجب ان يكون سعر الخصم اقل من السعر الأساسي
+																		{Number(option?.price) -
+																			Number(option?.discount_price) <=
+																		0 ? (
+																			<span
+																				style={{
+																					color: "red",
+																					fontSize: "14px",
+																					whiteSpace: "normal",
+																				}}>
+																				يجب ان يكون سعر الخصم اقل من السعر
+																				الأساسي
 																			</span>
 																		) : null}
 																	</div>
@@ -986,7 +1018,8 @@ const ShowImportEtlobhaProduct = () => {
 																					fontSize: "14px",
 																					whiteSpace: "normal",
 																				}}>
-																				يرجى ادخال السعر الأساسي أولاّّ حتى تتمكن من ادخال سعر الخصم
+																				يرجى ادخال السعر الأساسي أولاّّ حتى
+																				تتمكن من ادخال سعر الخصم
 																			</span>
 																		</div>
 																	) : null}
@@ -996,7 +1029,7 @@ const ShowImportEtlobhaProduct = () => {
 													))}
 												</div>
 											</div>
-											)}
+										)}
 
 										{Number(fetchedData?.data?.product?.stock) <= 1 && (
 											<div className='row mb-md-5 mb-3'>
@@ -1032,7 +1065,10 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-lg-4 col-6'>
 												<button
 													className='close-btn'
-													onClick={() => { navigate("/Products"); setEditorValue(""); }}>
+													onClick={() => {
+														navigate("/Products");
+														setEditorValue("");
+													}}>
 													إلغاء
 												</button>
 											</div>
@@ -1043,7 +1079,7 @@ const ShowImportEtlobhaProduct = () => {
 						</div>
 					</Box>
 				</Modal>
-			</div >
+			</div>
 		</>
 	);
 };
