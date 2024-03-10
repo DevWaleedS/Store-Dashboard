@@ -56,9 +56,9 @@ const selectStyle = {
 	fontSize: "16px",
 	width: "100%",
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-	{
-		paddingRight: "0px",
-	},
+		{
+			paddingRight: "0px",
+		},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -247,9 +247,7 @@ const AddBankAccountModal = () => {
 								{bankAccountInfo?.civil_id[0]?.name}
 							</span>
 						) : (
-							<span className='tax-text pe-2'>
-								ارفق صورة من الهوية الوطنية
-							</span>
+							<span className='tax-text pe-2'>ارفق صورة من الهوية الوطنية</span>
 						)}
 					</div>
 
@@ -269,7 +267,7 @@ const AddBankAccountModal = () => {
 	const BankAccountLetterUploader = () => {
 		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 			accept: {
-				'application/pdf': ['.pdf'],
+				"application/pdf": [".pdf"],
 			},
 			onDrop: (files) =>
 				handleFileUpload(
@@ -446,7 +444,9 @@ const AddBankAccountModal = () => {
 								<div className='col-12 '>
 									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
 										<IoMdInformationCircleOutline />
-										<span>يجب كتابة البيانات الصحيحة ليتم رفعها للجهات المختصة</span>
+										<span>
+											يجب كتابة البيانات الصحيحة ليتم رفعها للجهات المختصة
+										</span>
 									</div>
 								</div>
 							</div>
@@ -482,9 +482,9 @@ const AddBankAccountModal = () => {
 													}
 													const result =
 														banks?.data?.Banks?.filter(
-															(item) => item?.Value === parseInt(selected)
+															(item) => item?.bankId === parseInt(selected)
 														) || "";
-													return result[0]?.Text;
+													return result[0]?.name_ar;
 												}}>
 												{banks?.data?.Banks?.map((item, index) => {
 													return (
@@ -496,8 +496,8 @@ const AddBankAccountModal = () => {
 																height: "3rem",
 																"&:hover": {},
 															}}
-															value={item?.Value}>
-															{item?.Text}
+															value={item?.bankId}>
+															{item?.name_ar}
 														</MenuItem>
 													);
 												})}
@@ -539,11 +539,11 @@ const AddBankAccountModal = () => {
 
 										{(bankAccountErr?.bankAccountHolderName ||
 											errors?.bankAccountHolderName) && (
-												<div className='fs-6 text-danger'>
-													{bankAccountErr?.bankAccountHolderName}
-													{errors?.bankAccountHolderName.message}
-												</div>
-											)}
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.bankAccountHolderName}
+												{errors?.bankAccountHolderName.message}
+											</div>
+										)}
 									</div>
 								</div>
 
@@ -596,7 +596,7 @@ const AddBankAccountModal = () => {
 												{...register("iban", {
 													required: "حقل رقم آيبان الحساب مطلوب",
 												})}
-												style={{ direction:"ltr" }}
+												style={{ direction: "ltr" }}
 											/>
 											<span className='sa-iban-hint d-flex justify-content-center align-content-center flex-wrap'>
 												SA
@@ -661,11 +661,11 @@ const AddBankAccountModal = () => {
 
 										{(bankAccountErr?.bankAccountLetter ||
 											errors?.bankAccountLetter) && (
-												<div className='fs-6 text-danger'>
-													{bankAccountErr?.bankAccountLetter}
-													{errors?.bankAccountLetter.message}
-												</div>
-											)}
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.bankAccountLetter}
+												{errors?.bankAccountLetter.message}
+											</div>
+										)}
 									</div>
 								</div>
 
@@ -690,11 +690,11 @@ const AddBankAccountModal = () => {
 
 										{(bankAccountErr?.website_image ||
 											errors?.website_image) && (
-												<div className='fs-6 text-danger'>
-													{bankAccountErr?.website_image}
-													{errors?.website_image.message}
-												</div>
-											)}
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.website_image}
+												{errors?.website_image.message}
+											</div>
+										)}
 									</div>
 								</div>
 

@@ -181,7 +181,6 @@ const AddNewProduct = () => {
 					)
 			);
 
-			console.log("defaultOptions:- ", defaultOptions);
 			setProduct({
 				...product,
 				stock: qty,
