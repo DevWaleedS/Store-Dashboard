@@ -343,8 +343,8 @@ const AddProductOptionsModal = () => {
 				attributes.push({
 					values: [...currentAttribute],
 					qty: 0,
-					price: 0,
-					discount_price: 0,
+					price: "",
+					discount_price: "",
 				});
 				return;
 			}
@@ -379,9 +379,7 @@ const AddProductOptionsModal = () => {
 			return;
 		}
 		const updatedAttributes = [...attributes];
-		updatedAttributes[blockIndex].price = Number(
-			e.target.value.replace(/[^0-9]/g, "")
-		);
+		updatedAttributes[blockIndex].price = e.target.value;
 		setAttributes(updatedAttributes);
 	};
 
@@ -399,9 +397,7 @@ const AddProductOptionsModal = () => {
 			return;
 		}
 		const updatedAttributes = [...attributes];
-		updatedAttributes[blockIndex].discount_price = Number(
-			e.target.value.replace(/[^0-9]/g, "")
-		);
+		updatedAttributes[blockIndex].discount_price = e.target.value;
 		setAttributes(updatedAttributes);
 	};
 	/** handle add qty value for attr */
@@ -797,7 +793,7 @@ const AddProductOptionsModal = () => {
 								<IoPricetagsOutline />
 							</div>
 							<input
-								type='text'
+								type='number'
 								placeholder='السعر'
 								value={attribute?.price}
 								onChange={(e) => {
@@ -812,7 +808,7 @@ const AddProductOptionsModal = () => {
 								<IoPricetagsOutline />
 							</div>
 							<input
-								type='text'
+								type='number'
 								placeholder='السعر بعد الخصم'
 								value={attribute?.discount_price}
 								onChange={(e) => {
