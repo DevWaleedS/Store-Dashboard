@@ -188,7 +188,7 @@ const AddNewProduct = () => {
 				selling_price: Number(matchingObject?.price) || 0,
 			});
 		}
-	}, [attributes]);
+	}, [attributes, optionsSection]);
 
 	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({

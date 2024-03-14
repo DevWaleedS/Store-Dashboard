@@ -324,7 +324,7 @@ const EditProduct = () => {
 				}));
 			}
 		}
-	}, [attributes]);
+	}, [attributes, optionsSection]);
 
 	// To Handle Errors
 	//--------------------------------------------------
