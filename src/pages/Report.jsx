@@ -28,7 +28,7 @@ const Report = () => {
 	const componentRef = useRef();
 	const [dateValue, setDateValue] = useState([]);
 	const [url, setUrl] = useState(
-		`https://backend.atlbha.com/api/Store/reports?startDate=''&endDate=''`
+		`https://backend.atlbha.com/api/Store/reports`
 	);
 
 	// We use this effect to avoid the errors
