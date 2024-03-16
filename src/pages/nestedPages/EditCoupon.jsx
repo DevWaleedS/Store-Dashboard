@@ -121,19 +121,11 @@ const EditCoupon = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const currentDate = new Date();
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
-	const { fetchedData: payments } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/payment_types"
-	);
-	const { fetchedData: products } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/productImportproduct"
-	);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	const { fetchedData: payments } = useFetch("selector/payment_types");
+	const { fetchedData: products } = useFetch("selector/productImportproduct");
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/coupons/${id}`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`coupons/${id}`);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -314,15 +306,12 @@ const EditCoupon = () => {
 	const changeCouponStatus = () => {
 		setLoadingTitle("جاري تغير حالة كود الخصم");
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/couponchangeSatusall?id[]=${fetchedData?.data?.Coupons?.id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`couponchangeSatusall?id[]=${fetchedData?.data?.Coupons?.id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -381,16 +370,12 @@ const EditCoupon = () => {
 
 		formData.append("status", isEnable === "نشط" ? "active" : "not_active");
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/coupons/${fetchedData?.data?.Coupons?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`coupons/${fetchedData?.data?.Coupons?.id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

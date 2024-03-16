@@ -15,9 +15,7 @@ import { OrdersTableData, ProductsTableData } from "../../components/Tables";
 import DashboardSummeryDetails from "./DashboardSummeryDetails";
 
 const DashboardHomePage = () => {
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/index"
-	);
+	const { fetchedData, loading } = useFetch("index");
 	return (
 		<Fragment>
 			<Helmet>

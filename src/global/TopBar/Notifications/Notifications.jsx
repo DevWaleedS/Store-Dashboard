@@ -26,9 +26,7 @@ const Notifications = () => {
 	const [countOfNotifications, setCountOfNotifications] = useState(false);
 
 	// calling notifications
-	const { fetchedData, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/NotificationIndex"
-	);
+	const { fetchedData, reload, setReload } = useFetch("NotificationIndex");
 	// ---------------------------------------------------------
 
 	// Mark single notification as read
@@ -36,7 +34,7 @@ const Notifications = () => {
 		if (fetchedData?.data?.count_of_notifications === 0) return;
 
 		axios
-			.get(`https://backend.atlbha.com/api/Store/NotificationRead?id[]=${id}`, {
+			.get(`NotificationRead?id[]=${id}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${store_token}`,
@@ -58,15 +56,12 @@ const Notifications = () => {
 			?.map((not) => `id[]=${not?.id}`)
 			.join("&");
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/NotificationDeleteAll?${queryParams}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`NotificationDeleteAll?${queryParams}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setReload(!reload);

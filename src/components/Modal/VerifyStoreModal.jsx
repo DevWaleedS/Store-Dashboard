@@ -28,9 +28,7 @@ const VerifyStore = () => {
 	const UserInfo = useContext(UserAuth);
 	const { userInfo } = UserInfo;
 	const [verificationStatus, setVerificationStatus] = useState();
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/verification_show"
-	);
+	const { fetchedData, loading } = useFetch("verification_show");
 	const { isOpenVerifyModal } = useSelector((state) => state.VerifyModal);
 	const dispatch = useDispatch(false);
 

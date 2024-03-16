@@ -21,12 +21,8 @@ import useFetch from "../Hooks/UseFetch";
 import { UserAndManagementTable } from "../components/Tables";
 
 const Management = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/user"
-	);
-	const { fetchedData: roles } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/roles"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("user");
+	const { fetchedData: roles } = useFetch("selector/roles");
 	const navigate = useNavigate();
 	const [roll_id, setRoll_id] = useState("");
 	const [search, setSearch] = useState("");

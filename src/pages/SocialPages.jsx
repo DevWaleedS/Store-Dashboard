@@ -37,7 +37,7 @@ const SocialPages = () => {
 		?.split("=")[1];
 	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/socialMedia_store_show`
+		`socialMedia_store_show`
 	);
 
 	const contextStore = useContext(Context);
@@ -114,16 +114,12 @@ const SocialPages = () => {
 		formData.append("jaco", socialValue?.jaco || "");
 
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/socialMedia_store_update`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`socialMedia_store_update`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

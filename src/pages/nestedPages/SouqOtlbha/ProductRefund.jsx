@@ -54,7 +54,7 @@ const ProductRefund = () => {
 	const navigate = useNavigate();
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/etlobhaProductShow/${id}`
+		`etlobhaProductShow/${id}`
 	);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -65,9 +65,15 @@ const ProductRefund = () => {
 	const [imagesPreview, setImagesPreview] = useState([]);
 	const [isActive, setIsActive] = useState(null);
 	const [optionID, setOptionID] = useState(null);
-	const [productPrice, setProductPrice] = useState(fetchedData?.data?.products?.purchasing_price);
-	const [productQty, setProductQty] = useState(fetchedData?.data?.products?.stock);
-	const [productLessQty, setProductLessQty] = useState(fetchedData?.data?.products?.less_qty);
+	const [productPrice, setProductPrice] = useState(
+		fetchedData?.data?.products?.purchasing_price
+	);
+	const [productQty, setProductQty] = useState(
+		fetchedData?.data?.products?.stock
+	);
+	const [productLessQty, setProductLessQty] = useState(
+		fetchedData?.data?.products?.less_qty
+	);
 	const [selectedValues, setSelectedValues] = useState([]);
 
 	const handleChangeOptions = (e, index) => {
@@ -111,7 +117,7 @@ const ProductRefund = () => {
 		for (let i = 0; i < nestedArray?.length; i++) {
 			const subArray = nestedArray[i];
 			const subArrayValue = subArray?.name?.ar;
-			if (array?.every(value => subArrayValue?.includes(value))) {
+			if (array?.every((value) => subArrayValue?.includes(value))) {
 				return {
 					id: subArray?.id,
 					price: subArray?.price,
@@ -125,9 +131,17 @@ const ProductRefund = () => {
 	};
 
 	useEffect(() => {
-		if (selectedValues?.filter(value => value !== "")?.length > 0 && fetchedData?.data?.products?.amount === 1) {
-			const optionNames = fetchedData?.data?.products?.options?.map((option) => option);
-			const matchingSubArray = findMatchingSubArray(optionNames, selectedValues?.filter(value => value !== ""));
+		if (
+			selectedValues?.filter((value) => value !== "")?.length > 0 &&
+			fetchedData?.data?.products?.amount === 1
+		) {
+			const optionNames = fetchedData?.data?.products?.options?.map(
+				(option) => option
+			);
+			const matchingSubArray = findMatchingSubArray(
+				optionNames,
+				selectedValues?.filter((value) => value !== "")
+			);
 			setOptionID(Number(matchingSubArray?.id));
 			setProductPrice(Number(matchingSubArray?.price));
 			setProductQty(Number(matchingSubArray?.quantity));
@@ -141,15 +155,15 @@ const ProductRefund = () => {
 	}, [selectedValues, fetchedData?.data?.products]);
 
 	const getOptions = (product) => {
-		const attributesName = product?.attributes?.map((attributes) => attributes?.values?.filter(item => item?.value?.[1] === "1"));
+		const attributesName = product?.attributes?.map((attributes) =>
+			attributes?.values?.filter((item) => item?.value?.[1] === "1")
+		);
 		if (attributesName?.length > 0) {
-			return attributesName?.map(attribute => attribute?.[0]?.value?.[0]);
-		}
-		else {
+			return attributesName?.map((attribute) => attribute?.[0]?.value?.[0]);
+		} else {
 			return [];
 		}
-
-	}
+	};
 
 	// To Get All Info About Product
 	useEffect(() => {
@@ -173,12 +187,12 @@ const ProductRefund = () => {
 		formData.append("data[0][id]", productInfo?.id);
 		formData.append("data[0][price]", productPrice);
 		formData.append("data[0][qty]", productInfo?.qty);
-		if(optionID !== null){
+		if (optionID !== null) {
 			formData.append("data[0][option_id]", optionID);
 		}
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
+			.post(`addImportCart`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -302,8 +316,9 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`video_wrapper ${isActive === index ? "active" : ""
-																			}`}>
+																		className={`video_wrapper ${
+																			isActive === index ? "active" : ""
+																		}`}>
 																		<video
 																			onClick={() => {
 																				setImagesPreview(item?.image);
@@ -322,8 +337,9 @@ const ProductRefund = () => {
 																	<div
 																		key={index}
 																		onClick={handleClick}
-																		className={`${isActive === index ? "active" : ""
-																			}`}>
+																		className={`${
+																			isActive === index ? "active" : ""
+																		}`}>
 																		<img
 																			style={{
 																				cursor: "pointer",
@@ -378,15 +394,13 @@ const ProductRefund = () => {
 											</div>
 										</div>
 										<div className='col-md-6 col-12'>
-											{fetchedData?.data?.products?.attributes?.length > 0 &&
-												(
-													<ProductOptions
-														attributes={fetchedData?.data?.products?.attributes}
-														selectedValues={selectedValues}
-														updateSelectOptions={handleChangeOptions}
-													/>
-												)
-											}
+											{fetchedData?.data?.products?.attributes?.length > 0 && (
+												<ProductOptions
+													attributes={fetchedData?.data?.products?.attributes}
+													selectedValues={selectedValues}
+													updateSelectOptions={handleChangeOptions}
+												/>
+											)}
 											{/* purchasing_price */}
 											<div className='product-price mb-3'>
 												<div className='label mb-1'>سعر الشراء</div>
@@ -412,9 +426,7 @@ const ProductRefund = () => {
 														{" "}
 														*{" "}
 													</span>
-													<span>
-														({handleQut(productLessQty)})
-													</span>
+													<span>({handleQut(productLessQty)})</span>
 												</div>
 												<div className='input d-flex justify-content-center align-items-center'>
 													<div className='price-icon d-flex align-items-center p-2 gap-3'>
@@ -451,20 +463,17 @@ const ProductRefund = () => {
 													</div>
 												</div>
 
-												{Number(productInfo?.qty) >
-													Number(productQty) && (
-														<span className='fs-6 text-danger'>
-															الكمية المطلوبة غير متوفرة
-														</span>
-													)}
+												{Number(productInfo?.qty) > Number(productQty) && (
+													<span className='fs-6 text-danger'>
+														الكمية المطلوبة غير متوفرة
+													</span>
+												)}
 
 												{productInfo?.qty &&
-													Number(productInfo?.qty) <
-													Number(productLessQty) && (
+													Number(productInfo?.qty) < Number(productLessQty) && (
 														<>
 															<span className='fs-6 text-danger'>
-																أقل كمية طلب للمنتج{" "}
-																{handleQut(productLessQty)}
+																أقل كمية طلب للمنتج {handleQut(productLessQty)}
 															</span>
 														</>
 													)}

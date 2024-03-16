@@ -14,9 +14,7 @@ import { BigOrdersTable } from "../../components/Tables";
 import { ArrowBack } from "../../data/Icons";
 
 const Orders = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/orders"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("orders");
 	// -----------------------------------------------------------
 
 	// To create search

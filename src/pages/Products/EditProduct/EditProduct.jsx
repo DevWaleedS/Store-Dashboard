@@ -112,12 +112,8 @@ const EditProduct = () => {
 		?.split("=")[1];
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/product/${id}`
-	);
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`product/${id}`);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
 	const dispatch = useDispatch(false);
 
 	const contextStore = useContext(Context);
@@ -526,16 +522,12 @@ const EditProduct = () => {
 			}
 		}
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/product/${fetchedData?.data?.product?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`product/${fetchedData?.data?.product?.id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

@@ -20,9 +20,7 @@ import { Menu, MenuItem } from "@mui/material";
 const Explain = ({ searchExplain }) => {
 	const navigate = useNavigate();
 	// to get all  data from server
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/explainVideos"
-	);
+	const { fetchedData, loading } = useFetch("explainVideos");
 	let explainvideos = fetchedData?.data?.explainvideos;
 
 	if (searchExplain !== "") {

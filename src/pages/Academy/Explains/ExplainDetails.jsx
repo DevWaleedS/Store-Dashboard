@@ -16,9 +16,7 @@ const ExplainDetails = () => {
 	const navigate = useNavigate();
 
 	// to get all  data from server
-	const { fetchedData, loading } = useFetch(
-		`https://backend.atlbha.com/api/Store/explainVideos/${id} `
-	);
+	const { fetchedData, loading } = useFetch(`explainVideos/${id} `);
 
 	// This code to handle get the src from youtube iframe src
 	const [videoUrl, setVideoUrl] = useState(null);

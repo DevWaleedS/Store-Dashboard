@@ -23,12 +23,9 @@ function CheckoutPage() {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/showImportCart"
-	);
-	const { fetchedData: paymentMethods } = useFetch(
-		"https://backend.atlbha.com/api/Store/paymentmethodsImport"
-	);
+	const { fetchedData, loading, reload, setReload } =
+		useFetch("showImportCart");
+	const { fetchedData: paymentMethods } = useFetch("paymentmethodsImport");
 	const { fetchedData: citiesData } = useFetch(
 		"https://backend.atlbha.com/api/selector/shippingcities/5"
 	);
@@ -135,7 +132,7 @@ function CheckoutPage() {
 		formData.append("description", shipping?.notes || "");
 		formData.append("default_address", shipping?.defaultAddress ? 1 : 0);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/checkoutImport`, formData, {
+			.post(`checkoutImport`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -192,16 +189,12 @@ function CheckoutPage() {
 		let formData = new FormData();
 		formData.append("code", coupon);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/applyCoupon/${fetchedData?.data?.cart?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`applyCoupon/${fetchedData?.data?.cart?.id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (
 					res?.data?.success === true &&
@@ -543,7 +536,7 @@ function CheckoutPage() {
 																			alignItems: "start",
 																			gap: "0.2rem",
 																		}}>
-																		<div className="d-flex flex-row align-items-center gap-1">
+																		<div className='d-flex flex-row align-items-center gap-1'>
 																			<span
 																				style={{
 																					maxWidth: "170px",
@@ -555,9 +548,13 @@ function CheckoutPage() {
 																			</span>{" "}
 																			× <span>{item?.qty}</span>
 																		</div>
-																		<ul className="product-options">
+																		<ul className='product-options'>
 																			{item?.options?.map((option, index) => (
-																				<li key={index}>{`${index === 0 ? `${option}` : `/ ${option}`}`}</li>
+																				<li key={index}>{`${
+																					index === 0
+																						? `${option}`
+																						: `/ ${option}`
+																				}`}</li>
 																			))}
 																		</ul>
 																	</td>
@@ -575,14 +572,21 @@ function CheckoutPage() {
 															<th>الضريبة</th>
 															<td>{fetchedData?.data?.cart?.tax} ر.س</td>
 														</tr>
-														{fetchedData?.data?.cart?.overweight_price !== null && fetchedData?.data?.cart?.overweight_price !== 0 && (
-															<tr>
-																<th>قيمة الوزن الزائد ({fetchedData?.data?.cart?.overweight} kg)</th>
-																<td>
-																	{fetchedData?.data?.cart?.overweight_price} ر.س
-																</td>
-															</tr>
-														)}
+														{fetchedData?.data?.cart?.overweight_price !==
+															null &&
+															fetchedData?.data?.cart?.overweight_price !==
+																0 && (
+																<tr>
+																	<th>
+																		قيمة الوزن الزائد (
+																		{fetchedData?.data?.cart?.overweight} kg)
+																	</th>
+																	<td>
+																		{fetchedData?.data?.cart?.overweight_price}{" "}
+																		ر.س
+																	</td>
+																</tr>
+															)}
 														<tr>
 															<th>الشحن</th>
 															<td>
@@ -595,7 +599,7 @@ function CheckoutPage() {
 																<th>
 																	الخصم
 																	{fetchedData?.data?.cart?.discount_type ===
-																		"percent" ? (
+																	"percent" ? (
 																		<span
 																			style={{
 																				fontSize: "0.85rem",

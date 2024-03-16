@@ -116,15 +116,9 @@ const AddCoupon = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
-	const { fetchedData: payments } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/payment_types"
-	);
-	const { fetchedData: products } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/productImportproduct"
-	);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	const { fetchedData: payments } = useFetch("selector/payment_types");
+	const { fetchedData: products } = useFetch("selector/productImportproduct");
 
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
@@ -259,7 +253,7 @@ const AddCoupon = () => {
 
 		formData.append("status", isEnable === true ? "active" : "not_active");
 		axios
-			.post(`https://backend.atlbha.com/api/Store/coupons`, formData, {
+			.post(`coupons`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

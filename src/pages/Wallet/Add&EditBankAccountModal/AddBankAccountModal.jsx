@@ -373,7 +373,7 @@ const AddBankAccountModal = () => {
 		formData.append("website_image", bankAccountInfo?.website_image[0]);
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/createSupplier`, formData, {
+			.post(`createSupplier`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

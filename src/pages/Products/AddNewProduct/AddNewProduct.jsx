@@ -108,9 +108,7 @@ const AddNewProduct = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
@@ -437,7 +435,7 @@ const AddNewProduct = () => {
 		}
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/product`, formData, {
+			.post(`product`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

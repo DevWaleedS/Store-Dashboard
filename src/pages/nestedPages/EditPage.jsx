@@ -59,12 +59,8 @@ const EditPage = () => {
 		?.split("=")[1];
 
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/page/${id}`
-	);
-	const { fetchedData: pageCategories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/page-categories"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`page/${id}`);
+	const { fetchedData: pageCategories } = useFetch("selector/page-categories");
 	const navigate = useNavigate();
 
 	// To get the editor content
@@ -296,7 +292,7 @@ const EditPage = () => {
 		}
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/page/${id}`, formData, {
+			.post(`page/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

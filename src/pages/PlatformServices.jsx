@@ -27,8 +27,6 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { HomeIcon } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 
-// Redux
-import { useSelector } from "react-redux";
 // ---------------------------------------------
 
 // Select Style
@@ -67,21 +65,9 @@ const PlatformServices = () => {
 	// ------------------------------------------------------------
 
 	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/etlobhaservice/show"
+		"etlobhaservice/show"
 	);
-	const { fetchedData: services } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/services"
-	);
-	// -----------------------------------------------------------
-
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus, navigate]);
+	const { fetchedData: services } = useFetch("selector/services");
 	// -----------------------------------------------------------
 
 	const [data, setData] = useState({
@@ -117,7 +103,7 @@ const PlatformServices = () => {
 		formData.append("description", data?.description);
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/etlobhaservice`, formData, {
+			.post(`etlobhaservice`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

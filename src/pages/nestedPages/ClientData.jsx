@@ -134,7 +134,7 @@ const ClientData = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/cartShow/${id}`
+		`cartShow/${id}`
 	);
 	const cartDetails = fetchedData?.data?.cart;
 
@@ -215,18 +215,21 @@ const ClientData = () => {
 		let calculatedValue = "---";
 
 		if (free_shipping) {
-			calculatedValue = (cartDetails?.total - cartDetails?.shipping_price);
+			calculatedValue = cartDetails?.total - cartDetails?.shipping_price;
 		} else {
 			if (openPercentMenu) {
 				if (discount_type === "fixed") {
-					calculatedValue = discountFixedValue <= 0 ? "---" : discountFixedValue;
+					calculatedValue =
+						discountFixedValue <= 0 ? "---" : discountFixedValue;
 				} else if (discount_type === "percent") {
 					const totalAfterDiscount = (
 						cartDetails?.total - discountPercentValue
 					)?.toFixed(2);
-					calculatedValue = totalAfterDiscount <= 0 ? "---" : totalAfterDiscount;
+					calculatedValue =
+						totalAfterDiscount <= 0 ? "---" : totalAfterDiscount;
 				} else {
-					calculatedValue = cartDetails?.total <= 0 ? "---" : cartDetails?.total;
+					calculatedValue =
+						cartDetails?.total <= 0 ? "---" : cartDetails?.total;
 				}
 			} else {
 				calculatedValue = cartDetails?.total <= 0 ? "---" : cartDetails?.total;
@@ -277,16 +280,12 @@ const ClientData = () => {
 		);
 
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/sendOfferCart/${id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`sendOfferCart/${id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true) {
 					setLoadingTitle("");
@@ -597,7 +596,7 @@ const ClientData = () => {
 
 														{fetchedData?.data?.cart?.overweight !== 0 &&
 															fetchedData?.data?.cart?.overweight_price !==
-															0 && (
+																0 && (
 																<TableRow>
 																	<TableCell
 																		colSpan={3}
@@ -827,7 +826,7 @@ const ClientData = () => {
 																		)}
 																	{discount_type === "percent" &&
 																		cartDetails?.total - discountPercentValue <
-																		0 && (
+																			0 && (
 																			<div>
 																				<span className='fs-6 text-danger'>
 																					قيمة النسبة اكبر من إجمالي السلة
@@ -836,8 +835,8 @@ const ClientData = () => {
 																		)}
 																	{discount_type === "percent" &&
 																		cartDetails?.total -
-																		discountPercentValue ===
-																		0 && (
+																			discountPercentValue ===
+																			0 && (
 																			<div>
 																				<span className='fs-6 text-danger'>
 																					قيمة النسبة متساوية من إجمالي السلة

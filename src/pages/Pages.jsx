@@ -79,9 +79,7 @@ const menuItemStyles = {
 };
 
 const Pages = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/page"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("page");
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");

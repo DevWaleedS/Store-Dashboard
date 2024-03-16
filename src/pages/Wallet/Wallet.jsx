@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Third party
 
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // components
 import useFetch from "../../Hooks/UseFetch";
@@ -24,7 +24,7 @@ import { RiBankFill } from "react-icons/ri";
 import { FaFileInvoice } from "react-icons/fa";
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
 import BankAccStatusComment from "./Add&EditBankAccountModal/BankAccStatusComment.jsx";
 import AlertMessage from "./Add&EditBankAccountModal/AlerMessage.jsx";
@@ -32,31 +32,18 @@ import AlertMessage from "./Add&EditBankAccountModal/AlerMessage.jsx";
 const Wallet = () => {
 	const dispatch = useDispatch();
 
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	// get supplierDashboard
-	const { fetchedData: supplierDashboard } = useFetch(
-		`https://backend.atlbha.com/api/Store/showSupplierDashboard`
-	);
+	const { fetchedData: supplierDashboard } = useFetch(`showSupplierDashboard`);
 
 	// showSupplier bank account
-	const { fetchedData: currentBankAccount, loading } = useFetch(
-		`https://backend.atlbha.com/api/Store/indexSupplier`
-	);
+	const { fetchedData: currentBankAccount, loading } =
+		useFetch(`indexSupplier`);
 
 	// Billing Data
 
-	const { fetchedData: Billing, loading: loadingBilling } = useFetch(
-		`https://backend.atlbha.com/api/Store/billing`
-	);
+	const { fetchedData: Billing, loading: loadingBilling } = useFetch(`billing`);
 	return (
 		<>
 			<Helmet>

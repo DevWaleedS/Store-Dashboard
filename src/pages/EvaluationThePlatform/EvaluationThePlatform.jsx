@@ -1,10 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 // Third party
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
@@ -19,9 +19,6 @@ import "./EvaluationThePlatform.css";
 import { TextEditor } from "../../components/TextEditor";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
-// Redux
-import { useSelector } from "react-redux";
-
 const EvaluationThePlatform = () => {
 	const store_token = document.cookie
 		?.split("; ")
@@ -32,16 +29,6 @@ const EvaluationThePlatform = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-	// -----------------------------------------------------------
-
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	// To get the editor content
@@ -58,7 +45,7 @@ const EvaluationThePlatform = () => {
 		let formData = new FormData();
 		formData.append("comment_text", editorValue);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/etlobhaComment`, formData, {
+			.post(`etlobhaComment`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

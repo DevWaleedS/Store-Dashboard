@@ -26,9 +26,7 @@ const CourseDetails = () => {
 	const dispatch = useDispatch(false);
 
 	// to get all  data from server
-	const { fetchedData, loading } = useFetch(
-		`https://backend.atlbha.com/api/Store/course/${id}`
-	);
+	const { fetchedData, loading } = useFetch(`course/${id}`);
 
 	return (
 		<>

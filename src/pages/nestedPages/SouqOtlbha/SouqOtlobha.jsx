@@ -36,7 +36,7 @@ const SouqOtlobha = () => {
 		loading,
 		reload,
 		setReload,
-	} = useFetch("https://backend.atlbha.com/api/Store/showImportCart");
+	} = useFetch("showImportCart");
 
 	const [showFilteringOptions, setShowFilteringOptions] = useState(false);
 	const contextStore = useContext(Context);

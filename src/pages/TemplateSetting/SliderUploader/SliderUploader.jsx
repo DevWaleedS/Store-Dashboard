@@ -95,93 +95,96 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(sliderIndex, sliderState, setSliderState, setPreviewSliderState) =>
-			async (imageList) => {
-				// Check if the image size is valid
-				const isSizeValid = imageList?.every(
-					(image) => image?.file?.size <= maxFileSize
-				);
+		async (imageList) => {
+			// Check if the image size is valid
+			const isSizeValid = imageList?.every(
+				(image) => image?.file?.size <= maxFileSize
+			);
 
-				// Errors message
-				const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 1 ميجابايت.";
-				const dimensionsErrorMessage =
-					"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
+			// Errors message
+			const sizeErrorMessage = "حجم السلايدر يجب أن لا يزيد عن 1 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس السلايدر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 
-				const checkImageDimensions = (image) =>
-					new Promise((resolve) => {
-						const img = new Image();
-						img.onload = () => {
-							if (img?.width !== 1110 && img?.height !== 440) {
-								//  if the image dimensions is not valid
-								resolve(false);
-							} else {
-								resolve(true);
-							}
-						};
-						img.src = image?.data_url;
-					});
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img?.width !== 1110 && img?.height !== 440) {
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
 
-				const isValidDimensions = await Promise?.all(
-					imageList?.map(checkImageDimensions)
-				).then((results) => results?.every((result) => result));
+			const isValidDimensions = await Promise?.all(
+				imageList?.map(checkImageDimensions)
+			).then((results) => results?.every((result) => result));
 
-				// if the isValidDimensions and  imageSize >= maxFileSize return
-				if (!isSizeValid && !isValidDimensions) {
-					// Display a warning message and reset the logo state
-					toast.warning(sizeErrorMessage, {
-						theme: "light",
-					});
-					toast.warning(dimensionsErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else if (!isValidDimensions && sizeErrorMessage) {
-					toast.warning(dimensionsErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else if (!isSizeValid && isValidDimensions) {
-					toast.warning(sizeErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else {
-					const updatedSliderState = [...sliderState];
-					updatedSliderState[sliderIndex] = imageList;
-					setSliderState(updatedSliderState);
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isSizeValid && !isValidDimensions) {
+				// Display a warning message and reset the logo state
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isValidDimensions && sizeErrorMessage) {
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isSizeValid && isValidDimensions) {
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else {
+				const updatedSliderState = [...sliderState];
+				updatedSliderState[sliderIndex] = imageList;
+				setSliderState(updatedSliderState);
 
-					const updatedNameState = updatedSliderState[sliderIndex]?.data_url;
-					const updatedFileState = updatedSliderState[sliderIndex];
+				const updatedNameState = updatedSliderState[sliderIndex]?.data_url;
+				const updatedFileState = updatedSliderState[sliderIndex];
 
-					const sliderNames = [
-						setFirstSliderName,
-						setSecondSliderName,
-						setThirdSliderName,
-					];
+				const sliderNames = [
+					setFirstSliderName,
+					setSecondSliderName,
+					setThirdSliderName,
+				];
 
-					const sliderFile = [setFirstSlider, setSecondSlider, setThirdSlider];
+				const sliderFile = [setFirstSlider, setSecondSlider, setThirdSlider];
 
-					if (sliderNames[sliderIndex]) {
-						sliderNames[sliderIndex](updatedNameState);
-					}
-					if (sliderFile[sliderIndex]) {
-						sliderFile[sliderIndex](updatedFileState);
-					}
+				if (sliderNames[sliderIndex]) {
+					sliderNames[sliderIndex](updatedNameState);
 				}
-				setPreviewSliderState(imageList);
-			};
+				if (sliderFile[sliderIndex]) {
+					sliderFile[sliderIndex](updatedFileState);
+				}
+			}
+			setPreviewSliderState(imageList);
+		};
 
 	// update Sliders function
 	const updateSliders = () => {
 		setLoadingTitle("جاري تعديل السلايدرات المتحركة");
 		let formData = new FormData();
 		formData.append("slider1", firstSlider[0]?.file || firstSliderName || null);
-		formData.append("slider2", secondSlider[0]?.file || secondSliderName || null);
+		formData.append(
+			"slider2",
+			secondSlider[0]?.file || secondSliderName || null
+		);
 		formData.append("slider3", thirdSlider[0]?.file || thirdSliderName || null);
 		formData.append("sliderstatus1", sliderstatus1 ? "active" : "not_active");
 		formData.append("sliderstatus2", sliderstatus2 ? "active" : "not_active");
 		formData.append("sliderstatus3", sliderstatus3 ? "active" : "not_active");
 		axios
-			.post(`https://backend.atlbha.com/api/Store/sliderUpdate`, formData, {
+			.post(`sliderUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -208,14 +211,11 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 			});
 	};
 
-
 	return (
 		<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 			<div className='title'>
-				<h4>
-					السلايدر المتحرك (440 * 1110)
-				</h4>
-				<span className="sub_title">
+				<h4>السلايدر المتحرك (440 * 1110)</h4>
+				<span className='sub_title'>
 					( تستطيع تغيير الصورة التي تظهر في السلايدر المتحرك أعلى الموقع )
 				</span>
 			</div>

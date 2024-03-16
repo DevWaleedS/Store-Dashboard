@@ -11,23 +11,10 @@ import { HomeIcon } from "../data/Icons";
 import useFetch from "../Hooks/UseFetch";
 import { CartsTables } from "../components/Tables";
 
-// Redux
-import { useSelector } from "react-redux";
-
 const Carts = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/admin"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("admin");
 	// -----------------------------------------------------------
 
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 	// to create search
 	const [search, setSearch] = useState("");

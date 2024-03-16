@@ -117,9 +117,7 @@ const ShowImportEtlobhaProduct = () => {
 		?.split("=")[1];
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/product/${id}`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`product/${id}`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const editorContent = useContext(TextEditorContext);
@@ -299,16 +297,12 @@ const ShowImportEtlobhaProduct = () => {
 		}
 
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/updateimportproduct/${fetchedData?.data?.product?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`updateimportproduct/${fetchedData?.data?.product?.id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);

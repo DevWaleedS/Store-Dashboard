@@ -1,14 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { StoreVerificationThunk } from '../Thunk/storeVerificationThunk';
+import { createSlice } from "@reduxjs/toolkit";
+import { StoreVerificationThunk } from "../Thunk/storeVerificationThunk";
 
 const initialValueState = {
 	isOpenVerifyModal: false,
-	verificationStoreStatus: '',
+	verificationStoreStatus: "",
 };
 
-// slices
+// Slices
 const VerifyModalSlice = createSlice({
-	name: 'VerifyModalSlice',
+	name: "VerifyModalSlice",
 	initialState: initialValueState,
 	reducers: {
 		openVerifyModal: (state, action) => {
@@ -25,10 +25,9 @@ const VerifyModalSlice = createSlice({
 				// handle pending state if needed
 			})
 			.addCase(StoreVerificationThunk.fulfilled, (state, action) => {
-				state.verificationStoreStatus = action.payload?.data?.stores?.map((store) => store?.verification_status)[0];
-
-
-				
+				state.verificationStoreStatus = action.payload?.data?.stores?.map(
+					(store) => store?.verification_status
+				)[0];
 			})
 			.addCase(StoreVerificationThunk.rejected, (state, action) => {
 				// handle error state if needed

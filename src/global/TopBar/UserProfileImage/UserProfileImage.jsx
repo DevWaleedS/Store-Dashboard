@@ -62,9 +62,7 @@ const UserProfileImage = () => {
 	const { userInfo, setUserInfo } = UserInfo;
 
 	// to get the user profile info
-	const { fetchedData: profile } = useFetch(
-		"https://backend.atlbha.com/api/Store/profile"
-	);
+	const { fetchedData: profile } = useFetch("profile");
 
 	// to set data to the user aut
 	useEffect(() => {
@@ -97,7 +95,7 @@ const UserProfileImage = () => {
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					localStorage.removeItem("store_token");
+					localStorage.clear();
 
 					navigate("/auth/login");
 				} else {
@@ -118,7 +116,9 @@ const UserProfileImage = () => {
 					<div className='dropdown-title d-md-flex align-items-center d-none'>
 						<span className='me-1 '>
 							{userInfo?.name !== null
-								? userInfo?.name === "null" ? userInfo?.username : userInfo?.name
+								? userInfo?.name === "null"
+									? userInfo?.username
+									: userInfo?.name
 								: userInfo?.username || "اسم التاجر"}
 						</span>
 						<IoIosArrowDown />

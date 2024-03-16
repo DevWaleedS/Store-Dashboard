@@ -14,7 +14,7 @@ function CartMenu({ data, reload, setReload }) {
 	// delete item from cart function
 	const deleteItemFromCart = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/deleteImportCart/${id}`, {
+			.get(`deleteImportCart/${id}`, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -54,9 +54,11 @@ function CartMenu({ data, reload, setReload }) {
 										<a href={`${product?.product?.id}`}>
 											{product?.product?.name}
 										</a>
-										<ul className="product-options">
+										<ul className='product-options'>
 											{product?.options?.map((option, index) => (
-												<li key={index}>{`${index === 0 ? `${option}` : `/ ${option}`}`}</li>
+												<li key={index}>{`${
+													index === 0 ? `${option}` : `/ ${option}`
+												}`}</li>
 											))}
 										</ul>
 									</div>
@@ -85,14 +87,13 @@ function CartMenu({ data, reload, setReload }) {
 									<th>الضريبة</th>
 									<td>{data?.tax} ر.س</td>
 								</tr>
-								{data?.overweight_price !== null && data?.overweight_price !== 0 && (
-									<tr>
-										<th>قيمة الوزن الزائد ({data?.overweight} kg)</th>
-										<td>
-											{data?.overweight_price} ر.س
-										</td>
-									</tr>
-								)}
+								{data?.overweight_price !== null &&
+									data?.overweight_price !== 0 && (
+										<tr>
+											<th>قيمة الوزن الزائد ({data?.overweight} kg)</th>
+											<td>{data?.overweight_price} ر.س</td>
+										</tr>
+									)}
 								<tr>
 									<th>الشحن</th>
 									<td>{data?.shipping_price} ر.س</td>

@@ -18,9 +18,7 @@ const Offers = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/offer"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("offer");
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -28,7 +26,7 @@ const Offers = () => {
 	// change category status
 	const changeOfferStatus = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/changeOfferStatus/${id}`, {
+			.get(`changeOfferStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${store_token}`,

@@ -65,9 +65,7 @@ const EditUserDetails = () => {
 	const { setUserInfo } = UserInfo;
 	const { setEndActionTitle } = contextStore;
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/profile"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("profile");
 
 	const [user, setUser] = useState({
 		name: "",
@@ -258,7 +256,7 @@ const EditUserDetails = () => {
 			formData.append("image", userImage[0]);
 		}
 		axios
-			.post(`https://backend.atlbha.com/api/Store/profile`, formData, {
+			.post(`profile`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

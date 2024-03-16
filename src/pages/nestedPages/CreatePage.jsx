@@ -58,7 +58,7 @@ const CreatePage = () => {
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
 	const { fetchedData: pageCategories, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/page-categories"
+		"selector/page-categories"
 	);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
@@ -262,7 +262,7 @@ const CreatePage = () => {
 		formData.append("image", itsPost ? images[0] || "" : "");
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/page-publish`, formData, {
+			.post(`page-publish`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

@@ -28,9 +28,8 @@ const Notifications = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/NotificationIndex"
-	);
+	const { fetchedData, loading, reload, setReload } =
+		useFetch("NotificationIndex");
 	const [selected, setSelected] = useState([]);
 	const [showMore, setShowMore] = useState("");
 	const NotificationStore = useContext(NotificationContext);
@@ -148,15 +147,12 @@ const Notifications = () => {
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/NotificationDeleteAll?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`NotificationDeleteAll?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -337,9 +333,7 @@ const Notifications = () => {
 																				"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/NotificationDelete/${not?.id}`
-																			);
+																			setUrl(`NotificationDelete/${not?.id}`);
 																		}}
 																		style={{ cursor: "pointer" }}
 																		title='حذف الإشعار'

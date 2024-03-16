@@ -58,7 +58,7 @@ const SupportDetails = () => {
 	const dispatch = useDispatch(true);
 	// to get all  data from server
 	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/technicalSupport/${id}`
+		`technicalSupport/${id}`
 	);
 	return (
 		<>

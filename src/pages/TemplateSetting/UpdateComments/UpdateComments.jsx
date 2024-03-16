@@ -45,7 +45,7 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 		formData.append("commentstatus", commentStatus ? "active" : "not_active");
 		formData.append("clientstatus", clientStatus ? "active" : "not_active");
 		axios
-			.post(`https://backend.atlbha.com/api/Store/commentUpdate`, formData, {
+			.post(`commentUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

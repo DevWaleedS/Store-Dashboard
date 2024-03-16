@@ -86,9 +86,7 @@ const AddNewUser = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData: roles } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/roles"
-	);
+	const { fetchedData: roles } = useFetch("selector/roles");
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 
@@ -217,7 +215,7 @@ const AddNewUser = () => {
 		formData.append("status", data?.status);
 		formData.append("image", images[0]);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/user`, formData, {
+			.post(`user`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

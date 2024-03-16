@@ -88,7 +88,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 		formData.append("comment_id", commentDetails?.id);
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/replaycomment`, formData, {
+			.post(`replaycomment`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

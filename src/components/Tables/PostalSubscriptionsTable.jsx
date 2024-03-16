@@ -229,15 +229,12 @@ export default function PostalSubscriptionsTable({
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/subsicriptionsdeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`subsicriptionsdeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -347,7 +344,7 @@ export default function PostalSubscriptionsTable({
 																			);
 																			setDeleteMethod("get");
 																			setUrl(
-																				`https://backend.atlbha.com/api/Store/subsicriptionsdeleteall?id[]=${row?.id}`
+																				`subsicriptionsdeleteall?id[]=${row?.id}`
 																			);
 																		}}
 																		style={{

@@ -18,9 +18,7 @@ import { Menu, MenuItem } from "@mui/material";
 
 const CoursesTraining = ({ searchCourses }) => {
 	// to get all  data from server
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/course"
-	);
+	const { fetchedData, loading } = useFetch("course");
 	let courses = fetchedData?.data?.courses;
 
 	if (searchCourses !== "") {

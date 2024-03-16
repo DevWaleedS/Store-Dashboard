@@ -4,9 +4,7 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 import { IoCheckmarkSharp } from "react-icons/io5";
 
 const Plans = ({ yearlyPlan }) => {
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/packages"
-	);
+	const { fetchedData, loading } = useFetch("selector/packages");
 	return (
 		<div>
 			<div className='package-boxes d-flex flex-md-row flex-column gap-4 align-items-center flex-wrap'>

@@ -9,9 +9,8 @@ import SupportTable from "../components/Tables/SupportTable";
 const Support = () => {
 	const [search, setSearch] = useState("");
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/technicalSupport"
-	);
+	const { fetchedData, loading, reload, setReload } =
+		useFetch("technicalSupport");
 
 	let Technicalsupports = fetchedData?.data?.Technicalsupports;
 

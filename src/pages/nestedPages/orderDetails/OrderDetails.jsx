@@ -86,9 +86,7 @@ const OrderDetails = () => {
 		?.split("=")[1];
 
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/orders/${id}`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`orders/${id}`);
 
 	const [shippingId, setShippingId] = useState(null);
 	const { fetchedData: shippingCities } = useFetch(
@@ -189,7 +187,7 @@ const OrderDetails = () => {
 			formData.append("street_address", shipping?.address);
 		}
 		axios
-			.post(`https://backend.atlbha.com/api/Store/orders/${id}`, formData, {
+			.post(`orders/${id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -239,7 +237,7 @@ const OrderDetails = () => {
 		) {
 			axios
 				.get(
-					`https://backend.atlbha.com/api/Store/PrintSticker/${id}/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+					`PrintSticker/${id}/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
 					{
 						headers: {
 							"Content-Type": "multipart/form-data",
@@ -263,7 +261,7 @@ const OrderDetails = () => {
 			if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
 				axios
 					.get(
-						`https://backend.atlbha.com/api/Store/PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						`PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
@@ -293,7 +291,7 @@ const OrderDetails = () => {
 			} else if (fetchedData?.data?.orders?.shippingtypes?.name === "Imile") {
 				axios
 					.get(
-						`https://backend.atlbha.com/api/Store/PrintImileSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						`PrintImileSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
@@ -320,7 +318,7 @@ const OrderDetails = () => {
 			) {
 				axios
 					.get(
-						`https://backend.atlbha.com/api/Store/PrintJTSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						`PrintJTSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",
@@ -348,7 +346,7 @@ const OrderDetails = () => {
 			} else {
 				axios
 					.get(
-						`https://backend.atlbha.com/api/Store/PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
+						`PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
 						{
 							headers: {
 								"Content-Type": "multipart/form-data",

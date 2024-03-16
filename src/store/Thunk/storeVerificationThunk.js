@@ -6,15 +6,12 @@ export const StoreVerificationThunk = createAsyncThunk(
 	async (accessToken, thunkAPI) => {
 		const { rejectWithValue } = thunkAPI;
 		try {
-			const response = await axios.get(
-				"https://backend.atlbha.com/api/Store/verification_show",
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${accessToken}`,
-					},
-				}
-			);
+			const response = await axios.get("verification_show", {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
 
 			return response.data;
 		} catch (error) {

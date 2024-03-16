@@ -60,12 +60,8 @@ const EditRole = () => {
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
 	const { id } = useParams();
-	const { fetchedData: permissionsListData } = useFetch(
-		"https://backend.atlbha.com/api/Store/permissions"
-	);
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/roles/${id}`
-	);
+	const { fetchedData: permissionsListData } = useFetch("permissions");
+	const { fetchedData, loading, reload, setReload } = useFetch(`roles/${id}`);
 	const [search, setSearch] = useState("");
 	const [roles, setRoles] = useState({
 		role_name: "",
@@ -119,7 +115,7 @@ const EditRole = () => {
 			formData.append("permissions[]", permissions[i]);
 		}
 		axios
-			.post(`https://backend.atlbha.com/api/Store/roles/${id}`, formData, {
+			.post(`roles/${id}`, formData, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${store_token}`,

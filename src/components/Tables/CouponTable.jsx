@@ -288,15 +288,12 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 	// change category status
 	const changeProductStatus = (id) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/couponchangeSatusall?id[]=${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`couponchangeSatusall?id[]=${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -313,15 +310,12 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/coupondeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`coupondeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -337,15 +331,12 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 		if (confirm && actionTitle === "changeStatus") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/couponchangeSatusall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`couponchangeSatusall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -537,9 +528,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 																				"سيتم حذف كود الخصم وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/coupondeleteall?id[]=${row?.id}`
-																			);
+																			setUrl(`coupondeleteall?id[]=${row?.id}`);
 																		}}
 																		style={{
 																			cursor: "pointer",

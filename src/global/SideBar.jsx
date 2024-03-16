@@ -49,6 +49,7 @@ import {
 } from "../data/Icons";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
+import { StoreVerificationThunk } from "../store/Thunk/storeVerificationThunk";
 
 const SideBar = ({ open, closeSidebar }) => {
 	const dispatch = useDispatch(false);
@@ -65,9 +66,7 @@ const SideBar = ({ open, closeSidebar }) => {
 	-------------------------------------------------------------------------------------------
 	 */
 
-	const { fetchedData } = useFetch(
-		"https://backend.atlbha.com/api/Store/setting_store_show"
-	);
+	const { fetchedData } = useFetch("setting_store_show");
 	useEffect(() => {
 		if (fetchedData) {
 			setStoreLogo(fetchedData?.data?.setting_store?.logo);
@@ -127,10 +126,10 @@ const SideBar = ({ open, closeSidebar }) => {
 					</MenuItem>
 				</NavLink>
 				<NavLink
-					// location.pathname.slice(1)
 					to='Products'
 					className='menu-link'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());

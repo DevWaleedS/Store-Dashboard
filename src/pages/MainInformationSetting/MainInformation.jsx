@@ -89,17 +89,12 @@ const MainInformation = () => {
 	]);
 
 	// To show the store info that come from api
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/setting_store_show"
-	);
+	const { fetchedData, loading, reload, setReload } =
+		useFetch("setting_store_show");
 
 	// to get selectors from api
-	const { fetchedData: countryList } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/countries"
-	);
-	const { fetchedData: citiesList } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/cities"
-	);
+	const { fetchedData: countryList } = useFetch("selector/countries");
+	const { fetchedData: citiesList } = useFetch("selector/cities");
 
 	//  to handle disabled or enable phone number based verificationStoreStatus
 	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
@@ -177,10 +172,10 @@ const MainInformation = () => {
 				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
 					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
 					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-						"00966"
-					)
-						? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-						: fetchedData?.data?.setting_store?.user?.phonenumber
+							"00966"
+					  )
+					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
+					: fetchedData?.data?.setting_store?.user?.phonenumber
 			);
 			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
 
@@ -212,7 +207,8 @@ const MainInformation = () => {
 
 		let formData = new FormData();
 
-		if (storeLogoUpdate?.length !== 0) formData.append("logo", storeLogoUpdate[0]?.file);
+		if (storeLogoUpdate?.length !== 0)
+			formData.append("logo", storeLogoUpdate[0]?.file);
 		if (storeIcon?.length !== 0) formData.append("icon", storeIcon[0]?.file);
 
 		formData.append("store_name", storeName);
@@ -249,16 +245,12 @@ const MainInformation = () => {
 		}
 
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/setting_store_update`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`setting_store_update`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -454,7 +446,9 @@ const MainInformation = () => {
 												value={domain}
 												onChange={(e) => {
 													setDomain(
-														e.target.value.replace(/[^A-Za-z0-9_]/g, "").toLowerCase()
+														e.target.value
+															.replace(/[^A-Za-z0-9_]/g, "")
+															.toLowerCase()
 													);
 													setDomainNameFocus(true);
 												}}

@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useFetch from "../../Hooks/UseFetch";
 
 // MUI
@@ -18,13 +18,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { TopBarSearchInput } from "../../global";
 import { DelegateTable } from "../../components/Tables";
 
-// Redux
-import { useSelector } from "react-redux";
-
 const Delegate = () => {
-	const { fetchedData } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/cities"
-	);
+	const { fetchedData } = useFetch("selector/cities");
 	const [cityId, setCityId] = React.useState("");
 
 	const handleCategoryChange = (event) => {
@@ -32,16 +27,6 @@ const Delegate = () => {
 	};
 	// ------------------------------------------------------------------------------
 
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
-
-	// ---------------------------------------------------------------------
 	return (
 		<>
 			<Helmet>

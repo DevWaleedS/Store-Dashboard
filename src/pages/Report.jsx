@@ -27,19 +27,15 @@ import { TopBarSearchInput } from "../global";
 const Report = () => {
 	const componentRef = useRef();
 	const [dateValue, setDateValue] = useState([]);
-	const [url, setUrl] = useState(
-		`https://backend.atlbha.com/api/Store/reports`
-	);
+	const [url, setUrl] = useState(`reports`);
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
 		if (dateValue?.length !== 0 && dateValue !== null) {
 			setUrl(
-				`https://backend.atlbha.com/api/Store/reports?startDate=${moment(
-					dateValue[0]
-				).format("YYYY-MM-DD")}&endDate=${moment(dateValue[1]).format(
+				`reports?startDate=${moment(dateValue[0]).format(
 					"YYYY-MM-DD"
-				)}`
+				)}&endDate=${moment(dateValue[1]).format("YYYY-MM-DD")}`
 			);
 		} else {
 			console.log("data not found");

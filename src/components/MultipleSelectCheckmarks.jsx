@@ -40,14 +40,12 @@ const selectStyle = {
 };
 
 export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
-	const { fetchedData } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/etlobahCategory"
-	);
+	const { fetchedData } = useFetch("selector/etlobahCategory");
 	const { activity } = useSelector((state) => state.AddActivity);
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
 	const queryParams = activity?.map((id) => `category_id[]=${id}`).join("&");
 	const { fetchedData: subActivitiesList } = useFetch(
-		`https://backend.atlbha.com/api/Store/selector/subcategories?${queryParams}`
+		`selector/subcategories?${queryParams}`
 	);
 	const dispatch = useDispatch();
 	return (

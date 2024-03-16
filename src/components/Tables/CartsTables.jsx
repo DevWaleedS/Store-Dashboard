@@ -237,7 +237,7 @@ export default function CartsTables({
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(`https://backend.atlbha.com/api/Store/deleteCart?${queryParams}`, {
+				.get(`deleteCart?${queryParams}`, {
 					headers: {
 						"Content-Type": "application/json",
 						Authorization: `Bearer ${store_token}`,
@@ -401,9 +401,7 @@ export default function CartsTables({
 																			"سيتم حذف السلة وهذه الخطوة غير قابلة للرجوع"
 																		);
 																		setDeleteMethod("get");
-																		setUrl(
-																			`https://backend.atlbha.com/api/Store/deleteCart?id[]=${row?.id}`
-																		);
+																		setUrl(`deleteCart?id[]=${row?.id}`);
 																	}}
 																/>
 															</div>

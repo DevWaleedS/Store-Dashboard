@@ -60,9 +60,7 @@ const EditCategory = () => {
 	const { id } = useParams();
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
-	const { fetchedData, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/category/${id}`
-	);
+	const { fetchedData, reload, setReload } = useFetch(`category/${id}`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const { subCategories, setSubCategories } = contextStore;
@@ -144,16 +142,12 @@ const EditCategory = () => {
 			}
 		}
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/category/${fetchedData?.data?.categories?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`category/${fetchedData?.data?.categories?.id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

@@ -88,9 +88,7 @@ const MaintenanceModeModal = () => {
 	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
 	const { setNavbarZindex } = Z_index;
-	const { fetchedData, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/maintenance"
-	);
+	const { fetchedData, reload, setReload } = useFetch("maintenance");
 
 	const title = fetchedData?.data?.Maintenances[0]?.title;
 	const message = fetchedData?.data?.Maintenances[0]?.message;
@@ -161,16 +159,12 @@ const MaintenanceModeModal = () => {
 		);
 
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/updateMaintenance`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`updateMaintenance`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

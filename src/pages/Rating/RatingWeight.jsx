@@ -89,7 +89,7 @@ const RatingWeight = ({
 	// change Comment Status
 	const changeCommentStatus = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/changeCommentStatus/${id}`, {
+			.get(`changeCommentStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${store_token}`,
@@ -224,9 +224,7 @@ const RatingWeight = ({
 																		"سيتم حذف التعليق وهذه الخطوة غير قابلة للرجوع"
 																	);
 																	setDeleteMethod("delete");
-																	setUrl(
-																		`https://backend.atlbha.com/api/Store/comment/${rate?.id}`
-																	);
+																	setUrl(`comment/${rate?.id}`);
 																}}>
 																<DeleteIcon title='حذف التعليق' />
 																<span className='user-name me-2 align-self-center'>

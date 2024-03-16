@@ -89,93 +89,96 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
 	const handleImageUpload =
 		(bannerIndex, bannerState, setBannerState, setPreviewBannerState) =>
-			async (imageList) => {
-				// Check if the image size is valid
-				const isSizeValid = imageList?.every(
-					(image) => image?.file?.size <= maxFileSize
-				);
+		async (imageList) => {
+			// Check if the image size is valid
+			const isSizeValid = imageList?.every(
+				(image) => image?.file?.size <= maxFileSize
+			);
 
-				// Errors message
-				const sizeErrorMessage = "حجم البنر يجب أن لا يزيد عن 1 ميجابايت.";
-				const dimensionsErrorMessage =
-					"مقاس البنر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
+			// Errors message
+			const sizeErrorMessage = "حجم البنر يجب أن لا يزيد عن 1 ميجابايت.";
+			const dimensionsErrorMessage =
+				"مقاس البنر يجب أن يكون 1110 بكسل عرض و 440 بكسل ارتفاع.";
 
-				const checkImageDimensions = (image) =>
-					new Promise((resolve) => {
-						const img = new Image();
-						img.onload = () => {
-							if (img?.width !== 1110 && img?.height !== 440) {
-								//  if the image dimensions is not valid
-								resolve(false);
-							} else {
-								resolve(true);
-							}
-						};
-						img.src = image?.data_url;
-					});
+			const checkImageDimensions = (image) =>
+				new Promise((resolve) => {
+					const img = new Image();
+					img.onload = () => {
+						if (img?.width !== 1110 && img?.height !== 440) {
+							//  if the image dimensions is not valid
+							resolve(false);
+						} else {
+							resolve(true);
+						}
+					};
+					img.src = image?.data_url;
+				});
 
-				const isValidDimensions = await Promise?.all(
-					imageList?.map(checkImageDimensions)
-				).then((results) => results?.every((result) => result));
+			const isValidDimensions = await Promise?.all(
+				imageList?.map(checkImageDimensions)
+			).then((results) => results?.every((result) => result));
 
-				// if the isValidDimensions and  imageSize >= maxFileSize return
-				if (!isSizeValid && !isValidDimensions) {
-					// Display a warning message and reset the logo state
-					toast.warning(sizeErrorMessage, {
-						theme: "light",
-					});
-					toast.warning(dimensionsErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else if (!isValidDimensions && sizeErrorMessage) {
-					toast.warning(dimensionsErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else if (!isSizeValid && isValidDimensions) {
-					toast.warning(sizeErrorMessage, {
-						theme: "light",
-					});
-					return;
-				} else {
-					const updatedSliderState = [...bannerState];
-					updatedSliderState[bannerIndex] = imageList;
-					setBannerState(updatedSliderState);
+			// if the isValidDimensions and  imageSize >= maxFileSize return
+			if (!isSizeValid && !isValidDimensions) {
+				// Display a warning message and reset the logo state
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isValidDimensions && sizeErrorMessage) {
+				toast.warning(dimensionsErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else if (!isSizeValid && isValidDimensions) {
+				toast.warning(sizeErrorMessage, {
+					theme: "light",
+				});
+				return;
+			} else {
+				const updatedSliderState = [...bannerState];
+				updatedSliderState[bannerIndex] = imageList;
+				setBannerState(updatedSliderState);
 
-					const updatedNameState = updatedSliderState[bannerIndex]?.data_url;
-					const updatedFileState = updatedSliderState[bannerIndex];
+				const updatedNameState = updatedSliderState[bannerIndex]?.data_url;
+				const updatedFileState = updatedSliderState[bannerIndex];
 
-					const bannerNames = [
-						setFirstBannerName,
-						setSecondBannerName,
-						setThirdBannerName,
-					];
+				const bannerNames = [
+					setFirstBannerName,
+					setSecondBannerName,
+					setThirdBannerName,
+				];
 
-					const bannerFile = [setFirstBanner, setSecondBanner, setThirdBanner];
+				const bannerFile = [setFirstBanner, setSecondBanner, setThirdBanner];
 
-					if (bannerNames[bannerIndex]) {
-						bannerNames[bannerIndex](updatedNameState);
-					}
-					if (bannerFile[bannerIndex]) {
-						bannerFile[bannerIndex](updatedFileState);
-					}
+				if (bannerNames[bannerIndex]) {
+					bannerNames[bannerIndex](updatedNameState);
 				}
-				setPreviewBannerState(imageList);
-			};
+				if (bannerFile[bannerIndex]) {
+					bannerFile[bannerIndex](updatedFileState);
+				}
+			}
+			setPreviewBannerState(imageList);
+		};
 
 	// update banners function
 	const updateBanners = () => {
 		setLoadingTitle("جاري تعديل البنرات الإعلانية");
 		let formData = new FormData();
 		formData.append("banar1", firstBanner[0]?.file || firstBannerName || null);
-		formData.append("banar2", secondBanner[0]?.file || secondBannerName || null);
+		formData.append(
+			"banar2",
+			secondBanner[0]?.file || secondBannerName || null
+		);
 		formData.append("banar3", thirdBanner[0]?.file || thirdBannerName || null);
 		formData.append("banarstatus1", bannerstatus1 ? "active" : "not_active");
 		formData.append("banarstatus2", bannerstatus2 ? "active" : "not_active");
 		formData.append("banarstatus3", bannerstatus3 ? "active" : "not_active");
 		axios
-			.post(`https://backend.atlbha.com/api/Store/banarUpdate`, formData, {
+			.post(`banarUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -206,12 +209,9 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 	return (
 		<div className='seo-weight-edit-box template-edit-box mb-md-4 mb-3'>
 			<div className='title'>
-				<h4>
-					البنرات الإعلانية (440 * 1110)
-				</h4>
-				<span className="sub_title">
-					( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين الأقسام
-					)
+				<h4>البنرات الإعلانية (440 * 1110)</h4>
+				<span className='sub_title'>
+					( تستطيع تغيير الصورة التي تظهر كإعلانات في وسط الموقع وبين الأقسام )
 				</span>
 			</div>
 

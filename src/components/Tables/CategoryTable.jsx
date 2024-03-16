@@ -273,15 +273,12 @@ export default function EnhancedTable({
 	// change category status
 	const changeCategoryStatus = (id) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/categoryStorechangeSatusall?id[]=${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`categoryStorechangeSatusall?id[]=${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -298,15 +295,12 @@ export default function EnhancedTable({
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/categoryStoredeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`categoryStoredeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -322,15 +316,12 @@ export default function EnhancedTable({
 		if (confirm && actionTitle === "changeStatus") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/categoryStorechangeSatusall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`categoryStorechangeSatusall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -521,25 +512,6 @@ export default function EnhancedTable({
 																<div className='sub-categories'>
 																	{row?.subcategory?.length <= 2
 																		? row?.subcategory?.map((tag) => {
-																			return (
-																				<div
-																					key={tag?.id}
-																					style={{
-																						background:
-																							row?.store === null
-																								? "#FFFF"
-																								: "#dcdcdc",
-																						minWidth: "40%",
-																					}}>
-																					<span className='w-100 text-center text-overflow'>
-																						{tag?.name}
-																					</span>
-																				</div>
-																			);
-																		})
-																		: row?.subcategory
-																			.slice(0, 2)
-																			.map((tag) => {
 																				return (
 																					<div
 																						key={tag?.id}
@@ -548,13 +520,32 @@ export default function EnhancedTable({
 																								row?.store === null
 																									? "#FFFF"
 																									: "#dcdcdc",
+																							minWidth: "40%",
 																						}}>
 																						<span className='w-100 text-center text-overflow'>
 																							{tag?.name}
 																						</span>
 																					</div>
 																				);
-																			})}
+																		  })
+																		: row?.subcategory
+																				.slice(0, 2)
+																				.map((tag) => {
+																					return (
+																						<div
+																							key={tag?.id}
+																							style={{
+																								background:
+																									row?.store === null
+																										? "#FFFF"
+																										: "#dcdcdc",
+																							}}>
+																							<span className='w-100 text-center text-overflow'>
+																								{tag?.name}
+																							</span>
+																						</div>
+																					);
+																				})}
 
 																	{row?.subcategory?.length > 2 && (
 																		<div
@@ -661,7 +652,7 @@ export default function EnhancedTable({
 																					);
 																					setDeleteMethod("get");
 																					setUrl(
-																						`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
+																						`categoryStoredeleteall?id[]=${row?.id}`
 																					);
 																				}}
 																				style={{
@@ -685,7 +676,7 @@ export default function EnhancedTable({
 																					);
 
 																					setUrl(
-																						`https://backend.atlbha.com/api/Store/categoryStoredeleteall?id[]=${row?.id}`
+																						`categoryStoredeleteall?id[]=${row?.id}`
 																					);
 																				}}
 																				style={{

@@ -59,9 +59,7 @@ const CreateRole = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/permissions"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("permissions");
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
@@ -89,7 +87,7 @@ const CreateRole = () => {
 			permissions: permissions,
 		};
 		axios
-			.post("https://backend.atlbha.com/api/Store/roles", data, {
+			.post("roles", data, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${store_token}`,

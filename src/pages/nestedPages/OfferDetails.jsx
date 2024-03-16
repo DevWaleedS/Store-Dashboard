@@ -62,18 +62,10 @@ const style = {
 
 const OfferDetails = () => {
 	const { id } = useParams();
-	const { fetchedData } = useFetch(
-		`https://backend.atlbha.com/api/Store/offer/${id}`
-	);
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
-	const { fetchedData: payments } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/payment_types"
-	);
-	const { fetchedData: products } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/products"
-	);
+	const { fetchedData } = useFetch(`offer/${id}`);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	const { fetchedData: payments } = useFetch("selector/payment_types");
+	const { fetchedData: products } = useFetch("selector/products");
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 	const [offer, setOffer] = useState({

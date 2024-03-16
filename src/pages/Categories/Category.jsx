@@ -20,12 +20,8 @@ import DeleteCategoryAlert from "./DeleteCategoryAlert";
 
 const Category = () => {
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/category"
-	);
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("category");
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
 
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
@@ -140,9 +136,9 @@ const Category = () => {
 												fontSize: "18px",
 												backgroundColor: "#ededed",
 												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-												{
-													paddingRight: "20px",
-												},
+													{
+														paddingRight: "20px",
+													},
 												"& .MuiOutlinedInput-root": {
 													"& :hover": {
 														border: "none",

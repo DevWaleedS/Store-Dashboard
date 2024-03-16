@@ -299,15 +299,12 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/pagedeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`pagedeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -323,15 +320,12 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 		if (confirm && actionTitle === "changeStatus") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/pagechangeSatusall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`pagechangeSatusall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -350,16 +344,12 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 	// change category status
 	const changePageStatus = (id) => {
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/changePageStatus/${id}`,
-				null,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`changePageStatus/${id}`, null, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -546,9 +536,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 																				"سيتم حذف الصفحة وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("delete");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/page/${row?.id}`
-																			);
+																			setUrl(`page/${row?.id}`);
 																		}
 																	}}
 																	style={{

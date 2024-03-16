@@ -92,20 +92,8 @@ const ShippingCompanies = () => {
 	const { setEndActionTitle } = contextStore;
 
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/shippingtype`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`shippingtype`);
 
-	// -----------------------------------------------------------
-
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
 	// -----------------------------------------------------------
 
 	// Side Effects to filter other shipping
@@ -182,15 +170,12 @@ const ShippingCompanies = () => {
 	// change the Shipping Company  Status
 	const changeStatus = (id) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`changeShippingtypeStatus/${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -210,7 +195,7 @@ const ShippingCompanies = () => {
 		) {
 			axios
 				.get(
-					`https://backend.atlbha.com/api/Store/changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,
+					`changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,
 					{
 						headers: {
 							"Content-Type": "application/json",
@@ -242,16 +227,12 @@ const ShippingCompanies = () => {
 		formData.append("time", otherShipCompDetails?.time);
 		formData.append("overprice", otherShipCompDetails?.overprice);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/updatePrice/${otherShipCompDetails?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`updatePrice/${otherShipCompDetails?.id}`, formData, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);

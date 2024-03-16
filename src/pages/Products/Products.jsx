@@ -22,37 +22,22 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 // Components
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 
-// Redux
-import { useSelector } from "react-redux";
-
 const Products = () => {
+	const navigate = useNavigate();
+
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
+
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/product"
-	);
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("product");
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
 
 	// ------------------------------------------------------------------------------
-
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus, navigate]);
-
-	// ---------------------------------------------------------------------
 
 	const [file, setFile] = useState("");
 	const [search, setSearch] = useState("");
@@ -153,7 +138,7 @@ const Products = () => {
 		let formData = new FormData();
 		formData.append("file", file);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/import-products`, formData, {
+			.post(`import-products`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

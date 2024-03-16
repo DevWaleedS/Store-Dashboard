@@ -42,9 +42,7 @@ const style = {
 const JobTitles = () => {
 	//
 	const navigate = useNavigate();
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/roles"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("roles");
 	const DeleteStore = useContext(DeleteContext);
 	const {
 		setUrl,
@@ -131,9 +129,7 @@ const JobTitles = () => {
 																	"سيتم حذف الدور وهذه الخطوة غير قابلة للرجوع"
 																);
 																setDeleteMethod("delete");
-																setUrl(
-																	`https://backend.atlbha.com/api/Store/roles/${role?.id}`
-																);
+																setUrl(`roles/${role?.id}`);
 															}}
 															className='delete-btn me-md-3'>
 															<DeleteIcon title='حذف الدور' />

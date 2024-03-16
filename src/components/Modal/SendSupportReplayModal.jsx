@@ -85,16 +85,12 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 		formData.append("technical_support_id", supportDetails?.id);
 
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/replayTechnicalSupport`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`replayTechnicalSupport`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);

@@ -256,15 +256,12 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`technicalSupportStoredeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -283,15 +280,12 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 	// change Message status
 	const changeStatus = (id) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/changeTechnicalSupportStatus/${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`changeTechnicalSupportStatus/${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -499,7 +493,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 																			);
 																			setDeleteMethod("get");
 																			setUrl(
-																				`https://backend.atlbha.com/api/Store/technicalSupportStoredeleteall?id[]=${row?.id}`
+																				`technicalSupportStoredeleteall?id[]=${row?.id}`
 																			);
 																		}}
 																		style={{

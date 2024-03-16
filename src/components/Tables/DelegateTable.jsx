@@ -54,9 +54,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function DelegateTable({ cityId }) {
-	const { fetchedData, loading } = useFetch(
-		`https://backend.atlbha.com/api/Store/marketerRequest/${cityId}`
-	);
+	const { fetchedData, loading } = useFetch(`marketerRequest/${cityId}`);
 	// Get Data From Redux Store
 	const rows = useSelector((state) => state.CustomerTableData);
 

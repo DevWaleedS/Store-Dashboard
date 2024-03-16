@@ -39,9 +39,7 @@ const PaintStore = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/theme`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`theme`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -85,16 +83,12 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("primaryBg", primaryBg);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/themePrimaryUpdate`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`themePrimaryUpdate`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -117,16 +111,12 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("secondaryBg", secondaryBg);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/themeSecondaryUpdate`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`themeSecondaryUpdate`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -150,16 +140,12 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("fontColor", fontColor);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/themeFontColorUpdate`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`themeFontColorUpdate`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -182,16 +168,12 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("headerBg", headerBg);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/themeHeaderUpdate`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`themeHeaderUpdate`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -214,16 +196,12 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("layoutBg", layoutBg);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/themeLayoutUpdate`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`themeLayoutUpdate`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
@@ -246,7 +224,7 @@ const PaintStore = () => {
 		let formData = new FormData();
 		formData.append("iconsBg", iconsBg);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/themeIconUpdate`, formData, {
+			.post(`themeIconUpdate`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -275,16 +253,12 @@ const PaintStore = () => {
 		formData.append("footerBorder", footer?.footerBorder);
 		formData.append("footerBg", footer?.footerBg);
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/themeFooterUpdate`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`themeFooterUpdate`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

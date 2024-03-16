@@ -75,15 +75,9 @@ const CreateOffer = () => {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData: categories } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
-	const { fetchedData: payments } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/payment_types"
-	);
-	const { fetchedData: products } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/products"
-	);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	const { fetchedData: payments } = useFetch("selector/payment_types");
+	const { fetchedData: products } = useFetch("selector/products");
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 	const [reload, setReload] = useState(false);
@@ -359,7 +353,7 @@ const CreateOffer = () => {
 			offer?.offer_type === "percent" ? data?.maximum_discount : ""
 		);
 		axios
-			.post(`https://backend.atlbha.com/api/Store/offer`, formData, {
+			.post(`offer`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

@@ -7,9 +7,7 @@ import BannerUploader from "./BannerUploader/BannerUploader";
 import UpdateComments from "./UpdateComments/UpdateComments";
 
 const TemplateUpdate = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/homepage"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("homepage");
 
 	return (
 		<>

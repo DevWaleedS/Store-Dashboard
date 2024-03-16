@@ -95,7 +95,7 @@ const EditBankAccountModal = () => {
 		fetchedData: showSupplier,
 		reload,
 		setReload,
-	} = useFetch(`https://backend.atlbha.com/api/Store/showSupplier`);
+	} = useFetch(`showSupplier`);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -404,7 +404,7 @@ const EditBankAccountModal = () => {
 			formData.append("website_image", bankAccountInfo?.website_image[0]);
 
 		axios
-			.post(`https://backend.atlbha.com/api/Store/updateSupplier`, formData, {
+			.post(`updateSupplier`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,

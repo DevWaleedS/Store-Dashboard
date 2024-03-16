@@ -18,9 +18,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { CouponTable } from "../components/Tables";
 
-// Redux
-import { useSelector } from "react-redux";
-
 // filter Coupon by
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
@@ -81,20 +78,11 @@ const menuItemStyles = {
 };
 
 const Coupon = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/coupons"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch("coupons");
 	// -----------------------------------------------------------
 
 	//  handle if the store is not verified navigate to home page
 	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
-	// -----------------------------------------------------------
 
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");

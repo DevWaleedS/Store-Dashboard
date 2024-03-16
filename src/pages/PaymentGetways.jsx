@@ -17,7 +17,7 @@ import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoWallet } from "react-icons/io5";
@@ -78,29 +78,17 @@ const PaymentGetways = () => {
 		?.split("=")[1];
 
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/paymenttype`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`paymenttype`);
 
 	// showSupplier bank account
-	const { fetchedData: currentBankAccount } = useFetch(
-		`https://backend.atlbha.com/api/Store/indexSupplier`
-	);
+	const { fetchedData: currentBankAccount } = useFetch(`indexSupplier`);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
 	const [allPayments, setAllPayments] = useState([]);
-	// -----------------------------------------------------------
-
-	//  handle if the store is not verified navigate to home page
 	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus, navigate]);
+
 	// -----------------------------------------------------------
 
 	// Side Effects
@@ -123,15 +111,12 @@ const PaymentGetways = () => {
 	// change Status function
 	const changeStatus = (id, e) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/changePaymenttypeStatus/${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`changePaymenttypeStatus/${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -150,15 +135,12 @@ const PaymentGetways = () => {
 			allPayments?.length === 0
 		) {
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/changePaymenttypeStatus/${id}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`changePaymenttypeStatus/${id}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);

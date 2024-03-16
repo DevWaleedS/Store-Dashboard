@@ -37,9 +37,7 @@ const style = {
 const UserData = () => {
 	const { id } = useParams();
 
-	const { fetchedData, loading } = useFetch(
-		`https://backend.atlbha.com/api/Store/user/${id}`
-	);
+	const { fetchedData, loading } = useFetch(`user/${id}`);
 
 	const navigate = useNavigate();
 	const [user, setUser] = useState({

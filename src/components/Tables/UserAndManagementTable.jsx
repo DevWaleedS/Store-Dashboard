@@ -291,15 +291,12 @@ export default function UserAndManagementTable({
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/userdeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`userdeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -315,15 +312,12 @@ export default function UserAndManagementTable({
 		if (confirm && actionTitle === "changeStatus") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/userchangeSatusall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`userchangeSatusall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -342,15 +336,12 @@ export default function UserAndManagementTable({
 	// change category status
 	const changeUserStatus = (id) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/userchangeSatusall?id[]=${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`userchangeSatusall?id[]=${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -532,9 +523,7 @@ export default function UserAndManagementTable({
 																				"سيتم حذف المستخدم وهذه الخطوة غير قابلة للرجوع"
 																			);
 																			setDeleteMethod("get");
-																			setUrl(
-																				`https://backend.atlbha.com/api/Store/userdeleteall?id[]=${row?.id}`
-																			);
+																			setUrl(`userdeleteall?id[]=${row?.id}`);
 																		}}
 																		style={{
 																			cursor: "pointer",

@@ -303,15 +303,12 @@ export default function BigProductsTable({
 	// change category status
 	const changeCouponStatus = (id) => {
 		axios
-			.get(
-				`https://backend.atlbha.com/api/Store/productchangeSatusall?id[]=${id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.get(`productchangeSatusall?id[]=${id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -326,7 +323,7 @@ export default function BigProductsTable({
 	// change special status
 	const changeSpecialStatus = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/specialStatus/${id}`, {
+			.get(`specialStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${store_token}`,
@@ -347,15 +344,12 @@ export default function BigProductsTable({
 		if (confirm && actionTitle === "Delete") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/productdeleteall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`productdeleteall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -371,15 +365,12 @@ export default function BigProductsTable({
 		if (confirm && actionTitle === "changeStatus") {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			axios
-				.get(
-					`https://backend.atlbha.com/api/Store/productchangeSatusall?${queryParams}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
+				.get(`productchangeSatusall?${queryParams}`, {
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${store_token}`,
+					},
+				})
 				.then((res) => {
 					if (res?.data?.success === true && res?.data?.data?.status === 200) {
 						setEndActionTitle(res?.data?.message?.ar);
@@ -439,9 +430,7 @@ export default function BigProductsTable({
 	 * create change categories modal
 	 * ----------------------------------------------------------------------------
 	 */
-	const { fetchedData } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/mainCategories"
-	);
+	const { fetchedData } = useFetch("selector/mainCategories");
 
 	const [categories, setCategories] = useState([]);
 	const [category_id, setCategory_id] = useState("");
@@ -549,16 +538,12 @@ export default function BigProductsTable({
 		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 
 		axios
-			.post(
-				` https://backend.atlbha.com/api/Store/updateCategory?${queryParams}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(` updateCategory?${queryParams}`, formData, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setEndActionTitle(res?.data?.message?.ar);
@@ -1019,7 +1004,7 @@ export default function BigProductsTable({
 																				);
 																				setDeleteMethod("get");
 																				setUrl(
-																					`https://backend.atlbha.com/api/Store/productdeleteall?id[]=${row?.id}`
+																					`productdeleteall?id[]=${row?.id}`
 																				);
 																			}}
 																			style={{

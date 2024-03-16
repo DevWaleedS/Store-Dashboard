@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Icons
 import { BiSearch } from "react-icons/bi";
@@ -15,9 +15,6 @@ import CoursesTraining from "./Courses/CoursesTraining";
 // Context
 import Context from "../../Context/context";
 
-// Redux
-import { useSelector } from "react-redux";
-
 const Academy = () => {
 	// to handle CoursesTraining and Explain in Academy Section
 	const academyToggleContext = useContext(Context);
@@ -29,15 +26,6 @@ const Academy = () => {
 	};
 	const [searchCourses, setSearchCourses] = useState("");
 	const [searchExplain, setSearchExplain] = useState("");
-
-	//  handle if the store is not verified navigate to home page
-	const navigate = useNavigate();
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
-	useEffect(() => {
-		if (verificationStoreStatus !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [verificationStoreStatus]);
 
 	return (
 		<>

@@ -85,12 +85,8 @@ const EditUserPage = () => {
 		?.split("=")[1];
 	const { id } = useParams();
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/user/${id}`
-	);
-	const { fetchedData: roles } = useFetch(
-		"https://backend.atlbha.com/api/Store/selector/roles"
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`user/${id}`);
+	const { fetchedData: roles } = useFetch("selector/roles");
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -262,16 +258,12 @@ const EditUserPage = () => {
 			formData.append("image", images[0]);
 		}
 		axios
-			.post(
-				`https://backend.atlbha.com/api/Store/user/${fetchedData?.data?.users?.id}`,
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-						Authorization: `Bearer ${store_token}`,
-					},
-				}
-			)
+			.post(`user/${fetchedData?.data?.users?.id}`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${store_token}`,
+				},
+			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");

@@ -19,9 +19,8 @@ function CartPage() {
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"https://backend.atlbha.com/api/Store/showImportCart"
-	);
+	const { fetchedData, loading, reload, setReload } =
+		useFetch("showImportCart");
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
@@ -79,7 +78,7 @@ function CartPage() {
 	// delete item from cart function
 	const deleteItemFromCart = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/deleteImportCart/${id}`, {
+			.get(`deleteImportCart/${id}`, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -104,7 +103,7 @@ function CartPage() {
 		for (let i = 0; i < nestedArray?.length; i++) {
 			const subArray = nestedArray[i];
 			const subArrayValue = subArray?.name?.ar;
-			if (array?.every(value => subArrayValue?.includes(value))) {
+			if (array?.every((value) => subArrayValue?.includes(value))) {
 				return {
 					id: subArray?.id,
 				};
@@ -125,14 +124,22 @@ function CartPage() {
 				Number(newproductInfo?.[i]?.price)
 			);
 			formData.append([`data[${i}][qty]`], newproductInfo?.[i]?.qty);
-			const optionNames = newproductInfo?.[i]?.product?.options?.map((option) => option);
-			const matchingSubArray = findMatchingSubArray(optionNames, newproductInfo?.[i]?.options);
+			const optionNames = newproductInfo?.[i]?.product?.options?.map(
+				(option) => option
+			);
+			const matchingSubArray = findMatchingSubArray(
+				optionNames,
+				newproductInfo?.[i]?.options
+			);
 			if (Number(matchingSubArray?.id) !== null) {
-				formData.append([`data[${i}][option_id]`], Number(matchingSubArray?.id));
+				formData.append(
+					[`data[${i}][option_id]`],
+					Number(matchingSubArray?.id)
+				);
 			}
 		}
 		axios
-			.post(`https://backend.atlbha.com/api/Store/addImportCart`, formData, {
+			.post(`addImportCart`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 					Authorization: `Bearer ${store_token}`,
@@ -164,12 +171,12 @@ function CartPage() {
 	const openOptionSModal = (item) => {
 		setOpenModal(true);
 		setModalData(item);
-	}
+	};
 
 	const colseOptionModal = () => {
 		setOpenModal(false);
 		setModalData(null);
-	}
+	};
 
 	return (
 		<>
@@ -236,9 +243,15 @@ function CartPage() {
 															<a href={`${product?.product?.id}`}>
 																{product?.product?.name}
 															</a>
-															<ul className="options">
+															<ul className='options'>
 																{product?.options?.map((option, index) => (
-																	<li key={index} onClick={() => openOptionSModal(product)}>{`${index === 0 ? `${option}` : `/ ${option}`}`}</li>
+																	<li
+																		key={index}
+																		onClick={() =>
+																			openOptionSModal(product)
+																		}>{`${
+																		index === 0 ? `${option}` : `/ ${option}`
+																	}`}</li>
 																))}
 															</ul>
 														</td>
@@ -252,9 +265,10 @@ function CartPage() {
 																			Number(product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${+product?.stock === 1
-																					? "قطعة واحدة "
-																					: +product?.stock === 2
+																				`الكمية المتوفرة ${
+																					+product?.stock === 1
+																						? "قطعة واحدة "
+																						: +product?.stock === 2
 																						? " قطعتين "
 																						: ` ${+product?.stock} قطع`
 																				} فقط `
@@ -272,13 +286,13 @@ function CartPage() {
 																	value={Number(product?.qty)}
 																	onChange={(e) => {
 																		if (
-																			e.target.value >
-																			Number(product?.stock)
+																			e.target.value > Number(product?.stock)
 																		) {
 																			toast.error(
-																				`الكمية المتوفرة ${+product?.stock === 1
-																					? "قطعة واحدة "
-																					: +product?.stock === 2
+																				`الكمية المتوفرة ${
+																					+product?.stock === 1
+																						? "قطعة واحدة "
+																						: +product?.stock === 2
 																						? " قطعتين "
 																						: ` ${+product?.stock} قطع`
 																				} فقط `
@@ -288,8 +302,7 @@ function CartPage() {
 																			Number(product?.less_qty)
 																		) {
 																			toast.error(
-																				`أقل كمية للطلب هي ${+product
-																					?.less_qty}`
+																				`أقل كمية للطلب هي ${+product?.less_qty}`
 																			);
 																		} else {
 																			updateQtyValue(index, e);
@@ -303,8 +316,7 @@ function CartPage() {
 																			Number(product?.less_qty)
 																		) {
 																			toast.error(
-																				`أقل كمية للطلب هي ${+product
-																					?.less_qty}`
+																				`أقل كمية للطلب هي ${+product?.less_qty}`
 																			);
 																		} else {
 																			handleDecrement(index);
@@ -360,28 +372,37 @@ function CartPage() {
 																<th>الضريبة</th>
 																<td>{fetchedData?.data?.cart?.tax} ر.س</td>
 															</tr>
-															{fetchedData?.data?.cart?.overweight_price !== null && fetchedData?.data?.cart?.overweight_price !== 0 && (
-																<tr>
-																	<th>قيمة الوزن الزائد ({fetchedData?.data?.cart?.overweight} kg)</th>
-																	<td>
-																		{fetchedData?.data?.cart?.overweight_price} ر.س
-																	</td>
-																</tr>
-															)}
+															{fetchedData?.data?.cart?.overweight_price !==
+																null &&
+																fetchedData?.data?.cart?.overweight_price !==
+																	0 && (
+																	<tr>
+																		<th>
+																			قيمة الوزن الزائد (
+																			{fetchedData?.data?.cart?.overweight} kg)
+																		</th>
+																		<td>
+																			{
+																				fetchedData?.data?.cart
+																					?.overweight_price
+																			}{" "}
+																			ر.س
+																		</td>
+																	</tr>
+																)}
 															<tr>
 																<th>الشحن</th>
 																<td>
 																	{fetchedData?.data?.cart?.shipping_price} ر.س
 																</td>
 															</tr>
-															
 
 															{fetchedData?.data?.cart?.discount_total ? (
 																<tr>
 																	<th>
 																		الخصم
 																		{fetchedData?.data?.cart?.discount_type ===
-																			"percent" ? (
+																		"percent" ? (
 																			<span
 																				style={{
 																					fontSize: "0.85rem",

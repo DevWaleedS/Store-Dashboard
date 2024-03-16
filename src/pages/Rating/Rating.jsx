@@ -75,9 +75,7 @@ const Rating = () => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle, access_token } = contextStore;
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`https://backend.atlbha.com/api/Store/comment`
-	);
+	const { fetchedData, loading, reload, setReload } = useFetch(`comment`);
 	// to get current comment status
 	const commentActivation = fetchedData?.data?.commentActivation;
 	const [commentDetails, setCommentDetails] = React.useState(null);
@@ -120,7 +118,7 @@ const Rating = () => {
 	// change Comment Status
 	const changeCommentActivation = (id) => {
 		axios
-			.get(`https://backend.atlbha.com/api/Store/commentActivation`, {
+			.get(`commentActivation`, {
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: `Bearer ${access_token}`,
