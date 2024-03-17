@@ -115,6 +115,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Category'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -144,6 +145,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Orders'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -158,6 +160,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='PlatformServices'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -174,6 +177,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Coupon'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -197,6 +201,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Carts'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -223,6 +228,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='PostalSubscriptions'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -237,6 +243,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='SEOStore'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -261,6 +268,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Rating'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -275,6 +283,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Delegate'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 
 						if (verificationStoreStatus !== "تم التوثيق") {
@@ -292,6 +301,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Pages'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -306,6 +316,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Academy'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -321,6 +332,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Template'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -335,6 +347,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='PaintStore'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -352,6 +365,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						as='li'
 						className='sub-menu-link'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							dispatchVerifyModal(openVerifyModal());
 						}}>
@@ -365,6 +379,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='SocialPages'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -390,6 +405,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Support'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -404,6 +420,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='ShippingCompanies'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -418,6 +435,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='PaymentGetways'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -450,6 +468,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='MainInformation'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -464,6 +483,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						as='li'
 						className='sub-menu-link'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							setNavbarZindex(true);
 							dispatch(openMaintenanceModeModal());
 						}}>
@@ -490,6 +510,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Notifications'
 						onClick={() => {
+							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							if (verificationStoreStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
@@ -506,6 +527,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Report'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());
@@ -520,6 +542,7 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='EvaluationThePlatform'
 					onClick={() => {
+						dispatch(StoreVerificationThunk());
 						closeSidebar();
 						if (verificationStoreStatus !== "تم التوثيق") {
 							dispatchVerifyModal(openVerifyModal());

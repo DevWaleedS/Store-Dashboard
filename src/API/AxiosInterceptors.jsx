@@ -1,10 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import { toast } from "react-toastify";
 import Context from "../Context/context";
-import { useSelector } from "react-redux";
 
 const HTTP_UNAUTHORIZED = 401,
 	HTTP_FORBIDDEN = 403;
@@ -13,11 +12,10 @@ const AxiosInterceptors = ({ children }) => {
 	const navigate = useNavigate();
 	const pageUrl = useLocation();
 	const pathname = pageUrl?.pathname?.slice(1);
+	const pathnameRef = useRef(pathname);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
 
 	// ====== axios_interceptors ===============
 	useEffect(() => {
@@ -71,49 +69,55 @@ const AxiosInterceptors = ({ children }) => {
 		};
 	}, [navigate]);
 
-	// ======  to handle navigate user to home page if it not verify his account ===============
+	// Update the ref value whenever pathname changes
 	useEffect(() => {
-		let verificationStoreStatusInterceptors; // Define the interceptor variable
-		// Check if the pathname matches any of the specified values
-		if (
-			[
-				"Products",
-				"PaymentGetways",
-				"ShippingCompanies",
-				"Carts",
-				"Coupon",
-				"PlatformServices",
-				"PostalSubscriptions",
-				"SEOStore",
-				"Academy",
-				"Delegate",
-				"wallet",
-				"EvaluationThePlatform",
-			].includes(pathname)
-		) {
-			// Define the interceptor only for the specified pathnames
-			verificationStoreStatusInterceptors = axios.interceptors.response.use(
-				(success) => {
-					if (
-						success?.status === 200 &&
-						success?.config?.url?.includes("verification_show") &&
-						success?.data?.data?.stores[0]?.verification_status !== "تم التوثيق"
-					) {
-						navigate("/");
-					}
+		pathnameRef.current = pathname;
+	}, [pathname]);
 
-					return success;
+	useEffect(() => {
+		let verificationStoreStatusInterceptor; // Define the interceptor variable
+
+		// Define the interceptor only for the specified pathnames
+
+		// Create the interceptor
+		verificationStoreStatusInterceptor = axios.interceptors.response.use(
+			(response) => {
+				if (
+					[
+						"Products",
+						"PaymentGetways",
+						"ShippingCompanies",
+						"Carts",
+						"Coupon",
+						"PlatformServices",
+						"PostalSubscriptions",
+						"SEOStore",
+						"Academy",
+						"Delegate",
+						"wallet",
+						"EvaluationThePlatform",
+					].includes(pathnameRef.current) &&
+					response?.status === 200 &&
+					response?.config?.url?.includes("verification_show") &&
+					response?.data?.data?.stores[0]?.verification_status !== "تم التوثيق"
+				) {
+					navigate("/"); // Navigate to home page if verification fails
 				}
-			);
-		}
+				return response;
+			},
+			(error) => {
+				return Promise.reject(error);
+			}
+		);
 
+		// Clean up the interceptor when component unmounts
 		return () => {
-			// Eject the verification interceptor only if it's defined
-			if (verificationStoreStatusInterceptors) {
-				axios.interceptors.request.eject(verificationStoreStatusInterceptors);
+			// Eject the interceptor only if it's defined
+			if (verificationStoreStatusInterceptor) {
+				axios.interceptors.response.eject(verificationStoreStatusInterceptor);
 			}
 		};
-	}, [pathname]);
+	}, [pathnameRef.current]); // No dependencies needed for this useEffect hook
 
 	return <>{children}</>;
 };
