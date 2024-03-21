@@ -230,149 +230,9 @@ const OrderDetails = () => {
 	// Handle print sticker Function
 	const printSticker = () => {
 		setPrintError("");
-
-		if (
-			fetchedData?.data?.orders?.shipping?.status === "الغاء الشحنة" ||
-			fetchedData?.data?.orders?.shipping?.status === "جديد"
-		) {
-			axios
-				.get(
-					`PrintSticker/${id}/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-					{
-						headers: {
-							"Content-Type": "multipart/form-data",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-					} else {
-						setPrintError(res?.data?.message?.ar);
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-					}
-				});
-		} else {
-			if (fetchedData?.data?.orders?.shippingtypes?.name === "ساعي") {
-				axios
-					.get(
-						`PrintSaeeSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-						{
-							headers: {
-								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${store_token}`,
-							},
-						}
-					)
-					.then((res) => {
-						if (
-							res?.data?.success === true &&
-							res?.data?.data?.status === 200
-						) {
-							const newTab = window.open("", "_blank");
-							if (newTab) {
-								newTab.document.write(res?.data?.data?.Sticker?.data);
-								newTab.document.close();
-							} else {
-								console.error("Failed to open a new tab");
-							}
-						} else {
-							setPrintError(res?.data?.message?.ar);
-							toast.error(res?.data?.message?.ar, {
-								theme: "light",
-							});
-						}
-					});
-			} else if (fetchedData?.data?.orders?.shippingtypes?.name === "Imile") {
-				axios
-					.get(
-						`PrintImileSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-						{
-							headers: {
-								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${store_token}`,
-							},
-						}
-					)
-					.then((res) => {
-						if (
-							res?.data?.success === true &&
-							res?.data?.data?.status === 200
-						) {
-							// this will open the sticker in new tap
-							window.open(res?.data?.data?.Sticker?.billUrl, "_blank");
-						} else {
-							setPrintError(res?.data?.message?.ar);
-							toast.error(res?.data?.message?.ar, {
-								theme: "light",
-							});
-						}
-					});
-			} else if (
-				fetchedData?.data?.orders?.shippingtypes?.name === "J&T Express"
-			) {
-				axios
-					.get(
-						`PrintJTSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-						{
-							headers: {
-								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${store_token}`,
-							},
-						}
-					)
-					.then((res) => {
-						if (
-							res?.data?.success === true &&
-							res?.data?.data?.status === 200
-						) {
-							// this will open the sticker in new tap
-							window.open(
-								`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data}`,
-								"_blank"
-							);
-						} else {
-							setPrintError(res?.data?.message?.ar);
-							toast.error(res?.data?.message?.ar, {
-								theme: "light",
-							});
-						}
-					});
-			} else {
-				axios
-					.get(
-						`PrintSmsaSticker/${fetchedData?.data?.orders?.shipping?.shipping_id}`,
-						{
-							headers: {
-								"Content-Type": "multipart/form-data",
-								Authorization: `Bearer ${store_token}`,
-							},
-						}
-					)
-					.then((res) => {
-						if (
-							res?.data?.success === true &&
-							res?.data?.data?.status === 200
-						) {
-							// this will open the sticker in new tap
-							window.open(
-								`https://dashboard.go-tex.net/gotex-co-test${res?.data?.data?.Sticker?.data?.[0]}`,
-								"_blank"
-							);
-						} else {
-							setPrintError(res?.data?.message?.ar);
-							toast.error(res?.data?.message?.ar, {
-								theme: "light",
-							});
-						}
-					});
-			}
-		}
+		// this will open the sticker in new tap
+		window.open(fetchedData?.data?.orders?.shipping?.sticker, "_blank");
+		// this will open the sticker in new tap
 	};
 	// -------------------------------------------------
 
@@ -498,7 +358,7 @@ const OrderDetails = () => {
 											</div>
 										</div>
 										<div className='boxes mb-4'>
-											{fetchedData?.data?.orders?.shipping?.track_id && (
+											{fetchedData?.data?.orders?.shipping?.shipping_id && (
 												<div className='box mb-4'>
 													<div className='order-head-row'>
 														<FaServicestack />

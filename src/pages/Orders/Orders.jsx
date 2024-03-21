@@ -52,19 +52,7 @@ const Orders = () => {
 		filterOrders = orders?.filter((order) => order?.status === "قيد التجهيز");
 	} else if (select === "Imile") {
 		filterOrders = orders?.filter(
-			(order) => order?.shippingtypes?.name === "Imile"
-		);
-	} else if (select === "J&T Express") {
-		filterOrders = orders?.filter(
-			(order) => order?.shippingtypes?.name === "J&T Express"
-		);
-	} else if (select === "سمسا") {
-		filterOrders = orders?.filter(
-			(order) => order?.shippingtypes?.name === "سمسا"
-		);
-	} else if (select === "ساعي") {
-		filterOrders = orders?.filter(
-			(order) => order?.shippingtypes?.name === "ساعي"
+			(order) => order?.shippingtypes?.name === "ارامكس"
 		);
 	} else {
 		filterOrders = orders;
