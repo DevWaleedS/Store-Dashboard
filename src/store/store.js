@@ -18,6 +18,7 @@ import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
 import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
 import DeleteCategoryAlertModal from "./slices/DeleteCategoryAlertModal";
 import BankAccountAlert from "./slices/BankAccountAlert";
+import CategoriesSlice from "./slices/Categories.slice";
 
 // store
 export const store = configureStore({
@@ -44,5 +45,6 @@ export const store = configureStore({
 		BankAccStatusCommentModal,
 		DeleteCategoryAlertModal,
 		BankAccountAlert,
+		CategoriesSlice,
 	},
 });

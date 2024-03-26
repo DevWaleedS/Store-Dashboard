@@ -1,18 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export let categoriesThunk = createAsyncThunk(
-	"categories/categoriesDataThunk",
-	async (_, thunkAPI) => {
-		let { rejectWithValue } = thunkAPI;
-		const token = localStorage.getItem("token");
+export const categoriesThunk = createAsyncThunk(
+	"Categories/categoriesDataThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
 		try {
-			const response = await axios.get("category", {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-			});
+			const url = `category?page=${arg.page}&number=${arg.number}`;
+			let response = await axios.get(url);
 
 			return response.data;
 		} catch (error) {

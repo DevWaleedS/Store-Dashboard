@@ -17,11 +17,23 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { CategoryTable } from "../../components/Tables";
 import DeleteCategoryAlert from "./DeleteCategoryAlert";
+import { useDispatch, useSelector } from "react-redux";
+import { categoriesThunk } from "../../store/Thunk/CategoryTableThunk";
 
 const Category = () => {
+	const dispatch = useDispatch();
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch("category");
+	const { loading, reload, setReload } = useFetch("category?page=1");
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	const { Categories, currentPage, errors, storeCategory, SouqOtlbhaCategory } =
+		useSelector((state) => state.CategoriesSlice);
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(categoriesThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
 
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
@@ -34,18 +46,14 @@ const Category = () => {
 	useEffect(() => {
 		if (tabSelected === 1) {
 			setCategoriesData(
-				fetchedData?.data?.categories?.filter(
-					(category) => category?.store !== null
-				)
+				Categories?.categories?.filter((category) => category?.store !== null)
 			);
 		} else {
 			setCategoriesData(
-				fetchedData?.data?.categories?.filter(
-					(category) => category?.store === null
-				)
+				Categories?.categories?.filter((category) => category?.store === null)
 			);
 		}
-	}, [fetchedData?.data?.categories, tabSelected]);
+	}, [Categories?.categories, tabSelected]);
 
 	// Search
 	useEffect(() => {
@@ -216,7 +224,9 @@ const Category = () => {
 				<div className='filters-btn'>
 					<button
 						className={`btn ${tabSelected === 1 ? "active" : ""}`}
-						onClick={() => setTabSelected(1)}>
+						onClick={() => {
+							setTabSelected(1);
+						}}>
 						أنشطة التاجر
 					</button>
 					<button
@@ -228,11 +238,17 @@ const Category = () => {
 				<div className='row'>
 					<div className='category-table'>
 						<CategoryTable
-							fetchedData={categoriesResult}
-							loading={loading}
 							reload={reload}
+							loading={loading}
+							rowsCount={rowsCount}
+							setRowsCount={setRowsCount}
 							setReload={setReload}
+							pageTarget={pageTarget}
 							tabSelectedId={tabSelected}
+							categories={categoriesResult}
+							setPageTarget={setPageTarget}
+							pageCount={Categories?.page_count}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

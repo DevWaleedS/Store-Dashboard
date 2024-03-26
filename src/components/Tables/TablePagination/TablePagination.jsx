@@ -2,99 +2,52 @@ import React from "react";
 import Menu from "@mui/material/Menu";
 import { MenuItem } from "@mui/material";
 
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+
 // Icon
-import {
-	MdOutlineKeyboardArrowDown,
-	MdOutlineArrowBackIosNew,
-	MdOutlineArrowForwardIos,
-} from "react-icons/md";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 const TablePagination = ({
-	data,
 	open,
-	page,
-	setPage,
-	allRows,
+	pageCount,
+	setPageTarget,
+	currentPage,
 	anchorEl,
-	rowsPerPage,
 	handleClose,
 	handleRowsClick,
 	rowsPerPagesCount,
 	handleChangeRowsPerPage,
 }) => {
+	const handleChange = (event, value) => {
+		setPageTarget(value);
+	};
 	return (
 		<div className='d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
-			<div
-				className='d-flex align-items-center mx-auto mt-3 mt-md-0'
-				style={{ gap: "1rem" }}>
-				<MdOutlineArrowForwardIos
-					style={{
-						visibility: page + 1 === allRows()?.length && "hidden",
-						cursor: "pointer",
+			{/*  pagination  */}
+			<Stack
+				spacing={2}
+				className='d-flex align-items-center justify-content-center  my-3 m-md-auto'
+				style={{ direction: "ltr" }}>
+				<Pagination
+					color='secondary'
+					sx={{
+						"& .MuiPaginationItem-root": {
+							"&.Mui-selected ": {
+								color: "#fff",
+								backgroundColor: "#0077ff",
+							},
+							width: "28px",
+							minWidth: "28px",
+							height: "28px",
+						},
 					}}
-					onClick={() => {
-						setPage(page + 1);
-					}}
+					count={pageCount}
+					page={currentPage}
+					onChange={handleChange}
 				/>
-				<div className='d-flex flex-row-reverse gap-2'>
-					{allRows().map((item, itemIdx) => {
-						if (
-							(itemIdx < 1 || (itemIdx >= page - 1 && itemIdx <= page + 1)) &&
-							(Math.ceil(data) <= 3 ||
-								(Math.ceil(data) > 3 && itemIdx < allRows()?.length - 1))
-						) {
-							return (
-								<div
-									key={itemIdx}
-									className='d-flex justify-content-center align-items-center'
-									style={{
-										width: "1.7rem",
-										height: "1.9rem",
-										cursor: "pointer",
-										fontWight: "500",
-										lineHeight: "1.7rem",
-										borderRadius: "10px",
-										backgroundColor: item === page + 1 && "#508FF4",
-										color: item === page + 1 && "#fff",
-									}}
-									onClick={() => {
-										setPage(itemIdx);
-									}}>
-									{item}
-								</div>
-							);
-						}
-						return null;
-					})}
-					{Math.ceil(data / rowsPerPage) > 3 && <div>...</div>}
-					{Math.ceil(data / rowsPerPage) > 1 && (
-						<div
-							className='d-flex justify-content-center align-items-center'
-							style={{
-								width: "1.7rem",
-								height: "1.9rem",
-								cursor: "pointer",
-								fontWight: "500",
-								lineHeight: "1.7rem",
-								borderRadius: "10px",
-								backgroundColor:
-									Math.ceil(data / rowsPerPage) === page + 1 && "#508FF4",
-								color: Math.ceil(data / rowsPerPage) === page + 1 && "#fff",
-							}}
-							onClick={() => {
-								setPage(Math.ceil(data / rowsPerPage) - 1);
-							}}>
-							{Math.ceil(data / rowsPerPage)}
-						</div>
-					)}
-				</div>
-				<MdOutlineArrowBackIosNew
-					style={{ visibility: page !== 1 && "hidden", cursor: "pointer" }}
-					onClick={() => {
-						setPage(page - 1);
-					}}
-				/>
-			</div>
+			</Stack>
 
+			{/* Select page rows Count */}
 			<div
 				className='d-flex align-items-center gap-2  px-3 py-1'
 				style={{ border: "1px solid #2D62ED", borderRadius: "0.375rem" }}>

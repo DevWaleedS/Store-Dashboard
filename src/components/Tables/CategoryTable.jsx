@@ -207,11 +207,17 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable({
-	fetchedData,
+	categories,
+	pageCount,
+	currentPage,
 	loading,
 	reload,
 	setReload,
 	tabSelectedId,
+	rowsCount,
+	setRowsCount,
+	pageTarget,
+	setPageTarget,
 }) {
 	const store_token = document.cookie
 		?.split("; ")
@@ -232,14 +238,15 @@ export default function EnhancedTable({
 		setDeleteMethod,
 		setPossibilityOfDelete,
 	} = DeleteStore;
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
 	const rowsPerPagesCount = [10, 20, 30, 50, 100];
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
+
 	const handleRowsClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
@@ -249,7 +256,7 @@ export default function EnhancedTable({
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = fetchedData?.map((n) => n.id);
+			const newSelected = categories?.map((n) => n.id);
 			setSelected(newSelected);
 			return;
 		}
@@ -258,7 +265,8 @@ export default function EnhancedTable({
 
 	useEffect(() => {
 		if (tabSelectedId) {
-			setPage(0);
+			setPageTarget(1);
+			setRowsCount(10);
 		}
 	}, [tabSelectedId]);
 
@@ -358,20 +366,8 @@ export default function EnhancedTable({
 
 	const isSelected = (id) => selected.indexOf(id) !== -1;
 	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
-
-	const allRows = () => {
-		const num = Math.ceil(fetchedData?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
+		setRowsCount(parseInt(event.target.value));
+		setPageTarget(1);
 	};
 
 	return (
@@ -379,7 +375,7 @@ export default function EnhancedTable({
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					numSelected={selected.length}
-					rowCount={fetchedData?.length}
+					rowCount={categories?.length}
 					onSelectAllClick={handleSelectAllClick}
 					tabSelectedId={tabSelectedId}
 				/>
@@ -388,7 +384,7 @@ export default function EnhancedTable({
 						<EnhancedTableHead
 							numSelected={selected.length}
 							onSelectAllClick={handleSelectAllClick}
-							rowCount={fetchedData?.length}
+							rowCount={categories?.length}
 							tabSelectedId={tabSelectedId}
 						/>
 
@@ -401,308 +397,287 @@ export default function EnhancedTable({
 								</TableRow>
 							) : (
 								<Fragment>
-									{fetchedData?.length === 0 ? (
+									{categories?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={7}>
 												<p className='text-center'>لاتوجد بيانات</p>
 											</TableCell>
 										</TableRow>
 									) : (
-										fetchedData
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const isItemSelected = isSelected(row?.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
+										categories?.map((row, index) => {
+											const isItemSelected = isSelected(row?.id);
+											const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow
-														style={{
-															backgroundColor:
-																row?.store === null ? "#dfe2aa" : "",
-														}}
-														hover
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center '
-																style={{
-																	display: "flex",
-																	justifyContent:
-																		tabSelectedId === 1 ? "start" : "center",
-																	alignItems: "center",
-																	gap: "7px",
-																}}>
-																{tabSelectedId === 1 && (
-																	<Checkbox
-																		sx={{
+											return (
+												<TableRow
+													style={{
+														backgroundColor:
+															row?.store === null ? "#dfe2aa" : "",
+													}}
+													hover
+													role='checkbox'
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													key={index}
+													selected={isItemSelected}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center '
+															style={{
+																display: "flex",
+																justifyContent:
+																	tabSelectedId === 1 ? "start" : "center",
+																alignItems: "center",
+																gap: "7px",
+															}}>
+															{tabSelectedId === 1 && (
+																<Checkbox
+																	sx={{
+																		color: "#356b88",
+																		"& .MuiSvgIcon-root": {
 																			color: "#356b88",
-																			"& .MuiSvgIcon-root": {
-																				color: "#356b88",
-																			},
-																		}}
-																		checked={isItemSelected}
-																		onClick={(event) =>
-																			handleClick(event, row?.id)
-																		}
-																		inputProps={{
-																			"aria-labelledby": labelId,
-																		}}
-																	/>
+																		},
+																	}}
+																	checked={isItemSelected}
+																	onClick={(event) =>
+																		handleClick(event, row?.id)
+																	}
+																	inputProps={{
+																		"aria-labelledby": labelId,
+																	}}
+																/>
+															)}
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 1,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
+
+													<TableCell align='center' sx={{ minWidth: "73px" }}>
+														{row?.number}
+													</TableCell>
+													<TableCell>
+														<div
+															className='cate-prim d-flex align-items-center justify-content-start'
+															style={{
+																minWidth: " 300px",
+															}}>
+															<img
+																className='img_icons'
+																style={{
+																	border:
+																		row?.store === null
+																			? "1px solid #cfcdcd"
+																			: "1px solid #ddd",
+																}}
+																src={row?.icon}
+																alt={row?.name}
+															/>
+															<span
+																className='me-3'
+																style={{
+																	maxWidth: "100%",
+																	whiteSpace: "nowrap",
+																	overflow: "hidden",
+																	textOverflow: "ellipsis",
+																}}>
+																{row?.name}
+															</span>
+														</div>
+													</TableCell>
+													<TableCell align='center'>
+														{row?.countsubcategory}
+													</TableCell>
+
+													<TableCell align='right'>
+														{row?.subcategory?.length === 0 ? (
+															<div className='w-100 text-justfiy'>
+																لا يوجد أنشطة فرعية
+															</div>
+														) : (
+															<div className='sub-categories'>
+																{row?.subcategory?.length <= 2
+																	? row?.subcategory?.map((tag) => {
+																			return (
+																				<div
+																					key={tag?.id}
+																					style={{
+																						background:
+																							row?.store === null
+																								? "#FFFF"
+																								: "#dcdcdc",
+																						minWidth: "40%",
+																					}}>
+																					<span className='w-100 text-center text-overflow'>
+																						{tag?.name}
+																					</span>
+																				</div>
+																			);
+																	  })
+																	: row?.subcategory.slice(0, 2).map((tag) => {
+																			return (
+																				<div
+																					key={tag?.id}
+																					style={{
+																						background:
+																							row?.store === null
+																								? "#FFFF"
+																								: "#dcdcdc",
+																					}}>
+																					<span className='w-100 text-center text-overflow'>
+																						{tag?.name}
+																					</span>
+																				</div>
+																			);
+																	  })}
+
+																{row?.subcategory?.length > 2 && (
+																	<div
+																		style={{
+																			background:
+																				row?.store === null
+																					? "#FFFF"
+																					: "#dcdcdc",
+																			minWidth: "max-content",
+																		}}>
+																		{tabSelectedId === 1 ? (
+																			<Link
+																				to={`EditCategory/${row?.id}`}
+																				style={{ cursor: "pointer" }}
+																				title='المزيد من الأنشطة'>
+																				...
+																			</Link>
+																		) : (
+																			<span>...</span>
+																		)}
+																	</div>
 																)}
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 1,
-																	useGrouping: false,
-																})}
+															</div>
+														)}
+													</TableCell>
+
+													{tabSelectedId === 1 && (
+														<TableCell align='center'>
+															<div
+																className='form-check form-switch'
+																style={{ margin: "0 auto" }}>
+																<Switch
+																	disabled={row?.store === null ? true : false}
+																	onChange={() => changeCategoryStatus(row?.id)}
+																	checked={row?.status === "نشط" ? true : false}
+																	sx={{
+																		width: "50px",
+																		"& .MuiSwitch-track": {
+																			width: 26,
+																			height: 14,
+																			opacity: 1,
+																			backgroundColor: "rgba(0,0,0,.25)",
+																			boxSizing: "border-box",
+																		},
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
+																			width: 10,
+																			height: 10,
+																			borderRadius: 5,
+																			transform: "translate(6px,6px)",
+																			color: "#fff",
+																		},
+
+																		"&:hover": {
+																			"& .MuiSwitch-thumb": {
+																				boxShadow: "none",
+																			},
+																		},
+
+																		"& .MuiSwitch-switchBase": {
+																			padding: 1,
+																			"&.Mui-checked": {
+																				transform: "translateX(11px)",
+																				color: "#fff",
+																				"& + .MuiSwitch-track": {
+																					opacity: 1,
+																					backgroundColor: "#3AE374",
+																				},
+																			},
+																		},
+																	}}
+																/>
 															</div>
 														</TableCell>
+													)}
 
-														<TableCell align='center' sx={{ minWidth: "73px" }}>
-															{row?.number}
-														</TableCell>
-														<TableCell>
-															<div
-																className='cate-prim d-flex align-items-center justify-content-start'
-																style={{
-																	minWidth: " 300px",
-																}}>
-																<img
-																	className='img_icons'
-																	style={{
-																		border:
-																			row?.store === null
-																				? "1px solid #cfcdcd"
-																				: "1px solid #ddd",
-																	}}
-																	src={row?.icon}
-																	alt={row?.name}
-																/>
+													{tabSelectedId === 1 && (
+														<TableCell align='right'>
+															<div className='actions d-flex justify-content-center gap-1'>
 																<span
-																	className='me-3'
 																	style={{
-																		maxWidth: "100%",
-																		whiteSpace: "nowrap",
-																		overflow: "hidden",
-																		textOverflow: "ellipsis",
+																		pointerEvents:
+																			row?.store === null ? "none" : "",
 																	}}>
-																	{row?.name}
+																	<Link
+																		to={`EditCategory/${row?.id}`}
+																		style={{ cursor: "pointer" }}>
+																		<EditIcon title='تعديل النشاط' />
+																	</Link>
+																</span>
+																<span>
+																	{row?.possibility_of_delete ? (
+																		<DeleteIcon
+																			title='حذف النشاط'
+																			onClick={() => {
+																				setActionDelete(
+																					"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
+																				);
+																				setDeleteMethod("get");
+																				setUrl(
+																					`categoryStoredeleteall?id[]=${row?.id}`
+																				);
+																			}}
+																			style={{
+																				pointerEvents:
+																					row?.store === null ? "none" : "",
+																				cursor: "pointer",
+																				color: "red",
+																				fontSize: "1.2rem",
+																			}}
+																		/>
+																	) : (
+																		<DeleteIcon
+																			title='حذف النشاط'
+																			onClick={() => {
+																				setActionDelete(
+																					"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
+																				);
+																				setDeleteMethod("get");
+																				setPossibilityOfDelete(
+																					row?.possibility_of_delete
+																				);
+
+																				setUrl(
+																					`categoryStoredeleteall?id[]=${row?.id}`
+																				);
+																			}}
+																			style={{
+																				pointerEvents:
+																					row?.store === null ? "none" : "",
+																				cursor: "pointer",
+																				color: "red",
+																				fontSize: "1.2rem",
+																			}}
+																		/>
+																	)}
 																</span>
 															</div>
 														</TableCell>
-														<TableCell align='center'>
-															{row?.countsubcategory}
-														</TableCell>
-
-														<TableCell align='right'>
-															{row?.subcategory?.length === 0 ? (
-																<div className='w-100 text-justfiy'>
-																	لا يوجد أنشطة فرعية
-																</div>
-															) : (
-																<div className='sub-categories'>
-																	{row?.subcategory?.length <= 2
-																		? row?.subcategory?.map((tag) => {
-																				return (
-																					<div
-																						key={tag?.id}
-																						style={{
-																							background:
-																								row?.store === null
-																									? "#FFFF"
-																									: "#dcdcdc",
-																							minWidth: "40%",
-																						}}>
-																						<span className='w-100 text-center text-overflow'>
-																							{tag?.name}
-																						</span>
-																					</div>
-																				);
-																		  })
-																		: row?.subcategory
-																				.slice(0, 2)
-																				.map((tag) => {
-																					return (
-																						<div
-																							key={tag?.id}
-																							style={{
-																								background:
-																									row?.store === null
-																										? "#FFFF"
-																										: "#dcdcdc",
-																							}}>
-																							<span className='w-100 text-center text-overflow'>
-																								{tag?.name}
-																							</span>
-																						</div>
-																					);
-																				})}
-
-																	{row?.subcategory?.length > 2 && (
-																		<div
-																			style={{
-																				background:
-																					row?.store === null
-																						? "#FFFF"
-																						: "#dcdcdc",
-																				minWidth: "max-content",
-																			}}>
-																			{tabSelectedId === 1 ? (
-																				<Link
-																					to={`EditCategory/${row?.id}`}
-																					style={{ cursor: "pointer" }}
-																					title='المزيد من الأنشطة'>
-																					...
-																				</Link>
-																			) : (
-																				<span>...</span>
-																			)}
-																		</div>
-																	)}
-																</div>
-															)}
-														</TableCell>
-
-														{tabSelectedId === 1 && (
-															<TableCell align='center'>
-																<div
-																	className='form-check form-switch'
-																	style={{ margin: "0 auto" }}>
-																	<Switch
-																		disabled={
-																			row?.store === null ? true : false
-																		}
-																		onChange={() =>
-																			changeCategoryStatus(row?.id)
-																		}
-																		checked={
-																			row?.status === "نشط" ? true : false
-																		}
-																		sx={{
-																			width: "50px",
-																			"& .MuiSwitch-track": {
-																				width: 26,
-																				height: 14,
-																				opacity: 1,
-																				backgroundColor: "rgba(0,0,0,.25)",
-																				boxSizing: "border-box",
-																			},
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
-																				width: 10,
-																				height: 10,
-																				borderRadius: 5,
-																				transform: "translate(6px,6px)",
-																				color: "#fff",
-																			},
-
-																			"&:hover": {
-																				"& .MuiSwitch-thumb": {
-																					boxShadow: "none",
-																				},
-																			},
-
-																			"& .MuiSwitch-switchBase": {
-																				padding: 1,
-																				"&.Mui-checked": {
-																					transform: "translateX(11px)",
-																					color: "#fff",
-																					"& + .MuiSwitch-track": {
-																						opacity: 1,
-																						backgroundColor: "#3AE374",
-																					},
-																				},
-																			},
-																		}}
-																	/>
-																</div>
-															</TableCell>
-														)}
-
-														{tabSelectedId === 1 && (
-															<TableCell align='right'>
-																<div className='actions d-flex justify-content-center gap-1'>
-																	<span
-																		style={{
-																			pointerEvents:
-																				row?.store === null ? "none" : "",
-																		}}>
-																		<Link
-																			to={`EditCategory/${row?.id}`}
-																			style={{ cursor: "pointer" }}>
-																			<EditIcon title='تعديل النشاط' />
-																		</Link>
-																	</span>
-																	<span>
-																		{row?.possibility_of_delete ? (
-																			<DeleteIcon
-																				title='حذف النشاط'
-																				onClick={() => {
-																					setActionDelete(
-																						"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
-																					);
-																					setDeleteMethod("get");
-																					setUrl(
-																						`categoryStoredeleteall?id[]=${row?.id}`
-																					);
-																				}}
-																				style={{
-																					pointerEvents:
-																						row?.store === null ? "none" : "",
-																					cursor: "pointer",
-																					color: "red",
-																					fontSize: "1.2rem",
-																				}}
-																			/>
-																		) : (
-																			<DeleteIcon
-																				title='حذف النشاط'
-																				onClick={() => {
-																					setActionDelete(
-																						"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
-																					);
-																					setDeleteMethod("get");
-																					setPossibilityOfDelete(
-																						row?.possibility_of_delete
-																					);
-
-																					setUrl(
-																						`categoryStoredeleteall?id[]=${row?.id}`
-																					);
-																				}}
-																				style={{
-																					pointerEvents:
-																						row?.store === null ? "none" : "",
-																					cursor: "pointer",
-																					color: "red",
-																					fontSize: "1.2rem",
-																				}}
-																			/>
-																		)}
-																	</span>
-																</div>
-															</TableCell>
-														)}
-													</TableRow>
-												);
-											})
-									)}
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={6} />
-										</TableRow>
+													)}
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -710,16 +685,18 @@ export default function EnhancedTable({
 					</Table>
 				</TableContainer>
 			</Paper>
-			{fetchedData?.length !== 0 && !loading && (
+			{categories?.length !== 0 && !loading && (
 				<TablePagination
 					open={open}
-					page={page}
-					setPage={setPage}
-					allRows={allRows}
+					data={categories}
 					anchorEl={anchorEl}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
 					handleClose={handleClose}
-					data={fetchedData?.length}
-					rowsPerPage={rowsPerPage}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 					handleRowsClick={handleRowsClick}
 					rowsPerPagesCount={rowsPerPagesCount}
 					handleChangeRowsPerPage={handleChangeRowsPerPage}
