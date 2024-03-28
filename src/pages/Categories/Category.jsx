@@ -25,8 +25,16 @@ const Category = () => {
 	// to get all  data from server
 	const { loading, reload, setReload } = useFetch("category?page=1");
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
-	const { Categories, currentPage, errors, storeCategory, SouqOtlbhaCategory } =
-		useSelector((state) => state.CategoriesSlice);
+	const {
+		Categories,
+		currentPage,
+		etlobhaCurrentPage,
+		etlobhaPageCount,
+		pageCount,
+		errors,
+		storeCategory,
+		SouqOtlbhaCategory,
+	} = useSelector((state) => state.CategoriesSlice);
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
@@ -43,15 +51,12 @@ const Category = () => {
 	const [categoriesFilterSearch, setCategoriesFilterSearch] = useState([]);
 	const [categoriesResult, setCategoriesResult] = useState([]);
 
+	/* im using this to display store category and atlbha category */
 	useEffect(() => {
 		if (tabSelected === 1) {
-			setCategoriesData(
-				Categories?.categories?.filter((category) => category?.store !== null)
-			);
+			setCategoriesData(storeCategory);
 		} else {
-			setCategoriesData(
-				Categories?.categories?.filter((category) => category?.store === null)
-			);
+			setCategoriesData(SouqOtlbhaCategory);
 		}
 	}, [Categories?.categories, tabSelected]);
 
@@ -247,8 +252,8 @@ const Category = () => {
 							tabSelectedId={tabSelected}
 							categories={categoriesResult}
 							setPageTarget={setPageTarget}
-							pageCount={Categories?.page_count}
-							currentPage={currentPage}
+							pageCount={tabSelected === 1 ? pageCount : etlobhaPageCount}
+							currentPage={tabSelected === 1 ? currentPage : etlobhaCurrentPage}
 						/>
 					</div>
 				</div>

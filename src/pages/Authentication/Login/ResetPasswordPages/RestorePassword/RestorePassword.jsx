@@ -32,7 +32,8 @@ const RestorePassword = () => {
 
 	// to send code on your email
 	const [phoneNumber, setPhoneNumber] = useState("");
-	const [phoneNumberError, setPhoneNumberError] = useState("");
+
+	const [resetPasswordError, setResetPasswordError] = useState("");
 
 	// phone number regex
 	const PHONE_REGEX = /^(5\d{8})$/;
@@ -55,7 +56,7 @@ const RestorePassword = () => {
 
 	// send password function on your email
 	const sendPassWord = () => {
-		setPhoneNumberError("");
+		setResetPasswordError("");
 		const formData = new FormData();
 		formData.append(
 			"phonenumber",
@@ -81,7 +82,7 @@ const RestorePassword = () => {
 					setDisabledBtn(true);
 					navigate("/SendVerificationCode");
 				} else {
-					setPhoneNumberError(res?.data?.message?.ar);
+					setResetPasswordError(res?.data?.message?.ar);
 				}
 			});
 	};
@@ -133,25 +134,24 @@ const RestorePassword = () => {
 								تأكد ان رقم الجوال يبدأ برقم 5 ولا يقل عن 9 أرقام
 							</div>
 
-							{phoneNumberError && (
-								<p
-									className={"wrong-text w-100"}
-									style={{
-										color: "red",
-										marginTop: "-28px",
-										marginBottom: "10px",
-										direction: "rtl",
-									}}>
-									{phoneNumberError}
-								</p>
-							)}
-
 							<button
 								className='bt-main'
 								onClick={sendPassWord}
 								disabled={!phoneNumber}>
 								ارسال
 							</button>
+
+							{resetPasswordError && (
+								<p
+									className={"wrong-text w-100"}
+									style={{
+										color: "red",
+
+										direction: "rtl",
+									}}>
+									{resetPasswordError}
+								</p>
+							)}
 						</div>
 					</div>
 

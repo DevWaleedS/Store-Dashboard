@@ -21,6 +21,7 @@ const TablePagination = ({
 	const handleChange = (event, value) => {
 		setPageTarget(value);
 	};
+
 	return (
 		<div className='d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
 			{/*  pagination  */}
