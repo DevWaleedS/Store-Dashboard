@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -15,29 +15,46 @@ import { BsSearch } from "react-icons/bs";
 // Export File
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import { useDispatch, useSelector } from "react-redux";
+import { PostalSubscriptionsThunk } from "../store/Thunk/PostalSubscriptionsThunk";
 
 const PostalSubscriptions = () => {
+	const dispatch = useDispatch();
 	const [search, setSearch] = useState("");
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+
+	const { PostalSubscriptionsData, currentPage, pageCount } = useSelector(
+		(state) => state.PostalSubscriptionsSlice
+	);
+
+	const { loading, reload, setReload } = useFetch(
+		`subsicriptions?page=${pageTarget}&number=${rowsCount}`
+	);
+	console.log(PostalSubscriptionsData);
 
 	// -----------------------------------------------------------
 
+	/** get contact data */
+	useEffect(() => {
+		dispatch(PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
+
 	// -----------------------------------------------------------
 
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("subsicriptions");
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
 
 	// Handle Search
-	let subsicriptions = fetchedData?.data?.subsicriptions;
+	let subsicriptions = PostalSubscriptionsData?.subsicriptions;
 
 	if (search !== "") {
-		subsicriptions = fetchedData?.data?.subsicriptions?.filter((item) =>
+		subsicriptions = PostalSubscriptionsData?.subsicriptions?.filter((item) =>
 			item?.email?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
-		subsicriptions = fetchedData?.data?.subsicriptions;
+		subsicriptions = PostalSubscriptionsData?.subsicriptions;
 	}
 
 	// Export To CSV
@@ -106,10 +123,18 @@ const PostalSubscriptions = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<PostalSubscriptionsTable
-							reload={reload}
-							loading={loading}
-							setReload={setReload}
 							data={subsicriptions}
+							loading={loading}
+							reload={reload}
+							setReload={setReload}
+							search={search}
+							setSearch={setSearch}
+							rowsCount={rowsCount}
+							pageTarget={pageTarget}
+							setRowsCount={setRowsCount}
+							setPageTarget={setPageTarget}
+							pageCount={pageCount}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

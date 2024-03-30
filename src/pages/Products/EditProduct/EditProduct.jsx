@@ -18,7 +18,7 @@ import { useForm, Controller } from "react-hook-form";
 
 // Redux
 import { useDispatch } from "react-redux";
-import { openProductOptionModal } from "../../../store/slices/ProductOptionModal";
+import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 // Context
 import Context from "../../../Context/context";

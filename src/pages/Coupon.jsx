@@ -17,6 +17,8 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { CouponTable } from "../components/Tables";
+import { useDispatch, useSelector } from "react-redux";
+import { CouponsThunk } from "../store/Thunk/CouponsThunk";
 
 // filter Coupon by
 const filtersTypes = [
@@ -78,25 +80,36 @@ const menuItemStyles = {
 };
 
 const Coupon = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch("coupons");
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+	const { CouponsData, currentPage, pageCount } = useSelector(
+		(state) => state.CouponsSlice
+	);
+	const { loading, reload, setReload } = useFetch(
+		`coupon?page=${pageTarget}&number=${rowsCount}`
+	);
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
+
 	// -----------------------------------------------------------
-
-	//  handle if the store is not verified navigate to home page
 	const navigate = useNavigate();
-
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
 
-	let coupons = fetchedData?.data?.coupons;
+	let coupons = CouponsData?.coupons;
 	let filterCoupons = coupons;
 
 	// Search
 	if (search !== "") {
-		coupons = fetchedData?.data?.coupons?.filter((item) =>
+		coupons = CouponsData?.coupons?.filter((item) =>
 			item?.code?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
-		coupons = fetchedData?.data?.coupons;
+		coupons = CouponsData?.coupons;
 	}
 	// -------------------------------------------------------------------------------
 
@@ -213,10 +226,20 @@ const Coupon = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<CouponTable
-							data={filterCoupons}
-							loading={loading}
+							coupons={filterCoupons}
+							search={search}
+							select={select}
 							reload={reload}
+							loading={loading}
+							rowsCount={rowsCount}
 							setReload={setReload}
+							setSelect={setSelect}
+							setSearch={setSearch}
+							pageTarget={pageTarget}
+							setRowsCount={setRowsCount}
+							setPageTarget={setPageTarget}
+							pageCount={pageCount}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

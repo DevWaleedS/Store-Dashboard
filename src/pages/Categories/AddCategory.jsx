@@ -16,7 +16,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import AddSubCategory from "../nestedPages/AddSubCategory";
 
 // Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 
 // MUI
@@ -26,6 +26,7 @@ import Modal from "@mui/material/Modal";
 // Icons
 import { AiOutlinePlus } from "react-icons/ai";
 import { DeleteIcon, UploadIcon } from "../../data/Icons";
+import { addCategoryThunk } from "../../store/Thunk/CategoriesThunk";
 
 // Modal style
 const style = {
@@ -52,16 +53,11 @@ const style = {
 };
 
 const AddCategory = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	const dispatch = useDispatch(true);
-	const navigate = useNavigate();
-	const [reload, setReload] = useState(false);
+	const { error } = useSelector((state) => state.CategoriesSlice);
 
+	const navigate = useNavigate();
 	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const { subCategories, setSubCategories } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -83,7 +79,6 @@ const AddCategory = () => {
 
 	// handle images size
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
-
 	// Use state with useDropzone library to set banners
 	const [icons, setIcons] = React.useState([]);
 	const onChange = (imageList, addUpdateIndex) => {
@@ -116,10 +111,11 @@ const AddCategory = () => {
 	};
 
 	// to add new category
-	const handleCategory = (data) => {
+	const handleCategory = async (data) => {
 		setLoadingTitle("جاري حفظ النشاط");
 		resetCategoryError();
-		let formData = new FormData();
+
+		const formData = new FormData();
 		formData.append("name", data?.name);
 		if (icons?.length !== 0) {
 			formData.append("icon", icons[0]?.file);
@@ -131,35 +127,28 @@ const AddCategory = () => {
 				formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
 			}
 		}
-		axios
-			.post(`category`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Category");
-					setReload(!reload);
-					setSubCategories([]);
-				} else {
-					setLoadingTitle("");
-					setCategoryError({
-						...categoryError,
-						name: res?.data?.message?.en?.name?.[0],
-						icon: res?.data?.message?.en?.icon?.[0],
-					});
-					toast.error(res?.data?.message?.en?.name?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.icon?.[0], {
-						theme: "light",
-					});
-				}
+
+		try {
+			await dispatch(addCategoryThunk(formData)).unwrap();
+			setLoadingTitle("");
+			navigate("/Category");
+			setSubCategories([]);
+		} catch (errors) {
+			setLoadingTitle("");
+			setCategoryError({
+				...categoryError,
+				name: error?.en?.name[0],
+				icon: error?.en?.icon[0],
 			});
+			toast.error(error?.en?.name[0], {
+				theme: "light",
+			});
+			toast.error(error?.en?.icon[0], {
+				theme: "light",
+			});
+
+			console.log(errors);
+		}
 	};
 
 	// to edit the sub category
@@ -273,6 +262,15 @@ const AddCategory = () => {
 												</span>
 											)}
 										</div>
+
+										<div className='col-md-3 col-12'></div>
+										{error?.en?.icon && (
+											<div className='col-md-7 col-12'>
+												<span className='fs-6 text-danger'>
+													{error?.en?.icon[0]}
+												</span>
+											</div>
+										)}
 									</div>
 
 									<div className='row mb-md-5 mb-3'>
@@ -306,10 +304,18 @@ const AddCategory = () => {
 												{errors?.name && errors.name.message}
 											</span>
 										</div>
+										<div className='col-md-3 col-12'></div>
+										{error?.en?.name && (
+											<div className='col-md-7 col-12'>
+												<span className='fs-6 text-danger'>
+													{error?.en?.name[0]}
+												</span>
+											</div>
+										)}
 									</div>
 
 									{subCategories &&
-										subCategories.map(
+										subCategories?.map(
 											(subCategory, index) =>
 												subCategory?.name && (
 													<div className='row mb-md-5 mb-3' key={index}>

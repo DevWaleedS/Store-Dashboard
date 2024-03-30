@@ -21,9 +21,32 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
+import { useDispatch, useSelector } from "react-redux";
+import { ProductsThunk } from "../../store/Thunk/ProductsThunk";
 
 const Products = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+
+	const {
+		Products,
+		currentPage,
+		etlobhaCurrentPage,
+		etlobhaPageCount,
+		pageCount,
+		storeProducts,
+		SouqOtlbhaProducts,
+	} = useSelector((state) => state.ProductsSlice);
+	const { loading, reload, setReload } = useFetch(
+		`product?page=${pageTarget}&number=${rowsCount}`
+	);
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
 
 	const store_token = document.cookie
 		?.split("; ")
@@ -34,7 +57,6 @@ const Products = () => {
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
 
-	const { fetchedData, loading, reload, setReload } = useFetch("product");
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
 
 	// ------------------------------------------------------------------------------
@@ -68,19 +90,13 @@ const Products = () => {
 
 	useEffect(() => {
 		if (tabSelected === 1) {
-			setProductsData(
-				fetchedData?.data?.products?.filter(
-					(product) => product?.is_import === false
-				)
-			);
+			setProductsData(storeProducts);
 		} else {
-			setProductsData(
-				fetchedData?.data?.products?.filter(
-					(product) => product?.is_import === true
-				)
-			);
+			setProductsData(SouqOtlbhaProducts);
 		}
-	}, [fetchedData?.data?.products, tabSelected]);
+	}, [Products?.products, tabSelected]);
+
+	console.log(productsData);
 
 	// Search
 	useEffect(() => {
@@ -149,11 +165,11 @@ const Products = () => {
 					setLoadingTitle("");
 					setEndActionTitle(res?.data?.message?.ar);
 					setFile("");
-					setReload(!reload);
+					// setReload(!reload);
 				} else {
 					setLoadingTitle("");
 					setFileError(res?.data?.message?.en?.file?.[0]);
-					setReload(!reload);
+					// setReload(!reload);
 				}
 			});
 	};
@@ -226,11 +242,17 @@ const Products = () => {
 				</div>
 				<div className='category-table'>
 					<BigProductsTable
-						data={productsResult}
-						loading={loading}
+						products={productsResult}
 						reload={reload}
 						setReload={setReload}
+						loading={loading}
+						rowsCount={rowsCount}
+						setRowsCount={setRowsCount}
+						pageTarget={pageTarget}
 						tabSelectedId={tabSelected}
+						setPageTarget={setPageTarget}
+						pageCount={tabSelected === 1 ? pageCount : etlobhaPageCount}
+						currentPage={tabSelected === 1 ? currentPage : etlobhaCurrentPage}
 					/>
 				</div>
 

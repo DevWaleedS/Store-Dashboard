@@ -201,13 +201,25 @@ EnhancedTableToolbar.propTypes = {
 };
 
 // Start Pages Table
-export default function PagesTable({ data, loading, reload, setReload }) {
+export default function PagesTable({
+	data,
+	loading,
+	reload,
+	setReload,
+	search,
+	setSearch,
+	rowsCount,
+	pageTarget,
+	setRowsCount,
+	setPageTarget,
+	pageCount,
+	currentPage,
+}) {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -223,34 +235,7 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 	} = DeleteStore;
 
 	const [selected, setSelected] = React.useState([]);
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
 
-	// Handle Pagination
-	const open = Boolean(anchorEl);
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
 	// ---------------------------------------------
 
 	// Handle Select all Items
@@ -392,177 +377,161 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 											</TableCell>
 										</TableRow>
 									) : (
-										data
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const isItemSelected = isSelected(row?.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
-												return (
-													<TableRow
-														hover
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}
-														style={{
-															backgroundColor:
-																row?.default_page === 1 ? "#dfe2aa" : "",
-														}}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center'
-																style={{
-																	display: "flex",
-																	justifyContent: "start",
-																	alignItems: "center",
-																}}>
-																<Checkbox
-																	sx={{
+										data?.map((row, index) => {
+											const isItemSelected = isSelected(row?.id);
+											const labelId = `enhanced-table-checkbox-${index}`;
+											return (
+												<TableRow
+													hover
+													role='checkbox'
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													key={index}
+													selected={isItemSelected}
+													style={{
+														backgroundColor:
+															row?.default_page === 1 ? "#dfe2aa" : "",
+													}}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center'
+															style={{
+																display: "flex",
+																justifyContent: "start",
+																alignItems: "center",
+															}}>
+															<Checkbox
+																sx={{
+																	color: "#356b88",
+																	"& .MuiSvgIcon-root": {
 																		color: "#356b88",
-																		"& .MuiSvgIcon-root": {
-																			color: "#356b88",
-																		},
-																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, row.id)
-																	}
-																	inputProps={{
-																		"aria-labelledby": labelId,
-																	}}
-																/>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 2,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
-														<TableCell align='center'>{row?.title}</TableCell>
+																	},
+																}}
+																checked={isItemSelected}
+																onClick={(event) => handleClick(event, row.id)}
+																inputProps={{
+																	"aria-labelledby": labelId,
+																}}
+															/>
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 2,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
+													<TableCell align='center'>{row?.title}</TableCell>
 
-														<TableCell align='center'>
-															{moment(row?.created_at).format("YYYY-MM-DD")}
-														</TableCell>
-														<TableCell align='center'>
-															<span
-																align='center'
-																className='status'
-																style={{
-																	backgroundColor: row.bgColor,
-																	color: row.color,
-																	borderRadius: "16px",
-																	padding: "5px 25px",
-																	fontWeight: 500,
-																}}>
-																{row?.status}
-															</span>
-														</TableCell>
-														<TableCell align='center'>
-															<div className='actions d-flex align-items-center justify-content-center'>
-																<Link
-																	to={`EditPage/${row?.id}`}
-																	style={{ cursor: "pointer" }}>
-																	<EditIcon title='تعديل الصفحة ' />
-																</Link>
+													<TableCell align='center'>
+														{moment(row?.created_at).format("YYYY-MM-DD")}
+													</TableCell>
+													<TableCell align='center'>
+														<span
+															align='center'
+															className='status'
+															style={{
+																backgroundColor: row.bgColor,
+																color: row.color,
+																borderRadius: "16px",
+																padding: "5px 25px",
+																fontWeight: 500,
+															}}>
+															{row?.status}
+														</span>
+													</TableCell>
+													<TableCell align='center'>
+														<div className='actions d-flex align-items-center justify-content-center'>
+															<Link
+																to={`EditPage/${row?.id}`}
+																style={{ cursor: "pointer" }}>
+																<EditIcon title='تعديل الصفحة ' />
+															</Link>
 
-																<Switch
-																	onChange={() => changePageStatus(row?.id)}
-																	checked={
-																		row?.status === "تم النشر" ? true : false
-																	}
-																	title={
-																		row?.default_page === 1
-																			? "لايمكنك تعديل الحالة"
-																			: "تعديل الحالة"
-																	}
-																	disabled={row?.default_page === 1}
-																	sx={{
-																		width: "50px",
-																		"& .MuiSwitch-track": {
-																			width: 26,
-																			height: 14,
-																			opacity: 1,
-																			backgroundColor: "rgba(0,0,0,.25)",
-																			boxSizing: "border-box",
-																			cursor:
-																				row?.default_page === 1
-																					? "not-allowed"
-																					: "pointer",
-																		},
-																		"& .MuiSwitch-thumb": {
-																			boxShadow: "none",
-																			width: 10,
-																			height: 10,
-																			borderRadius: 5,
-																			transform: "translate(6px,6px)",
-																			color: "#fff",
-																		},
-
-																		"&:hover": {
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
-																			},
-																		},
-
-																		"& .MuiSwitch-switchBase": {
-																			padding: 1,
-																			"&.Mui-checked": {
-																				transform: "translateX(11px)",
-																				color: "#fff",
-																				"& + .MuiSwitch-track": {
-																					opacity: 1,
-																					backgroundColor: "#3AE374",
-																				},
-																			},
-																		},
-																	}}
-																/>
-																<DeleteIcon
-																	title={
-																		row?.default_page === 1
-																			? "لايمكنك حذف الصفحة"
-																			: "حذف الصفحة"
-																	}
-																	onClick={() => {
-																		if (row?.default_page !== 1) {
-																			setActionDelete(
-																				"سيتم حذف الصفحة وهذه الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("delete");
-																			setUrl(`page/${row?.id}`);
-																		}
-																	}}
-																	style={{
-																		paddingRight: "10px",
-																		width: "40px",
-																		color: "red",
+															<Switch
+																onChange={() => changePageStatus(row?.id)}
+																checked={
+																	row?.status === "تم النشر" ? true : false
+																}
+																title={
+																	row?.default_page === 1
+																		? "لايمكنك تعديل الحالة"
+																		: "تعديل الحالة"
+																}
+																disabled={row?.default_page === 1}
+																sx={{
+																	width: "50px",
+																	"& .MuiSwitch-track": {
+																		width: 26,
+																		height: 14,
+																		opacity: 1,
+																		backgroundColor: "rgba(0,0,0,.25)",
+																		boxSizing: "border-box",
 																		cursor:
 																			row?.default_page === 1
 																				? "not-allowed"
 																				: "pointer",
-																	}}
-																/>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-									)}
+																	},
+																	"& .MuiSwitch-thumb": {
+																		boxShadow: "none",
+																		width: 10,
+																		height: 10,
+																		borderRadius: 5,
+																		transform: "translate(6px,6px)",
+																		color: "#fff",
+																	},
 
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={6} />
-										</TableRow>
+																	"&:hover": {
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
+																		},
+																	},
+
+																	"& .MuiSwitch-switchBase": {
+																		padding: 1,
+																		"&.Mui-checked": {
+																			transform: "translateX(11px)",
+																			color: "#fff",
+																			"& + .MuiSwitch-track": {
+																				opacity: 1,
+																				backgroundColor: "#3AE374",
+																			},
+																		},
+																	},
+																}}
+															/>
+															<DeleteIcon
+																title={
+																	row?.default_page === 1
+																		? "لايمكنك حذف الصفحة"
+																		: "حذف الصفحة"
+																}
+																onClick={() => {
+																	if (row?.default_page !== 1) {
+																		setActionDelete(
+																			"سيتم حذف الصفحة وهذه الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("delete");
+																		setUrl(`page/${row?.id}`);
+																	}
+																}}
+																style={{
+																	paddingRight: "10px",
+																	width: "40px",
+																	color: "red",
+																	cursor:
+																		row?.default_page === 1
+																			? "not-allowed"
+																			: "pointer",
+																}}
+															/>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -572,17 +541,13 @@ export default function PagesTable({ data, loading, reload, setReload }) {
 			</Paper>
 			{data?.length !== 0 && !loading && (
 				<TablePagination
-					open={open}
-					page={page}
-					setPage={setPage}
-					allRows={allRows}
-					data={data?.length}
-					anchorEl={anchorEl}
-					handleClose={handleClose}
-					rowsPerPage={rowsPerPage}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
+					page={data}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 		</Box>

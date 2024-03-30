@@ -158,6 +158,12 @@ export default function CartsTables({
 	setReload,
 	search,
 	setSearch,
+	rowsCount,
+	pageTarget,
+	setRowsCount,
+	setPageTarget,
+	pageCount,
+	currentPage,
 }) {
 	const store_token = document.cookie
 		?.split("; ")
@@ -178,20 +184,7 @@ export default function CartsTables({
 		setDeleteMethod,
 	} = DeleteStore;
 	const [selected, setSelected] = useState([]);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
 
-	// for pagination
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
 	// _____________________________________________________________________ //
 
 	// Select all items
@@ -223,6 +216,8 @@ export default function CartsTables({
 
 		setSelected(newSelected);
 	};
+	const isSelected = (name) => selected.indexOf(name) !== -1;
+	// --------------------------------------------------------------------
 
 	// Delete single item
 	useEffect(() => {
@@ -257,24 +252,6 @@ export default function CartsTables({
 		}
 	}, [confirm]);
 
-	// for pagination
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	const isSelected = (name) => selected.indexOf(name) !== -1;
-
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - cartsData?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(cartsData?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
@@ -309,115 +286,97 @@ export default function CartsTables({
 											</TableCell>
 										</TableRow>
 									) : (
-										cartsData
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const isItemSelected = isSelected(row?.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
+										cartsData?.map((row, index) => {
+											const isItemSelected = isSelected(row?.id);
+											const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow
-														hover
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center'
-																style={{
-																	display: "flex",
-																	justifyContent: "start",
-																	alignItems: "center",
-																	gap: "7px",
-																}}>
-																<Checkbox
-																	sx={{
+											return (
+												<TableRow
+													hover
+													role='checkbox'
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													key={index}
+													selected={isItemSelected}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center'
+															style={{
+																display: "flex",
+																justifyContent: "start",
+																alignItems: "center",
+																gap: "7px",
+															}}>
+															<Checkbox
+																sx={{
+																	color: "#356b88",
+																	"& .MuiSvgIcon-root": {
 																		color: "#356b88",
-																		"& .MuiSvgIcon-root": {
-																			color: "#356b88",
-																		},
-																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, row?.id)
-																	}
-																	inputProps={{
-																		"aria-labelledby": labelId,
-																	}}
-																/>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 1,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
+																	},
+																}}
+																checked={isItemSelected}
+																onClick={(event) => handleClick(event, row?.id)}
+																inputProps={{
+																	"aria-labelledby": labelId,
+																}}
+															/>
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 1,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
 
-														<TableCell align='right'>
-															<div className='cate-prim'>
-																<img
-																	src={row?.user?.image}
-																	alt='img'
-																	className=' rounded-circle img_icons'
-																/>
-																<span className='me-3 text-black'>
-																	{row?.user?.name}
-																</span>
-															</div>
-														</TableCell>
-														<TableCell align='right'>
-															{moment(row?.created_at).format("YYYY-MM-DD")}
-														</TableCell>
-														<TableCell align='center'>{row?.count}</TableCell>
+													<TableCell align='right'>
+														<div className='cate-prim'>
+															<img
+																src={row?.user?.image}
+																alt='img'
+																className=' rounded-circle img_icons'
+															/>
+															<span className='me-3 text-black'>
+																{row?.user?.name}
+															</span>
+														</div>
+													</TableCell>
+													<TableCell align='right'>
+														{moment(row?.created_at).format("YYYY-MM-DD")}
+													</TableCell>
+													<TableCell align='center'>{row?.count}</TableCell>
 
-														<TableCell align='center'>
-															{row?.total} ر.س
-														</TableCell>
+													<TableCell align='center'>{row?.total} ر.س</TableCell>
 
-														<TableCell align='center'>{row?.status}</TableCell>
-														<TableCell align='center' sx={{ width: "80px" }}>
-															<div className='d-flex align-items-center justify-content-center gap-2 '>
-																<EditIcon
-																	title='تعديل السلة'
-																	style={{ cursor: "pointer" }}
-																	onClick={() =>
-																		navigate(`ClientData/${row?.id}`)
-																	}
-																/>
+													<TableCell align='center'>{row?.status}</TableCell>
+													<TableCell align='center' sx={{ width: "80px" }}>
+														<div className='d-flex align-items-center justify-content-center gap-2 '>
+															<EditIcon
+																title='تعديل السلة'
+																style={{ cursor: "pointer" }}
+																onClick={() =>
+																	navigate(`ClientData/${row?.id}`)
+																}
+															/>
 
-																<DeleteIcon
-																	title='حذف السلة'
-																	style={{ cursor: "pointer" }}
-																	onClick={() => {
-																		setActionDelete(
-																			"سيتم حذف السلة وهذه الخطوة غير قابلة للرجوع"
-																		);
-																		setDeleteMethod("get");
-																		setUrl(`deleteCart?id[]=${row?.id}`);
-																	}}
-																/>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-									)}
-
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={6} />
-										</TableRow>
+															<DeleteIcon
+																title='حذف السلة'
+																style={{ cursor: "pointer" }}
+																onClick={() => {
+																	setActionDelete(
+																		"سيتم حذف السلة وهذه الخطوة غير قابلة للرجوع"
+																	);
+																	setDeleteMethod("get");
+																	setUrl(`deleteCart?id[]=${row?.id}`);
+																}}
+															/>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -427,17 +386,13 @@ export default function CartsTables({
 			</Paper>
 			{cartsData?.length !== 0 && !loading && (
 				<TablePagination
-					open={open}
-					page={page}
-					setPage={setPage}
-					allRows={allRows}
-					anchorEl={anchorEl}
-					data={cartsData?.length}
-					rowsPerPage={rowsPerPage}
-					handleClose={handleClose}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
+					data={cartsData}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 		</Box>

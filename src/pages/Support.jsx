@@ -1,25 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { ArrowBack } from "../data/Icons";
 import useFetch from "../Hooks/UseFetch";
 import SupportTable from "../components/Tables/SupportTable";
+import { useDispatch, useSelector } from "react-redux";
+import { TechnicalSupportThunk } from "../store/Thunk/TechnicalSupportThunk";
 
 const Support = () => {
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(9);
 	const [search, setSearch] = useState("");
 
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("technicalSupport");
+	const { TechnicalSupportData, currentPage, pageCount } = useSelector(
+		(state) => state.TechnicalSupportSlice
+	);
+	// -----------------------------------------------------------
 
-	let Technicalsupports = fetchedData?.data?.Technicalsupports;
+	console.log(TechnicalSupportData);
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(TechnicalSupportThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
+	const { loading, reload, setReload } = useFetch(
+		`technicalSupport?page=${pageTarget}&number=${rowsCount}`
+	);
+
+	let Technicalsupports = TechnicalSupportData?.Technicalsupports;
 
 	if (search !== "") {
-		Technicalsupports = fetchedData?.data?.Technicalsupports?.filter((item) =>
-			item?.title?.toLowerCase()?.includes(search?.toLowerCase())
+		Technicalsupports = TechnicalSupportData?.Technicalsupports?.filter(
+			(item) => item?.title?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
-		Technicalsupports = fetchedData?.data?.Technicalsupports;
+		Technicalsupports = TechnicalSupportData?.Technicalsupports;
 	}
 
 	return (
@@ -66,10 +83,18 @@ const Support = () => {
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable
-							fetchedData={Technicalsupports}
+							data={Technicalsupports}
 							loading={loading}
 							reload={reload}
 							setReload={setReload}
+							search={search}
+							setSearch={setSearch}
+							rowsCount={rowsCount}
+							pageTarget={pageTarget}
+							setRowsCount={setRowsCount}
+							setPageTarget={setPageTarget}
+							pageCount={pageCount}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

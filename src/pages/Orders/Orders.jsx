@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third paerty
 import { Helmet } from "react-helmet";
@@ -12,21 +12,37 @@ import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
 import { ArrowBack } from "../../data/Icons";
+import { OrdersThunk } from "../../store/Thunk/OrdersThunk";
+import { useDispatch, useSelector } from "react-redux";
 
 const Orders = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch("orders");
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+	const { ordersData, currentPage, pageCount } = useSelector(
+		(state) => state.OrdersSlice
+	);
+	const { loading, reload, setReload } = useFetch(
+		`orders?page=${pageTarget}&number=${rowsCount}`
+	);
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(OrdersThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
+
 	// -----------------------------------------------------------
 
 	// To create search
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
-	let orders = fetchedData?.data?.orders;
+	let orders = ordersData?.orders;
 	let filterOrders = orders;
 	// ------------------------------------------------------------
 
 	// Search
 	if (search !== "") {
-		orders = fetchedData?.data?.orders?.filter(
+		orders = ordersData?.orders?.filter(
 			(order) =>
 				order?.shipping?.track_id
 					?.toLowerCase()
@@ -37,10 +53,10 @@ const Orders = () => {
 				order?.user?.name?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
-		orders = fetchedData?.data?.orders;
+		orders = ordersData?.orders;
 	}
 	// -------------------------------------------------------------
-
+	console.log(ordersData);
 	// Filter
 	if (select === "new") {
 		filterOrders = orders?.filter((order) => order?.status === "جديد");
@@ -93,11 +109,11 @@ const Orders = () => {
 					<div className='row'>
 						<OrdersQuickDetails
 							loading={loading}
-							new_order={fetchedData?.data?.new}
-							completed={fetchedData?.data?.completed}
-							not_completed={fetchedData?.data?.not_completed}
-							canceled={fetchedData?.data?.canceled}
-							all={fetchedData?.data?.all}
+							new_order={ordersData?.new}
+							completed={ordersData?.completed}
+							not_completed={ordersData?.not_completed}
+							canceled={ordersData?.canceled}
+							all={ordersData?.all}
 						/>
 					</div>
 				</div>
@@ -105,14 +121,20 @@ const Orders = () => {
 				{/** Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
-						data={filterOrders}
-						loading={loading}
-						reload={reload}
-						setReload={setReload}
+						orders={filterOrders}
 						search={search}
-						setSearch={setSearch}
 						select={select}
+						reload={reload}
+						loading={loading}
+						rowsCount={rowsCount}
 						setSelect={setSelect}
+						setReload={setReload}
+						setSearch={setSearch}
+						pageTarget={pageTarget}
+						setRowsCount={setRowsCount}
+						setPageTarget={setPageTarget}
+						pageCount={pageCount}
+						currentPage={currentPage}
 					/>
 				</div>
 			</section>

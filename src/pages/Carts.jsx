@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Icons
 import { HomeIcon } from "../data/Icons";
@@ -10,22 +10,38 @@ import { HomeIcon } from "../data/Icons";
 // Components
 import useFetch from "../Hooks/UseFetch";
 import { CartsTables } from "../components/Tables";
+import { useDispatch, useSelector } from "react-redux";
+import { EmptyCartsThunk } from "../store/Thunk/EmptyCartsThunk";
 
 const Carts = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch("admin");
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+	const [search, setSearch] = useState("");
+
+	const { EmptyCartsData, currentPage, pageCount } = useSelector(
+		(state) => state.EmptyCartsSlice
+	);
+	const { loading, reload, setReload } = useFetch(
+		`admin?page=${pageTarget}&number=${rowsCount}`
+	);
 	// -----------------------------------------------------------
 
+	/** get contact data */
+	useEffect(() => {
+		dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
+
 	// -----------------------------------------------------------
-	// to create search
-	const [search, setSearch] = useState("");
-	let carts = fetchedData?.data?.cart;
+
+	let carts = EmptyCartsData?.carts;
 
 	if (search !== "") {
-		carts = fetchedData?.data?.cart?.filter((item) =>
+		carts = EmptyCartsData?.carts?.filter((item) =>
 			item?.user?.name?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
-		carts = fetchedData?.data?.cart;
+		carts = EmptyCartsData?.carts;
 	}
 
 	return (
@@ -64,6 +80,12 @@ const Carts = () => {
 							setReload={setReload}
 							search={search}
 							setSearch={setSearch}
+							rowsCount={rowsCount}
+							pageTarget={pageTarget}
+							setRowsCount={setRowsCount}
+							setPageTarget={setPageTarget}
+							pageCount={pageCount}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

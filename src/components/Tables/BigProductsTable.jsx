@@ -236,11 +236,17 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function BigProductsTable({
-	data,
-	loading,
+	products,
 	reload,
+	loading,
 	setReload,
+	rowsCount,
+	setRowsCount,
+	pageTarget,
 	tabSelectedId,
+	setPageTarget,
+	pageCount,
+	currentPage,
 }) {
 	const store_token = document.cookie
 		?.split("; ")
@@ -261,23 +267,9 @@ export default function BigProductsTable({
 	} = DeleteStore;
 
 	const [selected, setSelected] = useState([]);
-
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const open = Boolean(anchorEl);
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = data?.map((n) => n.id);
+			const newSelected = products?.map((n) => n.id);
 
 			setSelected(newSelected);
 
@@ -288,7 +280,8 @@ export default function BigProductsTable({
 
 	useEffect(() => {
 		if (tabSelectedId) {
-			setPage(0);
+			setPageTarget(1);
+			setRowsCount(10);
 		}
 	}, [tabSelectedId]);
 
@@ -406,24 +399,7 @@ export default function BigProductsTable({
 		setSelected(newSelected);
 	};
 
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
 	const isSelected = (id) => selected.indexOf(id) !== -1;
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
 
 	/**
 	 * ----------------------------------------------------------------------------
@@ -756,7 +732,7 @@ export default function BigProductsTable({
 				<EnhancedTableToolbar
 					numSelected={selected.length}
 					tabSelectedId={tabSelectedId}
-					rowCount={data?.length}
+					rowCount={products?.length}
 					onSelectAllClick={handleSelectAllClick}
 					handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
 				/>
@@ -765,7 +741,7 @@ export default function BigProductsTable({
 						<EnhancedTableHead
 							numSelected={selected.length}
 							onSelectAllClick={handleSelectAllClick}
-							rowCount={data?.length}
+							rowCount={products?.length}
 						/>
 
 						<TableBody>
@@ -778,255 +754,236 @@ export default function BigProductsTable({
 							) : (
 								<>
 									<Fragment>
-										{data?.length === 0 ? (
+										{products?.length === 0 ? (
 											<TableRow>
 												<TableCell colSpan={8}>
 													<p className='text-center'>لاتوجد بيانات</p>
 												</TableCell>
 											</TableRow>
 										) : (
-											data
-												?.slice(
-													page * rowsPerPage,
-													page * rowsPerPage + rowsPerPage
-												)
-												?.map((row, index) => {
-													const isItemSelected = isSelected(row.id);
-													const labelId = `enhanced-table-checkbox-${index}`;
+											products?.map((row, index) => {
+												const isItemSelected = isSelected(row.id);
+												const labelId = `enhanced-table-checkbox-${index}`;
 
-													return (
-														<TableRow
-															sx={{
-																backgroundColor: row?.is_import
-																	? "#dfe2aa"
-																	: "",
-															}}
-															role='checkbox'
-															aria-checked={isItemSelected}
-															tabIndex={-1}
-															key={index}
-															selected={isItemSelected}>
-															<TableCell
-																component='th'
-																id={labelId}
-																scope='row'
-																align='right'>
-																<div className='flex items-center gap-4 '>
-																	<Checkbox
-																		sx={{
+												return (
+													<TableRow
+														sx={{
+															backgroundColor: row?.is_import ? "#dfe2aa" : "",
+														}}
+														role='checkbox'
+														aria-checked={isItemSelected}
+														tabIndex={-1}
+														key={index}
+														selected={isItemSelected}>
+														<TableCell
+															component='th'
+															id={labelId}
+															scope='row'
+															align='right'>
+															<div className='flex items-center gap-4 '>
+																<Checkbox
+																	sx={{
+																		color: "#356b88",
+																		"& .MuiSvgIcon-root": {
 																			color: "#356b88",
-																			"& .MuiSvgIcon-root": {
-																				color: "#356b88",
-																			},
-																		}}
-																		checked={isItemSelected}
-																		onClick={(event) =>
-																			handleClick(event, row?.id)
-																		}
-																		inputProps={{
-																			"aria-labelledby": labelId,
-																		}}
-																	/>
-																	{(index + 1).toLocaleString("en-US", {
-																		minimumIntegerDigits: 2,
-																		useGrouping: false,
-																	})}
-																</div>
-															</TableCell>
+																		},
+																	}}
+																	checked={isItemSelected}
+																	onClick={(event) =>
+																		handleClick(event, row?.id)
+																	}
+																	inputProps={{
+																		"aria-labelledby": labelId,
+																	}}
+																/>
+																{(index + 1).toLocaleString("en-US", {
+																	minimumIntegerDigits: 2,
+																	useGrouping: false,
+																})}
+															</div>
+														</TableCell>
 
-															<TableCell align='center'>
-																<div
-																	className='cate-prim d-flex align-items-center justify-content-start'
+														<TableCell align='center'>
+															<div
+																className='cate-prim d-flex align-items-center justify-content-start'
+																style={{
+																	width: " 300px",
+																}}>
+																<img
+																	className='img_icons'
+																	src={row?.cover}
+																	alt='img'
+																/>
+
+																<span
+																	className='me-3'
 																	style={{
-																		width: " 300px",
+																		maxWidth: "100%",
+																		whiteSpace: "nowrap",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
 																	}}>
-																	<img
-																		className='img_icons'
-																		src={row?.cover}
-																		alt='img'
-																	/>
+																	{row?.name}
+																</span>
+															</div>
+														</TableCell>
+														<TableCell align='right'>
+															{row?.category?.name}
+														</TableCell>
+														<TableCell align='center'>
+															{row?.discount_price &&
+															row?.discount_price !== "0" ? (
+																<>
+																	<span className='me-1 d-block'>
+																		{row?.discount_price} ر.س
+																	</span>
 
-																	<span
-																		className='me-3'
+																	<del
+																		className='original-price'
 																		style={{
-																			maxWidth: "100%",
-																			whiteSpace: "nowrap",
-																			overflow: "hidden",
-																			textOverflow: "ellipsis",
+																			fontSize: "13px",
+																			fontWeight: " 400",
+																			color: "#b3b3b3",
 																		}}>
-																		{row?.name}
-																	</span>
-																</div>
-															</TableCell>
-															<TableCell align='right'>
-																{row?.category?.name}
-															</TableCell>
-															<TableCell align='center'>
-																{row?.discount_price &&
-																row?.discount_price !== "0" ? (
-																	<>
-																		<span className='me-1 d-block'>
-																			{row?.discount_price} ر.س
-																		</span>
+																		{row?.selling_price} ر.س
+																	</del>
+																</>
+															) : (
+																<> {row?.selling_price} ر.س</>
+															)}
+														</TableCell>
+														<TableCell align='center'>{row?.stock}</TableCell>
+														<TableCell align='center'>
+															<div
+																className='form-check form-switch'
+																style={{ margin: "0 auto" }}>
+																<Switch
+																	onChange={() => changeSpecialStatus(row?.id)}
+																	checked={
+																		row?.special === "مميز" ? true : false
+																	}
+																	sx={{
+																		width: "50px",
+																		"& .MuiSwitch-track": {
+																			width: 26,
+																			height: 14,
+																			opacity: 1,
+																			backgroundColor: "rgba(0,0,0,.25)",
+																			boxSizing: "border-box",
+																		},
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
+																			width: 10,
+																			height: 10,
+																			borderRadius: 5,
+																			transform: "translate(6px,6px)",
+																			color: "#fff",
+																		},
 
-																		<del
-																			className='original-price'
-																			style={{
-																				fontSize: "13px",
-																				fontWeight: " 400",
-																				color: "#b3b3b3",
-																			}}>
-																			{row?.selling_price} ر.س
-																		</del>
-																	</>
-																) : (
-																	<> {row?.selling_price} ر.س</>
-																)}
-															</TableCell>
-															<TableCell align='center'>{row?.stock}</TableCell>
-															<TableCell align='center'>
-																<div
-																	className='form-check form-switch'
-																	style={{ margin: "0 auto" }}>
-																	<Switch
-																		onChange={() =>
-																			changeSpecialStatus(row?.id)
-																		}
-																		checked={
-																			row?.special === "مميز" ? true : false
-																		}
-																		sx={{
-																			width: "50px",
-																			"& .MuiSwitch-track": {
-																				width: 26,
-																				height: 14,
-																				opacity: 1,
-																				backgroundColor: "rgba(0,0,0,.25)",
-																				boxSizing: "border-box",
-																			},
+																		"&:hover": {
 																			"& .MuiSwitch-thumb": {
 																				boxShadow: "none",
-																				width: 10,
-																				height: 10,
-																				borderRadius: 5,
-																				transform: "translate(6px,6px)",
+																			},
+																		},
+
+																		"& .MuiSwitch-switchBase": {
+																			padding: 1,
+																			"&.Mui-checked": {
+																				transform: "translateX(11px)",
 																				color: "#fff",
-																			},
-
-																			"&:hover": {
-																				"& .MuiSwitch-thumb": {
-																					boxShadow: "none",
+																				"& + .MuiSwitch-track": {
+																					opacity: 1,
+																					backgroundColor: "#3AE374",
 																				},
 																			},
+																		},
+																	}}
+																/>
+															</div>
+														</TableCell>
 
-																			"& .MuiSwitch-switchBase": {
-																				padding: 1,
-																				"&.Mui-checked": {
-																					transform: "translateX(11px)",
-																					color: "#fff",
-																					"& + .MuiSwitch-track": {
-																						opacity: 1,
-																						backgroundColor: "#3AE374",
-																					},
-																				},
-																			},
-																		}}
-																	/>
-																</div>
-															</TableCell>
+														<TableCell align='center'>
+															<div
+																className='form-check form-switch'
+																style={{ margin: "0 auto" }}>
+																<Switch
+																	onChange={() => changeCouponStatus(row?.id)}
+																	checked={row?.status === "نشط" ? true : false}
+																	sx={{
+																		width: "50px",
+																		"& .MuiSwitch-track": {
+																			width: 26,
+																			height: 14,
+																			opacity: 1,
+																			backgroundColor: "rgba(0,0,0,.25)",
+																			boxSizing: "border-box",
+																		},
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
+																			width: 10,
+																			height: 10,
+																			borderRadius: 5,
+																			transform: "translate(6px,6px)",
+																			color: "#fff",
+																		},
 
-															<TableCell align='center'>
-																<div
-																	className='form-check form-switch'
-																	style={{ margin: "0 auto" }}>
-																	<Switch
-																		onChange={() => changeCouponStatus(row?.id)}
-																		checked={
-																			row?.status === "نشط" ? true : false
-																		}
-																		sx={{
-																			width: "50px",
-																			"& .MuiSwitch-track": {
-																				width: 26,
-																				height: 14,
-																				opacity: 1,
-																				backgroundColor: "rgba(0,0,0,.25)",
-																				boxSizing: "border-box",
-																			},
+																		"&:hover": {
 																			"& .MuiSwitch-thumb": {
 																				boxShadow: "none",
-																				width: 10,
-																				height: 10,
-																				borderRadius: 5,
-																				transform: "translate(6px,6px)",
+																			},
+																		},
+
+																		"& .MuiSwitch-switchBase": {
+																			padding: 1,
+																			"&.Mui-checked": {
+																				transform: "translateX(11px)",
 																				color: "#fff",
-																			},
-
-																			"&:hover": {
-																				"& .MuiSwitch-thumb": {
-																					boxShadow: "none",
+																				"& + .MuiSwitch-track": {
+																					opacity: 1,
+																					backgroundColor: "#3AE374",
 																				},
 																			},
+																		},
+																	}}
+																/>
+															</div>
+														</TableCell>
 
-																			"& .MuiSwitch-switchBase": {
-																				padding: 1,
-																				"&.Mui-checked": {
-																					transform: "translateX(11px)",
-																					color: "#fff",
-																					"& + .MuiSwitch-track": {
-																						opacity: 1,
-																						backgroundColor: "#3AE374",
-																					},
-																				},
-																			},
+														<TableCell align='right'>
+															<div className='actions d-flex justify-content-evenly'>
+																<Link
+																	to={
+																		row?.is_import
+																			? `ShowImportEtlobhaProduct/${row?.id}`
+																			: `EditProduct/${row?.id}`
+																	}
+																	style={{ cursor: "pointer" }}>
+																	<EditIcon title='تعديل المنتج' />
+																</Link>
+																<span>
+																	<DeleteIcon
+																		title='حذف المنتج'
+																		onClick={() => {
+																			setActionDelete(
+																				"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
+																			);
+																			setDeleteMethod("get");
+																			setUrl(
+																				`productdeleteall?id[]=${row?.id}`
+																			);
+																		}}
+																		style={{
+																			cursor: "pointer",
+																			color: "red",
+																			fontSize: "1.2rem",
 																		}}
 																	/>
-																</div>
-															</TableCell>
-
-															<TableCell align='right'>
-																<div className='actions d-flex justify-content-evenly'>
-																	<Link
-																		to={
-																			row?.is_import
-																				? `ShowImportEtlobhaProduct/${row?.id}`
-																				: `EditProduct/${row?.id}`
-																		}
-																		style={{ cursor: "pointer" }}>
-																		<EditIcon title='تعديل المنتج' />
-																	</Link>
-																	<span>
-																		<DeleteIcon
-																			title='حذف المنتج'
-																			onClick={() => {
-																				setActionDelete(
-																					"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
-																				);
-																				setDeleteMethod("get");
-																				setUrl(
-																					`productdeleteall?id[]=${row?.id}`
-																				);
-																			}}
-																			style={{
-																				cursor: "pointer",
-																				color: "red",
-																				fontSize: "1.2rem",
-																			}}
-																		/>
-																	</span>
-																</div>
-															</TableCell>
-														</TableRow>
-													);
-												})
-										)}
-										{emptyRows > 0 && (
-											<TableRow
-												style={{
-													height: 53 * emptyRows,
-												}}>
-												<TableCell colSpan={6} />
-											</TableRow>
+																</span>
+															</div>
+														</TableCell>
+													</TableRow>
+												);
+											})
 										)}
 									</Fragment>
 								</>
@@ -1035,19 +992,15 @@ export default function BigProductsTable({
 					</Table>
 				</TableContainer>
 			</Paper>
-			{data?.length !== 0 && !loading && (
+			{products?.length !== 0 && !loading && (
 				<TablePagination
-					page={page}
-					open={open}
-					setPage={setPage}
-					allRows={allRows}
-					anchorEl={anchorEl}
-					data={data?.length}
-					rowsPerPage={rowsPerPage}
-					handleClose={handleClose}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
+					data={categories}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 		</Box>

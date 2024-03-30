@@ -199,10 +199,17 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function BigOrdersTable({
-	data,
+	orders,
 	loading,
-	reload,
-	setReload,
+
+	rowsCount,
+	setRowsCount,
+	pageTarget,
+
+	setPageTarget,
+	pageCount,
+	currentPage,
+
 	search,
 	setSearch,
 	select,
@@ -210,59 +217,19 @@ export default function BigOrdersTable({
 }) {
 	const navigate = useNavigate();
 
-	const [selected, setSelected] = React.useState([]);
-	const [itemSelected, setItemSelected] = useState("");
-
-	// To handle table pagination
-	const [page, setPage] = React.useState(0);
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [rowsPerPage, setRowsPerPage] = React.useState(8);
-	const open = Boolean(anchorEl);
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
-
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					search={search}
 					setSearch={setSearch}
-					itemSelected={itemSelected}
-					setItemSelected={setItemSelected}
-					numSelected={selected.length}
-					rowCount={data?.length}
+					rowCount={orders?.length}
 					select={select}
 					setSelect={setSelect}
 				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-						<EnhancedTableHead
-							numSelected={selected.length}
-							rowCount={data?.length}
-						/>
+						<EnhancedTableHead rowCount={orders?.length} />
 
 						<TableBody>
 							{loading ? (
@@ -273,172 +240,157 @@ export default function BigOrdersTable({
 								</TableRow>
 							) : (
 								<Fragment>
-									{data?.length === 0 ? (
+									{orders?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={8}>
 												<p className='text-center'>لاتوجد بيانات</p>
 											</TableCell>
 										</TableRow>
 									) : (
-										data
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const labelId = `enhanced-table-checkbox-${index}`;
+										orders?.map((row, index) => {
+											const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow hover tabIndex={-1} key={index}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center'
+											return (
+												<TableRow hover tabIndex={-1} key={index}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center'
+															style={{
+																display: "flex",
+																justifyContent: "center",
+																alignItems: "center",
+																gap: "7px",
+															}}>
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 2,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
+
+													<TableCell align='right'>
+														<div
+															className='text-overflow'
+															style={{ maxWidth: "210px" }}>
+															{row?.shipping?.shipping_id}
+														</div>
+													</TableCell>
+													<TableCell align='right'>
+														<div className='cate-prim'>
+															<img
+																src={row?.user?.image}
+																alt='img'
+																className=' rounded-circle img_icons'
+															/>
+															<span
+																className='me-3'
 																style={{
-																	display: "flex",
-																	justifyContent: "center",
-																	alignItems: "center",
-																	gap: "7px",
+																	maxWidth: "100%",
+																	whiteSpace: "nowrap",
+																	overflow: "hidden",
+																	textOverflow: "ellipsis",
 																}}>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 2,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
+																{`${row?.user?.name} ${row?.user?.lastname}`}
+															</span>
+														</div>
+													</TableCell>
+													<TableCell align='right' sx={{ width: "90px" }}>
+														<div className='sub-categories'>
+															<span
+																className='status d-flex justify-content-center align-items-center'
+																style={{
+																	backgroundColor:
+																		row?.status === "تم الشحن"
+																			? "#ebfcf1"
+																			: row?.status === "جديد"
+																			? "#d4ebf7"
+																			: row?.status === "الغاء الشحنة"
+																			? "#ffebeb"
+																			: row?.status === "قيد التجهيز"
+																			? "#ffecd1c7"
+																			: "#9df1ba",
+																	color:
+																		row?.status === "تم الشحن"
+																			? "##9df1ba"
+																			: row?.status === "جديد"
+																			? "#0077ff"
+																			: row?.status === "الغاء الشحنة"
+																			? "#ff7b7b"
+																			: row?.status === "قيد التجهيز"
+																			? "#ff9f1a"
+																			: "#07b543",
+																	borderRadius: "16px",
+																	padding: "4px 12px",
+																	fontWeight: 500,
+																	fontSize: "16px",
+																}}>
+																{row?.status}
+															</span>
+														</div>
+													</TableCell>
+													<TableCell align='center'>
+														{row?.shippingtypes?.name}
+													</TableCell>
 
-														<TableCell align='right'>
-															<div
-																className='text-overflow'
-																style={{ maxWidth: "210px" }}>
-																{row?.shipping?.shipping_id}
-															</div>
-														</TableCell>
-														<TableCell align='right'>
-															<div className='cate-prim'>
-																<img
-																	src={row?.user?.image}
-																	alt='img'
-																	className=' rounded-circle img_icons'
+													<TableCell align='center'>{row?.quantity}</TableCell>
+
+													<TableCell align='center'>
+														{row?.total_price} ر.س
+													</TableCell>
+													<TableCell align='center'>
+														{row?.paymenttypes?.paymentType}
+													</TableCell>
+													<TableCell align='right' sx={{ width: "90px" }}>
+														<div className='sub-categories'>
+															<span
+																className='status d-flex justify-content-center align-items-center'
+																style={{
+																	backgroundColor:
+																		row?.payment_status === " تم الدفع"
+																			? "#ebfcf1"
+																			: row?.payment_status === "فشل الدفع"
+																			? "#ffebeb"
+																			: row?.payment_status === "لم يتم الدفع"
+																			? "#ffecd1c7"
+																			: null,
+																	color:
+																		row?.payment_status === "تم الدفع"
+																			? "##9df1ba"
+																			: row?.payment_status === "فشل الدفع "
+																			? "#ff7b7b"
+																			: row?.payment_status === "لم يتم الدفع"
+																			? "#ff9f1a"
+																			: null,
+																	borderRadius: "16px",
+																	padding: "4px 12px",
+																	fontWeight: 500,
+																	fontSize: "16px",
+																}}>
+																{row?.payment_status}
+															</span>
+														</div>
+													</TableCell>
+
+													<TableCell align='right'>
+														<div className='actions d-flex justify-content-evenly'>
+															<span>
+																<ReportIcon
+																	title='تفاصيل الطلب'
+																	style={{ cursor: "pointer" }}
+																	onClick={() => {
+																		navigate(`OrderDetails/${row?.id}`);
+																	}}
 																/>
-																<span
-																	className='me-3'
-																	style={{
-																		maxWidth: "100%",
-																		whiteSpace: "nowrap",
-																		overflow: "hidden",
-																		textOverflow: "ellipsis",
-																	}}>
-																	{`${row?.user?.name} ${row?.user?.lastname}`}
-																</span>
-															</div>
-														</TableCell>
-														<TableCell align='right' sx={{ width: "90px" }}>
-															<div className='sub-categories'>
-																<span
-																	className='status d-flex justify-content-center align-items-center'
-																	style={{
-																		backgroundColor:
-																			row?.status === "تم الشحن"
-																				? "#ebfcf1"
-																				: row?.status === "جديد"
-																				? "#d4ebf7"
-																				: row?.status === "الغاء الشحنة"
-																				? "#ffebeb"
-																				: row?.status === "قيد التجهيز"
-																				? "#ffecd1c7"
-																				: "#9df1ba",
-																		color:
-																			row?.status === "تم الشحن"
-																				? "##9df1ba"
-																				: row?.status === "جديد"
-																				? "#0077ff"
-																				: row?.status === "الغاء الشحنة"
-																				? "#ff7b7b"
-																				: row?.status === "قيد التجهيز"
-																				? "#ff9f1a"
-																				: "#07b543",
-																		borderRadius: "16px",
-																		padding: "4px 12px",
-																		fontWeight: 500,
-																		fontSize: "16px",
-																	}}>
-																	{row?.status}
-																</span>
-															</div>
-														</TableCell>
-														<TableCell align='center'>
-															{row?.shippingtypes?.name}
-														</TableCell>
-
-														<TableCell align='center'>
-															{row?.quantity}
-														</TableCell>
-
-														<TableCell align='center'>
-															{row?.total_price} ر.س
-														</TableCell>
-														<TableCell align='center'>
-															{row?.paymenttypes?.paymentType}
-														</TableCell>
-														<TableCell align='right' sx={{ width: "90px" }}>
-															<div className='sub-categories'>
-																<span
-																	className='status d-flex justify-content-center align-items-center'
-																	style={{
-																		backgroundColor:
-																			row?.payment_status === " تم الدفع"
-																				? "#ebfcf1"
-																				: row?.payment_status === "فشل الدفع"
-																				? "#ffebeb"
-																				: row?.payment_status === "لم يتم الدفع"
-																				? "#ffecd1c7"
-																				: null,
-																		color:
-																			row?.payment_status === "تم الدفع"
-																				? "##9df1ba"
-																				: row?.payment_status === "فشل الدفع "
-																				? "#ff7b7b"
-																				: row?.payment_status === "لم يتم الدفع"
-																				? "#ff9f1a"
-																				: null,
-																		borderRadius: "16px",
-																		padding: "4px 12px",
-																		fontWeight: 500,
-																		fontSize: "16px",
-																	}}>
-																	{row?.payment_status}
-																</span>
-															</div>
-														</TableCell>
-
-														<TableCell align='right'>
-															<div className='actions d-flex justify-content-evenly'>
-																<span>
-																	<ReportIcon
-																		title='تفاصيل الطلب'
-																		style={{ cursor: "pointer" }}
-																		onClick={() => {
-																			navigate(`OrderDetails/${row?.id}`);
-																		}}
-																	/>
-																</span>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-									)}
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={6} />
-										</TableRow>
+															</span>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -446,19 +398,15 @@ export default function BigOrdersTable({
 					</Table>
 				</TableContainer>
 			</Paper>
-			{data?.length !== 0 && !loading && (
+			{orders?.length !== 0 && !loading && (
 				<TablePagination
-					open={open}
-					page={page}
-					allRows={allRows}
-					setPage={setPage}
-					data={data?.length}
-					rowsPerPage={rowsPerPage}
-					anchorEl={anchorEl}
-					handleClose={handleClose}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
+					data={orders}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 		</Box>

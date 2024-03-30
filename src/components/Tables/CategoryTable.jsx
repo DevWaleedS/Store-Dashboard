@@ -239,18 +239,6 @@ export default function EnhancedTable({
 		setPossibilityOfDelete,
 	} = DeleteStore;
 
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const open = Boolean(anchorEl);
-
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
 	/** --------------------------------------------------- */
 	// select all items
 	const [selected, setSelected] = useState([]);
@@ -262,6 +250,27 @@ export default function EnhancedTable({
 		}
 		setSelected([]);
 	};
+
+	const handleClick = (event, id) => {
+		const selectedIndex = selected.indexOf(id);
+		let newSelected = [];
+
+		if (selectedIndex === -1) {
+			newSelected = newSelected.concat(selected, id);
+		} else if (selectedIndex === 0) {
+			newSelected = newSelected.concat(selected.slice(1));
+		} else if (selectedIndex === selected.length - 1) {
+			newSelected = newSelected.concat(selected.slice(0, -1));
+		} else if (selectedIndex > 0) {
+			newSelected = newSelected.concat(
+				selected.slice(0, selectedIndex),
+				selected.slice(selectedIndex + 1)
+			);
+		}
+
+		setSelected(newSelected);
+	};
+	const isSelected = (id) => selected.indexOf(id) !== -1;
 
 	useEffect(() => {
 		if (tabSelectedId) {
@@ -343,32 +352,6 @@ export default function EnhancedTable({
 			setConfirm(false);
 		}
 	}, [confirm]);
-
-	const handleClick = (event, id) => {
-		const selectedIndex = selected.indexOf(id);
-		let newSelected = [];
-
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selected.slice(0, selectedIndex),
-				selected.slice(selectedIndex + 1)
-			);
-		}
-
-		setSelected(newSelected);
-	};
-
-	const isSelected = (id) => selected.indexOf(id) !== -1;
-	const handleChangeRowsPerPage = (event) => {
-		setRowsCount(parseInt(event.target.value));
-		setPageTarget(1);
-	};
 
 	return (
 		<Box sx={{ width: "100%" }}>
@@ -687,19 +670,13 @@ export default function EnhancedTable({
 			</Paper>
 			{categories?.length !== 0 && !loading && (
 				<TablePagination
-					open={open}
 					data={categories}
-					anchorEl={anchorEl}
 					pageCount={pageCount}
 					currentPage={currentPage}
 					pageTarget={pageTarget}
-					handleClose={handleClose}
 					rowsCount={rowsCount}
 					setRowsCount={setRowsCount}
 					setPageTarget={setPageTarget}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 			)}
 		</Box>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -20,6 +20,8 @@ import { Button } from "@mui/material";
 // Components
 import { PagesTable } from "../components/Tables";
 import { ArrowBack } from "../data/Icons";
+import { useDispatch, useSelector } from "react-redux";
+import { PagesThunk } from "../store/Thunk/PagesThunk";
 
 // filter Pages by
 const filtersTypes = [
@@ -79,22 +81,40 @@ const menuItemStyles = {
 };
 
 const Pages = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch("page");
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+
+	const { PagesData, currentPage, pageCount } = useSelector(
+		(state) => state.PagesSlice
+	);
+	const { loading, reload, setReload } = useFetch(
+		`page?page=${pageTarget}&number=${rowsCount}`
+	);
+	// -----------------------------------------------------------
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget]);
+
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
 
-	let pages = fetchedData?.data?.pages;
+	let pages = PagesData?.pages;
 	let filterPages = pages;
 
 	// Search
 	if (search !== "") {
-		pages = fetchedData?.data?.pages?.filter((item) =>
+		pages = PagesData?.pages?.filter((item) =>
 			item?.title?.toLowerCase()?.includes(search?.toLowerCase())
 		);
 	} else {
-		pages = fetchedData?.data?.pages;
+		pages = PagesData?.pages;
 	}
+
+	console.log(PagesData);
 
 	// Filter By
 	if (select === "date") {
@@ -204,10 +224,18 @@ const Pages = () => {
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable
-							reload={reload}
-							loading={loading}
 							data={filterPages}
+							loading={loading}
+							reload={reload}
 							setReload={setReload}
+							search={search}
+							setSearch={setSearch}
+							rowsCount={rowsCount}
+							pageTarget={pageTarget}
+							setRowsCount={setRowsCount}
+							setPageTarget={setPageTarget}
+							pageCount={pageCount}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

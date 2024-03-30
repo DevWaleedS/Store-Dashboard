@@ -152,7 +152,20 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
+const SupportTable = ({
+	data,
+	loading,
+	reload,
+	setReload,
+	search,
+	setSearch,
+	rowsCount,
+	pageTarget,
+	setRowsCount,
+	setPageTarget,
+	pageCount,
+	currentPage,
+}) => {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -176,51 +189,18 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 		setDeleteMethod,
 	} = DeleteStore;
 
-	const [selected, setSelected] = React.useState([]);
-	const [page, setPage] = React.useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
-
-	// Handle pagination
-	const open = Boolean(anchorEl);
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchedData?.length) : 0;
-
-	const allRows = () => {
-		const num = Math.ceil(fetchedData?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
-	// ---------------------------------------------------------------
-
 	// Handle select all Items
+	const [selected, setSelected] = React.useState([]);
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = fetchedData?.map((n) => n.id);
+			const newSelected = data?.map((n) => n.id);
 			setSelected(newSelected);
 			return;
 		}
 		setSelected([]);
 	};
 
+	const isSelected = (name) => selected.indexOf(name) !== -1;
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -240,8 +220,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 
 		setSelected(newSelected);
 	};
-	const isSelected = (name) => selected.indexOf(name) !== -1;
-	//---------------------------------------
+	// ---------------------------------------------------------------
 
 	// Delete single item
 	useEffect(() => {
@@ -302,7 +281,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					numSelected={selected.length}
-					rowCount={fetchedData?.length}
+					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
 				/>
 				<TableContainer>
@@ -310,7 +289,7 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 						<EnhancedTableHead
 							numSelected={selected.length}
 							onSelectAllClick={handleSelectAllClick}
-							rowCount={fetchedData?.length}
+							rowCount={data?.length}
 						/>
 
 						<TableBody>
@@ -322,200 +301,185 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 								</TableRow>
 							) : (
 								<Fragment>
-									{fetchedData?.length === 0 ? (
+									{data?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={6}>
 												<p className='text-center'>لاتوجد بيانات</p>
 											</TableCell>
 										</TableRow>
 									) : (
-										fetchedData
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const isItemSelected = isSelected(row?.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
+										data?.map((row, index) => {
+											const isItemSelected = isSelected(row?.id);
+											const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow
-														hover
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center '
-																style={{
-																	display: "flex",
-																	justifyContent: "start",
-																	alignItems: "center",
-																	gap: "8px",
-																}}>
-																<Checkbox
-																	sx={{
+											return (
+												<TableRow
+													hover
+													role='checkbox'
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													key={index}
+													selected={isItemSelected}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center '
+															style={{
+																display: "flex",
+																justifyContent: "start",
+																alignItems: "center",
+																gap: "8px",
+															}}>
+															<Checkbox
+																sx={{
+																	color: "#356b88",
+																	pr: "14px",
+																	"& .MuiSvgIcon-root": {
 																		color: "#356b88",
-																		pr: "14px",
-																		"& .MuiSvgIcon-root": {
-																			color: "#356b88",
-																		},
-																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, row.id)
+																	},
+																}}
+																checked={isItemSelected}
+																onClick={(event) => handleClick(event, row.id)}
+																inputProps={{
+																	"aria-labelledby": labelId,
+																}}
+															/>
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 1,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
+													<TableCell align='center'>
+														{row?.store?.user?.name}
+													</TableCell>
+													<TableCell align='center'>
+														<div className='text-overflow support-title'>
+															{row?.title}
+														</div>
+													</TableCell>
+													<TableCell align='center'>
+														<div className='text-overflow support-title'>
+															{row?.content}
+														</div>
+													</TableCell>
+													<TableCell align='center'>
+														<div className='sub-categories'>
+															<span
+																className='status d-inline-flex align-items-center'
+																style={{
+																	backgroundColor:
+																		row?.supportstatus === "منتهية"
+																			? "#3ae374"
+																			: row?.supportstatus === "غير منتهية "
+																			? "#ff9f1a"
+																			: "#d3d3d3",
+																	color: "#fff",
+																}}>
+																{row?.supportstatus === "منتهية" ? (
+																	<GoCheck />
+																) : row?.supportstatus === "غير منتهية " ? (
+																	<HourGleass />
+																) : (
+																	<DeadLineIcon />
+																)}
+																{row?.supportstatus}
+															</span>
+														</div>
+													</TableCell>
+													<TableCell align='right'>
+														<div className='actions d-flex justify-content-center align-items-center gap-1'>
+															<span
+																style={{ cursor: "pointer" }}
+																onClick={() => {
+																	dispatch(openReplyModal());
+																	setUserDetails(row);
+																}}>
+																<ReplayIcon title='الرد على الشكوى' />
+															</span>
+
+															<span
+																style={{ cursor: "pointer" }}
+																onClick={() => {
+																	navigate(`supportDetails/${row?.id}`);
+																}}>
+																<Reports title='تفاصيل الشكوى' />
+															</span>
+
+															<span>
+																<Switch
+																	onChange={() => changeStatus(row?.id)}
+																	checked={
+																		row?.supportstatus === "منتهية"
+																			? true
+																			: false
 																	}
-																	inputProps={{
-																		"aria-labelledby": labelId,
-																	}}
-																/>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 1,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
-														<TableCell align='center'>
-															{row?.store?.user?.name}
-														</TableCell>
-														<TableCell align='center'>
-															<div className='text-overflow support-title'>
-																{row?.title}
-															</div>
-														</TableCell>
-														<TableCell align='center'>
-															<div className='text-overflow support-title'>
-																{row?.content}
-															</div>
-														</TableCell>
-														<TableCell align='center'>
-															<div className='sub-categories'>
-																<span
-																	className='status d-inline-flex align-items-center'
-																	style={{
-																		backgroundColor:
-																			row?.supportstatus === "منتهية"
-																				? "#3ae374"
-																				: row?.supportstatus === "غير منتهية "
-																				? "#ff9f1a"
-																				: "#d3d3d3",
-																		color: "#fff",
-																	}}>
-																	{row?.supportstatus === "منتهية" ? (
-																		<GoCheck />
-																	) : row?.supportstatus === "غير منتهية " ? (
-																		<HourGleass />
-																	) : (
-																		<DeadLineIcon />
-																	)}
-																	{row?.supportstatus}
-																</span>
-															</div>
-														</TableCell>
-														<TableCell align='right'>
-															<div className='actions d-flex justify-content-center align-items-center gap-1'>
-																<span
-																	style={{ cursor: "pointer" }}
-																	onClick={() => {
-																		dispatch(openReplyModal());
-																		setUserDetails(row);
-																	}}>
-																	<ReplayIcon title='الرد على الشكوى' />
-																</span>
+																	sx={{
+																		width: "50px",
+																		"& .MuiSwitch-track": {
+																			width: 26,
+																			height: 14,
+																			opacity: 1,
+																			backgroundColor: "rgba(0,0,0,.25)",
+																			boxSizing: "border-box",
+																		},
+																		"& .MuiSwitch-thumb": {
+																			boxShadow: "none",
+																			width: 10,
+																			height: 10,
+																			borderRadius: 5,
+																			transform: "translate(6px,6px)",
+																			color: "#fff",
+																		},
 
-																<span
-																	style={{ cursor: "pointer" }}
-																	onClick={() => {
-																		navigate(`supportDetails/${row?.id}`);
-																	}}>
-																	<Reports title='تفاصيل الشكوى' />
-																</span>
-
-																<span>
-																	<Switch
-																		onChange={() => changeStatus(row?.id)}
-																		checked={
-																			row?.supportstatus === "منتهية"
-																				? true
-																				: false
-																		}
-																		sx={{
-																			width: "50px",
-																			"& .MuiSwitch-track": {
-																				width: 26,
-																				height: 14,
-																				opacity: 1,
-																				backgroundColor: "rgba(0,0,0,.25)",
-																				boxSizing: "border-box",
-																			},
+																		"&:hover": {
 																			"& .MuiSwitch-thumb": {
 																				boxShadow: "none",
-																				width: 10,
-																				height: 10,
-																				borderRadius: 5,
-																				transform: "translate(6px,6px)",
+																			},
+																		},
+
+																		"& .MuiSwitch-switchBase": {
+																			padding: 1,
+																			"&.Mui-checked": {
+																				transform: "translateX(11px)",
 																				color: "#fff",
-																			},
-
-																			"&:hover": {
-																				"& .MuiSwitch-thumb": {
-																					boxShadow: "none",
+																				"& + .MuiSwitch-track": {
+																					opacity: 1,
+																					backgroundColor: "#3AE374",
 																				},
 																			},
+																		},
+																	}}
+																/>
+															</span>
 
-																			"& .MuiSwitch-switchBase": {
-																				padding: 1,
-																				"&.Mui-checked": {
-																					transform: "translateX(11px)",
-																					color: "#fff",
-																					"& + .MuiSwitch-track": {
-																						opacity: 1,
-																						backgroundColor: "#3AE374",
-																					},
-																				},
-																			},
-																		}}
-																	/>
-																</span>
-
-																<span>
-																	<DeleteIcon
-																		title='حذف  الشكوى'
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف الشكوى وهذه الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("get");
-																			setUrl(
-																				`technicalSupportStoredeleteall?id[]=${row?.id}`
-																			);
-																		}}
-																		style={{
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
-																		}}
-																	/>
-																</span>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-									)}
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={6} />
-										</TableRow>
+															<span>
+																<DeleteIcon
+																	title='حذف  الشكوى'
+																	onClick={() => {
+																		setActionDelete(
+																			"سيتم حذف الشكوى وهذه الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("get");
+																		setUrl(
+																			`technicalSupportStoredeleteall?id[]=${row?.id}`
+																		);
+																	}}
+																	style={{
+																		cursor: "pointer",
+																		color: "red",
+																		fontSize: "1.2rem",
+																	}}
+																/>
+															</span>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -523,19 +487,15 @@ const SupportTable = ({ fetchedData, loading, reload, setReload }) => {
 					</Table>
 				</TableContainer>
 			</Paper>
-			{fetchedData?.length !== 0 && !loading && (
+			{data?.length !== 0 && !loading && (
 				<TablePagination
-					open={open}
-					page={page}
-					setPage={setPage}
-					allRows={allRows}
-					anchorEl={anchorEl}
-					handleClose={handleClose}
-					rowsPerPage={rowsPerPage}
-					data={fetchedData?.length}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
+					page={data}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 			<SendSupportReplayModal

@@ -134,13 +134,20 @@ export default function PostalSubscriptionsTable({
 	loading,
 	reload,
 	setReload,
+	search,
+	setSearch,
+	rowsCount,
+	pageTarget,
+	setRowsCount,
+	setPageTarget,
+	pageCount,
+	currentPage,
 }) {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -154,33 +161,6 @@ export default function PostalSubscriptionsTable({
 		setDeleteReload,
 		setDeleteMethod,
 	} = DeleteStore;
-
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [anchorEl, setAnchorEl] = React.useState(null);
-
-	// Handle pagination
-	const open = Boolean(anchorEl);
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
 
 	/** --------------------------------------------------- */
 
@@ -281,93 +261,78 @@ export default function PostalSubscriptionsTable({
 											</TableCell>
 										</TableRow>
 									) : (
-										data
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const isItemSelected = isSelected(row?.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
+										data?.map((row, index) => {
+											const isItemSelected = isSelected(row?.id);
+											const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow
-														hover
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center'
-																style={{
-																	display: "flex",
-																	justifyContent: "start",
-																	alignItems: "center",
-																	gap: "7px",
-																}}>
-																<Checkbox
-																	sx={{
+											return (
+												<TableRow
+													hover
+													role='checkbox'
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													key={index}
+													selected={isItemSelected}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center'
+															style={{
+																display: "flex",
+																justifyContent: "start",
+																alignItems: "center",
+																gap: "7px",
+															}}>
+															<Checkbox
+																sx={{
+																	color: "#356b88",
+																	"& .MuiSvgIcon-root": {
 																		color: "#356b88",
-																		"& .MuiSvgIcon-root": {
-																			color: "#356b88",
-																		},
+																	},
+																}}
+																checked={isItemSelected}
+																onClick={(event) => handleClick(event, row.id)}
+																inputProps={{
+																	"aria-labelledby": labelId,
+																}}
+															/>
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 2,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
+													<TableCell align='right'>{row?.email}</TableCell>
+													<TableCell align='right'>
+														<div className='actions d-flex align-items-center justify-content-evenly'>
+															<span>
+																<DeleteIcon
+																	title='حذف الايميل'
+																	onClick={() => {
+																		setActionDelete(
+																			"سيتم حذف الايميل وهذه الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("get");
+																		setUrl(
+																			`subsicriptionsdeleteall?id[]=${row?.id}`
+																		);
 																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, row.id)
-																	}
-																	inputProps={{
-																		"aria-labelledby": labelId,
+																	style={{
+																		cursor: "pointer",
+																		color: "red",
+																		fontSize: "1.2rem",
+																		marginRight: "5px",
 																	}}
 																/>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 2,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
-														<TableCell align='right'>{row?.email}</TableCell>
-														<TableCell align='right'>
-															<div className='actions d-flex align-items-center justify-content-evenly'>
-																<span>
-																	<DeleteIcon
-																		title='حذف الايميل'
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف الايميل وهذه الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("get");
-																			setUrl(
-																				`subsicriptionsdeleteall?id[]=${row?.id}`
-																			);
-																		}}
-																		style={{
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
-																			marginRight: "5px",
-																		}}
-																	/>
-																</span>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-									)}
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={3} />
-										</TableRow>
+															</span>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -377,17 +342,13 @@ export default function PostalSubscriptionsTable({
 			</Paper>
 			{data?.length !== 0 && !loading && (
 				<TablePagination
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
-					handleRowsClick={handleRowsClick}
-					anchorEl={anchorEl}
-					open={open}
-					handleClose={handleClose}
-					page={page}
-					setPage={setPage}
-					allRows={allRows}
-					data={data?.length}
-					rowsPerPage={rowsPerPage}
+					page={data}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 		</Box>

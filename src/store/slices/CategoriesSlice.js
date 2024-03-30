@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { categoriesThunk } from "../Thunk/CategoryTableThunk";
+import { CategoriesThunk, addCategoryThunk } from "../Thunk/CategoriesThunk";
 
 const initialState = {
 	loading: false,
@@ -9,7 +9,7 @@ const initialState = {
 	etlobhaCurrentPage: 1,
 	etlobhaPageCount: 2,
 	pageCount: 1,
-	errors: "",
+	error: "",
 	storeCategory: [],
 	SouqOtlbhaCategory: [],
 };
@@ -20,11 +20,15 @@ const CategoriesSlice = createSlice({
 	reducers: {},
 	extraReducers: (builder) => {
 		builder
-			.addCase(categoriesThunk.pending, (state) => {
+			// to get all category
+			.addCase(CategoriesThunk.pending, (state) => {
 				state.reload = true;
+				state.loading = true;
 			})
-			.addCase(categoriesThunk.fulfilled, (state, action) => {
+			.addCase(CategoriesThunk.fulfilled, (state, action) => {
 				state.reload = false;
+				state.loading = false;
+
 				state.currentPage = action.payload.data.current_page;
 				state.etlobhaCurrentPage = action.payload.data.etlobha_current_page;
 				state.etlobhaPageCount = action.payload.data.etlobha_page_count;
@@ -33,9 +37,23 @@ const CategoriesSlice = createSlice({
 				state.storeCategory = action?.payload?.data.categories;
 				state.SouqOtlbhaCategory = action?.payload?.data?.etlobha_categories;
 			})
-			.addCase(categoriesThunk.rejected, (state, action) => {
+			.addCase(CategoriesThunk.rejected, (state, action) => {
 				state.reload = false;
-				state.errors = action.error.message;
+				state.loading = false;
+				state.error = action.error.message;
+			})
+
+			//add new category
+			.addCase(addCategoryThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(addCategoryThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+			})
+			.addCase(addCategoryThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
 			});
 	},
 });

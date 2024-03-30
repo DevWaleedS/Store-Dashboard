@@ -9,7 +9,7 @@ import ImageUploading from "react-images-uploading";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { closeProductOptionModal } from "../../../store/slices/ProductOptionModal";
+import { closeProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 // Context
 import Context from "../../../Context/context";
@@ -151,9 +151,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 const select_value_options = ["نص", "نص و لون", "نص و صورة"];
 
 const AddProductOptionsModal = () => {
-	const { isProductOptionOpen } = useSelector(
-		(state) => state.ProductOptionModal
-	);
+	const { isProductOptionOpen } = useSelector((state) => state.ProductsSlice);
 
 	const dispatch = useDispatch(false);
 

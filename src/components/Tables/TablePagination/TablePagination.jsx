@@ -8,18 +8,29 @@ import Stack from "@mui/material/Stack";
 // Icon
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 const TablePagination = ({
-	open,
 	pageCount,
 	setPageTarget,
 	currentPage,
-	anchorEl,
-	handleClose,
-	handleRowsClick,
-	rowsPerPagesCount,
-	handleChangeRowsPerPage,
+	setRowsCount,
 }) => {
 	const handleChange = (event, value) => {
 		setPageTarget(value);
+	};
+
+	// Handel Select row per page
+	const rowsPerPagesCount = [10, 20, 30, 50, 100];
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
+
+	const handleRowsClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+	const handleChangeRowsPerPage = (event) => {
+		setRowsCount(parseInt(event.target.value));
+		setPageTarget(1);
 	};
 
 	return (

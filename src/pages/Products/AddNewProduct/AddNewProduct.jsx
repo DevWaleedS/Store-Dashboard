@@ -45,7 +45,7 @@ import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 
 // Redux
 import { useDispatch } from "react-redux";
-import { openProductOptionModal } from "../../../store/slices/ProductOptionModal";
+import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 const style = {
 	position: "fixed",

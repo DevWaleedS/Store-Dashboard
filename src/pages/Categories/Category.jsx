@@ -17,30 +17,34 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { CategoryTable } from "../../components/Tables";
 import DeleteCategoryAlert from "./DeleteCategoryAlert";
+
+// Redux
 import { useDispatch, useSelector } from "react-redux";
-import { categoriesThunk } from "../../store/Thunk/CategoryTableThunk";
+import { CategoriesThunk } from "../../store/Thunk/CategoriesThunk";
 
 const Category = () => {
 	const dispatch = useDispatch();
-	// to get all  data from server
-	const { loading, reload, setReload } = useFetch("category?page=1");
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	const { loading, reload, setReload } = useFetch(
+		`category?page=${pageTarget}&number=${rowsCount}`
+	);
+
 	const {
 		Categories,
 		currentPage,
 		etlobhaCurrentPage,
 		etlobhaPageCount,
 		pageCount,
-		errors,
+
 		storeCategory,
 		SouqOtlbhaCategory,
 	} = useSelector((state) => state.CategoriesSlice);
-	const [pageTarget, setPageTarget] = useState(1);
-	const [rowsCount, setRowsCount] = useState(10);
 
 	/** get contact data */
 	useEffect(() => {
-		dispatch(categoriesThunk({ page: pageTarget, number: rowsCount }));
+		dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget]);
 
 	const navigate = useNavigate();
@@ -246,8 +250,8 @@ const Category = () => {
 							reload={reload}
 							loading={loading}
 							rowsCount={rowsCount}
-							setRowsCount={setRowsCount}
 							setReload={setReload}
+							setRowsCount={setRowsCount}
 							pageTarget={pageTarget}
 							tabSelectedId={tabSelected}
 							categories={categoriesResult}

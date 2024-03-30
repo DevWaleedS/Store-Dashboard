@@ -192,7 +192,18 @@ EnhancedTableToolbar.propTypes = {
 	numSelected: PropTypes.number.isRequired,
 };
 
-export default function CouponTable({ data, loading, reload, setReload }) {
+export default function CouponTable({
+	coupons,
+	loading,
+	reload,
+	setReload,
+	rowsCount,
+	setRowsCount,
+	pageTarget,
+	setPageTarget,
+	pageCount,
+	currentPage,
+}) {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -211,44 +222,12 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 		setDeleteMethod,
 	} = DeleteStore;
 
-	// Handel pagination
-	const [page, setPage] = useState(0);
-	const rowsPerPagesCount = [10, 20, 30, 50, 100];
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const open = Boolean(anchorEl);
-
-	const handleRowsClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
-
-	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(parseInt(event.target.value, 10));
-		setPage(0);
-	};
-
-	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows =
-		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data?.length) : 0;
-
-	const allRows = () => {
-		const num = Math.ceil(data?.length / rowsPerPage);
-		const arr = [];
-		for (let index = 0; index < num; index++) {
-			arr.push(index + 1);
-		}
-		return arr;
-	};
-
 	/** --------------------------------------------------- */
 	// select all items
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = data?.map((n) => n.id);
+			const newSelected = coupons?.map((n) => n.id);
 			setSelected(newSelected);
 			return;
 		}
@@ -356,7 +335,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
 					numSelected={selected.length}
-					rowCount={data?.length}
+					rowCount={coupons?.length}
 					onSelectAllClick={handleSelectAllClick}
 				/>
 				<TableContainer>
@@ -364,7 +343,7 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 						<EnhancedTableHead
 							numSelected={selected.length}
 							onSelectAllClick={handleSelectAllClick}
-							rowCount={data?.length}
+							rowCount={coupons?.length}
 						/>
 
 						<TableBody>
@@ -376,181 +355,160 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 								</TableRow>
 							) : (
 								<Fragment>
-									{data?.length === 0 ? (
+									{coupons?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={8}>
 												<p className='text-center'>لاتوجد بيانات</p>
 											</TableCell>
 										</TableRow>
 									) : (
-										data
-											?.slice(
-												page * rowsPerPage,
-												page * rowsPerPage + rowsPerPage
-											)
-											?.map((row, index) => {
-												const isItemSelected = isSelected(row?.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
+										coupons?.map((row, index) => {
+											const isItemSelected = isSelected(row?.id);
+											const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow
-														hover
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div
-																className='flex items-center'
-																style={{
-																	display: "flex",
-																	justifyContent: "start",
-																	alignItems: "center",
-																}}>
-																<Checkbox
-																	sx={{
+											return (
+												<TableRow
+													hover
+													role='checkbox'
+													aria-checked={isItemSelected}
+													tabIndex={-1}
+													key={index}
+													selected={isItemSelected}>
+													<TableCell
+														component='th'
+														id={labelId}
+														scope='row'
+														align='right'>
+														<div
+															className='flex items-center'
+															style={{
+																display: "flex",
+																justifyContent: "start",
+																alignItems: "center",
+															}}>
+															<Checkbox
+																sx={{
+																	color: "#356b88",
+																	"& .MuiSvgIcon-root": {
 																		color: "#356b88",
-																		"& .MuiSvgIcon-root": {
-																			color: "#356b88",
-																		},
-																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, row.id)
-																	}
-																	inputProps={{
-																		"aria-labelledby": labelId,
-																	}}
-																/>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 2,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
-														<TableCell align='right'>{row?.code}</TableCell>
-														<TableCell align='right'>
-															{row?.discount_type}
-														</TableCell>
-														<TableCell align='right'>
-															{moment(row?.expire_date).format("DD/MM/YYYY")}
-														</TableCell>
-														<TableCell align='center'>
-															{row?.discount}
-														</TableCell>
-														<TableCell align='center'>
-															{row?.total_price}
-														</TableCell>
-														<TableCell align='center'>
-															<div
-																align='center'
-																className='status '
-																style={{
-																	backgroundColor:
-																		row?.status === "نشط"
-																			? "#e0ffea"
-																			: "#ebebeb",
-																	color:
-																		row?.status === "نشط"
-																			? "#3ae374"
-																			: "#a7a7a7",
-																	width: "100px",
-																	fontWeight: 400,
-																	margin: "0 auto",
-																	borderRadius: "16px",
-																}}>
-																{row?.status}
-															</div>
-														</TableCell>
+																	},
+																}}
+																checked={isItemSelected}
+																onClick={(event) => handleClick(event, row.id)}
+																inputProps={{
+																	"aria-labelledby": labelId,
+																}}
+															/>
+															{(index + 1).toLocaleString("en-US", {
+																minimumIntegerDigits: 2,
+																useGrouping: false,
+															})}
+														</div>
+													</TableCell>
+													<TableCell align='right'>{row?.code}</TableCell>
+													<TableCell align='right'>
+														{row?.discount_type}
+													</TableCell>
+													<TableCell align='right'>
+														{moment(row?.expire_date).format("DD/MM/YYYY")}
+													</TableCell>
+													<TableCell align='center'>{row?.discount}</TableCell>
+													<TableCell align='center'>
+														{row?.total_price}
+													</TableCell>
+													<TableCell align='center'>
+														<div
+															align='center'
+															className='status '
+															style={{
+																backgroundColor:
+																	row?.status === "نشط" ? "#e0ffea" : "#ebebeb",
+																color:
+																	row?.status === "نشط" ? "#3ae374" : "#a7a7a7",
+																width: "100px",
+																fontWeight: 400,
+																margin: "0 auto",
+																borderRadius: "16px",
+															}}>
+															{row?.status}
+														</div>
+													</TableCell>
 
-														<TableCell align='right'>
-															<div className='actions d-flex align-items-center justify-content-evenly'>
-																<Switch
-																	onChange={() => changeProductStatus(row?.id)}
-																	checked={row?.status === "نشط" ? true : false}
-																	sx={{
-																		width: "50px",
-																		"& .MuiSwitch-track": {
-																			width: 26,
-																			height: 14,
-																			opacity: 1,
-																			backgroundColor: "rgba(0,0,0,.25)",
-																			boxSizing: "border-box",
-																		},
+													<TableCell align='right'>
+														<div className='actions d-flex align-items-center justify-content-evenly'>
+															<Switch
+																onChange={() => changeProductStatus(row?.id)}
+																checked={row?.status === "نشط" ? true : false}
+																sx={{
+																	width: "50px",
+																	"& .MuiSwitch-track": {
+																		width: 26,
+																		height: 14,
+																		opacity: 1,
+																		backgroundColor: "rgba(0,0,0,.25)",
+																		boxSizing: "border-box",
+																	},
+																	"& .MuiSwitch-thumb": {
+																		boxShadow: "none",
+																		width: 10,
+																		height: 10,
+																		borderRadius: 5,
+																		transform: "translate(6px,6px)",
+																		color: "#fff",
+																	},
+
+																	"&:hover": {
 																		"& .MuiSwitch-thumb": {
 																			boxShadow: "none",
-																			width: 10,
-																			height: 10,
-																			borderRadius: 5,
-																			transform: "translate(6px,6px)",
+																		},
+																	},
+
+																	"& .MuiSwitch-switchBase": {
+																		padding: 1,
+																		"&.Mui-checked": {
+																			transform: "translateX(11px)",
 																			color: "#fff",
-																		},
-
-																		"&:hover": {
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
+																			"& + .MuiSwitch-track": {
+																				opacity: 1,
+																				backgroundColor: "#3AE374",
 																			},
 																		},
+																	},
+																}}
+															/>
 
-																		"& .MuiSwitch-switchBase": {
-																			padding: 1,
-																			"&.Mui-checked": {
-																				transform: "translateX(11px)",
-																				color: "#fff",
-																				"& + .MuiSwitch-track": {
-																					opacity: 1,
-																					backgroundColor: "#3AE374",
-																				},
-																			},
-																		},
+															<span style={{ marginRight: "5px" }}>
+																{/** We will replace row.id to id  when Get API  */}
+
+																<Link
+																	to={`EditCoupon/${row.id}`}
+																	style={{ cursor: "pointer" }}>
+																	<Reports title='تفاصيل كود الخصم' />
+																</Link>
+															</span>
+															<span>
+																<DeleteIcon
+																	title='حذف كود الخصم'
+																	onClick={() => {
+																		setActionDelete(
+																			"سيتم حذف كود الخصم وهذه الخطوة غير قابلة للرجوع"
+																		);
+																		setDeleteMethod("get");
+																		setUrl(`coupondeleteall?id[]=${row?.id}`);
+																	}}
+																	style={{
+																		cursor: "pointer",
+																		color: "red",
+																		fontSize: "1.2rem",
+																		marginRight: "5px",
 																	}}
 																/>
-
-																<span style={{ marginRight: "5px" }}>
-																	{/** We will replace row.id to id  when Get API  */}
-
-																	<Link
-																		to={`EditCoupon/${row.id}`}
-																		style={{ cursor: "pointer" }}>
-																		<Reports title='تفاصيل كود الخصم' />
-																	</Link>
-																</span>
-																<span>
-																	<DeleteIcon
-																		title='حذف كود الخصم'
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف كود الخصم وهذه الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("get");
-																			setUrl(`coupondeleteall?id[]=${row?.id}`);
-																		}}
-																		style={{
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
-																			marginRight: "5px",
-																		}}
-																	/>
-																</span>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-									)}
-									{emptyRows > 0 && (
-										<TableRow
-											style={{
-												height: 53 * emptyRows,
-											}}>
-											<TableCell colSpan={6} />
-										</TableRow>
+															</span>
+														</div>
+													</TableCell>
+												</TableRow>
+											);
+										})
 									)}
 								</Fragment>
 							)}
@@ -558,19 +516,15 @@ export default function CouponTable({ data, loading, reload, setReload }) {
 					</Table>
 				</TableContainer>
 			</Paper>
-			{data?.length !== 0 && !loading && (
+			{coupons?.length !== 0 && !loading && (
 				<TablePagination
-					open={open}
-					page={page}
-					setPage={setPage}
-					allRows={allRows}
-					data={data?.length}
-					anchorEl={anchorEl}
-					rowsPerPage={rowsPerPage}
-					handleClose={handleClose}
-					handleRowsClick={handleRowsClick}
-					rowsPerPagesCount={rowsPerPagesCount}
-					handleChangeRowsPerPage={handleChangeRowsPerPage}
+					data={coupons}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
 				/>
 			)}
 		</Box>
