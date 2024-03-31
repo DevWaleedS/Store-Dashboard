@@ -353,9 +353,7 @@ const SupportTable = ({
 															})}
 														</div>
 													</TableCell>
-													<TableCell align='center'>
-														{row?.store?.user?.name}
-													</TableCell>
+													<TableCell align='center'>{row?.name}</TableCell>
 													<TableCell align='center'>
 														<div className='text-overflow support-title'>
 															{row?.title}
