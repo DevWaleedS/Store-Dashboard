@@ -89,7 +89,7 @@ const Rating = () => {
 	/** get contact data */
 	useEffect(() => {
 		dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	// to get current comment status
 	const commentActivation = RatingData?.commentActivation;

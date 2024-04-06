@@ -2,12 +2,13 @@ import React from "react";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { closeDeleteCategoryAlert } from "../../store/slices/DeleteCategoryAlertModal";
+
 import { FiAlertTriangle } from "react-icons/fi";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
+import { closeDeleteCategoryAlert } from "../../store/slices/CategoriesSlice";
 
 const style = {
 	position: "absolute",
@@ -29,7 +30,7 @@ const style = {
 
 const DeleteCategoryAlert = () => {
 	const { isDeleteCategoryAlertOpen, messageAlert } = useSelector(
-		(state) => state.DeleteCategoryAlertModal
+		(state) => state.CategoriesSlice
 	);
 	const dispatch = useDispatch(false);
 
@@ -41,7 +42,6 @@ const DeleteCategoryAlert = () => {
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='d-flex pt-2 px-2 justify-content-end'>
-						{" "}
 						<CloseIcon
 							className='close_video_icon'
 							style={{ cursor: "pointer" }}

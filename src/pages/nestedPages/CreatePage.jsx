@@ -251,7 +251,6 @@ const CreatePage = () => {
 		formData.append("page_desc", data?.page_desc);
 		formData.append("page_content", editorValue);
 		formData.append("seo_title", data?.seo_title);
-		formData.append("seo_link", data?.seo_link);
 		formData.append("seo_desc", data?.seo_desc);
 		formData.append("tags", page?.tags?.join(","));
 
@@ -476,16 +475,18 @@ const CreatePage = () => {
 											<label
 												htmlFor='page-title-input'
 												className='d-block mb-1'>
-												رابط صفحة تعريفية ( SEO Page URL )
+												رابط صفحة تعريفية ( SEO Page URL ){" "}
+												<span className='fs-6 text-danger'>(تلقائي)</span>
 											</label>
 											<div className='input-icon'>
 												<DocsIcon />
 											</div>
 											<input
+												readOnly
 												className='seo_link w-100'
 												name='seo_link'
 												type='text'
-												placeholder='رابط صفحة تعريفية ( SEO Page URL )'
+												placeholder='يتم اضافة الرابط تلقائي'
 												{...register("seo_link", {})}
 											/>
 											<div className='col-12'>

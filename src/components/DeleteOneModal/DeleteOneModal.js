@@ -1,16 +1,12 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useContext, Fragment } from "react";
 
 // Third party
-import axios from "axios";
+
 import ReactDom from "react-dom";
 
 // Context
-import Context from "../../Context/context";
-import { DeleteContext } from "../../Context/DeleteProvider";
 
-// Redux
-import { useDispatch } from "react-redux";
-import { openDeleteCategoryAlert } from "../../store/slices/DeleteCategoryAlertModal";
+import { DeleteContext } from "../../Context/DeleteProvider";
 
 // Styles
 import styles from "./DeleteOneModal.module.css";
@@ -23,84 +19,13 @@ const BackDrop = () => {
 	return <div className={styles.backdrop}></div>;
 };
 
-const DeleteOneModal = () => {
-	const dispatch = useDispatch(true);
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
-	const [loading, setLoading] = useState(false);
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+const DeleteOneModal = ({ handleDeleteSingleItem }) => {
 	const DeleteProvider = useContext(DeleteContext);
-	const {
-		setUrl,
-		url,
-		actionDelete,
-		setActionDelete,
-		setDeleteReload,
-		deleteReload,
-		deleteMethod,
-		possibilityOfDelete,
-		setPossibilityOfDelete,
-	} = DeleteProvider;
+	const { setItemId, itemId, actionDelete, setActionDelete } = DeleteProvider;
 
 	const confirm = () => {
-		if (deleteMethod === "delete") {
-			setLoading(true);
-			axios
-				.delete(url, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setDeleteReload(!deleteReload);
-						setActionDelete(null);
-						setUrl(null);
-						setLoading(false);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setDeleteReload(!deleteReload);
-						setActionDelete(null);
-						setUrl(null);
-						setLoading(false);
-					}
-				});
-		} else {
-			setLoading(true);
-			axios
-				.get(url, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-
-						setDeleteReload(!deleteReload);
-
-						setActionDelete(null);
-						setUrl(null);
-						setLoading(false);
-					} else {
-						possibilityOfDelete
-							? setEndActionTitle(res?.data?.message?.ar)
-							: dispatch(openDeleteCategoryAlert(res?.data?.message?.ar));
-						setPossibilityOfDelete(false);
-						setDeleteReload(!deleteReload);
-						setActionDelete(null);
-						setUrl(null);
-						setLoading(false);
-					}
-				});
-		}
+		handleDeleteSingleItem(itemId);
+		setActionDelete(null);
 	};
 
 	return (
@@ -120,8 +45,7 @@ const DeleteOneModal = () => {
 							type={"normal"}
 							style={{ backgroundColor: "#02466A", color: "#EFF9FF" }}
 							className={`${styles.confirm_btn} ${styles.notifi_btn}`}
-							onClick={() => confirm()}
-							disabled={loading}>
+							onClick={() => confirm()}>
 							تأكيد
 						</button>
 						<button
@@ -134,9 +58,8 @@ const DeleteOneModal = () => {
 							}}
 							onClick={() => {
 								setActionDelete(null);
-								setUrl(null);
-							}}
-							disabled={loading}>
+								setItemId(null);
+							}}>
 							الغاء
 						</button>
 					</div>
@@ -146,11 +69,15 @@ const DeleteOneModal = () => {
 	);
 };
 
-const DeleteOneModalComp = ({ title, cancelEarly }) => {
+const DeleteOneModalComp = ({ title, cancelEarly, handleDeleteSingleItem }) => {
 	return (
 		<Fragment>
 			{ReactDom.createPortal(
-				<DeleteOneModal title={title} cancelEarly={cancelEarly} />,
+				<DeleteOneModal
+					title={title}
+					cancelEarly={cancelEarly}
+					handleDeleteSingleItem={handleDeleteSingleItem}
+				/>,
 				document.getElementById("action_div")
 			)}
 		</Fragment>

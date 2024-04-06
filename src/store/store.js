@@ -16,7 +16,7 @@ import AddBankAccountModal from "./slices/AddBankAccountModal";
 import EditBankAccountModal from "./slices/EditBankAccountModal";
 import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
 import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
-import DeleteCategoryAlertModal from "./slices/DeleteCategoryAlertModal";
+
 import BankAccountAlert from "./slices/BankAccountAlert";
 import CategoriesSlice from "./slices/CategoriesSlice";
 import ProductsSlice from "./slices/ProductsSlice";
@@ -28,6 +28,7 @@ import RatingSlice from "./slices/RatingSlice";
 import PagesSlice from "./slices/PagesSlice";
 import AcademySlice from "./slices/AcademySlice";
 import TechnicalSupportSlice from "./slices/TechnicalSupportSlice";
+import SouqOtlobhaSlice from "./slices/SouqOtlobhaSlice";
 
 // store
 export const store = configureStore({
@@ -52,7 +53,7 @@ export const store = configureStore({
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
 		SuccessMessage: SuccessMessageModalSlice,
 		BankAccStatusCommentModal,
-		DeleteCategoryAlertModal,
+
 		BankAccountAlert,
 		CategoriesSlice,
 		ProductsSlice,
@@ -64,5 +65,6 @@ export const store = configureStore({
 		PagesSlice,
 		AcademySlice,
 		TechnicalSupportSlice,
+		SouqOtlobhaSlice,
 	},
 });

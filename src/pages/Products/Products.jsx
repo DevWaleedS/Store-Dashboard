@@ -6,7 +6,7 @@ import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
 import * as FileSaver from "file-saver";
 import useFetch from "../../Hooks/UseFetch";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Components
 import { DropCSVFiles, FormSearchWeight } from "./index";
@@ -22,31 +22,37 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 // Components
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 import { useDispatch, useSelector } from "react-redux";
-import { ProductsThunk } from "../../store/Thunk/ProductsThunk";
+import {
+	ImportedProductsThunk,
+	ProductsThunk,
+} from "../../store/Thunk/ProductsThunk";
 
 const Products = () => {
 	const navigate = useNavigate();
+
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
 	const {
-		Products,
-		currentPage,
-		etlobhaCurrentPage,
-		etlobhaPageCount,
-		pageCount,
+		loading,
+		reload,
 		storeProducts,
-		SouqOtlbhaProducts,
+		storeProductsPageCount,
+		storeProductsCurrentPage,
+		souqOtlbhaProducts,
+		souqOtlbhaCurrentPage,
+		souqOtlbhaPageCount,
 	} = useSelector((state) => state.ProductsSlice);
-	const { loading, reload, setReload } = useFetch(
-		`product?page=${pageTarget}&number=${rowsCount}`
-	);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`product?page=${pageTarget}&number=${rowsCount}`
+	// );
 
 	/** get contact data */
 	useEffect(() => {
 		dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+		dispatch(ImportedProductsThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget, dispatch]);
 
 	const store_token = document.cookie
 		?.split("; ")
@@ -84,6 +90,7 @@ const Products = () => {
 	const getSearchInput = (value) => {
 		setSearch(value);
 	};
+
 	const getCategorySelected = (value) => {
 		setCategory_id(value);
 	};
@@ -92,11 +99,9 @@ const Products = () => {
 		if (tabSelected === 1) {
 			setProductsData(storeProducts);
 		} else {
-			setProductsData(SouqOtlbhaProducts);
+			setProductsData(souqOtlbhaProducts);
 		}
-	}, [Products?.products, tabSelected]);
-
-	console.log(productsData);
+	}, [tabSelected, storeProducts, souqOtlbhaProducts]);
 
 	// Search
 	useEffect(() => {
@@ -244,15 +249,20 @@ const Products = () => {
 					<BigProductsTable
 						products={productsResult}
 						reload={reload}
-						setReload={setReload}
 						loading={loading}
 						rowsCount={rowsCount}
 						setRowsCount={setRowsCount}
 						pageTarget={pageTarget}
 						tabSelectedId={tabSelected}
 						setPageTarget={setPageTarget}
-						pageCount={tabSelected === 1 ? pageCount : etlobhaPageCount}
-						currentPage={tabSelected === 1 ? currentPage : etlobhaCurrentPage}
+						pageCount={
+							tabSelected === 1 ? storeProductsPageCount : souqOtlbhaPageCount
+						}
+						currentPage={
+							tabSelected === 1
+								? storeProductsCurrentPage
+								: souqOtlbhaCurrentPage
+						}
 					/>
 				</div>
 

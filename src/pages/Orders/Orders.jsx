@@ -29,7 +29,7 @@ const Orders = () => {
 	/** get contact data */
 	useEffect(() => {
 		dispatch(OrdersThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	// -----------------------------------------------------------
 

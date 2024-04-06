@@ -31,8 +31,72 @@ export const addCategoryThunk = createAsyncThunk(
 
 			return response.data;
 		} catch (error) {
-			console.log(error.message);
 			return rejectWithValue(error.message);
+		}
+	}
+);
+
+//Delete Thunk
+export const DeleteAllCategoriesThunk = createAsyncThunk(
+	"Categories/DeleteAllCategoriesThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`categoryStoredeleteall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+export const DeleteCategoriesThunk = createAsyncThunk(
+	"Categories/DeleteCategoriesThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`categoryStoredeleteall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+// ChangeCategoriesStatusThunk
+export const ChangeCategoriesStatusThunk = createAsyncThunk(
+	"Categories/ChangeCategoriesStatusThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`categoryStorechangeSatusall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+export const ChangeAllCategoriesStatusThunk = createAsyncThunk(
+	"Categories/ChangeAllCategoriesStatusThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`categoryStorechangeSatusall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
 		}
 	}
 );

@@ -30,7 +30,7 @@ const Carts = () => {
 	/** get contact data */
 	useEffect(() => {
 		dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	// -----------------------------------------------------------
 

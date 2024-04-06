@@ -14,15 +14,33 @@ import { Warning } from "../../data/Icons";
 const BackDrop = () => {
 	return <div className={styles.backdrop}></div>;
 };
-const DeleteModal = ({ cancelEarly }) => {
+const DeleteModal = ({ handleDeleteAllItems, handleChangeAllItemsStatus }) => {
 	const NotificationProvider = useContext(NotificationContext);
 
 	const {
 		notificationTitle,
 		setNotificationTitle,
-		setActionTitle,
-		setConfirm,
+		setItems,
+		items,
+		actionType,
+		setActionType,
 	} = NotificationProvider;
+
+	const handleClose = () => {
+		setNotificationTitle(null);
+		setActionType(null);
+		setItems(null);
+	};
+
+	const confirmDeleteAll = () => {
+		handleDeleteAllItems(items);
+		handleClose();
+	};
+
+	const confirmChangeStatusAll = () => {
+		handleChangeAllItemsStatus(items);
+		handleClose();
+	};
 
 	return (
 		<Fragment>
@@ -42,8 +60,9 @@ const DeleteModal = ({ cancelEarly }) => {
 							style={{ backgroundColor: "#02466A", color: "#EFF9FF" }}
 							className={`${styles.confirm_btn} ${styles.notifi_btn}`}
 							onClick={() => {
-								setNotificationTitle(null);
-								setConfirm(true);
+								actionType === "deleteAll"
+									? confirmDeleteAll()
+									: confirmChangeStatusAll();
 							}}>
 							تأكيد
 						</button>
@@ -56,9 +75,7 @@ const DeleteModal = ({ cancelEarly }) => {
 								color: "#02466A",
 							}}
 							onClick={() => {
-								setNotificationTitle(null);
-								setConfirm(false);
-								setActionTitle(null);
+								handleClose();
 							}}>
 							الغاء
 						</button>
@@ -69,11 +86,21 @@ const DeleteModal = ({ cancelEarly }) => {
 	);
 };
 
-const DeleteModalComp = ({ title, cancelEarly }) => {
+const DeleteModalComp = ({
+	title,
+	cancelEarly,
+	handleDeleteAllItems,
+	handleChangeAllItemsStatus,
+}) => {
 	return (
 		<Fragment>
 			{ReactDom.createPortal(
-				<DeleteModal title={title} cancelEarly={cancelEarly} />,
+				<DeleteModal
+					title={title}
+					cancelEarly={cancelEarly}
+					handleDeleteAllItems={handleDeleteAllItems}
+					handleChangeAllItemsStatus={handleChangeAllItemsStatus}
+				/>,
 				document.getElementById("action_div")
 			)}
 		</Fragment>

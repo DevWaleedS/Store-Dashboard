@@ -10,8 +10,6 @@ import {
 // Context
 import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
-import { DeleteContext } from "../Context/DeleteProvider";
-import { NotificationContext } from "../Context/NotificationProvider";
 
 // MUI
 import { theme } from "../Theme";
@@ -33,7 +31,7 @@ import { VerifayStoreAlert } from "../components/Modal";
 import { VerifayAfterMainInfoAlert } from "../components/Modal";
 
 import DeleteModal from "../components/DeleteModal/DeleteModal";
-import DeleteOneModal from "../components/DeleteOneModal/DeleteOneModal";
+
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
 import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
 
@@ -55,12 +53,8 @@ const RootLayout = () => {
 	// Context That open app Modal
 	const contextStore = useContext(Context);
 	const { title } = contextStore;
-	const DeleteStore = useContext(DeleteContext);
 	const LoadingStore = useContext(LoadingContext);
-	const NotificationStore = useContext(NotificationContext);
-	const { notificationTitle } = NotificationStore;
 	const { loadingTitle } = LoadingStore;
-	const { actionDelete } = DeleteStore;
 
 	// To handle Open Verify Modal
 	const { isOpenVerifyModal, verificationStoreStatus } = useSelector(
@@ -139,9 +133,9 @@ const RootLayout = () => {
 							/>
 
 							{title && <ActionCompleteComp />}
-							{actionDelete && <DeleteOneModal />}
+
 							{loadingTitle && <LoadingRequest />}
-							{notificationTitle && <DeleteModal />}
+
 							{isOpenVerifyModal && <VerifyStoreModal />}
 							{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
 							{isOpenMaintenanceModeModal && <MaintenanceMode />}

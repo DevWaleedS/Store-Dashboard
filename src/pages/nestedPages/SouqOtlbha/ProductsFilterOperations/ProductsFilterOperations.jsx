@@ -1,11 +1,5 @@
 import * as React from "react";
 
-// Context
-import Context from "../../../../Context/context";
-
-// Third party
-import useFetch from "../../../../Hooks/UseFetch";
-
 // MUI
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,6 +9,8 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { FilterProductsByCategoriesThunk } from "../../../../store/Thunk/SouqOtlobhaThunk";
 
 // Select styles
 const selectMenuStyles = {
@@ -47,15 +43,10 @@ const selectCategoriesStyles = {
 	},
 };
 
-const ProductsFilterOperations = ({ showFilteringOptions }) => {
-	const { fetchedData } = useFetch("etlobhaShow");
-	const { fetchedData: categories } = useFetch("selector/etlobahCategory");
+const ProductsFilterOperations = ({ showFilteringOptions, categories }) => {
+	const dispatch = useDispatch();
 	const [mainCategory, setMainCategory] = React.useState("");
 	const [subCategory, setSubCategory] = React.useState([]);
-	const [resultData, setResultData] = React.useState();
-
-	const contextStore = React.useContext(Context);
-	const { setProductsData } = contextStore;
 
 	const handleSubCategoryChange = (event) => {
 		const {
@@ -67,38 +58,21 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 		);
 	};
 
-	// sub category
+	// sub category Array
 	const subcategory =
-		categories?.data?.categories?.filter((sub) => sub?.name === mainCategory) ||
-		"";
+		categories?.filter((sub) => sub?.id === mainCategory) || "";
 
 	// create category filter function
 	const onClickFilter = () => {
-		if (mainCategory !== "") {
-			if (subCategory?.length !== 0) {
-				setProductsData(
-					resultData?.filter((category) => {
-						return subCategory?.some((sub) => {
-							return category?.subcategory?.some((item) => item?.name === sub);
-						});
-					})
-				);
-			} else {
-				setProductsData(
-					fetchedData?.data?.products?.filter(
-						(item) => item?.category?.name === mainCategory
-					)
-				);
-			}
-		} else {
-			setProductsData(resultData);
+		if (subCategory?.length !== 0 && mainCategory !== "") {
+			dispatch(
+				FilterProductsByCategoriesThunk({
+					category_id: mainCategory,
+					subCategory: subCategory,
+				})
+			);
 		}
 	};
-
-	React.useEffect(() => {
-		setResultData(fetchedData?.data?.products);
-		setProductsData(resultData);
-	}, [fetchedData?.data?.products, resultData]);
 
 	return (
 		<div
@@ -130,9 +104,7 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 								return <span> الكل</span>;
 							}
 							const result =
-								categories?.data?.categories?.filter(
-									(item) => item?.name === selected
-								) || "";
+								categories?.filter((item) => item?.id === selected) || "";
 
 							return result[0]?.name;
 						}}>
@@ -146,10 +118,10 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 							value={""}>
 							الكل
 						</MenuItem>
-						{categories?.data?.categories?.map((item) => (
+						{categories?.map((item) => (
 							<MenuItem
 								key={item?.id}
-								value={item?.name}
+								value={item?.id}
 								sx={{
 									backgroundColor: "#67747B33",
 								}}>
@@ -182,16 +154,16 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 							}
 							return selected.map((item) => {
 								const result = subcategory[0]?.subcategory?.filter(
-									(sub) => sub?.name === item
+									(sub) => sub?.id === item
 								);
-								return `${result[0]?.name} , `;
+								return `${result[0]?.name}, `;
 							});
 						}}
 						sx={selectCategoriesStyles}>
 						{subcategory[0]?.subcategory?.map((item) => (
 							<MenuItem
 								key={item?.id}
-								value={item?.name}
+								value={item?.id}
 								sx={{
 									backgroundColor: "#67747B33",
 									" ul": {
@@ -199,7 +171,7 @@ const ProductsFilterOperations = ({ showFilteringOptions }) => {
 										paddingBottom: 0,
 									},
 								}}>
-								<Checkbox checked={subCategory.indexOf(item?.name) > -1} />
+								<Checkbox checked={subCategory.indexOf(item?.id) > -1} />
 								<ListItemText primary={item?.name} />
 							</MenuItem>
 						))}

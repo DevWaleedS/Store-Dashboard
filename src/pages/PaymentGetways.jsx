@@ -131,9 +131,14 @@ const PaymentGetways = () => {
 
 	const changeCashOnDeliveryStatus = (id) => {
 		if (
-			allPayments?.some((item) => item?.status === "نشط") ||
-			allPayments?.length === 0
+			(cashOnDelivery[0]?.status === "نشط" && allPayments?.length === 0) ||
+			(cashOnDelivery[0]?.status === "نشط" &&
+				allPayments?.every((item) => item?.status !== "نشط"))
 		) {
+			toast.error("يجب تفعيل طريقه دفع واحدة على الاقل", {
+				theme: "light",
+			});
+		} else {
 			axios
 				.get(`changePaymenttypeStatus/${id}`, {
 					headers: {
@@ -152,10 +157,6 @@ const PaymentGetways = () => {
 						setReload(!reload);
 					}
 				});
-		} else {
-			toast.error("يجب تفعيل طريقه دفع واحدة على الاقل", {
-				theme: "light",
-			});
 		}
 	};
 

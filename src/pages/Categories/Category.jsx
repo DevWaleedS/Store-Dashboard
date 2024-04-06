@@ -16,7 +16,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { CategoryTable } from "../../components/Tables";
-import DeleteCategoryAlert from "./DeleteCategoryAlert";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -27,9 +26,9 @@ const Category = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
-	const { loading, reload, setReload } = useFetch(
-		`category?page=${pageTarget}&number=${rowsCount}`
-	);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`category?page=${pageTarget}&number=${rowsCount}`
+	// );
 
 	const {
 		Categories,
@@ -37,7 +36,8 @@ const Category = () => {
 		etlobhaCurrentPage,
 		etlobhaPageCount,
 		pageCount,
-
+		loading,
+		reload,
 		storeCategory,
 		SouqOtlbhaCategory,
 	} = useSelector((state) => state.CategoriesSlice);
@@ -45,7 +45,7 @@ const Category = () => {
 	/** get contact data */
 	useEffect(() => {
 		dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
@@ -62,7 +62,7 @@ const Category = () => {
 		} else {
 			setCategoriesData(SouqOtlbhaCategory);
 		}
-	}, [Categories?.categories, tabSelected]);
+	}, [Categories?.categories, tabSelected, storeCategory, SouqOtlbhaCategory]);
 
 	// Search
 	useEffect(() => {
@@ -250,7 +250,6 @@ const Category = () => {
 							reload={reload}
 							loading={loading}
 							rowsCount={rowsCount}
-							setReload={setReload}
 							setRowsCount={setRowsCount}
 							pageTarget={pageTarget}
 							tabSelectedId={tabSelected}
@@ -262,10 +261,6 @@ const Category = () => {
 					</div>
 				</div>
 			</div>
-
-			{/* DeleteCategoryAlert */}
-
-			<DeleteCategoryAlert />
 		</>
 	);
 };

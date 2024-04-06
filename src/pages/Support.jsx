@@ -24,7 +24,8 @@ const Support = () => {
 	/** get contact data */
 	useEffect(() => {
 		dispatch(TechnicalSupportThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
+
 	const { loading, reload, setReload } = useFetch(
 		`technicalSupport?page=${pageTarget}&number=${rowsCount}`
 	);

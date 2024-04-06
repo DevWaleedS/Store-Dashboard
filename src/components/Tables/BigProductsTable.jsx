@@ -22,6 +22,8 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
@@ -45,6 +47,16 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import {
+	ChangeAllProductsStatusThunk,
+	ChangeProductStatusThunk,
+	ChangeSpecialStatusThunk,
+	DeleteAllDeleteProductsThunk,
+	DeleteProductThunk,
+	ImportedProductsThunk,
+	ProductsThunk,
+} from "../../store/Thunk/ProductsThunk";
 
 function EnhancedTableHead(props) {
 	return (
@@ -102,6 +114,7 @@ EnhancedTableHead.propTypes = {
 
 function EnhancedTableToolbar(props) {
 	const {
+		itemsSelected,
 		numSelected,
 		rowCount,
 		onSelectAllClick,
@@ -109,7 +122,7 @@ function EnhancedTableToolbar(props) {
 		tabSelectedId,
 	} = props;
 	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { setNotificationTitle, setItems, setActionType } = NotificationStore;
 
 	return (
 		<Toolbar
@@ -131,7 +144,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم حذف جميع المنتجات وهذه الخطوة غير قابلة للرجوع"
 								);
-								setActionTitle("Delete");
+								setItems(itemsSelected);
+								setActionType("deleteAll");
 							}}>
 							<IconButton>
 								<DeleteIcon title='حذف جميع المنتجات' />
@@ -144,7 +158,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم تغيير حالة جميع المنتجات التي قمت بتحديدهم"
 								);
-								setActionTitle("changeStatus");
+								setItems(itemsSelected);
+								setActionType("changeStatusAll");
 							}}>
 							<IconButton>
 								<Switch
@@ -237,9 +252,9 @@ EnhancedTableToolbar.propTypes = {
 
 export default function BigProductsTable({
 	products,
-	reload,
+
 	loading,
-	setReload,
+
 	rowsCount,
 	setRowsCount,
 	pageTarget,
@@ -248,23 +263,17 @@ export default function BigProductsTable({
 	pageCount,
 	currentPage,
 }) {
+	const dispatch = useDispatch();
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
 	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } =
-		NotificationStore;
+	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
@@ -284,99 +293,6 @@ export default function BigProductsTable({
 			setRowsCount(10);
 		}
 	}, [tabSelectedId]);
-
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
-
-	// change category status
-	const changeCouponStatus = (id) => {
-		axios
-			.get(`productchangeSatusall?id[]=${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				}
-			});
-	};
-
-	// change special status
-	const changeSpecialStatus = (id) => {
-		axios
-			.get(`specialStatus/${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				}
-			});
-	};
-
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`productdeleteall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-		if (confirm && actionTitle === "changeStatus") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`productchangeSatusall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
 
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
@@ -398,9 +314,148 @@ export default function BigProductsTable({
 
 		setSelected(newSelected);
 	};
-
 	const isSelected = (id) => selected.indexOf(id) !== -1;
+	/** --------------------------------------------------------------- */
 
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteProductThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
+				dispatch(
+					ImportedProductsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeleteProductsThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
+				dispatch(
+					ImportedProductsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+	//------------------------------------------------------------------------
+
+	// change  status
+	const changeItemStatus = (id) => {
+		dispatch(
+			ChangeProductStatusThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
+				dispatch(
+					ImportedProductsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	const handleChangeAllItemsStatus = (selected) => {
+		dispatch(
+			ChangeAllProductsStatusThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
+				dispatch(
+					ImportedProductsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	// change category status
+	const changeSpecialStatus = (id) => {
+		dispatch(ChangeSpecialStatusThunk(id))
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
+				dispatch(
+					ImportedProductsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 	/**
 	 * ----------------------------------------------------------------------------
 	 * create change categories modal
@@ -527,7 +582,7 @@ export default function BigProductsTable({
 					setSelected([]);
 					setCategory_id([]);
 					setSubcategory_id([]);
-					setReload(!reload);
+					// setReload(!reload);
 				} else {
 					setProductError({
 						category_id: res?.data?.message?.en?.category_id?.[0],
@@ -725,284 +780,300 @@ export default function BigProductsTable({
 	};
 
 	return (
-		<Box sx={{ width: "100%" }}>
-			{openChangeCategoriesModal && changeCategoriesModal()}
+		<>
+			<Box sx={{ width: "100%" }}>
+				{openChangeCategoriesModal && changeCategoriesModal()}
 
-			<Paper sx={{ width: "100%", mb: 2 }}>
-				<EnhancedTableToolbar
-					numSelected={selected.length}
-					tabSelectedId={tabSelectedId}
-					rowCount={products?.length}
-					onSelectAllClick={handleSelectAllClick}
-					handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
-				/>
-				<TableContainer>
-					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-						<EnhancedTableHead
-							numSelected={selected.length}
-							onSelectAllClick={handleSelectAllClick}
-							rowCount={products?.length}
-						/>
+				<Paper sx={{ width: "100%", mb: 2 }}>
+					<EnhancedTableToolbar
+						itemsSelected={selected}
+						numSelected={selected.length}
+						tabSelectedId={tabSelectedId}
+						rowCount={products?.length}
+						onSelectAllClick={handleSelectAllClick}
+						handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
+					/>
+					<TableContainer>
+						<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+							<EnhancedTableHead
+								numSelected={selected.length}
+								onSelectAllClick={handleSelectAllClick}
+								rowCount={products?.length}
+							/>
 
-						<TableBody>
-							{loading ? (
-								<TableRow>
-									<TableCell colSpan={8}>
-										<CircularLoading />
-									</TableCell>
-								</TableRow>
-							) : (
-								<>
-									<Fragment>
-										{products?.length === 0 ? (
-											<TableRow>
-												<TableCell colSpan={8}>
-													<p className='text-center'>لاتوجد بيانات</p>
-												</TableCell>
-											</TableRow>
-										) : (
-											products?.map((row, index) => {
-												const isItemSelected = isSelected(row.id);
-												const labelId = `enhanced-table-checkbox-${index}`;
+							<TableBody>
+								{loading ? (
+									<TableRow>
+										<TableCell colSpan={8}>
+											<CircularLoading />
+										</TableCell>
+									</TableRow>
+								) : (
+									<>
+										<Fragment>
+											{products?.length === 0 ? (
+												<TableRow>
+													<TableCell colSpan={8}>
+														<p className='text-center'>لاتوجد بيانات</p>
+													</TableCell>
+												</TableRow>
+											) : (
+												products?.map((row, index) => {
+													const isItemSelected = isSelected(row.id);
+													const labelId = `enhanced-table-checkbox-${index}`;
 
-												return (
-													<TableRow
-														sx={{
-															backgroundColor: row?.is_import ? "#dfe2aa" : "",
-														}}
-														role='checkbox'
-														aria-checked={isItemSelected}
-														tabIndex={-1}
-														key={index}
-														selected={isItemSelected}>
-														<TableCell
-															component='th'
-															id={labelId}
-															scope='row'
-															align='right'>
-															<div className='flex items-center gap-4 '>
-																<Checkbox
-																	sx={{
-																		color: "#356b88",
-																		"& .MuiSvgIcon-root": {
+													return (
+														<TableRow
+															sx={{
+																backgroundColor: row?.is_import
+																	? "#dfe2aa"
+																	: "",
+															}}
+															role='checkbox'
+															aria-checked={isItemSelected}
+															tabIndex={-1}
+															key={index}
+															selected={isItemSelected}>
+															<TableCell
+																component='th'
+																id={labelId}
+																scope='row'
+																align='right'>
+																<div className='flex items-center gap-4 '>
+																	<Checkbox
+																		sx={{
 																			color: "#356b88",
-																		},
-																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, row?.id)
-																	}
-																	inputProps={{
-																		"aria-labelledby": labelId,
-																	}}
-																/>
-																{(index + 1).toLocaleString("en-US", {
-																	minimumIntegerDigits: 2,
-																	useGrouping: false,
-																})}
-															</div>
-														</TableCell>
-
-														<TableCell align='center'>
-															<div
-																className='cate-prim d-flex align-items-center justify-content-start'
-																style={{
-																	width: " 300px",
-																}}>
-																<img
-																	className='img_icons'
-																	src={row?.cover}
-																	alt='img'
-																/>
-
-																<span
-																	className='me-3'
-																	style={{
-																		maxWidth: "100%",
-																		whiteSpace: "nowrap",
-																		overflow: "hidden",
-																		textOverflow: "ellipsis",
-																	}}>
-																	{row?.name}
-																</span>
-															</div>
-														</TableCell>
-														<TableCell align='right'>
-															{row?.category?.name}
-														</TableCell>
-														<TableCell align='center'>
-															{row?.discount_price &&
-															row?.discount_price !== "0" ? (
-																<>
-																	<span className='me-1 d-block'>
-																		{row?.discount_price} ر.س
-																	</span>
-
-																	<del
-																		className='original-price'
-																		style={{
-																			fontSize: "13px",
-																			fontWeight: " 400",
-																			color: "#b3b3b3",
-																		}}>
-																		{row?.selling_price} ر.س
-																	</del>
-																</>
-															) : (
-																<> {row?.selling_price} ر.س</>
-															)}
-														</TableCell>
-														<TableCell align='center'>{row?.stock}</TableCell>
-														<TableCell align='center'>
-															<div
-																className='form-check form-switch'
-																style={{ margin: "0 auto" }}>
-																<Switch
-																	onChange={() => changeSpecialStatus(row?.id)}
-																	checked={
-																		row?.special === "مميز" ? true : false
-																	}
-																	sx={{
-																		width: "50px",
-																		"& .MuiSwitch-track": {
-																			width: 26,
-																			height: 14,
-																			opacity: 1,
-																			backgroundColor: "rgba(0,0,0,.25)",
-																			boxSizing: "border-box",
-																		},
-																		"& .MuiSwitch-thumb": {
-																			boxShadow: "none",
-																			width: 10,
-																			height: 10,
-																			borderRadius: 5,
-																			transform: "translate(6px,6px)",
-																			color: "#fff",
-																		},
-
-																		"&:hover": {
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
+																			"& .MuiSvgIcon-root": {
+																				color: "#356b88",
 																			},
-																		},
-
-																		"& .MuiSwitch-switchBase": {
-																			padding: 1,
-																			"&.Mui-checked": {
-																				transform: "translateX(11px)",
-																				color: "#fff",
-																				"& + .MuiSwitch-track": {
-																					opacity: 1,
-																					backgroundColor: "#3AE374",
-																				},
-																			},
-																		},
-																	}}
-																/>
-															</div>
-														</TableCell>
-
-														<TableCell align='center'>
-															<div
-																className='form-check form-switch'
-																style={{ margin: "0 auto" }}>
-																<Switch
-																	onChange={() => changeCouponStatus(row?.id)}
-																	checked={row?.status === "نشط" ? true : false}
-																	sx={{
-																		width: "50px",
-																		"& .MuiSwitch-track": {
-																			width: 26,
-																			height: 14,
-																			opacity: 1,
-																			backgroundColor: "rgba(0,0,0,.25)",
-																			boxSizing: "border-box",
-																		},
-																		"& .MuiSwitch-thumb": {
-																			boxShadow: "none",
-																			width: 10,
-																			height: 10,
-																			borderRadius: 5,
-																			transform: "translate(6px,6px)",
-																			color: "#fff",
-																		},
-
-																		"&:hover": {
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
-																			},
-																		},
-
-																		"& .MuiSwitch-switchBase": {
-																			padding: 1,
-																			"&.Mui-checked": {
-																				transform: "translateX(11px)",
-																				color: "#fff",
-																				"& + .MuiSwitch-track": {
-																					opacity: 1,
-																					backgroundColor: "#3AE374",
-																				},
-																			},
-																		},
-																	}}
-																/>
-															</div>
-														</TableCell>
-
-														<TableCell align='right'>
-															<div className='actions d-flex justify-content-evenly'>
-																<Link
-																	to={
-																		row?.is_import
-																			? `ShowImportEtlobhaProduct/${row?.id}`
-																			: `EditProduct/${row?.id}`
-																	}
-																	style={{ cursor: "pointer" }}>
-																	<EditIcon title='تعديل المنتج' />
-																</Link>
-																<span>
-																	<DeleteIcon
-																		title='حذف المنتج'
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
-																			);
-																			setDeleteMethod("get");
-																			setUrl(
-																				`productdeleteall?id[]=${row?.id}`
-																			);
 																		}}
-																		style={{
-																			cursor: "pointer",
-																			color: "red",
-																			fontSize: "1.2rem",
+																		checked={isItemSelected}
+																		onClick={(event) =>
+																			handleClick(event, row?.id)
+																		}
+																		inputProps={{
+																			"aria-labelledby": labelId,
 																		}}
 																	/>
-																</span>
-															</div>
-														</TableCell>
-													</TableRow>
-												);
-											})
-										)}
-									</Fragment>
-								</>
-							)}
-						</TableBody>
-					</Table>
-				</TableContainer>
-			</Paper>
-			{products?.length !== 0 && !loading && (
-				<TablePagination
-					data={categories}
-					pageCount={pageCount}
-					currentPage={currentPage}
-					pageTarget={pageTarget}
-					rowsCount={rowsCount}
-					setRowsCount={setRowsCount}
-					setPageTarget={setPageTarget}
+																	{(index + 1).toLocaleString("en-US", {
+																		minimumIntegerDigits: 2,
+																		useGrouping: false,
+																	})}
+																</div>
+															</TableCell>
+
+															<TableCell align='center'>
+																<div
+																	className='cate-prim d-flex align-items-center justify-content-start'
+																	style={{
+																		width: " 300px",
+																	}}>
+																	<img
+																		className='img_icons'
+																		src={row?.cover}
+																		alt='img'
+																	/>
+
+																	<span
+																		className='me-3'
+																		style={{
+																			maxWidth: "100%",
+																			whiteSpace: "nowrap",
+																			overflow: "hidden",
+																			textOverflow: "ellipsis",
+																		}}>
+																		{row?.name}
+																	</span>
+																</div>
+															</TableCell>
+															<TableCell align='right'>
+																{row?.category?.name}
+															</TableCell>
+															<TableCell align='center'>
+																{row?.discount_price &&
+																row?.discount_price !== "0" ? (
+																	<>
+																		<span className='me-1 d-block'>
+																			{row?.discount_price} ر.س
+																		</span>
+
+																		<del
+																			className='original-price'
+																			style={{
+																				fontSize: "13px",
+																				fontWeight: " 400",
+																				color: "#b3b3b3",
+																			}}>
+																			{row?.selling_price} ر.س
+																		</del>
+																	</>
+																) : (
+																	<> {row?.selling_price} ر.س</>
+																)}
+															</TableCell>
+															<TableCell align='center'>{row?.stock}</TableCell>
+															<TableCell align='center'>
+																<div
+																	className='form-check form-switch'
+																	style={{ margin: "0 auto" }}>
+																	<Switch
+																		onChange={() =>
+																			changeSpecialStatus(row?.id)
+																		}
+																		checked={
+																			row?.special === "مميز" ? true : false
+																		}
+																		sx={{
+																			width: "50px",
+																			"& .MuiSwitch-track": {
+																				width: 26,
+																				height: 14,
+																				opacity: 1,
+																				backgroundColor: "rgba(0,0,0,.25)",
+																				boxSizing: "border-box",
+																			},
+																			"& .MuiSwitch-thumb": {
+																				boxShadow: "none",
+																				width: 10,
+																				height: 10,
+																				borderRadius: 5,
+																				transform: "translate(6px,6px)",
+																				color: "#fff",
+																			},
+
+																			"&:hover": {
+																				"& .MuiSwitch-thumb": {
+																					boxShadow: "none",
+																				},
+																			},
+
+																			"& .MuiSwitch-switchBase": {
+																				padding: 1,
+																				"&.Mui-checked": {
+																					transform: "translateX(11px)",
+																					color: "#fff",
+																					"& + .MuiSwitch-track": {
+																						opacity: 1,
+																						backgroundColor: "#3AE374",
+																					},
+																				},
+																			},
+																		}}
+																	/>
+																</div>
+															</TableCell>
+
+															<TableCell align='center'>
+																<div
+																	className='form-check form-switch'
+																	style={{ margin: "0 auto" }}>
+																	<Switch
+																		onChange={() => changeItemStatus(row?.id)}
+																		checked={
+																			row?.status === "نشط" ? true : false
+																		}
+																		sx={{
+																			width: "50px",
+																			"& .MuiSwitch-track": {
+																				width: 26,
+																				height: 14,
+																				opacity: 1,
+																				backgroundColor: "rgba(0,0,0,.25)",
+																				boxSizing: "border-box",
+																			},
+																			"& .MuiSwitch-thumb": {
+																				boxShadow: "none",
+																				width: 10,
+																				height: 10,
+																				borderRadius: 5,
+																				transform: "translate(6px,6px)",
+																				color: "#fff",
+																			},
+
+																			"&:hover": {
+																				"& .MuiSwitch-thumb": {
+																					boxShadow: "none",
+																				},
+																			},
+
+																			"& .MuiSwitch-switchBase": {
+																				padding: 1,
+																				"&.Mui-checked": {
+																					transform: "translateX(11px)",
+																					color: "#fff",
+																					"& + .MuiSwitch-track": {
+																						opacity: 1,
+																						backgroundColor: "#3AE374",
+																					},
+																				},
+																			},
+																		}}
+																	/>
+																</div>
+															</TableCell>
+
+															<TableCell align='right'>
+																<div className='actions d-flex justify-content-evenly'>
+																	<Link
+																		to={
+																			row?.is_import
+																				? `ShowImportEtlobhaProduct/${row?.id}`
+																				: `EditProduct/${row?.id}`
+																		}
+																		style={{ cursor: "pointer" }}>
+																		<EditIcon title='تعديل المنتج' />
+																	</Link>
+																	<span>
+																		<DeleteIcon
+																			title='حذف المنتج'
+																			onClick={() => {
+																				setActionDelete(
+																					"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
+																				);
+																				setItemId(row.id);
+																			}}
+																			style={{
+																				cursor: "pointer",
+																				color: "red",
+																				fontSize: "1.2rem",
+																			}}
+																		/>
+																	</span>
+																</div>
+															</TableCell>
+														</TableRow>
+													);
+												})
+											)}
+										</Fragment>
+									</>
+								)}
+							</TableBody>
+						</Table>
+					</TableContainer>
+				</Paper>
+				{products?.length !== 0 && !loading && (
+					<TablePagination
+						data={categories}
+						pageCount={pageCount}
+						currentPage={currentPage}
+						pageTarget={pageTarget}
+						rowsCount={rowsCount}
+						setRowsCount={setRowsCount}
+						setPageTarget={setPageTarget}
+					/>
+				)}
+			</Box>
+			{actionDelete && (
+				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
+			)}
+
+			{notificationTitle && (
+				<DeleteModal
+					handleDeleteAllItems={handleDeleteAllItems}
+					handleChangeAllItemsStatus={handleChangeAllItemsStatus}
 				/>
 			)}
-		</Box>
+		</>
 	);
 }

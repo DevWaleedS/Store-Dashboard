@@ -136,8 +136,8 @@ const ShowImportEtlobhaProduct = () => {
 		stock: "",
 		qty: "",
 	});
-	const [productOptions, setProductOptions] = useState({});
-
+	const [productOptions, setProductOptions] = useState([]);
+	console.log(productOptions?.length);
 	const {
 		register,
 		handleSubmit,

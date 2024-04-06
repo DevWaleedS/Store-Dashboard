@@ -96,7 +96,7 @@ const Pages = () => {
 	/** get contact data */
 	useEffect(() => {
 		dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
@@ -113,8 +113,6 @@ const Pages = () => {
 	} else {
 		pages = PagesData?.pages;
 	}
-
-	console.log(PagesData);
 
 	// Filter By
 	if (select === "date") {

@@ -1,18 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ProductsThunk } from "../Thunk/ProductsThunk";
+import {
+	ChangeAllProductsStatusThunk,
+	ChangeProductStatusThunk,
+	ChangeSpecialStatusThunk,
+	DeleteAllDeleteProductsThunk,
+	DeleteProductThunk,
+	ImportedProductsThunk,
+	ProductsThunk,
+} from "../Thunk/ProductsThunk";
 
 const initialState = {
 	isProductOptionOpen: false, // to handle open product options
 	loading: false,
 	reload: false,
-	Products: [],
-	currentPage: 1,
-	etlobhaCurrentPage: 1,
-	etlobhaPageCount: 2,
-	pageCount: 1,
-	error: "",
+
 	storeProducts: [],
-	SouqOtlbhaProducts: [],
+	storeProductsPageCount: 1,
+	storeProductsCurrentPage: 1,
+
+	souqOtlbhaProducts: [],
+	souqOtlbhaCurrentPage: 1,
+	souqOtlbhaPageCount: 1,
+
+	error: "",
 };
 
 const ProductsSlice = createSlice({
@@ -37,32 +47,92 @@ const ProductsSlice = createSlice({
 				state.reload = false;
 				state.loading = false;
 
-				state.currentPage = action.payload.data.current_page;
-				state.etlobhaCurrentPage = action.payload.data.etlobha_current_page;
-				state.etlobhaPageCount = action.payload.data.etlobha_page_count;
-				state.pageCount = action.payload.data.page_count;
-				state.Products = action.payload.data;
-				state.storeProducts = action?.payload?.data.categories;
-				state.SouqOtlbhaProducts = action?.payload?.data?.etlobha_categories;
+				state.storeProductsPageCount = action.payload.data.page_count;
+				state.storeProductsCurrentPage = action.payload.data.current_page;
+				state.storeProducts = action?.payload?.data.products;
 			})
 			.addCase(ProductsThunk.rejected, (state, action) => {
 				state.reload = false;
 				state.loading = false;
 				state.error = action.error.message;
-			});
+			})
 
-		//add new Product
-		// .addCase(addCategoryThunk.pending, (state, action) => {
-		// 	state.reload = true;
-		// 	state.loading = true;
-		// })
-		// .addCase(addCategoryThunk.fulfilled, (state, action) => {
-		// 	state.reload = false;
-		// 	state.loading = false;
-		// })
-		// .addCase(addCategoryThunk.rejected, (state, action) => {
-		// 	state.error = action.payload.message;
-		// });
+			//ImportedProductsThunk
+			.addCase(ImportedProductsThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(ImportedProductsThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+				state.souqOtlbhaPageCount = action.payload.data.page_count;
+				state.souqOtlbhaCurrentPage = action.payload.data.current_page;
+				state.souqOtlbhaProducts = action?.payload?.data.products;
+			})
+			.addCase(ImportedProductsThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			}) // DeleteProductThunk
+			.addCase(DeleteProductThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(DeleteProductThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+			})
+			.addCase(DeleteProductThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			}) // DeleteAllDeleteProductsThunk
+			.addCase(DeleteAllDeleteProductsThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(DeleteAllDeleteProductsThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+			})
+			.addCase(DeleteAllDeleteProductsThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			})
+
+			//ChangeAllProductsStatusThunk
+			.addCase(ChangeProductStatusThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(ChangeProductStatusThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+			})
+			.addCase(ChangeProductStatusThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			})
+
+			//ChangeAllProductsStatusThunk
+			.addCase(ChangeAllProductsStatusThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(ChangeAllProductsStatusThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+			})
+			.addCase(ChangeAllProductsStatusThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			})
+
+			//ChangeSpecialStatusThunk
+			.addCase(ChangeSpecialStatusThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(ChangeSpecialStatusThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+			})
+			.addCase(ChangeSpecialStatusThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			});
 	},
 });
 

@@ -239,7 +239,7 @@ const AddCategory = () => {
 																	</div>
 																</div>
 															</div>
-															<div className='tax-text '>
+															<div className='tax-text mb-0'>
 																المقاس الأنسب 110 بكسل عرض و 110 بكسل ارتفاع
 															</div>
 														</div>
