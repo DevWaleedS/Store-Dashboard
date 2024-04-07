@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // Third Party
-import axios from "axios";
+import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
@@ -17,12 +17,16 @@ import Context from "../../Context/context";
 
 // Components
 import RatingWeight from "./RatingWeight";
-import useFetch from "../../Hooks/UseFetch";
-import { SendReplayModal } from "../../components/Modal";
 import { TopBarSearchInput } from "../../global";
-import { useDispatch, useSelector } from "react-redux";
-import { RatingThunk } from "../../store/Thunk/RatingThunk";
+import { SendReplayModal } from "../../components/Modal";
 import { TablePagination } from "../../components/Tables/TablePagination";
+
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import {
+	ChangeCommentActivationThunk,
+	RatingThunk,
+} from "../../store/Thunk/RatingThunk";
 
 const switchStyle = {
 	"& .MuiSwitch-track": {
@@ -71,17 +75,14 @@ const switchStyle = {
 const Rating = () => {
 	const dispatch = useDispatch();
 	const contextStore = useContext(Context);
-	const { setEndActionTitle, access_token } = contextStore;
+	const { setEndActionTitle } = contextStore;
 
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
 	// to get all  data from server
-	const { RatingData, currentPage, pageCount } = useSelector(
+	const { RatingData, currentPage, pageCount, loading, reload } = useSelector(
 		(state) => state.RatingSlice
-	);
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`comment?page=${pageTarget}&number=${rowsCount}`
 	);
 
 	// -----------------------------------------------------------
@@ -96,23 +97,26 @@ const Rating = () => {
 	const [commentDetails, setCommentDetails] = React.useState(null);
 
 	// ---------------------------------------------------------------------------------------------
-	// change Comment Status
+
+	// Delete items
 	const changeCommentActivation = (id) => {
-		axios
-			.get(`commentActivation`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${access_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+		dispatch(ChangeCommentActivationThunk())
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+					setEndActionTitle(data?.message?.ar);
 				}
+				dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
 			});
 	};
 
@@ -191,7 +195,8 @@ const Rating = () => {
 							RatingData={RatingData}
 							loading={loading}
 							reload={reload}
-							setReload={setReload}
+							pageTarget={pageTarget}
+							rowsCount={rowsCount}
 						/>
 					</div>
 
@@ -210,10 +215,9 @@ const Rating = () => {
 
 					{/* send rating replay component */}
 					<SendReplayModal
-						fetchedData={fetchedData}
+						fetchedData={RatingData}
 						loading={loading}
 						reload={reload}
-						setReload={setReload}
 						commentDetails={commentDetails}
 					/>
 				</div>

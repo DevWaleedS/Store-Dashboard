@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
+import React, { Fragment, useState, useContext } from "react";
 
 // Third party
-import axios from "axios";
+import { toast } from "react-toastify";
 
 // MUI
 import PropTypes from "prop-types";
@@ -20,6 +20,8 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Context
@@ -29,6 +31,14 @@ import { NotificationContext } from "../../Context/NotificationProvider";
 
 // import icons
 import { DeleteIcon } from "../../data/Icons";
+
+//redux
+import { useDispatch } from "react-redux";
+import {
+	DeleteAllDeletePostalSubscriptionsThunk,
+	DeletePostalSubscriptionsThunk,
+	PostalSubscriptionsThunk,
+} from "../../store/Thunk/PostalSubscriptionsThunk";
 
 function EnhancedTableHead(props) {
 	return (
@@ -60,9 +70,9 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick } = props;
+	const { numSelected, rowCount, onSelectAllClick, itemsSelected } = props;
 	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { setNotificationTitle, setItems, setActionType } = NotificationStore;
 	return (
 		<Toolbar
 			sx={{
@@ -83,7 +93,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم حذف جميع الايميلات وهذه الخطوة غير قابلة للرجوع"
 								);
-								setActionTitle("Delete");
+								setItems(itemsSelected);
+								setActionType("deleteAll");
 							}}>
 							<IconButton>
 								<DeleteIcon title='حذف جميع الايميلات' />
@@ -132,8 +143,6 @@ EnhancedTableToolbar.propTypes = {
 export default function PostalSubscriptionsTable({
 	data,
 	loading,
-	reload,
-	setReload,
 	search,
 	setSearch,
 	rowsCount,
@@ -143,27 +152,15 @@ export default function PostalSubscriptionsTable({
 	pageCount,
 	currentPage,
 }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
+	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } =
-		NotificationStore;
+	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	/** --------------------------------------------------- */
-
 	// select all items
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
@@ -196,43 +193,66 @@ export default function PostalSubscriptionsTable({
 	const isSelected = (id) => selected.indexOf(id) !== -1;
 	// -------------------------------------------------------------
 
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeletePostalSubscriptionsThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(
+					PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 
-	// Delete all items and Change all status
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`subsicriptionsdeleteall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeletePostalSubscriptionsThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(
+					PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
+					itemsSelected={selected}
 					numSelected={selected?.length}
 					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
@@ -315,10 +335,7 @@ export default function PostalSubscriptionsTable({
 																		setActionDelete(
 																			"سيتم حذف الايميل وهذه الخطوة غير قابلة للرجوع"
 																		);
-																		setDeleteMethod("get");
-																		setUrl(
-																			`subsicriptionsdeleteall?id[]=${row?.id}`
-																		);
+																		setItemId(row.id);
 																	}}
 																	style={{
 																		cursor: "pointer",
@@ -350,6 +367,14 @@ export default function PostalSubscriptionsTable({
 					setRowsCount={setRowsCount}
 					setPageTarget={setPageTarget}
 				/>
+			)}
+
+			{actionDelete && (
+				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
+			)}
+
+			{notificationTitle && (
+				<DeleteModal handleDeleteAllItems={handleDeleteAllItems} />
 			)}
 		</Box>
 	);

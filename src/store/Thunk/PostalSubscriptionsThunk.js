@@ -18,6 +18,38 @@ export const PostalSubscriptionsThunk = createAsyncThunk(
 	}
 );
 
+//Delete Thunk
+export const DeleteAllDeletePostalSubscriptionsThunk = createAsyncThunk(
+	"PostalSubscriptions/DeleteAllDeletePostalSubscriptionsThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`subsicriptionsdeleteall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+export const DeletePostalSubscriptionsThunk = createAsyncThunk(
+	"PostalSubscriptions/DeletePostalSubscriptionsThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`subsicriptionsdeleteall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
 // New thunk for adding a new category
 // export const addNewProductThunk = createAsyncThunk(
 // 	"Categories/addNewProductThunk",

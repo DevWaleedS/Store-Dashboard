@@ -1,12 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-	CategoriesThunk,
-	ChangeAllCategoriesStatusThunk,
-	ChangeCategoriesStatusThunk,
-	DeleteAllCategoriesThunk,
-	DeleteCategoriesThunk,
-	addCategoryThunk,
-} from "../Thunk/CategoriesThunk";
+import { CategoriesThunk, addCategoryThunk } from "../Thunk/CategoriesThunk";
 
 const initialState = {
 	loading: false,
@@ -71,55 +64,6 @@ const CategoriesSlice = createSlice({
 				state.loading = false;
 			})
 			.addCase(addCategoryThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			})
-			// DeleteCategoriesThunk
-			.addCase(DeleteCategoriesThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(DeleteCategoriesThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(DeleteCategoriesThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			}) // DeleteAllCategoriesThunk
-			.addCase(DeleteAllCategoriesThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(DeleteAllCategoriesThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(DeleteAllCategoriesThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			})
-
-			//ChangeCategoriesStatusThunk
-			.addCase(ChangeCategoriesStatusThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(ChangeCategoriesStatusThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(ChangeCategoriesStatusThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			})
-
-			//ChangeAllCategoriesStatusThunk
-			.addCase(ChangeAllCategoriesStatusThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(ChangeAllCategoriesStatusThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(ChangeAllCategoriesStatusThunk.rejected, (state, action) => {
 				state.error = action.payload.message;
 			});
 	},

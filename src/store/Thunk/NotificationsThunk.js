@@ -2,13 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // this thunk for fetching categories
-export const EmptyCartsThunk = createAsyncThunk(
-	"EmptyCarts/EmptyCartsThunk",
+export const NotificationsThunk = createAsyncThunk(
+	"Notifications/NotificationsThunk",
 	async (arg, thunkAPI) => {
 		const { rejectWithValue } = thunkAPI;
 
 		try {
-			const url = `admin?page=${arg.page}&number=${arg.number}`;
+			const url = `NotificationIndex?page=${arg.page}&number=${arg.number}`;
 			const response = await axios.get(url);
 
 			return response.data;
@@ -19,15 +19,15 @@ export const EmptyCartsThunk = createAsyncThunk(
 );
 
 //Delete Thunk
-export const DeleteAllDeleteEmptyCartsThunk = createAsyncThunk(
-	"EmptyCarts/DeleteAllDeleteEmptyCartsThunk",
+export const DeleteAllDeleteNotificationsThunk = createAsyncThunk(
+	"Notifications/DeleteAllDeleteNotificationsThunk",
 
 	async (arg, ThunkApi) => {
 		let { rejectWithValue } = ThunkApi;
 
 		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
 		try {
-			let res = await axios.get(`deleteCart?${queryParams}`);
+			let res = await axios.get(`NotificationDeleteAll?${queryParams}`);
 
 			return res.data;
 		} catch (error) {
@@ -35,13 +35,28 @@ export const DeleteAllDeleteEmptyCartsThunk = createAsyncThunk(
 		}
 	}
 );
-export const DeleteEmptyCartsThunk = createAsyncThunk(
-	"EmptyCarts/DeleteEmptyCartsThunk",
+export const DeleteNotificationsThunk = createAsyncThunk(
+	"Notifications/DeleteNotificationsThunk",
 
 	async (arg, ThunkApi) => {
 		let { rejectWithValue } = ThunkApi;
 		try {
-			let res = await axios.get(`deleteCart?id[]=${arg.id}`);
+			let res = await axios.get(`NotificationDeleteAll?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+export const ChangeTechnicalSupportThunk = createAsyncThunk(
+	"TechnicalSupport/ChangeTechnicalSupportThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`changeTechnicalSupportStatus/${arg.id}`);
 
 			return res.data;
 		} catch (error) {

@@ -18,21 +18,67 @@ export const CouponsThunk = createAsyncThunk(
 	}
 );
 
-// New thunk for adding a new category
-// export const addNewProductThunk = createAsyncThunk(
-// 	"Categories/addNewProductThunk",
-// 	async (categoryData, thunkAPI) => {
-// 		const { rejectWithValue } = thunkAPI;
+//Delete Thunk
+export const DeleteAllDeleteCouponsThunk = createAsyncThunk(
+	"Coupons/DeleteAllDeleteCouponsThunk",
 
-// 		try {
-// 			// Adjust this URL according to your API endpoint for adding categories
-// 			const url = `category`;
-// 			const response = await axios.post(url, categoryData);
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
 
-// 			return response.data;
-// 		} catch (error) {
-// 			console.log(error.message);
-// 			return rejectWithValue(error.message);
-// 		}
-// 	}
-// );
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`coupondeleteall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+export const DeleteCouponThunk = createAsyncThunk(
+	"Coupons/DeleteCouponThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`coupondeleteall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+// ChangeCategoriesStatusThunk
+export const ChangeCouponsStatusThunk = createAsyncThunk(
+	"Coupons/ChangeCouponsStatusThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`couponchangeSatusall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+export const ChangeAllCouponsStatusThunk = createAsyncThunk(
+	"Coupons/ChangeAllCouponsStatusThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`couponchangeSatusall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);

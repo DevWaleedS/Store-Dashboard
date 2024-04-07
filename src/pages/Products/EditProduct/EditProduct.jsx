@@ -936,7 +936,7 @@ const EditProduct = () => {
 																	);
 																}
 															})}
-															{emptyMultiImages.map((image, idx) => {
+															{emptyMultiImages?.map((image, idx) => {
 																return (
 																	<div
 																		key={idx}

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useContext, useState } from "react";
 
 // Third party
-import axios from "axios";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Context
@@ -31,6 +31,8 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
@@ -43,6 +45,12 @@ import {
 	ReplayIcon,
 } from "../../data/Icons";
 import { SendSupportReplayModal } from "../Modal";
+import {
+	ChangeTechnicalSupportThunk,
+	DeleteAllDeleteTechnicalSupportThunk,
+	DeleteTechnicalSupportThunk,
+	TechnicalSupportThunk,
+} from "../../store/Thunk/TechnicalSupportThunk";
 
 function EnhancedTableHead(props) {
 	return (
@@ -80,9 +88,9 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick } = props;
+	const { numSelected, rowCount, onSelectAllClick, itemsSelected } = props;
 	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { setNotificationTitle, setItems, setActionType } = NotificationStore;
 	return (
 		<React.Fragment>
 			{/** Table Head */}
@@ -105,7 +113,8 @@ function EnhancedTableToolbar(props) {
 									setNotificationTitle(
 										"سيتم حذف جميع الشكاوي وهذه الخطوة غير قابلة للرجوع"
 									);
-									setActionTitle("Delete");
+									setItems(itemsSelected);
+									setActionType("deleteAll");
 								}}>
 								<IconButton>
 									<DeleteIcon title='حذف جميع الشكاوي' />
@@ -156,7 +165,7 @@ const SupportTable = ({
 	data,
 	loading,
 	reload,
-	setReload,
+
 	search,
 	setSearch,
 	rowsCount,
@@ -166,28 +175,15 @@ const SupportTable = ({
 	pageCount,
 	currentPage,
 }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
-	// Get Data From Redux Store
 	const navigate = useNavigate();
-	const dispatch = useDispatch(true);
+	const dispatch = useDispatch();
 	const [UserDetails, setUserDetails] = useState("");
 	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } =
-		NotificationStore;
+	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	// Handle select all Items
 	const [selected, setSelected] = React.useState([]);
@@ -221,65 +217,96 @@ const SupportTable = ({
 		setSelected(newSelected);
 	};
 	// ---------------------------------------------------------------
-
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
-
-	// Delete all items and Change all status
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`technicalSupportStoredeleteall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
-	// --------------------------------------------
-
-	// change Message status
-	const changeStatus = (id) => {
-		axios
-			.get(`changeTechnicalSupportStatus/${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteTechnicalSupportThunk({
+				id: id,
 			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+					setEndActionTitle(data?.message?.ar);
 				}
+				dispatch(
+					TechnicalSupportThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
 			});
 	};
+
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeleteTechnicalSupportThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(
+					TechnicalSupportThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	// change  status
+	const changeItemStatus = (id) => {
+		dispatch(
+			ChangeTechnicalSupportThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+
+				dispatch(
+					TechnicalSupportThunk({ page: pageTarget, number: rowsCount })
+				);
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+	//------------------------------------------------------------------------
 
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
+					itemsSelected={selected}
 					numSelected={selected.length}
 					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
@@ -409,7 +436,7 @@ const SupportTable = ({
 
 															<span>
 																<Switch
-																	onChange={() => changeStatus(row?.id)}
+																	onChange={() => changeItemStatus(row?.id)}
 																	checked={
 																		row?.supportstatus === "منتهية"
 																			? true
@@ -461,10 +488,8 @@ const SupportTable = ({
 																		setActionDelete(
 																			"سيتم حذف الشكوى وهذه الخطوة غير قابلة للرجوع"
 																		);
-																		setDeleteMethod("get");
-																		setUrl(
-																			`technicalSupportStoredeleteall?id[]=${row?.id}`
-																		);
+
+																		setItemId(row?.id);
 																	}}
 																	style={{
 																		cursor: "pointer",
@@ -496,11 +521,15 @@ const SupportTable = ({
 					setPageTarget={setPageTarget}
 				/>
 			)}
-			<SendSupportReplayModal
-				reload={reload}
-				setReload={setReload}
-				supportDetails={UserDetails}
-			/>
+			<SendSupportReplayModal reload={reload} supportDetails={UserDetails} />
+
+			{actionDelete && (
+				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
+			)}
+
+			{notificationTitle && (
+				<DeleteModal handleDeleteAllItems={handleDeleteAllItems} />
+			)}
 		</Box>
 	);
 };

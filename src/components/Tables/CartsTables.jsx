@@ -1,8 +1,8 @@
-import React, { Fragment, useState, useContext, useEffect } from "react";
+import React, { Fragment, useState, useContext } from "react";
 
 // Third party
-import axios from "axios";
 import moment from "moment";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Context
@@ -27,11 +27,21 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Import icon
 import { FiSearch } from "react-icons/fi";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
+
+//redux
+import { useDispatch } from "react-redux";
+import {
+	DeleteAllDeleteEmptyCartsThunk,
+	DeleteEmptyCartsThunk,
+	EmptyCartsThunk,
+} from "../../store/Thunk/EmptyCartsThunk";
 
 function EnhancedTableHead(props) {
 	return (
@@ -70,9 +80,16 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick, search, setSearch } = props;
+	const {
+		numSelected,
+		rowCount,
+		onSelectAllClick,
+		search,
+		setSearch,
+		itemsSelected,
+	} = props;
 	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { setNotificationTitle, setItems, setActionType } = NotificationStore;
 
 	return (
 		<Toolbar
@@ -105,7 +122,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم حذف جميع السلات وهذه الخطوة غير قابلة للرجوع"
 								);
-								setActionTitle("Delete");
+								setItems(itemsSelected);
+								setActionType("deleteAll");
 							}}
 							className='delete-all'>
 							<IconButton>
@@ -154,8 +172,6 @@ EnhancedTableToolbar.propTypes = {
 export default function CartsTables({
 	cartsData,
 	loading,
-	reload,
-	setReload,
 	search,
 	setSearch,
 	rowsCount,
@@ -165,28 +181,17 @@ export default function CartsTables({
 	pageCount,
 	currentPage,
 }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const NotificationStore = useContext(NotificationContext);
+	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } =
-		NotificationStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
-	const [selected, setSelected] = useState([]);
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	// _____________________________________________________________________ //
-
+	const [selected, setSelected] = useState([]);
 	// Select all items
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
@@ -219,38 +224,56 @@ export default function CartsTables({
 	const isSelected = (name) => selected.indexOf(name) !== -1;
 	// --------------------------------------------------------------------
 
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteEmptyCartsThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 
-	// Delete all items and Change all status
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`deleteCart?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeleteEmptyCartsThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 
 	return (
 		<Box sx={{ width: "100%" }}>
@@ -258,6 +281,7 @@ export default function CartsTables({
 				<EnhancedTableToolbar
 					search={search}
 					setSearch={setSearch}
+					itemsSelected={selected}
 					numSelected={selected?.length}
 					rowCount={cartsData?.length}
 					onSelectAllClick={handleSelectAllClick}
@@ -368,8 +392,7 @@ export default function CartsTables({
 																	setActionDelete(
 																		"سيتم حذف السلة وهذه الخطوة غير قابلة للرجوع"
 																	);
-																	setDeleteMethod("get");
-																	setUrl(`deleteCart?id[]=${row?.id}`);
+																	setItemId(row.id);
 																}}
 															/>
 														</div>
@@ -394,6 +417,14 @@ export default function CartsTables({
 					setRowsCount={setRowsCount}
 					setPageTarget={setPageTarget}
 				/>
+			)}
+
+			{actionDelete && (
+				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
+			)}
+
+			{notificationTitle && (
+				<DeleteModal handleDeleteAllItems={handleDeleteAllItems} />
 			)}
 		</Box>
 	);

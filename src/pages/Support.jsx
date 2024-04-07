@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { ArrowBack } from "../data/Icons";
-import useFetch from "../Hooks/UseFetch";
 import SupportTable from "../components/Tables/SupportTable";
 import { useDispatch, useSelector } from "react-redux";
 import { TechnicalSupportThunk } from "../store/Thunk/TechnicalSupportThunk";
@@ -14,21 +13,18 @@ const Support = () => {
 	const [rowsCount, setRowsCount] = useState(9);
 	const [search, setSearch] = useState("");
 
-	const { TechnicalSupportData, currentPage, pageCount } = useSelector(
-		(state) => state.TechnicalSupportSlice
-	);
+	const { TechnicalSupportData, currentPage, pageCount, loading, reload } =
+		useSelector((state) => state.TechnicalSupportSlice);
 	// -----------------------------------------------------------
-
-	console.log(TechnicalSupportData);
 
 	/** get contact data */
 	useEffect(() => {
 		dispatch(TechnicalSupportThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget, dispatch]);
 
-	const { loading, reload, setReload } = useFetch(
-		`technicalSupport?page=${pageTarget}&number=${rowsCount}`
-	);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`technicalSupport?page=${pageTarget}&number=${rowsCount}`
+	// );
 
 	let Technicalsupports = TechnicalSupportData?.Technicalsupports;
 
@@ -87,7 +83,6 @@ const Support = () => {
 							data={Technicalsupports}
 							loading={loading}
 							reload={reload}
-							setReload={setReload}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}

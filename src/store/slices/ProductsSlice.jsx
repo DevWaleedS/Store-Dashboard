@@ -1,13 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-	ChangeAllProductsStatusThunk,
-	ChangeProductStatusThunk,
-	ChangeSpecialStatusThunk,
-	DeleteAllDeleteProductsThunk,
-	DeleteProductThunk,
-	ImportedProductsThunk,
-	ProductsThunk,
-} from "../Thunk/ProductsThunk";
+import { ImportedProductsThunk, ProductsThunk } from "../Thunk/ProductsThunk";
 
 const initialState = {
 	isProductOptionOpen: false, // to handle open product options
@@ -70,67 +62,6 @@ const ProductsSlice = createSlice({
 				state.souqOtlbhaProducts = action?.payload?.data.products;
 			})
 			.addCase(ImportedProductsThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			}) // DeleteProductThunk
-			.addCase(DeleteProductThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(DeleteProductThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(DeleteProductThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			}) // DeleteAllDeleteProductsThunk
-			.addCase(DeleteAllDeleteProductsThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(DeleteAllDeleteProductsThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(DeleteAllDeleteProductsThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			})
-
-			//ChangeAllProductsStatusThunk
-			.addCase(ChangeProductStatusThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(ChangeProductStatusThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(ChangeProductStatusThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			})
-
-			//ChangeAllProductsStatusThunk
-			.addCase(ChangeAllProductsStatusThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(ChangeAllProductsStatusThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(ChangeAllProductsStatusThunk.rejected, (state, action) => {
-				state.error = action.payload.message;
-			})
-
-			//ChangeSpecialStatusThunk
-			.addCase(ChangeSpecialStatusThunk.pending, (state, action) => {
-				state.reload = true;
-				state.loading = true;
-			})
-			.addCase(ChangeSpecialStatusThunk.fulfilled, (state, action) => {
-				state.reload = false;
-				state.loading = false;
-			})
-			.addCase(ChangeSpecialStatusThunk.rejected, (state, action) => {
 				state.error = action.payload.message;
 			});
 	},

@@ -18,6 +18,71 @@ export const PagesThunk = createAsyncThunk(
 	}
 );
 
+//Delete Thunk
+export const DeleteAllDeletePagesThunk = createAsyncThunk(
+	"Pages/DeleteAllDeletePagesThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`pagedeleteall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+export const DeleteCouponThunk = createAsyncThunk(
+	"Pages/DeleteCouponThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`pagedeleteall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+// ChangeCategoriesStatusThunk
+export const ChangePagesStatusThunk = createAsyncThunk(
+	"Pages/ChangePagesStatusThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`pagechangeSatusall?id[]=${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+export const ChangeAllPagesStatusThunk = createAsyncThunk(
+	"Pages/ChangeAllPagesStatusThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(`pagechangeSatusall?${queryParams}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
 // New thunk for adding a new category
 // export const addNewProductThunk = createAsyncThunk(
 // 	"Categories/addNewProductThunk",

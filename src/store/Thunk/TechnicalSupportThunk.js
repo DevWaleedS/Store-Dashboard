@@ -18,6 +18,57 @@ export const TechnicalSupportThunk = createAsyncThunk(
 	}
 );
 
+//Delete Thunk
+export const DeleteAllDeleteTechnicalSupportThunk = createAsyncThunk(
+	"TechnicalSupport/DeleteAllDeleteTechnicalSupportThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+
+		const queryParams = arg.selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			let res = await axios.get(
+				`technicalSupportStoredeleteall?${queryParams}`
+			);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+export const DeleteTechnicalSupportThunk = createAsyncThunk(
+	"TechnicalSupport/DeleteTechnicalSupportThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(
+				`technicalSupportStoredeleteall?id[]=${arg.id}`
+			);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
+export const ChangeTechnicalSupportThunk = createAsyncThunk(
+	"TechnicalSupport/ChangeTechnicalSupportThunk",
+
+	async (arg, ThunkApi) => {
+		let { rejectWithValue } = ThunkApi;
+		try {
+			let res = await axios.get(`changeTechnicalSupportStatus/${arg.id}`);
+
+			return res.data;
+		} catch (error) {
+			return rejectWithValue(error.response.data.data);
+		}
+	}
+);
+
 // New thunk for adding a new category
 // export const addNewProductThunk = createAsyncThunk(
 // 	"Categories/addNewProductThunk",

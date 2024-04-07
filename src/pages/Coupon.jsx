@@ -83,17 +83,17 @@ const Coupon = () => {
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-	const { CouponsData, currentPage, pageCount } = useSelector(
+	const { CouponsData, currentPage, pageCount, loading, reload } = useSelector(
 		(state) => state.CouponsSlice
 	);
-	const { loading, reload, setReload } = useFetch(
-		`coupon?page=${pageTarget}&number=${rowsCount}`
-	);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`coupon?page=${pageTarget}&number=${rowsCount}`
+	// );
 
 	/** get contact data */
 	useEffect(() => {
 		dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	// -----------------------------------------------------------
 	const navigate = useNavigate();
@@ -232,7 +232,6 @@ const Coupon = () => {
 							reload={reload}
 							loading={loading}
 							rowsCount={rowsCount}
-							setReload={setReload}
 							setSelect={setSelect}
 							setSearch={setSearch}
 							pageTarget={pageTarget}

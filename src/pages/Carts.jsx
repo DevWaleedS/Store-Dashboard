@@ -19,12 +19,11 @@ const Carts = () => {
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
 
-	const { EmptyCartsData, currentPage, pageCount } = useSelector(
-		(state) => state.EmptyCartsSlice
-	);
-	const { loading, reload, setReload } = useFetch(
-		`admin?page=${pageTarget}&number=${rowsCount}`
-	);
+	const { EmptyCartsData, currentPage, pageCount, loading, reload } =
+		useSelector((state) => state.EmptyCartsSlice);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`admin?page=${pageTarget}&number=${rowsCount}`
+	// );
 	// -----------------------------------------------------------
 
 	/** get contact data */
@@ -77,7 +76,6 @@ const Carts = () => {
 							cartsData={carts}
 							loading={loading}
 							reload={reload}
-							setReload={setReload}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}

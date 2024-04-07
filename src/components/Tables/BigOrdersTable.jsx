@@ -350,7 +350,7 @@ export default function BigOrdersTable({
 																className='status d-flex justify-content-center align-items-center'
 																style={{
 																	backgroundColor:
-																		row?.payment_status === " تم الدفع"
+																		row?.payment_status === "تم الدفع"
 																			? "#ebfcf1"
 																			: row?.payment_status === "فشل الدفع"
 																			? "#ffebeb"
@@ -359,7 +359,7 @@ export default function BigOrdersTable({
 																			: null,
 																	color:
 																		row?.payment_status === "تم الدفع"
-																			? "##9df1ba"
+																			? "#9df1ba"
 																			: row?.payment_status === "فشل الدفع "
 																			? "#ff7b7b"
 																			: row?.payment_status === "لم يتم الدفع"

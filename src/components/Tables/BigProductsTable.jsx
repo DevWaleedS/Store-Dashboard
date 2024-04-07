@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState, useContext } from "react";
 
 // Third party
 import axios from "axios";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 // MUI
@@ -27,7 +28,6 @@ import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
-import CloseIcon from "@mui/icons-material/Close";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 // Context
@@ -42,11 +42,9 @@ import {
 	Modal,
 	Select,
 } from "@mui/material";
-import OutlinedInput from "@mui/material/OutlinedInput";
 
 import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import {
 	ChangeAllProductsStatusThunk,
@@ -57,6 +55,43 @@ import {
 	ImportedProductsThunk,
 	ProductsThunk,
 } from "../../store/Thunk/ProductsThunk";
+
+const switchStyle = {
+	width: "50px",
+	"& .MuiSwitch-track": {
+		width: 26,
+		height: 14,
+		opacity: 1,
+		backgroundColor: "rgba(0,0,0,.25)",
+		boxSizing: "border-box",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		transform: "translate(6px,6px)",
+		color: "#fff",
+	},
+
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: 1,
+		"&.Mui-checked": {
+			transform: "translateX(11px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
 
 function EnhancedTableHead(props) {
 	return (
@@ -252,9 +287,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function BigProductsTable({
 	products,
-
 	loading,
-
 	rowsCount,
 	setRowsCount,
 	pageTarget,
@@ -275,6 +308,7 @@ export default function BigProductsTable({
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
+	// ----------------------------------------------------------------------------
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
@@ -286,14 +320,6 @@ export default function BigProductsTable({
 		}
 		setSelected([]);
 	};
-
-	useEffect(() => {
-		if (tabSelectedId) {
-			setPageTarget(1);
-			setRowsCount(10);
-		}
-	}, [tabSelectedId]);
-
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 
@@ -456,13 +482,20 @@ export default function BigProductsTable({
 				// });
 			});
 	};
+	// ----------------------------------------------------------------------------
+
+	useEffect(() => {
+		if (tabSelectedId) {
+			setPageTarget(1);
+			setRowsCount(10);
+		}
+	}, [tabSelectedId]);
 	/**
 	 * ----------------------------------------------------------------------------
 	 * create change categories modal
 	 * ----------------------------------------------------------------------------
 	 */
 	const { fetchedData } = useFetch("selector/mainCategories");
-
 	const [categories, setCategories] = useState([]);
 	const [category_id, setCategory_id] = useState("");
 	const [subcategory_id, setSubcategory_id] = useState([]);
@@ -923,42 +956,7 @@ export default function BigProductsTable({
 																		checked={
 																			row?.special === "مميز" ? true : false
 																		}
-																		sx={{
-																			width: "50px",
-																			"& .MuiSwitch-track": {
-																				width: 26,
-																				height: 14,
-																				opacity: 1,
-																				backgroundColor: "rgba(0,0,0,.25)",
-																				boxSizing: "border-box",
-																			},
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
-																				width: 10,
-																				height: 10,
-																				borderRadius: 5,
-																				transform: "translate(6px,6px)",
-																				color: "#fff",
-																			},
-
-																			"&:hover": {
-																				"& .MuiSwitch-thumb": {
-																					boxShadow: "none",
-																				},
-																			},
-
-																			"& .MuiSwitch-switchBase": {
-																				padding: 1,
-																				"&.Mui-checked": {
-																					transform: "translateX(11px)",
-																					color: "#fff",
-																					"& + .MuiSwitch-track": {
-																						opacity: 1,
-																						backgroundColor: "#3AE374",
-																					},
-																				},
-																			},
-																		}}
+																		sx={switchStyle}
 																	/>
 																</div>
 															</TableCell>
@@ -972,42 +970,7 @@ export default function BigProductsTable({
 																		checked={
 																			row?.status === "نشط" ? true : false
 																		}
-																		sx={{
-																			width: "50px",
-																			"& .MuiSwitch-track": {
-																				width: 26,
-																				height: 14,
-																				opacity: 1,
-																				backgroundColor: "rgba(0,0,0,.25)",
-																				boxSizing: "border-box",
-																			},
-																			"& .MuiSwitch-thumb": {
-																				boxShadow: "none",
-																				width: 10,
-																				height: 10,
-																				borderRadius: 5,
-																				transform: "translate(6px,6px)",
-																				color: "#fff",
-																			},
-
-																			"&:hover": {
-																				"& .MuiSwitch-thumb": {
-																					boxShadow: "none",
-																				},
-																			},
-
-																			"& .MuiSwitch-switchBase": {
-																				padding: 1,
-																				"&.Mui-checked": {
-																					transform: "translateX(11px)",
-																					color: "#fff",
-																					"& + .MuiSwitch-track": {
-																						opacity: 1,
-																						backgroundColor: "#3AE374",
-																					},
-																				},
-																			},
-																		}}
+																		sx={switchStyle}
 																	/>
 																</div>
 															</TableCell>

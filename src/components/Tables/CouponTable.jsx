@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
+import React, { Fragment, useState, useContext } from "react";
 
 // Third party
-import axios from "axios";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import moment from "moment-with-locales-es6";
 
@@ -24,6 +24,8 @@ import TableContainer from "@mui/material/TableContainer";
 // Components
 import { TablePagination } from "./TablePagination";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 
 // Context
 import Context from "../../Context/context";
@@ -32,6 +34,53 @@ import { NotificationContext } from "../../Context/NotificationProvider";
 
 // import icons
 import { DeleteIcon, Reports } from "../../data/Icons";
+
+//redux
+import { useDispatch } from "react-redux";
+import {
+	ChangeAllCouponsStatusThunk,
+	ChangeCouponsStatusThunk,
+	CouponsThunk,
+	DeleteAllDeleteCouponsThunk,
+	DeleteCouponThunk,
+} from "../../store/Thunk/CouponsThunk";
+
+const switchStyle = {
+	width: "50px",
+	"& .MuiSwitch-track": {
+		width: 26,
+		height: 14,
+		opacity: 1,
+		backgroundColor: "rgba(0,0,0,.25)",
+		boxSizing: "border-box",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		transform: "translate(6px,6px)",
+		color: "#fff",
+	},
+
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: 1,
+		"&.Mui-checked": {
+			transform: "translateX(11px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
 
 function EnhancedTableHead(props) {
 	return (
@@ -73,9 +122,9 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick } = props;
+	const { numSelected, rowCount, onSelectAllClick, itemsSelected } = props;
 	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { setNotificationTitle, setItems, setActionType } = NotificationStore;
 	return (
 		<Toolbar
 			sx={{
@@ -96,7 +145,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم حذف جميع أكواد الخصم وهذه الخطوة غير قابلة للرجوع"
 								);
-								setActionTitle("Delete");
+								setItems(itemsSelected);
+								setActionType("deleteAll");
 							}}>
 							<IconButton>
 								<DeleteIcon title='حذف جميع أكواد الخصم ' />
@@ -110,7 +160,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم تعطيل جميع أكواد الخصم التي قمت بتحديدهم"
 								);
-								setActionTitle("changeStatus");
+								setItems(itemsSelected);
+								setActionType("changeStatusAll");
 							}}>
 							<IconButton>
 								<Switch
@@ -195,8 +246,6 @@ EnhancedTableToolbar.propTypes = {
 export default function CouponTable({
 	coupons,
 	loading,
-	reload,
-	setReload,
 	rowsCount,
 	setRowsCount,
 	pageTarget,
@@ -204,23 +253,13 @@ export default function CouponTable({
 	pageCount,
 	currentPage,
 }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } =
-		NotificationStore;
+	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	/** --------------------------------------------------- */
 	// select all items
@@ -233,7 +272,6 @@ export default function CouponTable({
 		}
 		setSelected([]);
 	};
-
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -256,84 +294,116 @@ export default function CouponTable({
 	const isSelected = (id) => selected.indexOf(id) !== -1;
 	// -----------------------------------------------------------
 
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
-
-	// change category status
-	const changeProductStatus = (id) => {
-		axios
-			.get(`couponchangeSatusall?id[]=${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteCouponThunk({
+				id: id,
 			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+					setEndActionTitle(data?.message?.ar);
 				}
+				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
 			});
 	};
 
-	// Delete all items and Change all status
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`coupondeleteall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-		if (confirm && actionTitle === "changeStatus") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`couponchangeSatusall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeleteCouponsThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+	//------------------------------------------------------------------------
+
+	// change  status
+	const changeItemStatus = (id) => {
+		dispatch(
+			ChangeCouponsStatusThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	const handleChangeAllItemsStatus = (selected) => {
+		dispatch(
+			ChangeAllCouponsStatusThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	// ----------------------------------------------------------------------------
 
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
+					itemsSelected={selected}
 					numSelected={selected.length}
 					rowCount={coupons?.length}
 					onSelectAllClick={handleSelectAllClick}
@@ -437,44 +507,9 @@ export default function CouponTable({
 													<TableCell align='right'>
 														<div className='actions d-flex align-items-center justify-content-evenly'>
 															<Switch
-																onChange={() => changeProductStatus(row?.id)}
+																onChange={() => changeItemStatus(row?.id)}
 																checked={row?.status === "نشط" ? true : false}
-																sx={{
-																	width: "50px",
-																	"& .MuiSwitch-track": {
-																		width: 26,
-																		height: 14,
-																		opacity: 1,
-																		backgroundColor: "rgba(0,0,0,.25)",
-																		boxSizing: "border-box",
-																	},
-																	"& .MuiSwitch-thumb": {
-																		boxShadow: "none",
-																		width: 10,
-																		height: 10,
-																		borderRadius: 5,
-																		transform: "translate(6px,6px)",
-																		color: "#fff",
-																	},
-
-																	"&:hover": {
-																		"& .MuiSwitch-thumb": {
-																			boxShadow: "none",
-																		},
-																	},
-
-																	"& .MuiSwitch-switchBase": {
-																		padding: 1,
-																		"&.Mui-checked": {
-																			transform: "translateX(11px)",
-																			color: "#fff",
-																			"& + .MuiSwitch-track": {
-																				opacity: 1,
-																				backgroundColor: "#3AE374",
-																			},
-																		},
-																	},
-																}}
+																sx={switchStyle}
 															/>
 
 															<span style={{ marginRight: "5px" }}>
@@ -493,8 +528,7 @@ export default function CouponTable({
 																		setActionDelete(
 																			"سيتم حذف كود الخصم وهذه الخطوة غير قابلة للرجوع"
 																		);
-																		setDeleteMethod("get");
-																		setUrl(`coupondeleteall?id[]=${row?.id}`);
+																		setItemId(row.id);
 																	}}
 																	style={{
 																		cursor: "pointer",
@@ -525,6 +559,17 @@ export default function CouponTable({
 					rowsCount={rowsCount}
 					setRowsCount={setRowsCount}
 					setPageTarget={setPageTarget}
+				/>
+			)}
+
+			{actionDelete && (
+				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
+			)}
+
+			{notificationTitle && (
+				<DeleteModal
+					handleDeleteAllItems={handleDeleteAllItems}
+					handleChangeAllItemsStatus={handleChangeAllItemsStatus}
 				/>
 			)}
 		</Box>

@@ -1,35 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CouponsThunk } from "../Thunk/CouponsThunk";
+import { NotificationsThunk } from "../Thunk/NotificationsThunk";
 
 const initialState = {
 	loading: false,
 	reload: false,
-	CouponsData: [],
+	NotificationsData: [],
 	currentPage: 1,
 	pageCount: 1,
 	error: "",
 };
 
-const CouponsSlice = createSlice({
-	name: "Coupons",
+const NotificationsSlice = createSlice({
+	name: "Notifications",
 	initialState: initialState,
 	reducers: {},
 	extraReducers: (builder) => {
 		builder
-			// to get all Coupon
-			.addCase(CouponsThunk.pending, (state) => {
+			// to get all Notifications
+			.addCase(NotificationsThunk.pending, (state) => {
 				state.reload = true;
 				state.loading = true;
 			})
-			.addCase(CouponsThunk.fulfilled, (state, action) => {
+			.addCase(NotificationsThunk.fulfilled, (state, action) => {
 				state.reload = false;
 				state.loading = false;
 
 				state.currentPage = action.payload.data.current_page;
 				state.pageCount = action.payload.data.page_count;
-				state.CouponsData = action.payload.data;
+				state.NotificationsData = action.payload.data?.notifications;
 			})
-			.addCase(CouponsThunk.rejected, (state, action) => {
+			.addCase(NotificationsThunk.rejected, (state, action) => {
 				state.reload = false;
 				state.loading = false;
 				state.error = action.error.message;
@@ -37,4 +37,4 @@ const CouponsSlice = createSlice({
 	},
 });
 
-export default CouponsSlice.reducer;
+export default NotificationsSlice.reducer;

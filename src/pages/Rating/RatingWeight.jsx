@@ -1,6 +1,7 @@
-import React, { Fragment, useEffect, useContext } from "react";
+import React, { Fragment, useContext } from "react";
 
 // Redux
+
 import { useDispatch } from "react-redux";
 import { openReplyModal } from "../../store/slices/ReplyModal-slice";
 
@@ -9,7 +10,7 @@ import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 
 // Third party
-import axios from "axios";
+import { toast } from "react-toastify";
 
 // MUI
 import Switch from "@mui/material/Switch";
@@ -29,31 +30,28 @@ import {
 
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
+import DeleteOneModalComp from "../../components/DeleteOneModal/DeleteOneModal";
+
+// redux
+import {
+	ChangeCommentStatusThunk,
+	DeleteCommentThunk,
+	RatingThunk,
+} from "../../store/Thunk/RatingThunk";
 
 // IMPORT IMAGES
 const RatingWeight = ({
+	rowsCount,
+	pageTarget,
 	setCommentDetails,
-	fetchedData,
 	loading,
-	reload,
-	setReload,
 	RatingData,
 }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const dispatch = useDispatch(true);
+	const dispatch = useDispatch();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	// to add rating icon to jsx
 	const MAX_RATING = 5;
@@ -77,31 +75,56 @@ const RatingWeight = ({
 	};
 	// --------------------------------
 
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
-
 	// change Comment Status
 	const changeCommentStatus = (id) => {
-		axios
-			.get(`changeCommentStatus/${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
+		console.log(id);
+		dispatch(
+			ChangeCommentStatusThunk({
+				id: id,
 			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+					setEndActionTitle(data?.message?.ar);
 				}
+				dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+	//----------------------------------
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteCommentThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
 			});
 	};
 
@@ -220,8 +243,8 @@ const RatingWeight = ({
 																setActionDelete(
 																	"سيتم حذف التعليق وهذه الخطوة غير قابلة للرجوع"
 																);
-																setDeleteMethod("delete");
-																setUrl(`comment/${rate?.id}`);
+
+																setItemId(rate?.id);
 															}}>
 															<DeleteIcon title='حذف التعليق' />
 															<span className='user-name me-2 align-self-center'>
@@ -297,6 +320,12 @@ const RatingWeight = ({
 								</div>
 							</div>
 						))
+					)}
+
+					{actionDelete && (
+						<DeleteOneModalComp
+							handleDeleteSingleItem={handleDeleteSingleItem}
+						/>
 					)}
 				</>
 			)}

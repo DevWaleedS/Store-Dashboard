@@ -29,6 +29,7 @@ import PagesSlice from "./slices/PagesSlice";
 import AcademySlice from "./slices/AcademySlice";
 import TechnicalSupportSlice from "./slices/TechnicalSupportSlice";
 import SouqOtlobhaSlice from "./slices/SouqOtlobhaSlice";
+import NotificationsSlice from "./slices/NotificationsSlice";
 
 // store
 export const store = configureStore({
@@ -66,5 +67,6 @@ export const store = configureStore({
 		AcademySlice,
 		TechnicalSupportSlice,
 		SouqOtlobhaSlice,
+		NotificationsSlice,
 	},
 });

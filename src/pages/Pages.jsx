@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
 
 // ICONS
@@ -85,12 +84,12 @@ const Pages = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
-	const { PagesData, currentPage, pageCount } = useSelector(
+	const { PagesData, currentPage, pageCount, loading, reload } = useSelector(
 		(state) => state.PagesSlice
 	);
-	const { loading, reload, setReload } = useFetch(
-		`page?page=${pageTarget}&number=${rowsCount}`
-	);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`page?page=${pageTarget}&number=${rowsCount}`
+	// );
 	// -----------------------------------------------------------
 
 	/** get contact data */
@@ -225,7 +224,6 @@ const Pages = () => {
 							data={filterPages}
 							loading={loading}
 							reload={reload}
-							setReload={setReload}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}

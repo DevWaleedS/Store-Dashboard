@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 
 // Third party
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import moment from "moment-with-locales-es6";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
+import { FormatNotifications } from "../components";
+import DeleteModal from "../components/DeleteModal/DeleteModal";
 import CircularLoading from "../HelperComponents/CircularLoading";
+import DeleteOneModalComp from "../components/DeleteOneModal/DeleteOneModal";
 
 // Context
 import Context from "../Context/context";
@@ -23,87 +23,43 @@ import Checkbox from "@mui/material/Checkbox";
 import { CheckedSquare, DeleteIcon, Reports } from "../data/Icons";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import {
+	DeleteAllDeleteNotificationsThunk,
+	DeleteNotificationsThunk,
+	NotificationsThunk,
+} from "../store/Thunk/NotificationsThunk";
+import { TablePagination } from "../components/Tables/TablePagination";
+
 const Notifications = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("NotificationIndex");
-	const [selected, setSelected] = useState([]);
+	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+
+	const { NotificationsData, currentPage, pageCount, loading } = useSelector(
+		(state) => state.NotificationsSlice
+	);
+	// --------------------------------------------------------
+
+	/** get contact data */
+	useEffect(() => {
+		dispatch(NotificationsThunk({ page: pageTarget, number: rowsCount }));
+	}, [rowsCount, pageTarget, dispatch]);
+
 	const [showMore, setShowMore] = useState("");
 	const NotificationStore = useContext(NotificationContext);
-	const {
-		confirm,
-		setConfirm,
-		actionTitle,
-		setActionTitle,
-		setNotificationTitle,
-	} = NotificationStore;
+	const { notificationTitle, setNotificationTitle, setItems, setActionType } =
+		NotificationStore;
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
-	const isSelected = (id) => selected.indexOf(id) !== -1;
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
-	// formatDate
-	const formatDate = (date) => {
-		const calcPassedMinutes = (date1, date2) =>
-			Math.round(Math.abs(date2 - date1) / (1000 * 60));
-
-		const currentMinutes = calcPassedMinutes(+new Date(), +new Date(date));
-
-		if (currentMinutes < 1) {
-			return "الآن";
-		} else if (currentMinutes === 1) {
-			return "منذ دقيقة";
-		} else if (currentMinutes === 2) {
-			return "منذ دقيقتين";
-		} else if (currentMinutes <= 10) {
-			return `منذ ${currentMinutes} دقائق`;
-		} else if (currentMinutes < 60 && currentMinutes >= 11) {
-			return `منذ ${currentMinutes} دقيقة`;
-		} else if (currentMinutes === 60) {
-			return "منذ ساعة";
-		} else if (currentMinutes === 120) {
-			return "منذ ساعتين";
-		} else if (currentMinutes < 1440) {
-			let hours = Math.floor(currentMinutes / 60);
-			let min = currentMinutes % 60;
-			if (hours === 1) {
-				return `منذ ساعة و ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
-			} else if (hours === 2) {
-				return `منذ  و ساعتين ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
-			} else if (hours <= 10) {
-				return `منذ ${hours} ساعات و ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
-			} else {
-				return `منذ ${hours} ساعة و ${min} ${min <= 10 ? "دقائق" : "دقيقة"} `;
-			}
-		}
-
-		const currentDate = Math.round(currentMinutes / 60 / 24);
-
-		if (currentDate === 1) {
-			return "أمس، الساعة " + moment(date).locale("ar").format(" h:mm a");
-		} else if (currentDate === 2) {
-			return " منذ يومين، الساعة" + moment(date).locale("ar").format(" h:mm a");
-		} else if (currentDate <= 7) {
-			return (
-				`منذ ${currentDate}  أيام، الساعة` +
-				moment(date).locale("ar").format(" h:mm a")
-			);
-		}
-
-		return moment(date).locale("ar").format("D MMMM YYYY");
-	};
 	// -----------------------------------------------------------------
-
+	const [selected, setSelected] = useState([]);
+	const isSelected = (id) => selected.indexOf(id) !== -1;
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -123,10 +79,9 @@ const Notifications = () => {
 
 		setSelected(newSelected);
 	};
-
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = fetchedData?.data?.notifications?.map((n) => n.id);
+			const newSelected = NotificationsData?.map((n) => n.id);
 			setSelected(newSelected);
 			return;
 		}
@@ -134,39 +89,56 @@ const Notifications = () => {
 	};
 	// -------------------------------------------------------------------------
 
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteNotificationsThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(NotificationsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 
-	// Delete all items and Change all status
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`NotificationDeleteAll?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeleteNotificationsThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(NotificationsThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
 
 	const readMoreModal = () => {
 		return (
@@ -206,7 +178,7 @@ const Notifications = () => {
 					</section>
 				) : (
 					<>
-						{fetchedData?.data?.notifications?.length === 0 ? (
+						{NotificationsData?.length === 0 ? (
 							<h4
 								style={{ height: "70vh" }}
 								className='d-flex justify-content-center align-items-center'>
@@ -219,7 +191,7 @@ const Notifications = () => {
 								</div>
 
 								<div className='notifications-table'>
-									<div className='row'>
+									<div className='row mb-3'>
 										<div className='table_wrapper'>
 											<div className='d-flex flex-row align-items-center gap-5'>
 												<div className='d-flex flex-row align-items-center gap-3'>
@@ -234,13 +206,11 @@ const Notifications = () => {
 														}}
 														indeterminate={
 															selected.length > 0 &&
-															selected.length <
-																fetchedData?.data?.notifications?.length
+															selected.length < NotificationsData?.length
 														}
 														checked={
-															fetchedData?.data?.notifications?.length > 0 &&
-															selected.length ===
-																fetchedData?.data?.notifications?.length
+															NotificationsData?.length > 0 &&
+															selected.length === NotificationsData?.length
 														}
 														onChange={handleSelectAllClick}
 													/>
@@ -267,7 +237,8 @@ const Notifications = () => {
 																setNotificationTitle(
 																	"سيتم حذف جميع الاشعارات وهذه الخطوة غير قابلة للرجوع"
 																);
-																setActionTitle("Delete");
+																setItems(selected);
+																setActionType("deleteAll");
 															}}>
 															<DeleteIcon title='حذف جميع الاشعارات' />
 															<h6 className='' style={{ color: "#FF3838" }}>
@@ -278,7 +249,7 @@ const Notifications = () => {
 												</div>
 											</div>
 											<div className='d-flex flex-col gap-4 flex-wrap mt-3 flex '>
-												{fetchedData?.data?.notifications?.map((not, index) => {
+												{NotificationsData?.map((not, index) => {
 													const isItemSelected = isSelected(not.id);
 													return (
 														<div
@@ -314,10 +285,13 @@ const Notifications = () => {
 																	</div>
 																</div>
 															</div>
+
 															<div className='time-delete w-100 h-100 d-flex flex-md-row flex-column align-items-md-center align-items-end justify-content-end gap-md-5 gap-2'>
 																<div className=''>
 																	<p className='notification-time'>
-																		{formatDate(not.created_at)}
+																		<FormatNotifications
+																			date={not.created_at}
+																		/>
 																	</p>
 																</div>
 
@@ -332,8 +306,7 @@ const Notifications = () => {
 																			setActionDelete(
 																				"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
 																			);
-																			setDeleteMethod("get");
-																			setUrl(`NotificationDelete/${not?.id}`);
+																			setItemId(not.id);
 																		}}
 																		style={{ cursor: "pointer" }}
 																		title='حذف الإشعار'
@@ -346,7 +319,31 @@ const Notifications = () => {
 											</div>
 										</div>
 									</div>
+
+									<div className='row'>
+										{NotificationsData?.length !== 0 && !loading && (
+											<TablePagination
+												data={NotificationsData}
+												pageCount={pageCount}
+												currentPage={currentPage}
+												pageTarget={pageTarget}
+												rowsCount={rowsCount}
+												setRowsCount={setRowsCount}
+												setPageTarget={setPageTarget}
+											/>
+										)}
+									</div>
 								</div>
+
+								{actionDelete && (
+									<DeleteOneModalComp
+										handleDeleteSingleItem={handleDeleteSingleItem}
+									/>
+								)}
+
+								{notificationTitle && (
+									<DeleteModal handleDeleteAllItems={handleDeleteAllItems} />
+								)}
 							</>
 						)}
 					</>

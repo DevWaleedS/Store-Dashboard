@@ -1,14 +1,18 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
+import React, { Fragment, useContext } from "react";
 
 // Third party
-import axios from "axios";
+
 import moment from "moment";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
+
+//redux
+import { useDispatch } from "react-redux";
 
 // MUI
 import PropTypes from "prop-types";
@@ -29,10 +33,19 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Import Icons
 import { DeleteIcon, EditIcon } from "../../data/Icons";
+import {
+	ChangeAllPagesStatusThunk,
+	ChangePagesStatusThunk,
+	DeleteAllDeletePagesThunk,
+	DeleteCouponThunk,
+	PagesThunk,
+} from "../../store/Thunk/PagesThunk";
 
 function EnhancedTableHead(props) {
 	return (
@@ -67,16 +80,14 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
 	numSelected: PropTypes.number.isRequired,
-
 	onSelectAllClick: PropTypes.func.isRequired,
-
 	rowCount: PropTypes.number,
 };
 
 function EnhancedTableToolbar(props) {
-	const { numSelected, rowCount, onSelectAllClick } = props;
+	const { numSelected, rowCount, onSelectAllClick, itemsSelected } = props;
 	const NotificationStore = useContext(NotificationContext);
-	const { setNotificationTitle, setActionTitle } = NotificationStore;
+	const { setNotificationTitle, setItems, setActionType } = NotificationStore;
 
 	return (
 		<Toolbar
@@ -104,7 +115,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم حذف جميع الصفحات وهذه الخطوة غير قابلة للرجوع"
 								);
-								setActionTitle("Delete");
+								setItems(itemsSelected);
+								setActionType("deleteAll");
 							}}>
 							<IconButton>
 								<DeleteIcon title='حذف جميع الصفحات' />
@@ -118,7 +130,8 @@ function EnhancedTableToolbar(props) {
 								setNotificationTitle(
 									"سيتم تغيير حالة جميع الصفحات التي قمت بتحديدهم"
 								);
-								setActionTitle("changeStatus");
+								setItems(itemsSelected);
+								setActionType("changeStatusAll");
 							}}>
 							<IconButton>
 								<Switch
@@ -205,7 +218,6 @@ export default function PagesTable({
 	data,
 	loading,
 	reload,
-	setReload,
 	search,
 	setSearch,
 	rowsCount,
@@ -215,30 +227,18 @@ export default function PagesTable({
 	pageCount,
 	currentPage,
 }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
+	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
-	const { confirm, setConfirm, actionTitle, setActionTitle } =
-		NotificationStore;
+	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
-	const {
-		setUrl,
-		setActionDelete,
-		deleteReload,
-		setDeleteReload,
-		setDeleteMethod,
-	} = DeleteStore;
-
-	const [selected, setSelected] = React.useState([]);
+	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	// ---------------------------------------------
 
 	// Handle Select all Items
+	const [selected, setSelected] = React.useState([]);
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelected = data?.map((n) => n.id);
@@ -266,90 +266,119 @@ export default function PagesTable({
 
 		setSelected(newSelected);
 	};
-
 	const isSelected = (id) => selected.indexOf(id) !== -1;
-
 	// ---------------------------------------------------
 
-	// Delete single item
-	useEffect(() => {
-		if (deleteReload === true) {
-			setReload(!reload);
-		}
-		setDeleteReload(false);
-	}, [deleteReload]);
-
-	// Delete all items and Change all status
-	useEffect(() => {
-		if (confirm && actionTitle === "Delete") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`pagedeleteall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-		if (confirm && actionTitle === "changeStatus") {
-			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
-			axios
-				.get(`pagechangeSatusall?${queryParams}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					}
-				});
-			setActionTitle(null);
-			setConfirm(false);
-		}
-	}, [confirm]);
-	// -------------------------------------------------------
-
-	// change category status
-	const changePageStatus = (id) => {
-		axios
-			.post(`changePageStatus/${id}`, null, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
+	// Delete items
+	const handleDeleteSingleItem = (id) => {
+		dispatch(
+			DeleteCouponThunk({
+				id: id,
 			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
 				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
+					setEndActionTitle(data?.message?.ar);
 				}
+				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
 			});
 	};
+
+	const handleDeleteAllItems = (selected) => {
+		dispatch(
+			DeleteAllDeletePagesThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+	//------------------------------------------------------------------------
+
+	// change  status
+	const changeItemStatus = (id) => {
+		dispatch(
+			ChangePagesStatusThunk({
+				id: id,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	const handleChangeAllItemsStatus = (selected) => {
+		dispatch(
+			ChangeAllPagesStatusThunk({
+				selected: selected,
+			})
+		)
+			.unwrap()
+			.then((data) => {
+				if (!data?.success) {
+					toast.error(data?.message?.ar, {
+						theme: "light",
+					});
+				} else {
+					setEndActionTitle(data?.message?.ar);
+				}
+				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
+			})
+			.catch((error) => {
+				// handle error here
+				// toast.error(error, {
+				// 	theme: "light",
+				// });
+			});
+	};
+
+	// -------------------------------------------------------
 
 	return (
 		<Box sx={{ width: "100%" }}>
 			<Paper sx={{ width: "100%", mb: 2 }}>
 				<EnhancedTableToolbar
+					itemsSelected={selected}
 					numSelected={selected.length}
 					rowCount={data?.length}
 					onSelectAllClick={handleSelectAllClick}
@@ -451,7 +480,7 @@ export default function PagesTable({
 															</Link>
 
 															<Switch
-																onChange={() => changePageStatus(row?.id)}
+																onChange={() => changeItemStatus(row?.id)}
 																checked={
 																	row?.status === "تم النشر" ? true : false
 																}
@@ -513,8 +542,7 @@ export default function PagesTable({
 																		setActionDelete(
 																			"سيتم حذف الصفحة وهذه الخطوة غير قابلة للرجوع"
 																		);
-																		setDeleteMethod("delete");
-																		setUrl(`page/${row?.id}`);
+																		setItemId(row.id);
 																	}
 																}}
 																style={{
@@ -548,6 +576,17 @@ export default function PagesTable({
 					rowsCount={rowsCount}
 					setRowsCount={setRowsCount}
 					setPageTarget={setPageTarget}
+				/>
+			)}
+
+			{actionDelete && (
+				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
+			)}
+
+			{notificationTitle && (
+				<DeleteModal
+					handleDeleteAllItems={handleDeleteAllItems}
+					handleChangeAllItemsStatus={handleChangeAllItemsStatus}
 				/>
 			)}
 		</Box>

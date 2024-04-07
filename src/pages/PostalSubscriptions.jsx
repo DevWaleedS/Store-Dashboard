@@ -24,21 +24,19 @@ const PostalSubscriptions = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
-	const { PostalSubscriptionsData, currentPage, pageCount } = useSelector(
-		(state) => state.PostalSubscriptionsSlice
-	);
+	const { PostalSubscriptionsData, currentPage, pageCount, loading, reload } =
+		useSelector((state) => state.PostalSubscriptionsSlice);
 
-	const { loading, reload, setReload } = useFetch(
-		`subsicriptions?page=${pageTarget}&number=${rowsCount}`
-	);
-	console.log(PostalSubscriptionsData);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`subsicriptions?page=${pageTarget}&number=${rowsCount}`
+	// );
 
 	// -----------------------------------------------------------
 
 	/** get contact data */
 	useEffect(() => {
 		dispatch(PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+	}, [rowsCount, pageTarget, dispatch]);
 
 	// -----------------------------------------------------------
 
@@ -126,7 +124,6 @@ const PostalSubscriptions = () => {
 							data={subsicriptions}
 							loading={loading}
 							reload={reload}
-							setReload={setReload}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}
