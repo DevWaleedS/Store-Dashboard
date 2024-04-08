@@ -19,10 +19,19 @@ import { CategoryTable } from "../../components/Tables";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { CategoriesThunk } from "../../store/Thunk/CategoriesThunk";
+import {
+	CategoriesThunk,
+	searchCategoryEtlobhaThunk,
+	searchCategoryThunk,
+} from "../../store/Thunk/CategoriesThunk";
 
 const Category = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [search, setSearch] = useState("");
+	const [category_id, setCategory_id] = useState("");
+	const [tabSelected, setTabSelected] = useState(1);
+	const [categoriesData, setCategoriesData] = useState([]);
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
@@ -31,7 +40,6 @@ const Category = () => {
 	// );
 
 	const {
-		Categories,
 		currentPage,
 		etlobhaCurrentPage,
 		etlobhaPageCount,
@@ -47,14 +55,6 @@ const Category = () => {
 		dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget, dispatch]);
 
-	const navigate = useNavigate();
-	const [search, setSearch] = useState("");
-	const [category_id, setCategory_id] = useState("");
-	const [tabSelected, setTabSelected] = useState(1);
-	const [categoriesData, setCategoriesData] = useState([]);
-	const [categoriesFilterSearch, setCategoriesFilterSearch] = useState([]);
-	const [categoriesResult, setCategoriesResult] = useState([]);
-
 	/* im using this to display store category and atlbha category */
 	useEffect(() => {
 		if (tabSelected === 1) {
@@ -62,34 +62,57 @@ const Category = () => {
 		} else {
 			setCategoriesData(SouqOtlbhaCategory);
 		}
-	}, [Categories?.categories, tabSelected, storeCategory, SouqOtlbhaCategory]);
+	}, [tabSelected, storeCategory, SouqOtlbhaCategory]);
 
-	// Search
 	useEffect(() => {
-		if (search !== "") {
-			setCategoriesFilterSearch(
-				categoriesData?.filter((item) =>
-					item?.name?.toLowerCase()?.includes(search?.toLowerCase())
-				)
-			);
+		if (tabSelected === 1) {
+			const debounce = setTimeout(() => {
+				if (search !== "") {
+					dispatch(
+						searchCategoryThunk({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						})
+					);
+				}
+			}, 500);
+
+			return () => {
+				clearTimeout(debounce);
+			};
 		} else {
-			setCategoriesFilterSearch(categoriesData);
+			const debounce = setTimeout(() => {
+				if (search !== "") {
+					dispatch(
+						searchCategoryEtlobhaThunk({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						})
+					);
+				}
+			}, 500);
+
+			return () => {
+				clearTimeout(debounce);
+			};
 		}
-	}, [categoriesData, search]);
+	}, [search, tabSelected]);
 
 	// Filter by
-	useEffect(() => {
-		if (category_id !== "") {
-			setCategoriesResult(
-				categoriesFilterSearch?.filter((item) => item?.id === category_id)
-			);
-		} else {
-			setCategoriesResult(categoriesFilterSearch);
-		}
-	}, [categoriesFilterSearch, category_id]);
+	// useEffect(() => {
+	// 	if (category_id !== "") {
+	// 		setCategoriesResult(
+	// 			categoriesFilterSearch?.filter((item) => item?.id === category_id)
+	// 		);
+	// 	} else {
+	// 		setCategoriesResult(categoriesFilterSearch);
+	// 	}
+	// }, [categoriesFilterSearch, category_id]);
 
 	// ----------------------------------------------------
-
+	console.log(categoriesData);
 	const handleSubmit = (event) => {
 		event.preventDefault();
 	};
@@ -253,7 +276,7 @@ const Category = () => {
 							setRowsCount={setRowsCount}
 							pageTarget={pageTarget}
 							tabSelectedId={tabSelected}
-							categories={categoriesResult}
+							categories={categoriesData}
 							setPageTarget={setPageTarget}
 							pageCount={tabSelected === 1 ? pageCount : etlobhaPageCount}
 							currentPage={tabSelected === 1 ? currentPage : etlobhaCurrentPage}

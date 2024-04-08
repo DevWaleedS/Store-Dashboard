@@ -18,7 +18,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { CouponTable } from "../components/Tables";
 import { useDispatch, useSelector } from "react-redux";
-import { CouponsThunk } from "../store/Thunk/CouponsThunk";
+import {
+	CouponsThunk,
+	searchCouponNameThunk,
+} from "../store/Thunk/CouponsThunk";
 
 // filter Coupon by
 const filtersTypes = [
@@ -81,8 +84,11 @@ const menuItemStyles = {
 
 const Coupon = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
+	const [search, setSearch] = useState("");
+	const [select, setSelect] = useState("");
 	const { CouponsData, currentPage, pageCount, loading, reload } = useSelector(
 		(state) => state.CouponsSlice
 	);
@@ -94,26 +100,32 @@ const Coupon = () => {
 	useEffect(() => {
 		dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget, dispatch]);
-
 	// -----------------------------------------------------------
-	const navigate = useNavigate();
-	const [search, setSearch] = useState("");
-	const [select, setSelect] = useState("");
 
-	let coupons = CouponsData?.coupons;
-	let filterCoupons = coupons;
+	// search in Orders
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				dispatch(
+					searchCouponNameThunk({
+						query: search,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
 
-	// Search
-	if (search !== "") {
-		coupons = CouponsData?.coupons?.filter((item) =>
-			item?.code?.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		coupons = CouponsData?.coupons;
-	}
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [search, dispatch]);
 	// -------------------------------------------------------------------------------
 
 	// filter by
+	let coupons = CouponsData?.coupons;
+	let filterCoupons = coupons;
+
 	if (select === "fixedPrice") {
 		filterCoupons = coupons?.filter(
 			(coupon) => coupon?.discount_type === "مبلغ ثابت"

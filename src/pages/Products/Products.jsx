@@ -25,15 +25,29 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	ImportedProductsThunk,
 	ProductsThunk,
+	searchImportProductThunk,
+	searchProductThunk,
 } from "../../store/Thunk/ProductsThunk";
 
 const Products = () => {
+	const store_token = document.cookie
+		?.split("; ")
+		?.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 	const navigate = useNavigate();
-
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-
+	const [file, setFile] = useState("");
+	const [search, setSearch] = useState("");
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
+	const [tabSelected, setTabSelected] = useState(1);
+	const [productsData, setProductsData] = useState([]);
+	const [fileError, setFileError] = useState("");
+	const [category_id, setCategory_id] = useState("");
 	const {
 		loading,
 		reload,
@@ -44,6 +58,7 @@ const Products = () => {
 		souqOtlbhaCurrentPage,
 		souqOtlbhaPageCount,
 	} = useSelector((state) => state.ProductsSlice);
+	const { fetchedData: categories } = useFetch("selector/mainCategories");
 	// const { loading, reload, setReload } = useFetch(
 	// 	`product?page=${pageTarget}&number=${rowsCount}`
 	// );
@@ -54,47 +69,22 @@ const Products = () => {
 		dispatch(ImportedProductsThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget, dispatch]);
 
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
+	//---------------------------------------------------------------------------------
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
-
-	const { fetchedData: categories } = useFetch("selector/mainCategories");
-
-	// ------------------------------------------------------------------------------
-
-	const [file, setFile] = useState("");
-	const [search, setSearch] = useState("");
-
-	// Context
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-	const LoadingStore = useContext(LoadingContext);
-	const { setLoadingTitle } = LoadingStore;
-
-	const [tabSelected, setTabSelected] = useState(1);
-	const [productsData, setProductsData] = useState([]);
-	const [fileError, setFileError] = useState("");
-	const [category_id, setCategory_id] = useState("");
-	const [productsFilterSearch, setProductsFilterSearch] = useState([]);
-	const [productsResult, setProductsResult] = useState([]);
-
 	const handleFile = (file) => {
 		setFile(file[0]);
 	};
-
 	const getSearchInput = (value) => {
 		setSearch(value);
 	};
-
 	const getCategorySelected = (value) => {
 		setCategory_id(value);
 	};
+	//-----------------------------------------------------------------------------------------
 
+	// to get Products by
 	useEffect(() => {
 		if (tabSelected === 1) {
 			setProductsData(storeProducts);
@@ -103,36 +93,60 @@ const Products = () => {
 		}
 	}, [tabSelected, storeProducts, souqOtlbhaProducts]);
 
-	// Search
+	// search in products
 	useEffect(() => {
-		if (search !== "") {
-			setProductsFilterSearch(
-				productsData?.filter((item) =>
-					item?.name?.toLowerCase()?.includes(search?.toLowerCase())
-				)
-			);
+		if (tabSelected === 1) {
+			const debounce = setTimeout(() => {
+				if (search !== "") {
+					dispatch(
+						searchProductThunk({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						})
+					);
+				}
+			}, 500);
+
+			return () => {
+				clearTimeout(debounce);
+			};
 		} else {
-			setProductsFilterSearch(productsData);
+			const debounce = setTimeout(() => {
+				if (search !== "") {
+					dispatch(
+						searchImportProductThunk({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						})
+					);
+				}
+			}, 500);
+
+			return () => {
+				clearTimeout(debounce);
+			};
 		}
-	}, [productsData, search]);
+	}, [search, tabSelected]);
 
 	// Filter by
-	useEffect(() => {
-		if (category_id !== "") {
-			setProductsResult(
-				productsFilterSearch?.filter(
-					(item) => item?.category?.id === category_id
-				)
-			);
-		} else {
-			setProductsResult(productsFilterSearch);
-		}
-	}, [productsFilterSearch, category_id]);
+	// useEffect(() => {
+	// 	if (category_id !== "") {
+	// 		setProductsResult(
+	// 			productsFilterSearch?.filter(
+	// 				(item) => item?.category?.id === category_id
+	// 			)
+	// 		);
+	// 	} else {
+	// 		setProductsResult(productsFilterSearch);
+	// 	}
+	// }, [productsFilterSearch, category_id]);
 
 	// Export the product file
 	const exportToCSV = () => {
 		const ws = XLSX.utils.json_to_sheet(
-			productsResult?.map((item) => ({
+			productsData?.map((item) => ({
 				id: item?.id,
 				name: item?.name,
 				description: item?.description,
@@ -153,6 +167,7 @@ const Products = () => {
 		FileSaver.saveAs(data, "StoreProducts" + fileExtension);
 	};
 
+	// Import the product file
 	const uploadFile = () => {
 		setLoadingTitle("جاري رفع الملف");
 		setFileError("");
@@ -247,7 +262,7 @@ const Products = () => {
 				</div>
 				<div className='category-table'>
 					<BigProductsTable
-						products={productsResult}
+						products={productsData}
 						reload={reload}
 						loading={loading}
 						rowsCount={rowsCount}

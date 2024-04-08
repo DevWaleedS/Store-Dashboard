@@ -5,17 +5,21 @@ import { BiSearch } from "react-icons/bi";
 import { ArrowBack } from "../data/Icons";
 import SupportTable from "../components/Tables/SupportTable";
 import { useDispatch, useSelector } from "react-redux";
-import { TechnicalSupportThunk } from "../store/Thunk/TechnicalSupportThunk";
+import {
+	TechnicalSupportThunk,
+	searchTechnicalSupportThunk,
+} from "../store/Thunk/TechnicalSupportThunk";
 
 const Support = () => {
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(9);
 	const [search, setSearch] = useState("");
-
 	const { TechnicalSupportData, currentPage, pageCount, loading, reload } =
 		useSelector((state) => state.TechnicalSupportSlice);
 	// -----------------------------------------------------------
+
+	console.log(TechnicalSupportData);
 
 	/** get contact data */
 	useEffect(() => {
@@ -26,16 +30,24 @@ const Support = () => {
 	// 	`technicalSupport?page=${pageTarget}&number=${rowsCount}`
 	// );
 
-	let Technicalsupports = TechnicalSupportData?.Technicalsupports;
+	// search
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				dispatch(
+					searchTechnicalSupportThunk({
+						query: search,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
 
-	if (search !== "") {
-		Technicalsupports = TechnicalSupportData?.Technicalsupports?.filter(
-			(item) => item?.title?.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		Technicalsupports = TechnicalSupportData?.Technicalsupports;
-	}
-
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [search, dispatch]);
 	return (
 		<>
 			<Helmet>
@@ -80,11 +92,9 @@ const Support = () => {
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable
-							data={Technicalsupports}
+							data={TechnicalSupportData}
 							loading={loading}
 							reload={reload}
-							search={search}
-							setSearch={setSearch}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}

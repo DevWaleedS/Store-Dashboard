@@ -34,3 +34,37 @@ export const ExplainVideosThunk = createAsyncThunk(
 		}
 	}
 );
+
+//searchCourseName
+
+// searchCartNameThunk
+export const searchCourseNameThunk = createAsyncThunk(
+	"Academy/searchCourseNameThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchCourseName?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);
+export const explainVideoNameThunk = createAsyncThunk(
+	"Academy/explainVideoNameThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `explainVideoName?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

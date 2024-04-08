@@ -11,7 +11,10 @@ import { HomeIcon } from "../data/Icons";
 import useFetch from "../Hooks/UseFetch";
 import { CartsTables } from "../components/Tables";
 import { useDispatch, useSelector } from "react-redux";
-import { EmptyCartsThunk } from "../store/Thunk/EmptyCartsThunk";
+import {
+	EmptyCartsThunk,
+	searchCartNameThunk,
+} from "../store/Thunk/EmptyCartsThunk";
 
 const Carts = () => {
 	const dispatch = useDispatch();
@@ -33,15 +36,24 @@ const Carts = () => {
 
 	// -----------------------------------------------------------
 
-	let carts = EmptyCartsData?.carts;
+	// search
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				dispatch(
+					searchCartNameThunk({
+						query: search,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
 
-	if (search !== "") {
-		carts = EmptyCartsData?.carts?.filter((item) =>
-			item?.user?.name?.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		carts = EmptyCartsData?.carts;
-	}
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [search, dispatch]);
 
 	return (
 		<>
@@ -73,7 +85,7 @@ const Carts = () => {
 				<div className='row'>
 					<div className='carts-table'>
 						<CartsTables
-							cartsData={carts}
+							cartsData={EmptyCartsData}
 							loading={loading}
 							reload={reload}
 							search={search}

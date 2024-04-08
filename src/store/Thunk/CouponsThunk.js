@@ -82,3 +82,20 @@ export const ChangeAllCouponsStatusThunk = createAsyncThunk(
 		}
 	}
 );
+
+//searchCouponNameThunk
+export const searchCouponNameThunk = createAsyncThunk(
+	"Coupons/searchCouponNameThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchCouponName?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

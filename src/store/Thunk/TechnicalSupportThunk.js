@@ -69,6 +69,25 @@ export const ChangeTechnicalSupportThunk = createAsyncThunk(
 	}
 );
 
+//searchTechnicalSupport
+export const searchTechnicalSupportThunk = createAsyncThunk(
+	"TechnicalSupport/searchTechnicalSupportThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchTechnicalSupport?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);
+
+//searchTechnicalSupport
+
 // New thunk for adding a new category
 // export const addNewProductThunk = createAsyncThunk(
 // 	"Categories/addNewProductThunk",

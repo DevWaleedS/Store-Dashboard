@@ -280,21 +280,25 @@ const ShowImportEtlobhaProduct = () => {
 	 * Update Import Product Function
 	 * --------------------------------------------------------------------
 	 */
+
 	const updateImportProduct = (data) => {
 		resetCouponError();
 		setEditorValue("");
 		let formData = new FormData();
 		formData.append("price", data?.price);
-		formData.append("discount_price_import", data?.discount_price_import);
-		formData.append("qty", data?.qty);
-		for (let i = 0; i < productOptions?.length; i++) {
-			formData.append([`data[${i}][option_id]`], productOptions[i]?.id);
-			formData.append([`data[${i}][price]`], productOptions[i]?.price || 0);
-			formData.append(
-				[`data[${i}][discount_price]`],
-				productOptions[i]?.discount_price || 0
-			);
+		if (productOptions?.length !== 0) {
+			for (let i = 0; i < productOptions?.length; i++) {
+				formData.append([`data[${i}][option_id]`], productOptions[i]?.id);
+				formData.append([`data[${i}][price]`], productOptions[i]?.price || 0);
+				formData.append(
+					[`data[${i}][discount_price]`],
+					productOptions[i]?.discount_price || 0
+				);
+			}
+		} else {
+			formData.append(`discount_price`, data?.discount_price_import);
 		}
+		formData.append("qty", data?.qty);
 
 		axios
 			.post(`updateimportproduct/${fetchedData?.data?.product?.id}`, formData, {

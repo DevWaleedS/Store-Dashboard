@@ -100,3 +100,35 @@ export const ChangeAllCategoriesStatusThunk = createAsyncThunk(
 		}
 	}
 );
+
+//handle search in items
+export const searchCategoryThunk = createAsyncThunk(
+	"Categories/searchCategoryThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchCategory?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);
+export const searchCategoryEtlobhaThunk = createAsyncThunk(
+	"Categories/searchCategoryEtlobhaThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchCategoryEtlobha?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

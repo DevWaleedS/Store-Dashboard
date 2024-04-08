@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TechnicalSupportThunk } from "../Thunk/TechnicalSupportThunk";
+import {
+	TechnicalSupportThunk,
+	searchTechnicalSupportThunk,
+} from "../Thunk/TechnicalSupportThunk";
 
 const initialState = {
 	loading: false,
@@ -16,7 +19,7 @@ const TechnicalSupportSlice = createSlice({
 	reducers: {},
 	extraReducers: (builder) => {
 		builder
-			// to get all Empty Carts
+
 			.addCase(TechnicalSupportThunk.pending, (state) => {
 				state.reload = true;
 				state.loading = true;
@@ -27,9 +30,28 @@ const TechnicalSupportSlice = createSlice({
 
 				state.currentPage = action.payload.data.current_page;
 				state.pageCount = action.payload.data.page_count;
-				state.TechnicalSupportData = action.payload.data;
+				state.TechnicalSupportData = action.payload.data?.Technicalsupports;
 			})
 			.addCase(TechnicalSupportThunk.rejected, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+				state.error = action.error.message;
+			})
+
+			//searchTechnicalSupportThunk
+			.addCase(searchTechnicalSupportThunk.pending, (state) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(searchTechnicalSupportThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.currentPage = action.payload.data.current_page;
+				state.pageCount = action.payload.data.page_count;
+				state.TechnicalSupportData = action.payload.data.Technicalsupports;
+			})
+			.addCase(searchTechnicalSupportThunk.rejected, (state, action) => {
 				state.reload = false;
 				state.loading = false;
 				state.error = action.error.message;

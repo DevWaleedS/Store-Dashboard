@@ -115,3 +115,35 @@ export const ChangeSpecialStatusThunk = createAsyncThunk(
 		}
 	}
 );
+
+//handle search in items
+export const searchProductThunk = createAsyncThunk(
+	"Products/searchProductThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchProduct?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);
+export const searchImportProductThunk = createAsyncThunk(
+	"Products/searchImportProductThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchImportProduct?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

@@ -9,7 +9,10 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 //Icons
 import { BsPlayCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { ExplainVideosThunk } from "../../../store/Thunk/AcademyThunk";
+import {
+	ExplainVideosThunk,
+	explainVideoNameThunk,
+} from "../../../store/Thunk/AcademyThunk";
 import { TablePagination } from "../../../components/Tables/TablePagination";
 
 const Explain = ({ searchExplain }) => {
@@ -29,15 +32,25 @@ const Explain = ({ searchExplain }) => {
 	}, [rowsCount, pageTarget]);
 
 	// -----------------------------------------------------------
-	let explainvideos = ExplainVideosData?.explainvideos;
 
-	if (searchExplain !== "") {
-		explainvideos = ExplainVideosData?.explainvideos?.filter((item) =>
-			item?.title?.includes(searchExplain)
-		);
-	} else {
-		explainvideos = ExplainVideosData?.explainvideos;
-	}
+	// search in Orders
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (searchExplain !== "") {
+				dispatch(
+					explainVideoNameThunk({
+						query: searchExplain,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [searchExplain, dispatch]);
 
 	// ---------------------------------------------------------------------------------------------
 
@@ -49,13 +62,13 @@ const Explain = ({ searchExplain }) => {
 					style={{ height: "200px" }}>
 					<CircularLoading />
 				</div>
-			) : explainvideos?.length === 0 ? (
+			) : ExplainVideosData?.length === 0 ? (
 				<div className='d-flex justify-content-center align-items-center'>
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
 				<div className='explain-boxes'>
-					{explainvideos?.map((lesson) => (
+					{ExplainVideosData?.map((lesson) => (
 						<div className='box' key={lesson?.id}>
 							<figure className='course-figure'>
 								<div className='course-prev-image'>
@@ -83,9 +96,9 @@ const Explain = ({ searchExplain }) => {
 			)}
 
 			{/** Pagination */}
-			{explainvideos?.length !== 0 && !loading && (
+			{ExplainVideosData?.length !== 0 && !loading && (
 				<TablePagination
-					page={explainvideos}
+					page={ExplainVideosData}
 					pageCount={pageCount}
 					currentPage={currentPage}
 					pageTarget={pageTarget}

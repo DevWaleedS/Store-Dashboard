@@ -1,10 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CategoriesThunk, addCategoryThunk } from "../Thunk/CategoriesThunk";
+import {
+	CategoriesThunk,
+	addCategoryThunk,
+	searchCategoryEtlobhaThunk,
+	searchCategoryThunk,
+} from "../Thunk/CategoriesThunk";
 
 const initialState = {
 	loading: false,
 	reload: false,
-	Categories: [],
 	currentPage: 1,
 	etlobhaCurrentPage: 1,
 	etlobhaPageCount: 2,
@@ -44,8 +48,7 @@ const CategoriesSlice = createSlice({
 				state.etlobhaCurrentPage = action.payload.data.etlobha_current_page;
 				state.etlobhaPageCount = action.payload.data.etlobha_page_count;
 				state.pageCount = action.payload.data.page_count;
-				state.Categories = action.payload.data;
-				state.storeCategory = action?.payload?.data.categories;
+				state.storeCategory = action?.payload?.data.store_categories;
 				state.SouqOtlbhaCategory = action?.payload?.data?.etlobha_categories;
 			})
 			.addCase(CategoriesThunk.rejected, (state, action) => {
@@ -64,6 +67,40 @@ const CategoriesSlice = createSlice({
 				state.loading = false;
 			})
 			.addCase(addCategoryThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			})
+
+			//searchCategoryThunk
+			.addCase(searchCategoryThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(searchCategoryThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.currentPage = action.payload.data.current_page;
+				state.pageCount = action.payload.data.page_count;
+				state.storeCategory = action?.payload?.data.store_categories;
+			})
+			.addCase(searchCategoryThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			})
+
+			//searchCategoryEtlobhaThunk
+			.addCase(searchCategoryEtlobhaThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(searchCategoryEtlobhaThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.etlobhaCurrentPage = action.payload.data.etlobha_current_page;
+				state.etlobhaPageCount = action.payload.data.etlobha_page_count;
+				state.SouqOtlbhaCategory = action?.payload?.data?.etlobha_categories;
+			})
+			.addCase(searchCategoryEtlobhaThunk.rejected, (state, action) => {
 				state.error = action.payload.message;
 			});
 	},

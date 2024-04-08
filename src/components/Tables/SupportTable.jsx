@@ -165,9 +165,6 @@ const SupportTable = ({
 	data,
 	loading,
 	reload,
-
-	search,
-	setSearch,
 	rowsCount,
 	pageTarget,
 	setRowsCount,
@@ -195,7 +192,6 @@ const SupportTable = ({
 		}
 		setSelected([]);
 	};
-
 	const isSelected = (name) => selected.indexOf(name) !== -1;
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
@@ -216,6 +212,7 @@ const SupportTable = ({
 
 		setSelected(newSelected);
 	};
+
 	// ---------------------------------------------------------------
 	// Delete items
 	const handleDeleteSingleItem = (id) => {
@@ -244,7 +241,6 @@ const SupportTable = ({
 				// });
 			});
 	};
-
 	const handleDeleteAllItems = (selected) => {
 		dispatch(
 			DeleteAllDeleteTechnicalSupportThunk({
@@ -271,6 +267,7 @@ const SupportTable = ({
 				// });
 			});
 	};
+	// ---------------------------------------------------------------
 
 	// change  status
 	const changeItemStatus = (id) => {

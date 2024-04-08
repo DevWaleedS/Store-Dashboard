@@ -20,7 +20,7 @@ import { Button } from "@mui/material";
 import { PagesTable } from "../components/Tables";
 import { ArrowBack } from "../data/Icons";
 import { useDispatch, useSelector } from "react-redux";
-import { PagesThunk } from "../store/Thunk/PagesThunk";
+import { PagesThunk, searchPageNameThunk } from "../store/Thunk/PagesThunk";
 
 // filter Pages by
 const filtersTypes = [
@@ -81,9 +81,11 @@ const menuItemStyles = {
 
 const Pages = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [search, setSearch] = useState("");
+	const [select, setSelect] = useState("");
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-
 	const { PagesData, currentPage, pageCount, loading, reload } = useSelector(
 		(state) => state.PagesSlice
 	);
@@ -97,23 +99,29 @@ const Pages = () => {
 		dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget, dispatch]);
 
-	const navigate = useNavigate();
-	const [search, setSearch] = useState("");
-	const [select, setSelect] = useState("");
+	// search
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				dispatch(
+					searchPageNameThunk({
+						query: search,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
 
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [search, dispatch]);
+
+	// --------------------------------------------------------------------
+	// Filter By
 	let pages = PagesData?.pages;
 	let filterPages = pages;
-
-	// Search
-	if (search !== "") {
-		pages = PagesData?.pages?.filter((item) =>
-			item?.title?.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		pages = PagesData?.pages;
-	}
-
-	// Filter By
 	if (select === "date") {
 		filterPages = pages?.sort((a, b) =>
 			a?.created_at.localeCompare(b?.created_at)

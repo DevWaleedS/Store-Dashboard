@@ -83,6 +83,23 @@ export const ChangeAllPagesStatusThunk = createAsyncThunk(
 	}
 );
 
+//searchPageName
+export const searchPageNameThunk = createAsyncThunk(
+	"Pages/searchPageNameThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `searchPageName?query=${arg.query}&page=${arg.page}&number=${arg.number}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);
+
 // New thunk for adding a new category
 // export const addNewProductThunk = createAsyncThunk(
 // 	"Categories/addNewProductThunk",

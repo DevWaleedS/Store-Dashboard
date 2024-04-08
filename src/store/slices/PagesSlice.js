@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PagesThunk } from "../Thunk/PagesThunk";
+import { PagesThunk, searchPageNameThunk } from "../Thunk/PagesThunk";
 
 const initialState = {
 	loading: false,
@@ -33,8 +33,26 @@ const PagesSlice = createSlice({
 				state.reload = false;
 				state.loading = false;
 				state.error = action.error.message;
-			});
+			})
 
+			// searchPageNameThunk
+			.addCase(searchPageNameThunk.pending, (state) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(searchPageNameThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.currentPage = action.payload.data.current_page;
+				state.pageCount = action.payload.data.page_count;
+				state.PagesData = action.payload.data;
+			})
+			.addCase(searchPageNameThunk.rejected, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+				state.error = action.error.message;
+			});
 		//add new Product
 		// .addCase(addCategoryThunk.pending, (state, action) => {
 		// 	state.reload = true;

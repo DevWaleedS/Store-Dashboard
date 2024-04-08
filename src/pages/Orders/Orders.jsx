@@ -12,13 +12,15 @@ import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
 import { ArrowBack } from "../../data/Icons";
-import { OrdersThunk } from "../../store/Thunk/OrdersThunk";
+import { OrdersThunk, searchOrderThunk } from "../../store/Thunk/OrdersThunk";
 import { useDispatch, useSelector } from "react-redux";
 
 const Orders = () => {
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
+	const [search, setSearch] = useState("");
+	const [select, setSelect] = useState("");
 	const { ordersData, currentPage, pageCount } = useSelector(
 		(state) => state.OrdersSlice
 	);
@@ -33,31 +35,29 @@ const Orders = () => {
 
 	// -----------------------------------------------------------
 
-	// To create search
-	const [search, setSearch] = useState("");
-	const [select, setSelect] = useState("");
+	// search in Orders
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				dispatch(
+					searchOrderThunk({
+						query: search,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [search, dispatch]);
+	// -------------------------------------------------------------
+
+	// Filter
 	let orders = ordersData?.orders;
 	let filterOrders = orders;
-	// ------------------------------------------------------------
-
-	// Search
-	if (search !== "") {
-		orders = ordersData?.orders?.filter(
-			(order) =>
-				order?.shipping?.track_id
-					?.toLowerCase()
-					?.includes(search?.toLowerCase()) ||
-				order?.shippingtypes?.name
-					?.toLowerCase()
-					?.includes(search?.toLowerCase()) ||
-				order?.user?.name?.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		orders = ordersData?.orders;
-	}
-	// -------------------------------------------------------------
-	console.log(ordersData);
-	// Filter
 	if (select === "new") {
 		filterOrders = orders?.filter((order) => order?.status === "جديد");
 	} else if (select === "canceled") {

@@ -5,7 +5,10 @@ import AcademyWidget from "../AcademyWidget";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Icons
-import { CoursesThunk } from "../../../store/Thunk/AcademyThunk";
+import {
+	CoursesThunk,
+	searchCourseNameThunk,
+} from "../../../store/Thunk/AcademyThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { TablePagination } from "../../../components/Tables/TablePagination";
 
@@ -26,16 +29,24 @@ const CoursesTraining = ({ searchCourses }) => {
 
 	// -----------------------------------------------------------
 
-	let courses = CoursesData?.courses;
+	// search
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (searchCourses !== "") {
+				dispatch(
+					searchCourseNameThunk({
+						query: searchCourses,
+						page: pageTarget,
+						number: rowsCount,
+					})
+				);
+			}
+		}, 500);
 
-	if (searchCourses !== "") {
-		courses = CoursesData?.courses?.filter((item) =>
-			item?.name?.toLowerCase()?.includes(searchCourses?.toLowerCase())
-		);
-	} else {
-		courses = CoursesData?.courses;
-	}
-	console.log(CoursesData);
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [searchCourses, dispatch]);
 	// ---------------------------------------------------------------------------------------------
 
 	return (
@@ -46,12 +57,12 @@ const CoursesTraining = ({ searchCourses }) => {
 					style={{ height: "200px" }}>
 					<CircularLoading />
 				</div>
-			) : courses?.length === 0 ? (
+			) : CoursesData?.length === 0 ? (
 				<div className='d-flex justify-content-center align-items-center'>
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
-				courses?.map((course) => (
+				CoursesData?.map((course) => (
 					<div className='widget-bx mb-md-4 mb-3' key={course?.id}>
 						<AcademyWidget
 							id={course?.id}
@@ -66,9 +77,9 @@ const CoursesTraining = ({ searchCourses }) => {
 			)}
 
 			{/** Pagination */}
-			{courses?.length !== 0 && !loading && (
+			{CoursesData?.length !== 0 && !loading && (
 				<TablePagination
-					page={courses}
+					page={CoursesData}
 					pageCount={pageCount}
 					currentPage={currentPage}
 					pageTarget={pageTarget}

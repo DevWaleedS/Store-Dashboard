@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { OrdersThunk } from "../Thunk/OrdersThunk";
+import { OrdersThunk, searchOrderThunk } from "../Thunk/OrdersThunk";
 
 const initialState = {
 	loading: false,
@@ -30,6 +30,25 @@ const OrdersSlice = createSlice({
 				state.ordersData = action.payload.data;
 			})
 			.addCase(OrdersThunk.rejected, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+				state.error = action.error.message;
+			})
+
+			// searchOrderThunk
+			.addCase(searchOrderThunk.pending, (state) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(searchOrderThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.currentPage = action.payload.data.current_page;
+				state.pageCount = action.payload.data.page_count;
+				state.ordersData = action.payload.data;
+			})
+			.addCase(searchOrderThunk.rejected, (state, action) => {
 				state.reload = false;
 				state.loading = false;
 				state.error = action.error.message;
