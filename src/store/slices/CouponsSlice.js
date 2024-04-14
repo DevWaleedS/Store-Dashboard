@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CouponsThunk, searchCouponNameThunk } from "../Thunk/CouponsThunk";
+import {
+	CouponsThunk,
+	filterCouponsByStatusThunk,
+	searchCouponNameThunk,
+} from "../Thunk/CouponsThunk";
 
 const initialState = {
 	loading: false,
@@ -27,7 +31,7 @@ const CouponsSlice = createSlice({
 
 				state.currentPage = action.payload.data.current_page;
 				state.pageCount = action.payload.data.page_count;
-				state.CouponsData = action.payload.data;
+				state.CouponsData = action.payload.data.coupons;
 			})
 			.addCase(CouponsThunk.rejected, (state, action) => {
 				state.reload = false;
@@ -46,9 +50,29 @@ const CouponsSlice = createSlice({
 
 				state.currentPage = action.payload.data.current_page;
 				state.pageCount = action.payload.data.page_count;
-				state.CouponsData = action.payload.data;
+				state.CouponsData = action.payload.data.coupons;
 			})
 			.addCase(searchCouponNameThunk.rejected, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+				state.error = action.error.message;
+			})
+
+			//filterCouponsByStatusThunk
+
+			.addCase(filterCouponsByStatusThunk.pending, (state) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(filterCouponsByStatusThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.currentPage = action.payload.data.current_page;
+				state.pageCount = action.payload.data.page_count;
+				state.CouponsData = action.payload.data.coupons;
+			})
+			.addCase(filterCouponsByStatusThunk.rejected, (state, action) => {
 				state.reload = false;
 				state.loading = false;
 				state.error = action.error.message;

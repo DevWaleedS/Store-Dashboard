@@ -99,3 +99,25 @@ export const searchCouponNameThunk = createAsyncThunk(
 		}
 	}
 );
+
+// filterCouponsByStatusThunk
+export const filterCouponsByStatusThunk = createAsyncThunk(
+	"Coupons/filterCouponsByStatusThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url =
+				arg.select === "all"
+					? `coupons?page=${arg.page}&number=${arg.number}`
+					: arg.select === "fixed" || arg.select === "percent"
+					? `coupons?page=${arg.page}&number=${arg.number}&discount_type=${arg.select}`
+					: `coupons?page=${arg.page}&number=${arg.number}&status=${arg.select}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

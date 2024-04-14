@@ -20,14 +20,17 @@ import { Button } from "@mui/material";
 import { PagesTable } from "../components/Tables";
 import { ArrowBack } from "../data/Icons";
 import { useDispatch, useSelector } from "react-redux";
-import { PagesThunk, searchPageNameThunk } from "../store/Thunk/PagesThunk";
+import {
+	PagesThunk,
+	filterPagesByStatusThunk,
+	searchPageNameThunk,
+} from "../store/Thunk/PagesThunk";
 
 // filter Pages by
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
 	{ id: 2, ar_name: "تم النشر", en_name: "active" },
 	{ id: 3, ar_name: "محظور", en_name: "notActive" },
-	{ id: 4, ar_name: "تاريخ النشر", en_name: "date" },
 ];
 
 const selectFilterStyles = {
@@ -119,20 +122,17 @@ const Pages = () => {
 	}, [search, dispatch]);
 
 	// --------------------------------------------------------------------
-	// Filter By
-	let pages = PagesData?.pages;
-	let filterPages = pages;
-	if (select === "date") {
-		filterPages = pages?.sort((a, b) =>
-			a?.created_at.localeCompare(b?.created_at)
-		);
-	} else if (select === "active") {
-		filterPages = pages?.filter((page) => page?.status === "تم النشر");
-	} else if (select === "notActive") {
-		filterPages = pages?.filter((page) => page?.status === "محظور");
-	} else {
-		filterPages = pages;
-	}
+	useEffect(() => {
+		if (select !== "") {
+			dispatch(
+				filterPagesByStatusThunk({
+					select: select,
+					page: pageTarget,
+					number: rowsCount,
+				})
+			);
+		}
+	}, [select, dispatch]);
 
 	return (
 		<>
@@ -229,7 +229,7 @@ const Pages = () => {
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable
-							data={filterPages}
+							data={PagesData}
 							loading={loading}
 							reload={reload}
 							search={search}

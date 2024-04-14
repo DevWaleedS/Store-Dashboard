@@ -20,17 +20,18 @@ import { CouponTable } from "../components/Tables";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	CouponsThunk,
+	filterCouponsByStatusThunk,
 	searchCouponNameThunk,
 } from "../store/Thunk/CouponsThunk";
 
 // filter Coupon by
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
-	{ id: 2, ar_name: "مبلغ ثابت", en_name: "fixedPrice" },
-	{ id: 3, ar_name: "نسبة مئوية", en_name: "percentPrice" },
-	{ id: 4, ar_name: "منتهي", en_name: "expireCoupon" },
-	{ id: 4, ar_name: "نشط", en_name: "activeCoupon" },
-	{ id: 4, ar_name: "غير نشط", en_name: "notActiveCoupon" },
+	{ id: 2, ar_name: "مبلغ ثابت", en_name: "fixed" },
+	{ id: 3, ar_name: "نسبة مئوية", en_name: "percent" },
+	{ id: 4, ar_name: "منتهي", en_name: "expired" },
+	{ id: 4, ar_name: "نشط", en_name: "active" },
+	{ id: 4, ar_name: "غير نشط", en_name: "not_active" },
 ];
 
 const selectFilterStyles = {
@@ -122,27 +123,18 @@ const Coupon = () => {
 	}, [search, dispatch]);
 	// -------------------------------------------------------------------------------
 
-	// filter by
-	let coupons = CouponsData?.coupons;
-	let filterCoupons = coupons;
-
-	if (select === "fixedPrice") {
-		filterCoupons = coupons?.filter(
-			(coupon) => coupon?.discount_type === "مبلغ ثابت"
-		);
-	} else if (select === "percentPrice") {
-		filterCoupons = coupons?.filter(
-			(coupon) => coupon?.discount_type === "نسبة مئوية"
-		);
-	} else if (select === "expireCoupon") {
-		filterCoupons = coupons?.filter((coupon) => coupon?.status === "منتهي");
-	} else if (select === "activeCoupon") {
-		filterCoupons = coupons?.filter((coupon) => coupon?.status === "نشط");
-	} else if (select === "notActiveCoupon") {
-		filterCoupons = coupons?.filter((coupon) => coupon?.status === "غير نشط");
-	} else {
-		filterCoupons = coupons;
-	}
+	// filter by status or discount type
+	useEffect(() => {
+		if (select !== "") {
+			dispatch(
+				filterCouponsByStatusThunk({
+					select: select,
+					page: pageTarget,
+					number: rowsCount,
+				})
+			);
+		}
+	}, [select, dispatch]);
 	// -------------------------------------------------------------------------------
 
 	return (
@@ -238,7 +230,7 @@ const Coupon = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<CouponTable
-							coupons={filterCoupons}
+							coupons={CouponsData}
 							search={search}
 							select={select}
 							reload={reload}

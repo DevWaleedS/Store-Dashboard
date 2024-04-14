@@ -12,7 +12,11 @@ import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
 import { ArrowBack } from "../../data/Icons";
-import { OrdersThunk, searchOrderThunk } from "../../store/Thunk/OrdersThunk";
+import {
+	OrdersThunk,
+	filterOrdersByStatusThunk,
+	searchOrderThunk,
+} from "../../store/Thunk/OrdersThunk";
 import { useDispatch, useSelector } from "react-redux";
 
 const Orders = () => {
@@ -21,12 +25,12 @@ const Orders = () => {
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
-	const { ordersData, currentPage, pageCount } = useSelector(
+	const { ordersData, currentPage, pageCount, loading, reload } = useSelector(
 		(state) => state.OrdersSlice
 	);
-	const { loading, reload, setReload } = useFetch(
-		`orders?page=${pageTarget}&number=${rowsCount}`
-	);
+	// const { loading, reload, setReload } = useFetch(
+	// 	`orders?page=${pageTarget}&number=${rowsCount}`
+	// );
 
 	/** get contact data */
 	useEffect(() => {
@@ -55,24 +59,19 @@ const Orders = () => {
 	}, [search, dispatch]);
 	// -------------------------------------------------------------
 
-	// Filter
-	let orders = ordersData?.orders;
-	let filterOrders = orders;
-	if (select === "new") {
-		filterOrders = orders?.filter((order) => order?.status === "جديد");
-	} else if (select === "canceled") {
-		filterOrders = orders?.filter((order) => order?.status === "الغاء الشحنة");
-	} else if (select === "completed") {
-		filterOrders = orders?.filter((order) => order?.status === "مكتمل");
-	} else if (select === "ready") {
-		filterOrders = orders?.filter((order) => order?.status === "قيد التجهيز");
-	} else if (select === "Imile") {
-		filterOrders = orders?.filter(
-			(order) => order?.shippingtypes?.name === "ارامكس"
-		);
-	} else {
-		filterOrders = orders;
-	}
+	// Filter Orders by Order Status
+	useEffect(() => {
+		if (select !== "") {
+			dispatch(
+				filterOrdersByStatusThunk({
+					status: select,
+					page: pageTarget,
+					number: rowsCount,
+				})
+			);
+		}
+	}, [select, dispatch]);
+
 	// ---------------------------------------------------------------
 
 	return (
@@ -121,14 +120,13 @@ const Orders = () => {
 				{/** Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
-						orders={filterOrders}
+						orders={ordersData}
 						search={search}
 						select={select}
 						reload={reload}
 						loading={loading}
 						rowsCount={rowsCount}
 						setSelect={setSelect}
-						setReload={setReload}
 						setSearch={setSearch}
 						pageTarget={pageTarget}
 						setRowsCount={setRowsCount}

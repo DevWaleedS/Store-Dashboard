@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// this thunk for fetching categories
+// this thunk for fetching Orders
 export const OrdersThunk = createAsyncThunk(
 	"Orders/OrdersThunk",
 	async (arg, thunkAPI) => {
@@ -35,21 +35,19 @@ export const searchOrderThunk = createAsyncThunk(
 	}
 );
 
-// New thunk for adding a new category
-// export const addNewProductThunk = createAsyncThunk(
-// 	"Categories/addNewProductThunk",
-// 	async (categoryData, thunkAPI) => {
-// 		const { rejectWithValue } = thunkAPI;
+// filterOrdersByStatusThunk
+export const filterOrdersByStatusThunk = createAsyncThunk(
+	"Orders/filterOrdersByStatusThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
 
-// 		try {
-// 			// Adjust this URL according to your API endpoint for adding categories
-// 			const url = `category`;
-// 			const response = await axios.post(url, categoryData);
+		try {
+			const url = `orders?page=${arg.page}&number=${arg.number}&order_status=${arg.status}`;
+			const response = await axios.get(url);
 
-// 			return response.data;
-// 		} catch (error) {
-// 			console.log(error.message);
-// 			return rejectWithValue(error.message);
-// 		}
-// 	}
-// );
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

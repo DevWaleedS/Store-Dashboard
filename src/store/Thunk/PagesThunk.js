@@ -100,6 +100,26 @@ export const searchPageNameThunk = createAsyncThunk(
 	}
 );
 
+// filter Pages By Status Thunk
+export const filterPagesByStatusThunk = createAsyncThunk(
+	"Pages/filterPagesByStatusThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url =
+				arg.select === "all"
+					? `page?page=${arg.page}&number=${arg.number}`
+					: `page?page=${arg.page}&number=${arg.number}&status=${arg.select}`;
+
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);
 // New thunk for adding a new category
 // export const addNewProductThunk = createAsyncThunk(
 // 	"Categories/addNewProductThunk",
