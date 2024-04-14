@@ -23,6 +23,8 @@ const Academy = () => {
 	// Set function to change between pages
 	const togglePagesHandle = (index) => {
 		setTogglePag(index);
+		setSearchCourses("");
+		setSearchExplain("");
 	};
 	const [searchCourses, setSearchCourses] = useState("");
 	const [searchExplain, setSearchExplain] = useState("");

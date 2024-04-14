@@ -132,3 +132,20 @@ export const searchCategoryEtlobhaThunk = createAsyncThunk(
 		}
 	}
 );
+
+//filterCategoriesThunk
+export const filterCategoriesThunk = createAsyncThunk(
+	"Categories/filterCategoriesThunk",
+	async (arg, thunkAPI) => {
+		const { rejectWithValue } = thunkAPI;
+
+		try {
+			const url = `category?category_id=${arg.id}`;
+			const response = await axios.get(url);
+
+			return response.data;
+		} catch (error) {
+			return rejectWithValue(error.message);
+		}
+	}
+);

@@ -5,8 +5,7 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
 import * as FileSaver from "file-saver";
-import useFetch from "../../Hooks/UseFetch";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Components
 import { DropCSVFiles, FormSearchWeight } from "./index";
@@ -23,17 +22,20 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 import { useDispatch, useSelector } from "react-redux";
 import {
+	filterProductsThunk,
 	ImportedProductsThunk,
 	ProductsThunk,
 	searchImportProductThunk,
 	searchProductThunk,
 } from "../../store/Thunk/ProductsThunk";
+import { CategoriesSelectThunk } from "../../store/Thunk/CategoriesSelectThunk";
 
 const Products = () => {
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
@@ -58,10 +60,12 @@ const Products = () => {
 		souqOtlbhaCurrentPage,
 		souqOtlbhaPageCount,
 	} = useSelector((state) => state.ProductsSlice);
-	const { fetchedData: categories } = useFetch("selector/mainCategories");
-	// const { loading, reload, setReload } = useFetch(
-	// 	`product?page=${pageTarget}&number=${rowsCount}`
-	// );
+
+	// to fetch all categories select
+	const { Categories } = useSelector((state) => state.CategoriesSelect);
+	useEffect(() => {
+		dispatch(CategoriesSelectThunk());
+	}, [dispatch]);
 
 	/** get contact data */
 	useEffect(() => {
@@ -69,7 +73,16 @@ const Products = () => {
 		dispatch(ImportedProductsThunk({ page: pageTarget, number: rowsCount }));
 	}, [rowsCount, pageTarget, dispatch]);
 
-	//---------------------------------------------------------------------------------
+	// to get Products by
+	useEffect(() => {
+		if (tabSelected === 1) {
+			setProductsData(storeProducts);
+		} else {
+			setProductsData(souqOtlbhaProducts);
+		}
+	}, [tabSelected, storeProducts, souqOtlbhaProducts]);
+
+	//---------------------------------------------------------------------------------------------------------
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
@@ -82,16 +95,7 @@ const Products = () => {
 	const getCategorySelected = (value) => {
 		setCategory_id(value);
 	};
-	//-----------------------------------------------------------------------------------------
-
-	// to get Products by
-	useEffect(() => {
-		if (tabSelected === 1) {
-			setProductsData(storeProducts);
-		} else {
-			setProductsData(souqOtlbhaProducts);
-		}
-	}, [tabSelected, storeProducts, souqOtlbhaProducts]);
+	//--------------------------------------------------------------------------------------------------------
 
 	// search in products
 	useEffect(() => {
@@ -130,18 +134,16 @@ const Products = () => {
 		}
 	}, [search, tabSelected]);
 
-	// Filter by
-	// useEffect(() => {
-	// 	if (category_id !== "") {
-	// 		setProductsResult(
-	// 			productsFilterSearch?.filter(
-	// 				(item) => item?.category?.id === category_id
-	// 			)
-	// 		);
-	// 	} else {
-	// 		setProductsResult(productsFilterSearch);
-	// 	}
-	// }, [productsFilterSearch, category_id]);
+	// Filter categories
+	useEffect(() => {
+		if (category_id !== "") {
+			dispatch(
+				filterProductsThunk({
+					id: category_id,
+				})
+			);
+		}
+	}, [category_id, dispatch]);
 
 	// Export the product file
 	const exportToCSV = () => {
@@ -202,7 +204,7 @@ const Products = () => {
 			<div className='products p-lg-3'>
 				<div className='mb-3'>
 					<FormSearchWeight
-						categories={categories?.data?.categories}
+						categories={Categories}
 						categorySelected={getCategorySelected}
 						searchInput={getSearchInput}
 						type='product'
@@ -281,9 +283,8 @@ const Products = () => {
 					/>
 				</div>
 
-				{/** Add Product Form store page Modal*/}
+				{/** Add Product Form store page Modal */}
 				<AddProductFromStoreModal />
-				{/** Add new Product */}
 			</div>
 		</>
 	);

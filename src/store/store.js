@@ -30,6 +30,7 @@ import AcademySlice from "./slices/AcademySlice";
 import TechnicalSupportSlice from "./slices/TechnicalSupportSlice";
 import SouqOtlobhaSlice from "./slices/SouqOtlobhaSlice";
 import NotificationsSlice from "./slices/NotificationsSlice";
+import CategoriesSelectSlice from "./slices/CategoriesSelectSlice";
 
 // store
 export const store = configureStore({
@@ -43,7 +44,7 @@ export const store = configureStore({
 		VideoModal: VideoModalSlice,
 		AddSubActivity: AddSubActivity,
 		VerifyModal: VerifyStoreModalSlice,
-
+		CategoriesSelect: CategoriesSelectSlice,
 		AddSubCategorySlice: AddSubCategorySlice,
 		MaintenanceModeModal: MaintenanceModeModal,
 		DelegateRequestAlert: DelegateRequestAlert,

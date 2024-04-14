@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	ImportedProductsThunk,
 	ProductsThunk,
+	filterProductsThunk,
 	searchImportProductThunk,
 	searchProductThunk,
 } from "../Thunk/ProductsThunk";
@@ -101,6 +102,23 @@ const ProductsSlice = createSlice({
 				state.souqOtlbhaProducts = action?.payload?.data.import_products;
 			})
 			.addCase(searchImportProductThunk.rejected, (state, action) => {
+				state.error = action.payload.message;
+			})
+
+			// filterProductsThunk
+			.addCase(filterProductsThunk.pending, (state, action) => {
+				state.reload = true;
+				state.loading = true;
+			})
+			.addCase(filterProductsThunk.fulfilled, (state, action) => {
+				state.reload = false;
+				state.loading = false;
+
+				state.souqOtlbhaPageCount = action.payload.data.page_count;
+				state.souqOtlbhaCurrentPage = action.payload.data.current_page;
+				state.souqOtlbhaProducts = action?.payload?.data.import_products;
+			})
+			.addCase(filterProductsThunk.rejected, (state, action) => {
 				state.error = action.payload.message;
 			});
 	},

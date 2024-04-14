@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
 	CategoriesThunk,
-	addCategoryThunk,
+	filterCategoriesThunk,
 	searchCategoryEtlobhaThunk,
 	searchCategoryThunk,
 } from "../Thunk/CategoriesThunk";
@@ -57,16 +57,23 @@ const CategoriesSlice = createSlice({
 				state.error = action.error.message;
 			})
 
-			//add new category
-			.addCase(addCategoryThunk.pending, (state, action) => {
+			// filterCategoriesThunk
+			.addCase(filterCategoriesThunk.pending, (state, action) => {
 				state.reload = true;
 				state.loading = true;
 			})
-			.addCase(addCategoryThunk.fulfilled, (state, action) => {
+			.addCase(filterCategoriesThunk.fulfilled, (state, action) => {
 				state.reload = false;
 				state.loading = false;
+
+				state.currentPage = action.payload.data.current_page;
+				state.etlobhaCurrentPage = action.payload.data.etlobha_current_page;
+				state.etlobhaPageCount = action.payload.data.etlobha_page_count;
+				state.pageCount = action.payload.data.page_count;
+				state.storeCategory = action?.payload?.data.store_categories;
+				state.SouqOtlbhaCategory = action?.payload?.data?.etlobha_categories;
 			})
-			.addCase(addCategoryThunk.rejected, (state, action) => {
+			.addCase(filterCategoriesThunk.rejected, (state, action) => {
 				state.error = action.payload.message;
 			})
 

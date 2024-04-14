@@ -8,10 +8,7 @@ import { HomeIcon } from "../../data/Icons";
 import { BsSearch } from "react-icons/bs";
 import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 
-// Components
-import useFetch from "../../Hooks/UseFetch";
-
-//Mui
+// MUI
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,9 +18,11 @@ import { CategoryTable } from "../../components/Tables";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	CategoriesThunk,
+	filterCategoriesThunk,
 	searchCategoryEtlobhaThunk,
 	searchCategoryThunk,
 } from "../../store/Thunk/CategoriesThunk";
+import { CategoriesSelectThunk } from "../../store/Thunk/CategoriesSelectThunk";
 
 const Category = () => {
 	const dispatch = useDispatch();
@@ -34,10 +33,12 @@ const Category = () => {
 	const [categoriesData, setCategoriesData] = useState([]);
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-	const { fetchedData: categories } = useFetch("selector/mainCategories");
-	// const { loading, reload, setReload } = useFetch(
-	// 	`category?page=${pageTarget}&number=${rowsCount}`
-	// );
+
+	// to fetch all categories select
+	const { Categories } = useSelector((state) => state.CategoriesSelect);
+	useEffect(() => {
+		dispatch(CategoriesSelectThunk());
+	}, [dispatch]);
 
 	const {
 		currentPage,
@@ -64,6 +65,7 @@ const Category = () => {
 		}
 	}, [tabSelected, storeCategory, SouqOtlbhaCategory]);
 
+	// search categories
 	useEffect(() => {
 		if (tabSelected === 1) {
 			const debounce = setTimeout(() => {
@@ -100,22 +102,18 @@ const Category = () => {
 		}
 	}, [search, tabSelected]);
 
-	// Filter by
-	// useEffect(() => {
-	// 	if (category_id !== "") {
-	// 		setCategoriesResult(
-	// 			categoriesFilterSearch?.filter((item) => item?.id === category_id)
-	// 		);
-	// 	} else {
-	// 		setCategoriesResult(categoriesFilterSearch);
-	// 	}
-	// }, [categoriesFilterSearch, category_id]);
+	// Filter categories
+	useEffect(() => {
+		if (category_id !== "") {
+			dispatch(
+				filterCategoriesThunk({
+					id: category_id,
+				})
+			);
+		}
+	}, [category_id, dispatch]);
 
 	// ----------------------------------------------------
-	console.log(categoriesData);
-	const handleSubmit = (event) => {
-		event.preventDefault();
-	};
 
 	return (
 		<>
@@ -149,7 +147,7 @@ const Category = () => {
 						</span>
 					</div>
 					<div className='add-category'>
-						<form onSubmit={handleSubmit}>
+						<>
 							<div className='input-group'>
 								<div className='search-input input-box'>
 									<input
@@ -202,7 +200,7 @@ const Category = () => {
 													return <p className='text-[#ADB5B9]'>اختر النشاط</p>;
 												}
 												const result =
-													categories?.data?.categories?.filter(
+													Categories?.filter(
 														(item) => item?.id === parseInt(selected)
 													) || "";
 												return result[0]?.name;
@@ -217,7 +215,7 @@ const Category = () => {
 												value={""}>
 												الكل
 											</MenuItem>
-											{categories?.data?.categories?.map((cat, index) => {
+											{Categories?.map((cat, index) => {
 												return (
 													<MenuItem
 														key={index}
@@ -250,7 +248,7 @@ const Category = () => {
 									</button>
 								</div>
 							</div>
-						</form>
+						</>
 					</div>
 				</div>
 				<div className='filters-btn'>
