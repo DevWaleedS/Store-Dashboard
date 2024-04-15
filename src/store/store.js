@@ -32,6 +32,8 @@ import SouqOtlobhaSlice from "./slices/SouqOtlobhaSlice";
 import NotificationsSlice from "./slices/NotificationsSlice";
 import CategoriesSelectSlice from "./slices/CategoriesSelectSlice";
 
+import IndexSlice from "./slices/IndexSlice";
+
 // store
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
@@ -55,7 +57,7 @@ export const store = configureStore({
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
 		SuccessMessage: SuccessMessageModalSlice,
 		BankAccStatusCommentModal,
-
+		IndexSlice,
 		BankAccountAlert,
 		CategoriesSlice,
 		ProductsSlice,
