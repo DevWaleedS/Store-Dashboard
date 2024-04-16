@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useContext } from "react";
 
 // Third part
-import axios from "axios";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 // MUI
@@ -33,18 +33,17 @@ import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
-// ICONS
+// Icons
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 import { useDispatch } from "react-redux";
-import {
-	CategoriesThunk,
-	ChangeAllCategoriesStatusThunk,
-	ChangeCategoriesStatusThunk,
-	DeleteAllCategoriesThunk,
-	DeleteCategoriesThunk,
-} from "../../store/Thunk/CategoriesThunk";
 
-import { toast } from "react-toastify";
+// RTK
+import {
+	useChangeAllCategoriesStatusMutation,
+	useChangeCategoryStatusMutation,
+	useDeleteAllCategoriesMutation,
+	useDeleteCategoryMutation,
+} from "../../store/apiSlices/categoriesApi";
 
 function EnhancedTableHead(props) {
 	const { tabSelectedId } = props;
@@ -247,7 +246,8 @@ export default function EnhancedTable({
 	const DeleteStore = useContext(DeleteContext);
 	const { setItemId, setActionDelete, actionDelete } = DeleteStore;
 
-	/** --------------------------------------------------- */
+	//------------------------------------------------------------------------
+
 	// select all items
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
@@ -258,7 +258,6 @@ export default function EnhancedTable({
 		}
 		setSelected([]);
 	};
-
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -280,117 +279,98 @@ export default function EnhancedTable({
 	};
 	const isSelected = (id) => selected.indexOf(id) !== -1;
 
+	//  reset the page target and rows count
 	useEffect(() => {
 		if (tabSelectedId) {
 			setPageTarget(1);
 			setRowsCount(10);
 		}
 	}, [tabSelectedId]);
+	//------------------------------------------------------------------------
 
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteCategoriesThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
+	const [deleteCategory] = useDeleteCategoryMutation();
+	const [deleteAllCategories] = useDeleteAllCategoriesMutation();
 
-				dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deleteCategory({ categoryId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the category", err);
+		}
 	};
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllCategories({ selected: queryParams })
+				.unwrap()
 
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllCategoriesThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-
-				dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the category", err);
+		}
 	};
 	//------------------------------------------------------------------------
 
 	// change category status
-	const changeItemStatus = (id) => {
-		dispatch(
-			ChangeCategoriesStatusThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const [changeCategoryStatus] = useChangeCategoryStatusMutation();
+	const [changeAllCategoriesStatus] = useChangeAllCategoriesStatusMutation();
+
+	const changeItemStatus = async (id) => {
+		try {
+			await changeCategoryStatus({ categoryId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the category", err);
+		}
 	};
+	const handleChangeAllItemsStatus = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await changeAllCategoriesStatus({ selected: queryParams })
+				.unwrap()
 
-	const handleChangeAllItemsStatus = (selected) => {
-		dispatch(
-			ChangeAllCategoriesStatusThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-
-				dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to change Status for category", err);
+		}
 	};
 
 	return (

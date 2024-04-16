@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-
 import AddActivity from "./slices/AddActivity";
 import AddSubActivity from "./slices/AddSubActivity";
 import VideoModalSlice from "./slices/VideoModal-slice";
@@ -11,12 +10,10 @@ import VerifyStoreModalSlice from "./slices/VerifyStoreModal-slice";
 import DelegateRequestAlert from "./slices/DelegateRequestAlert-slice";
 import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
 import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
-
 import AddBankAccountModal from "./slices/AddBankAccountModal";
 import EditBankAccountModal from "./slices/EditBankAccountModal";
 import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
 import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
-
 import BankAccountAlert from "./slices/BankAccountAlert";
 import CategoriesSlice from "./slices/CategoriesSlice";
 import ProductsSlice from "./slices/ProductsSlice";
@@ -31,16 +28,34 @@ import TechnicalSupportSlice from "./slices/TechnicalSupportSlice";
 import SouqOtlobhaSlice from "./slices/SouqOtlobhaSlice";
 import NotificationsSlice from "./slices/NotificationsSlice";
 import CategoriesSelectSlice from "./slices/CategoriesSelectSlice";
-
-import IndexSlice from "./slices/IndexSlice";
+import { mainPageApi } from "./apiSlices/mainPageApi";
+import { categoriesApi } from "./apiSlices/categoriesApi";
 
 // store
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({
-			serializableCheck: false,
-		}),
+		getDefaultMiddleware().concat(
+			mainPageApi.middleware,
+			categoriesApi.middleware
+		),
 	reducer: {
+		[mainPageApi.reducerPath]: mainPageApi.reducer,
+		[categoriesApi.reducerPath]: categoriesApi.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		AddActivity: AddActivity,
 		ReplyModal: ReplyModalSlice,
 		VideoModal: VideoModalSlice,
@@ -57,7 +72,6 @@ export const store = configureStore({
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
 		SuccessMessage: SuccessMessageModalSlice,
 		BankAccStatusCommentModal,
-		IndexSlice,
 		BankAccountAlert,
 		CategoriesSlice,
 		ProductsSlice,

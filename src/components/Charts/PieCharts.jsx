@@ -5,14 +5,14 @@ import "react-circular-progressbar/dist/styles.css";
 
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 
-const PieCharts = ({ indexData }) => {
+const PieCharts = ({ mainPageData }) => {
 	const [sales_monthly, setSales_monthly] = useState();
 	const [sales_weekly, setSales_weekly] = useState();
 	const [sales_avg, setSales_avg] = useState();
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		if (indexData) {
+		if (mainPageData) {
 			function formatNumber(number) {
 				if (number >= 1000) {
 					const suffixes = ["", "K", "M", "B", "T"];
@@ -24,11 +24,11 @@ const PieCharts = ({ indexData }) => {
 				}
 				return number?.toString();
 			}
-			setSales_monthly(formatNumber(indexData?.sales_monthly));
-			setSales_weekly(formatNumber(indexData?.sales_weekly));
-			setSales_avg(formatNumber(indexData?.sales_avg));
+			setSales_monthly(formatNumber(mainPageData?.sales_monthly));
+			setSales_weekly(formatNumber(mainPageData?.sales_weekly));
+			setSales_avg(formatNumber(mainPageData?.sales_avg));
 		}
-	}, [indexData]);
+	}, [mainPageData]);
 
 	return (
 		<div className='pie-charts'>
@@ -44,8 +44,8 @@ const PieCharts = ({ indexData }) => {
 				<div className='pie-chart'>
 					<div className='circle  m-auto' style={{ width: 200, height: 270 }}>
 						<CircularProgressbar
-							value={indexData?.sales_percent || 0}
-							text={`${indexData?.sales_percent?.toFixed(0) || 0}%`}
+							value={mainPageData?.sales_percent || 0}
+							text={`${mainPageData?.sales_percent?.toFixed(0) || 0}%`}
 							background={"#f5fbff"}
 							// some style
 							styles={buildStyles({
@@ -66,7 +66,7 @@ const PieCharts = ({ indexData }) => {
 											{sales_monthly || 0}
 											<span className='currency'>ر.س</span>
 										</p>
-										{indexData?.sales_monthly_compare === 1 ? (
+										{mainPageData?.sales_monthly_compare === 1 ? (
 											<BsArrowUp />
 										) : (
 											<BsArrowDown className='red' />
@@ -82,7 +82,7 @@ const PieCharts = ({ indexData }) => {
 											{sales_weekly || 0}
 											<span className='currency'>ر.س</span>
 										</p>
-										{indexData?.sales_weekly_compare === 1 ? (
+										{mainPageData?.sales_weekly_compare === 1 ? (
 											<BsArrowUp />
 										) : (
 											<BsArrowDown className='red' />
@@ -98,7 +98,7 @@ const PieCharts = ({ indexData }) => {
 											{sales_avg || 0}
 											<span className='currency'>ر.س</span>
 										</p>
-										{indexData?.sales_avg_compare === 1 ? (
+										{mainPageData?.sales_avg_compare === 1 ? (
 											<BsArrowUp />
 										) : (
 											<BsArrowDown className='red' />

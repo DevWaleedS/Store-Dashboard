@@ -13,7 +13,6 @@ const AxiosInterceptors = ({ children }) => {
 	const pageUrl = useLocation();
 	const pathname = pageUrl?.pathname?.slice(1);
 	const pathnameRef = useRef(pathname);
-
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -69,6 +68,7 @@ const AxiosInterceptors = ({ children }) => {
 		};
 	}, [navigate]);
 
+	/** ------------------------------------------------------------ */
 	// Update the ref value whenever pathname changes
 	useEffect(() => {
 		pathnameRef.current = pathname;

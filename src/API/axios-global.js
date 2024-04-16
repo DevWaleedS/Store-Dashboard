@@ -24,6 +24,3 @@ axios.interceptors.request.use(
 		return Promise.reject(error);
 	}
 );
-
-/** create the response interceptors to handle susses message   */
-axios.interceptors.response.use();

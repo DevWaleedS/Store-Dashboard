@@ -12,28 +12,10 @@ import { OrdersTableData, ProductsTableData } from "../../components/Tables";
 
 // DashboardSummeryDetails
 import DashboardSummeryDetails from "./DashboardSummeryDetails";
-import { useDispatch, useSelector } from "react-redux";
-import { GetIndexThunk } from "../../store/Thunk/IndexThunk";
-import { useLocation } from "react-router-dom";
+import { useGetMainPageDataQuery } from "../../store/apiSlices/mainPageApi";
 
 const DashboardHomePage = () => {
-	const dispatch = useDispatch();
-	const location = useLocation();
-	const pathName = location?.pathname;
-	const { indexData, loading } = useSelector((state) => state.IndexSlice);
-
-	// fetch data
-	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (pathName === "/") {
-				dispatch(GetIndexThunk());
-			}
-		});
-
-		return () => {
-			clearTimeout(debounce);
-		};
-	}, [pathName, dispatch]);
+	const { data: mainPageData, isLoading } = useGetMainPageDataQuery();
 
 	return (
 		<Fragment>
@@ -47,7 +29,10 @@ const DashboardHomePage = () => {
 
 			{/** Dashboard Summery Details */}
 			<section className='details-section mb-3'>
-				<DashboardSummeryDetails summeryDetails={indexData} loading={loading} />
+				<DashboardSummeryDetails
+					summeryDetails={mainPageData?.data}
+					loading={isLoading}
+				/>
 			</section>
 
 			{/**  CHARTS SECTION */}
@@ -55,13 +40,13 @@ const DashboardHomePage = () => {
 				<div className='row'>
 					<div className='col-lg-8 col-md-12 mb-4'>
 						<LineCharts
-							array_sales_daily={indexData?.array_sales_daily}
-							array_sales_monthly={indexData?.array_sales_monthly}
-							array_sales_weekly={indexData?.array_sales_weekly}
+							array_sales_daily={mainPageData?.data?.array_sales_daily}
+							array_sales_monthly={mainPageData?.data?.array_sales_monthly}
+							array_sales_weekly={mainPageData?.data?.array_sales_weekly}
 						/>
 					</div>
 					<div className='col-lg-4 col-md-12 '>
-						<PieCharts indexData={indexData} />
+						<PieCharts mainPageData={mainPageData?.data} />
 					</div>
 				</div>
 			</section>
@@ -70,10 +55,10 @@ const DashboardHomePage = () => {
 			<section className='tables mb-5'>
 				<div className='row'>
 					<div className='col-md-6 mb-4'>
-						<OrdersTableData ordersDetails={indexData?.orders} />
+						<OrdersTableData ordersDetails={mainPageData?.data?.orders} />
 					</div>
 					<div className='col-md-6 mb-4'>
-						<ProductsTableData productsDetails={indexData?.products} />
+						<ProductsTableData productsDetails={mainPageData?.data?.products} />
 					</div>
 				</div>
 			</section>

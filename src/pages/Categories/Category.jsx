@@ -15,18 +15,25 @@ import MenuItem from "@mui/material/MenuItem";
 import { CategoryTable } from "../../components/Tables";
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
 	CategoriesThunk,
 	filterCategoriesThunk,
 	searchCategoryEtlobhaThunk,
 	searchCategoryThunk,
 } from "../../store/Thunk/CategoriesThunk";
-import { CategoriesSelectThunk } from "../../store/Thunk/CategoriesSelectThunk";
+
+import {
+	useFilterCategoriesMutation,
+	useGetCategoriesDataQuery,
+	useSearchInEtlbohaCategoriesMutation,
+	useSearchInStoreCategoriesMutation,
+} from "../../store/apiSlices/categoriesApi";
 
 const Category = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { Categories } = useSelector((state) => state.CategoriesSelect);
+
 	const [search, setSearch] = useState("");
 	const [category_id, setCategory_id] = useState("");
 	const [tabSelected, setTabSelected] = useState(1);
@@ -34,84 +41,76 @@ const Category = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
-	// to fetch all categories select
-	const { Categories } = useSelector((state) => state.CategoriesSelect);
-	useEffect(() => {
-		dispatch(CategoriesSelectThunk());
-	}, [dispatch]);
+	// Fetch categories based on search query and tabSelected
+	const { data: categories, isLoading } = useGetCategoriesDataQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
 
-	const {
-		currentPage,
-		etlobhaCurrentPage,
-		etlobhaPageCount,
-		pageCount,
-		loading,
-		reload,
-		storeCategory,
-		SouqOtlbhaCategory,
-	} = useSelector((state) => state.CategoriesSlice);
+	const [searchInStoreCategories] = useSearchInStoreCategoriesMutation();
+	const [searchInEtlbohaCategories] = useSearchInEtlbohaCategoriesMutation();
+	const [filterCategories] = useFilterCategoriesMutation();
 
-	/** get contact data */
 	useEffect(() => {
-		dispatch(CategoriesThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+		if (search !== "") {
+			const fetchData = async () => {
+				try {
+					const response =
+						tabSelected === 1
+							? await searchInStoreCategories({
+									query: search,
+									page: pageTarget,
+									number: rowsCount,
+							  })
+							: await searchInEtlbohaCategories({
+									query: search,
+									page: pageTarget,
+									number: rowsCount,
+							  });
 
-	/* im using this to display store category and atlbha category */
-	useEffect(() => {
-		if (tabSelected === 1) {
-			setCategoriesData(storeCategory);
-		} else {
-			setCategoriesData(SouqOtlbhaCategory);
-		}
-	}, [tabSelected, storeCategory, SouqOtlbhaCategory]);
-
-	// search categories
-	useEffect(() => {
-		if (tabSelected === 1) {
-			const debounce = setTimeout(() => {
-				if (search !== "") {
-					dispatch(
-						searchCategoryThunk({
-							query: search,
-							page: pageTarget,
-							number: rowsCount,
-						})
+					setCategoriesData(
+						response.data.data?.store_categories ??
+							response.data.data?.etlobha_categories
 					);
+				} catch (error) {
+					console.error("Error fetching categories:", error);
 				}
-			}, 500);
-
-			return () => {
-				clearTimeout(debounce);
 			};
-		} else {
-			const debounce = setTimeout(() => {
-				if (search !== "") {
-					dispatch(
-						searchCategoryEtlobhaThunk({
-							query: search,
-							page: pageTarget,
-							number: rowsCount,
-						})
-					);
-				}
-			}, 500);
 
-			return () => {
-				clearTimeout(debounce);
-			};
+			fetchData();
 		}
-	}, [search, tabSelected]);
+	}, [tabSelected, search, pageTarget, rowsCount]);
 
-	// Filter categories
 	useEffect(() => {
-		if (category_id !== "") {
-			dispatch(
-				filterCategoriesThunk({
-					id: category_id,
-				})
+		if (categories) {
+			setCategoriesData(
+				tabSelected === 1
+					? categories.data.store_categories
+					: categories.data.etlobha_categories
 			);
 		}
-	}, [category_id, dispatch]);
+	}, [tabSelected, categories]);
+
+	useEffect(() => {
+		if (category_id !== "") {
+			const fetchData = async () => {
+				try {
+					const response = await filterCategories(category_id);
+					const responseData = response.data;
+
+					setCategoriesData(
+						tabSelected === 1
+							? responseData.store_categories
+							: responseData.etlobha_categories
+					);
+				} catch (error) {
+					console.error("Error fetching categories:", error);
+				}
+			};
+
+			fetchData();
+		}
+	}, [category_id, filterCategories, tabSelected]);
 
 	// ----------------------------------------------------
 
@@ -268,16 +267,23 @@ const Category = () => {
 				<div className='row'>
 					<div className='category-table'>
 						<CategoryTable
-							reload={reload}
-							loading={loading}
+							loading={isLoading}
 							rowsCount={rowsCount}
 							setRowsCount={setRowsCount}
 							pageTarget={pageTarget}
 							tabSelectedId={tabSelected}
 							categories={categoriesData}
 							setPageTarget={setPageTarget}
-							pageCount={tabSelected === 1 ? pageCount : etlobhaPageCount}
-							currentPage={tabSelected === 1 ? currentPage : etlobhaCurrentPage}
+							pageCount={
+								tabSelected === 1
+									? categories?.data?.store_page_count
+									: categories?.data?.etlobha_page_count
+							}
+							currentPage={
+								tabSelected === 1
+									? categories?.data?.store_current_page
+									: categories?.data?.etlobha_current_page
+							}
 						/>
 					</div>
 				</div>
