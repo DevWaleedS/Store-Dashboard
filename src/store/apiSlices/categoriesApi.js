@@ -73,7 +73,7 @@ export const categoriesApi = createApi({
 			providesTags: ["Categories"],
 		}),
 		filterCategories: builder.mutation({
-			query: ({ categoryId }) => ({
+			query: (categoryId) => ({
 				url: `category?category_id=${categoryId}`,
 				method: "GET",
 			}),

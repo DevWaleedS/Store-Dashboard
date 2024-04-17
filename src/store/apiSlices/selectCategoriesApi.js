@@ -17,8 +17,8 @@ const prepareHeaders = (headers) => {
 	return headers;
 };
 
-export const mainPageApi = createApi({
-	reducerPath: "mainPageApi",
+export const selectCategoriesApi = createApi({
+	reducerPath: "selectCategoriesApi",
 
 	baseQuery: fetchBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
@@ -26,8 +26,8 @@ export const mainPageApi = createApi({
 	}),
 
 	endpoints: (builder) => ({
-		getMainPageData: builder.query({ query: () => "index" }),
+		getCategories: builder.query({ query: () => "selector/mainCategories" }),
 	}),
 });
 
-export const { useGetMainPageDataQuery } = mainPageApi;
+export const { useGetCategoriesQuery } = selectCategoriesApi;

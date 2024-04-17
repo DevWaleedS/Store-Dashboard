@@ -14,25 +14,20 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { CategoryTable } from "../../components/Tables";
 
-// Redux
-import { useSelector } from "react-redux";
-import {
-	CategoriesThunk,
-	filterCategoriesThunk,
-	searchCategoryEtlobhaThunk,
-	searchCategoryThunk,
-} from "../../store/Thunk/CategoriesThunk";
-
+//Redux And RTK Query
 import {
 	useFilterCategoriesMutation,
 	useGetCategoriesDataQuery,
 	useSearchInEtlbohaCategoriesMutation,
 	useSearchInStoreCategoriesMutation,
 } from "../../store/apiSlices/categoriesApi";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectCategoriesApi";
 
 const Category = () => {
 	const navigate = useNavigate();
-	const { Categories } = useSelector((state) => state.CategoriesSelect);
+
+	// Categories Selector
+	const { data: selectCategories } = useGetCategoriesQuery();
 
 	const [search, setSearch] = useState("");
 	const [category_id, setCategory_id] = useState("");
@@ -51,6 +46,7 @@ const Category = () => {
 	const [searchInEtlbohaCategories] = useSearchInEtlbohaCategoriesMutation();
 	const [filterCategories] = useFilterCategoriesMutation();
 
+	// handle search categories
 	useEffect(() => {
 		if (search !== "") {
 			const fetchData = async () => {
@@ -81,6 +77,7 @@ const Category = () => {
 		}
 	}, [tabSelected, search, pageTarget, rowsCount]);
 
+	// display categories by tapSelect
 	useEffect(() => {
 		if (categories) {
 			setCategoriesData(
@@ -91,12 +88,13 @@ const Category = () => {
 		}
 	}, [tabSelected, categories]);
 
+	// handle filtration
 	useEffect(() => {
 		if (category_id !== "") {
 			const fetchData = async () => {
 				try {
 					const response = await filterCategories(category_id);
-					const responseData = response.data;
+					const responseData = response.data?.data;
 
 					setCategoriesData(
 						tabSelected === 1
@@ -109,6 +107,12 @@ const Category = () => {
 			};
 
 			fetchData();
+		} else {
+			setCategoriesData(
+				tabSelected === 1
+					? categories.data.store_categories
+					: categories.data.etlobha_categories
+			);
 		}
 	}, [category_id, filterCategories, tabSelected]);
 
@@ -199,7 +203,7 @@ const Category = () => {
 													return <p className='text-[#ADB5B9]'>اختر النشاط</p>;
 												}
 												const result =
-													Categories?.filter(
+													selectCategories?.data?.categories?.filter(
 														(item) => item?.id === parseInt(selected)
 													) || "";
 												return result[0]?.name;
@@ -214,7 +218,7 @@ const Category = () => {
 												value={""}>
 												الكل
 											</MenuItem>
-											{Categories?.map((cat, index) => {
+											{selectCategories?.data?.categories?.map((cat, index) => {
 												return (
 													<MenuItem
 														key={index}

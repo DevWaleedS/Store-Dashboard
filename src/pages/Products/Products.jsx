@@ -20,15 +20,14 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
-import { useDispatch, useSelector } from "react-redux";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectCategoriesApi";
 import {
-	filterProductsThunk,
-	ImportedProductsThunk,
-	ProductsThunk,
-	searchImportProductThunk,
-	searchProductThunk,
-} from "../../store/Thunk/ProductsThunk";
-import { CategoriesSelectThunk } from "../../store/Thunk/CategoriesSelectThunk";
+	useFilterProductsByCategoriesMutation,
+	useGetImportedProductsQuery,
+	useGetStoreProductsQuery,
+	useSearchInImportedProductsMutation,
+	useSearchInStoreProductsMutation,
+} from "../../store/apiSlices/productsApi";
 
 const Products = () => {
 	const store_token = document.cookie
@@ -36,8 +35,10 @@ const Products = () => {
 		?.find((cookie) => cookie.startsWith("store_token="))
 		?.split("=")[1];
 
+	// Categories Selector
+	const { data: selectCategories } = useGetCategoriesQuery();
+
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [file, setFile] = useState("");
@@ -50,100 +51,110 @@ const Products = () => {
 	const [productsData, setProductsData] = useState([]);
 	const [fileError, setFileError] = useState("");
 	const [category_id, setCategory_id] = useState("");
-	const {
-		loading,
-		reload,
-		storeProducts,
-		storeProductsPageCount,
-		storeProductsCurrentPage,
-		souqOtlbhaProducts,
-		souqOtlbhaCurrentPage,
-		souqOtlbhaPageCount,
-	} = useSelector((state) => state.ProductsSlice);
 
-	// to fetch all categories select
-	const { Categories } = useSelector((state) => state.CategoriesSelect);
-	useEffect(() => {
-		dispatch(CategoriesSelectThunk());
-	}, [dispatch]);
+	// Fetch store Products
+	const { data: storeProducts, isLoading: storeProductsIsLoading } =
+		useGetStoreProductsQuery({
+			page: pageTarget,
+			number: rowsCount,
+		});
 
-	/** get contact data */
-	useEffect(() => {
-		dispatch(ProductsThunk({ page: pageTarget, number: rowsCount }));
-		dispatch(ImportedProductsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+	// Fetch Imported Products
+	const { data: importedProducts, isLoading: importedProductsIsLoading } =
+		useGetImportedProductsQuery({
+			page: pageTarget,
+			number: rowsCount,
+		});
 
-	// to get Products by
+	const [searchInStoreProducts] = useSearchInStoreProductsMutation();
+	const [searchInImportedProducts] = useSearchInImportedProductsMutation();
+	const [filterProductsByCategories] = useFilterProductsByCategoriesMutation();
+	// ---------------------------------------------------------------------------------------------------------
+
+	// display Products by tapSelect
 	useEffect(() => {
-		if (tabSelected === 1) {
-			setProductsData(storeProducts);
-		} else {
-			setProductsData(souqOtlbhaProducts);
+		if (storeProducts || importedProducts) {
+			setProductsData(
+				tabSelected === 1
+					? storeProducts?.data?.products
+					: importedProducts?.data?.import_products
+			);
 		}
-	}, [tabSelected, storeProducts, souqOtlbhaProducts]);
+	}, [tabSelected, storeProducts, importedProducts]);
 
-	//---------------------------------------------------------------------------------------------------------
+	// handle search in products
+	const getSearchInput = (value) => {
+		setSearch(value);
+	};
+
+	useEffect(() => {
+		if (search !== "") {
+			const fetchData = async () => {
+				try {
+					const response =
+						tabSelected === 1
+							? await searchInStoreProducts({
+									query: search,
+									page: pageTarget,
+									number: rowsCount,
+							  })
+							: await searchInImportedProducts({
+									query: search,
+									page: pageTarget,
+									number: rowsCount,
+							  });
+
+					setProductsData(
+						response.data.data?.products ?? response.data.data?.import_products
+					);
+				} catch (error) {
+					console.error("Error fetching Products:", error);
+				}
+			};
+
+			fetchData();
+		}
+	}, [tabSelected, search, pageTarget, rowsCount]);
+	// --------------------------------------------------------------------------------------------------------
+
+	// handle filtration
+	const getCategorySelected = (value) => {
+		setCategory_id(value);
+	};
+	useEffect(() => {
+		if (category_id !== "") {
+			const fetchData = async () => {
+				try {
+					const response = await filterProductsByCategories(category_id);
+					const responseData = response.data?.data;
+
+					setProductsData(
+						tabSelected === 1
+							? responseData.store_categories
+							: responseData.etlobha_categories
+					);
+				} catch (error) {
+					console.error("Error fetching Products:", error);
+				}
+			};
+
+			fetchData();
+		} else {
+			setProductsData(
+				tabSelected === 1
+					? storeProducts?.data?.products
+					: importedProducts?.data?.import_products
+			);
+		}
+	}, [category_id, filterProductsByCategories, tabSelected]);
+
+	// ----------------------------------------------------------------------------------------------
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
 	const handleFile = (file) => {
 		setFile(file[0]);
 	};
-	const getSearchInput = (value) => {
-		setSearch(value);
-	};
-	const getCategorySelected = (value) => {
-		setCategory_id(value);
-	};
-	//--------------------------------------------------------------------------------------------------------
-
-	// search in products
-	useEffect(() => {
-		if (tabSelected === 1) {
-			const debounce = setTimeout(() => {
-				if (search !== "") {
-					dispatch(
-						searchProductThunk({
-							query: search,
-							page: pageTarget,
-							number: rowsCount,
-						})
-					);
-				}
-			}, 500);
-
-			return () => {
-				clearTimeout(debounce);
-			};
-		} else {
-			const debounce = setTimeout(() => {
-				if (search !== "") {
-					dispatch(
-						searchImportProductThunk({
-							query: search,
-							page: pageTarget,
-							number: rowsCount,
-						})
-					);
-				}
-			}, 500);
-
-			return () => {
-				clearTimeout(debounce);
-			};
-		}
-	}, [search, tabSelected]);
-
-	// Filter categories
-	useEffect(() => {
-		if (category_id !== "") {
-			dispatch(
-				filterProductsThunk({
-					id: category_id,
-				})
-			);
-		}
-	}, [category_id, dispatch]);
 
 	// Export the product file
 	const exportToCSV = () => {
@@ -204,7 +215,7 @@ const Products = () => {
 			<div className='products p-lg-3'>
 				<div className='mb-3'>
 					<FormSearchWeight
-						categories={Categories}
+						categories={selectCategories?.data?.categories}
 						categorySelected={getCategorySelected}
 						searchInput={getSearchInput}
 						type='product'
@@ -265,20 +276,25 @@ const Products = () => {
 				<div className='category-table'>
 					<BigProductsTable
 						products={productsData}
-						reload={reload}
-						loading={loading}
+						loading={
+							tabSelected === 1
+								? storeProductsIsLoading
+								: importedProductsIsLoading
+						}
 						rowsCount={rowsCount}
 						setRowsCount={setRowsCount}
 						pageTarget={pageTarget}
 						tabSelectedId={tabSelected}
 						setPageTarget={setPageTarget}
 						pageCount={
-							tabSelected === 1 ? storeProductsPageCount : souqOtlbhaPageCount
+							tabSelected === 1
+								? storeProducts?.page_count
+								: importedProducts?.page_count
 						}
 						currentPage={
 							tabSelected === 1
-								? storeProductsCurrentPage
-								: souqOtlbhaCurrentPage
+								? storeProducts?.current_page
+								: importedProducts?.current_page
 						}
 					/>
 				</div>

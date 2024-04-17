@@ -52,6 +52,7 @@ export const DeleteAllDeleteProductsThunk = createAsyncThunk(
 		}
 	}
 );
+
 export const DeleteProductThunk = createAsyncThunk(
 	"Products/DeleteProductThunk",
 

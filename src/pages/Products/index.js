@@ -3,3 +3,4 @@ export { default as DropCSVFiles } from "./DropCSVFiles";
 export { default as FormSearchWeight } from "./FormSearchWeight";
 export { default as EditProduct } from "./EditProduct/EditProduct";
 export { default as AddNewProduct } from "./AddNewProduct/AddNewProduct";
+export { default as ChangeCategoriesForSomeSelectedProducts } from "./ChangeCategoriesForSomeSelectedProducts";

@@ -30,19 +30,25 @@ import NotificationsSlice from "./slices/NotificationsSlice";
 import CategoriesSelectSlice from "./slices/CategoriesSelectSlice";
 import { mainPageApi } from "./apiSlices/mainPageApi";
 import { categoriesApi } from "./apiSlices/categoriesApi";
+import { selectCategoriesApi } from "./apiSlices/selectCategoriesApi";
+import { productsApi } from "./apiSlices/productsApi";
+import ChangeCategoriesForSomeSelectedProductsSlice from "./slices/ChangeCategoriesForSomeSelectedProducts";
 
 // store
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
 			mainPageApi.middleware,
-			categoriesApi.middleware
+			productsApi.middleware,
+			categoriesApi.middleware,
+			selectCategoriesApi.middleware
 		),
 	reducer: {
 		[mainPageApi.reducerPath]: mainPageApi.reducer,
+		[productsApi.reducerPath]: productsApi.reducer,
 		[categoriesApi.reducerPath]: categoriesApi.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
+
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
@@ -85,5 +91,7 @@ export const store = configureStore({
 		TechnicalSupportSlice,
 		SouqOtlobhaSlice,
 		NotificationsSlice,
+
+		ChangeCategoriesForSomeSelectedProductsSlice,
 	},
 });
