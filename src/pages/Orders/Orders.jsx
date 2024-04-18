@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-// Third paerty
+// Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
 
 // Components
 import { OrdersQuickDetails } from "./index";
@@ -12,65 +11,86 @@ import { BigOrdersTable } from "../../components/Tables";
 
 // Icons
 import { ArrowBack } from "../../data/Icons";
+
 import {
-	OrdersThunk,
-	filterOrdersByStatusThunk,
-	searchOrderThunk,
-} from "../../store/Thunk/OrdersThunk";
-import { useDispatch, useSelector } from "react-redux";
+	useFilterOrdersByStatusMutation,
+	useGetOrdersQuery,
+	useSearchInOrdersMutation,
+} from "../../store/apiSlices/ordersApi";
 
 const Orders = () => {
-	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
-	const { ordersData, currentPage, pageCount, loading, reload } = useSelector(
-		(state) => state.OrdersSlice
-	);
-	// const { loading, reload, setReload } = useFetch(
-	// 	`orders?page=${pageTarget}&number=${rowsCount}`
-	// );
+	const [ordersData, setOrdersData] = useState([]);
 
-	/** get contact data */
+	// get orders data
+	const { data: orders, isLoading } = useGetOrdersQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
+
 	useEffect(() => {
-		dispatch(OrdersThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+		if (orders?.data?.orders?.length !== 0) {
+			setOrdersData(orders?.data?.orders);
+		}
+	}, [orders?.data?.orders]);
 
-	// -----------------------------------------------------------
-
-	// search in Orders
+	//handle search in orders
+	const [searchInOrders] = useSearchInOrdersMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (search !== "") {
-				dispatch(
-					searchOrderThunk({
-						query: search,
-						page: pageTarget,
-						number: rowsCount,
-					})
-				);
+				const fetchData = async () => {
+					try {
+						const response = await searchInOrders({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setOrdersData(response?.data?.data?.orders);
+					} catch (error) {
+						console.error("Error fetching Products:", error);
+					}
+				};
+
+				fetchData();
+			} else {
+				setOrdersData(orders?.data?.orders);
 			}
 		}, 500);
-
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, dispatch]);
+	}, [search, pageTarget, rowsCount]);
+
 	// -------------------------------------------------------------
 
 	// Filter Orders by Order Status
+	const [filterOrdersByStatus] = useFilterOrdersByStatusMutation();
 	useEffect(() => {
 		if (select !== "") {
-			dispatch(
-				filterOrdersByStatusThunk({
-					status: select,
-					page: pageTarget,
-					number: rowsCount,
-				})
-			);
+			const fetchData = async () => {
+				try {
+					const response = await filterOrdersByStatus({
+						orderStatus: select,
+						page: pageTarget,
+						number: rowsCount,
+					});
+
+					setOrdersData(response?.data?.data?.orders);
+				} catch (error) {
+					console.error("Error fetching Products:", error);
+				}
+			};
+
+			fetchData();
+		} else {
+			setOrdersData(orders?.data?.orders);
 		}
-	}, [select, dispatch]);
+	}, [select, filterOrdersByStatus]);
 
 	// ---------------------------------------------------------------
 
@@ -107,12 +127,12 @@ const Orders = () => {
 				<div className='data-boxes'>
 					<div className='row'>
 						<OrdersQuickDetails
-							loading={loading}
-							new_order={ordersData?.new}
-							completed={ordersData?.completed}
-							not_completed={ordersData?.not_completed}
-							canceled={ordersData?.canceled}
-							all={ordersData?.all}
+							loading={isLoading}
+							new_order={orders?.data?.new}
+							completed={orders?.data?.completed}
+							not_completed={orders?.data?.not_completed}
+							canceled={orders?.data?.canceled}
+							all={orders?.data?.all}
 						/>
 					</div>
 				</div>
@@ -123,16 +143,15 @@ const Orders = () => {
 						orders={ordersData}
 						search={search}
 						select={select}
-						reload={reload}
-						loading={loading}
+						loading={isLoading}
 						rowsCount={rowsCount}
 						setSelect={setSelect}
 						setSearch={setSearch}
 						pageTarget={pageTarget}
 						setRowsCount={setRowsCount}
 						setPageTarget={setPageTarget}
-						pageCount={pageCount}
-						currentPage={currentPage}
+						pageCount={orders?.data?.page_count}
+						currentPage={orders?.data?.current_page}
 					/>
 				</div>
 			</section>

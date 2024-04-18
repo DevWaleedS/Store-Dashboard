@@ -30,8 +30,6 @@ import { DelegateRequestAlert, VerifyStoreModal } from "../components/Modal";
 import { VerifayStoreAlert } from "../components/Modal";
 import { VerifayAfterMainInfoAlert } from "../components/Modal";
 
-import DeleteModal from "../components/DeleteModal/DeleteModal";
-
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
 import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
 
@@ -40,7 +38,6 @@ import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 
 // Using AXiso Global To wrapping the dashboard
 import "../API/axios-global";
-import AxiosInterceptors from "../API/AxiosInterceptors";
 
 const RootLayout = () => {
 	const store_token = document.cookie
@@ -103,69 +100,67 @@ const RootLayout = () => {
 	}, [verificationStoreStatus]);
 
 	return (
-		<AxiosInterceptors>
-			<PrivateRoute>
-				<ThemeProvider theme={theme}>
-					<CssBaseline>
-						<div className='app'>
-							<TopBar
-								toggleSidebar={() => {
-									setOpenSidebar(!openSidebar);
-								}}
-							/>
+		<PrivateRoute>
+			<ThemeProvider theme={theme}>
+				<CssBaseline>
+					<div className='app'>
+						<TopBar
+							toggleSidebar={() => {
+								setOpenSidebar(!openSidebar);
+							}}
+						/>
 
-							{/* This is Toast Library to Handle errors modal in dashboard*/}
-							<ToastContainer
-								rtl
-								draggable
-								closeOnClick
-								pauseOnHover
-								autoClose={5000}
-								pauseOnFocusLoss
-								position='top-left'
-								newestOnTop={false}
-								hideProgressBar={false}
-								style={{
-									fontSize: "14px",
-									color: "#000",
-									whiteSpace: "normal",
-								}}
-							/>
+						{/* This is Toast Library to Handle errors modal in dashboard*/}
+						<ToastContainer
+							rtl
+							draggable
+							closeOnClick
+							pauseOnHover
+							autoClose={5000}
+							pauseOnFocusLoss
+							position='top-left'
+							newestOnTop={false}
+							hideProgressBar={false}
+							style={{
+								fontSize: "14px",
+								color: "#000",
+								whiteSpace: "normal",
+							}}
+						/>
 
-							{title && <ActionCompleteComp />}
+						{title && <ActionCompleteComp />}
 
-							{loadingTitle && <LoadingRequest />}
+						{loadingTitle && <LoadingRequest />}
 
-							{isOpenVerifyModal && <VerifyStoreModal />}
-							{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
-							{isOpenMaintenanceModeModal && <MaintenanceMode />}
-							{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
-							{/** Delegate Request Alert */}
-							<DelegateRequestAlert />
-							<main className='content'>
-								<div className='row'>
-									<div className='sidebar-col'>
-										<SideBar
-											open={openSidebar}
-											closeSidebar={() => {
-												setOpenSidebar(!openSidebar);
-											}}
-										/>
-									</div>
-									<div className='pages-content'>
-										<div className='main-content'>
-											{/** use ScrollRestoration from react router dom to fix scrolling issue */}
-											<ScrollRestoration />
-											<Outlet />
-										</div>
+						{isOpenVerifyModal && <VerifyStoreModal />}
+						{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
+						{isOpenMaintenanceModeModal && <MaintenanceMode />}
+						{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
+						{/** Delegate Request Alert */}
+						<DelegateRequestAlert />
+						<main className='content'>
+							<div className='row'>
+								<div className='sidebar-col'>
+									<SideBar
+										open={openSidebar}
+										closeSidebar={() => {
+											setOpenSidebar(!openSidebar);
+										}}
+									/>
+								</div>
+								<div className='pages-content'>
+									<div className='main-content'>
+										{/** use ScrollRestoration from react router dom to fix scrolling issue */}
+										<ScrollRestoration />
+										<Outlet />
 									</div>
 								</div>
-							</main>
-						</div>
-					</CssBaseline>
-				</ThemeProvider>
-			</PrivateRoute>
-		</AxiosInterceptors>
+							</div>
+						</main>
+					</div>
+				</CssBaseline>
+			</ThemeProvider>
+		</PrivateRoute>
 	);
 };
 

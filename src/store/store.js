@@ -33,25 +33,31 @@ import { categoriesApi } from "./apiSlices/categoriesApi";
 import { selectCategoriesApi } from "./apiSlices/selectCategoriesApi";
 import { productsApi } from "./apiSlices/productsApi";
 import ChangeCategoriesForSomeSelectedProductsSlice from "./slices/ChangeCategoriesForSomeSelectedProducts";
+import { ordersApi } from "./apiSlices/ordersApi";
+import { loginApi } from "./apiSlices/loginApi";
+import { couponApi } from "./apiSlices/couponApi";
 
 // store
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
+			loginApi.middleware,
+			ordersApi.middleware,
+			couponApi.middleware,
 			mainPageApi.middleware,
 			productsApi.middleware,
 			categoriesApi.middleware,
 			selectCategoriesApi.middleware
 		),
 	reducer: {
+		[loginApi.reducerPath]: loginApi.reducer,
+		[ordersApi.reducerPath]: ordersApi.reducer,
+		[couponApi.reducerPath]: couponApi.reducer,
 		[mainPageApi.reducerPath]: mainPageApi.reducer,
 		[productsApi.reducerPath]: productsApi.reducer,
 		[categoriesApi.reducerPath]: categoriesApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,

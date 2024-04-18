@@ -48,33 +48,38 @@ const Category = () => {
 
 	// handle search categories
 	useEffect(() => {
-		if (search !== "") {
-			const fetchData = async () => {
-				try {
-					const response =
-						tabSelected === 1
-							? await searchInStoreCategories({
-									query: search,
-									page: pageTarget,
-									number: rowsCount,
-							  })
-							: await searchInEtlbohaCategories({
-									query: search,
-									page: pageTarget,
-									number: rowsCount,
-							  });
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				const fetchData = async () => {
+					try {
+						const response =
+							tabSelected === 1
+								? await searchInStoreCategories({
+										query: search,
+										page: pageTarget,
+										number: rowsCount,
+								  })
+								: await searchInEtlbohaCategories({
+										query: search,
+										page: pageTarget,
+										number: rowsCount,
+								  });
 
-					setCategoriesData(
-						response.data.data?.store_categories ??
-							response.data.data?.etlobha_categories
-					);
-				} catch (error) {
-					console.error("Error fetching categories:", error);
-				}
-			};
+						setCategoriesData(
+							response.data.data?.store_categories ??
+								response.data.data?.etlobha_categories
+						);
+					} catch (error) {
+						console.error("Error fetching categories:", error);
+					}
+				};
 
-			fetchData();
-		}
+				fetchData();
+			}
+		}, 500);
+		return () => {
+			clearTimeout(debounce);
+		};
 	}, [tabSelected, search, pageTarget, rowsCount]);
 
 	// display categories by tapSelect
@@ -94,12 +99,11 @@ const Category = () => {
 			const fetchData = async () => {
 				try {
 					const response = await filterCategories(category_id);
-					const responseData = response.data?.data;
 
 					setCategoriesData(
 						tabSelected === 1
-							? responseData.store_categories
-							: responseData.etlobha_categories
+							? response.data?.data.store_categories
+							: response.data?.data.etlobha_categories
 					);
 				} catch (error) {
 					console.error("Error fetching categories:", error);
@@ -110,8 +114,8 @@ const Category = () => {
 		} else {
 			setCategoriesData(
 				tabSelected === 1
-					? categories.data.store_categories
-					: categories.data.etlobha_categories
+					? categories?.data?.store_categories
+					: categories?.data?.etlobha_categories
 			);
 		}
 	}, [category_id, filterCategories, tabSelected]);

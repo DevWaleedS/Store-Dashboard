@@ -29,7 +29,7 @@ import { TablePagination } from "./TablePagination";
 
 // filter orders by
 const filtersTypes = [
-	{ id: 1, ar_name: "الكل", en_name: "all" },
+	{ id: 1, ar_name: "الكل", en_name: "" },
 	{ id: 2, ar_name: "جديد", en_name: "new" },
 	{ id: 5, ar_name: "قيد التجهيز", en_name: "ready" },
 	{ id: 4, ar_name: "تم الشحن", en_name: "completed" },

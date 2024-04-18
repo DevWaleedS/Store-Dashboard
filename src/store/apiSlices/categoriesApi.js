@@ -26,10 +26,13 @@ export const categoriesApi = createApi({
 	}),
 	tagTypes: ["Categories"],
 	endpoints: (builder) => ({
+		// get categories
 		getCategoriesData: builder.query({
 			query: (arg) => `category?page=${arg.page}&number=${arg.number}`,
 			providesTags: ["Categories"],
 		}),
+
+		// delete category
 		deleteCategory: builder.mutation({
 			query: ({ categoryId }) => ({
 				url: `categoryStoredeleteall?id[]=${categoryId}`,
@@ -37,6 +40,8 @@ export const categoriesApi = createApi({
 			}),
 			invalidatesTags: ["Categories"],
 		}),
+
+		// delete all categories
 		deleteAllCategories: builder.mutation({
 			query: ({ selected }) => ({
 				url: `categoryStoredeleteall?${selected}`,
@@ -44,6 +49,8 @@ export const categoriesApi = createApi({
 			}),
 			invalidatesTags: ["Categories"],
 		}),
+
+		// change category status
 		changeCategoryStatus: builder.mutation({
 			query: ({ categoryId }) => ({
 				url: `categoryStorechangeSatusall?id[]=${categoryId}`,
@@ -51,6 +58,8 @@ export const categoriesApi = createApi({
 			}),
 			invalidatesTags: ["Categories"],
 		}),
+
+		// change status for all categories
 		changeAllCategoriesStatus: builder.mutation({
 			query: ({ selected }) => ({
 				url: `categoryStorechangeSatusall?${selected}`,
@@ -58,26 +67,29 @@ export const categoriesApi = createApi({
 			}),
 			invalidatesTags: ["Categories"],
 		}),
+
+		// search in store categories
 		searchInStoreCategories: builder.mutation({
 			query: (arg) => ({
 				url: `searchCategory?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
 				method: "GET",
 			}),
-			providesTags: ["Categories"],
 		}),
+
+		// search in  etlbha categories
 		searchInEtlbohaCategories: builder.mutation({
 			query: (arg) => ({
 				url: `searchCategoryEtlobha?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
 				method: "GET",
 			}),
-			providesTags: ["Categories"],
 		}),
+
+		// filter in categories by category id
 		filterCategories: builder.mutation({
 			query: (categoryId) => ({
 				url: `category?category_id=${categoryId}`,
 				method: "GET",
 			}),
-			providesTags: ["Categories"],
 		}),
 	}),
 });

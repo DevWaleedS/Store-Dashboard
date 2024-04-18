@@ -113,6 +113,7 @@ import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPag
 import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
 import { Wallet } from "./pages/Wallet";
 import { Category, AddCategory, EditCategory } from "./pages/Categories";
+import AxiosInterceptors from "./API/AxiosInterceptors";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -146,7 +147,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: <RootLayout />,
+		element: (
+			<AxiosInterceptors>
+				<RootLayout />
+			</AxiosInterceptors>
+		),
 		errorElement: <ErrorPage />,
 
 		children: [

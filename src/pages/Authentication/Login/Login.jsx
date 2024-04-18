@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as EyeOPen } from "../../../data/Icons/eye_open.svg";
 import { ReactComponent as EyeClose } from "../../../data/Icons/eye_close.svg";
 import "./Login.css";
-import axios from "axios";
 import { UserAuth } from "../../../Context/UserAuthorProvider";
 import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
+import { useLoginMutation } from "../../../store/apiSlices/loginApi";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  TO HANDLE THE REG_EXPRESS
@@ -74,39 +74,52 @@ const Login = () => {
 	 * Login Function
 	 * ---------------------------------------------------------------------------------------------------
 	 */
-	const Login = () => {
+
+	const [login, { isLoading }] = useLoginMutation();
+
+	const handleLogin = async () => {
+		// Reset any previous errors
 		setError("");
 		setUsernameError("");
 		setPasswordError("");
-		const data = {
-			user_name: username,
-			password: password,
-		};
-		axios.post("https://backend.atlbha.com/api/loginapi", data).then((res) => {
-			if (res?.data?.success === true && res?.data?.data?.status === 200) {
-				const token = res.data.data.token;
-				document.cookie = `store_token=${token};   path=/`;
 
-				if (rememberMe?.remember_me) {
-					//Set username, password and remember_me status to context
+		try {
+			// Call the login mutation with the provided credentials
+			const res = await login({ user_name: username, password }).unwrap();
+
+			if (res?.success === true && res?.data?.status === 200) {
+				const token = res.data.token;
+				document.cookie = `store_token=${token}; path=/`;
+
+				if (rememberMe) {
+					// Set username, password, and remember_me status to context
+					// Replace with your function to set user info to context
 					setUserInfoToUserAuthContext();
 				} else {
-					//remove username, password and remember_me status from context
+					// Remove username, password, and remember_me status from context
+					// Replace with your function to remove user info from context
 					removeUserInfoUserAuthContext();
 				}
 
-				// if the user is logged we will navigate him to dashboard
+				// If the user is logged in, navigate them to the dashboard
+				// Replace "/" with the desired dashboard route
 				navigate("/");
 			} else {
-				setUsernameError(res?.data?.message?.en?.user_name?.[0]);
-				setPasswordError(res?.data?.message?.en?.password?.[0]);
-				setError(res?.data?.message?.ar);
-				if (res?.data?.message?.en === "User not verified") {
+				setUsernameError(res?.message?.en?.user_name?.[0]);
+				setPasswordError(res?.message?.en?.password?.[0]);
+				setError(res?.message?.ar);
+				if (res?.message?.en === "User not verified") {
+					// Set email and navigate to verification code page
+					// Replace "/LogInVerificationCode" with the verification code page route
 					setEmail(username);
 					navigate("/LogInVerificationCode");
 				}
 			}
-		});
+		} catch (error) {
+			console.error("Login error:", error);
+			// Handle login error
+			setError("An error occurred during login.");
+		}
 	};
 
 	/**
@@ -118,7 +131,7 @@ const Login = () => {
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
 			event.preventDefault();
-			Login();
+			handleLogin();
 
 			if (rememberMe?.remember_me) {
 				//Set username , password and remember_me cookie to expire
@@ -225,7 +238,10 @@ const Login = () => {
 				</div>
 				<h5 onClick={NavigateToRestorePassword}>نسيت كلمة المرور ؟</h5>
 			</div>
-			<button className='bt-main' onClick={Login}>
+			<button
+				className='bt-main'
+				onClick={handleLogin}
+				disabled={!username || !password || isLoading}>
 				تسجيل الدخول
 			</button>
 		</div>

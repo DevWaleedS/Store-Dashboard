@@ -128,18 +128,13 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 	// Function to handle changing categories
 	const changeCategories = async () => {
 		resetProductError();
-		const formData = new FormData();
-
-		formData.append("category_id", category_id);
-		for (let i = 0; i < subcategory_id?.length; i++) {
-			formData.append(`subcategory_id[${i}]`, subcategory_id[i]);
-		}
 
 		try {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			const response = await changeCategoriesForSomeSelectedProducts({
 				queryParams,
-				body: formData,
+				category_id,
+				subcategory_id,
 			});
 
 			// Handle response

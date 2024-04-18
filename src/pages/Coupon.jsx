@@ -19,10 +19,14 @@ import FormControl from "@mui/material/FormControl";
 import { CouponTable } from "../components/Tables";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	CouponsThunk,
 	filterCouponsByStatusThunk,
 	searchCouponNameThunk,
 } from "../store/Thunk/CouponsThunk";
+import {
+	useFilterCouponsByStatusMutation,
+	useGetCouponsQuery,
+	useSearchInCouponsMutation,
+} from "../store/apiSlices/couponApi";
 
 // filter Coupon by
 const filtersTypes = [
@@ -86,55 +90,80 @@ const menuItemStyles = {
 const Coupon = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [couponsData, setCouponsData] = useState([]);
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
-	const { CouponsData, currentPage, pageCount, loading, reload } = useSelector(
-		(state) => state.CouponsSlice
-	);
-	// const { loading, reload, setReload } = useFetch(
-	// 	`coupon?page=${pageTarget}&number=${rowsCount}`
-	// );
+
+	//get all coupons data
+	const { data: coupons, isLoading } = useGetCouponsQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
 
 	/** get contact data */
 	useEffect(() => {
-		dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+		if (coupons?.data?.coupons?.length !== 0) {
+			setCouponsData(coupons?.data?.coupons);
+		}
+	}, [coupons?.data?.coupons]);
 	// -----------------------------------------------------------
 
-	// search in Orders
+	//handle search in Coupons
+	const [searchInCoupons] = useSearchInCouponsMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (search !== "") {
-				dispatch(
-					searchCouponNameThunk({
-						query: search,
-						page: pageTarget,
-						number: rowsCount,
-					})
-				);
+				const fetchData = async () => {
+					try {
+						const response = await searchInCoupons({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setCouponsData(response?.data?.data?.coupons);
+					} catch (error) {
+						console.error("Error fetching Products:", error);
+					}
+				};
+
+				fetchData();
+			} else {
+				setCouponsData(coupons?.data?.coupons);
 			}
 		}, 500);
-
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, dispatch]);
+	}, [search, pageTarget, rowsCount]);
 	// -------------------------------------------------------------------------------
 
 	// filter by status or discount type
+	const [filterCouponsByStatus] = useFilterCouponsByStatusMutation();
 	useEffect(() => {
 		if (select !== "") {
-			dispatch(
-				filterCouponsByStatusThunk({
-					select: select,
-					page: pageTarget,
-					number: rowsCount,
-				})
-			);
+			const fetchData = async () => {
+				try {
+					const response = await filterCouponsByStatus({
+						select,
+						page: pageTarget,
+						number: rowsCount,
+					});
+
+					setCouponsData(response.data?.data?.coupons);
+				} catch (error) {
+					console.error("Error fetching Products:", error);
+				}
+			};
+
+			fetchData();
+		} else {
+			setCouponsData(coupons?.data?.coupons);
 		}
-	}, [select, dispatch]);
+	}, [select, filterCouponsByStatus]);
+
 	// -------------------------------------------------------------------------------
 
 	return (
@@ -230,19 +259,18 @@ const Coupon = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<CouponTable
-							coupons={CouponsData}
+							coupons={couponsData}
 							search={search}
 							select={select}
-							reload={reload}
-							loading={loading}
+							loading={isLoading}
 							rowsCount={rowsCount}
 							setSelect={setSelect}
 							setSearch={setSearch}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={pageCount}
-							currentPage={currentPage}
+							pageCount={coupons?.data?.page_count}
+							currentPage={coupons?.data?.current_page}
 						/>
 					</div>
 				</div>

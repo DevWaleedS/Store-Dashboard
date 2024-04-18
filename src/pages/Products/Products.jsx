@@ -22,7 +22,9 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 import { useGetCategoriesQuery } from "../../store/apiSlices/selectCategoriesApi";
 import {
+	useFilterImportedProductsByCategoriesMutation,
 	useFilterProductsByCategoriesMutation,
+	useFilterStoreProductsByCategoriesMutation,
 	useGetImportedProductsQuery,
 	useGetStoreProductsQuery,
 	useSearchInImportedProductsMutation,
@@ -68,7 +70,11 @@ const Products = () => {
 
 	const [searchInStoreProducts] = useSearchInStoreProductsMutation();
 	const [searchInImportedProducts] = useSearchInImportedProductsMutation();
-	const [filterProductsByCategories] = useFilterProductsByCategoriesMutation();
+	const [filterStoreProductsByCategories] =
+		useFilterStoreProductsByCategoriesMutation();
+
+	const [filterImportedProductsByCategories] =
+		useFilterImportedProductsByCategoriesMutation();
 	// ---------------------------------------------------------------------------------------------------------
 
 	// display Products by tapSelect
@@ -88,32 +94,38 @@ const Products = () => {
 	};
 
 	useEffect(() => {
-		if (search !== "") {
-			const fetchData = async () => {
-				try {
-					const response =
-						tabSelected === 1
-							? await searchInStoreProducts({
-									query: search,
-									page: pageTarget,
-									number: rowsCount,
-							  })
-							: await searchInImportedProducts({
-									query: search,
-									page: pageTarget,
-									number: rowsCount,
-							  });
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				const fetchData = async () => {
+					try {
+						const response =
+							tabSelected === 1
+								? await searchInStoreProducts({
+										query: search,
+										page: pageTarget,
+										number: rowsCount,
+								  })
+								: await searchInImportedProducts({
+										query: search,
+										page: pageTarget,
+										number: rowsCount,
+								  });
 
-					setProductsData(
-						response.data.data?.products ?? response.data.data?.import_products
-					);
-				} catch (error) {
-					console.error("Error fetching Products:", error);
-				}
-			};
+						setProductsData(
+							response.data.data?.products ??
+								response.data.data?.import_products
+						);
+					} catch (error) {
+						console.error("Error fetching Products:", error);
+					}
+				};
 
-			fetchData();
-		}
+				fetchData();
+			}
+		}, 500);
+		return () => {
+			clearTimeout(debounce);
+		};
 	}, [tabSelected, search, pageTarget, rowsCount]);
 	// --------------------------------------------------------------------------------------------------------
 
@@ -125,13 +137,24 @@ const Products = () => {
 		if (category_id !== "") {
 			const fetchData = async () => {
 				try {
-					const response = await filterProductsByCategories(category_id);
+					const response =
+						tabSelected === 1
+							? await filterStoreProductsByCategories({
+									category_id,
+									page: pageTarget,
+									number: rowsCount,
+							  })
+							: await filterImportedProductsByCategories({
+									category_id,
+									page: pageTarget,
+									number: rowsCount,
+							  });
 					const responseData = response.data?.data;
 
 					setProductsData(
 						tabSelected === 1
-							? responseData.store_categories
-							: responseData.etlobha_categories
+							? responseData.products
+							: responseData.import_products
 					);
 				} catch (error) {
 					console.error("Error fetching Products:", error);
@@ -146,7 +169,12 @@ const Products = () => {
 					: importedProducts?.data?.import_products
 			);
 		}
-	}, [category_id, filterProductsByCategories, tabSelected]);
+	}, [
+		category_id,
+		tabSelected,
+		filterImportedProductsByCategories,
+		filterStoreProductsByCategories,
+	]);
 
 	// ----------------------------------------------------------------------------------------------
 	const fileType =

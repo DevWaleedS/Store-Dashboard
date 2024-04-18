@@ -80,6 +80,7 @@ export const productsApi = createApi({
 				url: `specialStatus/${id}`,
 				method: "GET",
 			}),
+
 			invalidatesTags: ["Products"],
 		}),
 
@@ -89,7 +90,6 @@ export const productsApi = createApi({
 				url: `searchProduct?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
 				method: "GET",
 			}),
-			providesTags: ["Products"],
 		}),
 
 		// search in Imported products
@@ -98,28 +98,42 @@ export const productsApi = createApi({
 				url: `searchImportProduct?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
 				method: "GET",
 			}),
-			providesTags: ["Products"],
 		}),
 
 		// filter products by categories
-		filterProductsByCategories: builder.mutation({
-			query: (category_id) => ({
-				url: `category?category_id=${category_id}`,
+		filterStoreProductsByCategories: builder.mutation({
+			query: (arg) => ({
+				url: `product?page=${arg.page}&number=${arg.number}&category_id=${arg.category_id}`,
 				method: "GET",
 			}),
+		}),
 
-			providesTags: ["Products"],
+		// filter products by categories
+		filterImportedProductsByCategories: builder.mutation({
+			query: (arg) => ({
+				url: `importedProducts?page=${arg.page}&number=${arg.number}&category_id=${arg.category_id}`,
+				method: "GET",
+			}),
 		}),
 
 		// change Categories For Some Selected Products
 		changeCategoriesForSomeSelectedProducts: builder.mutation({
-			query: ({ queryParams, body }) => ({
-				url: `updateCategory?${queryParams}`,
-				method: "POST",
-				body,
-			}),
+			query: ({ queryParams, category_id, subcategory_id }) => {
+				const url = `updateCategory?${queryParams}`;
+				const method = "POST";
 
-			providesTags: ["Products"],
+				// Construct payload object
+				let payload = { category_id };
+
+				// If subcategory_id array is not empty, include it in the payload
+				if (subcategory_id && subcategory_id.length > 0) {
+					payload.subcategory_id = subcategory_id;
+				}
+
+				// Return URL, method, and payload
+				return { url, method, body: JSON.stringify(payload) };
+			},
+			invalidatesTags: ["Products"],
 		}),
 	}),
 });
@@ -135,6 +149,7 @@ export const {
 	useChangeProductStatusMutation,
 	useChangeAllProductsStatusMutation,
 	useChangeSpecialStatusMutation,
-	useFilterProductsByCategoriesMutation,
+	useFilterStoreProductsByCategoriesMutation,
+	useFilterImportedProductsByCategoriesMutation,
 	useChangeCategoriesForSomeSelectedProductsMutation,
 } = productsApi;
