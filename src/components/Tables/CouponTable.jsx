@@ -37,13 +37,13 @@ import { DeleteIcon, Reports } from "../../data/Icons";
 
 //redux
 import { useDispatch } from "react-redux";
+
 import {
-	ChangeAllCouponsStatusThunk,
-	ChangeCouponsStatusThunk,
-	CouponsThunk,
-	DeleteAllDeleteCouponsThunk,
-	DeleteCouponThunk,
-} from "../../store/Thunk/CouponsThunk";
+	useChangeAllCouponsStatusMutation,
+	useChangeCouponStatusMutation,
+	useDeleteAllCouponsMutation,
+	useDeleteCouponMutation,
+} from "../../store/apiSlices/couponApi";
 
 const switchStyle = {
 	width: "50px",
@@ -253,7 +253,6 @@ export default function CouponTable({
 	pageCount,
 	currentPage,
 }) {
-	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
@@ -295,106 +294,88 @@ export default function CouponTable({
 	// -----------------------------------------------------------
 
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteCouponThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	const [deleteCoupon] = useDeleteCouponMutation();
+	const [deleteAllCoupons] = useDeleteAllCouponsMutation();
 
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllDeleteCouponsThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deleteCoupon({ couponId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteCoupon", err);
+		}
+	};
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllCoupons({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllCoupons", err);
+		}
 	};
 	//------------------------------------------------------------------------
 
-	// change  status
-	const changeItemStatus = (id) => {
-		dispatch(
-			ChangeCouponsStatusThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	// change category status
+	const [changeCouponStatus] = useChangeCouponStatusMutation();
+	const [changeAllCouponsStatus] = useChangeAllCouponsStatusMutation();
 
-	const handleChangeAllItemsStatus = (selected) => {
-		dispatch(
-			ChangeAllCouponsStatusThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(CouponsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const changeItemStatus = async (id) => {
+		try {
+			await changeCouponStatus({ couponId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the changeCouponStatus", err);
+		}
+	};
+	const handleChangeAllItemsStatus = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await changeAllCouponsStatus({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to change Status for changeAllCouponsStatus", err);
+		}
 	};
 
 	// ----------------------------------------------------------------------------

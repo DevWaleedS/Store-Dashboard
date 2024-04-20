@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 
 // Third party
-import axios from "axios";
 import { toast } from "react-toastify";
 
 // Context
@@ -21,6 +20,9 @@ import Modal from "@mui/material/Modal";
 
 // Components
 import { TextEditor } from "../TextEditor";
+
+// RTK Query
+import { useSendReplayToCommentMutation } from "../../store/apiSlices/ratingApi";
 
 const style = {
 	position: "absolute",
@@ -59,11 +61,7 @@ const contentStyles = {
 	border: "1px solid #67747B33",
 };
 
-const SendReplayModal = ({ commentDetails, reload, setReload }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+const SendReplayModal = ({ commentDetails }) => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
@@ -81,35 +79,41 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 	};
 
 	// to send Replay Comment
-	const sendReplayComment = () => {
+	const [sendReplayToComment] = useSendReplayToCommentMutation();
+	const handleSendReplayToComment = async () => {
 		serMessageError("");
+
 		let formData = new FormData();
 		formData.append("comment_text", editorValue);
 		formData.append("comment_id", commentDetails?.id);
 
-		axios
-			.post(`replaycomment`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					dispatch(closeReplyModal());
-					setReload(!reload);
-					resetsMessage();
-				} else {
-					serMessageError(res?.data?.message?.en?.comment_text?.[0]);
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.comment_text?.[0], {
-						theme: "light",
-					});
-				}
+		try {
+			const response = await sendReplayToComment({
+				comment_text: editorValue,
+				comment_id: commentDetails?.id,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setEndActionTitle(response?.data?.message?.ar);
+				dispatch(closeReplyModal());
+
+				resetsMessage();
+			} else {
+				serMessageError(response?.data?.message?.en?.comment_text?.[0]);
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+				toast.error(response?.data?.message?.en?.comment_text?.[0], {
+					theme: "light",
+				});
+			}
+		} catch (error) {
+			console.error("Error changing sendReplayToComment:", error);
+		}
 	};
 
 	return (
@@ -163,7 +167,7 @@ const SendReplayModal = ({ commentDetails, reload, setReload }) => {
 					</div>
 					<div className='d-flex justify-content-center gap-4 mb-4 '>
 						<button
-							onClick={() => sendReplayComment()}
+							onClick={() => handleSendReplayToComment()}
 							disabled={!editorValue}
 							style={{
 								color: "#EFF9FF",

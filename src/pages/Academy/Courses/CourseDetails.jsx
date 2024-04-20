@@ -13,20 +13,23 @@ import { BiPlayCircle } from "react-icons/bi";
 import { ArrowBack, ArrowDown, PDFIcon } from "../../../data/Icons";
 
 // Components
-import useFetch from "../../../Hooks/UseFetch";
 import { CourseVideoModal } from "../../../components/Modal";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 import VideoOfCourseDuration from "../VideoOfCourseDuration/VideoOfCourseDuration";
 
+// RTK Query
+import { useGetAcademyCourseByIdQuery } from "../../../store/apiSlices/academyApi";
+
 const CourseDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-
 	// to open video modal
 	const dispatch = useDispatch(false);
 
-	// to get all  data from server
-	const { fetchedData, loading } = useFetch(`course/${id}`);
+	// to fetch course details
+	const { data: courseDetails, isFetching } = useGetAcademyCourseByIdQuery({
+		courseId: id,
+	});
 
 	return (
 		<>
@@ -61,7 +64,7 @@ const CourseDetails = () => {
 					</div>
 				</div>
 
-				{loading ? (
+				{isFetching ? (
 					<div
 						className='d-flex justify-content-center align-items-center'
 						style={{ height: "200px" }}>
@@ -72,7 +75,7 @@ const CourseDetails = () => {
 						{/* Course image */}
 						<section className='course-image mb-5'>
 							<img
-								src={fetchedData?.data?.course?.image}
+								src={courseDetails?.data?.course?.image}
 								className='img-fluid'
 								loading='lazy'
 								alt={""}
@@ -82,10 +85,10 @@ const CourseDetails = () => {
 						<section className='row mb-5'>
 							<div className='course-actions'>
 								<div className='course-name mb-1'>
-									<h4>{fetchedData?.data?.course?.name} </h4>
+									<h4>{courseDetails?.data?.course?.name} </h4>
 								</div>
 
-								{fetchedData?.data?.course?.unit?.map((unit) => (
+								{courseDetails?.data?.course?.unit?.map((unit) => (
 									<div className='col-12' key={unit?.id}>
 										<div
 											className='accordion-item course-unites d-flex justify-content-between order-action-box accordion-box '

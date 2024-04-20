@@ -5,7 +5,6 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
 import { PostalSubscriptionsTable } from "../components/Tables";
 
 // Icons
@@ -15,50 +14,73 @@ import { BsSearch } from "react-icons/bs";
 // Export File
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-import { useDispatch, useSelector } from "react-redux";
-import { PostalSubscriptionsThunk } from "../store/Thunk/PostalSubscriptionsThunk";
+
+// RTK Query
+import {
+	useGetPostalSubscriptionsQuery,
+	useSearchInPostalSubscriptionsMutation,
+} from "../store/apiSlices/postalSubscriptionsApi";
 
 const PostalSubscriptions = () => {
-	const dispatch = useDispatch();
 	const [search, setSearch] = useState("");
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
+	const [postalSubscriptionsData, setPostalSubscriptionsData] = useState([]);
 
-	const { PostalSubscriptionsData, currentPage, pageCount, loading, reload } =
-		useSelector((state) => state.PostalSubscriptionsSlice);
+	const { data: postalSubscriptions, isLoading } =
+		useGetPostalSubscriptionsQuery({
+			page: pageTarget,
+			number: rowsCount,
+		});
+	// --------------------------------------------------------------------------
 
-	// const { loading, reload, setReload } = useFetch(
-	// 	`subsicriptions?page=${pageTarget}&number=${rowsCount}`
-	// );
-
-	// -----------------------------------------------------------
-
-	/** get contact data */
+	/** get data */
 	useEffect(() => {
-		dispatch(PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+		if (postalSubscriptions?.data?.subsicriptions?.length !== 0) {
+			setPostalSubscriptionsData(postalSubscriptions?.data?.subsicriptions);
+		}
+	}, [postalSubscriptions?.data?.subsicriptions]);
 
-	// -----------------------------------------------------------
+	// -------------------------------------------------------------------------------------------
+
+	// handle search in postalSubscriptions
+	const [searchInPostalSubscriptions] =
+		useSearchInPostalSubscriptionsMutation();
+	useEffect(() => {
+		const debounce = setTimeout(() => {
+			if (search !== "") {
+				const fetchData = async () => {
+					try {
+						const response = await searchInPostalSubscriptions({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setPostalSubscriptionsData(response?.data?.data?.subsicriptions);
+					} catch (error) {
+						console.error("Error fetching searchInPostalSubscriptions:", error);
+					}
+				};
+
+				fetchData();
+			} else {
+				setPostalSubscriptionsData(postalSubscriptions?.data?.subsicriptions);
+			}
+		}, 500);
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [search, pageTarget, rowsCount]);
 
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
 	const fileExtension = ".xlsx";
 
-	// Handle Search
-	let subsicriptions = PostalSubscriptionsData?.subsicriptions;
-
-	if (search !== "") {
-		subsicriptions = PostalSubscriptionsData?.subsicriptions?.filter((item) =>
-			item?.email?.toLowerCase()?.includes(search?.toLowerCase())
-		);
-	} else {
-		subsicriptions = PostalSubscriptionsData?.subsicriptions;
-	}
-
 	// Export To CSV
 	const exportToCSV = () => {
 		const ws = XLSX.utils.json_to_sheet(
-			subsicriptions?.map((item) => ({
+			postalSubscriptionsData?.map((item) => ({
 				email: item?.email,
 			}))
 		);
@@ -121,17 +143,16 @@ const PostalSubscriptions = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<PostalSubscriptionsTable
-							data={subsicriptions}
-							loading={loading}
-							reload={reload}
+							data={postalSubscriptionsData}
+							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={pageCount}
-							currentPage={currentPage}
+							pageCount={postalSubscriptions?.data?.page_count}
+							currentPage={postalSubscriptions?.data?.current_page}
 						/>
 					</div>
 				</div>

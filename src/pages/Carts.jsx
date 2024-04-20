@@ -8,52 +8,62 @@ import { Link } from "react-router-dom";
 import { HomeIcon } from "../data/Icons";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
 import { CartsTables } from "../components/Tables";
-import { useDispatch, useSelector } from "react-redux";
+
+// RTK Query
 import {
-	EmptyCartsThunk,
-	searchCartNameThunk,
-} from "../store/Thunk/EmptyCartsThunk";
+	useGetEmptyCartsQuery,
+	useSearchInEmptyCartsMutation,
+} from "../store/apiSlices/emptyCartsApi";
 
 const Carts = () => {
-	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
+	const [emptyCartsData, setEmptyCartsData] = useState([]);
 
-	const { EmptyCartsData, currentPage, pageCount, loading, reload } =
-		useSelector((state) => state.EmptyCartsSlice);
-	// const { loading, reload, setReload } = useFetch(
-	// 	`admin?page=${pageTarget}&number=${rowsCount}`
-	// );
-	// -----------------------------------------------------------
+	const { data: emptyCarts, isLoading } = useGetEmptyCartsQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
 
-	/** get contact data */
+	/** get data */
 	useEffect(() => {
-		dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+		if (emptyCarts?.data?.carts?.length !== 0) {
+			setEmptyCartsData(emptyCarts?.data?.carts);
+		}
+	}, [emptyCarts?.data?.carts]);
 
-	// -----------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-	// search
+	// handle search in empty carts
+	const [searchInEmptyCarts] = useSearchInEmptyCartsMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (search !== "") {
-				dispatch(
-					searchCartNameThunk({
-						query: search,
-						page: pageTarget,
-						number: rowsCount,
-					})
-				);
+				const fetchData = async () => {
+					try {
+						const response = await searchInEmptyCarts({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setEmptyCartsData(response?.data?.data?.carts);
+					} catch (error) {
+						console.error("Error fetching searchInEmptyCarts:", error);
+					}
+				};
+
+				fetchData();
+			} else {
+				setEmptyCartsData(emptyCarts?.data?.carts);
 			}
 		}, 500);
-
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, dispatch]);
+	}, [search, pageTarget, rowsCount]);
 
 	return (
 		<>
@@ -85,17 +95,16 @@ const Carts = () => {
 				<div className='row'>
 					<div className='carts-table'>
 						<CartsTables
-							cartsData={EmptyCartsData}
-							loading={loading}
-							reload={reload}
+							cartsData={emptyCarts}
+							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={pageCount}
-							currentPage={currentPage}
+							pageCount={emptyCarts?.data?.page_count}
+							currentPage={emptyCarts?.data?.current_page}
 						/>
 					</div>
 				</div>

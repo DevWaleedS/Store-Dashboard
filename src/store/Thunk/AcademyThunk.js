@@ -35,8 +35,6 @@ export const ExplainVideosThunk = createAsyncThunk(
 	}
 );
 
-//searchCourseName
-
 // searchCartNameThunk
 export const searchCourseNameThunk = createAsyncThunk(
 	"Academy/searchCourseNameThunk",

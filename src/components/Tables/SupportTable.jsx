@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 
 // Third party
 import { toast } from "react-toastify";
@@ -36,7 +36,6 @@ import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
-import { GoCheck } from "react-icons/go";
 import {
 	DeadLineIcon,
 	DeleteIcon,
@@ -44,13 +43,15 @@ import {
 	Reports,
 	ReplayIcon,
 } from "../../data/Icons";
+import { GoCheck } from "react-icons/go";
 import { SendSupportReplayModal } from "../Modal";
+
+// RTK Query
 import {
-	ChangeTechnicalSupportThunk,
-	DeleteAllDeleteTechnicalSupportThunk,
-	DeleteTechnicalSupportThunk,
-	TechnicalSupportThunk,
-} from "../../store/Thunk/TechnicalSupportThunk";
+	useChangeTechnicalSupportStatusMutation,
+	useDeleteAllTechnicalSupportMutation,
+	useDeleteTechnicalSupportItemMutation,
+} from "../../store/apiSlices/technicalSupportApi";
 
 function EnhancedTableHead(props) {
 	return (
@@ -164,7 +165,7 @@ EnhancedTableToolbar.propTypes = {
 const SupportTable = ({
 	data,
 	loading,
-	reload,
+
 	rowsCount,
 	pageTarget,
 	setRowsCount,
@@ -214,88 +215,71 @@ const SupportTable = ({
 	};
 
 	// ---------------------------------------------------------------
+
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteTechnicalSupportThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(
-					TechnicalSupportThunk({ page: pageTarget, number: rowsCount })
-				);
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const [deleteTechnicalSupportItem] = useDeleteTechnicalSupportItemMutation();
+	const [deleteAllTechnicalSupport] = useDeleteAllTechnicalSupportMutation();
+
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deleteTechnicalSupportItem({ technicalSupportId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteTechnicalSupportItem", err);
+		}
 	};
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllDeleteTechnicalSupportThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(
-					TechnicalSupportThunk({ page: pageTarget, number: rowsCount })
-				);
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllTechnicalSupport({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllTechnicalSupport", err);
+		}
 	};
 	// ---------------------------------------------------------------
 
-	// change  status
-	const changeItemStatus = (id) => {
-		dispatch(
-			ChangeTechnicalSupportThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
+	// change technical Support status
+	const [changeTechnicalSupportStatus] =
+		useChangeTechnicalSupportStatusMutation();
 
-				dispatch(
-					TechnicalSupportThunk({ page: pageTarget, number: rowsCount })
-				);
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const changeItemStatus = async (id) => {
+		try {
+			await changeTechnicalSupportStatus({ technicalSupportId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the changeTechnicalSupportStatus", err);
+		}
 	};
 	//------------------------------------------------------------------------
 
@@ -518,7 +502,7 @@ const SupportTable = ({
 					setPageTarget={setPageTarget}
 				/>
 			)}
-			<SendSupportReplayModal reload={reload} supportDetails={UserDetails} />
+			<SendSupportReplayModal supportDetails={UserDetails} />
 
 			{actionDelete && (
 				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />

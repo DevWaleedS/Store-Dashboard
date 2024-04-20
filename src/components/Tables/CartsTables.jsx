@@ -37,11 +37,11 @@ import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 //redux
 import { useDispatch } from "react-redux";
+
 import {
-	DeleteAllDeleteEmptyCartsThunk,
-	DeleteEmptyCartsThunk,
-	EmptyCartsThunk,
-} from "../../store/Thunk/EmptyCartsThunk";
+	useDeleteAllEmptyCartsMutation,
+	useDeleteEmptyCartsMutation,
+} from "../../store/apiSlices/emptyCartsApi";
 
 function EnhancedTableHead(props) {
 	return (
@@ -182,7 +182,6 @@ export default function CartsTables({
 	currentPage,
 }) {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
@@ -225,54 +224,45 @@ export default function CartsTables({
 	// --------------------------------------------------------------------
 
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteEmptyCartsThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	const [deleteEmptyCarts] = useDeleteEmptyCartsMutation();
+	const [deleteAllEmptyCarts] = useDeleteAllEmptyCartsMutation();
 
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllDeleteEmptyCartsThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(EmptyCartsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deleteEmptyCarts({ emptyCartId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteEmptyCarts", err);
+		}
+	};
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllEmptyCarts({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllEmptyCarts", err);
+		}
 	};
 
 	return (

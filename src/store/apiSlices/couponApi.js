@@ -35,7 +35,7 @@ export const couponApi = createApi({
 		// delete Coupons
 		deleteCoupon: builder.mutation({
 			query: ({ couponId }) => ({
-				url: `coupondeleteall??id[]=${couponId}`,
+				url: `coupondeleteall?id[]=${couponId}`,
 				method: "GET",
 			}),
 			invalidatesTags: ["Coupons"],

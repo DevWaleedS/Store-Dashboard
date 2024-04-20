@@ -31,15 +31,22 @@ import {
 	NotificationsThunk,
 } from "../store/Thunk/NotificationsThunk";
 import { TablePagination } from "../components/Tables/TablePagination";
+import {
+	useDeleteAllNotificationsMutation,
+	useDeleteNotificationsMutation,
+	useGetNotificationsQuery,
+} from "../store/apiSlices/notificationsApi";
 
 const Notifications = () => {
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
-	const { NotificationsData, currentPage, pageCount, loading } = useSelector(
-		(state) => state.NotificationsSlice
-	);
+	const { data: notification, isLoading } = useGetNotificationsQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
+
 	// --------------------------------------------------------
 
 	/** get contact data */
@@ -81,7 +88,7 @@ const Notifications = () => {
 	};
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
-			const newSelected = NotificationsData?.map((n) => n.id);
+			const newSelected = notification?.data?.notifications?.map((n) => n.id);
 			setSelected(newSelected);
 			return;
 		}
@@ -90,54 +97,45 @@ const Notifications = () => {
 	// -------------------------------------------------------------------------
 
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteNotificationsThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(NotificationsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	const [deleteNotifications] = useDeleteNotificationsMutation();
+	const [deleteAllNotifications] = useDeleteAllNotificationsMutation();
 
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllDeleteNotificationsThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(NotificationsThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deleteNotifications({ notificationId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteNotifications", err);
+		}
+	};
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllNotifications({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllNotifications", err);
+		}
 	};
 
 	const readMoreModal = () => {
@@ -170,7 +168,7 @@ const Notifications = () => {
 					</div>
 				</div>
 
-				{loading ? (
+				{isLoading ? (
 					<section
 						style={{ height: "70vh" }}
 						className='d-flex justify-content-center align-items-center'>
@@ -178,7 +176,7 @@ const Notifications = () => {
 					</section>
 				) : (
 					<>
-						{NotificationsData?.length === 0 ? (
+						{notification?.data?.notifications?.length === 0 ? (
 							<h4
 								style={{ height: "70vh" }}
 								className='d-flex justify-content-center align-items-center'>
@@ -206,11 +204,13 @@ const Notifications = () => {
 														}}
 														indeterminate={
 															selected.length > 0 &&
-															selected.length < NotificationsData?.length
+															selected.length <
+																notification?.data?.notifications?.length
 														}
 														checked={
-															NotificationsData?.length > 0 &&
-															selected.length === NotificationsData?.length
+															notification?.data?.notifications?.length > 0 &&
+															selected.length ===
+																notification?.data?.notifications?.length
 														}
 														onChange={handleSelectAllClick}
 													/>
@@ -249,89 +249,92 @@ const Notifications = () => {
 												</div>
 											</div>
 											<div className='d-flex flex-col gap-4 flex-wrap mt-3 flex '>
-												{NotificationsData?.map((not, index) => {
-													const isItemSelected = isSelected(not.id);
-													return (
-														<div
-															key={index}
-															style={{ boxShadow: "3px 3px 6px #00000005" }}
-															className='notification-box bg-white w-100 d-flex flex-md-row flex-col align-md-items-center align-items-start justify-content-between gap-2 px-md-4 py-md-3 py-3 px-2'>
-															<div className='message w-100 d-flex flex-row align-items-center gap-md-4 gap-2'>
-																<Checkbox
-																	checkedIcon={<CheckedSquare />}
-																	sx={{
-																		color: "#1DBBBE",
-																		"& .MuiSvgIcon-root": {
-																			color: "#ADB5B9",
-																		},
-																	}}
-																	checked={isItemSelected}
-																	onClick={(event) =>
-																		handleClick(event, not.id)
-																	}
-																/>
-																<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
-																	<div className='d-flex flex-column gap-1'>
-																		<div className='d-flex flex-row align-items-center'>
-																			<h2
-																				className='notifications-title'
-																				dangerouslySetInnerHTML={{
-																					__html: not?.message,
-																				}}></h2>
+												{notification?.data?.notifications?.map(
+													(not, index) => {
+														const isItemSelected = isSelected(not.id);
+														return (
+															<div
+																key={index}
+																style={{ boxShadow: "3px 3px 6px #00000005" }}
+																className='notification-box bg-white w-100 d-flex flex-md-row flex-col align-md-items-center align-items-start justify-content-between gap-2 px-md-4 py-md-3 py-3 px-2'>
+																<div className='message w-100 d-flex flex-row align-items-center gap-md-4 gap-2'>
+																	<Checkbox
+																		checkedIcon={<CheckedSquare />}
+																		sx={{
+																			color: "#1DBBBE",
+																			"& .MuiSvgIcon-root": {
+																				color: "#ADB5B9",
+																			},
+																		}}
+																		checked={isItemSelected}
+																		onClick={(event) =>
+																			handleClick(event, not.id)
+																		}
+																	/>
+																	<div className='w-100 d-flex flex-row align-items-center justify-content-between '>
+																		<div className='d-flex flex-column gap-1'>
+																			<div className='d-flex flex-row align-items-center'>
+																				<h2
+																					className='notifications-title'
+																					dangerouslySetInnerHTML={{
+																						__html: not?.message,
+																					}}></h2>
+																			</div>
+																			<p className='notification-user-name'>
+																				{not?.user[0]?.name}
+																			</p>
 																		</div>
-																		<p className='notification-user-name'>
-																			{not?.user[0]?.name}
+																	</div>
+																</div>
+
+																<div className='time-delete w-100 h-100 d-flex flex-md-row flex-column align-items-md-center align-items-end justify-content-end gap-md-5 gap-2'>
+																	<div className=''>
+																		<p className='notification-time'>
+																			<FormatNotifications
+																				date={not.created_at}
+																			/>
 																		</p>
+																	</div>
+
+																	<div className='d-flex flex-row align-items-center gap-2'>
+																		<Reports
+																			title='قراءة المزيد'
+																			className='show-more'
+																			onClick={() => setShowMore(not?.message)}
+																		/>
+																		<DeleteIcon
+																			onClick={() => {
+																				setActionDelete(
+																					"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
+																				);
+																				setItemId(not.id);
+																			}}
+																			style={{ cursor: "pointer" }}
+																			title='حذف الإشعار'
+																		/>
 																	</div>
 																</div>
 															</div>
-
-															<div className='time-delete w-100 h-100 d-flex flex-md-row flex-column align-items-md-center align-items-end justify-content-end gap-md-5 gap-2'>
-																<div className=''>
-																	<p className='notification-time'>
-																		<FormatNotifications
-																			date={not.created_at}
-																		/>
-																	</p>
-																</div>
-
-																<div className='d-flex flex-row align-items-center gap-2'>
-																	<Reports
-																		title='قراءة المزيد'
-																		className='show-more'
-																		onClick={() => setShowMore(not?.message)}
-																	/>
-																	<DeleteIcon
-																		onClick={() => {
-																			setActionDelete(
-																				"سيتم حذف النشاط وهذه الخطوة غير قابلة للرجوع"
-																			);
-																			setItemId(not.id);
-																		}}
-																		style={{ cursor: "pointer" }}
-																		title='حذف الإشعار'
-																	/>
-																</div>
-															</div>
-														</div>
-													);
-												})}
+														);
+													}
+												)}
 											</div>
 										</div>
 									</div>
 
 									<div className='row'>
-										{NotificationsData?.length !== 0 && !loading && (
-											<TablePagination
-												data={NotificationsData}
-												pageCount={pageCount}
-												currentPage={currentPage}
-												pageTarget={pageTarget}
-												rowsCount={rowsCount}
-												setRowsCount={setRowsCount}
-												setPageTarget={setPageTarget}
-											/>
-										)}
+										{notification?.data?.notifications?.length !== 0 &&
+											!isLoading && (
+												<TablePagination
+													data={notification?.data?.notifications}
+													pageCount={notification?.data?.page_count}
+													currentPage={notification?.data?.current_page}
+													pageTarget={pageTarget}
+													rowsCount={rowsCount}
+													setRowsCount={setRowsCount}
+													setPageTarget={setPageTarget}
+												/>
+											)}
 									</div>
 								</div>
 

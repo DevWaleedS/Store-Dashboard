@@ -3,7 +3,7 @@ export { default as Carts } from "./Carts";
 export { default as Offers } from "./Offers";
 export { default as Coupon } from "./Coupon";
 export { default as Report } from "./Report";
-export { default as Support } from "./Support";
+
 export { default as SEOStore } from "./SEOStore";
 
 export { default as RootLayOut } from "./RootLayout";

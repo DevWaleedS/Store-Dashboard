@@ -2,52 +2,61 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
-import { ArrowBack } from "../data/Icons";
-import SupportTable from "../components/Tables/SupportTable";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	TechnicalSupportThunk,
-	searchTechnicalSupportThunk,
-} from "../store/Thunk/TechnicalSupportThunk";
+import { ArrowBack } from "../../data/Icons";
+import SupportTable from "../../components/Tables/SupportTable";
 
-const Support = () => {
-	const dispatch = useDispatch();
+// RTK Query
+import { useGetTechnicalSupportQuery } from "../../store/apiSlices/technicalSupportApi";
+import { useSearchInPostalSubscriptionsMutation } from "../../store/apiSlices/postalSubscriptionsApi";
+
+const TechnicalSupport = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(9);
 	const [search, setSearch] = useState("");
-	const { TechnicalSupportData, currentPage, pageCount, loading, reload } =
-		useSelector((state) => state.TechnicalSupportSlice);
+	const [technicalSupportData, setTechnicalSupportData] = useState([]);
+
+	const { data: technicalSupport, isLoading } = useGetTechnicalSupportQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
 	// -----------------------------------------------------------
 
-	console.log(TechnicalSupportData);
-
-	/** get contact data */
+	/** get technical Support data */
 	useEffect(() => {
-		dispatch(TechnicalSupportThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+		if (technicalSupport?.data?.Technicalsupports?.length !== 0) {
+			setTechnicalSupportData(technicalSupport?.data?.Technicalsupports);
+		}
+	}, [technicalSupport?.data?.Technicalsupports]);
 
-	// const { loading, reload, setReload } = useFetch(
-	// 	`technicalSupport?page=${pageTarget}&number=${rowsCount}`
-	// );
-
-	// search
+	// handle search in Technical Support
+	const [searchInTechnicalSupport] = useSearchInPostalSubscriptionsMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (search !== "") {
-				dispatch(
-					searchTechnicalSupportThunk({
-						query: search,
-						page: pageTarget,
-						number: rowsCount,
-					})
-				);
+				const fetchData = async () => {
+					try {
+						const response = await searchInTechnicalSupport({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setTechnicalSupportData(response?.data?.data?.Technicalsupports);
+					} catch (error) {
+						console.error("Error fetching searchInTechnicalSupport:", error);
+					}
+				};
+
+				fetchData();
+			} else {
+				setTechnicalSupportData(technicalSupport?.data?.Technicalsupports);
 			}
 		}, 500);
-
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, dispatch]);
+	}, [search, pageTarget, rowsCount]);
+
 	return (
 		<>
 			<Helmet>
@@ -92,15 +101,14 @@ const Support = () => {
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable
-							data={TechnicalSupportData}
-							loading={loading}
-							reload={reload}
+							data={technicalSupportData}
+							loading={isLoading}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={pageCount}
-							currentPage={currentPage}
+							pageCount={technicalSupport?.data?.page_count}
+							currentPage={technicalSupport?.data?.current_page}
 						/>
 					</div>
 				</div>
@@ -109,4 +117,4 @@ const Support = () => {
 	);
 };
 
-export default Support;
+export default TechnicalSupport;

@@ -32,21 +32,14 @@ import {
 import CircularLoading from "../../HelperComponents/CircularLoading";
 import DeleteOneModalComp from "../../components/DeleteOneModal/DeleteOneModal";
 
-// redux
+// RTK Query
 import {
-	ChangeCommentStatusThunk,
-	DeleteCommentThunk,
-	RatingThunk,
-} from "../../store/Thunk/RatingThunk";
+	useChangeRatingStatusMutation,
+	useDeleteRatingMutation,
+} from "../../store/apiSlices/ratingApi";
 
 // IMPORT IMAGES
-const RatingWeight = ({
-	rowsCount,
-	pageTarget,
-	setCommentDetails,
-	loading,
-	RatingData,
-}) => {
+const RatingWeight = ({ setCommentDetails, loading, RatingData }) => {
 	const dispatch = useDispatch();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -75,57 +68,47 @@ const RatingWeight = ({
 	};
 	// --------------------------------
 
-	// change Comment Status
-	const changeCommentStatus = (id) => {
-		console.log(id);
-		dispatch(
-			ChangeCommentStatusThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	// Change Comment Status
+	const [changeRatingStatus] = useChangeRatingStatusMutation();
+	const changeCommentStatus = async (id) => {
+		try {
+			await changeRatingStatus({ commentId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the changeRatingStatus", err);
+		}
 	};
+
 	//----------------------------------
-	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteCommentThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	// Delete Comment
+	const [deleteRating] = useDeleteRatingMutation();
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deleteRating({ commentId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteRating", err);
+		}
 	};
 
 	return (
@@ -138,10 +121,10 @@ const RatingWeight = ({
 				</div>
 			) : (
 				<>
-					{RatingData?.comment_of_products?.length === 0 ? (
+					{RatingData === 0 ? (
 						<p className='text-center'>لايوجد تقييمات</p>
 					) : (
-						RatingData?.comment_of_products?.map((rate) => (
+						RatingData?.map((rate) => (
 							<div className='rating-widget mb-md-5 mb-3' key={rate?.id}>
 								<div className='row'>
 									{/** user info */}

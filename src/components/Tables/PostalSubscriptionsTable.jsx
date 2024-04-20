@@ -33,12 +33,10 @@ import { NotificationContext } from "../../Context/NotificationProvider";
 import { DeleteIcon } from "../../data/Icons";
 
 //redux
-import { useDispatch } from "react-redux";
 import {
-	DeleteAllDeletePostalSubscriptionsThunk,
-	DeletePostalSubscriptionsThunk,
-	PostalSubscriptionsThunk,
-} from "../../store/Thunk/PostalSubscriptionsThunk";
+	useDeleteAllPostalSubscriptionsMutation,
+	useDeletePostalSubscriptionsMutation,
+} from "../../store/apiSlices/postalSubscriptionsApi";
 
 function EnhancedTableHead(props) {
 	return (
@@ -152,7 +150,6 @@ export default function PostalSubscriptionsTable({
 	pageCount,
 	currentPage,
 }) {
-	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
@@ -194,58 +191,46 @@ export default function PostalSubscriptionsTable({
 	// -------------------------------------------------------------
 
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeletePostalSubscriptionsThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(
-					PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount })
-				);
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	const [deletePostalSubscriptions] = useDeletePostalSubscriptionsMutation();
+	const [deleteAllPostalSubscriptions] =
+		useDeleteAllPostalSubscriptionsMutation();
 
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllDeletePostalSubscriptionsThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(
-					PostalSubscriptionsThunk({ page: pageTarget, number: rowsCount })
-				);
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deletePostalSubscriptions({ postalSubscriptionId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deletePostalSubscriptions", err);
+		}
+	};
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllPostalSubscriptions({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllPostalSubscriptions", err);
+		}
 	};
 
 	return (

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 // Third party
-import axios from "axios";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -22,6 +22,9 @@ import Modal from "@mui/material/Modal";
 
 // Components
 import { TextEditor } from "../TextEditor";
+
+// RTK Query
+import { useSendReplayTechnicalSupportMutation } from "../../store/apiSlices/technicalSupportApi";
 
 const style = {
 	position: "absolute",
@@ -54,11 +57,7 @@ const contentStyles = {
 	whiteSpace: "normal",
 };
 
-const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+const SendSupportReplayModal = ({ supportDetails }) => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -78,37 +77,41 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 	const [messageError, serMessageError] = useState("");
 
 	// to send Replay Comment
-	const sendReplayComment = () => {
+	const [sendReplayTechnicalSupport] = useSendReplayTechnicalSupportMutation();
+	const handleSendReplayTechnicalSupport = async () => {
 		serMessageError("");
 		let formData = new FormData();
 		formData.append("replay_text", editorValue);
 		formData.append("technical_support_id", supportDetails?.id);
 
-		axios
-			.post(`replayTechnicalSupport`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					dispatch(closeReplyModal());
-					setReload(!reload);
-					resetsMessage();
-					navigate("/Support");
-				} else {
-					serMessageError(res?.data?.message?.en?.replay_text?.[0]);
-
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.replay_text?.[0], {
-						theme: "light",
-					});
-				}
+		try {
+			const response = await sendReplayTechnicalSupport({
+				replay_text: editorValue,
+				technical_support_id: supportDetails?.id,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setEndActionTitle(response?.data?.message?.ar);
+				dispatch(closeReplyModal());
+				resetsMessage();
+				navigate("/Support");
+				resetsMessage();
+			} else {
+				serMessageError(response?.data?.message?.en?.comment_text?.[0]);
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+				toast.error(response?.data?.message?.en?.comment_text?.[0], {
+					theme: "light",
+				});
+			}
+		} catch (error) {
+			console.error("Error changing sendReplayToComment:", error);
+		}
 	};
 
 	return (
@@ -162,7 +165,7 @@ const SendSupportReplayModal = ({ supportDetails, reload, setReload }) => {
 					</div>
 					<div className='d-flex justify-content-center gap-4 mb-4 '>
 						<button
-							onClick={() => sendReplayComment()}
+							onClick={() => handleSendReplayTechnicalSupport()}
 							disabled={!editorValue}
 							style={{
 								color: "#EFF9FF",

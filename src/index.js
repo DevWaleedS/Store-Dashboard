@@ -33,7 +33,6 @@ import {
 	Management,
 	SocialPages,
 	//PackageUpgrade,
-	Support,
 	//MarketingCampaign,
 	//BranchesAndWarehouses,
 	Notifications,
@@ -78,7 +77,7 @@ import {
 	// CreateOffer,
 	CreatePage,
 	EditPage,
-	SupportDetails,
+
 	// OfferDetails,
 } from "./pages/nestedPages";
 
@@ -114,6 +113,8 @@ import VerificationPage from "./pages/Authentication/VerificationPage/Verificati
 import { Wallet } from "./pages/Wallet";
 import { Category, AddCategory, EditCategory } from "./pages/Categories";
 import AxiosInterceptors from "./API/AxiosInterceptors";
+import { TechnicalSupport } from "./pages/TechnicalSupport";
+import TechnicalSupportDetails from "./pages/TechnicalSupport/TechnicalSupportDetails";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -315,12 +316,12 @@ const router = createBrowserRouter([
 
 			{
 				path: "Support",
-				element: <Support />,
+				element: <TechnicalSupport />,
 			},
 			//
 			{
 				path: "Support/supportDetails/:id",
-				element: <SupportDetails />,
+				element: <TechnicalSupportDetails />,
 			},
 			{
 				path: "MainInformation",

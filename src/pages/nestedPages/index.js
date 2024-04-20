@@ -16,6 +16,5 @@ export { default as OfferDetails } from "./OfferDetails";
 
 export { default as SalesReports } from "./SalesReports";
 export { default as AddSubCategory } from "./AddSubCategory";
-export { default as SupportDetails } from "./SupportDetails";
 export { default as EditUserDetails } from "./EditUserDetails";
 export { default as CustomersReports } from "./CustomersReports";

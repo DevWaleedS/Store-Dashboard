@@ -5,70 +5,87 @@ import { useNavigate } from "react-router-dom";
 
 // Components
 import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { TablePagination } from "../../../components/Tables/TablePagination";
 
 //Icons
 import { BsPlayCircle } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
+
+// RTK Query
 import {
-	ExplainVideosThunk,
-	explainVideoNameThunk,
-} from "../../../store/Thunk/AcademyThunk";
-import { TablePagination } from "../../../components/Tables/TablePagination";
+	useGetAcademyExplainVideosQuery,
+	useSearchInAcademyExplainVideosMutation,
+} from "../../../store/apiSlices/academyApi";
 
 const Explain = ({ searchExplain }) => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(9);
+	const [explainVideosData, setExplainVideosData] = useState([]);
 
-	const { ExplainVideosData, currentPage, pageCount, loading } = useSelector(
-		(state) => state.AcademySlice
-	);
-	// -----------------------------------------------------------
+	const { data: explainVideos, isLoading } = useGetAcademyExplainVideosQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
 
-	/** get contact data */
+	/** get courses data */
 	useEffect(() => {
-		dispatch(ExplainVideosThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget]);
+		if (explainVideos?.data?.explainvideos?.length !== 0) {
+			setExplainVideosData(explainVideos?.data?.explainvideos);
+		}
+	}, [explainVideos?.data?.explainvideos]);
 
 	// -----------------------------------------------------------
 
-	// search in Orders
+	// handle search in courses
+	const [searchInAcademyExplainVideos] =
+		useSearchInAcademyExplainVideosMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (searchExplain !== "") {
-				dispatch(
-					explainVideoNameThunk({
-						query: searchExplain,
-						page: pageTarget,
-						number: rowsCount,
-					})
-				);
+				const fetchData = async () => {
+					try {
+						const response = await searchInAcademyExplainVideos({
+							query: searchExplain,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setExplainVideosData(response?.data?.data?.explainvideos);
+					} catch (error) {
+						console.error(
+							"Error fetching searchInAcademyExplainVideos:",
+							error
+						);
+					}
+				};
+
+				fetchData();
+			} else {
+				setExplainVideosData(explainVideos?.data?.explainvideos);
 			}
 		}, 500);
-
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [searchExplain, dispatch]);
-
+	}, [searchExplain, pageTarget, rowsCount]);
 	// ---------------------------------------------------------------------------------------------
 
 	return (
 		<div className='row'>
-			{loading ? (
+			{isLoading ? (
 				<div
 					className='d-flex justify-content-center align-items-center'
 					style={{ height: "200px" }}>
 					<CircularLoading />
 				</div>
-			) : ExplainVideosData?.length === 0 ? (
+			) : explainVideosData?.length === 0 ? (
 				<div className='d-flex justify-content-center align-items-center'>
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
 				<div className='explain-boxes'>
-					{ExplainVideosData?.map((lesson) => (
+					{explainVideosData?.map((lesson) => (
 						<div className='box' key={lesson?.id}>
 							<figure className='course-figure'>
 								<div className='course-prev-image'>
@@ -96,11 +113,11 @@ const Explain = ({ searchExplain }) => {
 			)}
 
 			{/** Pagination */}
-			{ExplainVideosData?.length !== 0 && !loading && (
+			{explainVideosData?.length !== 0 && !isLoading && (
 				<TablePagination
-					page={ExplainVideosData}
-					pageCount={pageCount}
-					currentPage={currentPage}
+					page={explainVideosData}
+					pageCount={explainVideos?.data?.page_count}
+					currentPage={explainVideos?.data?.current_page}
 					pageTarget={pageTarget}
 					rowsCount={rowsCount}
 					setRowsCount={setRowsCount}

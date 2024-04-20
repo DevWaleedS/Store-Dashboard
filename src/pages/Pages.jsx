@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
+import { ArrowBack } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 
 //Mui
@@ -18,13 +19,13 @@ import { Button } from "@mui/material";
 
 // Components
 import { PagesTable } from "../components/Tables";
-import { ArrowBack } from "../data/Icons";
-import { useDispatch, useSelector } from "react-redux";
+
+// RTK Query
 import {
-	PagesThunk,
-	filterPagesByStatusThunk,
-	searchPageNameThunk,
-} from "../store/Thunk/PagesThunk";
+	useFilterPagesByStatusMutation,
+	useGetPagesQuery,
+	useSearchInPagesMutation,
+} from "../store/apiSlices/pagesApi";
 
 // filter Pages by
 const filtersTypes = [
@@ -83,56 +84,79 @@ const menuItemStyles = {
 };
 
 const Pages = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-	const { PagesData, currentPage, pageCount, loading, reload } = useSelector(
-		(state) => state.PagesSlice
-	);
-	// const { loading, reload, setReload } = useFetch(
-	// 	`page?page=${pageTarget}&number=${rowsCount}`
-	// );
+	const [pageArray, setPageArray] = useState([]);
+
+	const { data: pagesData, isLoading } = useGetPagesQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
+
+	useEffect(() => {
+		if (pagesData?.data?.pages?.length !== 0) {
+			setPageArray(pagesData?.data?.pages);
+		}
+	}, [pagesData?.data?.pages]);
+
 	// -----------------------------------------------------------
 
-	/** get contact data */
-	useEffect(() => {
-		dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
-
-	// search
+	// handle search in Pages
+	const [searchInPages] = useSearchInPagesMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (search !== "") {
-				dispatch(
-					searchPageNameThunk({
-						query: search,
-						page: pageTarget,
-						number: rowsCount,
-					})
-				);
+				const fetchData = async () => {
+					try {
+						const response = await searchInPages({
+							query: search,
+							page: pageTarget,
+							number: rowsCount,
+						});
+
+						setPageArray(response?.data?.data?.pages);
+					} catch (error) {
+						console.error("Error fetching searchInPages:", error);
+					}
+				};
+
+				fetchData();
+			} else {
+				setPageArray(pagesData?.data?.pages);
 			}
 		}, 500);
-
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, dispatch]);
+	}, [search, pageTarget, rowsCount]);
+	// -------------------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+	// filter by status
+	const [filterPagesByStatus] = useFilterPagesByStatusMutation();
 	useEffect(() => {
 		if (select !== "") {
-			dispatch(
-				filterPagesByStatusThunk({
-					select: select,
-					page: pageTarget,
-					number: rowsCount,
-				})
-			);
+			const fetchData = async () => {
+				try {
+					const response = await filterPagesByStatus({
+						select,
+						page: pageTarget,
+						number: rowsCount,
+					});
+
+					setPageArray(response?.data?.data?.pages);
+				} catch (error) {
+					console.error("Error fetching filterPagesByStatus:", error);
+				}
+			};
+
+			fetchData();
+		} else {
+			setPageArray(pagesData?.data?.pages);
 		}
-	}, [select, dispatch]);
+	}, [select, filterPagesByStatus]);
 
 	return (
 		<>
@@ -229,17 +253,16 @@ const Pages = () => {
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable
-							data={PagesData}
-							loading={loading}
-							reload={reload}
+							data={pageArray}
+							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={pageCount}
-							currentPage={currentPage}
+							pageCount={pagesData?.data?.page_count}
+							currentPage={pagesData?.data?.current_page}
 						/>
 					</div>
 				</div>

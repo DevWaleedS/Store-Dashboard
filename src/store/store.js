@@ -36,35 +36,49 @@ import ChangeCategoriesForSomeSelectedProductsSlice from "./slices/ChangeCategor
 import { ordersApi } from "./apiSlices/ordersApi";
 import { loginApi } from "./apiSlices/loginApi";
 import { couponApi } from "./apiSlices/couponApi";
+import { emptyCartsApi } from "./apiSlices/emptyCartsApi";
+import { postalSubscriptionsApi } from "./apiSlices/postalSubscriptionsApi";
+import { ratingApi } from "./apiSlices/ratingApi";
+import { pagesApi } from "./apiSlices/pagesApi";
+import { AcademyApi } from "./apiSlices/academyApi";
+import { technicalSupportApi } from "./apiSlices/technicalSupportApi";
+import { notificationsApi } from "./apiSlices/notificationsApi";
 
 // store
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
+			pagesApi.middleware,
 			loginApi.middleware,
 			ordersApi.middleware,
 			couponApi.middleware,
+			ratingApi.middleware,
+			AcademyApi.middleware,
 			mainPageApi.middleware,
 			productsApi.middleware,
 			categoriesApi.middleware,
-			selectCategoriesApi.middleware
+			emptyCartsApi.middleware,
+			notificationsApi.middleware,
+			technicalSupportApi.middleware,
+			selectCategoriesApi.middleware,
+			postalSubscriptionsApi.middleware
 		),
 	reducer: {
+		[pagesApi.reducerPath]: pagesApi.reducer,
 		[loginApi.reducerPath]: loginApi.reducer,
 		[ordersApi.reducerPath]: ordersApi.reducer,
+		[ratingApi.reducerPath]: ratingApi.reducer,
 		[couponApi.reducerPath]: couponApi.reducer,
+		[AcademyApi.reducerPath]: AcademyApi.reducer,
 		[mainPageApi.reducerPath]: mainPageApi.reducer,
 		[productsApi.reducerPath]: productsApi.reducer,
 		[categoriesApi.reducerPath]: categoriesApi.reducer,
+		[emptyCartsApi.reducerPath]: emptyCartsApi.reducer,
+		[notificationsApi.reducerPath]: notificationsApi.reducer,
+		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
+		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
 
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,

@@ -4,31 +4,41 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
-// Components
-import useFetch from "../../../Hooks/UseFetch";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+// Icons
 import { ArrowBack } from "../../../data/Icons";
 
-// Icons
+// Components
+import CircularLoading from "../../../HelperComponents/CircularLoading";
+
+// RTK Query
+import { useGetAcademyExplainVideoByIdQuery } from "../../../store/apiSlices/academyApi";
 
 const ExplainDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	// to get all  data from server
-	const { fetchedData, loading } = useFetch(`explainVideos/${id} `);
+	// to fetch explain Video Details
+	const {
+		data: explainVideoDetails,
+		isFetching,
+		isLoading,
+	} = useGetAcademyExplainVideoByIdQuery({
+		videoId: id,
+	});
+
+	console.log(isLoading);
 
 	// This code to handle get the src from youtube iframe src
 	const [videoUrl, setVideoUrl] = useState(null);
 	useEffect(() => {
 		const parser = new DOMParser();
 		const doc = parser?.parseFromString(
-			fetchedData?.data?.explainvideos?.video,
+			explainVideoDetails?.data?.explainvideos?.video,
 			"text/html"
 		);
 		const iframeSrc = doc?.querySelector("iframe")?.getAttribute("src");
 		setVideoUrl(iframeSrc);
-	}, [fetchedData?.data?.explainvideos?.video]);
+	}, [explainVideoDetails?.data?.explainvideos?.video]);
 
 	return (
 		<>
@@ -64,7 +74,7 @@ const ExplainDetails = () => {
 				</div>
 
 				<div className='row mb-5'>
-					{loading ? (
+					{isFetching ? (
 						<div
 							className='d-flex justify-content-center align-items-center'
 							style={{ height: "200px" }}>
@@ -73,7 +83,7 @@ const ExplainDetails = () => {
 					) : (
 						<div className='course-actions'>
 							<div className='course-name explain-title mb-4'>
-								<h4>{fetchedData?.data?.explainvideos?.title}</h4>
+								<h4>{explainVideoDetails?.data?.explainvideos?.title}</h4>
 							</div>
 
 							<section className='explain-video'>
@@ -82,7 +92,7 @@ const ExplainDetails = () => {
 									height='100%'
 									src={videoUrl}
 									allowFullScreen
-									title={fetchedData?.data?.explainvideos?.title}
+									title={explainVideoDetails?.data?.explainvideos?.title}
 								/>
 							</section>
 						</div>

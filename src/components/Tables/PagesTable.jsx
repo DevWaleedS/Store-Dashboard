@@ -46,6 +46,12 @@ import {
 	DeleteCouponThunk,
 	PagesThunk,
 } from "../../store/Thunk/PagesThunk";
+import {
+	useChangeAllPagesStatusMutation,
+	useChangePagesStatusMutation,
+	useDeleteAllPagesMutation,
+	useDeletePageMutation,
+} from "../../store/apiSlices/pagesApi";
 
 function EnhancedTableHead(props) {
 	return (
@@ -217,9 +223,6 @@ EnhancedTableToolbar.propTypes = {
 export default function PagesTable({
 	data,
 	loading,
-	reload,
-	search,
-	setSearch,
 	rowsCount,
 	pageTarget,
 	setRowsCount,
@@ -270,106 +273,88 @@ export default function PagesTable({
 	// ---------------------------------------------------
 
 	// Delete items
-	const handleDeleteSingleItem = (id) => {
-		dispatch(
-			DeleteCouponThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	const [deletePage] = useDeletePageMutation();
+	const [deleteAllPages] = useDeleteAllPagesMutation();
 
-	const handleDeleteAllItems = (selected) => {
-		dispatch(
-			DeleteAllDeletePagesThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const handleDeleteSingleItem = async (id) => {
+		try {
+			await deletePage({ pageId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deletePage", err);
+		}
+	};
+	const handleDeleteAllItems = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await deleteAllPages({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllPages", err);
+		}
 	};
 	//------------------------------------------------------------------------
 
-	// change  status
-	const changeItemStatus = (id) => {
-		dispatch(
-			ChangePagesStatusThunk({
-				id: id,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
-	};
+	// change category status
+	const [changePagesStatus] = useChangePagesStatusMutation();
+	const [changeAllPagesStatus] = useChangeAllPagesStatusMutation();
 
-	const handleChangeAllItemsStatus = (selected) => {
-		dispatch(
-			ChangeAllPagesStatusThunk({
-				selected: selected,
-			})
-		)
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(PagesThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	const changeItemStatus = async (id) => {
+		try {
+			await changePagesStatus({ pageId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the changePagesStatus", err);
+		}
+	};
+	const handleChangeAllItemsStatus = async (selected) => {
+		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
+		try {
+			await changeAllPagesStatus({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to change Status for changeAllCouponsStatus", err);
+		}
 	};
 
 	// -------------------------------------------------------

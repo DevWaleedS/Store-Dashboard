@@ -110,7 +110,7 @@ const Coupon = () => {
 	}, [coupons?.data?.coupons]);
 	// -----------------------------------------------------------
 
-	//handle search in Coupons
+	// handle search in Coupons
 	const [searchInCoupons] = useSearchInCouponsMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {

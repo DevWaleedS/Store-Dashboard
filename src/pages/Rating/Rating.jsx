@@ -21,13 +21,13 @@ import { TopBarSearchInput } from "../../global";
 import { SendReplayModal } from "../../components/Modal";
 import { TablePagination } from "../../components/Tables/TablePagination";
 
-//redux
-import { useDispatch, useSelector } from "react-redux";
+// RTK Query
 import {
-	ChangeCommentActivationThunk,
-	RatingThunk,
-} from "../../store/Thunk/RatingThunk";
+	useChangeCommentActivationMutation,
+	useGetRatingQuery,
+} from "../../store/apiSlices/ratingApi";
 
+// switch style
 const switchStyle = {
 	"& .MuiSwitch-track": {
 		width: 36,
@@ -73,51 +73,44 @@ const switchStyle = {
 };
 
 const Rating = () => {
-	const dispatch = useDispatch();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
-	// to get all  data from server
-	const { RatingData, currentPage, pageCount, loading, reload } = useSelector(
-		(state) => state.RatingSlice
-	);
+	const { data: ratingData, isLoading } = useGetRatingQuery({
+		page: pageTarget,
+		number: rowsCount,
+	});
 
-	// -----------------------------------------------------------
-
-	/** get contact data */
-	useEffect(() => {
-		dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
+	// --------------------------------------------------------------------------------------
 
 	// to get current comment status
-	const commentActivation = RatingData?.commentActivation;
+	const commentActivation = ratingData?.data?.commentActivation;
 	const [commentDetails, setCommentDetails] = React.useState(null);
 
 	// ---------------------------------------------------------------------------------------------
 
-	// Delete items
-	const changeCommentActivation = (id) => {
-		dispatch(ChangeCommentActivationThunk())
-			.unwrap()
-			.then((data) => {
-				if (!data?.success) {
-					toast.error(data?.message?.ar, {
-						theme: "light",
-					});
-				} else {
-					setEndActionTitle(data?.message?.ar);
-				}
-				dispatch(RatingThunk({ page: pageTarget, number: rowsCount }));
-			})
-			.catch((error) => {
-				// handle error here
-				// toast.error(error, {
-				// 	theme: "light",
-				// });
-			});
+	//Change Comment Activation
+	const [changeCommentActivation] = useChangeCommentActivationMutation();
+	const changeCommentActiveStatus = async () => {
+		try {
+			await changeCommentActivation()
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the changeCommentActivation", err);
+		}
 	};
 
 	return (
@@ -156,7 +149,7 @@ const Rating = () => {
 						<div className='row rating-filter-box d-flex justify-content-md-end justify-content-between  align-items-center '>
 							<div className='col-5 d-flex justify-content-md-end justify-content-start'>
 								<div className='check-box'>
-									{!RatingData?.comment_of_products?.length === 0 && (
+									{ratingData?.data?.comment_of_products?.length !== 0 && (
 										<FormControlLabel
 											sx={{
 												marginRight: 0,
@@ -173,7 +166,7 @@ const Rating = () => {
 											}}
 											control={
 												<Switch
-													onChange={() => changeCommentActivation()}
+													onChange={() => changeCommentActiveStatus()}
 													checked={
 														commentActivation === "active" ? true : false
 													}
@@ -192,32 +185,31 @@ const Rating = () => {
 					<div className='rating-bx mb-md-5 mb-3'>
 						<RatingWeight
 							setCommentDetails={setCommentDetails}
-							RatingData={RatingData}
-							loading={loading}
-							reload={reload}
+							RatingData={ratingData?.data?.comment_of_products}
+							loading={isLoading}
 							pageTarget={pageTarget}
 							rowsCount={rowsCount}
 						/>
 					</div>
 
 					{/** Pagination */}
-					{RatingData?.comment_of_products?.length !== 0 && !loading && (
-						<TablePagination
-							page={RatingData}
-							pageCount={pageCount}
-							currentPage={currentPage}
-							pageTarget={pageTarget}
-							rowsCount={rowsCount}
-							setRowsCount={setRowsCount}
-							setPageTarget={setPageTarget}
-						/>
-					)}
+					{ratingData?.data?.comment_of_products?.length !== 0 &&
+						!isLoading && (
+							<TablePagination
+								page={ratingData?.data?.comment_of_products}
+								pageCount={ratingData?.data?.page_count}
+								currentPage={ratingData?.data?.current_page}
+								pageTarget={pageTarget}
+								rowsCount={rowsCount}
+								setRowsCount={setRowsCount}
+								setPageTarget={setPageTarget}
+							/>
+						)}
 
 					{/* send rating replay component */}
 					<SendReplayModal
-						fetchedData={RatingData}
-						loading={loading}
-						reload={reload}
+						fetchedData={ratingData?.data?.comment_of_products}
+						loading={isLoading}
 						commentDetails={commentDetails}
 					/>
 				</div>

@@ -30,6 +30,7 @@ import {
 	User,
 } from "../../data/Icons";
 import { TextEditor } from "../../components/TextEditor";
+import { useShowTechnicalSupportByIdQuery } from "../../store/apiSlices/technicalSupportApi";
 
 // Modal Style
 const style = {
@@ -52,14 +53,17 @@ const style = {
 	},
 };
 
-const SupportDetails = () => {
+const TechnicalSupportDetails = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch(true);
+
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`technicalSupport/${id}`
-	);
+	const { data: technicalSupportData, isFetching } =
+		useShowTechnicalSupportByIdQuery({
+			id,
+		});
+
 	return (
 		<>
 			<Helmet>
@@ -105,7 +109,7 @@ const SupportDetails = () => {
 							</div>
 
 							<div className='mb-md-5 mb-3'>
-								{loading ? (
+								{isFetching ? (
 									<div
 										className='d-flex justify-content-center align-items-center'
 										style={{ height: "200px" }}>
@@ -117,7 +121,9 @@ const SupportDetails = () => {
 											<div className='col-12 mb-4'>
 												<div className='issue-number'>
 													<h5>رقم الرسالة</h5>
-													<div>{fetchedData?.data?.technicalSupports?.id}</div>
+													<div>
+														{technicalSupportData?.data?.technicalSupports?.id}
+													</div>
 												</div>
 											</div>
 											<div className='col-12'>
@@ -134,8 +140,8 @@ const SupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span className='text-center text-overflow'>
 																			{
-																				fetchedData?.data?.technicalSupports
-																					?.name
+																				technicalSupportData?.data
+																					?.technicalSupports?.name
 																			}
 																		</span>
 																	</div>
@@ -152,8 +158,8 @@ const SupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span style={{ direction: "ltr" }}>
 																			{
-																				fetchedData?.data?.technicalSupports
-																					?.phonenumber
+																				technicalSupportData?.data
+																					?.technicalSupports?.phonenumber
 																			}
 																		</span>
 																	</div>
@@ -169,8 +175,8 @@ const SupportDetails = () => {
 																	<div className='box pending-box d-flex justify-content-center'>
 																		<span>
 																			{
-																				fetchedData?.data?.technicalSupports
-																					?.supportstatus
+																				technicalSupportData?.data
+																					?.technicalSupports?.supportstatus
 																			}
 																		</span>
 																	</div>
@@ -188,8 +194,8 @@ const SupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
 																			{moment(
-																				fetchedData?.data?.technicalSupports
-																					?.created_at
+																				technicalSupportData?.data
+																					?.technicalSupports?.created_at
 																			).format("DD-MM-YYYY")}
 																		</span>
 																	</div>
@@ -205,8 +211,8 @@ const SupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
 																			{
-																				fetchedData?.data?.technicalSupports
-																					?.title
+																				technicalSupportData?.data
+																					?.technicalSupports?.title
 																			}
 																		</span>
 																	</div>
@@ -242,7 +248,7 @@ const SupportDetails = () => {
 												<TextEditor
 													readOnly={true}
 													ToolBar={"emptyCart"}
-													placeholder={`${fetchedData?.data?.technicalSupports?.content}`}
+													placeholder={`${technicalSupportData?.data?.technicalSupports?.content}`}
 												/>
 											</div>
 										</div>
@@ -265,12 +271,10 @@ const SupportDetails = () => {
 				</Modal>
 			</div>
 			<SendSupportReplayModal
-				reload={reload}
-				setReload={setReload}
-				supportDetails={fetchedData?.data?.technicalSupports}
+				supportDetails={technicalSupportData?.data?.technicalSupports}
 			/>
 		</>
 	);
 };
 
-export default SupportDetails;
+export default TechnicalSupportDetails;
