@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
@@ -30,7 +30,6 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // Components
-import useFetch from "../../../Hooks/UseFetch";
 import AddProductOptions from "./AddProductOptions";
 import { TextEditor } from "../../../components/TextEditor";
 
@@ -47,6 +46,11 @@ import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
+// RTK Query
+import { useGetCategoriesQuery } from "../../../store/apiSlices/selectCategoriesApi";
+import { useAddNewProductMutation } from "../../../store/apiSlices/productsApi";
+
+// style the select mui
 const style = {
 	position: "fixed",
 	top: "80px",
@@ -90,6 +94,7 @@ const selectStyle = {
 	},
 };
 
+// tooltip
 const BootstrapTooltip = styled(({ className, ...props }) => (
 	<Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -104,11 +109,9 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 }));
 
 const AddNewProduct = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData: categories } = useFetch("selector/mainCategories");
+	// get categories selector
+	const { data: selectCategories } = useGetCategoriesQuery();
+
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
@@ -337,7 +340,7 @@ const AddNewProduct = () => {
 	};
 
 	const subcategory =
-		categories?.data?.categories?.filter(
+		selectCategories?.categories?.filter(
 			(sub) => sub?.id === parseInt(product?.category_id)
 		) || [];
 
@@ -347,10 +350,13 @@ const AddNewProduct = () => {
 		return () => icons.forEach((banner) => URL.revokeObjectURL(banner.preview));
 	}, []);
 
-	// handle add new product
-	const addNewProduct = (data) => {
+	/**   handle add new product */
+	const [addNewProduct] = useAddNewProductMutation();
+	const handleAddNewProduct = async (data) => {
 		setLoadingTitle("جاري اضافة المنتج");
 		resetCouponError();
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("name", data?.name);
 		formData.append("short_description", data?.short_description);
@@ -434,79 +440,55 @@ const AddNewProduct = () => {
 			}
 		}
 
-		axios
-			.post(`product`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Products");
-					setReload(!reload);
-					setEditorValue("");
-					clearOptions();
-				} else {
-					setLoadingTitle("");
-					setProductError({
-						name: res?.data?.message?.en?.name?.[0],
-						short_description: res?.data?.message?.en?.short_description?.[0],
-						cover: res?.data?.message?.en?.cover?.[0],
-						description: res?.data?.message?.en?.description?.[0],
-						selling_price: res?.data?.message?.en?.selling_price?.[0],
-						category_id: res?.data?.message?.en?.category_id?.[0],
-						discount_price: res?.data?.message?.en?.discount_price?.[0],
-						subcategory_id: res?.data?.message?.en?.subcategory_id?.[0],
-						stock: res?.data?.message?.en?.stock?.[0],
-						weight: res?.data?.message?.en?.weight?.[0],
-						SEOdescription: res?.data?.message?.en?.SEOdescription?.[0],
-						images: res?.data?.message?.en?.images?.[0],
-					});
-					toast.error(res?.data?.message?.en?.name?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.short_description?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.cover?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.description?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.selling_price?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.category_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount_price?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.subcategory_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.stock?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.weight?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.SEOdescription?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.images?.[0], {
-						theme: "light",
-					});
-				}
+		try {
+			const response = await addNewProduct({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Products");
+				setReload(!reload);
+				setEditorValue("");
+				clearOptions();
+			} else {
+				setLoadingTitle("");
+				setProductError({
+					name: response?.data?.message?.en?.name?.[0],
+					short_description:
+						response?.data?.message?.en?.short_description?.[0],
+					cover: response?.data?.message?.en?.cover?.[0],
+					description: response?.data?.message?.en?.description?.[0],
+					selling_price: response?.data?.message?.en?.selling_price?.[0],
+					category_id: response?.data?.message?.en?.category_id?.[0],
+					discount_price: response?.data?.message?.en?.discount_price?.[0],
+					subcategory_id: response?.data?.message?.en?.subcategory_id?.[0],
+					stock: response?.data?.message?.en?.stock?.[0],
+					weight: response?.data?.message?.en?.weight?.[0],
+					SEOdescription: response?.data?.message?.en?.SEOdescription?.[0],
+					images: response?.data?.message?.en?.images?.[0],
+				});
+
+				// handle display errors using toast
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+
+				Object.entries(response.data.message.en).forEach(([key, message]) => {
+					toast.error(message[0], { theme: "light" });
+				});
+			}
+		} catch (error) {
+			console.error("Error changing addNewProduct:", error);
+		}
 	};
 
+	// open video modal
 	const videoModal = () => {
 		return (
 			<>
@@ -548,7 +530,7 @@ const AddNewProduct = () => {
 
 							<form
 								className='form-h-full add-new-product-form'
-								onSubmit={handleSubmit(addNewProduct)}>
+								onSubmit={handleSubmit(handleAddNewProduct)}>
 								<div className='form-body'>
 									{/* Product name  */}
 									<div className='row mb-md-5 mb-3'>
@@ -886,12 +868,12 @@ const AddNewProduct = () => {
 																	);
 																}
 																const result =
-																	categories?.data?.categories?.filter(
+																	selectCategories?.categories?.filter(
 																		(item) => item?.id === parseInt(selected)
 																	) || "";
 																return result[0]?.name;
 															}}>
-															{categories?.data?.categories?.map(
+															{selectCategories?.categories?.map(
 																(cat, index) => {
 																	return (
 																		<MenuItem
@@ -1311,7 +1293,6 @@ const AddNewProduct = () => {
 									</div>
 
 									{/* Add Product options */}
-
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>

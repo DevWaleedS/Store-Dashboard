@@ -12,20 +12,24 @@ const prepareHeaders = (headers) => {
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
+	// Set Content-Type header for JSON requests
+	headers.set("Content-Type", "application/json");
+
 	return headers;
 };
 
-export const selectCategoriesApi = createApi({
-	reducerPath: "selectCategoriesApi",
-
+// Create API slice
+export const getShippingCitiesApi = createApi({
+	reducerPath: "getShippingCitiesApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
+		baseUrl: "https://backend.atlbha.com/api/selector/",
 		prepareHeaders,
 	}),
 
 	endpoints: (builder) => ({
-		getCategories: builder.query({
-			query: () => "selector/mainCategories",
+		// get store Orders endpoint..
+		getShippingCities: builder.query({
+			query: (shippingId) => `shippingcities/${shippingId}`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data,
@@ -33,4 +37,5 @@ export const selectCategoriesApi = createApi({
 	}),
 });
 
-export const { useGetCategoriesQuery } = selectCategoriesApi;
+// Export endpoints and hooks
+export const { useGetShippingCitiesQuery } = getShippingCitiesApi;

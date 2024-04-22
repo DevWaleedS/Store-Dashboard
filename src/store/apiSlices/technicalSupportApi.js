@@ -12,8 +12,6 @@ const prepareHeaders = (headers) => {
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
-	headers.set("Content-Type", "application/json");
-
 	return headers;
 };
 
@@ -69,10 +67,12 @@ export const technicalSupportApi = createApi({
 		}),
 
 		// show Technical Support by id
-
 		showTechnicalSupportById: builder.query({
 			query: ({ id }) => `technicalSupport/${id}`,
-			providesTags: ["TechnicalSupport"],
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: (result, error, id) => [{ type: "TechnicalSupport", id }],
 		}),
 
 		// send replay Technical Support

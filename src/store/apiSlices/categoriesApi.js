@@ -12,8 +12,6 @@ const prepareHeaders = (headers) => {
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
-	headers.set("Content-Type", "application/json");
-
 	return headers;
 };
 
@@ -91,6 +89,38 @@ export const categoriesApi = createApi({
 				method: "GET",
 			}),
 		}),
+
+		//add new category
+		addNewCategory: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `category`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Categories"],
+		}),
+
+		// get category by id
+		getCategoryById: builder.query({
+			query: (id) => `category/${id}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: ["Categories"],
+		}),
+		// edit category by id
+		editCategoryById: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `category/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Categories"],
+		}),
 	}),
 });
 
@@ -104,4 +134,7 @@ export const {
 	useSearchInStoreCategoriesMutation,
 	useSearchInEtlbohaCategoriesMutation,
 	useFilterCategoriesMutation,
+	useAddNewCategoryMutation,
+	useGetCategoryByIdQuery,
+	useEditCategoryByIdMutation,
 } = categoriesApi;

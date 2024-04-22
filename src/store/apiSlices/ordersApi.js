@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Function to prepare headers for HTTP requests
+
 const prepareHeaders = (headers) => {
 	const token =
 		document.cookie
@@ -12,6 +13,7 @@ const prepareHeaders = (headers) => {
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
+	// Set Content-Type header for JSON requests
 	headers.set("Content-Type", "application/json");
 
 	return headers;
@@ -47,6 +49,25 @@ export const ordersApi = createApi({
 				method: "GET",
 			}),
 		}),
+
+		// get order by id
+		getOrderById: builder.query({
+			query: (id) => `orders/${id}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: (result, error, id) => [{ type: "Orders", id }],
+		}),
+		// update Order Status
+		updateOrderStatus: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `orders/${id}`,
+					method: "PUT",
+					body: body,
+				};
+			},
+		}),
 	}),
 });
 
@@ -55,4 +76,6 @@ export const {
 	useGetOrdersQuery,
 	useSearchInOrdersMutation,
 	useFilterOrdersByStatusMutation,
+	useGetOrderByIdQuery,
+	useUpdateOrderStatusMutation,
 } = ordersApi;

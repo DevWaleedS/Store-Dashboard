@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 
 // Third party
-import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
@@ -12,7 +11,6 @@ import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // Components
-import useFetch from "../../../Hooks/UseFetch";
 import { TopBarSearchInput } from "../../../global";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
@@ -57,6 +55,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+// RTK Query
+import {
+	useGetOrderByIdQuery,
+	useUpdateOrderStatusMutation,
+} from "../../../store/apiSlices/ordersApi";
+import { useGetShippingCitiesQuery } from "../../../store/apiSlices/getShippingCitiesApi";
+
 // The Table title
 function EnhancedTableHead() {
 	return (
@@ -80,18 +85,13 @@ function EnhancedTableHead() {
 }
 
 const OrderDetails = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
+	// get current order by id
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(`orders/${id}`);
+	const { data: currentOrder, isFetching } = useGetOrderByIdQuery(id);
 
+	//get shipping cities data
 	const [shippingId, setShippingId] = useState(null);
-	const { fetchedData: shippingCities } = useFetch(
-		`https://backend.atlbha.com/api/selector/shippingcities/${shippingId}`
-	);
+	const { data: shippingCitiesData } = useGetShippingCitiesQuery(shippingId);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -123,22 +123,22 @@ const OrderDetails = () => {
 
 	// To handle the shipping information
 	useEffect(() => {
-		if (fetchedData?.data?.orders?.shipping) {
+		if (currentOrder?.orders?.shipping) {
 			setShipping({
 				...shipping,
-				district: fetchedData?.data?.orders?.shipping?.district,
-				city: fetchedData?.data?.orders?.shipping?.city,
-				address: fetchedData?.data?.orders?.shipping?.street_address,
-				weight: fetchedData?.data?.orders?.shipping?.weight,
+				district: currentOrder?.orders?.shipping?.district,
+				city: currentOrder?.orders?.shipping?.city,
+				address: currentOrder?.orders?.shipping?.street_address,
+				weight: currentOrder?.orders?.shipping?.weight,
 			});
 		}
-	}, [fetchedData?.data?.orders?.shipping]);
+	}, [currentOrder?.orders?.shipping]);
 
 	useEffect(() => {
-		if (fetchedData?.data?.orders?.shippingtypes) {
-			setShippingId(fetchedData?.data?.orders?.shippingtypes?.id);
+		if (currentOrder?.orders?.shippingtypes) {
+			setShippingId(currentOrder?.orders?.shippingtypes?.id);
 		}
-	}, [fetchedData?.data?.orders?.shippingtypes]);
+	}, [currentOrder?.orders?.shippingtypes]);
 	// ----------------------------------------------------
 
 	function removeDuplicates(arr) {
@@ -152,19 +152,19 @@ const OrderDetails = () => {
 	}
 
 	const getCityFromProvince =
-		shippingCities?.data?.cities?.filter(
+		shippingCitiesData?.cities?.filter(
 			(obj) => obj?.region?.name_en === shipping?.district
 		) || [];
 
 	function translateCityName(name) {
-		const unique = shippingCities?.data?.cities?.filter(
+		const unique = shippingCitiesData?.cities?.filter(
 			(obj) => obj?.name_en === name
 		);
 		return unique?.[0]?.name || name;
 	}
 
 	function translateProvinceName(name) {
-		const unique = shippingCities?.data?.cities?.filter((obj) => {
+		const unique = shippingCitiesData?.cities?.filter((obj) => {
 			return obj?.region?.name_en === name;
 		});
 
@@ -174,64 +174,67 @@ const OrderDetails = () => {
 	// -----------------------------------------------------
 
 	// To handle update order Status
-	const updateOrderStatus = (status) => {
+	const [updateOrderStatus] = useUpdateOrderStatusMutation();
+
+	const handleUpdateOrderStatus = async (status) => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
 
-		let formData = new FormData();
-		formData.append("_method", "PUT");
-		formData.append("status", status);
-		if (status === "ready" || status === "canceled") {
-			formData.append("district", shipping?.district);
-			formData.append("city", shipping?.city);
-			formData.append("street_address", shipping?.address);
-		}
-		axios
-			.post(`orders/${id}`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
+		// Data that send to API
+		let data = {
+			status: status,
+		};
 
-					setError({
-						district: res?.data?.message?.en?.district?.[0],
-						city: res?.data?.message?.en?.city?.[0],
-						address: res?.data?.message?.en?.street_address?.[0],
-						weight: res?.data?.message?.en?.weight?.[0],
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.district?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.city?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.street_address?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.weight?.[0], {
-						theme: "light",
-					});
-				}
+		if (status === "ready" || status === "canceled") {
+			data.district = shipping?.district;
+			data.city = shipping?.city;
+			data.street_address = shipping?.address;
+		}
+
+		try {
+			const response = await updateOrderStatus({
+				id,
+				body: data, // Sending JSON object
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message);
+			} else {
+				setLoadingTitle("");
+
+				setError({
+					district: response?.data?.message?.en?.district?.[0] || "",
+					city: response?.data?.message?.en?.city?.[0] || "",
+					address: response?.data?.message?.en?.street_address?.[0] || "",
+					weight: response?.data?.message?.en?.weight?.[0] || "",
+				});
+
+				// handle display errors using toast
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+
+				Object.entries(response.data.message.en).forEach(([key, message]) => {
+					toast.error(message[0], { theme: "light" });
+				});
+			}
+		} catch (error) {
+			console.error("Error changing update order status :", error);
+		}
 	};
+
 	// -------------------------------------------------
 
 	// Handle print sticker Function
 	const printSticker = () => {
 		setPrintError("");
 		// this will open the sticker in new tap
-		window.open(fetchedData?.data?.orders?.shipping?.sticker, "_blank");
+		window.open(currentOrder?.orders?.shipping?.sticker, "_blank");
 		// this will open the sticker in new tap
 	};
 	// -------------------------------------------------
@@ -281,7 +284,7 @@ const OrderDetails = () => {
 										<h5>رقم الطلب</h5>
 									</div>
 									<div className='number'>
-										{loading ? 0 : fetchedData?.data?.orders?.order_number}
+										{isFetching ? 0 : currentOrder?.orders?.order_number}
 									</div>
 								</div>
 							</div>
@@ -289,7 +292,7 @@ const OrderDetails = () => {
 					</div>
 
 					{/* order-details-body */}
-					{loading ? (
+					{isFetching ? (
 						<section>
 							<CircularLoading />
 						</section>
@@ -308,7 +311,7 @@ const OrderDetails = () => {
 													<span className='me-2'>الحالة</span>
 												</div>
 												<div className='order-data-row'>
-													<span>{fetchedData?.data?.orders?.status}</span>
+													<span>{currentOrder?.orders?.status}</span>
 												</div>
 											</div>
 											<div className='box'>
@@ -319,9 +322,9 @@ const OrderDetails = () => {
 
 												<div className='order-data-row'>
 													<span>
-														{moment(
-															fetchedData?.data?.orders?.created_at
-														).format("DD-MM-YYYY")}
+														{moment(currentOrder?.orders?.created_at).format(
+															"DD-MM-YYYY"
+														)}
 													</span>
 												</div>
 											</div>
@@ -331,9 +334,7 @@ const OrderDetails = () => {
 													<span className='me-3 price'>إجمالي الطلب</span>
 												</div>
 												<div className='order-data-row'>
-													<span>
-														{fetchedData?.data?.orders?.total_price} ر.س
-													</span>
+													<span>{currentOrder?.orders?.total_price} ر.س</span>
 												</div>
 											</div>
 											<div className='box'>
@@ -342,7 +343,7 @@ const OrderDetails = () => {
 													<span className='me-2'> عدد المنتجات</span>
 												</div>
 												<div className='order-data-row'>
-													<span>{fetchedData?.data?.orders?.quantity}</span>
+													<span>{currentOrder?.orders?.quantity}</span>
 												</div>
 											</div>
 											<div className='box'>
@@ -352,13 +353,13 @@ const OrderDetails = () => {
 												</div>
 												<div className='order-data-row'>
 													<span>
-														{fetchedData?.data?.orders?.shippingtypes?.name}
+														{currentOrder?.orders?.shippingtypes?.name}
 													</span>
 												</div>
 											</div>
 										</div>
 										<div className='boxes mb-4'>
-											{fetchedData?.data?.orders?.shipping?.shipping_id && (
+											{currentOrder?.orders?.shipping?.shipping_id && (
 												<div className='box mb-4'>
 													<div className='order-head-row'>
 														<FaServicestack />
@@ -371,7 +372,7 @@ const OrderDetails = () => {
 															}}>
 															( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
 															<a
-																href={fetchedData?.data?.orders?.trackingLink}
+																href={currentOrder?.orders?.trackingLink}
 																target='_blank'
 																rel='noreferrer'>
 																<BiLinkExternal
@@ -387,7 +388,7 @@ const OrderDetails = () => {
 													<div className='order-data-row track_id_box'>
 														<div className='d-flex justify-content-center align-items-center'>
 															<span className='track_id_input'>
-																{fetchedData?.data?.orders?.shipping?.track_id}
+																{currentOrder?.orders?.shipping?.track_id}
 															</span>
 															{copy ? (
 																<div className='copy-track_id-icon'>
@@ -402,7 +403,7 @@ const OrderDetails = () => {
 																			setCopy(true);
 																			setTimeout(() => {
 																				navigator.clipboard.writeText(
-																					fetchedData?.data?.orders?.shipping
+																					currentOrder?.orders?.shipping
 																						?.track_id
 																				);
 																				setCopy(false);
@@ -415,7 +416,7 @@ const OrderDetails = () => {
 													</div>
 												</div>
 											)}
-											{fetchedData?.data?.orders?.shipping?.shipping_id && (
+											{currentOrder?.orders?.shipping?.shipping_id && (
 												<div className='box mb-4'>
 													<div className='order-head-row'>
 														<PiTrafficSign />
@@ -423,7 +424,7 @@ const OrderDetails = () => {
 													</div>
 													<div className='order-data-row'>
 														<span>
-															{fetchedData?.data?.orders?.shipping?.shipping_id}
+															{currentOrder?.orders?.shipping?.shipping_id}
 														</span>
 													</div>
 												</div>
@@ -442,7 +443,7 @@ const OrderDetails = () => {
 														whiteSpace: "normal",
 														textAlign: "center",
 													}}>
-													{fetchedData?.data?.orders?.description}
+													{currentOrder?.orders?.description}
 												</span>
 											</div>
 										</div>
@@ -456,14 +457,14 @@ const OrderDetails = () => {
 											<div className='d-flex justify-content-between  align-content-center gap-1'>
 												<h6>عدد القطع:</h6>
 												<p style={{ fontSize: "14px", fontWight: "400" }}>
-													{fetchedData?.data?.orders?.totalCount === 1 && (
+													{currentOrder?.orders?.totalCount === 1 && (
 														<>(قطعة واحده)</>
 													)}
-													{fetchedData?.data?.orders?.totalCount === 2 && (
+													{currentOrder?.orders?.totalCount === 2 && (
 														<>(قطعتين)</>
 													)}
-													{fetchedData?.data?.orders?.totalCount > 2 && (
-														<>({fetchedData?.data?.orders?.totalCount} قطعة)</>
+													{currentOrder?.orders?.totalCount > 2 && (
+														<>({currentOrder?.orders?.totalCount} قطعة)</>
 													)}
 												</p>
 											</div>
@@ -474,7 +475,7 @@ const OrderDetails = () => {
 												aria-labelledby='tableTitle'>
 												<EnhancedTableHead />
 												<TableBody>
-													{fetchedData?.data?.orders?.orderItem?.map(
+													{currentOrder?.orders?.orderItem?.map(
 														(row, index) => (
 															<TableRow hover tabIndex={-1} key={index}>
 																<TableCell
@@ -545,7 +546,7 @@ const OrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{fetchedData?.data?.orders?.subtotal} ر.س
+																{currentOrder?.orders?.subtotal} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -564,7 +565,7 @@ const OrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{fetchedData?.data?.orders?.tax} ر.س
+																{currentOrder?.orders?.tax} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -583,11 +584,11 @@ const OrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{fetchedData?.data?.orders?.shipping_price} ر.س
+																{currentOrder?.orders?.shipping_price} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
-													{fetchedData?.data?.orders?.codprice !== 0 && (
+													{currentOrder?.orders?.codprice !== 0 && (
 														<TableRow>
 															<TableCell
 																colSpan={3}
@@ -606,15 +607,14 @@ const OrderDetails = () => {
 																<span
 																	className='table-price_span'
 																	style={{ fontWeight: "500" }}>
-																	{fetchedData?.data?.orders?.codprice} ر.س
+																	{currentOrder?.orders?.codprice} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
 													)}
 
-													{fetchedData?.data?.orders?.overweight !== 0 &&
-														fetchedData?.data?.orders?.overweight_price !==
-															0 && (
+													{currentOrder?.orders?.overweight !== 0 &&
+														currentOrder?.orders?.overweight_price !== 0 && (
 															<TableRow>
 																<TableCell
 																	colSpan={3}
@@ -624,7 +624,7 @@ const OrderDetails = () => {
 																	style={{ borderBottom: "none" }}>
 																	<span style={{ fontWeight: "700" }}>
 																		تكلفة الوزن الزائد (
-																		{fetchedData?.data?.orders?.overweight}{" "}
+																		{currentOrder?.orders?.overweight}{" "}
 																		<span>kg</span>)
 																	</span>
 																</TableCell>
@@ -635,16 +635,12 @@ const OrderDetails = () => {
 																	<span
 																		className='table-price_span'
 																		style={{ fontWeight: "500" }}>
-																		{
-																			fetchedData?.data?.orders
-																				?.overweight_price
-																		}{" "}
-																		ر.س
+																		{currentOrder?.orders?.overweight_price} ر.س
 																	</span>
 																</TableCell>
 															</TableRow>
 														)}
-													{fetchedData?.data?.orders?.discount !== 0 && (
+													{currentOrder?.orders?.discount !== 0 && (
 														<TableRow>
 															<TableCell
 																colSpan={3}
@@ -660,7 +656,7 @@ const OrderDetails = () => {
 																<span
 																	className='table-price_span'
 																	style={{ fontWeight: "500" }}>
-																	{fetchedData?.data?.orders?.discount} ر.س
+																	{currentOrder?.orders?.discount} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
@@ -688,7 +684,7 @@ const OrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{fetchedData?.data?.orders?.total_price} ر.س
+																{currentOrder?.orders?.total_price} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -711,7 +707,7 @@ const OrderDetails = () => {
 																alt=''
 																loading={"lazy"}
 																className=' img-fluid'
-																src={fetchedData?.data?.orders?.user?.image}
+																src={currentOrder?.orders?.user?.image}
 															/>
 														</div>
 													</div>
@@ -723,7 +719,7 @@ const OrderDetails = () => {
 															<div className='info-box'>
 																<User className='client-icon' />
 																<span className=' text-overflow'>
-																	{`${fetchedData?.data?.orders?.user?.name} ${fetchedData?.data?.orders?.user?.lastname}`}
+																	{`${currentOrder?.orders?.user?.name} ${currentOrder?.orders?.user?.lastname}`}
 																</span>
 															</div>
 														</div>
@@ -732,20 +728,19 @@ const OrderDetails = () => {
 															<div className='info-box'>
 																<Phone />
 																<span style={{ direction: "ltr" }}>
-																	{fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
+																	{currentOrder?.orders?.user?.phonenumber?.startsWith(
 																		"+966"
 																	)
-																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																		? currentOrder?.orders?.user?.phonenumber?.slice(
 																				4
 																		  )
-																		: fetchedData?.data?.orders?.user?.phonenumber?.startsWith(
+																		: currentOrder?.orders?.user?.phonenumber?.startsWith(
 																				"00966"
 																		  )
-																		? fetchedData?.data?.orders?.user?.phonenumber?.slice(
+																		? currentOrder?.orders?.user?.phonenumber?.slice(
 																				5
 																		  )
-																		: fetchedData?.data?.orders?.user
-																				?.phonenumber}
+																		: currentOrder?.orders?.user?.phonenumber}
 																</span>
 															</div>
 														</div>
@@ -762,7 +757,7 @@ const OrderDetails = () => {
 																<Message />
 
 																<span className='text-overflow'>
-																	{fetchedData?.data?.orders?.user?.email}
+																	{currentOrder?.orders?.user?.email}
 																</span>
 															</div>
 														</div>
@@ -778,8 +773,7 @@ const OrderDetails = () => {
 																/>
 																<span style={{ whiteSpace: "normal" }}>
 																	{translateProvinceName(
-																		fetchedData?.data?.orders?.OrderAddress
-																			?.district
+																		currentOrder?.orders?.OrderAddress?.district
 																	)}
 																</span>
 															</div>
@@ -797,13 +791,12 @@ const OrderDetails = () => {
 																/>
 																<span style={{ whiteSpace: "normal" }}>
 																	{translateCityName(
-																		fetchedData?.data?.orders?.OrderAddress
-																			?.city
+																		currentOrder?.orders?.OrderAddress?.city
 																	)}
 																</span>
 															</div>
 														</div>
-														{fetchedData?.data?.orders?.OrderAddress
+														{currentOrder?.orders?.OrderAddress
 															?.postal_code && (
 															<div className='col-md-6 col-12 mb-3'>
 																<h6 className='mb-3'>الرمز البريدي</h6>
@@ -817,7 +810,7 @@ const OrderDetails = () => {
 																	/>
 																	<span style={{ whiteSpace: "normal" }}>
 																		{
-																			fetchedData?.data?.orders?.OrderAddress
+																			currentOrder?.orders?.OrderAddress
 																				?.postal_code
 																		}
 																	</span>
@@ -830,7 +823,7 @@ const OrderDetails = () => {
 																<Location />
 																<span style={{ whiteSpace: "normal" }}>
 																	{
-																		fetchedData?.data?.orders?.OrderAddress
+																		currentOrder?.orders?.OrderAddress
 																			?.street_address
 																	}
 																</span>
@@ -889,10 +882,9 @@ const OrderDetails = () => {
 													IconComponent={IoIosArrowDown}
 													displayEmpty
 													disabled={
-														fetchedData?.data?.orders?.status === "تم الشحن" ||
-														fetchedData?.data?.orders?.status ===
-															"الغاء الشحنة" ||
-														fetchedData?.data?.orders?.status === "مكتمل"
+														currentOrder?.orders?.status === "تم الشحن" ||
+														currentOrder?.orders?.status === "الغاء الشحنة" ||
+														currentOrder?.orders?.status === "مكتمل"
 															? true
 															: false
 													}
@@ -905,7 +897,7 @@ const OrderDetails = () => {
 														}
 														return translateProvinceName(selected);
 													}}>
-													{removeDuplicates(shippingCities?.data?.cities)?.map(
+													{removeDuplicates(shippingCitiesData?.cities)?.map(
 														(district, index) => {
 															return (
 																<MenuItem
@@ -971,10 +963,9 @@ const OrderDetails = () => {
 													IconComponent={IoIosArrowDown}
 													displayEmpty
 													disabled={
-														fetchedData?.data?.orders?.status === "تم الشحن" ||
-														fetchedData?.data?.orders?.status ===
-															"الغاء الشحنة" ||
-														fetchedData?.data?.orders?.status === "مكتمل"
+														currentOrder?.orders?.status === "تم الشحن" ||
+														currentOrder?.orders?.status === "الغاء الشحنة" ||
+														currentOrder?.orders?.status === "مكتمل"
 															? true
 															: false
 													}
@@ -1022,10 +1013,9 @@ const OrderDetails = () => {
 											<div className='col-lg-9 col-md-9 col-12'>
 												<input
 													disabled={
-														fetchedData?.data?.orders?.status === "تم الشحن" ||
-														fetchedData?.data?.orders?.status ===
-															"الغاء الشحنة" ||
-														fetchedData?.data?.orders?.status === "مكتمل"
+														currentOrder?.orders?.status === "تم الشحن" ||
+														currentOrder?.orders?.status === "الغاء الشحنة" ||
+														currentOrder?.orders?.status === "مكتمل"
 															? true
 															: false
 													}
@@ -1063,7 +1053,7 @@ const OrderDetails = () => {
 				</section>
 
 				{/* Order options */}
-				<section className={`${loading ? "d-none" : "order-details-body"}`}>
+				<section className={`${isFetching ? "d-none" : "order-details-body"}`}>
 					<div className='mb-md-5 mb-4'>
 						<div className='order-details-box'>
 							<div className='title mb-4'>
@@ -1076,9 +1066,9 @@ const OrderDetails = () => {
 									<div className='accordion-item w-100'>
 										<button
 											disabled={
-												fetchedData?.data?.orders?.status === "تم الشحن" ||
-												fetchedData?.data?.orders?.status === "الغاء الشحنة" ||
-												fetchedData?.data?.orders?.status === "مكتمل"
+												currentOrder?.orders?.status === "تم الشحن" ||
+												currentOrder?.orders?.status === "الغاء الشحنة" ||
+												currentOrder?.orders?.status === "مكتمل"
 													? true
 													: false
 											}
@@ -1099,11 +1089,9 @@ const OrderDetails = () => {
 												<ArrowDown
 													style={{
 														cursor:
-															fetchedData?.data?.orders?.status ===
-																"تم الشحن" ||
-															fetchedData?.data?.orders?.status ===
-																"الغاء الشحنة" ||
-															fetchedData?.data?.orders?.status === "مكتمل"
+															currentOrder?.orders?.status === "تم الشحن" ||
+															currentOrder?.orders?.status === "الغاء الشحنة" ||
+															currentOrder?.orders?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",
 													}}
@@ -1119,10 +1107,9 @@ const OrderDetails = () => {
 											<div className='accordion-body'>
 												<ul className='select-status p-0'>
 													<li
-														onClick={() => updateOrderStatus("ready")}
+														onClick={() => handleUpdateOrderStatus("ready")}
 														style={
-															fetchedData?.data?.orders?.status ===
-															"قيد التجهيز"
+															currentOrder?.orders?.status === "قيد التجهيز"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1131,8 +1118,7 @@ const OrderDetails = () => {
 																: { cursor: "pointer" }
 														}>
 														قيد التجهيز
-														{fetchedData?.data?.orders?.status ===
-														" قيد التجهيز" ? (
+														{currentOrder?.orders?.status === " قيد التجهيز" ? (
 															<span style={{ fontSize: "1rem" }}>
 																{" "}
 																(تم تغيير حالة الطلب إلى قيد التجهيز من قبل ){" "}
@@ -1146,13 +1132,13 @@ const OrderDetails = () => {
 													</li>
 
 													<li
-														onClick={() => updateOrderStatus("completed")}
+														onClick={() => handleUpdateOrderStatus("completed")}
 														style={{ cursor: "pointer" }}>
 														تم الشحن
 													</li>
 
 													<li
-														onClick={() => updateOrderStatus("canceled")}
+														onClick={() => handleUpdateOrderStatus("canceled")}
 														style={{ cursor: "pointer" }}>
 														الغاء الشحنة
 														<span style={{ fontSize: "1rem", color: "red" }}>
@@ -1189,22 +1175,21 @@ const OrderDetails = () => {
 									/>
 								</div>
 
-								{fetchedData?.data?.orders?.shipping &&
-									fetchedData?.data?.orders?.shippingtypes?.name !== "اخرى" && (
+								{currentOrder?.orders?.shipping &&
+									currentOrder?.orders?.shippingtypes?.name !== "اخرى" && (
 										<button
 											disabled={
-												fetchedData?.data?.orders?.status === "تم الشحن" ||
-												fetchedData?.data?.orders?.status === "الغاء الشحنة" ||
-												fetchedData?.data?.orders?.status === "مكتمل"
+												currentOrder?.orders?.status === "تم الشحن" ||
+												currentOrder?.orders?.status === "الغاء الشحنة" ||
+												currentOrder?.orders?.status === "مكتمل"
 													? true
 													: false
 											}
 											style={{
 												cursor:
-													fetchedData?.data?.orders?.status === "تم الشحن" ||
-													fetchedData?.data?.orders?.status ===
-														"الغاء الشحنة" ||
-													fetchedData?.data?.orders?.status === "مكتمل"
+													currentOrder?.orders?.status === "تم الشحن" ||
+													currentOrder?.orders?.status === "الغاء الشحنة" ||
+													currentOrder?.orders?.status === "مكتمل"
 														? "not-allowed"
 														: "pointer",
 											}}
@@ -1228,11 +1213,9 @@ const OrderDetails = () => {
 												<Print
 													style={{
 														cursor:
-															fetchedData?.data?.orders?.status ===
-																"تم الشحن" ||
-															fetchedData?.data?.orders?.status ===
-																"الغاء الشحنة" ||
-															fetchedData?.data?.orders?.status === "مكتمل"
+															currentOrder?.orders?.status === "تم الشحن" ||
+															currentOrder?.orders?.status === "الغاء الشحنة" ||
+															currentOrder?.orders?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",
 													}}

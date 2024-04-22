@@ -12,8 +12,6 @@ const prepareHeaders = (headers) => {
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
-	headers.set("Content-Type", "application/json");
-
 	return headers;
 };
 
@@ -135,6 +133,39 @@ export const productsApi = createApi({
 			},
 			invalidatesTags: ["Products"],
 		}),
+
+		//add new Product
+		addNewProduct: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `product`,
+					method: "POST",
+					body: body,
+				};
+			},
+
+			invalidatesTags: ["Products"],
+		}),
+
+		// get Product by id
+		getProductById: builder.query({
+			query: (id) => `product/${id}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: (result, error, id) => [{ type: "Products", id }],
+		}),
+		// edit Product by id
+		editProductById: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `product/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Products"],
+		}),
 	}),
 });
 
@@ -152,4 +183,7 @@ export const {
 	useFilterStoreProductsByCategoriesMutation,
 	useFilterImportedProductsByCategoriesMutation,
 	useChangeCategoriesForSomeSelectedProductsMutation,
+	useGetProductByIdQuery,
+	useEditProductByIdMutation,
+	useAddNewProductMutation,
 } = productsApi;

@@ -91,10 +91,10 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 
 	// To display categories
 	useEffect(() => {
-		if (selectCategories?.data?.categories) {
-			setCategories(selectCategories?.data?.categories);
+		if (selectCategories?.categories) {
+			setCategories(selectCategories?.categories);
 		}
-	}, [selectCategories?.data?.categories]);
+	}, [selectCategories?.categories]);
 
 	// get sub categories based on main categories
 	const subcategory =

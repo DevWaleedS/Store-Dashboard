@@ -46,7 +46,7 @@ import {
 } from "./pages";
 
 import { Rating } from "./pages/Rating";
-import { Orders } from "./pages/Orders";
+import { OrderDetails, Orders } from "./pages/Orders/index";
 
 // Academy Component
 import { Academy } from "./pages/Academy";
@@ -100,7 +100,6 @@ import {
 } from "./pages/nestedPages/SouqOtlbha";
 
 import { MainInformation } from "./pages/MainInformationSetting";
-import { OrderDetails } from "./pages/nestedPages/orderDetails";
 
 // Login and reset password  pages
 import Main from "./pages/Authentication/Main/Main";
@@ -112,7 +111,6 @@ import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPag
 import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
 import { Wallet } from "./pages/Wallet";
 import { Category, AddCategory, EditCategory } from "./pages/Categories";
-import AxiosInterceptors from "./API/AxiosInterceptors";
 import { TechnicalSupport } from "./pages/TechnicalSupport";
 import TechnicalSupportDetails from "./pages/TechnicalSupport/TechnicalSupportDetails";
 
@@ -148,11 +146,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/",
-		element: (
-			<AxiosInterceptors>
-				<RootLayout />
-			</AxiosInterceptors>
-		),
+		element: <RootLayout />,
 		errorElement: <ErrorPage />,
 
 		children: [

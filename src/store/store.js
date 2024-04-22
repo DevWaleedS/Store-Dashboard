@@ -43,6 +43,9 @@ import { pagesApi } from "./apiSlices/pagesApi";
 import { AcademyApi } from "./apiSlices/academyApi";
 import { technicalSupportApi } from "./apiSlices/technicalSupportApi";
 import { notificationsApi } from "./apiSlices/notificationsApi";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { getShippingCitiesApi } from "./apiSlices/getShippingCitiesApi";
+import { platformServicesApi } from "./apiSlices/platformServicesApi";
 
 // store
 export const store = configureStore({
@@ -60,7 +63,9 @@ export const store = configureStore({
 			emptyCartsApi.middleware,
 			notificationsApi.middleware,
 			technicalSupportApi.middleware,
+			platformServicesApi.middleware,
 			selectCategoriesApi.middleware,
+			getShippingCitiesApi.middleware,
 			postalSubscriptionsApi.middleware
 		),
 	reducer: {
@@ -77,10 +82,18 @@ export const store = configureStore({
 		[notificationsApi.reducerPath]: notificationsApi.reducer,
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
+		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		[getShippingCitiesApi.reducerPath]: getShippingCitiesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
-
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 		AddActivity: AddActivity,
 		ReplyModal: ReplyModalSlice,
@@ -115,3 +128,5 @@ export const store = configureStore({
 		ChangeCategoriesForSomeSelectedProductsSlice,
 	},
 });
+
+setupListeners(store.dispatch);

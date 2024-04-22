@@ -207,7 +207,7 @@ const Category = () => {
 													return <p className='text-[#ADB5B9]'>اختر النشاط</p>;
 												}
 												const result =
-													selectCategories?.data?.categories?.filter(
+													selectCategories?.categories?.filter(
 														(item) => item?.id === parseInt(selected)
 													) || "";
 												return result[0]?.name;
@@ -222,7 +222,7 @@ const Category = () => {
 												value={""}>
 												الكل
 											</MenuItem>
-											{selectCategories?.data?.categories?.map((cat, index) => {
+											{selectCategories?.categories?.map((cat, index) => {
 												return (
 													<MenuItem
 														key={index}

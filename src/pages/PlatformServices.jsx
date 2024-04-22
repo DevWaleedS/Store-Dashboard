@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Components
 import useFetch from "../Hooks/UseFetch";
@@ -26,6 +26,11 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
+import {
+	useGetPlatformServicesDataQuery,
+	useGetPlatformServicesSelectorQuery,
+	useRequestNewServiceMutation,
+} from "../store/apiSlices/platformServicesApi";
 
 // ---------------------------------------------
 
@@ -63,11 +68,14 @@ const PlatformServices = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	// ------------------------------------------------------------
+	// Get platform services data from api
+	const { data: platformServices, isLoading } =
+		useGetPlatformServicesDataQuery();
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		"etlobhaservice/show"
-	);
-	const { fetchedData: services } = useFetch("selector/services");
+	// Get the Services Data Selector
+	const { data: platformServicesSelector } =
+		useGetPlatformServicesSelectorQuery();
+
 	// -----------------------------------------------------------
 
 	const [data, setData] = useState({
@@ -83,18 +91,21 @@ const PlatformServices = () => {
 	useEffect(() => {
 		setData({
 			...data,
-			store_name: fetchedData?.data?.stores?.store_name,
-			activity: fetchedData?.data?.stores?.activity?.map(
+			store_name: platformServices?.stores?.store_name,
+			activity: platformServices?.stores?.activity?.map(
 				(active) => active?.name
 			),
 		});
-	}, [fetchedData]);
+	}, [platformServices]);
 	// --------------------------------------------
 
 	// Send Request Order
-	const requestOrder = () => {
+
+	const [requestNewService] = useRequestNewServiceMutation();
+	const handleRequestService = async () => {
 		setLoadingTitle("جاري ارسال الطلب");
 
+		// data that send to api
 		let formData = new FormData();
 		formData.append("name", data?.name);
 		for (let i = 0; i < data?.services?.length; i++) {
@@ -102,30 +113,40 @@ const PlatformServices = () => {
 		}
 		formData.append("description", data?.description);
 
-		axios
-			.post(`etlobhaservice`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setReload(!reload);
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setData({ ...data, services: [], name: "", description: "" });
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					setData({ ...data, services: [], name: "", description: "" });
-				}
+		try {
+			const response = await requestNewService({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+
+				setEndActionTitle(response?.data?.message?.ar);
+				setData({ ...data, services: [], name: "", description: "" });
+			} else {
+				setLoadingTitle("");
+
+				setData({ ...data, services: [], name: "", description: "" });
+
+				// handle display errors using toast
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+
+				Object.entries(response.data.message.en).forEach(([key, message]) => {
+					toast.error(message[0], { theme: "light" });
+				});
+			}
+		} catch (error) {
+			console.error("Error changing edit Product:", error);
+		}
 	};
 	// --------------------------------------
-
+	console.log(data);
 	return (
 		<>
 			<Helmet>
@@ -161,7 +182,7 @@ const PlatformServices = () => {
 					<h5 className='form-name mb-md-5 mb-3'>
 						قم بتقديم طلب بالخدمات التي تحتاجها
 					</h5>
-					{loading ? (
+					{isLoading ? (
 						<div className=''>
 							<CircularLoading />
 						</div>
@@ -193,14 +214,21 @@ const PlatformServices = () => {
 								</div>
 								<div className='col-md-7 col-12'>
 									<div className='store-activity-input '>
-										{data?.activity?.map((activity, idx) => (
-											<div key={idx} className='activity'>
-												{activity}
+										{data?.activity?.length > 0 ? (
+											data.activity.map((activity, idx) => (
+												<div key={idx} className='activity'>
+													{activity}
+												</div>
+											))
+										) : (
+											<div style={{ fontSize: "16px" }}>
+												لا يوجد نشاط لهذا المتجر
 											</div>
-										))}
+										)}
 									</div>
 								</div>
 							</div>
+
 							<div className='row align-items-center mb-3'>
 								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
 									<label htmlFor='order-number'>
@@ -232,13 +260,13 @@ const PlatformServices = () => {
 													);
 												}
 												return selected.map((item) => {
-													const result = services?.data?.services?.filter(
+													const result = platformServicesSelector?.filter(
 														(service) => service?.id === parseInt(item)
 													);
 													return `${result[0]?.name} , `;
 												});
 											}}>
-											{services?.data?.services?.map((service, index) => (
+											{platformServicesSelector?.map((service, index) => (
 												<MenuItem key={index} value={service?.id}>
 													<Checkbox
 														checked={data?.services?.indexOf(service?.id) > -1}
@@ -300,7 +328,7 @@ const PlatformServices = () => {
 								<div className='col-md-7 col-12'>
 									<button
 										className='w-100 upload-request-btn'
-										onClick={() => requestOrder()}
+										onClick={() => handleRequestService()}
 										disabled={
 											data?.services?.length === 0 && data?.name === ""
 										}>

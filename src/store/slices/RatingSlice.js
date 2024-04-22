@@ -35,19 +35,6 @@ const RatingSlice = createSlice({
 				state.loading = false;
 				state.error = action.error.message;
 			});
-
-		//add new Product
-		// .addCase(addCategoryThunk.pending, (state, action) => {
-		// 	state.reload = true;
-		// 	state.loading = true;
-		// })
-		// .addCase(addCategoryThunk.fulfilled, (state, action) => {
-		// 	state.reload = false;
-		// 	state.loading = false;
-		// })
-		// .addCase(addCategoryThunk.rejected, (state, action) => {
-		// 	state.error = action.payload.message;
-		// });
 	},
 });
 

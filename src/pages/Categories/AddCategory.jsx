@@ -26,7 +26,9 @@ import Modal from "@mui/material/Modal";
 // Icons
 import { AiOutlinePlus } from "react-icons/ai";
 import { DeleteIcon, UploadIcon } from "../../data/Icons";
-import { addCategoryThunk } from "../../store/Thunk/CategoriesThunk";
+
+// RTK Query
+import { useAddNewCategoryMutation } from "../../store/apiSlices/categoriesApi";
 
 // Modal style
 const style = {
@@ -58,7 +60,9 @@ const AddCategory = () => {
 
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
+
 	const { subCategories, setSubCategories } = contextStore;
+	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -110,44 +114,58 @@ const AddCategory = () => {
 		});
 	};
 
-	// to add new category
-	const handleCategory = async (data) => {
+	// handle add new Category
+	const [addNewCategory] = useAddNewCategoryMutation();
+	const handleCreateNewCategory = async (data) => {
 		setLoadingTitle("جاري حفظ النشاط");
 		resetCategoryError();
 
 		const formData = new FormData();
 		formData.append("name", data?.name);
-		if (icons?.length !== 0) {
+		if (icons?.length > 0) {
 			formData.append("icon", icons[0]?.file);
 		}
 
-		// to select all subcategories names
-		for (let i = 0; i < subCategories?.length; i++) {
-			if (subCategories[i]?.name !== "") {
-				formData.append([`data[${i}][name]`], subCategories[i]?.name || "");
+		subCategories.forEach((subCategory, index) => {
+			if (subCategory?.name) {
+				formData.append(`data[${index}][name]`, subCategory.name);
 			}
-		}
+		});
 
 		try {
-			await dispatch(addCategoryThunk(formData)).unwrap();
-			setLoadingTitle("");
-			navigate("/Category");
-			setSubCategories([]);
-		} catch (errors) {
-			setLoadingTitle("");
-			setCategoryError({
-				...categoryError,
-				name: error?.en?.name[0],
-				icon: error?.en?.icon[0],
-			});
-			toast.error(error?.en?.name[0], {
-				theme: "light",
-			});
-			toast.error(error?.en?.icon[0], {
-				theme: "light",
+			const response = await addNewCategory({
+				body: formData,
 			});
 
-			console.log(errors);
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				navigate("/Category");
+				setSubCategories([]);
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				setCategoryError({
+					...categoryError,
+					name: response?.data?.message?.en?.name?.[0],
+					icon: response?.res?.data?.message?.en?.name?.[0],
+				});
+
+				// handle display errors using toast
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+
+				Object.entries(response.data.message.en).forEach(([key, message]) => {
+					toast.error(message[0], { theme: "light" });
+				});
+			}
+		} catch (error) {
+			console.error("Error changing addNewCategory:", error);
 		}
 	};
 
@@ -189,7 +207,7 @@ const AddCategory = () => {
 							</div>
 							<form
 								className='form-h-full'
-								onSubmit={handleSubmit(handleCategory)}>
+								onSubmit={handleSubmit(handleCreateNewCategory)}>
 								<div className='form-body'>
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-md-3 col-12'>

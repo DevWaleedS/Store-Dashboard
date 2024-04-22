@@ -3,7 +3,6 @@ import React from "react";
 // Third Party
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import useFetch from "../../Hooks/UseFetch";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 // Redux
@@ -16,7 +15,6 @@ import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 
 // Components
-
 import { SendSupportReplayModal } from "../../components/Modal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
@@ -30,6 +28,8 @@ import {
 	User,
 } from "../../data/Icons";
 import { TextEditor } from "../../components/TextEditor";
+
+// RTK query
 import { useShowTechnicalSupportByIdQuery } from "../../store/apiSlices/technicalSupportApi";
 
 // Modal Style
@@ -122,7 +122,7 @@ const TechnicalSupportDetails = () => {
 												<div className='issue-number'>
 													<h5>رقم الرسالة</h5>
 													<div>
-														{technicalSupportData?.data?.technicalSupports?.id}
+														{technicalSupportData?.technicalSupports?.id}
 													</div>
 												</div>
 											</div>
@@ -140,8 +140,8 @@ const TechnicalSupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span className='text-center text-overflow'>
 																			{
-																				technicalSupportData?.data
-																					?.technicalSupports?.name
+																				technicalSupportData?.technicalSupports
+																					?.name
 																			}
 																		</span>
 																	</div>
@@ -158,8 +158,8 @@ const TechnicalSupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span style={{ direction: "ltr" }}>
 																			{
-																				technicalSupportData?.data
-																					?.technicalSupports?.phonenumber
+																				technicalSupportData?.technicalSupports
+																					?.phonenumber
 																			}
 																		</span>
 																	</div>
@@ -175,8 +175,8 @@ const TechnicalSupportDetails = () => {
 																	<div className='box pending-box d-flex justify-content-center'>
 																		<span>
 																			{
-																				technicalSupportData?.data
-																					?.technicalSupports?.supportstatus
+																				technicalSupportData?.technicalSupports
+																					?.supportstatus
 																			}
 																		</span>
 																	</div>
@@ -194,8 +194,8 @@ const TechnicalSupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
 																			{moment(
-																				technicalSupportData?.data
-																					?.technicalSupports?.created_at
+																				technicalSupportData?.technicalSupports
+																					?.created_at
 																			).format("DD-MM-YYYY")}
 																		</span>
 																	</div>
@@ -211,8 +211,8 @@ const TechnicalSupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
 																			{
-																				technicalSupportData?.data
-																					?.technicalSupports?.title
+																				technicalSupportData?.technicalSupports
+																					?.title
 																			}
 																		</span>
 																	</div>
@@ -248,7 +248,7 @@ const TechnicalSupportDetails = () => {
 												<TextEditor
 													readOnly={true}
 													ToolBar={"emptyCart"}
-													placeholder={`${technicalSupportData?.data?.technicalSupports?.content}`}
+													placeholder={`${technicalSupportData?.technicalSupports?.content}`}
 												/>
 											</div>
 										</div>
@@ -271,7 +271,7 @@ const TechnicalSupportDetails = () => {
 				</Modal>
 			</div>
 			<SendSupportReplayModal
-				supportDetails={technicalSupportData?.data?.technicalSupports}
+				supportDetails={technicalSupportData?.technicalSupports}
 			/>
 		</>
 	);
