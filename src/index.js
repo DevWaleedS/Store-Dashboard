@@ -24,8 +24,6 @@ import RootLayout from "./pages/RootLayout";
 import "./index.css";
 
 import {
-	Carts,
-	Coupon,
 	Offers,
 	Pages,
 	PaymentGetways,
@@ -63,9 +61,6 @@ import { DashboardHomePage } from "./pages/DashboardHomePage";
 
 // Import Nested Pages
 import {
-	AddCoupon,
-	EditCoupon,
-	ClientData,
 	EditUserPage,
 	JobTitles,
 	EditRole,
@@ -113,6 +108,10 @@ import { Wallet } from "./pages/Wallet";
 import { Category, AddCategory, EditCategory } from "./pages/Categories";
 import { TechnicalSupport } from "./pages/TechnicalSupport";
 import TechnicalSupportDetails from "./pages/TechnicalSupport/TechnicalSupportDetails";
+
+// coupons
+import { Coupon, AddCoupon, EditCoupon } from "./pages/Coupon";
+import { EditEmptyCart, EmptyCarts } from "./pages/EmptyCarts";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -215,14 +214,14 @@ const router = createBrowserRouter([
 			// 	element: <OfferDetails />,
 			// },
 			{
-				path: "Carts",
-				element: <Carts />,
+				path: "EmptyCarts",
+				element: <EmptyCarts />,
 			},
 
-			// ClientData page nested page for Carts page
+			// EditEmptyCart page nested page for Carts page
 			{
-				path: "Carts/ClientData/:id",
-				element: <ClientData />,
+				path: "EmptyCarts/EditEmptyCart/:id",
+				element: <EditEmptyCart />,
 			},
 
 			{

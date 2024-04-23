@@ -1,26 +1,28 @@
 import axios from "axios";
 
-// this is the base url that is available into any component in the dashboard
-axios.defaults.baseURL = "https://backend.atlbha.com/api/Store/";
+const baseURL = "https://backend.atlbha.com/api/Store/";
+axios.defaults.baseURL = baseURL;
 
 axios.interceptors.request.use(
 	(req) => {
 		if (!req.url.includes("login")) {
-			let store_token =
+			const storeToken =
 				document.cookie
 					?.split("; ")
 					?.find((cookie) => cookie.startsWith("store_token="))
 					?.split("=")[1] || null;
 
-			if (store_token !== null) {
-				req.headers.Authorization = `Bearer ${store_token}`;
+			if (storeToken !== null) {
+				req.headers.Authorization = `Bearer ${storeToken}`;
 			}
 		}
 
 		return req;
 	},
 	(error) => {
-		// Do something with request error
+		// Handle request error
 		return Promise.reject(error);
 	}
 );
+
+export default axios;

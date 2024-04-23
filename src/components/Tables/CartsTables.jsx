@@ -371,7 +371,7 @@ export default function CartsTables({
 																title='تعديل السلة'
 																style={{ cursor: "pointer" }}
 																onClick={() =>
-																	navigate(`ClientData/${row?.id}`)
+																	navigate(`EditEmptyCart/${row?.id}`)
 																}
 															/>
 

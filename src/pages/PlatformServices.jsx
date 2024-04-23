@@ -132,12 +132,17 @@ const PlatformServices = () => {
 
 				setData({ ...data, services: [], name: "", description: "" });
 
-				// handle display errors using toast
-				toast.error(response?.data?.message?.ar, {
-					theme: "light",
-				});
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
 
-				Object.entries(response?.data?.message?.en).forEach(
+				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });
 					}

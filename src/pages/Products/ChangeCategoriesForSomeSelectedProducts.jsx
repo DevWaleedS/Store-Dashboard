@@ -15,13 +15,12 @@ import Checkbox from "@mui/material/Checkbox";
 import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectCategoriesApi";
-
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../store/slices/ChangeCategoriesForSomeSelectedProducts";
 import { useChangeCategoriesForSomeSelectedProductsMutation } from "../../store/apiSlices/productsApi";
 import { toast } from "react-toastify";
 import Context from "../../Context/context";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 // Style the modal
 const style = {
@@ -91,10 +90,10 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 
 	// To display categories
 	useEffect(() => {
-		if (selectCategories?.categories) {
-			setCategories(selectCategories?.categories);
+		if (selectCategories) {
+			setCategories(selectCategories);
 		}
-	}, [selectCategories?.categories]);
+	}, [selectCategories]);
 
 	// get sub categories based on main categories
 	const subcategory =

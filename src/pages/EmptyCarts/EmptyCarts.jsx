@@ -5,18 +5,18 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 // Icons
-import { HomeIcon } from "../data/Icons";
+import { HomeIcon } from "../../data/Icons";
 
 // Components
-import { CartsTables } from "../components/Tables";
+import { CartsTables } from "../../components/Tables";
 
 // RTK Query
 import {
 	useGetEmptyCartsQuery,
 	useSearchInEmptyCartsMutation,
-} from "../store/apiSlices/emptyCartsApi";
+} from "../../store/apiSlices/emptyCartsApi";
 
-const Carts = () => {
+const EmptyCarts = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
@@ -95,7 +95,7 @@ const Carts = () => {
 				<div className='row'>
 					<div className='carts-table'>
 						<CartsTables
-							cartsData={emptyCarts}
+							cartsData={emptyCartsData}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
@@ -113,4 +113,4 @@ const Carts = () => {
 	);
 };
 
-export default Carts;
+export default EmptyCarts;

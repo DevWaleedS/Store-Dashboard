@@ -3,11 +3,9 @@ export { default as UserData } from "./UserData";
 export { default as Delegate } from "./Delegate";
 export { default as EditPage } from "./EditPage";
 export { default as JobTitles } from "./JobTitles";
-export { default as AddCoupon } from "./AddCoupon";
-export { default as EditCoupon } from "./EditCoupon";
 export { default as AddNewUser } from "./AddNewUser";
 export { default as CreatePage } from "./CreatePage";
-export { default as ClientData } from "./ClientData";
+
 export { default as CreateRole } from "./CreateRole";
 
 export { default as CreateOffer } from "./CreateOffer";

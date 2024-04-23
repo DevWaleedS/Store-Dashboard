@@ -21,7 +21,7 @@ import {
 	useSearchInEtlbohaCategoriesMutation,
 	useSearchInStoreCategoriesMutation,
 } from "../../store/apiSlices/categoriesApi";
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectCategoriesApi";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 const Category = () => {
 	const navigate = useNavigate();
@@ -207,7 +207,7 @@ const Category = () => {
 													return <p className='text-[#ADB5B9]'>اختر النشاط</p>;
 												}
 												const result =
-													selectCategories?.categories?.filter(
+													selectCategories?.filter(
 														(item) => item?.id === parseInt(selected)
 													) || "";
 												return result[0]?.name;
@@ -222,7 +222,7 @@ const Category = () => {
 												value={""}>
 												الكل
 											</MenuItem>
-											{selectCategories?.categories?.map((cat, index) => {
+											{selectCategories?.map((cat, index) => {
 												return (
 													<MenuItem
 														key={index}

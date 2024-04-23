@@ -2,31 +2,27 @@ import React, { useState, useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
 
 // Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
-import { HomeIcon } from "../data/Icons";
+import { HomeIcon } from "../../data/Icons";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 
-//MUI
+// MUI
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import { CouponTable } from "../components/Tables";
-import { useDispatch, useSelector } from "react-redux";
-import {
-	filterCouponsByStatusThunk,
-	searchCouponNameThunk,
-} from "../store/Thunk/CouponsThunk";
+import { CouponTable } from "../../components/Tables";
+
+// RTK Query
 import {
 	useFilterCouponsByStatusMutation,
 	useGetCouponsQuery,
 	useSearchInCouponsMutation,
-} from "../store/apiSlices/couponApi";
+} from "../../store/apiSlices/couponApi";
 
 // filter Coupon by
 const filtersTypes = [
@@ -88,7 +84,6 @@ const menuItemStyles = {
 };
 
 const Coupon = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [couponsData, setCouponsData] = useState([]);
 	const [pageTarget, setPageTarget] = useState(1);

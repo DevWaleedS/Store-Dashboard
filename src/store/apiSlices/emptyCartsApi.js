@@ -55,6 +55,27 @@ export const emptyCartsApi = createApi({
 				method: "GET",
 			}),
 		}),
+
+		// get empty cart by id
+		getEmptyCartById: builder.query({
+			query: (id) => `cartShow/${id}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.cart,
+			providesTags: ["EmptyCarts"],
+		}),
+
+		// edit coupon by id
+		sendOfferToEmptyCart: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `sendOfferCart/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["EmptyCarts"],
+		}),
 	}),
 });
 
@@ -64,4 +85,6 @@ export const {
 	useDeleteEmptyCartsMutation,
 	useDeleteAllEmptyCartsMutation,
 	useSearchInEmptyCartsMutation,
+	useGetEmptyCartByIdQuery,
+	useSendOfferToEmptyCartMutation,
 } = emptyCartsApi;

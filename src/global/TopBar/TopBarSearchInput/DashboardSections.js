@@ -105,7 +105,7 @@ export const dashboardSections = [
 	{
 		id: 7,
 		sectionName: "السلات المتروكة",
-		route: "Carts",
+		route: "EmptyCarts",
 		icon: <BsCart />,
 	},
 	{

@@ -199,7 +199,7 @@ const SideBar = ({ open, closeSidebar }) => {
 
 					<NavLink
 						className='sub-menu-link'
-						to='Carts'
+						to='EmptyCarts'
 						onClick={() => {
 							dispatch(StoreVerificationThunk());
 							closeSidebar();

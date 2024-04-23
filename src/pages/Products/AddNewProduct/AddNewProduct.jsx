@@ -47,8 +47,9 @@ import { useDispatch } from "react-redux";
 import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 // RTK Query
-import { useGetCategoriesQuery } from "../../../store/apiSlices/selectCategoriesApi";
+
 import { useAddNewProductMutation } from "../../../store/apiSlices/productsApi";
+import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 // style the select mui
 const style = {
@@ -340,7 +341,7 @@ const AddNewProduct = () => {
 	};
 
 	const subcategory =
-		selectCategories?.categories?.filter(
+		selectCategories?.filter(
 			(sub) => sub?.id === parseInt(product?.category_id)
 		) || [];
 
@@ -440,6 +441,7 @@ const AddNewProduct = () => {
 			}
 		}
 
+		// make request...
 		try {
 			const response = await addNewProduct({
 				body: formData,
@@ -474,12 +476,17 @@ const AddNewProduct = () => {
 					images: response?.data?.message?.en?.images?.[0],
 				});
 
-				// handle display errors using toast
-				toast.error(response?.data?.message?.ar, {
-					theme: "light",
-				});
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
 
-				Object.entries(response?.data?.message?.en).forEach(
+				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });
 					}
@@ -870,31 +877,29 @@ const AddNewProduct = () => {
 																	);
 																}
 																const result =
-																	selectCategories?.categories?.filter(
+																	selectCategories?.filter(
 																		(item) => item?.id === parseInt(selected)
 																	) || "";
 																return result[0]?.name;
 															}}>
-															{selectCategories?.categories?.map(
-																(cat, index) => {
-																	return (
-																		<MenuItem
-																			key={index}
-																			className='souq_storge_category_filter_items'
-																			sx={{
-																				backgroundColor:
-																					cat?.store === null
-																						? " #dfe2aa"
-																						: " rgba(211, 211, 211, 1)",
-																				height: "3rem",
-																				"&:hover": {},
-																			}}
-																			value={cat?.id}>
-																			{cat?.name}
-																		</MenuItem>
-																	);
-																}
-															)}
+															{selectCategories?.map((cat, index) => {
+																return (
+																	<MenuItem
+																		key={index}
+																		className='souq_storge_category_filter_items'
+																		sx={{
+																			backgroundColor:
+																				cat?.store === null
+																					? " #dfe2aa"
+																					: " rgba(211, 211, 211, 1)",
+																			height: "3rem",
+																			"&:hover": {},
+																		}}
+																		value={cat?.id}>
+																		{cat?.name}
+																	</MenuItem>
+																);
+															})}
 														</Select>
 													)}
 												/>

@@ -1,14 +1,11 @@
 import React, { useContext, useState } from "react";
 
 // Third party
-import axios from "axios";
+
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-// Components
-import useFetch from "../../Hooks/UseFetch";
 
 // Context
 import Context from "../../Context/context";
@@ -33,6 +30,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { IoIosArrowDown } from "react-icons/io";
 import { DateIcon, SearchIcon } from "../../data/Icons";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useAddNewCouponMutation } from "../../store/apiSlices/couponApi";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
+import { useGetPaymentsTypesQuery } from "../../store/apiSlices/selectorsApis/selectPaymentsTypesApi";
+import { useGetImportProductsQuery } from "../../store/apiSlices/selectorsApis/selectImportProductsApi";
 
 // Modal Style
 const style = {
@@ -112,16 +113,13 @@ const selectStyle = {
 };
 
 const AddCoupon = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData: categories } = useFetch("selector/mainCategories");
-	const { fetchedData: payments } = useFetch("selector/payment_types");
-	const { fetchedData: products } = useFetch("selector/productImportproduct");
+	//  Selectors rtk
+
+	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectPayments } = useGetPaymentsTypesQuery();
+	const { data: selectProducts } = useGetImportProductsQuery();
 
 	const navigate = useNavigate();
-	const [reload, setReload] = useState(false);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -191,7 +189,7 @@ const AddCoupon = () => {
 		const value = event.target.value;
 		setSearchTerm(value);
 
-		const filtered = products?.data?.products.filter((product) =>
+		const filtered = selectProducts.filter((product) =>
 			product.name.toLowerCase().includes(value.toLowerCase())
 		);
 		setFilteredProducts(filtered);
@@ -205,7 +203,7 @@ const AddCoupon = () => {
 		);
 
 		// Add the selected product to the list of selected products
-		const selectedProduct = products?.data?.products.find(
+		const selectedProduct = selectProducts.find(
 			(product) => product.id === productId
 		);
 		setSelectedProducts((prevSelectedProducts) =>
@@ -217,10 +215,13 @@ const AddCoupon = () => {
 		);
 	};
 
-	// add coupon function
-	const addNewCoupon = (data) => {
+	// handle add coupon function
+	const [addNewCoupon] = useAddNewCouponMutation();
+	const handleAddNewCoupon = async (data) => {
 		setLoadingTitle("جاري اضافة كود الخصم");
 		resetCouponError();
+
+		// data to that send to api
 		let formData = new FormData();
 		formData.append("code", data?.code);
 		formData.append("discount_type", data.discount_type);
@@ -250,63 +251,54 @@ const AddCoupon = () => {
 				coupon_apply === "selected_product" ? product?.id : ""
 			)
 		);
-
 		formData.append("status", isEnable === true ? "active" : "not_active");
-		axios
-			.post(`coupons`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Coupon");
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
 
-					setCouponError({
-						...couponError,
-						code: res?.data?.message?.en?.code?.[0],
-						discount_type: res?.data?.message?.en?.discount_type?.[0],
-						total_price: res?.data?.message?.en?.total_price?.[0],
-						discount: res?.data?.message?.en?.discount?.[0],
-						total_redemptions: res?.data?.message?.en?.total_redemptions?.[0],
-						user_redemptions: res?.data?.message?.en?.user_redemptions?.[0],
-						coupon_apply: res?.data?.message?.en?.coupon_apply?.[0],
-					});
-					setStartDateError(res?.data?.message?.en?.expire_date?.[0]);
-
-					toast.error(res?.data?.message?.en?.code?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount_type?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.total_redemptions?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.user_redemptions?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.coupon_apply?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.expire_date?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await addNewCoupon({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Coupon");
+			} else {
+				setLoadingTitle("");
+				setCouponError({
+					...couponError,
+					code: response?.data?.message?.en?.code?.[0],
+					discount_type: response?.data?.message?.en?.discount_type?.[0],
+					total_price: response?.data?.message?.en?.total_price?.[0],
+					discount: response?.data?.message?.en?.discount?.[0],
+					total_redemptions:
+						response?.data?.message?.en?.total_redemptions?.[0],
+					user_redemptions: response?.data?.message?.en?.user_redemptions?.[0],
+					coupon_apply: response?.data?.message?.en?.coupon_apply?.[0],
+				});
+				setStartDateError(response?.data?.message?.en?.expire_date?.[0]);
+
+				// handle display errors using toast
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing addNewCoupon:", error);
+		}
 	};
 
+	// handle delete select item
 	const deleteItemFromSelectedProduct = (id) => {
 		const newLists = selectedProducts?.filter(
 			(__product, index) => index !== id
@@ -336,7 +328,7 @@ const AddCoupon = () => {
 								</div>
 							</div>
 
-							<form onSubmit={handleSubmit(addNewCoupon)}>
+							<form onSubmit={handleSubmit(handleAddNewCoupon)}>
 								<div className='form-body'>
 									<div className='row mb-md-5 mb-3 d-flex justify-content-evenly'>
 										<div className='col-lg-5 col-12 mb-lg-0 mb-3'>
@@ -896,31 +888,29 @@ const AddCoupon = () => {
 																	);
 																}
 																const result =
-																	categories?.data?.categories?.filter(
+																	selectCategories?.filter(
 																		(item) => item?.id === parseInt(selected)
 																	) || "";
 																return result[0]?.name;
 															}}>
-															{categories?.data?.categories?.map(
-																(cat, index) => {
-																	return (
-																		<MenuItem
-																			key={index}
-																			className='souq_storge_category_filter_items'
-																			sx={{
-																				backgroundColor:
-																					cat?.store === null
-																						? " #dfe2aa"
-																						: " rgba(211, 211, 211, 1)",
-																				height: "3rem",
-																				"&:hover": {},
-																			}}
-																			value={cat?.id}>
-																			{cat?.name}
-																		</MenuItem>
-																	);
-																}
-															)}
+															{selectCategories?.map((cat, index) => {
+																return (
+																	<MenuItem
+																		key={index}
+																		className='souq_storge_category_filter_items'
+																		sx={{
+																			backgroundColor:
+																				cat?.store === null
+																					? " #dfe2aa"
+																					: " rgba(211, 211, 211, 1)",
+																			height: "3rem",
+																			"&:hover": {},
+																		}}
+																		value={cat?.id}>
+																		{cat?.name}
+																	</MenuItem>
+																);
+															})}
 														</Select>
 													</FormControl>
 													<div className='col-12'>
@@ -971,28 +961,26 @@ const AddCoupon = () => {
 																	);
 																}
 																const result =
-																	payments?.data?.payment_types?.filter(
+																	selectPayments?.filter(
 																		(item) => item?.id === parseInt(selected)
 																	) || "";
 																return result[0]?.name;
 															}}>
-															{payments?.data?.payment_types?.map(
-																(payment, index) => {
-																	return (
-																		<MenuItem
-																			key={index}
-																			className='souq_storge_category_filter_items'
-																			sx={{
-																				backgroundColor: "#fff",
-																				height: "3rem",
-																				"&:hover": {},
-																			}}
-																			value={payment?.id}>
-																			{payment?.name}
-																		</MenuItem>
-																	);
-																}
-															)}
+															{selectPayments?.map((payment, index) => {
+																return (
+																	<MenuItem
+																		key={index}
+																		className='souq_storge_category_filter_items'
+																		sx={{
+																			backgroundColor: "#fff",
+																			height: "3rem",
+																			"&:hover": {},
+																		}}
+																		value={payment?.id}>
+																		{payment?.name}
+																	</MenuItem>
+																);
+															})}
 														</Select>
 													</FormControl>
 													<div className='col-12'>

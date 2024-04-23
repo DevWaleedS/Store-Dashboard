@@ -28,7 +28,7 @@ export const selectCategoriesApi = createApi({
 			query: () => "selector/mainCategories",
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data,
+			transformResponse: (response, meta, arg) => response.data?.categories,
 		}),
 	}),
 });

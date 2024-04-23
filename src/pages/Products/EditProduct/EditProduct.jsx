@@ -48,7 +48,7 @@ import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 
 // RTK Query
-import { useGetCategoriesQuery } from "../../../store/apiSlices/selectCategoriesApi";
+import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
 import {
 	useEditProductByIdMutation,
 	useGetProductByIdQuery,
@@ -439,7 +439,7 @@ const EditProduct = () => {
 
 	// Handle select Subcategory Array
 	const subcategory =
-		selectCategories?.categories?.filter(
+		selectCategories?.filter(
 			(sub) => sub?.id === parseInt(product?.category_id)
 		) || [];
 	// ---------------------------------------
@@ -566,12 +566,17 @@ const EditProduct = () => {
 					images: response?.data?.message?.en?.["images.0"]?.[0],
 				});
 
-				// handle display errors using toast
-				toast.error(response?.data?.message?.ar, {
-					theme: "light",
-				});
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
 
-				Object.entries(response?.data?.message?.en).forEach(
+				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });
 					}
@@ -1001,33 +1006,31 @@ const EditProduct = () => {
 																		);
 																	}
 																	const result =
-																		selectCategories?.categories?.filter(
+																		selectCategories?.filter(
 																			(item) =>
 																				item?.id === parseInt(selected) ||
 																				item?.id === product?.category_id
 																		) || "";
 																	return result[0]?.name;
 																}}>
-																{selectCategories?.categories?.map(
-																	(cat, idx) => {
-																		return (
-																			<MenuItem
-																				key={idx}
-																				className='souq_storge_category_filter_items'
-																				sx={{
-																					backgroundColor:
-																						cat?.store === null
-																							? " #dfe2aa"
-																							: " rgba(211, 211, 211, 1)",
-																					height: "3rem",
-																					"&:hover": {},
-																				}}
-																				value={cat?.id}>
-																				{cat?.name}
-																			</MenuItem>
-																		);
-																	}
-																)}
+																{selectCategories?.map((cat, idx) => {
+																	return (
+																		<MenuItem
+																			key={idx}
+																			className='souq_storge_category_filter_items'
+																			sx={{
+																				backgroundColor:
+																					cat?.store === null
+																						? " #dfe2aa"
+																						: " rgba(211, 211, 211, 1)",
+																				height: "3rem",
+																				"&:hover": {},
+																			}}
+																			value={cat?.id}>
+																			{cat?.name}
+																		</MenuItem>
+																	);
+																})}
 															</Select>
 														)}
 													/>

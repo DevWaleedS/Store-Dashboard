@@ -30,7 +30,7 @@ import NotificationsSlice from "./slices/NotificationsSlice";
 import CategoriesSelectSlice from "./slices/CategoriesSelectSlice";
 import { mainPageApi } from "./apiSlices/mainPageApi";
 import { categoriesApi } from "./apiSlices/categoriesApi";
-import { selectCategoriesApi } from "./apiSlices/selectCategoriesApi";
+
 import { productsApi } from "./apiSlices/productsApi";
 import ChangeCategoriesForSomeSelectedProductsSlice from "./slices/ChangeCategoriesForSomeSelectedProducts";
 import { ordersApi } from "./apiSlices/ordersApi";
@@ -46,6 +46,11 @@ import { notificationsApi } from "./apiSlices/notificationsApi";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { getShippingCitiesApi } from "./apiSlices/getShippingCitiesApi";
 import { platformServicesApi } from "./apiSlices/platformServicesApi";
+
+// selector apis
+import { selectCategoriesApi } from "./apiSlices/selectorsApis/selectCategoriesApi";
+import { selectImportProductsApi } from "./apiSlices/selectorsApis/selectImportProductsApi";
+import { selectPaymentsTypesApi } from "./apiSlices/selectorsApis/selectPaymentsTypesApi";
 
 // store
 export const store = configureStore({
@@ -64,7 +69,11 @@ export const store = configureStore({
 			notificationsApi.middleware,
 			technicalSupportApi.middleware,
 			platformServicesApi.middleware,
+
 			selectCategoriesApi.middleware,
+			selectImportProductsApi.middleware,
+			selectPaymentsTypesApi.middleware,
+
 			getShippingCitiesApi.middleware,
 			postalSubscriptionsApi.middleware
 		),
@@ -85,8 +94,8 @@ export const store = configureStore({
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		[getShippingCitiesApi.reducerPath]: getShippingCitiesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		[selectPaymentsTypesApi.reducerPath]: selectPaymentsTypesApi.reducer,
+		[selectImportProductsApi.reducerPath]: selectImportProductsApi.reducer,
 		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,

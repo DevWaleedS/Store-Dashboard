@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, Fragment } from "react";
 
 // Third party
-import axios from "axios";
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
@@ -9,7 +8,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Context
@@ -35,6 +33,16 @@ import { IoIosArrowDown } from "react-icons/io";
 import { ReactComponent as DateIcon } from "../../data/Icons/icon-date.svg";
 import { ReactComponent as SearchIcon } from "../../data/Icons/icon_24_search.svg";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+
+// Rtk query
+import {
+	useGetCouponByIdQuery,
+	useEditCouponByIdMutation,
+	useChangeCouponStatusMutation,
+} from "../../store/apiSlices/couponApi";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
+import { useGetPaymentsTypesQuery } from "../../store/apiSlices/selectorsApis/selectPaymentsTypesApi";
+import { useGetImportProductsQuery } from "../../store/apiSlices/selectorsApis/selectImportProductsApi";
 
 // Modal Style
 const style = {
@@ -114,18 +122,17 @@ const selectStyle = {
 };
 
 const EditCoupon = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// Selectors Rtk
 	const { id } = useParams();
+	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectPayments } = useGetPaymentsTypesQuery();
+	const { data: selectProducts } = useGetImportProductsQuery();
+
+	// get current coupon by id
+	const { data: currentCoupon, isFetching } = useGetCouponByIdQuery(id);
+
 	const navigate = useNavigate();
 	const currentDate = new Date();
-	const { fetchedData: categories } = useFetch("selector/mainCategories");
-	const { fetchedData: payments } = useFetch("selector/payment_types");
-	const { fetchedData: products } = useFetch("selector/productImportproduct");
-
-	const { fetchedData, loading, reload, setReload } = useFetch(`coupons/${id}`);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -217,7 +224,7 @@ const EditCoupon = () => {
 		const value = event.target.value;
 		setSearchTerm(value);
 
-		const filtered = products?.data?.products.filter((product) =>
+		const filtered = selectProducts.filter((product) =>
 			product.name.toLowerCase().includes(value.toLowerCase())
 		);
 		setFilteredProducts(filtered);
@@ -231,7 +238,7 @@ const EditCoupon = () => {
 		);
 
 		// Add the selected product to the list of selected products
-		const selectedProduct = products?.data?.products?.find(
+		const selectedProduct = selectProducts?.find(
 			(product) => product?.id === productId
 		);
 		setSelectedProducts((prevSelectedProducts) =>
@@ -251,78 +258,63 @@ const EditCoupon = () => {
 	useEffect(() => {
 		setCoupon({
 			...coupon,
-			code: fetchedData?.data?.Coupons?.code,
+			code: currentCoupon?.code,
 			discount_type:
-				fetchedData?.data?.Coupons?.discount_type === "مبلغ ثابت"
-					? "fixed"
-					: "percent",
-			total_price: fetchedData?.data?.Coupons?.total_price,
-			discount: fetchedData?.data?.Coupons?.discount,
-			total_redemptions: fetchedData?.data?.Coupons?.total_redemptions,
-			user_redemptions: fetchedData?.data?.Coupons?.user_redemptions,
-			free_shipping: +fetchedData?.data?.Coupons?.free_shipping,
-			exception_discount_product:
-				+fetchedData?.data?.Coupons?.exception_discount_product,
+				currentCoupon?.discount_type === "مبلغ ثابت" ? "fixed" : "percent",
+			total_price: currentCoupon?.total_price,
+			discount: currentCoupon?.discount,
+			total_redemptions: currentCoupon?.total_redemptions,
+			user_redemptions: currentCoupon?.user_redemptions,
+			free_shipping: +currentCoupon?.free_shipping,
+			exception_discount_product: +currentCoupon?.exception_discount_product,
 		});
 
-		if (fetchedData?.data?.Coupons?.expire_date) {
-			setStartDate(
-				moment(fetchedData?.data?.Coupons?.expire_date, "YYYY-MM-DD").toDate()
-			);
+		if (currentCoupon?.expire_date) {
+			setStartDate(moment(currentCoupon?.expire_date, "YYYY-MM-DD").toDate());
 		} else {
 			setStartDate("");
 		}
 
 		setCoupon_apply(
-			fetchedData?.data?.Coupons?.coupon_apply === "selected_product"
+			currentCoupon?.coupon_apply === "selected_product"
 				? "selected_product"
-				: fetchedData?.data?.Coupons?.coupon_apply === "selected_category"
+				: currentCoupon?.coupon_apply === "selected_category"
 				? "selected_category"
-				: fetchedData?.data?.Coupons?.coupon_apply === "selected_payment"
+				: currentCoupon?.coupon_apply === "selected_payment"
 				? "selected_payment"
-				: fetchedData?.data?.Coupons?.coupon_apply === "all"
+				: currentCoupon?.coupon_apply === "all"
 				? "all"
 				: null
 		);
 
-		setSelectedProducts(
-			fetchedData?.data?.Coupons?.selected_product?.data || []
-		);
+		setSelectedProducts(currentCoupon?.selected_product?.data || []);
 
-		setSelect_category_id(
-			fetchedData?.data?.Coupons?.selected_category?.[0]?.id
-		);
+		setSelect_category_id(currentCoupon?.selected_category?.[0]?.id);
 
-		setIsEnable(fetchedData?.data?.Coupons?.status);
+		setIsEnable(currentCoupon?.status);
 
-		setSelect_payment_id(fetchedData?.data?.Coupons?.selected_payment?.[0]?.id);
-	}, [fetchedData?.data?.Coupons]);
+		setSelect_payment_id(currentCoupon?.selected_payment?.[0]?.id);
+	}, [currentCoupon]);
 
-	/**
-	 * ---------------------------------------------------------------------------------
-	 *  change Coupon Status Function
-	 * ---------------------------------------------------------------------------------
-	 */
-	const changeCouponStatus = () => {
-		setLoadingTitle("جاري تغير حالة كود الخصم");
-		axios
-			.get(`couponchangeSatusall?id[]=${fetchedData?.data?.Coupons?.id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				}
-			});
+	/** change Coupon Status Function  */
+	const [changeCouponStatus] = useChangeCouponStatusMutation();
+	const handleChangeCouponStatus = async () => {
+		try {
+			await changeCouponStatus({ couponId: currentCoupon?.id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the changeCouponStatus", err);
+		}
 	};
 
 	/**
@@ -330,9 +322,13 @@ const EditCoupon = () => {
 	 * update Coupon Function
 	 * ---------------------------------------------------------------------------------
 	 */
-	const updateCoupon = (data) => {
+
+	const [editCouponById] = useEditCouponByIdMutation();
+	const handleEditCoupon = async (data) => {
 		setLoadingTitle("جاري تعديل كود الخصم");
 		resetCouponError();
+
+		// data that send to api...
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("code", data?.code);
@@ -369,58 +365,56 @@ const EditCoupon = () => {
 		});
 
 		formData.append("status", isEnable === "نشط" ? "active" : "not_active");
-		axios
-			.post(`coupons/${fetchedData?.data?.Coupons?.id}`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Coupon");
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setCouponError({
-						...couponError,
-						code: res?.data?.message?.en?.code?.[0],
-						discount_type: res?.data?.message?.en?.discount_type?.[0],
-						total_price: res?.data?.message?.en?.total_price?.[0],
-						discount: res?.data?.message?.en?.discount?.[0],
-						total_redemptions: res?.data?.message?.en?.total_redemptions?.[0],
-						user_redemptions: res?.data?.message?.en?.user_redemptions?.[0],
-						coupon_apply: res?.data?.message?.en?.coupon_apply?.[0],
-					});
-					setStartDateError(res?.data?.message?.en?.expire_date?.[0]);
 
-					toast.error(res?.data?.message?.en?.code?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount_type?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.total_redemptions?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.user_redemptions?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.coupon_apply?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.expire_date?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await editCouponById({
+				id: currentCoupon?.id,
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Coupon");
+			} else {
+				setLoadingTitle("");
+				setCouponError({
+					...couponError,
+					code: response?.data?.message?.en?.code?.[0],
+					discount_type: response?.data?.message?.en?.discount_type?.[0],
+					total_price: response?.data?.message?.en?.total_price?.[0],
+					discount: response?.data?.message?.en?.discount?.[0],
+					total_redemptions:
+						response?.data?.message?.en?.total_redemptions?.[0],
+					user_redemptions: response?.data?.message?.en?.user_redemptions?.[0],
+					coupon_apply: response?.data?.message?.en?.coupon_apply?.[0],
+				});
+				setStartDateError(response?.data?.message?.en?.expire_date?.[0]);
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing editCouponById:", error);
+		}
 	};
 
 	const deleteItemFromSelectedProduct = (id) => {
@@ -451,7 +445,7 @@ const EditCoupon = () => {
 									</div>
 								</div>
 							</div>
-							{loading ? (
+							{isFetching ? (
 								<div className='pt-md-5'>
 									<CircularLoading />
 								</div>
@@ -469,12 +463,12 @@ const EditCoupon = () => {
 													<button
 														type='button'
 														className='enable-coupon-btn'
-														onClick={() => changeCouponStatus()}>
+														onClick={() => handleChangeCouponStatus()}>
 														إعادة تفعيل كود الخصم
 													</button>
 												</Fragment>
 											) : moment(
-													fetchedData?.data?.Coupons?.expire_date,
+													currentCoupon?.expire_date,
 													"YYYY-MM-DD"
 											  ).toDate() < currentDate ? (
 												<Fragment>
@@ -501,7 +495,7 @@ const EditCoupon = () => {
 										</div>
 									</div>
 									<form
-										onSubmit={handleSubmit(updateCoupon)}
+										onSubmit={handleSubmit(handleEditCoupon)}
 										className={isEnable === "غير نشط" ? "disabled" : ""}>
 										<div className='form-body'>
 											<div className='row mb-md-5 d-flex  justify-content-evenly'>
@@ -1105,32 +1099,30 @@ const EditCoupon = () => {
 																			);
 																		}
 																		const result =
-																			categories?.data?.categories?.filter(
+																			selectCategories?.filter(
 																				(item) =>
 																					item?.id === parseInt(selected)
 																			) || "";
 																		return result[0]?.name;
 																	}}>
-																	{categories?.data?.categories?.map(
-																		(cat, index) => {
-																			return (
-																				<MenuItem
-																					key={index}
-																					className='souq_storge_category_filter_items'
-																					sx={{
-																						backgroundColor:
-																							cat?.store === null
-																								? " #dfe2aa"
-																								: " rgba(211, 211, 211, 1)",
-																						height: "3rem",
-																						"&:hover": {},
-																					}}
-																					value={cat?.id}>
-																					{cat?.name}
-																				</MenuItem>
-																			);
-																		}
-																	)}
+																	{selectCategories?.map((cat, index) => {
+																		return (
+																			<MenuItem
+																				key={index}
+																				className='souq_storge_category_filter_items'
+																				sx={{
+																					backgroundColor:
+																						cat?.store === null
+																							? " #dfe2aa"
+																							: " rgba(211, 211, 211, 1)",
+																					height: "3rem",
+																					"&:hover": {},
+																				}}
+																				value={cat?.id}>
+																				{cat?.name}
+																			</MenuItem>
+																		);
+																	})}
 																</Select>
 															</FormControl>
 															<div className='col-12'>
@@ -1182,29 +1174,27 @@ const EditCoupon = () => {
 																			);
 																		}
 																		const result =
-																			payments?.data?.payment_types?.filter(
+																			selectPayments?.filter(
 																				(item) =>
 																					item?.id === parseInt(selected)
 																			) || "";
 																		return result[0]?.name;
 																	}}>
-																	{payments?.data?.payment_types?.map(
-																		(payment, index) => {
-																			return (
-																				<MenuItem
-																					key={index}
-																					className='souq_storge_category_filter_items'
-																					sx={{
-																						backgroundColor: "#fff",
-																						height: "3rem",
-																						"&:hover": {},
-																					}}
-																					value={payment?.id}>
-																					{payment?.name}
-																				</MenuItem>
-																			);
-																		}
-																	)}
+																	{selectPayments?.map((payment, index) => {
+																		return (
+																			<MenuItem
+																				key={index}
+																				className='souq_storge_category_filter_items'
+																				sx={{
+																					backgroundColor: "#fff",
+																					height: "3rem",
+																					"&:hover": {},
+																				}}
+																				value={payment?.id}>
+																				{payment?.name}
+																			</MenuItem>
+																		);
+																	})}
 																</Select>
 															</FormControl>
 															<div className='col-12'>

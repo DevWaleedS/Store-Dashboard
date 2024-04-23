@@ -87,6 +87,39 @@ export const couponApi = createApi({
 				method: "GET",
 			}),
 		}),
+
+		// add new coupon
+		addNewCoupon: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `coupons`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Coupons"],
+		}),
+
+		// get coupon by id
+		getCouponById: builder.query({
+			query: (id) => `coupons/${id}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.Coupons,
+			providesTags: ["Coupons"],
+		}),
+
+		// edit coupon by id
+		editCouponById: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `coupons/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Coupons"],
+		}),
 	}),
 });
 
@@ -99,4 +132,7 @@ export const {
 	useChangeAllCouponsStatusMutation,
 	useSearchInCouponsMutation,
 	useFilterCouponsByStatusMutation,
+	useAddNewCouponMutation,
+	useGetCouponByIdQuery,
+	useEditCouponByIdMutation,
 } = couponApi;

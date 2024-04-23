@@ -35,9 +35,7 @@ import { NotificationContext } from "../../Context/NotificationProvider";
 // import icons
 import { DeleteIcon, Reports } from "../../data/Icons";
 
-//redux
-import { useDispatch } from "react-redux";
-
+// RTK
 import {
 	useChangeAllCouponsStatusMutation,
 	useChangeCouponStatusMutation,

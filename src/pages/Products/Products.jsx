@@ -22,7 +22,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 
 // RTK Query
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectCategoriesApi";
+import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 import {
 	useFilterImportedProductsByCategoriesMutation,
 	useFilterStoreProductsByCategoriesMutation,
@@ -244,7 +244,7 @@ const Products = () => {
 			<div className='products p-lg-3'>
 				<div className='mb-3'>
 					<FormSearchWeight
-						categories={selectCategories?.categories}
+						categories={selectCategories}
 						categorySelected={getCategorySelected}
 						searchInput={getSearchInput}
 						type='product'
