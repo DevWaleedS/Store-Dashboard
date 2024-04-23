@@ -479,9 +479,11 @@ const AddNewProduct = () => {
 					theme: "light",
 				});
 
-				Object.entries(response.data.message.en).forEach(([key, message]) => {
-					toast.error(message[0], { theme: "light" });
-				});
+				Object.entries(response?.data?.message?.en).forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
 			}
 		} catch (error) {
 			console.error("Error changing addNewProduct:", error);

@@ -203,10 +203,9 @@ const OrderDetails = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message);
+				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
-
 				setError({
 					district: response?.data?.message?.en?.district?.[0] || "",
 					city: response?.data?.message?.en?.city?.[0] || "",
@@ -219,9 +218,11 @@ const OrderDetails = () => {
 					theme: "light",
 				});
 
-				Object.entries(response.data.message.en).forEach(([key, message]) => {
-					toast.error(message[0], { theme: "light" });
-				});
+				Object.entries(response?.data?.message?.en).forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
 			}
 		} catch (error) {
 			console.error("Error changing update order status :", error);
