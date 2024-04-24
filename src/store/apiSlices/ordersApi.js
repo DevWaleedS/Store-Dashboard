@@ -67,6 +67,8 @@ export const ordersApi = createApi({
 					body: body,
 				};
 			},
+
+			invalidatesTags: ["Orders"],
 		}),
 	}),
 });

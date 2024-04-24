@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // Context
 import Context from "../../../Context/context";
@@ -90,6 +90,7 @@ const OrderDetails = () => {
 	const { data: currentOrder, isFetching } = useGetOrderByIdQuery(id);
 
 	//get shipping cities data
+	const navigate = useNavigate();
 	const [shippingId, setShippingId] = useState(null);
 	const { data: shippingCitiesData } = useGetShippingCitiesQuery(shippingId);
 
@@ -202,6 +203,7 @@ const OrderDetails = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
+				navigate("/Orders");
 				setLoadingTitle("");
 				setEndActionTitle(response?.data?.message?.ar);
 			} else {
@@ -888,7 +890,7 @@ const OrderDetails = () => {
 													displayEmpty
 													disabled={
 														currentOrder?.orders?.status === "تم الشحن" ||
-														currentOrder?.orders?.status === "الغاء الشحنة" ||
+														currentOrder?.orders?.status === "ملغي" ||
 														currentOrder?.orders?.status === "مكتمل"
 															? true
 															: false
@@ -969,7 +971,7 @@ const OrderDetails = () => {
 													displayEmpty
 													disabled={
 														currentOrder?.orders?.status === "تم الشحن" ||
-														currentOrder?.orders?.status === "الغاء الشحنة" ||
+														currentOrder?.orders?.status === "ملغي" ||
 														currentOrder?.orders?.status === "مكتمل"
 															? true
 															: false
@@ -1019,7 +1021,7 @@ const OrderDetails = () => {
 												<input
 													disabled={
 														currentOrder?.orders?.status === "تم الشحن" ||
-														currentOrder?.orders?.status === "الغاء الشحنة" ||
+														currentOrder?.orders?.status === "ملغي" ||
 														currentOrder?.orders?.status === "مكتمل"
 															? true
 															: false
@@ -1070,13 +1072,6 @@ const OrderDetails = () => {
 									id='accordionExample'>
 									<div className='accordion-item w-100'>
 										<button
-											disabled={
-												currentOrder?.orders?.status === "تم الشحن" ||
-												currentOrder?.orders?.status === "الغاء الشحنة" ||
-												currentOrder?.orders?.status === "مكتمل"
-													? true
-													: false
-											}
 											type='button'
 											className='accordion-button  text-end '
 											data-bs-toggle='collapse'
@@ -1095,7 +1090,7 @@ const OrderDetails = () => {
 													style={{
 														cursor:
 															currentOrder?.orders?.status === "تم الشحن" ||
-															currentOrder?.orders?.status === "الغاء الشحنة" ||
+															currentOrder?.orders?.status === "ملغي" ||
 															currentOrder?.orders?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",
@@ -1138,13 +1133,29 @@ const OrderDetails = () => {
 
 													<li
 														onClick={() => handleUpdateOrderStatus("completed")}
-														style={{ cursor: "pointer" }}>
+														style={
+															currentOrder?.orders?.status === "تم الشحن"
+																? {
+																		pointerEvents: "none",
+																		opacity: "0.6",
+																		cursor: "not-allowed",
+																  }
+																: { cursor: "pointer" }
+														}>
 														تم الشحن
 													</li>
 
 													<li
 														onClick={() => handleUpdateOrderStatus("canceled")}
-														style={{ cursor: "pointer" }}>
+														style={
+															currentOrder?.orders?.status === "ملغي"
+																? {
+																		pointerEvents: "none",
+																		opacity: "0.6",
+																		cursor: "not-allowed",
+																  }
+																: { cursor: "pointer" }
+														}>
 														الغاء الشحنة
 														<span style={{ fontSize: "1rem", color: "red" }}>
 															{" "}
@@ -1185,7 +1196,7 @@ const OrderDetails = () => {
 										<button
 											disabled={
 												currentOrder?.orders?.status === "تم الشحن" ||
-												currentOrder?.orders?.status === "الغاء الشحنة" ||
+												currentOrder?.orders?.status === "ملغي" ||
 												currentOrder?.orders?.status === "مكتمل"
 													? true
 													: false
@@ -1193,7 +1204,7 @@ const OrderDetails = () => {
 											style={{
 												cursor:
 													currentOrder?.orders?.status === "تم الشحن" ||
-													currentOrder?.orders?.status === "الغاء الشحنة" ||
+													currentOrder?.orders?.status === "ملغي" ||
 													currentOrder?.orders?.status === "مكتمل"
 														? "not-allowed"
 														: "pointer",
@@ -1219,7 +1230,7 @@ const OrderDetails = () => {
 													style={{
 														cursor:
 															currentOrder?.orders?.status === "تم الشحن" ||
-															currentOrder?.orders?.status === "الغاء الشحنة" ||
+															currentOrder?.orders?.status === "ملغي" ||
 															currentOrder?.orders?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",

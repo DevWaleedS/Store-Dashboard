@@ -308,7 +308,7 @@ export default function BigOrdersTable({
 																			? "#ebfcf1"
 																			: row?.status === "جديد"
 																			? "#d4ebf7"
-																			: row?.status === "الغاء الشحنة"
+																			: row?.status === "ملغي"
 																			? "#ffebeb"
 																			: row?.status === "قيد التجهيز"
 																			? "#ffecd1c7"
@@ -318,7 +318,7 @@ export default function BigOrdersTable({
 																			? "##9df1ba"
 																			: row?.status === "جديد"
 																			? "#0077ff"
-																			: row?.status === "الغاء الشحنة"
+																			: row?.status === "ملغي"
 																			? "#ff7b7b"
 																			: row?.status === "قيد التجهيز"
 																			? "#ff9f1a"
@@ -342,7 +342,7 @@ export default function BigOrdersTable({
 														{row?.total_price} ر.س
 													</TableCell>
 													<TableCell align='center'>
-														{row?.paymenttypes?.paymentType}
+														{row?.paymenttypes?.name}
 													</TableCell>
 													<TableCell align='right' sx={{ width: "90px" }}>
 														<div className='sub-categories'>
