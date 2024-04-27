@@ -281,7 +281,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='Delegate'
+					to='RequestDelegate'
 					onClick={() => {
 						dispatch(StoreVerificationThunk());
 						closeSidebar();
@@ -433,7 +433,7 @@ const SideBar = ({ open, closeSidebar }) => {
 				</NavLink>
 				<NavLink
 					className='menu-link'
-					to='PaymentGetways'
+					to='PaymentGateways'
 					onClick={() => {
 						dispatch(StoreVerificationThunk());
 						closeSidebar();

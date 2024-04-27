@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // Third party
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,12 +11,20 @@ import Context from "../Context/context";
 // MUI
 import { Switch } from "@mui/material";
 
-// components
+// Components
 import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
+
 // Redux
 import { useDispatch } from "react-redux";
+
+// RTK Query
+import {
+	useChangePaymentStatusMutation,
+	useGetPaymentGatewaysQuery,
+} from "../store/apiSlices/paymentGatewaysApi";
+
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoWallet } from "react-icons/io5";
@@ -25,6 +32,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
 import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
 
+// switch styles
 const switchStyle = {
 	"& .MuiSwitch-track": {
 		width: 36,
@@ -69,67 +77,80 @@ const switchStyle = {
 	},
 };
 
-const PaymentGetways = () => {
+const PaymentGateways = () => {
 	const dispatch = useDispatch();
-
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const navigate = useNavigate();
 
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(`paymenttype`);
+	const { data: paymentGateways, isLoading } = useGetPaymentGatewaysQuery();
 
 	// showSupplier bank account
 	const { fetchedData: currentBankAccount } = useFetch(`indexSupplier`);
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
+
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
 	const [allPayments, setAllPayments] = useState([]);
-	const navigate = useNavigate();
 
 	// -----------------------------------------------------------
 
 	// Side Effects
 	useEffect(() => {
-		if (fetchedData) {
+		if (paymentGateways) {
 			setCashOnDelivery(
-				fetchedData?.data?.paymenttypes?.filter(
+				paymentGateways?.filter(
 					(paymenttypes) => paymenttypes?.name === "الدفع عند الاستلام"
 				)
 			);
 
 			setAllPayments(
-				fetchedData?.data?.paymenttypes?.filter(
+				paymentGateways?.filter(
 					(paymenttypes) => paymenttypes?.name !== "الدفع عند الاستلام"
 				)
 			);
 		}
-	}, [fetchedData]);
+	}, [paymentGateways]);
 
-	// change Status function
-	const changeStatus = (id, e) => {
-		axios
-			.get(`changePaymenttypeStatus/${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					toast.error(res?.data?.message?.ar, {
+	// ------------------------------------------------------------------------
+
+	// Handle change Status Of Payment gateway
+	const [changePaymentStatus] = useChangePaymentStatusMutation();
+	const handleChangePaymentStatus = async (id) => {
+		// make request...
+		try {
+			const response = await changePaymentStatus(id);
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
 						theme: "light",
-					});
-				}
-			});
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing changePaymentStatus:", error);
+		}
 	};
 
-	const changeCashOnDeliveryStatus = (id) => {
+	// handle change status of  Cash O nDelivery Status
+	const handleChangeCashOnDeliveryStatus = async (id) => {
 		if (
 			(cashOnDelivery[0]?.status === "نشط" && allPayments?.length === 0) ||
 			(cashOnDelivery[0]?.status === "نشط" &&
@@ -139,24 +160,39 @@ const PaymentGetways = () => {
 				theme: "light",
 			});
 		} else {
-			axios
-				.get(`changePaymenttypeStatus/${id}`, {
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
-					},
-				})
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						toast.error(res?.data?.message?.ar, {
+			// make request...
+			try {
+				const response = await changePaymentStatus(id);
+
+				// Handle response
+				if (
+					response.data?.success === true &&
+					response.data?.data?.status === 200
+				) {
+					setEndActionTitle(response?.data?.message?.ar);
+				} else {
+					// Handle display errors using toast notifications
+					toast.error(
+						response?.data?.message?.ar
+							? response.data.message.ar
+							: response.data.message.en,
+						{
 							theme: "light",
-						});
-						setReload(!reload);
-					}
-				});
+						}
+					);
+
+					Object.entries(response?.data?.message?.en)?.forEach(
+						([key, message]) => {
+							toast.error(message[0], { theme: "light" });
+						}
+					);
+				}
+			} catch (error) {
+				console.error(
+					"Error changing handleChangeCashOnDeliveryStatus:",
+					error
+				);
+			}
 		}
 	};
 
@@ -165,11 +201,13 @@ const PaymentGetways = () => {
 		dispatch(openAddBankAccountModal());
 		navigate("/wallet");
 	};
+
 	// handle open create bank account
 	const handleOpenBankComment = () => {
 		dispatch(openCommentModal());
 		navigate("/wallet");
 	};
+
 	return (
 		<>
 			<Helmet>
@@ -199,7 +237,7 @@ const PaymentGetways = () => {
 						</nav>
 					</div>
 				</div>
-				{loading ? (
+				{isLoading ? (
 					<div className='row'>
 						<div
 							className='d-flex justify-content-center align-items-center col-12'
@@ -209,7 +247,7 @@ const PaymentGetways = () => {
 					</div>
 				) : (
 					<>
-						{/*	<div className='row  mb-2 '>
+						<div className='row  mb-2 '>
 							<div className='col-12 '>
 								{!currentBankAccount?.data ? (
 									<div className='mb-2 payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
@@ -284,7 +322,7 @@ const PaymentGetways = () => {
 									</div>
 								) : null}
 							</div>
-						</div>*/}
+						</div>
 
 						<div className='data-container '>
 							<div className='row other-shipping-company mb-4'>
@@ -337,7 +375,9 @@ const PaymentGetways = () => {
 												}}>
 												<Switch
 													onChange={() => {
-														changeCashOnDeliveryStatus(cashOnDelivery[0]?.id);
+														handleChangeCashOnDeliveryStatus(
+															cashOnDelivery[0]?.id
+														);
 													}}
 													checked={
 														cashOnDelivery[0]?.status === "نشط" ? true : false
@@ -374,7 +414,7 @@ const PaymentGetways = () => {
 													<Switch
 														name={item?.name}
 														checked={item?.status === "نشط" ? true : false}
-														onChange={() => changeStatus(item?.id)}
+														onChange={() => handleChangePaymentStatus(item?.id)}
 														sx={switchStyle}
 													/>
 												</div>
@@ -390,4 +430,4 @@ const PaymentGetways = () => {
 	);
 };
 
-export default PaymentGetways;
+export default PaymentGateways;

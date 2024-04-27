@@ -51,6 +51,19 @@ import { platformServicesApi } from "./apiSlices/platformServicesApi";
 import { selectCategoriesApi } from "./apiSlices/selectorsApis/selectCategoriesApi";
 import { selectImportProductsApi } from "./apiSlices/selectorsApis/selectImportProductsApi";
 import { selectPaymentsTypesApi } from "./apiSlices/selectorsApis/selectPaymentsTypesApi";
+import { SEOImprovementsApi } from "./apiSlices/SEOImprovementsApi";
+import { selectCitiesApi } from "./apiSlices/selectorsApis/selectCitiesApi";
+import { requestDelegateApi } from "./apiSlices/requestDelegateApi";
+import { selectPageCategoriesApi } from "./apiSlices/selectorsApis/selectPageCategoriesApi";
+import { templateSettingApi } from "./apiSlices/templateSettingApi";
+import { paintStoreApi } from "./apiSlices/paintStoreApi";
+import { verifyStoreApi } from "./apiSlices/verifyStoreApi";
+import { selectEtlobahCategoryApi } from "./apiSlices/selectorsApis/selectEtlobahCategoryApi";
+import { selectEtlbohaSubCategoriesApi } from "./apiSlices/selectorsApis/selectEtlbohaSubCategoriesApi";
+import { socialPagesApi } from "./apiSlices/socialPagesApi";
+import { shippingCompaniesApi } from "./apiSlices/shippingCompaniesApi";
+import { paymentGatewaysApi } from "./apiSlices/paymentGatewaysApi";
+import { walletApi } from "./apiSlices/walletApi";
 
 // store
 export const store = configureStore({
@@ -58,6 +71,7 @@ export const store = configureStore({
 		getDefaultMiddleware().concat(
 			pagesApi.middleware,
 			loginApi.middleware,
+			walletApi.middleware,
 			ordersApi.middleware,
 			couponApi.middleware,
 			ratingApi.middleware,
@@ -66,44 +80,72 @@ export const store = configureStore({
 			productsApi.middleware,
 			categoriesApi.middleware,
 			emptyCartsApi.middleware,
+			paintStoreApi.middleware,
+			verifyStoreApi.middleware,
+			socialPagesApi.middleware,
 			notificationsApi.middleware,
+			paymentGatewaysApi.middleware,
+			templateSettingApi.middleware,
+			requestDelegateApi.middleware,
+			SEOImprovementsApi.middleware,
 			technicalSupportApi.middleware,
 			platformServicesApi.middleware,
+			shippingCompaniesApi.middleware,
+			selectPageCategoriesApi.middleware,
 
+			selectCitiesApi.middleware,
 			selectCategoriesApi.middleware,
 			selectImportProductsApi.middleware,
 			selectPaymentsTypesApi.middleware,
-
 			getShippingCitiesApi.middleware,
-			postalSubscriptionsApi.middleware
+			postalSubscriptionsApi.middleware,
+			selectEtlobahCategoryApi.middleware,
+			selectEtlbohaSubCategoriesApi.middleware
 		),
 	reducer: {
 		[pagesApi.reducerPath]: pagesApi.reducer,
 		[loginApi.reducerPath]: loginApi.reducer,
 		[ordersApi.reducerPath]: ordersApi.reducer,
+		[walletApi.reducerPath]: walletApi.reducer,
 		[ratingApi.reducerPath]: ratingApi.reducer,
 		[couponApi.reducerPath]: couponApi.reducer,
 		[AcademyApi.reducerPath]: AcademyApi.reducer,
 		[mainPageApi.reducerPath]: mainPageApi.reducer,
 		[productsApi.reducerPath]: productsApi.reducer,
+		[paintStoreApi.reducerPath]: paintStoreApi.reducer,
 		[categoriesApi.reducerPath]: categoriesApi.reducer,
 		[emptyCartsApi.reducerPath]: emptyCartsApi.reducer,
+		[socialPagesApi.reducerPath]: socialPagesApi.reducer,
+		[verifyStoreApi.reducerPath]: verifyStoreApi.reducer,
+		[selectCitiesApi.reducerPath]: selectCitiesApi.reducer,
 		[notificationsApi.reducerPath]: notificationsApi.reducer,
+		[templateSettingApi.reducerPath]: templateSettingApi.reducer,
+		[paymentGatewaysApi.reducerPath]: paymentGatewaysApi.reducer,
+		[requestDelegateApi.reducerPath]: requestDelegateApi.reducer,
+		[SEOImprovementsApi.reducerPath]: SEOImprovementsApi.reducer,
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		[getShippingCitiesApi.reducerPath]: getShippingCitiesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
 		[selectPaymentsTypesApi.reducerPath]: selectPaymentsTypesApi.reducer,
 		[selectImportProductsApi.reducerPath]: selectImportProductsApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		// [platformServicesApi.reducerPath]: platformServicesApi.reducer,
+		[selectPageCategoriesApi.reducerPath]: selectPageCategoriesApi.reducer,
+		[selectEtlobahCategoryApi.reducerPath]: selectEtlobahCategoryApi.reducer,
+		[selectEtlbohaSubCategoriesApi.reducerPath]:
+			selectEtlbohaSubCategoriesApi.reducer,
+
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+
 		AddActivity: AddActivity,
 		ReplyModal: ReplyModalSlice,
 		VideoModal: VideoModalSlice,

@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
-import { ArrowBack } from "../data/Icons";
+import { ArrowBack } from "../../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 
 //Mui
@@ -18,14 +18,14 @@ import FormControl from "@mui/material/FormControl";
 import { Button } from "@mui/material";
 
 // Components
-import { PagesTable } from "../components/Tables";
+import { PagesTable } from "../../components/Tables";
 
 // RTK Query
 import {
 	useFilterPagesByStatusMutation,
 	useGetPagesQuery,
 	useSearchInPagesMutation,
-} from "../store/apiSlices/pagesApi";
+} from "../../store/apiSlices/pagesApi";
 
 // filter Pages by
 const filtersTypes = [

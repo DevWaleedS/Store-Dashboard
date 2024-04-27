@@ -28,13 +28,15 @@ import { useDispatch } from "react-redux";
 import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
 import BankAccStatusComment from "./Add&EditBankAccountModal/BankAccStatusComment.jsx";
 import AlertMessage from "./Add&EditBankAccountModal/AlerMessage.jsx";
+import { useGetWalletDataQuery } from "../../store/apiSlices/walletApi.js";
 
 const Wallet = () => {
 	const dispatch = useDispatch();
 
 	// -----------------------------------------------------------
 
-	// get supplierDashboard
+	// get supplier dashboard
+	const { data: walletData, isLoading } = useGetWalletDataQuery();
 	const { fetchedData: supplierDashboard } = useFetch(`showSupplierDashboard`);
 
 	// showSupplier bank account
@@ -42,8 +44,8 @@ const Wallet = () => {
 		useFetch(`indexSupplier`);
 
 	// Billing Data
-
 	const { fetchedData: Billing, loading: loadingBilling } = useFetch(`billing`);
+
 	return (
 		<>
 			<Helmet>

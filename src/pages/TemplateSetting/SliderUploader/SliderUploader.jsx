@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-import axios from "axios";
+
 import { toast } from "react-toastify";
 import ImageUploading from "react-images-uploading";
 
@@ -17,6 +17,9 @@ import { Button, FormControl, Switch } from "@mui/material";
 // Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
+
+// RTK Query
+import { useUpdateTemplateSlidersMutation } from "../../../store/apiSlices/templateSettingApi";
 
 // switchStyle
 const switchStyle = {
@@ -48,11 +51,7 @@ const switchStyle = {
 	},
 };
 
-const SliderUploader = ({ sliders, loading, reload, setReload }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+const SliderUploader = ({ sliders, loading }) => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -170,9 +169,13 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 			setPreviewSliderState(imageList);
 		};
 
-	// update Sliders function
-	const updateSliders = () => {
+	// handle update Sliders function
+	const [updateTemplateSliders] = useUpdateTemplateSlidersMutation();
+
+	const handleUpdateSliders = async () => {
 		setLoadingTitle("جاري تعديل السلايدرات المتحركة");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("slider1", firstSlider[0]?.file || firstSliderName || null);
 		formData.append(
@@ -183,32 +186,42 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 		formData.append("sliderstatus1", sliderstatus1 ? "active" : "not_active");
 		formData.append("sliderstatus2", sliderstatus2 ? "active" : "not_active");
 		formData.append("sliderstatus3", sliderstatus3 ? "active" : "not_active");
-		axios
-			.post(`sliderUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					toast.error(res?.data?.message?.en?.slider1?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.slider2?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.slider3?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await updateTemplateSliders({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing updateTemplateSliders:", error);
+		}
 	};
 
 	return (
@@ -470,7 +483,10 @@ const SliderUploader = ({ sliders, loading, reload, setReload }) => {
 					</div>
 					<div className='col-12 p-4'>
 						<div className='btn-bx '>
-							<Button onClick={() => updateSliders()} variant='contained'>
+							<Button
+								disabled={loading}
+								onClick={() => handleUpdateSliders()}
+								variant='contained'>
 								حفظ
 							</Button>
 						</div>

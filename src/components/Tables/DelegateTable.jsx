@@ -1,7 +1,4 @@
-import React from "react";
-
-// Third party
-import useFetch from "../../Hooks/UseFetch";
+import React, { useState } from "react";
 
 // Components
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -22,6 +19,8 @@ import TableContainer from "@mui/material/TableContainer";
 
 // import icons
 import { IoMdStar } from "react-icons/io";
+import { useGetDelegateByCityIdQuery } from "../../store/apiSlices/requestDelegateApi";
+import { TablePagination } from "./TablePagination";
 
 function EnhancedTableHead(props) {
 	return (
@@ -54,7 +53,16 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function DelegateTable({ cityId }) {
-	const { fetchedData, loading } = useFetch(`marketerRequest/${cityId}`);
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+
+	// handle request Delegate by city id
+	const { data: delegate, isLoading } = useGetDelegateByCityIdQuery({
+		cityId,
+		page: pageTarget,
+		number: rowsCount,
+	});
+
 	// Get Data From Redux Store
 	const rows = useSelector((state) => state.CustomerTableData);
 
@@ -69,16 +77,16 @@ export default function DelegateTable({ cityId }) {
 								<TableCell className='text-center' colSpan={5}>
 									يرجى اختيار مدينة أولا حتى يتم عرض المندوبين
 								</TableCell>
-							) : loading ? (
+							) : isLoading ? (
 								<TableCell colSpan={5}>
 									<CircularLoading />
 								</TableCell>
-							) : fetchedData?.data?.marketers?.length === 0 ? (
+							) : delegate?.marketers?.length === 0 ? (
 								<TableCell className='text-center' colSpan={5}>
 									لايوجد مندوبين لهذه المدينة
 								</TableCell>
 							) : (
-								fetchedData?.data?.marketers?.map((row, index) => (
+								delegate?.marketers?.map((row, index) => (
 									<TableRow hover role='checkbox' tabIndex={-1} key={index}>
 										<TableCell
 											component='th'
@@ -136,6 +144,18 @@ export default function DelegateTable({ cityId }) {
 					</Table>
 				</TableContainer>
 			</Paper>
+
+			{delegate?.marketers?.length !== 0 && !isLoading && (
+				<TablePagination
+					data={delegate?.marketers}
+					pageCount={delegate?.page_count}
+					currentPage={delegate?.current_page}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
+				/>
+			)}
 		</Box>
 	);
 }

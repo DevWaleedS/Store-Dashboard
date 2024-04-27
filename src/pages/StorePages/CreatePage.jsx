@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from "react";
 
 // Third Party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
@@ -11,9 +11,9 @@ import { useForm, Controller } from "react-hook-form";
 // Context
 import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
 import { TextEditor } from "../../components/TextEditor";
 
 // MUI
@@ -27,7 +27,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // Icons
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { DocsIcon, PaperIcon } from "../../data/Icons";
-import { TextEditorContext } from "../../Context/TextEditorProvider";
+
+// RTK Query
+import { useCreateNewPageMutation } from "../../store/apiSlices/pagesApi";
+import { useGetPagesCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectPageCategoriesApi";
 
 // Modal Style
 const style = {
@@ -53,15 +56,10 @@ const style = {
 };
 
 const CreatePage = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData: pageCategories, loading } = useFetch(
-		"selector/page-categories"
-	);
 	const navigate = useNavigate();
-	const [reload, setReload] = useState(false);
+
+	// handle get pages Category
+	const { data: pagesCategory, isLoading } = useGetPagesCategoriesQuery();
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
@@ -243,9 +241,12 @@ const CreatePage = () => {
 	// ----------------------------------------------------------------------
 
 	// Handle create new page
-	const handlePage = (data) => {
+	const [createNewPage] = useCreateNewPageMutation();
+	const handleCreateNewPage = async (data) => {
 		setLoadingTitle("جاري حفظ الصفحة");
 		resetCouponError();
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("title", data?.title);
 		formData.append("page_desc", data?.page_desc);
@@ -260,59 +261,53 @@ const CreatePage = () => {
 
 		formData.append("image", itsPost ? images[0] || "" : "");
 
-		axios
-			.post(`page-publish`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Pages");
-					setReload(!reload);
-					setEditorValue("");
-				} else {
-					setLoadingTitle("");
-					setPageError({
-						title: res?.data?.message?.en?.title?.[0],
-						page_desc: res?.data?.message?.en?.page_desc?.[0],
-						page_content: res?.data?.message?.en?.page_content?.[0],
-						seo_title: res?.data?.message?.en?.seo_title?.[0],
-						seo_link: res?.data?.message?.en?.seo_link?.[0],
-						seo_desc: res?.data?.message?.en?.seo_desc?.[0],
-						tags: res?.data?.message?.en?.tags?.[0],
-						images: res?.data?.message?.en?.image?.[0],
-					});
-
-					toast.error(res?.data?.message?.en?.title?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.page_desc?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.page_content?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.seo_title?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.seo_link?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.seo_desc?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.tags?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.image?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await createNewPage({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Pages");
+				setEditorValue("");
+			} else {
+				setLoadingTitle("");
+				setPageError({
+					title: response?.data?.message?.en?.title?.[0],
+					page_desc: response?.data?.message?.en?.page_desc?.[0],
+					page_content: response?.data?.message?.en?.page_content?.[0],
+					seo_title: response?.data?.message?.en?.seo_title?.[0],
+					seo_link: response?.data?.message?.en?.seo_link?.[0],
+					seo_desc: response?.data?.message?.en?.seo_desc?.[0],
+					tags: response?.data?.message?.en?.tags?.[0],
+					images: response?.data?.message?.en?.image?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing createNewPage:", error);
+		}
 	};
 
 	return (
@@ -327,7 +322,7 @@ const CreatePage = () => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box component={"div"} sx={style} className='create-pages-modal'>
-						<form onSubmit={handleSubmit(handlePage)}>
+						<form onSubmit={handleSubmit(handleCreateNewPage)}>
 							{/** Offers Details */}
 							<div className='create-pages-form-wrapper'>
 								<div className='d-flex'>
@@ -531,55 +526,54 @@ const CreatePage = () => {
 												</div>
 												<div className='body page-category '>
 													<FormGroup className='' sx={{ overflow: "hidden" }}>
-														{pageCategories?.data?.pagesCategory?.map(
-															(cat, index) =>
-																loading ? (
-																	<p>...</p>
-																) : (
-																	<FormControlLabel
-																		value={cat?.id}
-																		key={index}
-																		sx={{
-																			py: 1,
-																			mr: 0,
-																			borderBottom: "1px solid #ECECEC",
-																			"& .MuiTypography-root": {
-																				fontSize: "18px",
-																				fontWeight: "500",
-																				"@media(max-width:767px)": {
-																					fontSize: "16px",
-																				},
+														{pagesCategory?.map((cat, index) =>
+															isLoading ? (
+																<p>...</p>
+															) : (
+																<FormControlLabel
+																	value={cat?.id}
+																	key={index}
+																	sx={{
+																		py: 1,
+																		mr: 0,
+																		borderBottom: "1px solid #ECECEC",
+																		"& .MuiTypography-root": {
+																			fontSize: "18px",
+																			fontWeight: "500",
+																			"@media(max-width:767px)": {
+																				fontSize: "16px",
 																			},
-																		}}
-																		control={
-																			<Checkbox
-																				onChange={(e) => {
-																					if (e.target.checked) {
-																						setPage({
-																							...page,
-																							pageCategory: [
-																								...page.pageCategory,
-																								parseInt(e.target.value),
-																							],
-																						});
-																					} else {
-																						setPage({
-																							...page,
-																							pageCategory:
-																								page?.pageCategory?.filter(
-																									(item) =>
-																										parseInt(item) !==
-																										parseInt(cat.id)
-																								),
-																						});
-																					}
-																				}}
-																				sx={{ "& path": { fill: "#000000" } }}
-																			/>
-																		}
-																		label={cat?.name}
-																	/>
-																)
+																		},
+																	}}
+																	control={
+																		<Checkbox
+																			onChange={(e) => {
+																				if (e.target.checked) {
+																					setPage({
+																						...page,
+																						pageCategory: [
+																							...page.pageCategory,
+																							parseInt(e.target.value),
+																						],
+																					});
+																				} else {
+																					setPage({
+																						...page,
+																						pageCategory:
+																							page?.pageCategory?.filter(
+																								(item) =>
+																									parseInt(item) !==
+																									parseInt(cat.id)
+																							),
+																					});
+																				}
+																			}}
+																			sx={{ "& path": { fill: "#000000" } }}
+																		/>
+																	}
+																	label={cat?.name}
+																/>
+															)
 														)}
 													</FormGroup>
 												</div>

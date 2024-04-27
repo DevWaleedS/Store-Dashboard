@@ -49,7 +49,6 @@ const DelegateRequestAlert = () => {
 						<AiOutlineCloseCircle
 							onClick={() => {
 								dispatch(closeDelegateRequestAlert());
-								navigate("");
 							}}
 							style={{
 								color: "#000",
@@ -75,7 +74,10 @@ const DelegateRequestAlert = () => {
 					</div>
 					<div className='d-flex justify-between '>
 						<button
-							onClick={() => dispatch(closeDelegateRequestAlert())}
+							onClick={() => {
+								dispatch(closeDelegateRequestAlert());
+								navigate("/RequestDelegate");
+							}}
 							style={{
 								color: "#fff",
 								fontSize: "24px",

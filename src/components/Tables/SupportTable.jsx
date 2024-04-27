@@ -165,7 +165,6 @@ EnhancedTableToolbar.propTypes = {
 const SupportTable = ({
 	data,
 	loading,
-
 	rowsCount,
 	pageTarget,
 	setRowsCount,

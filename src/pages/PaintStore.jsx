@@ -34,12 +34,22 @@ import {
 } from "../data/Icons";
 import FontDownloadOutlinedIcon from "@mui/icons-material/FontDownloadOutlined";
 
+// RTK Query
+import {
+	useGetPaintStoreThemeQuery,
+	useThemeFontColorUpdateMutation,
+	useThemeFooterUpdateMutation,
+	useThemeHeaderUpdateMutation,
+	useThemeIconUpdateMutation,
+	useThemeLayoutUpdateMutation,
+	useThemePrimaryUpdateMutation,
+	useThemeSecondaryUpdateMutation,
+} from "../store/apiSlices/paintStoreApi";
+
 const PaintStore = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(`theme`);
+	// get store theme data
+	const { data: storeTheme, isLoading } = useGetPaintStoreThemeQuery();
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -61,224 +71,347 @@ const PaintStore = () => {
 	});
 
 	useEffect(() => {
-		if (fetchedData?.data?.Theme) {
-			setPrimaryBg(fetchedData?.data?.Theme?.primaryBg);
-			setSecondaryBg(fetchedData?.data?.Theme?.secondaryBg);
-			setFontColor(fetchedData?.data?.Theme?.fontColor);
-			setHeaderBg(fetchedData?.data?.Theme?.headerBg);
-			setLayoutBg(fetchedData?.data?.Theme?.layoutBg);
-			setIconsBg(fetchedData?.data?.Theme?.iconsBg);
+		if (storeTheme) {
+			setPrimaryBg(storeTheme?.primaryBg);
+			setSecondaryBg(storeTheme?.secondaryBg);
+			setFontColor(storeTheme?.fontColor);
+			setHeaderBg(storeTheme?.headerBg);
+			setLayoutBg(storeTheme?.layoutBg);
+			setIconsBg(storeTheme?.iconsBg);
 			setFooter({
 				...footer,
-				footerBorder: fetchedData?.data?.Theme?.footerBorder,
-				footerBg: fetchedData?.data?.Theme?.footerBg,
+				footerBorder: storeTheme?.footerBorder,
+				footerBg: storeTheme?.footerBg,
 			});
 		}
-	}, [fetchedData?.data?.Theme]);
+	}, [storeTheme]);
 
-	// Handle Primary
-	const handlePrimaryUpdate = () => {
+	// -------------------------------------------------------------
+
+	// handle Theme Primary Update
+	const [themePrimaryUpdate] = useThemePrimaryUpdateMutation();
+	const handleThemePrimaryUpdate = async () => {
 		setLoadingTitle("جاري تعديل اللون الأساسي");
 
+		// data that send to api
 		let formData = new FormData();
 		formData.append("primaryBg", primaryBg);
-		axios
-			.post(`themePrimaryUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.primaryBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themePrimaryUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themePrimaryUpdate:", error);
+		}
 	};
 
-	const handleSecondaryUpdate = () => {
+	// handle Theme Secondary Update
+	const [themeSecondaryUpdate] = useThemeSecondaryUpdateMutation();
+	const handleThemeSecondaryUpdate = async () => {
 		setLoadingTitle("جاري تعديل اللون الفرعي");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("secondaryBg", secondaryBg);
-		axios
-			.post(`themeSecondaryUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.secondaryBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themeSecondaryUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themeSecondaryUpdate:", error);
+		}
 	};
 
-	const handleFontColorUpdate = () => {
+	// handle Theme Font Color Update
+	const [themeFontColorUpdate] = useThemeFontColorUpdateMutation();
+	const handleThemeFontColorUpdate = async () => {
 		setLoadingTitle("جاري تعديل لون الخط");
 
+		// data that send to api
 		let formData = new FormData();
 		formData.append("fontColor", fontColor);
-		axios
-			.post(`themeFontColorUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.primaryBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themeFontColorUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themeFontColorUpdate:", error);
+		}
 	};
 
-	const handleHeaderUpdate = () => {
+	// handle Theme Header Update
+	const [themeHeaderUpdate] = useThemeHeaderUpdateMutation();
+	const handleThemeHeaderUpdate = async () => {
 		setLoadingTitle(" (الهيدر) جاري تعديل القائمة العلوية");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("headerBg", headerBg);
-		axios
-			.post(`themeHeaderUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.headerBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themeHeaderUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themeHeaderUpdate:", error);
+		}
 	};
 
-	const handleLayotUpdate = () => {
+	// handlePrimaryUpdate
+	const [themeLayoutUpdate] = useThemeLayoutUpdateMutation();
+	const handleLayoutUpdate = async () => {
 		setLoadingTitle("جاري تعديل الخلفية");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("layoutBg", layoutBg);
-		axios
-			.post(`themeLayoutUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.layoutBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themeLayoutUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themeLayoutUpdate:", error);
+		}
 	};
 
-	const handleIconUpdate = () => {
+	// handle Theme Icon Update
+	const [themeIconUpdate] = useThemeIconUpdateMutation();
+	const handleThemeIconUpdate = async () => {
 		setLoadingTitle("جاري تعديل الايقونات");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("iconsBg", iconsBg);
-		axios
-			.post(`themeIconUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.iconsBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themeIconUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themeIconUpdate:", error);
+		}
 	};
 
-	const handleFooterUpdate = () => {
+	// handle Theme Footer Update
+	const [themeFooterUpdate] = useThemeFooterUpdateMutation();
+	const handleThemeFooterUpdate = async () => {
 		setLoadingTitle("جاري تعديل القائمة السفلية ");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("footerBorder", footer?.footerBorder);
 		formData.append("footerBg", footer?.footerBg);
-		axios
-			.post(`themeFooterUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.footerBorder?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.footerBg?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await themeFooterUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing themeFooterUpdate:", error);
+		}
 	};
 
+	// handle reset theme to default values
 	const resetPrimaryColor = () => {
 		setPrimaryBg("#1dbbbe");
 	};
@@ -360,7 +493,7 @@ const PaintStore = () => {
 						</nav>
 					</div>
 				</div>
-				{loading ? (
+				{isLoading ? (
 					<div className='data-container'>
 						<CircularLoading />
 					</div>
@@ -434,7 +567,7 @@ const PaintStore = () => {
 									onClick={resetPrimaryColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handlePrimaryUpdate}>
+								<button type='button' onClick={handleThemePrimaryUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>
@@ -507,7 +640,7 @@ const PaintStore = () => {
 									onClick={resetSecondaryColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handleSecondaryUpdate}>
+								<button type='button' onClick={handleThemeSecondaryUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>
@@ -580,7 +713,7 @@ const PaintStore = () => {
 									onClick={resetFontColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handleFontColorUpdate}>
+								<button type='button' onClick={handleThemeFontColorUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>
@@ -656,7 +789,7 @@ const PaintStore = () => {
 									onClick={resetHeaderColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handleHeaderUpdate}>
+								<button type='button' onClick={handleThemeHeaderUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>
@@ -729,7 +862,7 @@ const PaintStore = () => {
 									onClick={resetLayoutColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handleLayotUpdate}>
+								<button type='button' onClick={handleLayoutUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>
@@ -802,7 +935,7 @@ const PaintStore = () => {
 									onClick={resetIconsColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handleIconUpdate}>
+								<button type='button' onClick={handleThemeIconUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>
@@ -934,7 +1067,7 @@ const PaintStore = () => {
 									onClick={resetFooterColor}>
 									اعادة اللون الإفتراضي
 								</button>
-								<button type='button' onClick={handleFooterUpdate}>
+								<button type='button' onClick={handleThemeFooterUpdate}>
 									حـفـظ
 								</button>
 							</AccordionDetails>

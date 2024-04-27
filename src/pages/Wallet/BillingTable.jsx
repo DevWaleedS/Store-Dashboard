@@ -12,6 +12,8 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+import { Info } from "../../data/Icons";
+import { useNavigate } from "react-router-dom";
 
 function EnhancedTableHead(props) {
 	return (
@@ -37,6 +39,10 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#67747B" }}>
 					المجموع
 				</TableCell>
+
+				<TableCell align='center' sx={{ color: "#67747B" }}>
+					الاجراء
+				</TableCell>
 			</TableRow>
 		</TableHead>
 	);
@@ -47,6 +53,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const BillingTable = ({ loadingBilling, billingInfo }) => {
+	const navigate = useNavigate();
 	return (
 		<>
 			<Box className='bank-accounts-table' sx={{ width: "100%" }}>
@@ -127,6 +134,17 @@ const BillingTable = ({ loadingBilling, billingInfo }) => {
 
 											<TableCell align='center'>
 												{row?.price_after_deduction} ر.س
+											</TableCell>
+
+											<TableCell align='center'>
+												<Info
+													onClick={() => {
+														navigate(`billingInfo/${row?.id}`);
+													}}
+													style={{
+														cursor: "pointer",
+													}}
+												/>
 											</TableCell>
 										</TableRow>
 									))}

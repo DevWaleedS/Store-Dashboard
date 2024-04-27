@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-import axios from "axios";
+
 import { toast } from "react-toastify";
 import ImageUploading from "react-images-uploading";
 
@@ -17,6 +17,9 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 // Context
 import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
+
+// RTK Query
+import { useUpdateTemplateBannersMutation } from "../../../store/apiSlices/templateSettingApi";
 
 // Switch Style
 const switchStyle = {
@@ -47,11 +50,7 @@ const switchStyle = {
 		opacity: 1,
 	},
 };
-const BannerUploader = ({ Banners, loading, reload, setReload }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+const BannerUploader = ({ Banners, loading }) => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -164,9 +163,12 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 			setPreviewBannerState(imageList);
 		};
 
-	// update banners function
-	const updateBanners = () => {
+	// handle update banners function
+	const [updateTemplateBanners] = useUpdateTemplateBannersMutation();
+	const handleUpdateBanners = async () => {
 		setLoadingTitle("جاري تعديل البنرات الإعلانية");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("banar1", firstBanner[0]?.file || firstBannerName || null);
 		formData.append(
@@ -177,33 +179,42 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 		formData.append("banarstatus1", bannerstatus1 ? "active" : "not_active");
 		formData.append("banarstatus2", bannerstatus2 ? "active" : "not_active");
 		formData.append("banarstatus3", bannerstatus3 ? "active" : "not_active");
-		axios
-			.post(`banarUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
 
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					toast.error(res?.data?.message?.en?.banar1?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.banar2?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.banar3?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await updateTemplateBanners({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing updateTemplateBanners:", error);
+		}
 	};
 
 	return (
@@ -460,7 +471,10 @@ const BannerUploader = ({ Banners, loading, reload, setReload }) => {
 					</div>
 					<div className='col-12 p-4'>
 						<div className='btn-bx '>
-							<Button onClick={() => updateBanners()} variant='contained'>
+							<Button
+								disabled={loading}
+								onClick={() => handleUpdateBanners()}
+								variant='contained'>
 								حفظ
 							</Button>
 						</div>

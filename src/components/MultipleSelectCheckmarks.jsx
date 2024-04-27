@@ -16,8 +16,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 // Icon
 import { IoIosArrowDown } from "react-icons/io";
 
-// Third Party
-import useFetch from "../Hooks/UseFetch";
+// RTK Query
+import { useGetEtlobhaCategoriesQuery } from "../store/apiSlices/selectorsApis/selectEtlobahCategoryApi";
+import { useGetEtlobhaSubCategoriesCategoriesQuery } from "../store/apiSlices/selectorsApis/selectEtlbohaSubCategoriesApi";
 
 const selectStyle = {
 	backgroundColor: "#fff",
@@ -39,15 +40,22 @@ const selectStyle = {
 	},
 };
 
-export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
-	const { fetchedData } = useFetch("selector/etlobahCategory");
+export default function MultipleSelectCheckmarks({ showErr }) {
+	const dispatch = useDispatch();
+	// get etlobha categories
+	const { data: etlobahCategory } = useGetEtlobhaCategoriesQuery();
+
+	// get etlobha sub categories by main categories ids
 	const { activity } = useSelector((state) => state.AddActivity);
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
-	const queryParams = activity?.map((id) => `category_id[]=${id}`).join("&");
-	const { fetchedData: subActivitiesList } = useFetch(
-		`selector/subcategories?${queryParams}`
-	);
-	const dispatch = useDispatch();
+
+	const mainCategoriesIds = activity
+		?.map((id) => `category_id[]=${id}`)
+		.join("&");
+
+	const { data: subcategories } =
+		useGetEtlobhaSubCategoriesCategoriesQuery(mainCategoriesIds);
+
 	return (
 		<>
 			<div className='row d-flex justify-content-between align-items-start mb-2 '>
@@ -76,13 +84,13 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 									);
 								}
 								return selected?.map((item) => {
-									const result = fetchedData?.data?.categories?.filter(
+									const result = etlobahCategory?.filter(
 										(service) => service?.id === parseInt(item)
 									);
 									return `${result[0]?.name} , `;
 								});
 							}}>
-							{fetchedData?.data?.categories?.map((act, index) => (
+							{etlobahCategory?.map((act, index) => (
 								<MenuItem
 									key={index}
 									value={act?.id}
@@ -149,13 +157,13 @@ export default function MultipleSelectCheckmarks({ showErr, setShowErr }) {
 									);
 								}
 								return selected?.map((item) => {
-									const result = subActivitiesList?.data?.categories?.filter(
+									const result = subcategories?.filter(
 										(sub) => sub?.id === parseInt(item)
 									);
 									return `${result?.[0]?.name} , `;
 								});
 							}}>
-							{subActivitiesList?.data?.categories?.map((sub, index) => (
+							{subcategories?.map((sub, index) => (
 								<MenuItem key={index} value={sub?.id}>
 									<Checkbox checked={subActivities?.indexOf(sub?.id) > -1} />
 									<ListItemText primary={sub?.name} />

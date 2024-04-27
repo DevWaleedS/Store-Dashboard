@@ -1,38 +1,27 @@
 import React from "react";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
 import SliderUploader from "./SliderUploader/SliderUploader";
 import BannerUploader from "./BannerUploader/BannerUploader";
 import UpdateComments from "./UpdateComments/UpdateComments";
 
+// RTK Query
+import { useGetTemplateSettingQuery } from "../../store/apiSlices/templateSettingApi";
+
 const TemplateUpdate = () => {
-	const { fetchedData, loading, reload, setReload } = useFetch("homepage");
+	// get template data
+	const { data: template, isLoading } = useGetTemplateSettingQuery();
 
 	return (
 		<>
 			{/** upload sliders */}
-			<SliderUploader
-				reload={reload}
-				loading={loading}
-				setReload={setReload}
-				sliders={fetchedData?.data?.Homepages}
-			/>
+			<SliderUploader loading={isLoading} sliders={template} />
 
 			{/** upload banner */}
-			<BannerUploader
-				reload={reload}
-				loading={loading}
-				setReload={setReload}
-				Banners={fetchedData?.data?.Homepages}
-			/>
+			<BannerUploader loading={isLoading} Banners={template} />
 
 			{/** UpdateComments */}
-			<UpdateComments
-				reload={reload}
-				setReload={setReload}
-				Comments={fetchedData?.data?.Homepages}
-			/>
+			<UpdateComments loading={isLoading} Comments={template} />
 		</>
 	);
 };

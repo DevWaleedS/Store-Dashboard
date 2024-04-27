@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 
 // Third party
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
@@ -11,9 +10,9 @@ import { useNavigate, useParams } from "react-router-dom";
 // Context
 import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
 import { TextEditor } from "../../components/TextEditor";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
@@ -28,7 +27,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // ICONS
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { DocsIcon, PaperIcon } from "../../data/Icons";
-import { TextEditorContext } from "../../Context/TextEditorProvider";
+
+// RTK Query
+import {
+	useEditPageByIdMutation,
+	useGetPageByIdQuery,
+} from "../../store/apiSlices/pagesApi";
+import { useGetPagesCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectPageCategoriesApi";
 // Modal Style
 const style = {
 	position: "fixed",
@@ -53,16 +58,14 @@ const style = {
 };
 
 const EditPage = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
+	// handle get current page data by pag id
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(`page/${id}`);
-	const { fetchedData: pageCategories } = useFetch("selector/page-categories");
-	const navigate = useNavigate();
+	const { data: currentPage, isFetching } = useGetPageByIdQuery(id);
 
+	// handle get pages Category
+	const { data: pagesCategory, isLoading } = useGetPagesCategoriesQuery();
+
+	const navigate = useNavigate();
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
@@ -86,8 +89,8 @@ const EditPage = () => {
 	});
 
 	const {
-		register,
 		handleSubmit,
+		register,
 		reset,
 		control,
 		formState: { errors },
@@ -102,6 +105,7 @@ const EditPage = () => {
 		},
 	});
 
+	console.log(control);
 	const [tag, setTag] = useState("");
 	const [titleLength, setTitleLength] = useState(false);
 	const [descriptionLength, setDescriptionLength] = useState(false);
@@ -109,7 +113,10 @@ const EditPage = () => {
 
 	// ---------------------------------------------------------
 	const addTags = () => {
-		setPage({ ...page, tags: [...page?.tags, tag] });
+		setPage((prevPage) => ({
+			...prevPage,
+			tags: [...prevPage.tags, tag],
+		}));
 		setTag("");
 	};
 
@@ -118,7 +125,7 @@ const EditPage = () => {
 		setPage({ ...page, tags: newTags });
 	};
 	// ------------------------------------------------------
-
+	// handle errors
 	const [pageError, setPageError] = useState({
 		title: "",
 		page_desc: "",
@@ -145,26 +152,28 @@ const EditPage = () => {
 	// -----------------------------------------------------
 
 	useEffect(() => {
-		setPage({
-			...page,
-			title: fetchedData?.data?.pages?.title,
-			page_desc: fetchedData?.data?.pages?.page_desc,
-			page_content: fetchedData?.data?.pages?.page_content || "",
-			seo_title: fetchedData?.data?.pages?.seo_title,
-			seo_link: fetchedData?.data?.pages?.seo_link,
-			seo_desc: fetchedData?.data?.pages?.seo_desc,
-			tags: fetchedData?.data?.pages?.tags,
-			pageCategory: fetchedData?.data?.pages?.pageCategory?.map(
-				(item) => item?.id
-			),
-			image: fetchedData?.data?.pages?.image,
-		});
-		setEditorValue(fetchedData?.data?.pages?.page_content);
-	}, [fetchedData?.data?.pages]);
+		if (currentPage) {
+			setPage({
+				...page,
+				title: currentPage?.title,
+				page_desc: currentPage?.page_desc,
+				page_content: currentPage?.page_content || "",
+				seo_title: currentPage?.seo_title,
+				seo_link: currentPage?.seo_link,
+				seo_desc: currentPage?.seo_desc,
+				tags: currentPage?.tags,
+				pageCategory: currentPage?.pageCategory?.map((item) => item?.id),
+				image: currentPage?.image,
+			});
+			setEditorValue(currentPage?.page_content);
+		}
+	}, [currentPage]);
 
 	useEffect(() => {
 		reset(page);
-	}, [page, reset]);
+	}, [currentPage, reset, page]);
+
+	console.log(page);
 	// -------------------------------------------------
 
 	// Add Post image
@@ -270,83 +279,75 @@ const EditPage = () => {
 		},
 	});
 
-	const updatePage = (data) => {
+	// handle update current page by id
+	const [editPageById] = useEditPageByIdMutation();
+	const handleEditCurrentPage = async (data) => {
 		setLoadingTitle("جاري تعديل الصفحة");
 		resetCouponError();
+
+		// data that send to api
 		let formData = new FormData();
-		formData.append("_method", "PUT");
 		formData.append("title", data?.title);
 		formData.append("page_desc", data?.page_desc);
 		formData.append("page_content", editorValue || page?.page_content);
 		formData.append("seo_title", data?.seo_title);
-
 		formData.append("seo_desc", data?.seo_desc);
-
 		formData.append("tags", page?.tags?.join(","));
 		for (let i = 0; i < page?.pageCategory?.length; i++) {
 			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
 		}
-
 		if (images.length !== 0) {
 			formData.append("image", itsPost ? images[0] || "" : "");
 		}
 
-		axios
-			.post(`page/${id}`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Pages");
-					setReload(!reload);
-					setEditorValue("");
-				} else {
-					setLoadingTitle("");
-					setPageError({
-						title: res?.data?.message?.en?.title?.[0],
-						page_desc: res?.data?.message?.en?.page_desc?.[0],
-						page_content: res?.data?.message?.en?.page_content?.[0],
-						seo_title: res?.data?.message?.en?.seo_title?.[0],
-						seo_link: res?.data?.message?.en?.seo_link?.[0],
-						seo_desc: res?.data?.message?.en?.seo_desc?.[0],
-						tags: res?.data?.message?.en?.tags?.[0],
-						images: res?.data?.message?.en?.image?.[0],
-					});
-
-					toast.error(res?.data?.message?.en?.title?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.page_desc?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.page_content?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.seo_title?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.seo_link?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.seo_desc?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.tags?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.image?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.postcategory_id?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await editPageById({
+				id,
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Pages");
+				setEditorValue("");
+			} else {
+				setLoadingTitle("");
+				setPageError({
+					title: response?.data?.message?.en?.title?.[0],
+					page_desc: response?.data?.message?.en?.page_desc?.[0],
+					page_content: response?.data?.message?.en?.page_content?.[0],
+					seo_title: response?.data?.message?.en?.seo_title?.[0],
+					seo_link: response?.data?.message?.en?.seo_link?.[0],
+					seo_desc: response?.data?.message?.en?.seo_desc?.[0],
+					tags: response?.data?.message?.en?.tags?.[0],
+					images: response?.data?.message?.en?.image?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing edit current Page:", error);
+		}
 	};
 
 	return (
@@ -364,7 +365,7 @@ const EditPage = () => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box sx={style} className='create-pages-modal'>
-						<form onSubmit={handleSubmit(updatePage)}>
+						<form onSubmit={handleSubmit(handleEditCurrentPage)}>
 							{/** Offers Details */}
 							<div className='create-pages-form-wrapper'>
 								<div className='d-flex'>
@@ -380,7 +381,7 @@ const EditPage = () => {
 										</div>
 									</div>
 								</div>
-								{loading ? (
+								{isFetching ? (
 									<div className='mt-5 h-100 d-flex flex-column align-items-center'>
 										<CircularLoading />
 									</div>
@@ -503,6 +504,7 @@ const EditPage = () => {
 													<div className='input-icon'>
 														<DocsIcon />
 													</div>
+
 													<input
 														name='seo_title'
 														className='w-100'
@@ -579,67 +581,65 @@ const EditPage = () => {
 															<FormGroup
 																className=''
 																sx={{ overflow: "hidden" }}>
-																{pageCategories?.data?.pagesCategory?.map(
-																	(cat, index) =>
-																		loading ? (
-																			<p>...</p>
-																		) : (
-																			<FormControlLabel
-																				value={cat?.id}
-																				key={index}
-																				sx={{
-																					py: 1,
-																					mr: 0,
-																					borderBottom: "1px solid #ECECEC",
-																					"& .MuiTypography-root": {
-																						fontSize: "18px",
-																						fontWeight: "500",
-																						"@media(max-width:767px)": {
-																							fontSize: "16px",
-																						},
+																{pagesCategory?.map((cat, index) =>
+																	isLoading ? (
+																		<p>...</p>
+																	) : (
+																		<FormControlLabel
+																			value={cat?.id}
+																			key={index}
+																			sx={{
+																				py: 1,
+																				mr: 0,
+																				borderBottom: "1px solid #ECECEC",
+																				"& .MuiTypography-root": {
+																					fontSize: "18px",
+																					fontWeight: "500",
+																					"@media(max-width:767px)": {
+																						fontSize: "16px",
 																					},
-																				}}
-																				control={
-																					<Checkbox
-																						checked={
-																							page?.pageCategory?.includes(
-																								cat?.id
-																							) || false
-																						}
-																						onChange={(e) => {
-																							const categoryId = parseInt(
-																								e.target.value
-																							);
-																							const isChecked =
-																								e.target.checked;
+																				},
+																			}}
+																			control={
+																				<Checkbox
+																					checked={
+																						page?.pageCategory?.includes(
+																							cat?.id
+																						) || false
+																					}
+																					onChange={(e) => {
+																						const categoryId = parseInt(
+																							e.target.value
+																						);
+																						const isChecked = e.target.checked;
 
-																							if (isChecked) {
-																								setPage((prevPage) => ({
-																									...prevPage,
-																									pageCategory: [
-																										...prevPage.pageCategory,
-																										categoryId,
-																									],
-																								}));
-																							} else {
-																								setPage((prevPage) => ({
-																									...prevPage,
-																									pageCategory:
-																										prevPage.pageCategory.filter(
-																											(item) =>
-																												item !== categoryId
-																										),
-																								}));
-																							}
-																						}}
-																						sx={{
-																							"& path": { fill: "#000000" },
-																						}}
-																					/>
-																				}
-																				label={cat?.name}
-																			/>
-																		)
+																						if (isChecked) {
+																							setPage((prevPage) => ({
+																								...prevPage,
+																								pageCategory: [
+																									...prevPage.pageCategory,
+																									categoryId,
+																								],
+																							}));
+																						} else {
+																							setPage((prevPage) => ({
+																								...prevPage,
+																								pageCategory:
+																									prevPage.pageCategory.filter(
+																										(item) =>
+																											item !== categoryId
+																									),
+																							}));
+																						}
+																					}}
+																					sx={{
+																						"& path": { fill: "#000000" },
+																					}}
+																				/>
+																			}
+																			label={cat?.name}
+																		/>
+																	)
 																)}
 															</FormGroup>
 														</div>

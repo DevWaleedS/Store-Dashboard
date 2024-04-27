@@ -1,10 +1,8 @@
 export { default as EditRole } from "./EditRole";
 export { default as UserData } from "./UserData";
-export { default as Delegate } from "./Delegate";
-export { default as EditPage } from "./EditPage";
+
 export { default as JobTitles } from "./JobTitles";
 export { default as AddNewUser } from "./AddNewUser";
-export { default as CreatePage } from "./CreatePage";
 
 export { default as CreateRole } from "./CreateRole";
 

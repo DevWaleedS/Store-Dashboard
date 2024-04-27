@@ -15,13 +15,19 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 // Context
 import Context from "../../Context/context";
 
-// Redux
-import { useSelector } from "react-redux";
+// RTK Query
+import {
+	useChangeOtherShippingCompanyStatusAndAddPriceMutation,
+	useChangeShippingComponyStatusMutation,
+	useGetShippingCompaniesQuery,
+	useUpdatePriceForOtherShippingCompanyMutation,
+} from "../../store/apiSlices/shippingCompaniesApi";
 
 // Icons
 import { HomeIcon } from "../../data/Icons";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Switch } from "@mui/material";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 // switch style
 const switchStyle = {
@@ -69,10 +75,15 @@ const switchStyle = {
 };
 
 const ShippingCompanies = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// to get all  data from server
+	const { data: shippingCompanies, isLoading } = useGetShippingCompaniesQuery();
+
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
+
 	const [validPriceFocus, setValidPriceFocus] = useState(false);
 	const [otherShippingCompany, setOtherShippingCompany] = useState([]);
 	const [allShippingCompanies, setAllShippingCompanies] = useState([]);
@@ -83,36 +94,29 @@ const ShippingCompanies = () => {
 		currentPrice: "",
 		time: "",
 		currentTime: "",
-
 		overprice: "",
 		currentOverprice: "",
 	});
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
-	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(`shippingtype`);
 
 	// -----------------------------------------------------------
 
 	// Side Effects to filter other shipping
 	useEffect(() => {
-		if (fetchedData) {
+		if (shippingCompanies) {
 			setOtherShippingCompany(
-				fetchedData?.data?.shippingtypes?.filter(
+				shippingCompanies?.filter(
 					(shippingCompany) => shippingCompany?.name === "اخرى"
 				)
 			);
 
 			setAllShippingCompanies(
-				fetchedData?.data?.shippingtypes?.filter(
+				shippingCompanies?.filter(
 					(shippingCompany) => shippingCompany?.name !== "اخرى"
 				)
 			);
 		}
-	}, [fetchedData]);
-	// ------------------------
+	}, [shippingCompanies]);
+	// -----------------------------------------------
 
 	useEffect(() => {
 		if (otherShippingCompany) {
@@ -166,92 +170,147 @@ const ShippingCompanies = () => {
 			[name]: value,
 		}));
 	};
+	//===================================================================//
 
 	// change the Shipping Company  Status
-	const changeStatus = (id) => {
-		axios
-			.get(`changeShippingtypeStatus/${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				}
-			});
+	const [changeShippingComponyStatus] =
+		useChangeShippingComponyStatusMutation();
+
+	const handleChangeStatus = async (id) => {
+		// make request...
+		try {
+			const response = await changeShippingComponyStatus(id);
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing changeShippingComponyStatus:", error);
+		}
 	};
+	// ----------------------------------------------------------------------------
 
 	// Change OtherShipping Company Status And Add Price
-	const changeOtherShippingCompanyStatusAndAddPrice = (id) => {
+	const [changeOtherShippingCompanyStatusAndAddPrice] =
+		useChangeOtherShippingCompanyStatusAndAddPriceMutation();
+	const handleChangeOtherShippingCompanyStatusAndAddPrice = async (id) => {
 		if (
 			allShippingCompanies?.some((item) => item?.status === "نشط") ||
 			allShippingCompanies?.length === 0
 		) {
-			axios
-				.get(
-					`changeShippingtypeStatus/${id}?price=${otherShipCompDetails?.price}&time=${otherShipCompDetails?.time}`,
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${store_token}`,
-						},
-					}
-				)
-				.then((res) => {
-					if (res?.data?.success === true && res?.data?.data?.status === 200) {
-						setEndActionTitle(res?.data?.message?.ar);
-						setReload(!reload);
-					} else {
-						toast.error(res?.data?.message?.ar, {
-							theme: "light",
-						});
-						setReload(!reload);
-					}
+			// make request...
+			try {
+				const response = await changeOtherShippingCompanyStatusAndAddPrice({
+					otherShipCompanyId: id,
+					otherShipCompanyPrice: otherShipCompDetails?.price,
+					otherShipCompanyDuration: otherShipCompDetails?.time,
 				});
+
+				// Handle response
+				if (
+					response.data?.success === true &&
+					response.data?.data?.status === 200
+				) {
+					setEndActionTitle(response?.data?.message?.ar);
+				} else {
+					// Handle display errors using toast notifications
+					toast.error(
+						response?.data?.message?.ar
+							? response.data.message.ar
+							: response.data.message.en,
+						{
+							theme: "light",
+						}
+					);
+
+					Object.entries(response?.data?.message?.en)?.forEach(
+						([key, message]) => {
+							toast.error(message[0], { theme: "light" });
+						}
+					);
+				}
+			} catch (error) {
+				console.error("Error changing changeShippingComponyStatus:", error);
+			}
 		} else {
 			toast.error("يجب تفعيل شركة شحن واحدة على الاقل", {
 				theme: "light",
 			});
 		}
 	};
+	//--------------------------------------------------------------------------------
 
-	const updatePrice = () => {
+	// handle update Price For Other Shipping Company
+	const [updatePriceForOtherShippingCompany] =
+		useUpdatePriceForOtherShippingCompanyMutation();
+	const handleUpdatePrice = async () => {
+		setLoadingTitle("جار تعديل بيانت الشحن");
+
+		// data that sent to api...
 		let formData = new FormData();
 		formData.append("price", otherShipCompDetails?.price);
 		formData.append("time", otherShipCompDetails?.time);
 		formData.append("overprice", otherShipCompDetails?.overprice);
-		axios
-			.post(`updatePrice/${otherShipCompDetails?.id}`, formData, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.price?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.time?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.overprice?.[0], {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await updatePriceForOtherShippingCompany({
+				otherShipCompanyId: otherShipCompDetails?.id,
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error(
+				"Error changing updatePriceForOtherShippingCompany:",
+				error
+			);
+		}
 	};
 
 	return (
@@ -295,7 +354,7 @@ const ShippingCompanies = () => {
 					</div>
 				</div>
 				<div className='data-container '>
-					{loading ? (
+					{isLoading ? (
 						<div className='row'>
 							<div
 								className='d-flex justify-content-center align-items-center col-12'
@@ -346,7 +405,7 @@ const ShippingCompanies = () => {
 												}}>
 												<Switch
 													onChange={() => {
-														changeOtherShippingCompanyStatusAndAddPrice(
+														handleChangeOtherShippingCompanyStatusAndAddPrice(
 															otherShippingCompany[0]?.id
 														);
 													}}
@@ -463,8 +522,8 @@ const ShippingCompanies = () => {
 											</div>
 											<button
 												className='save-price-btn'
-												disabled={!otherShipCompDetails?.status}
-												onClick={updatePrice}>
+												disabled={!otherShipCompDetails?.status || isLoading}
+												onClick={handleUpdatePrice}>
 												تعديل بيانات الشحن
 											</button>
 										</div>
@@ -481,7 +540,7 @@ const ShippingCompanies = () => {
 												currentShippingPrice=''
 												currentShippingTime={0}
 												image={item?.image}
-												changeStatus={() => changeStatus(item?.id)}
+												changeStatus={() => handleChangeStatus(item?.id)}
 												checked={item?.status === "نشط" ? true : false}
 											/>
 										</div>

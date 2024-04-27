@@ -85,6 +85,38 @@ export const pagesApi = createApi({
 				method: "GET",
 			}),
 		}),
+
+		// create new Page
+		createNewPage: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `page-publish`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Pages"],
+		}),
+
+		// get Page by id
+		getPageById: builder.query({
+			query: (id) => `page/${id}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.pages,
+		}),
+
+		// edit Page by id
+		editPageById: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `page/${id}`,
+					method: "PUT",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Pages"],
+		}),
 	}),
 });
 
@@ -97,4 +129,7 @@ export const {
 	useChangeAllPagesStatusMutation,
 	useSearchInPagesMutation,
 	useFilterPagesByStatusMutation,
+	useCreateNewPageMutation,
+	useGetPageByIdQuery,
+	useEditPageByIdMutation,
 } = pagesApi;

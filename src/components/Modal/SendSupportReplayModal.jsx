@@ -80,14 +80,14 @@ const SendSupportReplayModal = ({ supportDetails }) => {
 	const [sendReplayTechnicalSupport] = useSendReplayTechnicalSupportMutation();
 	const handleSendReplayTechnicalSupport = async () => {
 		serMessageError("");
+
 		let formData = new FormData();
 		formData.append("replay_text", editorValue);
 		formData.append("technical_support_id", supportDetails?.id);
 
 		try {
 			const response = await sendReplayTechnicalSupport({
-				replay_text: editorValue,
-				technical_support_id: supportDetails?.id,
+				body: formData,
 			});
 
 			// Handle response

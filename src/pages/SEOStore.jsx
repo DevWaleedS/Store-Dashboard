@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -29,13 +29,16 @@ import {
 	TiktokIconColored,
 	TwitterIcon,
 } from "../data/Icons";
+import {
+	useGetSEODataQuery,
+	useUpdateSeoMutation,
+} from "../store/apiSlices/SEOImprovementsApi";
 
 const PaintStore = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } = useFetch(`seo`);
+	// get seo data
+	const { data: Seo, isLoading } = useGetSEODataQuery();
+
+	const { reload, setReload } = useFetch(`seo`);
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -76,23 +79,28 @@ const PaintStore = () => {
 	// --------------------------------------------------------------
 
 	useEffect(() => {
-		setUpdateLinkValue(fetchedData?.data?.Seo?.[0]?.google_analytics);
-		setRobotLink(fetchedData?.data?.Seo?.[0]?.robot_link || "");
-		setSnapchat(fetchedData?.data?.Seo?.[0]?.snappixel || "");
-		setTwitter(fetchedData?.data?.Seo?.[0]?.twitterpixel || "");
-		setTiktok(fetchedData?.data?.Seo?.[0]?.tiktokpixel || "");
-		setInstagram(fetchedData?.data?.Seo?.[0]?.instapixel || "");
-		setKeyWord(fetchedData?.data?.Seo?.[0]?.key_words?.map((key) => key) || []);
-	}, [fetchedData?.data?.Seo]);
+		setUpdateLinkValue(Seo?.[0]?.google_analytics);
+		setRobotLink(Seo?.[0]?.robot_link || "");
+		setSnapchat(Seo?.[0]?.snappixel || "");
+		setTwitter(Seo?.[0]?.twitterpixel || "");
+		setTiktok(Seo?.[0]?.tiktokpixel || "");
+		setInstagram(Seo?.[0]?.instapixel || "");
+		setKeyWord(Seo?.[0]?.key_words?.map((key) => key) || []);
+	}, [Seo]);
 
 	useEffect(() => {
 		const storeLinkValidation = LINK_REGEX.test(updateLinkValue);
 		setValidPageLink(storeLinkValidation);
 	}, [updateLinkValue]);
 
-	const handleSEOUpdate = () => {
+	// HANDLE UPDATE SEO DATA
+	const [updateSeo] = useUpdateSeoMutation();
+
+	const handleSEOUpdate = async () => {
 		resetDataError();
 		setLoadingTitle("جاري تعديل تحسينات الSEO");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("google_analytics", updateLinkValue);
 		formData.append("robot_link", robotLink);
@@ -101,54 +109,54 @@ const PaintStore = () => {
 		formData.append("tiktokpixel", tiktok);
 		formData.append("instapixel", instagram);
 		formData.append("key_words", keyWord.join(","));
-		axios
-			.post(`updateSeo`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
 
-					setDataError({
-						...dataError,
-						updateLinkValue: res?.data?.message?.en?.google_analytics?.[0],
-						robotLink: res?.data?.message?.en?.robot_link?.[0],
-						snapchat: res?.data?.message?.en?.snappixel?.[0],
-						twitter: res?.data?.message?.en?.twitterpixel?.[0],
-						tiktok: res?.data?.message?.en?.tiktokpixel?.[0],
-						instagram: res?.data?.message?.en?.instapixel?.[0],
-						keyWord: res?.data?.message?.en?.key_words?.[0],
-					});
-					toast.error(res?.data?.message?.en?.google_analytics?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.robot_link?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.snappixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.twitterpixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.tiktokpixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.instapixel?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.key_words?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await updateSeo({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				setReload(!reload);
+			} else {
+				setLoadingTitle("");
+
+				setDataError({
+					...dataError,
+					updateLinkValue: response?.data?.message?.en?.google_analytics?.[0],
+					robotLink: response?.data?.message?.en?.robot_link?.[0],
+					snapchat: response?.data?.message?.en?.snappixel?.[0],
+					twitter: response?.data?.message?.en?.twitterpixel?.[0],
+					tiktok: response?.data?.message?.en?.tiktokpixel?.[0],
+					instagram: response?.data?.message?.en?.instapixel?.[0],
+					keyWord: response?.data?.message?.en?.key_words?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing updateSeo:", error);
+		}
 	};
 
 	return (
@@ -174,7 +182,7 @@ const PaintStore = () => {
 						</nav>
 					</div>
 				</div>
-				{loading ? (
+				{isLoading ? (
 					<div className='data-container'>
 						<CircularLoading />
 					</div>
@@ -339,6 +347,7 @@ const PaintStore = () => {
 									height: "56px",
 									backgroundColor: "#1dbbbe",
 								}}
+								disabled={isLoading}
 								onClick={handleSEOUpdate}>
 								حفظ
 							</Button>

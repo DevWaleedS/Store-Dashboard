@@ -68,24 +68,22 @@ export const technicalSupportApi = createApi({
 
 		// show Technical Support by id
 		showTechnicalSupportById: builder.query({
-			query: ({ id }) => `technicalSupport/${id}`,
+			query: (id) => `technicalSupport/${id}`,
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data,
-			providesTags: (result, error, id) => [{ type: "TechnicalSupport", id }],
+			transformResponse: (response, meta, arg) =>
+				response.data?.technicalSupports,
+			providesTags: ["TechnicalSupport"],
 		}),
 
 		// send replay Technical Support
 		sendReplayTechnicalSupport: builder.mutation({
-			query: ({ replay_text, technical_support_id }) => {
-				const url = `replayTechnicalSupport`;
-				const method = "POST";
-
-				// Construct payload object
-				let payload = { technical_support_id, replay_text };
-
-				// Return URL, method, and payload
-				return { url, method, body: JSON.stringify(payload) };
+			query: ({ body }) => {
+				return {
+					url: `replayTechnicalSupport`,
+					method: "POST",
+					body: body,
+				};
 			},
 			invalidatesTags: ["TechnicalSupport"],
 		}),

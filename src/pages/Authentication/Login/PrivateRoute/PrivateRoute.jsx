@@ -1,24 +1,19 @@
-import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
 	const location = useLocation();
 
-	const store_token =
-		document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1] ||
-		new URLSearchParams(window.location.search).get("ddsdgsfdv");
+	// Simplified token retrieval from cookies only.
+	const store_token = document.cookie
+		.split("; ")
+		.find((cookie) => cookie.startsWith("store_token="))
+		?.split("=")[1];
 
-	useEffect(() => {
-		if (store_token) document.cookie = `store_token=${store_token};   path=/`;
-	}, [store_token]);
-
+	// Redirect if no token is found. No need to modify the cookie here.
 	return store_token ? (
 		children
 	) : (
-		<Navigate state={{ from: location }} replace to='/auth/login' />
+		<Navigate to='/auth/login' state={{ from: location }} replace />
 	);
 };
 

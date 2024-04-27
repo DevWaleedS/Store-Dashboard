@@ -115,7 +115,6 @@ const AddNewProduct = () => {
 
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
-	const [reload, setReload] = useState(false);
 
 	const contextStore = useContext(Context);
 	const {
@@ -455,7 +454,7 @@ const AddNewProduct = () => {
 				setLoadingTitle("");
 				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/Products");
-				setReload(!reload);
+
 				setEditorValue("");
 				clearOptions();
 			} else {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // Third party
-import axios from "axios";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 // Icons
@@ -15,11 +15,10 @@ import { LoadingContext } from "../../../Context/LoadingProvider";
 // MUI
 import { Button, FormControl, Switch } from "@mui/material";
 
-const UpdateComments = ({ Comments, reload, setReload }) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+// RTK Query
+import { useUpdateClientsCommentsMutation } from "../../../store/apiSlices/templateSettingApi";
+
+const UpdateComments = ({ Comments, loading }) => {
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -38,30 +37,53 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 		}
 	}, [Comments]);
 
-	// Update comments function
-	const updateComments = () => {
+	// handle  Update comments function
+
+	const [updateClientsComments] = useUpdateClientsCommentsMutation();
+
+	const handleUupdateClientsComments = async () => {
 		setLoadingTitle("جاري تعديل التعليقات والعملاء");
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("commentstatus", commentStatus ? "active" : "not_active");
 		formData.append("clientstatus", clientStatus ? "active" : "not_active");
-		axios
-			.post(`commentUpdate`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
 
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-				}
+		// make request...
+		try {
+			const response = await updateClientsComments({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing updateClientsComments:", error);
+		}
 	};
 	return (
 		<div className='seo-weight-edit-box template-edit-box '>
@@ -127,7 +149,10 @@ const UpdateComments = ({ Comments, reload, setReload }) => {
 
 					<div className='col-12 p-4'>
 						<div className='btn-bx '>
-							<Button onClick={() => updateComments()} variant='contained'>
+							<Button
+								disabled={loading}
+								onClick={() => handleUupdateClientsComments()}
+								variant='contained'>
 								حفظ
 							</Button>
 						</div>

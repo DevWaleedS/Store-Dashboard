@@ -3,7 +3,6 @@ import React from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
 
 // MUI
 import Select from "@mui/material/Select";
@@ -11,15 +10,17 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 
 // ICONS
-import { HomeIcon } from "../../data/Icons";
+import { HomeIcon } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 
 // Components
-import { TopBarSearchInput } from "../../global";
-import { DelegateTable } from "../../components/Tables";
+import { TopBarSearchInput } from "../global";
+import { DelegateTable } from "../components/Tables";
+import { useGetCitiesQuery } from "../store/apiSlices/selectorsApis/selectCitiesApi";
 
-const Delegate = () => {
-	const { fetchedData } = useFetch("selector/cities");
+const RequestDelegate = () => {
+	// cities selector
+	const { data: cities } = useGetCitiesQuery();
 	const [cityId, setCityId] = React.useState("");
 
 	const handleCategoryChange = (event) => {
@@ -117,12 +118,11 @@ const Delegate = () => {
 										return <span> اختر المدينة</span>;
 									}
 									const result =
-										fetchedData?.data?.cities?.filter(
-											(item) => item?.id === parseInt(selected)
-										) || "";
+										cities?.filter((item) => item?.id === parseInt(selected)) ||
+										"";
 									return result[0]?.name;
 								}}>
-								{fetchedData?.data?.cities?.map((item, idx) => {
+								{cities?.map((item, idx) => {
 									return (
 										<MenuItem
 											key={idx}
@@ -150,4 +150,4 @@ const Delegate = () => {
 	);
 };
 
-export default Delegate;
+export default RequestDelegate;

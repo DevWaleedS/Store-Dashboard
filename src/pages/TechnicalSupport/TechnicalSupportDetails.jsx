@@ -60,9 +60,7 @@ const TechnicalSupportDetails = () => {
 
 	// to get all  data from server
 	const { data: technicalSupportData, isFetching } =
-		useShowTechnicalSupportByIdQuery({
-			id,
-		});
+		useShowTechnicalSupportByIdQuery(id);
 
 	return (
 		<>
@@ -121,9 +119,7 @@ const TechnicalSupportDetails = () => {
 											<div className='col-12 mb-4'>
 												<div className='issue-number'>
 													<h5>رقم الرسالة</h5>
-													<div>
-														{technicalSupportData?.technicalSupports?.id}
-													</div>
+													<div>{technicalSupportData?.id}</div>
 												</div>
 											</div>
 											<div className='col-12'>
@@ -139,10 +135,7 @@ const TechnicalSupportDetails = () => {
 
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span className='text-center text-overflow'>
-																			{
-																				technicalSupportData?.technicalSupports
-																					?.name
-																			}
+																			{technicalSupportData?.name}
 																		</span>
 																	</div>
 																</div>
@@ -157,10 +150,7 @@ const TechnicalSupportDetails = () => {
 
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span style={{ direction: "ltr" }}>
-																			{
-																				technicalSupportData?.technicalSupports
-																					?.phonenumber
-																			}
+																			{technicalSupportData?.phonenumber}
 																		</span>
 																	</div>
 																</div>
@@ -174,10 +164,7 @@ const TechnicalSupportDetails = () => {
 																	</div>
 																	<div className='box pending-box d-flex justify-content-center'>
 																		<span>
-																			{
-																				technicalSupportData?.technicalSupports
-																					?.supportstatus
-																			}
+																			{technicalSupportData?.supportstatus}
 																		</span>
 																	</div>
 																</div>
@@ -194,8 +181,7 @@ const TechnicalSupportDetails = () => {
 																	<div className='box success-box d-flex justify-content-center'>
 																		<span>
 																			{moment(
-																				technicalSupportData?.technicalSupports
-																					?.created_at
+																				technicalSupportData?.created_at
 																			).format("DD-MM-YYYY")}
 																		</span>
 																	</div>
@@ -209,12 +195,7 @@ const TechnicalSupportDetails = () => {
 																		<span className='me-2'>عنوان الرسالة </span>
 																	</div>
 																	<div className='box success-box d-flex justify-content-center'>
-																		<span>
-																			{
-																				technicalSupportData?.technicalSupports
-																					?.title
-																			}
-																		</span>
+																		<span>{technicalSupportData?.title}</span>
 																	</div>
 																</div>
 															</div>
@@ -248,7 +229,7 @@ const TechnicalSupportDetails = () => {
 												<TextEditor
 													readOnly={true}
 													ToolBar={"emptyCart"}
-													placeholder={`${technicalSupportData?.technicalSupports?.content}`}
+													placeholder={`${technicalSupportData?.content}`}
 												/>
 											</div>
 										</div>
@@ -270,9 +251,7 @@ const TechnicalSupportDetails = () => {
 					</Box>
 				</Modal>
 			</div>
-			<SendSupportReplayModal
-				supportDetails={technicalSupportData?.technicalSupports}
-			/>
+			<SendSupportReplayModal supportDetails={technicalSupportData} />
 		</>
 	);
 };

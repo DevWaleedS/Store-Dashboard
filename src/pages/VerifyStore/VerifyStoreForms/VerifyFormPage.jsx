@@ -19,8 +19,15 @@ import { resetActivity } from "../../../store/slices/AddActivity";
 import { resetSubActivity } from "../../../store/slices/AddSubActivity";
 import { openVerifyStoreAlertModal } from "../../../store/slices/VerifyStoreAlertModal-slice";
 
+// RTK
+import {
+	useShowVerificationQuery,
+	useUpdateVerificationMutation,
+} from "../../../store/apiSlices/verifyStoreApi";
+import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
+import { useGetCitiesQuery } from "../../../store/apiSlices/selectorsApis/selectCitiesApi";
+
 // third party
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
@@ -39,18 +46,16 @@ import { IoIosArrowDown } from "react-icons/io";
 import { UploadIcon, WebsiteIcon } from "../../../data/Icons";
 
 const VerifyFormPage = forwardRef((props, ref) => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	/** ----------------------------------------------------*/
 
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("verification_show");
+	// Handle show Verification  data
+	const { data: showVerification, isFetching } = useShowVerificationQuery();
 
-	const { fetchedData: activities } = useFetch("selector/mainCategories");
+	// Categories Selector
+	const { data: selectCategories } = useGetCategoriesQuery();
 
-	const { fetchedData: cities } = useFetch("selector/cities");
+	// cities selector
+	const { data: cities } = useGetCitiesQuery();
 
 	// to open verify alert
 	const dispatchVerifyAlert = useDispatch(false);
@@ -65,7 +70,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const { activity } = useSelector((state) => state.AddActivity);
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
 
-	const selectedActivity = activities?.data?.categories?.filter((item) => {
+	const selectedActivity = selectCategories?.filter((item) => {
 		return activity?.some((ele) => {
 			return ele === item?.id;
 		});
@@ -174,7 +179,9 @@ const VerifyFormPage = forwardRef((props, ref) => {
 
 	/** ------------------------------------------------------------------------- */
 
-	const uploadVerifyStoreOrder = () => {
+	/* handle upload Verify Store Order */
+	const [verificationUpdate] = useUpdateVerificationMutation();
+	const uploadVerifyStoreOrder = async () => {
 		resetDataErrors();
 		setLoadingTitle("جاري ارسال طلب التوثيق");
 		let formData = new FormData();
@@ -206,57 +213,55 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		for (let i = 0; i < subActivities?.length; i++) {
 			formData.append([`subcategory_id[${i}]`], subActivities[i]);
 		}
-		axios
-			.post(`verification_update`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					dispatchVerifyAlert(openVerifyStoreAlertModal());
-					setReload(!reload);
-					navigate("/");
-					dispatch(resetActivity());
-					dispatch(resetSubActivity());
-				} else {
-					setLoadingTitle("");
-					setDataErrors({
-						owner_name: res?.data?.message?.en?.owner_name?.[0],
 
-						verification_type: res?.data?.message?.en?.verification_type?.[0],
-						verification_code: res?.data?.message?.en?.verification_code?.[0],
-						commercial_name: res?.data?.message?.en?.commercial_name?.[0],
-						city_id: res?.data?.message?.en?.city_id?.[0],
-						file: res?.data?.message?.en?.file?.[0],
-					});
-					toast.error(res?.data?.message?.en?.owner_name?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.verification_type?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.verification_code?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.commercial_name?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.city_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.file?.[0], {
-						theme: "light",
-					});
-					toast.info(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+		try {
+			const response = await verificationUpdate({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				dispatchVerifyAlert(openVerifyStoreAlertModal());
+				navigate("/");
+				dispatch(resetActivity());
+				dispatch(resetSubActivity());
+			} else {
+				setLoadingTitle("");
+				setDataErrors({
+					owner_name: response?.data?.message?.en?.owner_name?.[0],
+
+					verification_type:
+						response?.data?.message?.en?.verification_type?.[0],
+					verification_code:
+						response?.data?.message?.en?.verification_code?.[0],
+					commercial_name: response?.data?.message?.en?.commercial_name?.[0],
+					city_id: response?.data?.message?.en?.city_id?.[0],
+					file: response?.data?.message?.en?.file?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing createNewPage:", error);
+		}
 	};
 
 	// Expose the function to the parent component using useImperativeHandle
@@ -266,7 +271,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 
 	return (
 		<Fragment>
-			{loading ? (
+			{isFetching ? (
 				<CircularLoading />
 			) : (
 				<Fragment>
@@ -506,12 +511,12 @@ const VerifyFormPage = forwardRef((props, ref) => {
 													return <p className='text-[#ADB5B9]'>اختر المدينة</p>;
 												}
 												const result =
-													cities?.data?.cities?.filter(
+													cities?.filter(
 														(city) => city?.id === parseInt(selected)
 													) || "";
 												return result[0]?.name;
 											}}>
-											{cities?.data?.cities?.map((city, index) => (
+											{cities?.map((city, index) => (
 												<MenuItem
 													value={city?.id}
 													key={index}
@@ -760,12 +765,12 @@ const VerifyFormPage = forwardRef((props, ref) => {
 													return <p className='text-[#ADB5B9]'>اختر المدينة</p>;
 												}
 												const result =
-													cities?.data?.cities?.filter(
+													cities?.filter(
 														(city) => city?.id === parseInt(selected)
 													) || "";
 												return result[0]?.name;
 											}}>
-											{cities?.data?.cities?.map((city, index) => (
+											{cities?.map((city, index) => (
 												<MenuItem
 													value={city?.id}
 													key={index}

@@ -153,7 +153,7 @@ const PlatformServices = () => {
 		}
 	};
 	// --------------------------------------
-	console.log(data);
+
 	return (
 		<>
 			<Helmet>

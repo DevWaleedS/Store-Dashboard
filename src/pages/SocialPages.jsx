@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
+
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
@@ -30,15 +30,15 @@ import {
 	JacoLiveIcon,
 } from "../data/Icons";
 
+// RTK Query
+import {
+	useGetSocialMediaDataQuery,
+	useUpdateSocialMediaDataMutation,
+} from "../store/apiSlices/socialPagesApi";
+
 const SocialPages = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	// to get all  data from server
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`socialMedia_store_show`
-	);
+	const { data: socialMedia, isFetching } = useGetSocialMediaDataQuery();
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -90,20 +90,25 @@ const SocialPages = () => {
 	useEffect(() => {
 		setSocialValue({
 			...socialValue,
-			snapchat: fetchedData?.data?.snapchat,
-			facebook: fetchedData?.data?.facebook,
-			twiter: fetchedData?.data?.twiter,
-			youtube: fetchedData?.data?.youtube,
-			instegram: fetchedData?.data?.instegram,
-			tiktok: fetchedData?.data?.tiktok,
-			jaco: fetchedData?.data?.jaco,
+			snapchat: socialMedia?.snapchat,
+			facebook: socialMedia?.facebook,
+			twiter: socialMedia?.twiter,
+			youtube: socialMedia?.youtube,
+			instegram: socialMedia?.instegram,
+			tiktok: socialMedia?.tiktok,
+			jaco: socialMedia?.jaco,
 		});
-	}, [fetchedData]);
+	}, [socialMedia]);
 
-	// to update Seo values
-	const updateSocialMedia = () => {
+	// handle update social pages data
+	const [updateSocialMediaData, { isLoading }] =
+		useUpdateSocialMediaDataMutation();
+
+	const handleUpdateSocialMedia = async () => {
 		setLoadingTitle("جاري تعديل حسابات التواصل الاجتماعي");
 		resetError();
+
+		// data that send to api
 		let formData = new FormData();
 		formData.append("snapchat", socialValue?.snapchat || "");
 		formData.append("facebook", socialValue?.facebook || "");
@@ -113,53 +118,50 @@ const SocialPages = () => {
 		formData.append("tiktok", socialValue?.tiktok || "");
 		formData.append("jaco", socialValue?.jaco || "");
 
-		axios
-			.post(`socialMedia_store_update`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-				} else {
-					setLoadingTitle("");
-
-					setError({
-						snapchat: res?.data?.message?.en?.snapchat?.[0],
-						facebook: res?.data?.message?.en?.facebook?.[0],
-						twiter: res?.data?.message?.en?.twiter?.[0],
-						youtube: res?.data?.message?.en?.youtube?.[0],
-						instegram: res?.data?.message?.en?.instegram?.[0],
-						tiktok: res?.data?.message?.en?.tiktok?.[0],
-						jaco: res?.data?.message?.en?.jaco?.[0],
-					});
-					toast.error(res?.data?.message?.en?.snapchat?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.facebook?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.twiter?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.youtube?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.instegram?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.tiktok?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.jaco?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await updateSocialMediaData({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+				setError({
+					snapchat: response?.data?.message?.en?.snapchat?.[0],
+					facebook: response?.data?.message?.en?.facebook?.[0],
+					twiter: response?.data?.message?.en?.twiter?.[0],
+					youtube: response?.data?.message?.en?.youtube?.[0],
+					instegram: response?.data?.message?.en?.instegram?.[0],
+					tiktok: response?.data?.message?.en?.tiktok?.[0],
+					jaco: response?.data?.message?.en?.jaco?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing updateSocialMediaData:", error);
+		}
 	};
 
 	return (
@@ -195,14 +197,14 @@ const SocialPages = () => {
 				</div>
 				<div>
 					<div className='social-links-form'>
-						{loading ? (
+						{isFetching ? (
 							<div
 								className='d-flex justify-content-center align-items-center'
 								style={{ height: "200px" }}>
 								<CircularLoading />
 							</div>
 						) : (
-							<form onSubmit={(event) => event.preventDefault()}>
+							<>
 								<div className='row mb-3'>
 									<div className='col-12'>
 										<label htmlFor='snap-chat d-block'>
@@ -384,14 +386,14 @@ const SocialPages = () => {
 								<div className='row'>
 									<div className='col-12 d-flex justify-content-center align-items-center '>
 										<Button
+											disabled={isLoading}
 											className='social-save-btn'
-											type='submit'
-											onClick={updateSocialMedia}>
+											onClick={handleUpdateSocialMedia}>
 											حفظ
 										</Button>
 									</div>
 								</div>
-							</form>
+							</>
 						)}
 					</div>
 				</div>

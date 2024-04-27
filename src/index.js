@@ -25,8 +25,7 @@ import "./index.css";
 
 import {
 	Offers,
-	Pages,
-	PaymentGetways,
+	PaymentGateways,
 	Report,
 	Management,
 	SocialPages,
@@ -41,6 +40,7 @@ import {
 	SEOStore,
 	CartPage,
 	CheckoutPage,
+	RequestDelegate,
 } from "./pages";
 
 import { Rating } from "./pages/Rating";
@@ -68,10 +68,8 @@ import {
 	CreateRole,
 	AddNewUser,
 	EditUserDetails,
-	Delegate,
+
 	// CreateOffer,
-	CreatePage,
-	EditPage,
 
 	// OfferDetails,
 } from "./pages/nestedPages";
@@ -111,7 +109,13 @@ import TechnicalSupportDetails from "./pages/TechnicalSupport/TechnicalSupportDe
 
 // coupons
 import { Coupon, AddCoupon, EditCoupon } from "./pages/Coupon";
+
+// empty carts
 import { EditEmptyCart, EmptyCarts } from "./pages/EmptyCarts";
+
+// store pages
+import { CreatePage, EditPage, Pages } from "./pages/StorePages";
+import BillingInfo from "./pages/Wallet/BillingInfo";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -381,12 +385,19 @@ const router = createBrowserRouter([
 				element: <ShippingCompanies />,
 			},
 			{
-				path: "PaymentGetways",
-				element: <PaymentGetways />,
+				path: "PaymentGateways",
+				element: <PaymentGateways />,
 			},
 			{
 				path: "wallet",
 				element: <Wallet />,
+			},
+
+			// Billing Info
+
+			{
+				path: "wallet/billingInfo/:id",
+				element: <BillingInfo />,
 			},
 			{
 				path: "Template",
@@ -409,8 +420,8 @@ const router = createBrowserRouter([
 				element: <PlatformServices />,
 			},
 			{
-				path: "/Delegate",
-				element: <Delegate />,
+				path: "/RequestDelegate",
+				element: <RequestDelegate />,
 			},
 			{
 				path: "EvaluationThePlatform",
