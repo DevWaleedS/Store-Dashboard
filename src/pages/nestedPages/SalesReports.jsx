@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 const SalesReports = ({ salesReport, loading }) => {
+	console.log(salesReport);
 	return (
 		<section className='sales-reports-data'>
 			<div className='report-head mb-2'>
@@ -25,7 +26,7 @@ const SalesReports = ({ salesReport, loading }) => {
 								<div className='col-5'>
 									<h5 className='report_numbers'>
 										<span className='number ms-2'>
-											{salesReport?.data?.total_sales}
+											{salesReport?.total_sales}
 										</span>
 										<span className='currency'> ر.س</span>
 									</h5>
@@ -40,7 +41,7 @@ const SalesReports = ({ salesReport, loading }) => {
 								<div className='col-5'>
 									<h5 className='report_numbers'>
 										<span className='number ms-2'>
-											{salesReport?.data?.products_costs}
+											{salesReport?.products_costs}
 										</span>
 										<span className='currency'> ر.س</span>
 									</h5>
@@ -55,7 +56,7 @@ const SalesReports = ({ salesReport, loading }) => {
 								<div className='col-5'>
 									<h5 className='report_numbers'>
 										<span className='number ms-2'>
-											{salesReport?.data?.discount_coupons}
+											{salesReport?.discount_coupons}
 										</span>
 										<span className='currency'> ر.س</span>
 									</h5>
@@ -70,23 +71,21 @@ const SalesReports = ({ salesReport, loading }) => {
 								<div className='col-5'>
 									<h5 className='report_numbers'>
 										<span className='number ms-2'>
-											{salesReport?.data?.shipping_price}
+											{salesReport?.shipping_price}
 										</span>
 										<span className=' currency'> ر.س</span>
 									</h5>
 								</div>
 							</div>
 						</div>
-						<div className='total-wrapper  mb-2'>
+						<div className='total-wrapper mb-2'>
 							<div className='row'>
 								<div className='col-5'>
 									<h6>الضرائب</h6>
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>
-											{salesReport?.data?.taxs}
-										</span>
+										<span className='number ms-2'>{salesReport?.taxs}</span>
 										<span className=' currency'> ر.س</span>
 									</h5>
 								</div>
@@ -99,9 +98,7 @@ const SalesReports = ({ salesReport, loading }) => {
 								</div>
 								<div className='col-5'>
 									<h5 className='report_numbers'>
-										<span className='number ms-2'>
-											{salesReport?.data?.payment}
-										</span>
+										<span className='number ms-2'>{salesReport?.payment}</span>
 										<span className=' currency'> ر.س</span>
 									</h5>
 								</div>
@@ -121,7 +118,7 @@ const SalesReports = ({ salesReport, loading }) => {
 										alignItems: "center",
 										gap: "5px",
 									}}>
-									<span className='number'>{salesReport?.data?.sales}</span>
+									<span className='number'>{salesReport?.sales}</span>
 									ر.س
 								</h5>
 							</div>

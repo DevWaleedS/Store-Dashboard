@@ -1,6 +1,8 @@
 import React from "react";
 
+//Third party
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 // MUI
 import PropTypes from "prop-types";
@@ -11,9 +13,13 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Icons
 import { Info } from "../../data/Icons";
-import { useNavigate } from "react-router-dom";
+
+//Components
+import { TablePagination } from "./TablePagination";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 function EnhancedTableHead(props) {
 	return (
@@ -52,13 +58,23 @@ EnhancedTableHead.propTypes = {
 	rowCount: PropTypes.number,
 };
 
-const BillingTable = ({ loadingBilling, billingInfo }) => {
+const BillingTable = ({
+	loadingBilling,
+	billingInfo,
+	rowsCount,
+	setRowsCount,
+	pageTarget,
+
+	setPageTarget,
+	pageCount,
+	currentPage,
+}) => {
 	const navigate = useNavigate();
 	return (
 		<>
-			<Box className='bank-accounts-table' sx={{ width: "100%" }}>
+			<Box className='bank-accounts-table  mb-4' sx={{ width: "100%" }}>
 				<TableContainer>
-					<Table>
+					<Table className='bank-accounts'>
 						{loadingBilling ? (
 							<TableBody>
 								<TableCell colSpan={5}>
@@ -154,6 +170,18 @@ const BillingTable = ({ loadingBilling, billingInfo }) => {
 					</Table>
 				</TableContainer>
 			</Box>
+
+			{billingInfo?.length !== 0 && !loadingBilling && (
+				<TablePagination
+					data={billingInfo}
+					pageCount={pageCount}
+					currentPage={currentPage}
+					pageTarget={pageTarget}
+					rowsCount={rowsCount}
+					setRowsCount={setRowsCount}
+					setPageTarget={setPageTarget}
+				/>
+			)}
 		</>
 	);
 };

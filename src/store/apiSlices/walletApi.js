@@ -22,23 +22,51 @@ export const walletApi = createApi({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
 		prepareHeaders,
 	}),
-	tagTypes: ["Wallet"],
+	tagTypes: ["Wallet", "CurrentBankAccount", "Billing"],
 	endpoints: (builder) => ({
 		// get store Wallet endpoint..
 		getWalletData: builder.query({
 			query: () => `showSupplierDashboard`,
-			providesTags: ["Wallet", "CurrentBankAccount", "Billing"],
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) =>
+				response.data?.SupplierDashboard,
+			providesTags: ["Wallet"],
 		}),
 
 		// get store Wallet endpoint..
 		getCurrentBankAccount: builder.query({
 			query: () => `indexSupplier`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: ["CurrentBankAccount"],
+		}),
+
+		// show current bank account
+		showBankAccount: builder.query({
+			query: () => `showSupplier`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
 			providesTags: ["CurrentBankAccount"],
 		}),
 
 		// get store Wallet endpoint..
 		getBillingData: builder.query({
-			query: () => `showSupplierDashboard`,
+			query: (arg) => `billing?page=${arg.page}&number=${arg.number}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: ["Billing"],
+		}),
+
+		// show current bank account
+		showBillingById: builder.query({
+			query: ({ billingId }) => `showBilling/${billingId}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.billing,
 			providesTags: ["Billing"],
 		}),
 
@@ -46,24 +74,24 @@ export const walletApi = createApi({
 		addBankAccount: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `Wallet`,
+					url: `createSupplier`,
 					method: "POST",
 					body: body,
 				};
 			},
-			invalidatesTags: ["Wallet"],
+			invalidatesTags: ["CurrentBankAccount"],
 		}),
 
 		// edit coupon by id
 		editBankAccount: builder.mutation({
-			query: ({ id, body }) => {
+			query: ({ body }) => {
 				return {
-					url: `Wallet/${id}`,
+					url: `updateSupplier`,
 					method: "POST",
 					body: body,
 				};
 			},
-			invalidatesTags: ["Wallet"],
+			invalidatesTags: ["CurrentBankAccount"],
 		}),
 	}),
 });
@@ -73,4 +101,8 @@ export const {
 	useGetWalletDataQuery,
 	useGetCurrentBankAccountQuery,
 	useGetBillingDataQuery,
+	useShowBillingByIdQuery,
+	useAddBankAccountMutation,
+	useShowBankAccountQuery,
+	useEditBankAccountMutation,
 } = walletApi;

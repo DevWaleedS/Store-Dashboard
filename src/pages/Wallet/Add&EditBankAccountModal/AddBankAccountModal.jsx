@@ -1,14 +1,12 @@
 import React, { Fragment, useContext, useState } from "react";
 
 // Third party
-import axios from "axios";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
-
+import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // MUI
@@ -20,8 +18,12 @@ import MenuItem from "@mui/material/MenuItem";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { closeAddBankAccountModal } from "../../../store/slices/AddBankAccountModal";
 import { openMessageAlert } from "../../../store/slices/BankAccountAlert";
+import { closeAddBankAccountModal } from "../../../store/slices/AddBankAccountModal";
+
+// RTK
+import { useAddBankAccountMutation } from "../../../store/apiSlices/walletApi.js";
+import { useGetBanksQuery } from "../../../store/apiSlices/selectorsApis/selectBanksApi.js";
 
 // Icons
 import { CiUser, CiBank } from "react-icons/ci";
@@ -30,10 +32,6 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { BsFileEarmarkArrowUp } from "react-icons/bs";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
-
-import { useForm } from "react-hook-form";
-
-import useFetch from "../../../Hooks/UseFetch";
 
 /* Modal Styles */
 const style = {
@@ -75,27 +73,15 @@ const selectStyle = {
 /**----------------------------------------------------------------------------- */
 
 const AddBankAccountModal = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// get banks selector
+	const { data: banks } = useGetBanksQuery();
+
 	const dispatch = useDispatch(false);
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
 	const { isAddBankAccountModalOpen } = useSelector(
 		(state) => state.AddBankAccountModal
 	);
-
-	/** ----------------- */
-	const {
-		fetchedData: banks,
-		setReload,
-		reload,
-	} = useFetch("https://backend.atlbha.com/api/selector/banks");
-
-	/** ----------- */
-
-	const LoadingStore = useContext(LoadingContext);
-	const { setLoadingTitle } = LoadingStore;
-
 	const [bankAccountInfo, setBankAccountInfo] = useState({
 		bankId: "",
 		bankAccountHolderName: "",
@@ -123,6 +109,8 @@ const AddBankAccountModal = () => {
 			supplierCode: "",
 		},
 	});
+
+	/** ----------------------------------------------------------- */
 
 	/** handle onchange function  */
 	const handleOnChange = (e) => {
@@ -359,10 +347,12 @@ const AddBankAccountModal = () => {
 	};
 
 	/** handle save Options  */
-	const addBankAccount = (data) => {
+	const [addBankAccount, { isLoading }] = useAddBankAccountMutation();
+	const handleAddBankAccount = async (data) => {
 		setLoadingTitle("جاري اضافة الحساب البنكي");
 		resetErrors();
 
+		// data that send to api
 		let formData = new FormData();
 		formData.append("bankId", data?.bankId);
 		formData.append("bankAccountHolderName", data?.bankAccountHolderName);
@@ -372,36 +362,52 @@ const AddBankAccountModal = () => {
 		formData.append("bankAccountLetter", bankAccountInfo?.bankAccountLetter[0]);
 		formData.append("website_image", bankAccountInfo?.website_image[0]);
 
-		axios
-			.post(`createSupplier`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					dispatch(openMessageAlert(res?.data?.message?.ar));
-
-					setReload(!reload);
-					dispatch(closeAddBankAccountModal());
-					restValues();
-				} else {
-					setLoadingTitle("");
-					setBankAccountErr({
-						bankId: res?.data?.message?.en?.bankId?.[0],
-						bankAccountHolderName:
-							res?.data?.message?.en?.bankAccountHolderName?.[0],
-						bankAccount: res?.data?.message?.en?.bankAccount?.[0],
-						iban: res?.data?.message?.en?.iban?.[0],
-						supplierCode: res?.data?.message?.en?.supplierCode?.[0],
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await addBankAccount({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				dispatch(openMessageAlert(response?.data?.message?.ar));
+				dispatch(closeAddBankAccountModal());
+				restValues();
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				setBankAccountErr({
+					bankId: response?.data?.message?.en?.bankId?.[0],
+					bankAccountHolderName:
+						response?.data?.message?.en?.bankAccountHolderName?.[0],
+					bankAccount: response?.data?.message?.en?.bankAccount?.[0],
+					iban: response?.data?.message?.en?.iban?.[0],
+					supplierCode: response?.data?.message?.en?.supplierCode?.[0],
+				});
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing addBankAccount:", error);
+		}
 	};
 
 	return (
@@ -451,7 +457,7 @@ const AddBankAccountModal = () => {
 								</div>
 							</div>
 
-							<form onSubmit={handleSubmit(addBankAccount)}>
+							<form onSubmit={handleSubmit(handleAddBankAccount)}>
 								<div className='row  mb-3'>
 									<div className='col-12'>
 										<label>
@@ -481,12 +487,12 @@ const AddBankAccountModal = () => {
 														return <p className='text-[#ADB5B9]'>اختر البنك</p>;
 													}
 													const result =
-														banks?.data?.Banks?.filter(
+														banks?.filter(
 															(item) => item?.bankId === parseInt(selected)
 														) || "";
 													return result[0]?.name_ar;
 												}}>
-												{banks?.data?.Banks?.map((item, index) => {
+												{banks?.map((item, index) => {
 													return (
 														<MenuItem
 															key={index}
@@ -702,7 +708,7 @@ const AddBankAccountModal = () => {
 									<div className='col-lg-4 col-6'>
 										<button
 											className='save-btn'
-											// disabled={!bankAccountInfoHasOptions}
+											disabled={isLoading}
 											type='submit'>
 											حفظ
 										</button>

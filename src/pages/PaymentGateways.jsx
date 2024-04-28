@@ -31,6 +31,7 @@ import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
 import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
+import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
 
 // switch styles
 const switchStyle = {
@@ -85,7 +86,7 @@ const PaymentGateways = () => {
 	const { data: paymentGateways, isLoading } = useGetPaymentGatewaysQuery();
 
 	// showSupplier bank account
-	const { fetchedData: currentBankAccount } = useFetch(`indexSupplier`);
+	const { data: currentBankAccount } = useGetCurrentBankAccountQuery();
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -249,7 +250,7 @@ const PaymentGateways = () => {
 					<>
 						<div className='row  mb-2 '>
 							<div className='col-12 '>
-								{!currentBankAccount?.data ? (
+								{!currentBankAccount ? (
 									<div className='mb-2 payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
 										<div className='d-flex gap-1'>
 											<IoMdInformationCircleOutline />

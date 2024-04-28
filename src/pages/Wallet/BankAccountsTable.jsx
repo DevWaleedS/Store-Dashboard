@@ -1,7 +1,5 @@
 import React from "react";
 
-import useFetch from "../../Hooks/UseFetch";
-
 // MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -18,6 +16,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { openEditBankAccountModal } from "../../store/slices/EditBankAccountModal";
 import { openCommentModal } from "../../store/slices/BankAccStatusCommentModal";
+import { useGetBanksQuery } from "../../store/apiSlices/selectorsApis/selectBanksApi";
 
 function EnhancedTableHead(props) {
 	return (
@@ -52,15 +51,13 @@ EnhancedTableHead.propTypes = {
 const BankAccountsTable = ({ bankAccount, loading }) => {
 	const dispatch = useDispatch();
 
-	// get banks api
-	const { fetchedData: banks } = useFetch(
-		"https://backend.atlbha.com/api/selector/banks"
-	);
+	// get banks selector
+	const { data: banks } = useGetBanksQuery();
 
 	// Handle get bank account name
-	const bankAccountName = banks?.data?.Banks?.filter(
-		(bank) => bank?.Value === +bankAccount?.supplierUser?.bankId
-	)[0]?.Text;
+	const bankAccountName = banks?.filter(
+		(bank) => bank?.bankId === +bankAccount?.supplierUser?.bankId
+	)[0]?.name_ar;
 
 	return (
 		<>
@@ -187,13 +184,16 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 											</span>
 										</div>
 									</TableCell>
-									<TableCell align='center'>
-										<button
-											onClick={() => dispatch(openEditBankAccountModal())}
-											className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-											<span>تعديل بيانات الحساب</span>
-										</button>
-									</TableCell>
+									{bankAccount?.SupplierDetails?.SupplierStatus !==
+										"Active" && (
+										<TableCell align='center'>
+											<button
+												onClick={() => dispatch(openEditBankAccountModal())}
+												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+												<span>تعديل بيانات الحساب</span>
+											</button>
+										</TableCell>
+									)}
 								</TableBody>
 							</>
 						)}

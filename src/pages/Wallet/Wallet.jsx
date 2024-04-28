@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Third party
 
@@ -6,15 +6,14 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 // components
-import useFetch from "../../Hooks/UseFetch";
 import { TopBarSearchInput } from "../../global";
 import {
 	WalletQuickDetails,
 	AddBankAccountModal,
 	EditBankAccountModal,
 	BankAccountsTable,
-	BillingTable,
 } from "./index.js";
+import BillingTable from "../../components/Tables/BillingTable.jsx";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
@@ -28,23 +27,35 @@ import { useDispatch } from "react-redux";
 import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
 import BankAccStatusComment from "./Add&EditBankAccountModal/BankAccStatusComment.jsx";
 import AlertMessage from "./Add&EditBankAccountModal/AlerMessage.jsx";
-import { useGetWalletDataQuery } from "../../store/apiSlices/walletApi.js";
+
+// RTK Query
+import {
+	useGetBillingDataQuery,
+	useGetCurrentBankAccountQuery,
+	useGetWalletDataQuery,
+} from "../../store/apiSlices/walletApi.js";
 
 const Wallet = () => {
 	const dispatch = useDispatch();
+	const [pageTarget, setPageTarget] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
 
 	// -----------------------------------------------------------
 
 	// get supplier dashboard
 	const { data: walletData, isLoading } = useGetWalletDataQuery();
-	const { fetchedData: supplierDashboard } = useFetch(`showSupplierDashboard`);
 
 	// showSupplier bank account
-	const { fetchedData: currentBankAccount, loading } =
-		useFetch(`indexSupplier`);
+	const { data: currentBankAccount, isLoading: currentAccountIsLoading } =
+		useGetCurrentBankAccountQuery();
 
 	// Billing Data
-	const { fetchedData: Billing, loading: loadingBilling } = useFetch(`billing`);
+	const { data: billing, isLoading: billingIsLoading } = useGetBillingDataQuery(
+		{
+			page: pageTarget,
+			number: rowsCount,
+		}
+	);
 
 	return (
 		<>
@@ -78,7 +89,7 @@ const Wallet = () => {
 
 				<div className='data-container wallet-data-container'>
 					<>
-						{loading ? (
+						{currentAccountIsLoading || isLoading || billingIsLoading ? (
 							<div
 								style={{ minHeight: "250px" }}
 								className='d-flex justify-content-center align-items-center'>
@@ -89,10 +100,8 @@ const Wallet = () => {
 								{/* Wallet quick details component */}
 								<section className='row mb-3 mb-md-5'>
 									<WalletQuickDetails
-										loading={loading}
-										supplierDashboard={
-											supplierDashboard?.data?.SupplierDashboard
-										}
+										loading={isLoading}
+										supplierDashboard={walletData}
 									/>
 								</section>
 
@@ -107,7 +116,7 @@ const Wallet = () => {
 												<span>الحسابات البنكية</span>
 											</div>
 										</div>
-										{!currentBankAccount?.data ? (
+										{!currentBankAccount ? (
 											<div className=''>
 												<button
 													onClick={() => dispatch(openAddBankAccountModal())}
@@ -124,8 +133,8 @@ const Wallet = () => {
 									{/* Bank Account Table */}
 									<div className=' bank-accounts-box'>
 										<BankAccountsTable
-											bankAccount={currentBankAccount?.data}
-											loading={loading}
+											bankAccount={currentBankAccount}
+											loading={currentAccountIsLoading}
 										/>
 									</div>
 								</section>
@@ -142,15 +151,18 @@ const Wallet = () => {
 											</div>
 										</div>
 									</div>
-
-									{/* Billing Table */}
-									<div className=' bank-accounts-box'>
-										<BillingTable
-											billingInfo={Billing?.data?.billing}
-											loading={loadingBilling}
-										/>
-									</div>
 								</section>
+
+								{/* Billing Table */}
+								<BillingTable
+									billingInfo={billing?.billing}
+									loading={billingIsLoading}
+									pageTarget={pageTarget}
+									setRowsCount={setRowsCount}
+									setPageTarget={setPageTarget}
+									pageCount={billing?.page_count}
+									currentPage={billing?.current_page}
+								/>
 							</>
 						)}
 					</>

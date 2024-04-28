@@ -3,4 +3,3 @@ export { default as AddBankAccountModal } from "./Add&EditBankAccountModal/AddBa
 export { default as EditBankAccountModal } from "./Add&EditBankAccountModal/EditBankAccountModal";
 export { default as WalletQuickDetails } from "./WalletQuickDetails";
 export { default as BankAccountsTable } from "./BankAccountsTable";
-export { default as BillingTable } from "./BillingTable";

@@ -16,29 +16,14 @@ import TableRow from "@mui/material/TableRow";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
-import { PiTrafficSign } from "react-icons/pi";
-import { BiLinkExternal } from "react-icons/bi";
-import { FaMountainCity, FaSignsPost } from "react-icons/fa6";
-import { FaServicestack, FaCity } from "react-icons/fa";
-import { BsFillInfoSquareFill } from "react-icons/bs";
-import { AiFillCopy, AiFillCheckCircle } from "react-icons/ai";
-import {
-	ArrowBack,
-	User,
-	Location,
-	Message,
-	Phone,
-	Quantity,
-	StatusIcon,
-	WalletIcon,
-	DateIcon,
-	Delevray,
-} from "../../data/Icons";
+import { ArrowBack } from "../../data/Icons";
 
 // handle print invoice
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import useFetch from "../../Hooks/UseFetch";
+
+// RTK Query
+import { useShowBillingByIdQuery } from "../../store/apiSlices/walletApi";
 
 // The Table title
 function EnhancedTableHead() {
@@ -64,73 +49,20 @@ function EnhancedTableHead() {
 
 const BillingInfo = () => {
 	const { id } = useParams();
-	const { fetchedData, loading } = useFetch(`showBilling/${id}`);
 
-	const [shippingId, setShippingId] = useState(null);
-	const { fetchedData: shippingCities } = useFetch(
-		`https://backend.atlbha.sa/api/selector/shippingcities/${shippingId}`
-	);
-
-	const [shipping, setShipping] = useState({
-		district: "",
-		city: "",
-		address: "",
+	// get billing info by id
+	const { data: billing, isFetching } = useShowBillingByIdQuery({
+		billingId: id,
 	});
 
 	// ----------------------------------------------------
 
-	// To handle the shipping information
-	useEffect(() => {
-		if (fetchedData?.data?.orders?.shipping) {
-			setShipping({
-				...shipping,
-				district: fetchedData?.data?.orders?.shipping?.district,
-				city: fetchedData?.data?.orders?.shipping?.city,
-				address: fetchedData?.data?.orders?.shipping?.street_address,
-				weight: fetchedData?.data?.orders?.shipping?.weight,
-			});
-		}
-	}, [fetchedData?.data?.orders?.shipping]);
-
-	useEffect(() => {
-		if (fetchedData?.data?.orders?.shippingtypes) {
-			setShippingId(fetchedData?.data?.orders?.shippingtypes?.id);
-		}
-	}, [fetchedData?.data?.orders?.shippingtypes]);
-	// ----------------------------------------------------
-
-	function removeDuplicates(arr) {
-		const unique = arr?.filter((obj, index) => {
-			return (
-				index ===
-				arr?.findIndex((o) => obj?.region?.name_en === o?.region?.name_en)
-			);
-		});
-		return unique;
-	}
-
-	const getCityFromProvince =
-		shippingCities?.data?.cities?.filter(
-			(obj) => obj?.region?.name_en === shipping?.district
-		) || [];
-
-	function translateCityName(name) {
-		const unique = shippingCities?.data?.cities?.filter(
-			(obj) => obj?.name_en === name
-		);
-		return unique?.[0]?.name || name;
-	}
-
-	function translateProvinceName(name) {
-		const unique = shippingCities?.data?.cities?.filter((obj) => {
-			return obj?.region?.name_en === name;
-		});
-
-		return unique?.[0]?.region?.name || name;
-	}
-
 	// handle print billing
 	const handlePrintBilling = () => {
+		// Get the button and hide it
+		const printButton = document.querySelector(".print-billing-btn");
+		printButton.style.visibility = "hidden";
+
 		const input = document.getElementById("printableArea");
 		html2canvas(input)
 			.then((canvas) => {
@@ -141,7 +73,6 @@ const BillingInfo = () => {
 					format: "a4",
 				});
 
-				// Calculate the ratio to fit the image within the PDF page width
 				const pdfWidth = pdf.internal.pageSize.getWidth();
 				const pdfHeight = pdf.internal.pageSize.getHeight();
 				const canvasWidth = canvas.width;
@@ -149,24 +80,24 @@ const BillingInfo = () => {
 				let finalWidth = pdfWidth;
 				let finalHeight = canvasHeight * (pdfWidth / canvasWidth);
 
-				// Make sure the content is not taller than the page
 				if (finalHeight > pdfHeight) {
 					finalHeight = pdfHeight;
 					finalWidth = canvasWidth * (pdfHeight / canvasHeight);
 				}
 
-				// Calculate the position to center the image horizontally
 				const x = (pdfWidth - finalWidth) / 2;
-				const y = 0; // Start at the top of the page
+				const y = 0;
 
-				// Add the image to the PDF
 				pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
-				pdf.save(
-					`invoice(${fetchedData?.data?.billing?.paymentTransectionID}).pdf`
-				);
+				pdf.save(`invoice(${billing?.paymentTransectionID}).pdf`);
+
+				// Show the button again after PDF is generated
+				printButton.style.visibility = "visible";
 			})
 			.catch((err) => {
 				console.error("Error while generating PDF", err);
+				// Ensure button visibility is restored even if there is an error
+				printButton.style.visibility = "visible";
 			});
 	};
 
@@ -205,74 +136,71 @@ const BillingInfo = () => {
 				</div>
 
 				{/* order-details-body */}
-				{loading ? (
+				{isFetching ? (
 					<section>
 						<CircularLoading />
 					</section>
 				) : (
 					<section className='order-details-body'>
 						<div className='mb-md-4 mb-3' id='printableArea'>
-							<div className='row mb-2'>
-								<div className='col-md-6 col-12 d-flex align-items-center'>
-									<h3>تفاصيل الفاتورة</h3>
+							<div className='row mb-3'>
+								<div className='col-6 d-flex align-items-end'>
+									<button
+										onClick={handlePrintBilling}
+										className='print-billing-btn'>
+										تحميل الفاتورة
+									</button>
 								</div>
-								<div className='col-md-6 col-12 d-flex justify-content-md-end justify-content-center order__number'>
+
+								<div className='col-6 d-flex justify-content-end order__number'>
 									<div className='order-number'>
 										<div className='title'>
 											<h5>رقم الفاتورة</h5>
 										</div>
 										<div className='number'>
-											{loading
-												? "..."
-												: fetchedData?.data?.billing?.paymentTransectionID}
+											{isFetching ? "..." : billing?.paymentTransectionID}
 										</div>
 									</div>
 								</div>
 							</div>
 
 							{/* customer data */}
-							<div className=''>
+							<div className='mb-3'>
 								<div className='order-details-box'>
 									<div className='title mb-4'>
 										<h5>بيانات العميل</h5>
 									</div>
-									<div className='order-details-data pt-md-4 pb-md-4'>
+									<div className='order-details-data '>
 										<div className='row d-flex flex-md-row flex-column justify-content-center'>
-											<div className='col-lg-10 col-12'>
+											<div className='col-lg-12'>
 												<div className='row mb-md-4 mb-3'>
-													<div className='col-md-6 col-12 mb-3'>
+													<div className='col-md-4 col-12 mb-3'>
 														<h6 className='mb-2'>اسم العميل</h6>
 														<div className='info-box'>
-															<User className='client-icon' />
 															<span className=' text-overflow'>
-																{`${fetchedData?.data?.billing?.order?.user?.name} ${fetchedData?.data?.billing?.order?.user?.lastname}`}
+																{`${billing?.order?.user?.name} ${billing?.order?.user?.lastname}`}
 															</span>
 														</div>
 													</div>
-													<div className='col-md-6 col-12 mb-3'>
+
+													<div className='col-md-4 col-12 mb-3'>
 														<h6 className='mb-2'>رقم الهاتف</h6>
 														<div className='info-box'>
 															<span style={{ direction: "ltr" }}>
-																{fetchedData?.data?.billing?.order?.user?.phonenumber?.startsWith(
+																{billing?.order?.user?.phonenumber?.startsWith(
 																	"+966"
 																)
-																	? fetchedData?.data?.billing?.order?.user?.phonenumber?.slice(
-																			4
-																	  )
-																	: fetchedData?.data?.billing?.order?.user?.phonenumber?.startsWith(
+																	? billing?.order?.user?.phonenumber?.slice(4)
+																	: billing?.order?.user?.phonenumber?.startsWith(
 																			"00966"
 																	  )
-																	? fetchedData?.data?.billing?.order?.user?.phonenumber?.slice(
-																			5
-																	  )
-																	: fetchedData?.data?.billing?.order?.user
-																			?.phonenumber}
+																	? billing?.order?.user?.phonenumber?.slice(5)
+																	: billing?.order?.user?.phonenumber}
 															</span>
 														</div>
 													</div>
-												</div>
-												<div className='row'>
-													<div className='col-md-6 col-12 mb-3'>
+
+													<div className='col-md-4 col-12 '>
 														<h6 className='mb-2'>البريد الالكتروني</h6>
 														<div
 															className='info-box'
@@ -281,51 +209,7 @@ const BillingInfo = () => {
 																gap: "30px",
 															}}>
 															<span className='text-overflow'>
-																{fetchedData?.data?.billing?.order?.user?.email}
-															</span>
-														</div>
-													</div>
-													<div className='col-md-6 col-12 mb-3'>
-														<h6 className='mb-3'>المنطقة</h6>
-														<div className='info-box'>
-															<span style={{ whiteSpace: "normal" }}>
-																{
-																	fetchedData?.data?.billing?.order
-																		?.OrderAddress?.district
-																}
-															</span>
-														</div>
-													</div>
-													<div className='col-md-6 col-12 mb-3'>
-														<h6 className='mb-3'>المدينة</h6>
-
-														<div className='info-box'>
-															<span style={{ whiteSpace: "normal" }}>
-																{fetchedData?.data?.billing?.order?.city}
-															</span>
-														</div>
-													</div>
-													{fetchedData?.data?.billing?.order?.postal_code && (
-														<div className='col-md-6 col-12 mb-3'>
-															<h6 className='mb-3'>الرمز البريدي</h6>
-															<div className='info-box'>
-																<span style={{ whiteSpace: "normal" }}>
-																	{
-																		fetchedData?.data?.orders?.OrderAddress
-																			?.postal_code
-																	}
-																</span>
-															</div>
-														</div>
-													)}
-													<div className='col-12 mb-3'>
-														<h6 className='mb-3'>العنوان</h6>
-														<div className='info-box'>
-															<span style={{ whiteSpace: "normal" }}>
-																{
-																	fetchedData?.data?.billing?.order
-																		?.street_address
-																}
+																{billing?.order?.user?.email}
 															</span>
 														</div>
 													</div>
@@ -337,19 +221,19 @@ const BillingInfo = () => {
 							</div>
 
 							{/* order details */}
-							<div className='order-details-box mb-5'>
+							<div className='order-details-box mb-3'>
 								<div className='title mb-4'>
 									<h5>بيانات الطلب</h5>
 								</div>
 
-								<div className='order-details-data pt-md-4 pb-md-4'>
+								<div className='order-details-data '>
 									<div className='boxes mb-4'>
 										<div className='box'>
 											<div className='order-head-row'>
 												<span className='me-2'>حالة الطلب</span>
 											</div>
 											<div className='order-data-row'>
-												<span>{fetchedData?.data?.billing?.order?.status}</span>
+												<span>{billing?.order?.status}</span>
 											</div>
 										</div>
 
@@ -358,9 +242,7 @@ const BillingInfo = () => {
 												<span className='me-2'>رقم الطلب</span>
 											</div>
 											<div className='order-data-row'>
-												<span>
-													{fetchedData?.data?.billing?.order?.order_number}
-												</span>
+												<span>{billing?.order?.order_number}</span>
 											</div>
 										</div>
 
@@ -371,9 +253,9 @@ const BillingInfo = () => {
 
 											<div className='order-data-row'>
 												<span>
-													{moment(
-														fetchedData?.data?.billing?.order?.created_at
-													).format("DD-MM-YYYY")}
+													{moment(billing?.order?.created_at).format(
+														"DD-MM-YYYY"
+													)}
 												</span>
 											</div>
 										</div>
@@ -383,9 +265,7 @@ const BillingInfo = () => {
 												<span className='me-3 price'>إجمالي الطلب</span>
 											</div>
 											<div className='order-data-row'>
-												<span>
-													{fetchedData?.data?.billing?.order?.total_price} ر.س
-												</span>
+												<span>{billing?.order?.total_price} ر.س</span>
 											</div>
 										</div>
 									</div>
@@ -393,19 +273,19 @@ const BillingInfo = () => {
 							</div>
 
 							{/* Billing details */}
-							<div className='order-details-box mb-5'>
+							<div className='order-details-box mb-3'>
 								<div className='title mb-4'>
 									<h5>بيانات الدفع</h5>
 								</div>
 
-								<div className='order-details-data pt-md-4 pb-md-4'>
+								<div className='order-details-data'>
 									<div className='boxes mb-4'>
 										<div className='box'>
 											<div className='order-head-row'>
 												<span className='me-2'>طريقة الدفع</span>
 											</div>
 											<div className='order-data-row'>
-												<span>{fetchedData?.data?.billing?.paymentType}</span>
+												<span>{billing?.paymentType}</span>
 											</div>
 										</div>
 										<div className='box'>
@@ -415,9 +295,7 @@ const BillingInfo = () => {
 
 											<div className='order-data-row'>
 												<span>
-													{moment(
-														fetchedData?.data?.billing?.paymenDate
-													).format("DD-MM-YYYY")}
+													{moment(billing?.paymenDate).format("DD-MM-YYYY")}
 												</span>
 											</div>
 										</div>
@@ -426,9 +304,7 @@ const BillingInfo = () => {
 												<span className='me-3 price'>رقم المعاملة </span>
 											</div>
 											<div className='order-data-row'>
-												<span>
-													{fetchedData?.data?.billing?.paymentTransectionID}
-												</span>
+												<span>{billing?.paymentTransectionID}</span>
 											</div>
 										</div>
 										<div className='box'>
@@ -436,7 +312,7 @@ const BillingInfo = () => {
 												<span className='me-2'>الرسوم</span>
 											</div>
 											<div className='order-data-row'>
-												<span>{fetchedData?.data?.billing?.deduction} ر.س</span>
+												<span>{billing?.deduction} ر.س</span>
 											</div>
 										</div>
 										<div className='box'>
@@ -444,9 +320,7 @@ const BillingInfo = () => {
 												<span className='me-2'>السعر بعد الرسوم</span>
 											</div>
 											<div className='order-data-row'>
-												<span>
-													{fetchedData?.data?.billing?.price_after_deduction}ر.س
-												</span>
+												<span>{billing?.price_after_deduction}ر.س</span>
 											</div>
 										</div>
 
@@ -455,33 +329,221 @@ const BillingInfo = () => {
 												<span className='me-2'>حالة الدفع</span>
 											</div>
 											<div className='order-data-row'>
-												<span>
-													{fetchedData?.data?.billing?.order?.payment_status}
-												</span>
+												<span>{billing?.order?.payment_status}</span>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
-						{/* Print Billing */}
-						<div className='mb-md-3 mb-2'>
-							<div className='col-12'>
-								<button
-									onClick={handlePrintBilling}
-									style={{
-										color: "#EFF9FF",
-										fontSize: "22px",
-										fontWight: 400,
+							{/* Product info*/}
+							<div>
+								<div className='order-details-box'>
+									<div className='title mb-4 d-flex justify-content-between  align-content-center  flex-wrap'>
+										<h5>تفاصيل المنتجات</h5>
+										<div className='d-flex justify-content-between  align-content-center gap-1'>
+											<h6>عدد القطع:</h6>
+											<p style={{ fontSize: "14px", fontWight: "400" }}>
+												{billing?.order?.totalCount === 1 && <>(قطعة واحده)</>}
+												{billing?.order?.totalCount === 2 && <>(قطعتين)</>}
+												{billing?.order?.totalCount > 2 && (
+													<>({billing?.order?.totalCount} قطعة)</>
+												)}
+											</p>
+										</div>
+									</div>
+									<TableContainer>
+										<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+											<EnhancedTableHead />
+											<TableBody>
+												{billing?.order?.orderItem?.map((row, index) => (
+													<TableRow hover tabIndex={-1} key={index}>
+														<TableCell
+															component='th'
+															id={index}
+															scope='row'
+															align='right'>
+															<div
+																className='flex items-center'
+																style={{
+																	display: "flex",
+																	justifyContent: "start",
+																	alignItems: "center",
+																	gap: "7px",
+																}}>
+																{(index + 1).toLocaleString("en-US", {
+																	minimumIntegerDigits: 2,
+																	useGrouping: false,
+																})}
+															</div>
+														</TableCell>
 
-										height: "54px",
-										width: "163px",
-										backgroundColor: "#02466A",
-										borderRadius: "6px",
-									}}>
-									تحميل الفاتورة
-								</button>
+														<TableCell align='right'>
+															<div className='d-flex flex-row align-items-center'>
+																<img
+																	className='rounded-circle img_icons'
+																	src={row?.product?.cover}
+																	alt='client'
+																/>
+																<span
+																	className='me-2'
+																	style={{
+																		minWidth: "400px",
+																		maxWidth: "550px",
+																		whiteSpace: "nowrap",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
+																	}}>
+																	{row?.product?.name}
+																</span>
+															</div>
+														</TableCell>
+														<TableCell align='right' sx={{ width: "90px" }}>
+															<div className='text-center'>
+																<span>{row?.quantity}</span>
+															</div>
+														</TableCell>
+														<TableCell align='center'>
+															<span className='table-price_span'>
+																{row?.sum} ر.س
+															</span>
+														</TableCell>
+													</TableRow>
+												))}
+												<TableRow>
+													<TableCell
+														colSpan={3}
+														component='th'
+														scope='row'
+														align='right'
+														style={{ borderBottom: "none" }}>
+														<span style={{ fontWeight: "700" }}>السعر</span>
+													</TableCell>
+													<TableCell
+														align='center'
+														style={{ borderBottom: "none" }}>
+														<span
+															className='table-price_span'
+															style={{ fontWeight: "500" }}>
+															{billing?.order?.subtotal} ر.س
+														</span>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell
+														colSpan={3}
+														component='th'
+														scope='row'
+														align='right'
+														style={{ borderBottom: "none" }}>
+														<span style={{ fontWeight: "700" }}>الضريبة</span>
+													</TableCell>
+													<TableCell
+														align='center'
+														style={{ borderBottom: "none" }}>
+														<span
+															className='table-price_span'
+															style={{ fontWeight: "500" }}>
+															{billing?.order?.tax} ر.س
+														</span>
+													</TableCell>
+												</TableRow>
+												<TableRow>
+													<TableCell
+														colSpan={3}
+														component='th'
+														scope='row'
+														align='right'
+														style={{ borderBottom: "none" }}>
+														<span style={{ fontWeight: "700" }}>الشحن</span>
+													</TableCell>
+													<TableCell
+														align='center'
+														style={{ borderBottom: "none" }}>
+														<span
+															className='table-price_span'
+															style={{ fontWeight: "500" }}>
+															{billing?.order?.shipping_price} ر.س
+														</span>
+													</TableCell>
+												</TableRow>
+
+												{billing?.order?.overweight !== 0 &&
+													billing?.order?.overweight_price !== 0 && (
+														<TableRow>
+															<TableCell
+																colSpan={3}
+																component='th'
+																scope='row'
+																align='right'
+																style={{ borderBottom: "none" }}>
+																<span style={{ fontWeight: "700" }}>
+																	تكلفة الوزن الزائد (
+																	{billing?.order?.overweight} <span>kg</span>)
+																</span>
+															</TableCell>
+
+															<TableCell
+																align='center'
+																style={{ borderBottom: "none" }}>
+																<span
+																	className='table-price_span'
+																	style={{ fontWeight: "500" }}>
+																	{billing?.order?.overweight_price} ر.س
+																</span>
+															</TableCell>
+														</TableRow>
+													)}
+												{billing?.order?.discount !== 0 && (
+													<TableRow>
+														<TableCell
+															colSpan={3}
+															component='th'
+															scope='row'
+															align='right'
+															style={{ borderBottom: "none" }}>
+															<span style={{ fontWeight: "700" }}>الخصم</span>
+														</TableCell>
+														<TableCell
+															align='center'
+															style={{ borderBottom: "none" }}>
+															<span
+																className='table-price_span'
+																style={{ fontWeight: "500" }}>
+																{billing?.order?.discount} ر.س
+															</span>
+														</TableCell>
+													</TableRow>
+												)}
+												<TableRow>
+													<TableCell
+														colSpan={3}
+														component='th'
+														scope='row'
+														align='right'
+														style={{
+															borderBottom: "none",
+															backgroundColor: "#e1e1e1",
+														}}>
+														<span style={{ fontWeight: "700" }}>الإجمالي</span>
+													</TableCell>
+													<TableCell
+														align='center'
+														style={{
+															borderBottom: "none",
+															backgroundColor: "#e1e1e1",
+														}}>
+														<span
+															className='table-price_span'
+															style={{ fontWeight: "500" }}>
+															{billing?.order?.total_price} ر.س
+														</span>
+													</TableCell>
+												</TableRow>
+											</TableBody>
+										</Table>
+									</TableContainer>
+								</div>
 							</div>
 						</div>
 					</section>

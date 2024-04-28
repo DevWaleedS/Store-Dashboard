@@ -64,6 +64,11 @@ import { socialPagesApi } from "./apiSlices/socialPagesApi";
 import { shippingCompaniesApi } from "./apiSlices/shippingCompaniesApi";
 import { paymentGatewaysApi } from "./apiSlices/paymentGatewaysApi";
 import { walletApi } from "./apiSlices/walletApi";
+import { selectBanksApi } from "./apiSlices/selectorsApis/selectBanksApi";
+import { mainInformationApi } from "./apiSlices/mainInformationApi";
+import { selectCountriesApi } from "./apiSlices/selectorsApis/selectCountriesApi";
+import { maintenanceModeApi } from "./apiSlices/maintenanceModeApi";
+import { reportsApi } from "./apiSlices/reportsApi";
 
 // store
 export const store = configureStore({
@@ -75,6 +80,7 @@ export const store = configureStore({
 			ordersApi.middleware,
 			couponApi.middleware,
 			ratingApi.middleware,
+			reportsApi.middleware,
 			AcademyApi.middleware,
 			mainPageApi.middleware,
 			productsApi.middleware,
@@ -83,22 +89,25 @@ export const store = configureStore({
 			paintStoreApi.middleware,
 			verifyStoreApi.middleware,
 			socialPagesApi.middleware,
+			selectBanksApi.middleware,
+			selectCitiesApi.middleware,
 			notificationsApi.middleware,
+			mainInformationApi.middleware,
+			selectCountriesApi.middleware,
+			maintenanceModeApi.middleware,
 			paymentGatewaysApi.middleware,
 			templateSettingApi.middleware,
 			requestDelegateApi.middleware,
 			SEOImprovementsApi.middleware,
 			technicalSupportApi.middleware,
 			platformServicesApi.middleware,
-			shippingCompaniesApi.middleware,
-			selectPageCategoriesApi.middleware,
-
-			selectCitiesApi.middleware,
 			selectCategoriesApi.middleware,
-			selectImportProductsApi.middleware,
-			selectPaymentsTypesApi.middleware,
 			getShippingCitiesApi.middleware,
+			shippingCompaniesApi.middleware,
+			selectPaymentsTypesApi.middleware,
 			postalSubscriptionsApi.middleware,
+			selectPageCategoriesApi.middleware,
+			selectImportProductsApi.middleware,
 			selectEtlobahCategoryApi.middleware,
 			selectEtlbohaSubCategoriesApi.middleware
 		),
@@ -109,6 +118,7 @@ export const store = configureStore({
 		[walletApi.reducerPath]: walletApi.reducer,
 		[ratingApi.reducerPath]: ratingApi.reducer,
 		[couponApi.reducerPath]: couponApi.reducer,
+		[reportsApi.reducerPath]: reportsApi.reducer,
 		[AcademyApi.reducerPath]: AcademyApi.reducer,
 		[mainPageApi.reducerPath]: mainPageApi.reducer,
 		[productsApi.reducerPath]: productsApi.reducer,
@@ -117,11 +127,15 @@ export const store = configureStore({
 		[emptyCartsApi.reducerPath]: emptyCartsApi.reducer,
 		[socialPagesApi.reducerPath]: socialPagesApi.reducer,
 		[verifyStoreApi.reducerPath]: verifyStoreApi.reducer,
+		[selectBanksApi.reducerPath]: selectBanksApi.reducer,
 		[selectCitiesApi.reducerPath]: selectCitiesApi.reducer,
 		[notificationsApi.reducerPath]: notificationsApi.reducer,
+		[maintenanceModeApi.reducerPath]: maintenanceModeApi.reducer,
+		[selectCountriesApi.reducerPath]: selectCountriesApi.reducer,
 		[templateSettingApi.reducerPath]: templateSettingApi.reducer,
 		[paymentGatewaysApi.reducerPath]: paymentGatewaysApi.reducer,
 		[requestDelegateApi.reducerPath]: requestDelegateApi.reducer,
+		[mainInformationApi.reducerPath]: mainInformationApi.reducer,
 		[SEOImprovementsApi.reducerPath]: SEOImprovementsApi.reducer,
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
@@ -136,10 +150,6 @@ export const store = configureStore({
 		[selectEtlbohaSubCategoriesApi.reducerPath]:
 			selectEtlbohaSubCategoriesApi.reducer,
 
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,

@@ -2,6 +2,7 @@ export { default as PagesTable } from "./PagesTable";
 export { default as CouponTable } from "./CouponTable";
 export { default as CartsTables } from "./CartsTables";
 export { default as SupportTable } from "./SupportTable";
+export { default as BillingTable } from "./BigOrdersTable";
 export { default as DelegateTable } from "./DelegateTable";
 export { default as CategoryTable } from "./CategoryTable";
 export { default as BigOrdersTable } from "./BigOrdersTable";

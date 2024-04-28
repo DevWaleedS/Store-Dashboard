@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -9,6 +9,7 @@ import { TopBarSearchInput } from "../global";
 import { FormatNotifications } from "../components";
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import CircularLoading from "../HelperComponents/CircularLoading";
+import { TablePagination } from "../components/Tables/TablePagination";
 import DeleteOneModalComp from "../components/DeleteOneModal/DeleteOneModal";
 
 // Context
@@ -23,14 +24,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { CheckedSquare, DeleteIcon, Reports } from "../data/Icons";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-//redux
-import { useDispatch, useSelector } from "react-redux";
-import {
-	DeleteAllDeleteNotificationsThunk,
-	DeleteNotificationsThunk,
-	NotificationsThunk,
-} from "../store/Thunk/NotificationsThunk";
-import { TablePagination } from "../components/Tables/TablePagination";
+// RTK Query
 import {
 	useDeleteAllNotificationsMutation,
 	useDeleteNotificationsMutation,
@@ -38,23 +32,16 @@ import {
 } from "../store/apiSlices/notificationsApi";
 
 const Notifications = () => {
-	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
+	const [showMore, setShowMore] = useState("");
 
+	// get notification from api
 	const { data: notification, isLoading } = useGetNotificationsQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
 
-	// --------------------------------------------------------
-
-	/** get contact data */
-	useEffect(() => {
-		dispatch(NotificationsThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
-
-	const [showMore, setShowMore] = useState("");
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle, setNotificationTitle, setItems, setActionType } =
 		NotificationStore;
@@ -65,6 +52,7 @@ const Notifications = () => {
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
 	// -----------------------------------------------------------------
+	// handle select all
 	const [selected, setSelected] = useState([]);
 	const isSelected = (id) => selected.indexOf(id) !== -1;
 	const handleClick = (event, id) => {

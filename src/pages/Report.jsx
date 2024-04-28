@@ -1,17 +1,15 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 
 // third party
 import moment from "moment";
 import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 
 // MUI
 import { Button } from "@mui/material";
 
 // TO print this page
 import ReactToPrint from "react-to-print";
-
-import { Link } from "react-router-dom";
-import useFetch from "../Hooks/UseFetch";
 
 // Date picker component
 import DateRangePicker from "rsuite/DateRangePicker";
@@ -23,27 +21,23 @@ import { HomeIcon, PrintIcon, WalletIcon } from "../data/Icons";
 // Pages Components
 import { SalesReports } from "./nestedPages";
 import { TopBarSearchInput } from "../global";
+import { useGetReportsByDateQuery } from "../store/apiSlices/reportsApi";
 
 const Report = () => {
 	const componentRef = useRef();
 	const [dateValue, setDateValue] = useState([]);
-	const [url, setUrl] = useState(`reports`);
 
-	// We use this effect to avoid the errors
-	useEffect(() => {
-		if (dateValue?.length !== 0 && dateValue !== null) {
-			setUrl(
-				`reports?startDate=${moment(dateValue[0]).format(
-					"YYYY-MM-DD"
-				)}&endDate=${moment(dateValue[1]).format("YYYY-MM-DD")}`
-			);
-		} else {
-			console.log("data not found");
-		}
-	}, [dateValue]);
-
-	// add url after add the date
-	const { fetchedData, loading } = useFetch(url);
+	// get reports by send start and end date
+	const { data: reports, isLoading } = useGetReportsByDateQuery({
+		startDate:
+			dateValue?.length > 0
+				? moment(dateValue[0])?.format("YYYY-MM-DD")
+				: undefined,
+		endDate:
+			dateValue?.length > 1
+				? moment(dateValue[1])?.format("YYYY-MM-DD")
+				: undefined,
+	});
 
 	return (
 		<>
@@ -156,7 +150,7 @@ const Report = () => {
 							id='pills-sales-tab'
 							role='tabpanel'
 							aria-labelledby='sales-tab'>
-							<SalesReports salesReport={fetchedData} loading={loading} />
+							<SalesReports salesReport={reports} loading={isLoading} />
 						</div>
 
 						{/*

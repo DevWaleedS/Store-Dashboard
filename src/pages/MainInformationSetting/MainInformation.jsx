@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -20,17 +20,17 @@ import { useDispatch } from "react-redux";
 import { openVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAfterMainModal-slice";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
+import HoursWorks from "./HoursWorks/HoursWorks";
 import { TopBarSearchInput } from "../../global";
 import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
 import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
 import CircularLoading from "../../HelperComponents/CircularLoading";
+
 // Redux
 import { useSelector } from "react-redux";
 
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
-
 import {
 	Address,
 	CityIcon,
@@ -39,8 +39,16 @@ import {
 	HomeIcon,
 	Timer,
 } from "../../data/Icons";
-import HoursWorks from "./HoursWorks/HoursWorks";
 
+// RTK Query
+import {
+	useGetMainInformationQuery,
+	useUpdateStoreMainInformationMutation,
+} from "../../store/apiSlices/mainInformationApi";
+import { useGetCitiesQuery } from "../../store/apiSlices/selectorsApis/selectCitiesApi";
+import { useGetCountriesQuery } from "../../store/apiSlices/selectorsApis/selectCountriesApi";
+
+// select style
 const selectStyle = {
 	width: "100%",
 	fontSize: "18px",
@@ -64,10 +72,13 @@ const selectStyle = {
 };
 
 const MainInformation = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// To show the store info that come from api
+	const { data: mainInformation, isLoading } = useGetMainInformationQuery();
+
+	// to get selectors from api
+	const { data: cities } = useGetCitiesQuery();
+	const { data: countries } = useGetCountriesQuery();
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle, setStoreLogo } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -75,7 +86,6 @@ const MainInformation = () => {
 
 	// Hours Works
 	const [openHoursWork, setOpenHoursWork] = useState(false);
-
 	const [workDays, setWorkDays] = useState([
 		{
 			day: {
@@ -88,15 +98,7 @@ const MainInformation = () => {
 		},
 	]);
 
-	// To show the store info that come from api
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("setting_store_show");
-
-	// to get selectors from api
-	const { fetchedData: countryList } = useFetch("selector/countries");
-	const { fetchedData: citiesList } = useFetch("selector/cities");
-
-	//  to handle disabled or enable phone number based verificationStoreStatus
+	//  to handle disabled or enable phone number based verification Store Status
 	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
 
 	/** -----------------------------------------------------------------------------------------------------------
@@ -160,28 +162,26 @@ const MainInformation = () => {
 
 	// We use this effect to avoid the errors
 	useEffect(() => {
-		if (fetchedData?.data?.setting_store) {
-			setDefaultStoreLogo(fetchedData?.data?.setting_store?.logo);
-			setDefaultStoreIcon(fetchedData?.data?.setting_store?.icon);
-			setStoreName(fetchedData?.data?.setting_store?.store_name);
-			setDomain([fetchedData?.data?.setting_store?.domain]);
-			setCountry(fetchedData?.data?.setting_store?.country?.id || 1);
-			setCity(fetchedData?.data?.setting_store?.city?.id);
-			setStoreEmail(fetchedData?.data?.setting_store?.user?.email);
+		if (mainInformation) {
+			setDefaultStoreLogo(mainInformation?.logo);
+			setDefaultStoreIcon(mainInformation?.icon);
+			setStoreName(mainInformation?.store_name);
+			setDomain([mainInformation?.domain]);
+			setCountry(mainInformation?.country?.id || 1);
+			setCity(mainInformation?.city?.id);
+			setStoreEmail(mainInformation?.user?.email);
 			setPhoneNumber(
-				fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith("+966")
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(4)
-					: fetchedData?.data?.setting_store?.user?.phonenumber?.startsWith(
-							"00966"
-					  )
-					? fetchedData?.data?.setting_store?.user?.phonenumber.slice(5)
-					: fetchedData?.data?.setting_store?.user?.phonenumber
+				mainInformation?.user?.phonenumber?.startsWith("+966")
+					? mainInformation?.user?.phonenumber.slice(4)
+					: mainInformation?.user?.phonenumber?.startsWith("00966")
+					? mainInformation?.user?.phonenumber.slice(5)
+					: mainInformation?.user?.phonenumber
 			);
-			setDescriptionValue(fetchedData?.data?.setting_store?.description || "");
+			setDescriptionValue(mainInformation?.description || "");
 
-			setWorkDays(fetchedData?.data?.setting_store?.workDays);
+			setWorkDays(mainInformation?.workDays);
 		}
-	}, [fetchedData?.data?.setting_store]);
+	}, [mainInformation]);
 
 	// ----------------------------------------------------------------------------
 
@@ -198,15 +198,15 @@ const MainInformation = () => {
 	}, [domain]);
 	// ------------------------------------------------------------------
 
-	// -------------------------------------------------------------------
 	// to update UpdateMaintenanceMode values
-	const settingsStoreUpdate = () => {
+	const [updateStoreMainInformation] = useUpdateStoreMainInformationMutation();
+	const handleUpdateStoreMainInformation = async () => {
 		localStorage.removeItem("storeLogo");
 		resetSettingError();
 		setLoadingTitle("جاري تعديل بيانات المتجر الأساسية");
 
+		// data that send to api...
 		let formData = new FormData();
-
 		if (storeLogoUpdate?.length !== 0)
 			formData.append("logo", storeLogoUpdate[0]?.file);
 		if (storeIcon?.length !== 0) formData.append("icon", storeIcon[0]?.file);
@@ -244,84 +244,62 @@ const MainInformation = () => {
 			);
 		}
 
-		axios
-			.post(`setting_store_update`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setReload(!reload);
-					setStoreLogo(res?.data?.data?.setting_store?.logo);
-					if (
-						res?.data?.data?.setting_store?.verification_status ===
-						"لم يتم الطلب"
-					) {
-						dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
-					} else {
-						setEndActionTitle(res?.data?.message?.ar);
-					}
-				} else {
-					setLoadingTitle("");
-					setSettingErr({
-						logo: res?.data?.message?.en?.logo,
-						icon: res?.data?.message?.en?.icon,
-						store_name: res?.data?.message?.en?.store_name?.[0],
-						domain: res?.data?.message?.en?.domain?.[0],
-						country_id: res?.data?.message?.en?.country_id?.[0],
-						city_id: res?.data?.message?.en?.city_id?.[0],
-						storeAddress: res?.data?.message?.en?.store_address?.[0],
-						storeEmail: res?.data?.message?.en?.store_email?.[0],
-						phoneNumber: res?.data?.message?.en?.phonenumber?.[0],
-						description: res?.data?.message?.en?.description?.[0],
-					});
-					toast.error(res?.data?.message?.en?.logo?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.icon?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.logo, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.icon, {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.store_name?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.domain?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.country_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.city_id?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.store_address?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.store_email?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.description?.[0], {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await updateStoreMainInformation({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+
+				setStoreLogo(response?.data?.data?.setting_store?.logo);
+				if (
+					response?.data?.data?.setting_store?.verification_status ===
+					"لم يتم الطلب"
+				) {
+					dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
+				} else {
+					setEndActionTitle(response?.data?.message?.ar);
+				}
+			} else {
+				setLoadingTitle("");
+				setSettingErr({
+					logo: response?.data?.message?.en?.logo,
+					icon: response?.data?.message?.en?.icon,
+					store_name: response?.data?.message?.en?.store_name?.[0],
+					domain: response?.data?.message?.en?.domain?.[0],
+					country_id: response?.data?.message?.en?.country_id?.[0],
+					city_id: response?.data?.message?.en?.city_id?.[0],
+					storeAddress: response?.data?.message?.en?.store_address?.[0],
+					storeEmail: response?.data?.message?.en?.store_email?.[0],
+					phoneNumber: response?.data?.message?.en?.phonenumber?.[0],
+					description: response?.data?.message?.en?.description?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing updateStoreMainInformation:", error);
+		}
 	};
 	// -----------------------------------------------------------------------------
 
@@ -359,7 +337,7 @@ const MainInformation = () => {
 				</div>
 
 				<div className='main-info-form'>
-					{loading ? (
+					{isLoading ? (
 						<div
 							className='d-flex justify-content-center align-items-center'
 							style={{ height: "200px" }}>
@@ -565,13 +543,13 @@ const MainInformation = () => {
 															</span>
 														);
 													}
-													const result = countryList?.data?.countries?.filter(
+													const result = countries?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
 													);
 													setCountryAddress(result?.[0]?.name || "");
 													return result?.[0]?.name;
 												}}>
-												{countryList?.data?.countries?.map((item, idx) => {
+												{countries?.map((item, idx) => {
 													return (
 														<MenuItem
 															key={idx}
@@ -641,14 +619,14 @@ const MainInformation = () => {
 															</span>
 														);
 													}
-													const result = citiesList?.data?.cities?.filter(
+													const result = cities?.filter(
 														(item) => parseInt(item?.id) === parseInt(selected)
 													);
 													setCityAddress(result?.[0]?.name || "");
 
 													return result?.[0]?.name;
 												}}>
-												{citiesList?.data?.cities?.map((item, idx) => {
+												{cities?.map((item, idx) => {
 													return (
 														<MenuItem
 															key={idx}
@@ -849,7 +827,7 @@ const MainInformation = () => {
 											height: "56px",
 											backgroundColor: "#1dbbbe",
 										}}
-										onClick={settingsStoreUpdate}>
+										onClick={handleUpdateStoreMainInformation}>
 										حفظ
 									</Button>
 								</div>

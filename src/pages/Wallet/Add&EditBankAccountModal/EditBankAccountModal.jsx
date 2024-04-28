@@ -1,14 +1,13 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 
 // Third party
-import axios from "axios";
+
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
-
 import { useDropzone } from "react-dropzone";
+import { useForm, Controller } from "react-hook-form";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // MUI
@@ -31,9 +30,12 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { BsFileEarmarkArrowUp } from "react-icons/bs";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 
-import { useForm, Controller } from "react-hook-form";
-
-import useFetch from "../../../Hooks/UseFetch";
+// RTK Query
+import { useGetBanksQuery } from "../../../store/apiSlices/selectorsApis/selectBanksApi";
+import {
+	useShowBankAccountQuery,
+	useEditBankAccountMutation,
+} from "../../../store/apiSlices/walletApi.js";
 
 /* Modal Styles */
 const style = {
@@ -75,30 +77,17 @@ const selectStyle = {
 /**----------------------------------------------------------------------------- */
 
 const EditBankAccountModal = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// get banks selector
+	const { data: banks } = useGetBanksQuery();
+
+	//show bank account data
+	const { data: bankAccount, isLoading } = useShowBankAccountQuery();
+
 	const dispatch = useDispatch(false);
 	const { isEditBankAccountModalOpen } = useSelector(
 		(state) => state.EditBankAccountModal
 	);
 
-	/** ----------------- */
-	// get banks
-	const { fetchedData: banks } = useFetch(
-		"https://backend.atlbha.com/api/selector/banks"
-	);
-	/** ----------- */
-	// show current Supplier
-	const {
-		fetchedData: showSupplier,
-		reload,
-		setReload,
-	} = useFetch(`showSupplier`);
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -119,26 +108,25 @@ const EditBankAccountModal = () => {
 	});
 
 	useEffect(() => {
-		if (showSupplier) {
+		if (bankAccount) {
 			setBankAccountInfo({
 				...bankAccountInfo,
-				bankId: showSupplier?.data?.supplierUser?.bankId || "",
+				bankId: bankAccount?.supplierUser?.bankId || "",
 				bankAccountHolderName:
-					showSupplier?.data?.supplierUser?.bankAccountHolderName || "",
-				bankAccount: showSupplier?.data?.supplierUser?.bankAccount || "",
-				iban: showSupplier?.data?.supplierUser?.iban?.startsWith("SA")
-					? showSupplier?.data?.supplierUser?.iban.slice(2)
-					: showSupplier?.data?.supplierUser?.iban || "",
+					bankAccount?.supplierUser?.bankAccountHolderName || "",
+				bankAccount: bankAccount?.supplierUser?.bankAccount || "",
+				iban: bankAccount?.supplierUser?.iban?.startsWith("SA")
+					? bankAccount?.supplierUser?.iban.slice(2)
+					: bankAccount?.supplierUser?.iban || "",
 
-				currentCivilIdFile:
-					showSupplier?.data?.SupplierDocumentUser[0]?.file || "",
+				currentCivilIdFile: bankAccount?.SupplierDocumentUser[0]?.file || "",
 				currentBankAccountLetterFile:
-					showSupplier?.data?.SupplierDocumentUser[1]?.file || "",
+					bankAccount?.SupplierDocumentUser[1]?.file || "",
 				currentWebsiteImageFile:
-					showSupplier?.data?.SupplierDocumentUser[2]?.file || "",
+					bankAccount?.SupplierDocumentUser[2]?.file || "",
 			});
 		}
-	}, [showSupplier]);
+	}, [bankAccount]);
 
 	const {
 		register,
@@ -380,11 +368,13 @@ const EditBankAccountModal = () => {
 		);
 	};
 
-	/** handle save Options  */
-	const EditBankAccount = (data) => {
+	/** handle edit bank account   */
+	const [editBankAccount] = useEditBankAccountMutation();
+	const handleEditBankAccount = async (data) => {
 		setLoadingTitle("جاري تعديل بيانات الحساب البنكي");
 		resetErrors();
 
+		// data that send to api...
 		let formData = new FormData();
 		formData.append("bankId", data?.bankId);
 		formData.append("bankAccountHolderName", data?.bankAccountHolderName);
@@ -403,35 +393,50 @@ const EditBankAccountModal = () => {
 		if (bankAccountInfo?.website_image?.length !== 0)
 			formData.append("website_image", bankAccountInfo?.website_image[0]);
 
-		axios
-			.post(`updateSupplier`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					dispatch(openMessageAlert(res?.data?.message?.ar));
-
-					setReload(!reload);
-					dispatch(closeEditBankAccountModal());
-				} else {
-					setLoadingTitle("");
-					setBankAccountErr({
-						bankId: res?.data?.message?.en?.bankId?.[0],
-						bankAccountHolderName:
-							res?.data?.message?.en?.bankAccountHolderName?.[0],
-						bankAccount: res?.data?.message?.en?.bankAccount?.[0],
-						iban: res?.data?.message?.en?.iban?.[0],
-						supplierCode: res?.data?.message?.en?.supplierCode?.[0],
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await editBankAccount({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				dispatch(openMessageAlert(response?.data?.message?.ar));
+
+				dispatch(closeEditBankAccountModal());
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+				setBankAccountErr({
+					bankId: response?.data?.message?.en?.bankId?.[0],
+					bankAccountHolderName:
+						response?.data?.message?.en?.bankAccountHolderName?.[0],
+					bankAccount: response?.data?.message?.en?.bankAccount?.[0],
+					iban: response?.data?.message?.en?.iban?.[0],
+					supplierCode: response?.data?.message?.en?.supplierCode?.[0],
+				});
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing addBankAccount:", error);
+		}
 	};
 
 	return (
@@ -480,7 +485,7 @@ const EditBankAccountModal = () => {
 								</div>
 							</div>
 
-							<form onSubmit={handleSubmit(EditBankAccount)}>
+							<form onSubmit={handleSubmit(handleEditBankAccount)}>
 								<div className='row  mb-3'>
 									<div className='col-12'>
 										<label>
@@ -517,13 +522,13 @@ const EditBankAccountModal = () => {
 																);
 															}
 															const result =
-																banks?.data?.Banks?.filter(
+																banks?.filter(
 																	(item) => item?.bankId === parseInt(selected)
 																) || "";
 
 															return result[0]?.name_ar;
 														}}>
-														{banks?.data?.Banks?.map((item, index) => {
+														{banks?.map((item, index) => {
 															return (
 																<MenuItem
 																	key={index}
@@ -787,7 +792,10 @@ const EditBankAccountModal = () => {
 
 								<div className='form-footer row d-flex justify-content-center align-items-center'>
 									<div className='col-lg-4 col-6'>
-										<button className='save-btn' type='submit'>
+										<button
+											disabled={isLoading}
+											className='save-btn'
+											type='submit'>
 											تعديل بيانات الحساب
 										</button>
 									</div>
