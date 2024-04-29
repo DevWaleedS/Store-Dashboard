@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
-import { StoreVerificationThunk } from "../store/Thunk/storeVerificationThunk";
+
 import {
 	closeVerifyModal,
 	openVerifyModal,
@@ -39,12 +39,16 @@ import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 // Using AXiso Global To wrapping the dashboard
 import "../API/axios-global";
 import AxiosInterceptors from "../API/AxiosInterceptors";
+import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 const RootLayout = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// Handle show Verification  data
+	const {
+		data: showVerification,
+		isFetching,
+		refetch,
+	} = useShowVerificationQuery();
+
 	// To open and close side bar in mobile screen
 	const [openSidebar, setOpenSidebar] = React.useState(false);
 
@@ -55,9 +59,7 @@ const RootLayout = () => {
 	const { loadingTitle } = LoadingStore;
 
 	// To handle Open Verify Modal
-	const { isOpenVerifyModal, verificationStoreStatus } = useSelector(
-		(state) => state.VerifyModal
-	);
+	const { isOpenVerifyModal } = useSelector((state) => state.VerifyModal);
 
 	// Open Maintenance Mode Modal
 	const { isOpenMaintenanceModeModal } = useSelector(
@@ -74,21 +76,16 @@ const RootLayout = () => {
 		(state) => state.VerifyAfterMainModal
 	);
 
-	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
-
-	useEffect(() => {
-		dispatch(StoreVerificationThunk(store_token));
-	}, [dispatch]);
 
 	// This is modal verification Store Status message That is display after dashboard is open
 	useEffect(() => {
 		const debounce = setTimeout(() => {
 			if (
-				verificationStoreStatus === "لم يتم الطلب" ||
-				verificationStoreStatus === "جاري التوثيق" ||
-				verificationStoreStatus === "طلب جديد" ||
-				verificationStoreStatus === "التوثيق مرفوض"
+				showVerification?.verification_status === "لم يتم الطلب" ||
+				showVerification?.verification_status === "جاري التوثيق" ||
+				showVerification?.verification_status === "طلب جديد" ||
+				showVerification?.verification_status === "التوثيق مرفوض"
 			) {
 				dispatchVerifyModal(openVerifyModal());
 			}
@@ -98,7 +95,7 @@ const RootLayout = () => {
 			clearTimeout(debounce);
 			dispatchVerifyModal(closeVerifyModal());
 		};
-	}, [verificationStoreStatus]);
+	}, [showVerification?.verification_status, dispatchVerifyModal]);
 
 	return (
 		<AxiosInterceptors>
@@ -134,7 +131,12 @@ const RootLayout = () => {
 
 							{loadingTitle && <LoadingRequest />}
 
-							{isOpenVerifyModal && <VerifyStoreModal />}
+							{isOpenVerifyModal && (
+								<VerifyStoreModal
+									isFetching={isFetching}
+									verificationStatus={showVerification?.verification_status}
+								/>
+							)}
 							{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
 							{isOpenMaintenanceModeModal && <MaintenanceMode />}
 							{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
@@ -144,6 +146,7 @@ const RootLayout = () => {
 								<div className='row'>
 									<div className='sidebar-col'>
 										<SideBar
+											verificationStatus={showVerification?.verification_status}
 											open={openSidebar}
 											closeSidebar={() => {
 												setOpenSidebar(!openSidebar);

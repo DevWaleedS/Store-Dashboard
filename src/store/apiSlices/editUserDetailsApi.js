@@ -16,37 +16,36 @@ const prepareHeaders = (headers) => {
 };
 
 // Create API slice
-export const verifyStoreApi = createApi({
-	reducerPath: "verifyStoreApi",
+export const editUserDetailsApi = createApi({
+	reducerPath: "editUserDetailsApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
 		prepareHeaders,
 	}),
-	tagTypes: ["Verification"],
+	tagTypes: ["EditUserDetails"],
 	endpoints: (builder) => ({
-		// get store Coupons endpoint..
-		showVerification: builder.query({
-			query: () => `verification_show`,
+		// get User Profile data endpoint..
+		getUserProfileData: builder.query({
+			query: () => `profile`,
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data?.stores[0],
-			providesTags: ["Verification"],
+			transformResponse: (response, meta, arg) => response.data?.users,
+			providesTags: ["EditUserDetails"],
 		}),
-
-		// Handle verification Update
-		updateVerification: builder.mutation({
+		// update Store Main Information
+		editUserProfileData: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `verification_update`,
+					url: `profile`,
 					method: "POST",
 					body: body,
 				};
 			},
-			invalidatesTags: ["Verification"],
+			invalidatesTags: ["EditUserDetails"],
 		}),
 	}),
 });
 
 // Export endpoints and hooks
-export const { useUpdateVerificationMutation, useShowVerificationQuery } =
-	verifyStoreApi;
+export const { useGetUserProfileDataQuery, useEditUserProfileDataMutation } =
+	editUserDetailsApi;

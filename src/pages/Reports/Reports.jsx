@@ -16,14 +16,15 @@ import DateRangePicker from "rsuite/DateRangePicker";
 import "rsuite/dist/rsuite.min.css";
 
 // import icons and images
-import { HomeIcon, PrintIcon, WalletIcon } from "../data/Icons";
+import { HomeIcon, PrintIcon, WalletIcon } from "../../data/Icons";
 
 // Pages Components
-import { SalesReports } from "./nestedPages";
-import { TopBarSearchInput } from "../global";
-import { useGetReportsByDateQuery } from "../store/apiSlices/reportsApi";
 
-const Report = () => {
+import SalesReports from "./SalesReports";
+import { TopBarSearchInput } from "../../global";
+import { useGetReportsByDateQuery } from "../../store/apiSlices/reportsApi";
+
+const Reports = () => {
 	const componentRef = useRef();
 	const [dateValue, setDateValue] = useState([]);
 
@@ -170,4 +171,4 @@ const Report = () => {
 	);
 };
 
-export default Report;
+export default Reports;

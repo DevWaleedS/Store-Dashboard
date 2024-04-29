@@ -13,8 +13,9 @@ const TablePagination = ({
 	currentPage,
 	setRowsCount,
 }) => {
-	const handleChange = (event, value) => {
+	const handleChange = (value) => {
 		setPageTarget(value);
+		localStorage.setItem("notificationPageTarget", value);
 	};
 
 	// Handel Select row per page
@@ -30,6 +31,8 @@ const TablePagination = ({
 	};
 	const handleChangeRowsPerPage = (event) => {
 		setRowsCount(parseInt(event.target.value));
+
+		localStorage.setItem("notificationRowsCount", event.target.value);
 		setPageTarget(1);
 	};
 

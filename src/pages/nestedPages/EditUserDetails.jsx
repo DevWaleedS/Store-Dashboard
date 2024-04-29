@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -10,10 +9,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
-import { UserAuth } from "../../Context/UserAuthorProvider";
+import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // MUI
@@ -29,6 +27,12 @@ import {
 	Eye,
 } from "../../data/Icons";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
+
+// RTK Query
+import {
+	useEditUserProfileDataMutation,
+	useGetUserProfileDataQuery,
+} from "../../store/apiSlices/editUserDetailsApi";
 
 const style = {
 	position: "fixed",
@@ -53,19 +57,15 @@ const style = {
 };
 
 const EditUserDetails = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	const navigate = useNavigate();
+	// get user profile data from api...
+	const { data: userProfileData, isFetching } = useGetUserProfileDataQuery();
 
-	const UserInfo = useContext(UserAuth);
 	const contextStore = useContext(Context);
-
-	const { setUserInfo } = UserInfo;
 	const { setEndActionTitle } = contextStore;
 
-	const { fetchedData, loading, reload, setReload } = useFetch("profile");
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
 
 	const [user, setUser] = useState({
 		name: "",
@@ -146,26 +146,26 @@ const EditUserDetails = () => {
 	};
 
 	useEffect(() => {
-		if (fetchedData?.data?.users) {
+		if (userProfileData) {
 			setUser({
 				...user,
-				name: fetchedData?.data?.users?.name,
-				user_name: fetchedData?.data?.users?.user_name,
-				email: fetchedData?.data?.users?.email,
-				phonenumber: fetchedData?.data?.users?.phonenumber?.startsWith("+966")
-					? fetchedData?.data?.users?.phonenumber?.slice(4)
-					: fetchedData?.data?.users?.phonenumber?.startsWith("00966")
-					? fetchedData?.data?.users?.phonenumber.slice(5)
-					: fetchedData?.data?.users?.phonenumber,
+				name: userProfileData?.name,
+				user_name: userProfileData?.user_name,
+				email: userProfileData?.email,
+				phonenumber: userProfileData?.phonenumber?.startsWith("+966")
+					? userProfileData?.phonenumber?.slice(4)
+					: userProfileData?.phonenumber?.startsWith("00966")
+					? userProfileData?.phonenumber.slice(5)
+					: userProfileData?.phonenumber,
 			});
 		}
-	}, [fetchedData?.data?.users]);
+	}, [userProfileData]);
 
 	useEffect(() => {
 		reset(user);
 	}, [user, reset]);
 
-	// ----------------------------------------------------
+	/** ============================================================ */
 
 	// handle images size
 	const maxFileSize = 1 * 1024 * 1024; // 1 MB;
@@ -222,9 +222,9 @@ const EditUserDetails = () => {
 			{file?.path}
 		</li>
 	));
-	// -----------------------------------------------------
+	/** ============================================================ */
 
-	// get banners
+	/** get banners */
 	const bannersImage = acceptedFiles?.map((image) => (
 		<div key={image.name}>
 			<img
@@ -240,8 +240,12 @@ const EditUserDetails = () => {
 	));
 	// ---------------------------------------------------------------------------------
 
-	const updateUser = (data) => {
+	const [editUserProfileData] = useEditUserProfileDataMutation();
+	const handleUpdateUser = async (data) => {
+		setLoadingTitle("جاري تعديل بيانات المستخدم ");
 		resetDataError();
+
+		// data that send to ap...
 		let formData = new FormData();
 		formData.append("name", data?.name);
 		formData.append("user_name", data?.user_name);
@@ -255,52 +259,54 @@ const EditUserDetails = () => {
 		if (userImage?.length !== 0) {
 			formData.append("image", userImage[0]);
 		}
-		axios
-			.post(`profile`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setUserInfo({ user_image: res?.data?.data?.users?.image });
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/");
-					setReload(!reload);
-					window.location.reload();
-				} else {
-					setDataError({
-						...dataError,
-						user_name: res?.data?.message?.en?.user_name?.[0],
-						email: res?.data?.message?.en?.email?.[0],
-						password: res?.data?.message?.en?.password?.[0],
-						confirm_password: res?.data?.message?.en?.confirm_password?.[0],
-						phonenumber: res?.data?.message?.en?.phonenumber?.[0],
-						image: res?.data?.message?.en?.image?.[0],
-					});
-					toast.error(res?.data?.message?.en?.user_name?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.email?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.password?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.confirm_password?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.phonenumber?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.image?.[0], {
-						theme: "light",
-					});
-				}
-			});
-	};
 
+		// make request...
+		try {
+			const response = await editUserProfileData({
+				body: formData,
+			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/");
+			} else {
+				setLoadingTitle("");
+				setDataError({
+					...dataError,
+					user_name: response?.data?.message?.en?.user_name?.[0],
+					email: response?.data?.message?.en?.email?.[0],
+					password: response?.data?.message?.en?.password?.[0],
+					confirm_password: response?.data?.message?.en?.confirm_password?.[0],
+					phonenumber: response?.data?.message?.en?.phonenumber?.[0],
+					image: response?.data?.message?.en?.image?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing editUserProfileData:", error);
+		}
+	};
 	return (
 		<>
 			<Helmet>
@@ -336,12 +342,12 @@ const EditUserDetails = () => {
 									</div>
 								</div>
 							</div>
-							{loading ? (
+							{isFetching ? (
 								<div className='mt-5'>
 									<CircularLoading />
 								</div>
 							) : (
-								<form onSubmit={handleSubmit(updateUser)}>
+								<form onSubmit={handleSubmit(handleUpdateUser)}>
 									<div className='user-details-body edit-user-body'>
 										<div className='row mb-5'>
 											<div className='col-lg-2 col-12 d-flex justify-content-center'>
@@ -350,7 +356,7 @@ const EditUserDetails = () => {
 													{bannersImage.length === 0 ? (
 														<img
 															className='img-fluid'
-															src={fetchedData?.data?.users?.image}
+															src={userProfileData?.image}
 															alt='user'
 														/>
 													) : (
@@ -362,14 +368,14 @@ const EditUserDetails = () => {
 											<div className='col-lg-4 col-12 d-flex justify-content-center'>
 												<div className='user-info me-3'>
 													<span className='user-name mb-3 d-block text-center'>
-														{fetchedData?.data?.users?.name === null
-															? fetchedData?.data?.users?.user_name
-															: fetchedData?.data?.users?.name}
+														{userProfileData?.name === null
+															? userProfileData?.user_name
+															: userProfileData?.name}
 													</span>
 													<div className='contact-info mb-2'>
 														<Message />
 														<span className='me-3'>
-															{fetchedData?.data?.users?.email}
+															{userProfileData?.email}
 														</span>
 													</div>
 													<div
@@ -381,7 +387,7 @@ const EditUserDetails = () => {
 														}}>
 														<Phone />
 														<span className='me-3'>
-															{fetchedData?.data?.users?.phonenumber}
+															{userProfileData?.phonenumber}
 														</span>
 													</div>
 												</div>
@@ -389,9 +395,9 @@ const EditUserDetails = () => {
 
 											<div className='col-lg-4 col-12 d-flex justify-content-center order-md-last order-first'>
 												<div className='job-title'>
-													{fetchedData?.data?.users?.role === null
+													{userProfileData?.role === null
 														? "الدور الوظيفي"
-														: fetchedData?.data?.users?.role?.name}
+														: userProfileData?.role?.name}
 												</div>
 											</div>
 										</div>

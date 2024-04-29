@@ -49,7 +49,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	/** ----------------------------------------------------*/
 
 	// Handle show Verification  data
-	const { data: showVerification, isFetching } = useShowVerificationQuery();
+	const { isFetching } = useShowVerificationQuery();
 
 	// Categories Selector
 	const { data: selectCategories } = useGetCategoriesQuery();

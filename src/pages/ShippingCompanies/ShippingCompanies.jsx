@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
-import useFetch from "../../Hooks/UseFetch";
+
 import { TopBarSearchInput } from "../../global";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -28,6 +28,7 @@ import { HomeIcon } from "../../data/Icons";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Switch } from "@mui/material";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 // switch style
 const switchStyle = {
@@ -78,6 +79,7 @@ const ShippingCompanies = () => {
 	// to get all  data from server
 	const { data: shippingCompanies, isLoading } = useGetShippingCompaniesQuery();
 
+	const navigate = useNavigate();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
@@ -99,6 +101,13 @@ const ShippingCompanies = () => {
 	});
 
 	// -----------------------------------------------------------
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
 
 	// Side Effects to filter other shipping
 	useEffect(() => {

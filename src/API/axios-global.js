@@ -4,10 +4,6 @@ import axios from "axios";
 const baseURL = "https://backend.atlbha.com/api/Store/";
 axios.defaults.baseURL = baseURL;
 
-/**
- * Extracts the store token from the browser's cookies.
- * @returns {string|null} The token if found, otherwise null.
- */
 function getStoreTokenFromCookies() {
 	const cookieValue = document.cookie
 		.split("; ")

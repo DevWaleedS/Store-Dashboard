@@ -27,6 +27,9 @@ export const notificationsApi = createApi({
 		// get store Notifications endpoint..
 		GetNotifications: builder.query({
 			query: (arg) => `NotificationIndex?page=${arg.page}&number=${arg.number}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data,
 			providesTags: ["Notifications"],
 		}),
 
@@ -47,6 +50,16 @@ export const notificationsApi = createApi({
 			}),
 			invalidatesTags: ["Notifications"],
 		}),
+
+		// mark Single Notification As Read
+
+		markSingleNotificationAsRead: builder.mutation({
+			query: ({ notificationId }) => ({
+				url: `NotificationRead?id[]=${notificationId}`,
+				method: "GET",
+			}),
+			invalidatesTags: ["Notifications"],
+		}),
 	}),
 });
 
@@ -55,4 +68,5 @@ export const {
 	useGetNotificationsQuery,
 	useDeleteNotificationsMutation,
 	useDeleteAllNotificationsMutation,
+	useMarkSingleNotificationAsReadMutation,
 } = notificationsApi;

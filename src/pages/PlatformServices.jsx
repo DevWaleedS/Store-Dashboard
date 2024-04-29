@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
@@ -26,11 +25,14 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
+
+// RTK Query
 import {
 	useGetPlatformServicesDataQuery,
 	useGetPlatformServicesSelectorQuery,
 	useRequestNewServiceMutation,
 } from "../store/apiSlices/platformServicesApi";
+import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 // ---------------------------------------------
 
@@ -59,10 +61,7 @@ const selectStyle = {
 // -----------------------------------------------------
 
 const PlatformServices = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const navigate = useNavigate();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -86,6 +85,14 @@ const PlatformServices = () => {
 		description: "",
 	});
 	// ---------------------------------------------
+
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
 
 	// To get Activity and store name
 	useEffect(() => {

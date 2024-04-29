@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
 // Use Sidebar Pro to create sidebar
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -7,12 +7,9 @@ import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { NavLink, Link } from "react-router-dom";
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
-
-// Third party
-import useFetch from "../Hooks/UseFetch";
 
 // Context
 import Context from "../Context/context";
@@ -49,32 +46,24 @@ import {
 } from "../data/Icons";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
-import { StoreVerificationThunk } from "../store/Thunk/storeVerificationThunk";
+import { useGetMainInformationQuery } from "../store/apiSlices/mainInformationApi";
 
-const SideBar = ({ open, closeSidebar }) => {
+const SideBar = ({ open, closeSidebar, verificationStatus }) => {
+	// To show the store info that come from api
+	const { data: mainInformation } = useGetMainInformationQuery();
+
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
 
 	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
-	const { setNavbarZindex, setStoreLogo } = Z_index;
+	const { setNavbarZindex } = Z_index;
 
-	/**
-	 * to set the domain name of store to local storage
-	 *To show the store info that come from api
-	-------------------------------------------------------------------------------------------
-	 */
-
-	const { fetchedData } = useFetch("setting_store_show");
-	useEffect(() => {
-		if (fetchedData) {
-			setStoreLogo(fetchedData?.data?.setting_store?.logo);
+	const handleOpenVerificationModal = () => {
+		if (verificationStatus !== "تم التوثيق") {
+			dispatchVerifyModal(openVerifyModal());
 		}
-	}, [fetchedData]);
-	localStorage.setItem("domain", fetchedData?.data?.setting_store?.domain);
-	localStorage.setItem("storeLogo", fetchedData?.data?.setting_store?.logo);
-	const domain = localStorage.getItem("domain");
+	};
 
 	return (
 		<Sidebar
@@ -82,11 +71,11 @@ const SideBar = ({ open, closeSidebar }) => {
 			className={`sidebar ${open ? "show" : ""}`}
 			style={{ height: "100%" }}>
 			<Menu>
-				{verificationStoreStatus === "تم التوثيق" ? (
+				{verificationStatus === "تم التوثيق" ? (
 					<a
 						as='li'
 						className='menu-link'
-						href={`https://template.atlbha.com/${domain}`}
+						href={`https://template.atlbha.com/${mainInformation?.domain}`}
 						target='_blank'
 						rel='noreferrer'>
 						<MenuItem>
@@ -115,11 +104,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Category'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Category />
@@ -130,11 +116,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					to='Products'
 					className='menu-link'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Products />
@@ -145,11 +128,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Orders'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Orders />
@@ -160,11 +140,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='PlatformServices'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Services />
@@ -177,11 +154,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Coupon'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<Discoint />
@@ -201,11 +175,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='EmptyCarts'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<BsCart />
@@ -228,11 +199,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='PostalSubscriptions'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<MarkEmailReadIcon style={{ fontSize: "24px" }} />
@@ -243,11 +211,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='SEOStore'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
@@ -268,26 +233,22 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Rating'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Rating className='rating-icon' />
-						<span className='me-2'>التقييمات </span>
+						<span className='me-2'>التقييمات</span>
 					</MenuItem>
 				</NavLink>
 				<NavLink
 					className='menu-link'
 					to='RequestDelegate'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
 
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
+						if (verificationStatus !== "تم التوثيق") {
+							handleOpenVerificationModal();
 						} else {
 							dispatch(openDelegateRequestAlert());
 						}
@@ -301,11 +262,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Pages'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<PagesIcon />
@@ -316,11 +274,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Academy'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Academy />
@@ -332,11 +287,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Template'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<Layout />
@@ -347,11 +299,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='PaintStore'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<Paint />
@@ -365,7 +314,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						as='li'
 						className='sub-menu-link'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
 							dispatchVerifyModal(openVerifyModal());
 						}}>
@@ -379,11 +327,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='SocialPages'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<Social />
@@ -405,11 +350,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='Support'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Support />
@@ -420,11 +362,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='ShippingCompanies'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Delevray />
@@ -435,11 +374,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='PaymentGateways'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Payment />
@@ -451,11 +387,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='wallet'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<IoWallet />
@@ -469,11 +402,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='MainInformation'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
@@ -484,7 +414,6 @@ const SideBar = ({ open, closeSidebar }) => {
 						as='li'
 						className='sub-menu-link'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							setNavbarZindex(true);
 							dispatch(openMaintenanceModeModal());
 						}}>
@@ -498,7 +427,7 @@ const SideBar = ({ open, closeSidebar }) => {
 						to='Management'
 						onClick={() => {
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
+							if (verificationStatus !== "تم التوثيق") {
 								dispatchVerifyModal(openVerifyModal());
 							}
 						}}>
@@ -511,11 +440,8 @@ const SideBar = ({ open, closeSidebar }) => {
 						className='sub-menu-link'
 						to='Notifications'
 						onClick={() => {
-							dispatch(StoreVerificationThunk());
 							closeSidebar();
-							if (verificationStoreStatus !== "تم التوثيق") {
-								dispatchVerifyModal(openVerifyModal());
-							}
+							handleOpenVerificationModal();
 						}}>
 						<MenuItem>
 							<FaCircle style={{ width: "14px" }} />
@@ -526,13 +452,10 @@ const SideBar = ({ open, closeSidebar }) => {
 
 				<NavLink
 					className='menu-link'
-					to='Report'
+					to='Reports'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Reports />
@@ -543,11 +466,8 @@ const SideBar = ({ open, closeSidebar }) => {
 					className='menu-link'
 					to='EvaluationThePlatform'
 					onClick={() => {
-						dispatch(StoreVerificationThunk());
 						closeSidebar();
-						if (verificationStoreStatus !== "تم التوثيق") {
-							dispatchVerifyModal(openVerifyModal());
-						}
+						handleOpenVerificationModal();
 					}}>
 					<MenuItem>
 						<Evaluation />

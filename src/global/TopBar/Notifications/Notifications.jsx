@@ -1,77 +1,93 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 // MUI
 import Badge from "@mui/material/Badge";
+import { Avatar, Skeleton } from "@mui/material";
 
 // icons
 import { MdNotifications } from "react-icons/md";
 
 // Third Party
-import axios from "axios";
-import useFetch from "../../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 
-// Loading Component
-import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { toast } from "react-toastify";
 
+// RTK Query
+import {
+	useDeleteAllNotificationsMutation,
+	useGetNotificationsQuery,
+	useMarkSingleNotificationAsReadMutation,
+} from "../../../store/apiSlices/notificationsApi";
+
+// Context
+import Context from "../../../Context/context";
+
 const Notifications = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
 	const [closeMenu, setCloseMenu] = useState(false);
 	const [countOfNotifications, setCountOfNotifications] = useState(false);
 
-	// calling notifications
-	const { fetchedData, reload, setReload } = useFetch("NotificationIndex");
+	// get notification from api
+	const {
+		data: notification,
+		isFetching,
+		isLoading,
+	} = useGetNotificationsQuery({
+		page: localStorage.getItem("notificationPageTarget") || 1,
+		number: localStorage.getItem("notificationRowsCount") || 10,
+	});
+
 	// ---------------------------------------------------------
 
 	// Mark single notification as read
-	const markSingleNotificationAsRead = (id) => {
-		if (fetchedData?.data?.count_of_notifications === 0) return;
+	const [markSingleNotificationAsRead] =
+		useMarkSingleNotificationAsReadMutation();
 
-		axios
-			.get(`NotificationRead?id[]=${id}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setReload(!reload);
-				} else {
-					setReload(!reload);
-				}
-			});
+	const handleMarkSingleNotificationAsRead = async (id) => {
+		if (notification?.count_of_notifications === 0) return;
+
+		try {
+			await markSingleNotificationAsRead({ notificationId: id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the markSingleNotificationAsRead", err);
+		}
 	};
 	/* ------------------------------------------------------------------------------- */
 
 	// Delete Notification
-	const deleteNotifications = () => {
-		const queryParams = fetchedData?.data?.notifications
+	const [deleteAllNotifications] = useDeleteAllNotificationsMutation();
+	const handleDeleteAllItems = async () => {
+		const queryParams = notification?.notifications
 			?.map((not) => `id[]=${not?.id}`)
 			.join("&");
-		axios
-			.get(`NotificationDeleteAll?${queryParams}`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setReload(!reload);
-					setLoading(!loading);
-				} else {
-					toast.error(res?.data?.message?.ar || res?.data?.message?.en, {
-						theme: "light",
-					});
-				}
-			});
+		try {
+			await deleteAllNotifications({ selected: queryParams })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteAllNotifications", err);
+		}
 	};
 	// ------------------------------------------
 
@@ -86,7 +102,7 @@ const Notifications = () => {
 				<Badge
 					max={50}
 					badgeContent={
-						countOfNotifications ? 0 : fetchedData?.data?.count_of_notifications
+						countOfNotifications ? 0 : notification?.count_of_notifications
 					}
 					sx={{
 						"& .MuiBadge-badge": {
@@ -111,21 +127,21 @@ const Notifications = () => {
 					closeMenu ? true : false
 				} dropdown-menu notification-dropdown`}
 				style={{ direction: "rtl" }}>
-				{fetchedData?.data?.notifications.length === 0 ? (
+				{notification?.notifications.length === 0 ? (
 					<></>
 				) : (
 					<div
 						className='d-flex justify-content-between align-items-center mb-2 px-3 notification-header'
 						style={{ direction: "ltr" }}>
 						<span
-							onClick={deleteNotifications}
+							onClick={handleDeleteAllItems}
 							className='delete-notifications'>
 							حذف الكل
 						</span>
 						<span className='notifications-title'>الاشعارات</span>
 					</div>
 				)}
-				{fetchedData?.data?.notifications.length === 0 ? (
+				{notification?.notifications.length === 0 ? (
 					<div className='notification-wrapper'>
 						<div className='h-100 d-flex flex-column align-items-center justify-content-center'>
 							<p style={{ direction: "ltr" }}>!لايوجد اشعارات حتى هذه اللحظة</p>
@@ -133,14 +149,79 @@ const Notifications = () => {
 					</div>
 				) : (
 					<div className='notification-wrapper'>
-						{loading ? (
-							<div className='notification-wrapper'>
-								<div className='h-100 d-flex flex-column align-items-center justify-content-center'>
-									<CircularLoading />
-								</div>
-							</div>
+						{isLoading || isFetching ? (
+							<>
+								<li>
+									<div className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center'>
+										<div
+											className='me-2 text-overflow '
+											style={{ textAlign: "right" }}>
+											<span className=' user-name'>
+												<Skeleton width={200} height={20} />
+											</span>
+											<span className='notification-data'>
+												<Skeleton width={230} height={30} />
+											</span>
+										</div>
+										<Skeleton variant='circular'>
+											<Avatar />
+										</Skeleton>
+									</div>
+								</li>
+								<li>
+									<div className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center'>
+										<div
+											className='me-2 text-overflow '
+											style={{ textAlign: "right" }}>
+											<span className=' user-name'>
+												<Skeleton width={200} height={20} />
+											</span>
+											<span className='notification-data'>
+												<Skeleton width={230} height={30} />
+											</span>
+										</div>
+										<Skeleton variant='circular'>
+											<Avatar />
+										</Skeleton>
+									</div>
+								</li>
+								<li>
+									<div className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center'>
+										<div
+											className='me-2 text-overflow '
+											style={{ textAlign: "right" }}>
+											<span className=' user-name'>
+												<Skeleton width={200} height={20} />
+											</span>
+											<span className='notification-data'>
+												<Skeleton width={230} height={30} />
+											</span>
+										</div>
+										<Skeleton variant='circular'>
+											<Avatar />
+										</Skeleton>
+									</div>
+								</li>
+								<li>
+									<div className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center'>
+										<div
+											className='me-2 text-overflow '
+											style={{ textAlign: "right" }}>
+											<span className=' user-name'>
+												<Skeleton width={200} height={20} />
+											</span>
+											<span className='notification-data'>
+												<Skeleton width={230} height={30} />
+											</span>
+										</div>
+										<Skeleton variant='circular'>
+											<Avatar />
+										</Skeleton>
+									</div>
+								</li>
+							</>
 						) : (
-							fetchedData?.data?.notifications?.map((not, index) => (
+							notification?.notifications?.map((not, index) => (
 								<li
 									key={index}
 									className={`${
@@ -149,10 +230,9 @@ const Notifications = () => {
 											: ""
 									}`}
 									onClick={() => {
-										setReload(!reload);
 										setCloseMenu(!closeMenu);
 										navigate("/Notifications");
-										markSingleNotificationAsRead(not?.id);
+										handleMarkSingleNotificationAsRead(not?.id);
 									}}>
 									<div className='dropdown-item d-flex flex-row-reverse justify-content-end align-items-center'>
 										<div

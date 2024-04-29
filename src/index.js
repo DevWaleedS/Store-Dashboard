@@ -26,7 +26,6 @@ import "./index.css";
 import {
 	Offers,
 	PaymentGateways,
-	Report,
 	Management,
 	SocialPages,
 	//PackageUpgrade,
@@ -102,8 +101,11 @@ import { CreateNewPassword } from "./pages/Authentication/Login/ResetPasswordPag
 import SendVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
 import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
 import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
-import { Wallet } from "./pages/Wallet";
+
+// categories
 import { Category, AddCategory, EditCategory } from "./pages/Categories";
+
+// Technical Support
 import { TechnicalSupport } from "./pages/TechnicalSupport";
 import TechnicalSupportDetails from "./pages/TechnicalSupport/TechnicalSupportDetails";
 
@@ -115,7 +117,13 @@ import { EditEmptyCart, EmptyCarts } from "./pages/EmptyCarts";
 
 // store pages
 import { CreatePage, EditPage, Pages } from "./pages/StorePages";
+
+// wallet and billing
+import { Wallet } from "./pages/Wallet";
 import BillingInfo from "./pages/Wallet/BillingInfo";
+
+// reports
+import { Reports } from "./pages/Reports";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -408,8 +416,8 @@ const router = createBrowserRouter([
 				element: <PaintStore />,
 			},
 			{
-				path: "Report",
-				element: <Report />,
+				path: "Reports",
+				element: <Reports />,
 			},
 			{
 				path: "Notifications",

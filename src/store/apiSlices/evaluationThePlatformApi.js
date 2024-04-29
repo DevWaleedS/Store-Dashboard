@@ -16,37 +16,28 @@ const prepareHeaders = (headers) => {
 };
 
 // Create API slice
-export const verifyStoreApi = createApi({
-	reducerPath: "verifyStoreApi",
+export const evaluationThePlatformApi = createApi({
+	reducerPath: "evaluationThePlatformApi",
 	baseQuery: fetchBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
 		prepareHeaders,
 	}),
-	tagTypes: ["Verification"],
+	tagTypes: ["EvaluationThePlatformApi"],
 	endpoints: (builder) => ({
-		// get store Coupons endpoint..
-		showVerification: builder.query({
-			query: () => `verification_show`,
-
-			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data?.stores[0],
-			providesTags: ["Verification"],
-		}),
-
-		// Handle verification Update
-		updateVerification: builder.mutation({
+		// update Store Main Information
+		AddEvaluationThePlatformApi: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `verification_update`,
+					url: `etlobhaComment`,
 					method: "POST",
 					body: body,
 				};
 			},
-			invalidatesTags: ["Verification"],
+			invalidatesTags: ["EvaluationThePlatformApi"],
 		}),
 	}),
 });
 
 // Export endpoints and hooks
-export const { useUpdateVerificationMutation, useShowVerificationQuery } =
-	verifyStoreApi;
+export const { useAddEvaluationThePlatformApiMutation } =
+	evaluationThePlatformApi;

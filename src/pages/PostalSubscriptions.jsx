@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
 import { PostalSubscriptionsTable } from "../components/Tables";
@@ -20,8 +20,10 @@ import {
 	useGetPostalSubscriptionsQuery,
 	useSearchInPostalSubscriptionsMutation,
 } from "../store/apiSlices/postalSubscriptionsApi";
+import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 const PostalSubscriptions = () => {
+	const navigate = useNavigate();
 	const [search, setSearch] = useState("");
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
@@ -33,6 +35,14 @@ const PostalSubscriptions = () => {
 			number: rowsCount,
 		});
 	// --------------------------------------------------------------------------
+
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
 
 	/** get data */
 	useEffect(() => {

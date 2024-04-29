@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 
 // MUI
-import { Box, styled, useTheme } from "@mui/material";
+import { Box, Skeleton, styled, useTheme } from "@mui/material";
 import { Avatar } from "@mui/material";
 import Badge from "@mui/material/Badge";
 
@@ -11,11 +11,13 @@ import { ReactComponent as UserIcon } from "../../../data/Icons/icon-24-client.s
 import { ReactComponent as LogOutIcon } from "../../../data/Icons/icon-24-sign out.svg";
 
 // Third Party
-import axios from "axios";
+import { toast } from "react-toastify";
+
 import { tokens } from "../../../Theme";
-import useFetch from "../../../Hooks/UseFetch";
 import { Link, useNavigate } from "react-router-dom";
-import { UserAuth } from "../../../Context/UserAuthorProvider";
+
+// RTK QUERY
+import { useLogOutMutation } from "../../../store/apiSlices/logOutApi";
 
 // Style dot active on avatar image
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -46,63 +48,53 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 		},
 	},
 }));
-const UserProfileImage = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+const UserProfileImage = ({ name, userName, userImage, isFetching }) => {
 	// Avatar Colors
 	const theme = useTheme();
 	const colors = tokens(theme.palette);
-
 	const navigate = useNavigate();
 
-	// TO SET THE NAME AND IMAGE TO CONTEXT
-	const UserInfo = useContext(UserAuth);
-	const { userInfo, setUserInfo } = UserInfo;
-
-	// to get the user profile info
-	const { fetchedData: profile } = useFetch("profile");
-
-	// to set data to the user aut
-	useEffect(() => {
-		if (profile) {
-			setUserInfo({
-				name: profile?.data?.users?.name,
-				username: profile?.data?.users?.user_name,
-				user_image: profile?.data?.users?.image,
-			});
-		}
-	}, [profile]);
 	// -----------------------------------------------------------------------------
 
 	// To log out from dashboard!
-	const logOut = () => {
+	const [logOut] = useLogOutMutation();
+	const handleLogOut = async () => {
 		// Clear all cookies
 		for (const cookie of document.cookie.split(";")) {
-			const [name, value] = cookie.trim().split("=");
+			const [name] = cookie.trim().split("=");
 
 			// Set the cookie's expiration to a past date to delete it
 			document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
 		}
 
-		axios
-			.get("https://backend.atlbha.com/api/logout", {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					localStorage.clear();
+		// make request...
+		try {
+			const response = await logOut();
 
-					navigate("/auth/login");
-				} else {
-					console.log(res?.data?.message?.ar);
-				}
-			});
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				localStorage.clear();
+
+				navigate("/auth/login");
+			} else {
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing logout:", error);
+		}
 	};
+
 	return (
 		<ul className='nav-item avatar-box'>
 			{/** dropdown */}
@@ -113,28 +105,40 @@ const UserProfileImage = () => {
 					data-bs-toggle='dropdown'
 					aria-expanded='false'
 					color={colors.white[300]}>
-					<div className='dropdown-title d-md-flex align-items-center d-none'>
-						<span className='me-1 '>
-							{userInfo?.name !== null
-								? userInfo?.name === "null"
-									? userInfo?.username
-									: userInfo?.name
-								: userInfo?.username || "اسم التاجر"}
-						</span>
-						<IoIosArrowDown />
-					</div>
+					{!isFetching ? (
+						<>
+							<div className='dropdown-title d-md-flex align-items-center d-none'>
+								<span className='me-1 '>
+									{name !== null
+										? name === "null"
+											? userName
+											: name
+										: userName || "اسم التاجر"}
+								</span>
 
-					{/** avatar img  */}
-					<StyledBadge
-						overlap='circular'
-						anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-						variant='dot'>
-						<Avatar
-							sx={{ border: "2px solid #ddd" }}
-							alt='avatarImage'
-							src={profile?.data?.users?.image || userInfo?.user_image}
-						/>
-					</StyledBadge>
+								<IoIosArrowDown />
+							</div>
+
+							<StyledBadge
+								overlap='circular'
+								anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+								variant='dot'>
+								<Avatar
+									sx={{ border: "2px solid #ddd" }}
+									alt='avatarImage'
+									src={userImage}
+								/>
+							</StyledBadge>
+						</>
+					) : (
+						<>
+							{" "}
+							<Skeleton width={120} height={15} />
+							<Skeleton variant='circular'>
+								<Avatar />
+							</Skeleton>
+						</>
+					)}
 				</Box>
 				<ul className='dropdown-menu user-info-dropdown'>
 					<li className=''>
@@ -149,7 +153,7 @@ const UserProfileImage = () => {
 						<Link
 							className='dropdown-item d-flex justify-content-end align-items-center'
 							to=''
-							onClick={logOut}>
+							onClick={handleLogOut}>
 							<span className='me-2'>تسجيل الخروج</span>
 							<LogOutIcon />
 						</Link>

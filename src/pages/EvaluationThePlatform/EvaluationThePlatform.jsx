@@ -1,14 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 // Third party
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
+import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Icons
 import { UserImage } from "../../data/images";
@@ -16,15 +16,16 @@ import { HomeIcon } from "../../data/Icons";
 
 // Css Styles
 import "./EvaluationThePlatform.css";
+
+// Components
 import { TextEditor } from "../../components/TextEditor";
-import { TextEditorContext } from "../../Context/TextEditorProvider";
+
+// RTK query
+import { useAddEvaluationThePlatformApiMutation } from "../../store/apiSlices/evaluationThePlatformApi";
+import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 const EvaluationThePlatform = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const [reload, setReload] = useState(false);
+	const navigate = useNavigate();
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
@@ -38,36 +39,60 @@ const EvaluationThePlatform = () => {
 	// To handle errors
 	const [evaluationError, setEvaluationError] = useState("");
 
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
+
 	// send add Evaluation The Platform Function
-	const addEvaluationThePlatform = () => {
+	const [addEvaluationThePlatform, { isLoading }] =
+		useAddEvaluationThePlatformApiMutation();
+
+	const handleAddEvaluationThePlatform = async () => {
 		setLoadingTitle("جاري اضافة تعليقك لمنصة اطلبها ");
 		setEvaluationError("");
+
+		// data that send to api...
 		let formData = new FormData();
 		formData.append("comment_text", editorValue);
-		axios
-			.post(`etlobhaComment`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-					setEditorValue("");
-				} else {
-					setLoadingTitle("");
-					setEvaluationError(res?.data?.message?.en?.comment_text?.[0]);
-					toast.error(res?.data?.message?.en?.comment_text?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await addEvaluationThePlatform({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+
+				setEditorValue("");
+			} else {
+				setLoadingTitle("");
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				setLoadingTitle("");
+				setEvaluationError(response?.data?.message?.en?.comment_text?.[0]);
+			}
+		} catch (error) {
+			console.error("Error changing addEvaluationThePlatform:", error);
+		}
 	};
 
 	return (
@@ -155,9 +180,9 @@ const EvaluationThePlatform = () => {
 								disabled={
 									editorValue === "" || editorValue === "<p><br></p>"
 										? true
-										: false
+										: false || isLoading
 								}
-								onClick={addEvaluationThePlatform}
+								onClick={handleAddEvaluationThePlatform}
 								className='send-valuation-btn d-flex flex-column justify-content-center align-items-center'>
 								ارسال
 							</button>

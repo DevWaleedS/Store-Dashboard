@@ -3,7 +3,6 @@ import React, { Fragment } from "react";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 const SalesReports = ({ salesReport, loading }) => {
-	console.log(salesReport);
 	return (
 		<section className='sales-reports-data'>
 			<div className='report-head mb-2'>

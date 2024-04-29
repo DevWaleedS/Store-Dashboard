@@ -24,6 +24,7 @@ const AxiosInterceptors = ({ children }) => {
 					["delete", "patch", "post", "put"].includes(response.config.method)
 				) {
 					setEndActionTitle(response.data.message?.ar);
+					console.log(response);
 				}
 				return response;
 			},
@@ -98,6 +99,7 @@ const AxiosInterceptors = ({ children }) => {
 				) {
 					navigate("/");
 				}
+
 				return response;
 			},
 			(error) => Promise.reject(error)

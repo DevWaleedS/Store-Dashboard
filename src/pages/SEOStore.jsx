@@ -4,10 +4,10 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
+
 import CircularLoading from "../HelperComponents/CircularLoading";
 import TextareaCode from "../components/TextareaCode/TextareaCode";
 
@@ -29,16 +29,20 @@ import {
 	TiktokIconColored,
 	TwitterIcon,
 } from "../data/Icons";
+
+// RTK Query
 import {
 	useGetSEODataQuery,
 	useUpdateSeoMutation,
 } from "../store/apiSlices/SEOImprovementsApi";
+import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 const PaintStore = () => {
 	// get seo data
 	const { data: Seo, isLoading } = useGetSEODataQuery();
 
-	const { reload, setReload } = useFetch(`seo`);
+	const navigate = useNavigate();
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -77,6 +81,14 @@ const PaintStore = () => {
 		});
 	};
 	// --------------------------------------------------------------
+
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
 
 	useEffect(() => {
 		setUpdateLinkValue(Seo?.[0]?.google_analytics);
@@ -123,7 +135,6 @@ const PaintStore = () => {
 			) {
 				setLoadingTitle("");
 				setEndActionTitle(response?.data?.message?.ar);
-				setReload(!reload);
 			} else {
 				setLoadingTitle("");
 

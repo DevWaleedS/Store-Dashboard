@@ -1,5 +1,5 @@
 export { default as Offers } from "./Offers";
-export { default as Report } from "./Report";
+
 export { default as SEOStore } from "./SEOStore";
 export { default as RootLayOut } from "./RootLayout";
 export { default as Management } from "./Management";

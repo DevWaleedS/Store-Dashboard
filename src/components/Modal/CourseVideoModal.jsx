@@ -68,7 +68,7 @@ const CourseVideoModal = () => {
 									height='100%'
 									src={videoUrl}
 									allowFullScreen
-									title={"fetchedData?.data?.explainvideos?.title"}
+									title={"title"}
 								/>
 							</section>
 						</Box>

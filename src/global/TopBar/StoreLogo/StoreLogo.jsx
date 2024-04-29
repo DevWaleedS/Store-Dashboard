@@ -1,23 +1,22 @@
-import React, { useContext } from "react";
-// Context
-import Context from "../../../Context/context";
-// images and icons
-import { DefaultLogo } from "../../../data/images";
+import React from "react";
+import { Avatar, Skeleton } from "@mui/material";
 
-const StoreLogo = () => {
-	const storeContext = useContext(Context);
-	const { storeLogo } = storeContext;
-	return (
+const StoreLogo = ({ storeLogo, isFetching }) => {
+	return !isFetching ? (
 		<div
 			className='navbar-brand d-md-flex d-none'
 			style={{ width: "70px", height: "65.59px" }}>
 			<img
 				className=' img-fluid'
 				style={{ objectFit: "contain" }}
-				src={storeLogo || localStorage.getItem("storeLogo")}
+				src={storeLogo}
 				alt=''
 			/>
 		</div>
+	) : (
+		<Skeleton variant='circular'>
+			<Avatar />
+		</Skeleton>
 	);
 };
 

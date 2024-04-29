@@ -10,7 +10,6 @@ export { default as CreateOffer } from "./CreateOffer";
 export { default as EditUserPage } from "./EditUserPage";
 export { default as OfferDetails } from "./OfferDetails";
 
-export { default as SalesReports } from "./SalesReports";
 export { default as AddSubCategory } from "./AddSubCategory";
 export { default as EditUserDetails } from "./EditUserDetails";
 export { default as CustomersReports } from "./CustomersReports";

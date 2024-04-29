@@ -73,14 +73,14 @@ const selectStyle = {
 
 const MainInformation = () => {
 	// To show the store info that come from api
-	const { data: mainInformation, isLoading } = useGetMainInformationQuery();
+	const { data: mainInformation, isFetching } = useGetMainInformationQuery();
 
 	// to get selectors from api
 	const { data: cities } = useGetCitiesQuery();
 	const { data: countries } = useGetCountriesQuery();
 
 	const contextStore = useContext(Context);
-	const { setEndActionTitle, setStoreLogo } = contextStore;
+	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -97,9 +97,6 @@ const MainInformation = () => {
 			to: "",
 		},
 	]);
-
-	//  to handle disabled or enable phone number based verification Store Status
-	const { verificationStoreStatus } = useSelector((state) => state.VerifyModal);
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO HANDLE THE REG_EXPRESS <=
@@ -201,7 +198,6 @@ const MainInformation = () => {
 	// to update UpdateMaintenanceMode values
 	const [updateStoreMainInformation] = useUpdateStoreMainInformationMutation();
 	const handleUpdateStoreMainInformation = async () => {
-		localStorage.removeItem("storeLogo");
 		resetSettingError();
 		setLoadingTitle("جاري تعديل بيانات المتجر الأساسية");
 
@@ -257,7 +253,6 @@ const MainInformation = () => {
 			) {
 				setLoadingTitle("");
 
-				setStoreLogo(response?.data?.data?.setting_store?.logo);
 				if (
 					response?.data?.data?.setting_store?.verification_status ===
 					"لم يتم الطلب"
@@ -337,7 +332,7 @@ const MainInformation = () => {
 				</div>
 
 				<div className='main-info-form'>
-					{isLoading ? (
+					{isFetching ? (
 						<div
 							className='d-flex justify-content-center align-items-center'
 							style={{ height: "200px" }}>

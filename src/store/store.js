@@ -69,6 +69,10 @@ import { mainInformationApi } from "./apiSlices/mainInformationApi";
 import { selectCountriesApi } from "./apiSlices/selectorsApis/selectCountriesApi";
 import { maintenanceModeApi } from "./apiSlices/maintenanceModeApi";
 import { reportsApi } from "./apiSlices/reportsApi";
+import { evaluationThePlatformApi } from "./apiSlices/evaluationThePlatformApi";
+import { editUserDetailsApi } from "./apiSlices/editUserDetailsApi";
+import { logOutApi } from "./apiSlices/logOutApi";
+import { registrationMarketerStatusApi } from "./apiSlices/registrationMarketerStatusApi";
 
 // store
 export const store = configureStore({
@@ -76,6 +80,7 @@ export const store = configureStore({
 		getDefaultMiddleware().concat(
 			pagesApi.middleware,
 			loginApi.middleware,
+			logOutApi.middleware,
 			walletApi.middleware,
 			ordersApi.middleware,
 			couponApi.middleware,
@@ -92,6 +97,7 @@ export const store = configureStore({
 			selectBanksApi.middleware,
 			selectCitiesApi.middleware,
 			notificationsApi.middleware,
+			editUserDetailsApi.middleware,
 			mainInformationApi.middleware,
 			selectCountriesApi.middleware,
 			maintenanceModeApi.middleware,
@@ -109,11 +115,14 @@ export const store = configureStore({
 			selectPageCategoriesApi.middleware,
 			selectImportProductsApi.middleware,
 			selectEtlobahCategoryApi.middleware,
-			selectEtlbohaSubCategoriesApi.middleware
+			evaluationThePlatformApi.middleware,
+			selectEtlbohaSubCategoriesApi.middleware,
+			registrationMarketerStatusApi.middleware
 		),
 	reducer: {
 		[pagesApi.reducerPath]: pagesApi.reducer,
 		[loginApi.reducerPath]: loginApi.reducer,
+		[logOutApi.reducerPath]: logOutApi.reducer,
 		[ordersApi.reducerPath]: ordersApi.reducer,
 		[walletApi.reducerPath]: walletApi.reducer,
 		[ratingApi.reducerPath]: ratingApi.reducer,
@@ -137,6 +146,7 @@ export const store = configureStore({
 		[requestDelegateApi.reducerPath]: requestDelegateApi.reducer,
 		[mainInformationApi.reducerPath]: mainInformationApi.reducer,
 		[SEOImprovementsApi.reducerPath]: SEOImprovementsApi.reducer,
+		[editUserDetailsApi.reducerPath]: editUserDetailsApi.reducer,
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
@@ -147,13 +157,11 @@ export const store = configureStore({
 		[selectImportProductsApi.reducerPath]: selectImportProductsApi.reducer,
 		[selectPageCategoriesApi.reducerPath]: selectPageCategoriesApi.reducer,
 		[selectEtlobahCategoryApi.reducerPath]: selectEtlobahCategoryApi.reducer,
+		[evaluationThePlatformApi.reducerPath]: evaluationThePlatformApi.reducer,
 		[selectEtlbohaSubCategoriesApi.reducerPath]:
 			selectEtlbohaSubCategoriesApi.reducer,
-
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		// [shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		[registrationMarketerStatusApi.reducerPath]:
+			registrationMarketerStatusApi.reducer,
 		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
 
 		AddActivity: AddActivity,

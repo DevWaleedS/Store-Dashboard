@@ -31,7 +31,7 @@ import {
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "all" },
 	{ id: 2, ar_name: "تم النشر", en_name: "active" },
-	{ id: 3, ar_name: "محظور", en_name: "notActive" },
+	{ id: 3, ar_name: "محظور", en_name: "not_active" },
 ];
 
 const selectFilterStyles = {

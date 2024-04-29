@@ -12,9 +12,10 @@ import Context from "../Context/context";
 import { Switch } from "@mui/material";
 
 // Components
-import useFetch from "../Hooks/UseFetch";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
+import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
+import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -24,14 +25,13 @@ import {
 	useChangePaymentStatusMutation,
 	useGetPaymentGatewaysQuery,
 } from "../store/apiSlices/paymentGatewaysApi";
+import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
+import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 // Icons
 import { HomeIcon } from "../data/Icons";
 import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
-import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
-import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
 
 // switch styles
 const switchStyle = {
@@ -95,6 +95,14 @@ const PaymentGateways = () => {
 	const [allPayments, setAllPayments] = useState([]);
 
 	// -----------------------------------------------------------
+
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
 
 	// Side Effects
 	useEffect(() => {

@@ -1,13 +1,13 @@
-import React, { useState, useEffect, Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 
 // Third party
 import ReactDom from "react-dom";
 import { Link } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
 
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { Avatar, Skeleton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 // Redux
@@ -18,27 +18,15 @@ import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 import { MdVerified } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
-// Context
-import { UserAuth } from "../../Context/UserAuthorProvider";
+// RTK Query
+import { useGetUserProfileDataQuery } from "../../store/apiSlices/editUserDetailsApi";
 
-// Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+const VerifyStore = ({ verificationStatus, isFetching }) => {
+	// get user profile data from api...
+	const { data: userProfileData } = useGetUserProfileDataQuery();
 
-const VerifyStore = () => {
-	const UserInfo = useContext(UserAuth);
-	const { userInfo } = UserInfo;
-	const [verificationStatus, setVerificationStatus] = useState();
-	const { fetchedData, loading } = useFetch("verification_show");
 	const { isOpenVerifyModal } = useSelector((state) => state.VerifyModal);
-	const dispatch = useDispatch(false);
-
-	useEffect(() => {
-		if (fetchedData?.data?.stores) {
-			setVerificationStatus(
-				fetchedData?.data?.stores?.map((store) => store?.verification_status)[0]
-			);
-		}
-	}, [fetchedData?.data?.stores]);
+	const dispatch = useDispatch(true);
 
 	// styles
 	const style = {
@@ -71,8 +59,39 @@ const VerifyStore = () => {
 						id='modal-modal-description'
 						sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
 						<div className='d-flex justify-content-center align-items-center'>
-							{loading ? (
-								<CircularLoading />
+							{isFetching ? (
+								<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3 overflow-hidden'>
+									<p className='verify-message d-flex align-items-center gap-3'>
+										<Skeleton variant='circular'>
+											<Avatar />
+										</Skeleton>
+										<div>
+											<Skeleton
+												variant='text'
+												animation='wave'
+												width={300}
+												height={13}
+											/>
+
+											<Skeleton
+												variant='text'
+												animation='wave'
+												width={800}
+												height={30}
+											/>
+										</div>
+									</p>
+									<div className='btns-box'>
+										<Skeleton width={160} height={40} variant='rectangular' />
+									</div>
+									<IoMdCloseCircleOutline
+										style={{ cursor: "pointer", fill: "#02466a" }}
+										fill='#02466a'
+										onClick={() => {
+											dispatch(closeVerifyModal());
+										}}
+									/>
+								</div>
 							) : (
 								<div className='d-flex justify-content-center align-items-center'>
 									{verificationStatus === "جاري التوثيق" ? (
@@ -80,9 +99,9 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{!userInfo?.name
-														? userInfo?.username || "٠٠٠"
-														: userInfo?.name}{" "}
+													{!userProfileData?.name
+														? userProfileData?.username || "٠٠٠"
+														: userProfileData?.name}{" "}
 												</span>{" "}
 												المتجر الخاص قيد المراجعة من قبل الجهات المختصة
 											</p>
@@ -99,9 +118,9 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{!userInfo?.name
-														? userInfo?.username || "٠٠٠"
-														: userInfo?.name}{" "}
+													{!userProfileData?.name
+														? userProfileData?.username || "٠٠٠"
+														: userProfileData?.name}{" "}
 												</span>
 												تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من الجهات
 												المختصة
@@ -128,9 +147,9 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{!userInfo?.name
-														? userInfo?.username || "٠٠٠"
-														: userInfo?.name}{" "}
+													{!userProfileData?.name
+														? userProfileData?.username || "٠٠٠"
+														: userProfileData?.name}{" "}
 												</span>
 												طلب التوثيق مرفوض الرجاء التوجه إلى التوثيق لتعديل
 												البيانات
@@ -157,9 +176,9 @@ const VerifyStore = () => {
 											<p className='verify-message'>
 												مرحبا{" "}
 												<span style={{ fontWeight: 600 }}>
-													{!userInfo?.name
-														? userInfo?.username || "٠٠٠"
-														: userInfo?.name}{" "}
+													{!userProfileData?.name
+														? userProfileData?.username || "٠٠٠"
+														: userProfileData?.name}{" "}
 												</span>
 												فضلا أكمل البيانات الأساسية للمتجر لطلب التوثيق
 											</p>
@@ -207,11 +226,14 @@ const VerifyStore = () => {
 	);
 };
 
-const VerifyStoreModal = () => {
+const VerifyStoreModal = ({ verificationStatus, isFetching }) => {
 	return (
 		<Fragment>
 			{ReactDom.createPortal(
-				<VerifyStore />,
+				<VerifyStore
+					verificationStatus={verificationStatus}
+					isFetching={isFetching}
+				/>,
 				document.getElementById("verifay_store_modal")
 			)}
 		</Fragment>

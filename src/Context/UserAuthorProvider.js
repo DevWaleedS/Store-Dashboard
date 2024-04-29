@@ -3,8 +3,6 @@ import React, { useState } from "react";
 export const UserAuth = React.createContext();
 
 const UserAuthorProvider = ({ children }) => {
-	const [userInfo, setUserInfo] = useState({});
-
 	const [rememberMe, setRememberMe] = useState({
 		username: "",
 		password: "",
@@ -12,8 +10,6 @@ const UserAuthorProvider = ({ children }) => {
 	});
 
 	const context = {
-		userInfo,
-		setUserInfo,
 		rememberMe,
 		setRememberMe,
 	};

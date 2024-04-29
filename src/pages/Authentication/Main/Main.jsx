@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
-import "./Main.css";
+
 // Third party
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+
 // Components
-import LogoHeader from "../LogoHeader/LogoHeader";
 import Tabs from "../Tabs/Tabs";
 import Login from "../Login/Login";
-import RegisterStore from "../RegisterStore/RegisterStore";
-import useFetch from "../../../Hooks/UseFetch";
-// Icons
-
-import RegisterDelegate from "../RegisterDelegate/RegisterDelegate";
-import { SvgComponent } from "../../../data/Icons";
 import Loading from "../../Loading/Loading";
+import LogoHeader from "../LogoHeader/LogoHeader";
+import RegisterStore from "../RegisterStore/RegisterStore";
+import RegisterDelegate from "../RegisterDelegate/RegisterDelegate";
 
+// Icons
+import { SvgComponent } from "../../../data/Icons";
+
+// RTK Query
+import { useShowRegistrationMarketerStatusQuery } from "../../../store/apiSlices/registrationMarketerStatusApi";
+
+// Css Styles file
+import "./Main.css";
+
+// -------------------------------------------------
 const mainTitle = [
 	{ id: 1, text: "قم بتسجيل الدخول إلى حسابك" },
 	{ id: 2, text: "أنشئ حسابك واستمتع بالتجارة الإلكترونية" },
@@ -32,9 +39,9 @@ const imgSubTitle = [
 ];
 
 function Main() {
-	const { fetchedData, loading } = useFetch(
-		"https://backend.atlbha.com/api/selector/registrationMarketer"
-	);
+	// show  registration marketer status
+	const { data: registrationMarketerStatus, isLoading } =
+		useShowRegistrationMarketerStatusQuery();
 
 	const navigate = useNavigate();
 	const parm = useParams();
@@ -56,21 +63,20 @@ function Main() {
 					? 0
 					: parm?.type === "merchant"
 					? 1
-					: parm?.type === "delegate" &&
-					  fetchedData?.data?.registration_marketer === "active"
+					: parm?.type === "delegate" && registrationMarketerStatus === "active"
 					? 2
 					: 0
 			);
 		} else {
 			navigate("*");
 		}
-	}, [parm?.type, fetchedData?.data?.registration_marketer]);
+	}, [parm?.type, registrationMarketerStatus]);
 
 	if (store_token) {
 		return <Navigate to='/' />;
 	}
 
-	if (loading) {
+	if (isLoading) {
 		return <Loading />;
 	}
 
@@ -89,7 +95,7 @@ function Main() {
 							<Tabs
 								activeTab={activeTab}
 								setActiveTab={setActiveTab}
-								registration_marketer={fetchedData?.data?.registration_marketer}
+								registration_marketer={registrationMarketerStatus}
 							/>
 							<h2>{mainTitle?.[activeTab]?.text}</h2>
 							{activeTab === 0 ? (

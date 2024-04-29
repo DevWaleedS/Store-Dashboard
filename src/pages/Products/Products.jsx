@@ -31,8 +31,10 @@ import {
 	useSearchInImportedProductsMutation,
 	useSearchInStoreProductsMutation,
 } from "../../store/apiSlices/productsApi";
+import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 const Products = () => {
+	const navigate = useNavigate();
 	const store_token = document.cookie
 		?.split("; ")
 		?.find((cookie) => cookie.startsWith("store_token="))
@@ -41,7 +43,14 @@ const Products = () => {
 	// Categories Selector
 	const { data: selectCategories } = useGetCategoriesQuery();
 
-	const navigate = useNavigate();
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
+
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [file, setFile] = useState("");

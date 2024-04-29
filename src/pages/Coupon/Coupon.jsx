@@ -23,6 +23,7 @@ import {
 	useGetCouponsQuery,
 	useSearchInCouponsMutation,
 } from "../../store/apiSlices/couponApi";
+import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 // filter Coupon by
 const filtersTypes = [
@@ -96,6 +97,14 @@ const Coupon = () => {
 		page: pageTarget,
 		number: rowsCount,
 	});
+
+	// to Handle if the user is not verify  her account
+	const { data: showVerification } = useShowVerificationQuery();
+	useEffect(() => {
+		if (showVerification?.verification_status !== "تم التوثيق") {
+			navigate("/");
+		}
+	}, [showVerification?.verification_status, navigate]);
 
 	/** get contact data */
 	useEffect(() => {

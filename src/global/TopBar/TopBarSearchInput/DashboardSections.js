@@ -314,7 +314,7 @@ export const dashboardSections = [
 	{
 		id: 31,
 		sectionName: "التقارير",
-		route: "Report",
+		route: "Reports",
 		icon: <Reports />,
 	},
 	{
