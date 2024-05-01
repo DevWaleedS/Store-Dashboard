@@ -621,7 +621,7 @@ export default function BigProductsTable({
 																	<Link
 																		to={
 																			row?.is_import
-																				? `ShowImportEtlobhaProduct/${row?.id}`
+																				? `EditImportProducts/${row?.id}`
 																				: `EditProduct/${row?.id}`
 																		}
 																		style={{ cursor: "pointer" }}>

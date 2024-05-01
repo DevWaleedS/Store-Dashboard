@@ -26,9 +26,6 @@ import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
 import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// Redux
-import { useSelector } from "react-redux";
-
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
 import {
@@ -834,6 +831,7 @@ const MainInformation = () => {
 
 			{/* Hours Works Modal */}
 			<HoursWorks
+				worksDaysData={mainInformation?.workDays}
 				workDays={workDays}
 				setWorkDays={setWorkDays}
 				openHoursWork={openHoursWork}

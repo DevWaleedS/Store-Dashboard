@@ -184,33 +184,29 @@ const EditProduct = () => {
 
 	// To get All Product info from api
 	useEffect(() => {
-		if (currentProduct?.product) {
+		if (currentProduct) {
 			setProduct({
 				...product,
-				name: currentProduct?.product?.name,
-				short_description: currentProduct?.product?.short_description,
-				selling_price: currentProduct?.product?.selling_price,
-				category_id: currentProduct?.product?.category?.id,
-				discount_price: currentProduct?.product?.discount_price,
-				subcategory_id: currentProduct?.product?.subcategory?.map(
-					(sub) => sub?.id
-				),
-				stock: currentProduct?.product?.stock,
-				weight: currentProduct?.product?.weight,
+				name: currentProduct?.name,
+				short_description: currentProduct?.short_description,
+				selling_price: currentProduct?.selling_price,
+				category_id: currentProduct?.category?.id,
+				discount_price: currentProduct?.discount_price,
+				subcategory_id: currentProduct?.subcategory?.map((sub) => sub?.id),
+				stock: currentProduct?.stock,
+				weight: currentProduct?.weight,
 			});
-			setEditorValue(currentProduct?.product?.description);
-			setSEOdescription(
-				currentProduct?.product?.SEOdescription?.map((seo) => seo)
-			);
-			setMultiImages(currentProduct?.product?.images?.map((image) => image));
+			setEditorValue(currentProduct?.description);
+			setSEOdescription(currentProduct?.SEOdescription?.map((seo) => seo));
+			setMultiImages(currentProduct?.images?.map((image) => image));
 
 			setProductHasOptions(
-				currentProduct?.product?.product_has_options === 1 ? true : false
+				currentProduct?.product_has_options === 1 ? true : false
 			);
 
 			setOptionsSection(
-				currentProduct?.product?.attributes?.length !== 0
-					? currentProduct?.product?.attributes?.map((attribute) => ({
+				currentProduct?.attributes?.length !== 0
+					? currentProduct?.attributes?.map((attribute) => ({
 							id: attribute?.id,
 							name: attribute?.name,
 							select_value: attribute?.type,
@@ -245,7 +241,7 @@ const EditProduct = () => {
 					  ]
 			);
 			setAttributes(
-				currentProduct?.product?.options?.map((option) => ({
+				currentProduct?.options?.map((option) => ({
 					id: option?.id,
 					price: Number(option?.price),
 					discount_price: Number(option?.discount_price),
@@ -258,7 +254,7 @@ const EditProduct = () => {
 				}))
 			);
 		}
-	}, [currentProduct?.product]);
+	}, [currentProduct]);
 
 	// ---------------------------------------------
 
@@ -531,9 +527,10 @@ const EditProduct = () => {
 			}
 		}
 
+		// make request ...
 		try {
 			const response = await editProductById({
-				id: currentProduct?.product?.id,
+				id: currentProduct?.id,
 				body: formData,
 			});
 
@@ -788,9 +785,7 @@ const EditProduct = () => {
 																{...getInputProps()}
 																id='add-image'
 																disabled={
-																	currentProduct?.product?.is_import
-																		? true
-																		: false
+																	currentProduct?.is_import ? true : false
 																}
 															/>
 														</div>
@@ -812,8 +807,8 @@ const EditProduct = () => {
 
 													<img
 														className='w-100 h-100'
-														src={currentProduct?.product?.cover}
-														alt={currentProduct?.product?.product?.name}
+														src={currentProduct?.cover}
+														alt={currentProduct?.product?.name}
 													/>
 												</div>
 											</div>

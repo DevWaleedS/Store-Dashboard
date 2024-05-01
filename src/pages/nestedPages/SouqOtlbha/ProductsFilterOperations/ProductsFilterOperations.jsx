@@ -9,8 +9,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
-import { useDispatch } from "react-redux";
-import { FilterProductsByCategoriesThunk } from "../../../../store/Thunk/SouqOtlobhaThunk";
+
+// RTK Query
+import { useFilterSouqOtlobhaProductsByCategoriesMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 
 // Select styles
 const selectMenuStyles = {
@@ -43,8 +44,14 @@ const selectCategoriesStyles = {
 	},
 };
 
-const ProductsFilterOperations = ({ showFilteringOptions, categories }) => {
-	const dispatch = useDispatch();
+const ProductsFilterOperations = ({
+	setSouqOtlobhaProductsData,
+	showFilteringOptions,
+	categories,
+	products,
+	number,
+	page,
+}) => {
 	const [mainCategory, setMainCategory] = React.useState("");
 	const [subCategory, setSubCategory] = React.useState([]);
 
@@ -62,15 +69,33 @@ const ProductsFilterOperations = ({ showFilteringOptions, categories }) => {
 	const subcategory =
 		categories?.filter((sub) => sub?.id === mainCategory) || "";
 
-	// create category filter function
-	const onClickFilter = () => {
+	// handle   Filter on souq otlobha products by categories
+	const [filterSouqOtlobhaProductsByCategories, { isLoading }] =
+		useFilterSouqOtlobhaProductsByCategoriesMutation();
+
+	const subCategoriesSelectedIds = subCategory
+		.map((id) => `id[]=${id}`)
+		.join("&");
+	const handleFilterSouqOtlobhaProductsByCategories = async () => {
 		if (subCategory?.length !== 0 && mainCategory !== "") {
-			dispatch(
-				FilterProductsByCategoriesThunk({
-					category_id: mainCategory,
-					subCategory: subCategory,
-				})
-			);
+			try {
+				const response = await filterSouqOtlobhaProductsByCategories({
+					page,
+					number,
+					subCategoriesSelectedIds,
+					mainCategoryId: mainCategory,
+				});
+				const responseData = response.data?.data;
+
+				setSouqOtlobhaProductsData(responseData.products);
+			} catch (error) {
+				console.error(
+					"Error fetching filterSouqOtlobhaProductsByCategories:",
+					error
+				);
+			}
+		} else {
+			setSouqOtlobhaProductsData(products);
 		}
 	};
 
@@ -179,7 +204,10 @@ const ProductsFilterOperations = ({ showFilteringOptions, categories }) => {
 				</FormControl>
 			</div>
 			<div className='col-md-3 col-12 mt-md-0 mt-3'>
-				<button className='apply-btn' onClick={() => onClickFilter()}>
+				<button
+					className='apply-btn'
+					disabled={isLoading}
+					onClick={() => handleFilterSouqOtlobhaProductsByCategories()}>
 					تنفيذ الفرز
 				</button>
 			</div>

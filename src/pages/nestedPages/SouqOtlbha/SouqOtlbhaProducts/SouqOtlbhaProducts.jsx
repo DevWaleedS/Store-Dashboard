@@ -10,18 +10,18 @@ import CircularLoading from "../../../../HelperComponents/CircularLoading";
 import { BsStarFill } from "react-icons/bs";
 import { CurrencyIcon } from "../../../../data/Icons";
 
-const SouqOtlbhaProducts = ({ data, loading }) => {
+const SouqOtlbhaProducts = ({ products, loading }) => {
 	const navigate = useNavigate();
 	return loading ? (
 		<CircularLoading />
 	) : (
 		<Fragment>
-			{data?.length === 0 ? (
+			{products?.length === 0 ? (
 				<div>
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
-				data?.map((product, index) => (
+				products?.map((product, index) => (
 					<div className='product-box mb-md-4 mb-3' key={index}>
 						<div className='row'>
 							<div className='col-sm-3 col-12 mb-sm-0 mb-3'>

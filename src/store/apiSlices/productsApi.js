@@ -152,7 +152,7 @@ export const productsApi = createApi({
 			query: (id) => `product/${id}`,
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data,
+			transformResponse: (response, meta, arg) => response.data?.product,
 			providesTags: (result, error, id) => [{ type: "Products", id }],
 		}),
 		// edit Product by id
@@ -160,6 +160,18 @@ export const productsApi = createApi({
 			query: ({ id, body }) => {
 				return {
 					url: `product/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Products"],
+		}),
+
+		// edit Product by id
+		editImportProductById: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `updateimportproduct/${id}`,
 					method: "POST",
 					body: body,
 				};
@@ -185,5 +197,6 @@ export const {
 	useChangeCategoriesForSomeSelectedProductsMutation,
 	useGetProductByIdQuery,
 	useEditProductByIdMutation,
+	useEditImportProductByIdMutation,
 	useAddNewProductMutation,
 } = productsApi;

@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
-import useFetch from "../../../Hooks/UseFetch";
+
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Context
@@ -23,6 +23,12 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { CurrencyIcon } from "../../../data/Icons";
 import { PlayVideo } from "../../../data/images";
 import ProductOptions from "./ProductOptions";
+
+// RTK Query
+import {
+	useImportProductToStoreProductsMutation,
+	useShowSouqOtlobhaProductByIdQuery,
+} from "../../../store/apiSlices/souqOtlobhaProductsApi";
 
 // Select Styles
 const modalStyle = {
@@ -45,17 +51,13 @@ const modalStyle = {
 };
 
 const ProductRefund = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const { fetchedData, loading, reload, setReload } = useFetch(
-		`etlobhaProductShow/${id}`
-	);
+	// get product by id
+	const { data: currentProduct, isFetching } =
+		useShowSouqOtlobhaProductByIdQuery(id);
+
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -66,13 +68,11 @@ const ProductRefund = () => {
 	const [isActive, setIsActive] = useState(null);
 	const [optionID, setOptionID] = useState(null);
 	const [productPrice, setProductPrice] = useState(
-		fetchedData?.data?.products?.purchasing_price
+		currentProduct?.purchasing_price
 	);
-	const [productQty, setProductQty] = useState(
-		fetchedData?.data?.products?.stock
-	);
+	const [productQty, setProductQty] = useState(currentProduct?.stock);
 	const [productLessQty, setProductLessQty] = useState(
-		fetchedData?.data?.products?.less_qty
+		currentProduct?.less_qty
 	);
 	const [selectedValues, setSelectedValues] = useState([]);
 
@@ -109,9 +109,9 @@ const ProductRefund = () => {
 
 	useEffect(() => {
 		if (selectedValues?.length === 0) {
-			setSelectedValues(getOptions(fetchedData?.data?.products));
+			setSelectedValues(getOptions(currentProduct));
 		}
-	}, [fetchedData?.data?.products, selectedValues?.length]);
+	}, [currentProduct, selectedValues?.length]);
 
 	const findMatchingSubArray = (nestedArray, array) => {
 		for (let i = 0; i < nestedArray?.length; i++) {
@@ -133,11 +133,9 @@ const ProductRefund = () => {
 	useEffect(() => {
 		if (
 			selectedValues?.filter((value) => value !== "")?.length > 0 &&
-			fetchedData?.data?.products?.amount === 1
+			currentProduct?.amount === 1
 		) {
-			const optionNames = fetchedData?.data?.products?.options?.map(
-				(option) => option
-			);
+			const optionNames = currentProduct?.options?.map((option) => option);
 			const matchingSubArray = findMatchingSubArray(
 				optionNames,
 				selectedValues?.filter((value) => value !== "")
@@ -148,11 +146,11 @@ const ProductRefund = () => {
 			setProductLessQty(Number(matchingSubArray?.less_qty));
 		} else {
 			setOptionID(null);
-			setProductPrice(fetchedData?.data?.products?.purchasing_price);
-			setProductQty(fetchedData?.data?.products?.stock);
-			setProductLessQty(fetchedData?.data?.products?.less_qty);
+			setProductPrice(currentProduct?.purchasing_price);
+			setProductQty(currentProduct?.stock);
+			setProductLessQty(currentProduct?.less_qty);
 		}
-	}, [selectedValues, fetchedData?.data?.products]);
+	}, [selectedValues, currentProduct]);
 
 	const getOptions = (product) => {
 		const attributesName = product?.attributes?.map((attributes) =>
@@ -167,22 +165,27 @@ const ProductRefund = () => {
 
 	// To Get All Info About Product
 	useEffect(() => {
-		if (fetchedData?.data?.products) {
+		if (currentProduct) {
 			setProductInfo({
 				...productInfo,
-				price: fetchedData?.data?.products?.purchasing_price,
+				price: currentProduct?.purchasing_price,
 			});
 
-			setImagesPreview(fetchedData?.data?.products?.cover);
+			setImagesPreview(currentProduct?.cover);
 		}
-	}, [fetchedData?.data?.products]);
+	}, [currentProduct]);
 	// --------------------------------------------------------------
 
-	// Handle Import Product
-	const importProduct = () => {
+	// Handle Import Product from souq etlobha products to store products
+
+	const [importProductToStoreProducts, { isLoading }] =
+		useImportProductToStoreProductsMutation();
+
+	const handleImportProduct = async () => {
 		resetProductErrors();
 		setLoadingTitle("جاري اضافة المنتج إلى سلة الاستيراد");
 
+		// Data that send to api...
 		let formData = new FormData();
 		formData.append("data[0][id]", productInfo?.id);
 		formData.append("data[0][price]", productPrice);
@@ -191,42 +194,49 @@ const ProductRefund = () => {
 			formData.append("data[0][option_id]", optionID);
 		}
 
-		axios
-			.post(`addImportCart`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (
-					res?.data?.success === true &&
-					res?.data?.message?.en === "Cart Added successfully"
-				) {
-					setLoadingTitle("");
-					setReload(!reload);
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Products/SouqOtlobha");
-				} else {
-					setLoadingTitle("");
-					setProductErrors({
-						...productErrors,
-						price: res?.data?.message?.en?.["data.0.price"]?.[0],
-						qty: res?.data?.message?.en?.["data.0.qty"]?.[0],
-						less_qty: res?.data?.message?.ar,
-					});
-
-					toast.error(res?.data?.message?.en?.["data.0.price"]?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.["data.0.qty"]?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+		// make request...
+		try {
+			const response = await importProductToStoreProducts({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Products/SouqOtlobha");
+			} else {
+				setLoadingTitle("");
+				setProductErrors({
+					...productErrors,
+					price: response?.data?.message?.en?.["data.0.price"]?.[0],
+					qty: response?.data?.message?.en?.["data.0.qty"]?.[0],
+					less_qty: response?.data?.message?.ar,
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				toast.error(response?.data?.message?.en?.["data.0.price"]?.[0], {
+					theme: "light",
+				});
+				toast.error(response?.data?.message?.en?.["data.0.qty"]?.[0], {
+					theme: "light",
+				});
+			}
+		} catch (error) {
+			console.error("Error changing importProductToStoreProducts:", error);
+		}
 	};
 
 	const handleQut = (less_qty) => {
@@ -265,7 +275,7 @@ const ProductRefund = () => {
 									}}
 								/>
 							</div>
-							{loading ? (
+							{isFetching ? (
 								<div className='mt-5 h-100 d-flex flex-column align-items-center justify-content-cneter'>
 									<CircularLoading />
 								</div>
@@ -274,7 +284,7 @@ const ProductRefund = () => {
 									<div className='row container-row overflow-hidden'>
 										<div className='col-12'>
 											<div className='product-title mb-3 '>
-												{fetchedData?.data?.products?.name}
+												{currentProduct?.name}
 											</div>
 										</div>
 										<div className='col-md-5 col-12 mb-md-0 mb-3'>
@@ -301,62 +311,60 @@ const ProductRefund = () => {
 													)}
 												</div>
 												<div className='another-image'>
-													{fetchedData?.data?.products?.images?.map(
-														(item, index) => {
-															const isVideo = item?.image.includes(
-																".mp4" || ".avi" || ".mov" || ".mkv"
-															);
-															const handleClick = () => {
-																setImagesPreview(item?.image);
-																setIsActive(index);
-															};
+													{currentProduct?.images?.map((item, index) => {
+														const isVideo = item?.image.includes(
+															".mp4" || ".avi" || ".mov" || ".mkv"
+														);
+														const handleClick = () => {
+															setImagesPreview(item?.image);
+															setIsActive(index);
+														};
 
-															if (isVideo) {
-																return (
-																	<div
-																		key={index}
-																		onClick={handleClick}
-																		className={`video_wrapper ${
-																			isActive === index ? "active" : ""
-																		}`}>
-																		<video
-																			onClick={() => {
-																				setImagesPreview(item?.image);
-																			}}
-																			style={{
-																				cursor: "pointer",
-																			}}
-																			poster={PlayVideo}
-																			src={item?.image}
-																			className='img-fluid'
-																		/>
-																	</div>
-																);
-															} else {
-																return (
-																	<div
-																		key={index}
-																		onClick={handleClick}
-																		className={`${
-																			isActive === index ? "active" : ""
-																		}`}>
-																		<img
-																			style={{
-																				cursor: "pointer",
-																				objectFit: "contain",
-																			}}
-																			onClick={() => {
-																				setImagesPreview(item?.image);
-																			}}
-																			src={item?.image}
-																			alt={item?.image}
-																			className='img-fluid'
-																		/>
-																	</div>
-																);
-															}
+														if (isVideo) {
+															return (
+																<div
+																	key={index}
+																	onClick={handleClick}
+																	className={`video_wrapper ${
+																		isActive === index ? "active" : ""
+																	}`}>
+																	<video
+																		onClick={() => {
+																			setImagesPreview(item?.image);
+																		}}
+																		style={{
+																			cursor: "pointer",
+																		}}
+																		poster={PlayVideo}
+																		src={item?.image}
+																		className='img-fluid'
+																	/>
+																</div>
+															);
+														} else {
+															return (
+																<div
+																	key={index}
+																	onClick={handleClick}
+																	className={`${
+																		isActive === index ? "active" : ""
+																	}`}>
+																	<img
+																		style={{
+																			cursor: "pointer",
+																			objectFit: "contain",
+																		}}
+																		onClick={() => {
+																			setImagesPreview(item?.image);
+																		}}
+																		src={item?.image}
+																		alt={item?.image}
+																		className='img-fluid'
+																	/>
+																</div>
+															);
 														}
-													)}
+													})}
 												</div>
 											</div>
 
@@ -365,14 +373,13 @@ const ProductRefund = () => {
 												<div className='main-category category mb-3'>
 													<div className='label mb-2'>النشاط الرئيسي</div>
 													<div className='input'>
-														{fetchedData?.data?.products?.category?.name}
+														{currentProduct?.category?.name}
 													</div>
 												</div>
 												<div className='sub-category category'>
 													<div className='label mb-2'>الأنشطة الفرعية </div>
 													<div className='d-flex flex-wrap align-items-center justify-content-start flex-wrap gap-1'>
-														{fetchedData?.data?.products?.subcategory
-															?.length === 0 ? (
+														{currentProduct?.subcategory?.length === 0 ? (
 															<div
 																className='tags'
 																style={{
@@ -381,22 +388,20 @@ const ProductRefund = () => {
 																لا يوجد أنشطة فرعية
 															</div>
 														) : (
-															fetchedData?.data?.products?.subcategory?.map(
-																(sub, index) => (
-																	<div key={index} className='tags'>
-																		{sub?.name}
-																	</div>
-																)
-															)
+															currentProduct?.subcategory?.map((sub, index) => (
+																<div key={index} className='tags'>
+																	{sub?.name}
+																</div>
+															))
 														)}
 													</div>
 												</div>
 											</div>
 										</div>
 										<div className='col-md-6 col-12'>
-											{fetchedData?.data?.products?.attributes?.length > 0 && (
+											{currentProduct?.attributes?.length > 0 && (
 												<ProductOptions
-													attributes={fetchedData?.data?.products?.attributes}
+													attributes={currentProduct?.attributes}
 													selectedValues={selectedValues}
 													updateSelectOptions={handleChangeOptions}
 												/>
@@ -495,7 +500,7 @@ const ProductRefund = () => {
 												<div
 													className='input textarea'
 													dangerouslySetInnerHTML={{
-														__html: fetchedData?.data?.products?.description,
+														__html: currentProduct?.description,
 													}}
 												/>
 											</div>
@@ -504,9 +509,8 @@ const ProductRefund = () => {
 									<div className='d-flex justify-content-center '>
 										<button
 											className='refund-btn  d-flex justify-content-center align-items-center'
-											onClick={() => {
-												importProduct();
-											}}>
+											disabled={isLoading}
+											onClick={handleImportProduct}>
 											اضافة المنتج إلى سلة الاستيراد
 										</button>
 									</div>

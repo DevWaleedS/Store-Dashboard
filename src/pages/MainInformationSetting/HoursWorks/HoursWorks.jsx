@@ -4,9 +4,6 @@ import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-// Components
-import useFetch from "../../../Hooks/UseFetch";
-
 // Icons
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
@@ -34,6 +31,7 @@ const ModalStyle = {
 };
 
 const HoursWorks = ({
+	worksDaysData,
 	setWorkDays,
 	setOpenHoursWork,
 	openHoursWork,
@@ -42,8 +40,6 @@ const HoursWorks = ({
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 
-	// To show the store info that come from api
-	const { fetchedData } = useFetch("setting_store_show");
 	const updateState = (index) => {
 		setWorkDays((prevState) => {
 			const newState = prevState.map((obj, i) => {
@@ -96,7 +92,7 @@ const HoursWorks = ({
 						onClick={() => {
 							setOpenHoursWork(false);
 
-							setWorkDays(fetchedData?.data?.setting_store?.workDays);
+							setWorkDays(worksDaysData);
 						}}
 						style={{
 							color: "#ffffff",

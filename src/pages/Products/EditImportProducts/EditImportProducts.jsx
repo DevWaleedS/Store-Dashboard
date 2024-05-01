@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,7 +12,6 @@ import Context from "../../../Context/context";
 import { TextEditorContext } from "../../../Context/TextEditorProvider";
 
 // Components
-import useFetch from "../../../Hooks/UseFetch";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { TextEditor } from "../../../components/TextEditor";
 
@@ -29,11 +28,18 @@ import IconButton from "@mui/material/IconButton";
 import Zoom from "@mui/material/Zoom";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
-// icons and images
+// Icons and images
 import { Controller, useForm } from "react-hook-form";
 import { CurrencyIcon, PlayVideo } from "../../../data/Icons";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { MdInfoOutline } from "react-icons/md";
+
+// RTK Query
+import {
+	useEditImportProductByIdMutation,
+	useGetProductByIdQuery,
+} from "../../../store/apiSlices/productsApi";
+import { LoadingContext } from "../../../Context/LoadingProvider";
 
 const style = {
 	position: "fixed",
@@ -110,14 +116,15 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 	},
 }));
 
-const ShowImportEtlobhaProduct = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+const EditImportProducts = () => {
 	const navigate = useNavigate();
+
+	// get product data by id
 	const { id } = useParams();
-	const { fetchedData, loading, reload, setReload } = useFetch(`product/${id}`);
+	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
+
+	const LoadingStore = useContext(LoadingContext);
+	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const editorContent = useContext(TextEditorContext);
@@ -137,9 +144,8 @@ const ShowImportEtlobhaProduct = () => {
 		qty: "",
 	});
 	const [productOptions, setProductOptions] = useState([]);
-	console.log(productOptions?.length);
+
 	const {
-		register,
 		handleSubmit,
 		reset,
 		control,
@@ -207,31 +213,30 @@ const ShowImportEtlobhaProduct = () => {
 
 	/**
 	 * --------------------------------------------------------------------
-	 * to set data that coming from api
-	 * --------------------------------------------------------------------
+	  to set data that coming from api
 	 */
 	useEffect(() => {
-		if (fetchedData?.data?.product) {
+		if (currentProduct) {
 			setProduct({
 				...product,
-				name: fetchedData?.data?.product?.name,
-				short_description: fetchedData?.data?.product?.short_description,
+				name: currentProduct?.name,
+				short_description: currentProduct?.short_description,
 				price:
-					fetchedData?.data?.product?.options?.length > 0
-						? fetchedData?.data?.product?.options?.[0]?.price
-						: fetchedData?.data?.product?.selling_price,
+					currentProduct?.options?.length > 0
+						? currentProduct?.options?.[0]?.price
+						: currentProduct?.selling_price,
 				discount_price_import:
-					fetchedData?.data?.product?.options?.length > 0
-						? fetchedData?.data?.product?.options?.[0]?.discount_price
-						: fetchedData?.data?.product?.discount_price_import,
-				qty: fetchedData?.data?.product?.stock,
+					currentProduct?.options?.length > 0
+						? currentProduct?.options?.[0]?.discount_price
+						: currentProduct?.discount_price_import,
+				qty: currentProduct?.stock,
 			});
-			setEditorValue(fetchedData?.data?.product?.description);
-			setImagesPreview(fetchedData?.data?.product?.cover);
+			setEditorValue(currentProduct?.description);
+			setImagesPreview(currentProduct?.cover);
 		}
-		if (fetchedData?.data?.product?.options?.length > 0) {
+		if (currentProduct?.options?.length > 0) {
 			setProductOptions(
-				fetchedData?.data?.product?.options?.map((option) => ({
+				currentProduct?.options?.map((option) => ({
 					id: option?.id,
 					price: Number(option?.price),
 					discount_price: Number(option?.discount_price),
@@ -243,7 +248,7 @@ const ShowImportEtlobhaProduct = () => {
 				}))
 			);
 		}
-	}, [fetchedData?.data?.product]);
+	}, [currentProduct]);
 
 	const addPriceToAttributes = (e, index) => {
 		const updatedAttributes = [...productOptions];
@@ -275,15 +280,16 @@ const ShowImportEtlobhaProduct = () => {
 		}
 	};
 
-	/**
-	 * --------------------------------------------------------------------
-	 * Update Import Product Function
-	 * --------------------------------------------------------------------
-	 */
+	/**----------------------------------------------------------------------------------------
+	 *  Handle update import product */
 
-	const updateImportProduct = (data) => {
+	const [editImportProductById, { isLoading }] =
+		useEditImportProductByIdMutation();
+	const handleUpdateImportProduct = async (data) => {
+		setLoadingTitle("جاري تعديل المنتج");
 		resetCouponError();
-		setEditorValue("");
+
+		// data that send to api ...
 		let formData = new FormData();
 		formData.append("price", data?.price);
 		if (productOptions?.length !== 0) {
@@ -300,39 +306,48 @@ const ShowImportEtlobhaProduct = () => {
 		}
 		formData.append("qty", data?.qty);
 
-		axios
-			.post(`updateimportproduct/${fetchedData?.data?.product?.id}`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setEndActionTitle(res?.data?.message?.ar);
-					navigate("/Products");
-					setReload(!reload);
-				} else {
-					setProductError({
-						price: res?.data?.message?.en?.price?.[0],
-						discount_price_import: res?.data?.message?.en?.[0],
-						qty: res?.data?.message?.en?.qty?.[0],
-					});
-					toast.error(res?.data?.message?.en?.price?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.discount_price_import?.[0], {
-						theme: "light",
-					});
-
-					toast.error(res?.data?.message?.en?.qty?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+		// make request ...
+		try {
+			const response = await editImportProductById({
+				id: currentProduct?.id,
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+				navigate("/Products");
+			} else {
+				setLoadingTitle("");
+				setProductError({
+					price: response?.data?.message?.en?.price?.[0],
+					discount_price_import: response?.data?.message?.en?.[0],
+					qty: response?.data?.message?.en?.qty?.[0],
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing editImportProductById:", error);
+		}
 	};
 
 	return (
@@ -357,12 +372,12 @@ const ShowImportEtlobhaProduct = () => {
 									</div>
 								</div>
 							</div>
-							{loading ? (
+							{isFetching ? (
 								<CircularLoading />
 							) : (
 								<form
 									className='form-h-full'
-									onSubmit={handleSubmit(updateImportProduct)}>
+									onSubmit={handleSubmit(handleUpdateImportProduct)}>
 									<div className='form-body'>
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-md-3 col-12'>
@@ -401,7 +416,7 @@ const ShowImportEtlobhaProduct = () => {
 										</div>
 
 										{/* Multi images */}
-										{fetchedData?.data?.product?.images?.length !== 0 && (
+										{currentProduct?.images?.length !== 0 && (
 											<div className='row mb-md-5 mb-3'>
 												<div className='col-md-3 col-12'>
 													<label htmlFor='product-name'>
@@ -411,72 +426,70 @@ const ShowImportEtlobhaProduct = () => {
 
 												<div className='col-md-7 col-12 '>
 													<div className='d-flex justify-content-start align-items-center gap-2 import-product-multi-images'>
-														{fetchedData?.data?.product?.images?.map(
-															(item, index) => {
-																const isVideo = item?.image.includes(
-																	".mp4" || ".avi" || ".mov" || ".mkv"
+														{currentProduct?.images?.map((item, index) => {
+															const isVideo = item?.image.includes(
+																".mp4" || ".avi" || ".mov" || ".mkv"
+															);
+															const handleClick = () => {
+																setImagesPreview(item?.image);
+																setIsActive(index);
+															};
+
+															if (isVideo) {
+																return (
+																	<div
+																		key={index}
+																		onClick={handleClick}
+																		className={`video_wrapper ${
+																			isActive === index ? "active" : ""
+																		}`}>
+																		<video
+																			onClick={() => {
+																				setImagesPreview(item?.image);
+																			}}
+																			style={{
+																				cursor: "pointer",
+																			}}
+																			src={item?.image}
+																			className='img-fluid'
+																		/>
+
+																		<PlayVideo
+																			onClick={() => {
+																				setImagesPreview(item?.image);
+																			}}
+																			style={{
+																				fill: "#fff",
+																				cursor: "pointer",
+																				position: "absolute",
+																			}}
+																		/>
+																	</div>
 																);
-																const handleClick = () => {
-																	setImagesPreview(item?.image);
-																	setIsActive(index);
-																};
-
-																if (isVideo) {
-																	return (
-																		<div
-																			key={index}
-																			onClick={handleClick}
-																			className={`video_wrapper ${
-																				isActive === index ? "active" : ""
-																			}`}>
-																			<video
-																				onClick={() => {
-																					setImagesPreview(item?.image);
-																				}}
-																				style={{
-																					cursor: "pointer",
-																				}}
-																				src={item?.image}
-																				className='img-fluid'
-																			/>
-
-																			<PlayVideo
-																				onClick={() => {
-																					setImagesPreview(item?.image);
-																				}}
-																				style={{
-																					fill: "#fff",
-																					cursor: "pointer",
-																					position: "absolute",
-																				}}
-																			/>
-																		</div>
-																	);
-																} else {
-																	return (
-																		<div
-																			key={index}
-																			onClick={handleClick}
-																			className={` d-flex justify-content-center align-items-center ${
-																				isActive === index ? "active" : ""
-																			}`}>
-																			<img
-																				style={{
-																					cursor: "pointer",
-																					objectFit: "contain",
-																				}}
-																				onClick={() => {
-																					setImagesPreview(item?.image);
-																				}}
-																				src={item?.image}
-																				alt={item?.image}
-																				className='img-fluid'
-																			/>
-																		</div>
-																	);
-																}
+															} else {
+																return (
+																	<div
+																		key={index}
+																		onClick={handleClick}
+																		className={` d-flex justify-content-center align-items-center ${
+																			isActive === index ? "active" : ""
+																		}`}>
+																		<img
+																			style={{
+																				cursor: "pointer",
+																				objectFit: "contain",
+																			}}
+																			onClick={() => {
+																				setImagesPreview(item?.image);
+																			}}
+																			src={item?.image}
+																			alt={item?.image}
+																			className='img-fluid'
+																		/>
+																	</div>
+																);
 															}
-														)}
+														})}
 													</div>
 												</div>
 											</div>
@@ -499,7 +512,7 @@ const ShowImportEtlobhaProduct = () => {
 													<div
 														style={{ whiteSpace: "normal" }}
 														className='price w-100 d-flex justify-content-start align-items-start p-2'>
-														{fetchedData?.data?.product?.name}
+														{currentProduct?.name}
 													</div>
 												</div>
 											</div>
@@ -534,7 +547,7 @@ const ShowImportEtlobhaProduct = () => {
 													<div
 														style={{ whiteSpace: "normal" }}
 														className='price w-100 d-flex justify-content-start align-items-start p-2'>
-														{fetchedData?.data?.product?.short_description}
+														{currentProduct?.short_description}
 													</div>
 												</div>
 											</div>
@@ -555,7 +568,7 @@ const ShowImportEtlobhaProduct = () => {
 														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center p-2'>
-														{fetchedData?.data?.product?.category?.name}
+														{currentProduct?.category?.name}
 													</div>
 												</div>
 											</div>
@@ -570,8 +583,7 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 											<div className='col-md-7 col-12'>
 												<div className='sub-category '>
-													{fetchedData?.data?.product?.subcategory?.length ===
-													0 ? (
+													{currentProduct?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex align-items-center justify-content-center gap-3 '
 															style={{ color: "#1dbbbe", fontSize: "16px" }}>
@@ -579,7 +591,7 @@ const ShowImportEtlobhaProduct = () => {
 														</div>
 													) : (
 														<div className='d-flex flex-wrap align-items-center justify-content-start gap-1'>
-															{fetchedData?.data?.product?.subcategory?.map(
+															{currentProduct?.subcategory?.map(
 																(sub, index) => (
 																	<div key={index} className='tags'>
 																		{sub?.name}
@@ -617,7 +629,7 @@ const ShowImportEtlobhaProduct = () => {
 														<CurrencyIcon />
 													</div>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{fetchedData?.data?.product?.purchasing_price}
+														{currentProduct?.purchasing_price}
 													</div>
 
 													<div
@@ -717,12 +729,10 @@ const ShowImportEtlobhaProduct = () => {
 											<div className='col-md-3 col-12'></div>
 											<div className='col-md-7 col-12'>
 												{Number(product?.price) <
-													Number(
-														fetchedData?.data?.product?.purchasing_price
-													) && (
+													Number(currentProduct?.purchasing_price) && (
 													<span className='fs-6 text-danger'>
 														السعر يجب ان يكون اكبر من او يساوي (
-														{fetchedData?.data?.product?.purchasing_price})
+														{currentProduct?.purchasing_price})
 													</span>
 												)}
 
@@ -882,8 +892,8 @@ const ShowImportEtlobhaProduct = () => {
 														height: "48px",
 													}}>
 													<div className='price w-100 d-flex justify-content-center align-items-center import_products_input'>
-														{fetchedData?.data?.product?.options?.length > 0
-															? fetchedData?.data?.product?.options?.reduce(
+														{currentProduct?.options?.length > 0
+															? currentProduct?.options?.reduce(
 																	(accumulator, option) =>
 																		Number(accumulator) +
 																		Number(option?.quantity),
@@ -1029,7 +1039,7 @@ const ShowImportEtlobhaProduct = () => {
 											</div>
 										)}
 
-										{Number(fetchedData?.data?.product?.stock) <= 1 && (
+										{Number(currentProduct?.stock) <= 1 && (
 											<div className='row mb-md-5 mb-3'>
 												<div className='col-md-3 col-12'>
 													<label htmlFor='price'>
@@ -1056,7 +1066,10 @@ const ShowImportEtlobhaProduct = () => {
 									<div className='form-footer'>
 										<div className='row d-flex justify-content-center align-items-center'>
 											<div className='col-lg-4 col-6'>
-												<button className='save-btn' type='submit'>
+												<button
+													disabled={isLoading}
+													className='save-btn'
+													type='submit'>
 													حفظ
 												</button>
 											</div>
@@ -1082,4 +1095,4 @@ const ShowImportEtlobhaProduct = () => {
 	);
 };
 
-export default ShowImportEtlobhaProduct;
+export default EditImportProducts;

@@ -1,55 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../../../Hooks/UseFetch";
 import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
+import { TopBarSearchInput } from "../../../global";
+import SuccessMessageModal from "../../CheckoutPage/SuccessMessageModal";
+import { TablePagination } from "../../../components/Tables/TablePagination";
 import {
 	SouqOtlbhaProducts,
 	ProductsFilterOperations,
 	CartMenu,
 } from "./index";
 
-// ICONS
+// Icons
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import { FilterIcon } from "../../../data/Icons";
 
-import { TopBarSearchInput } from "../../../global";
-import SuccessMessageModal from "../../CheckoutPage/SuccessMessageModal";
-import { useDispatch, useSelector } from "react-redux";
-import { SouqOtlobhaThunk } from "../../../store/Thunk/SouqOtlobhaThunk";
-import { TablePagination } from "../../../components/Tables/TablePagination";
+// RTK Query
+import {
+	useGetSouqOtlobhaProductsQuery,
+	useShowImportProductsCartDataQuery,
+} from "../../../store/apiSlices/souqOtlobhaProductsApi";
 
 const SouqOtlobha = () => {
 	const navigate = useNavigate();
-
-	const dispatch = useDispatch();
+	const [showCart, setShowCart] = useState(false);
 	const [pageTarget, setPageTarget] = React.useState(1);
 	const [rowsCount, setRowsCount] = React.useState(10);
-	const { products, categories, currentPage, pageCount } = useSelector(
-		(state) => state.SouqOtlobhaSlice
-	);
-
-	/** get contact data */
-	React.useEffect(() => {
-		dispatch(SouqOtlobhaThunk({ page: pageTarget, number: rowsCount }));
-	}, [rowsCount, pageTarget, dispatch]);
-	/** ------------------------------------------------------------ */
-
-	const {
-		fetchedData: cartData,
-		loading,
-		reload,
-		setReload,
-	} = useFetch("showImportCart");
-
+	const [souqOtlobhaProductsData, setSouqOtlobhaProductsData] = useState([]);
 	const [showFilteringOptions, setShowFilteringOptions] = useState(false);
 
-	const [showCart, setShowCart] = useState(false);
+	/** get Soqu otlobha products data */
+	const { data: souqOtlobhaProducts, isLoading } =
+		useGetSouqOtlobhaProductsQuery({
+			page: pageTarget,
+			number: rowsCount,
+		});
+
+	/** ------------------------------------------------------------ */
+	// Show import products cart data
+	const { data: showImportProductsCartData, isLoading: isCartLoading } =
+		useShowImportProductsCartDataQuery();
 
 	// ---------------------------------------------------------------------------------------------
+	// display Products by tapSelect
+	useEffect(() => {
+		if (souqOtlobhaProducts?.products) {
+			setSouqOtlobhaProductsData(souqOtlobhaProducts?.products);
+		}
+	}, [souqOtlobhaProducts]);
 
 	return (
 		<>
@@ -71,23 +72,17 @@ const SouqOtlobha = () => {
 									onClick={() => setShowCart(!showCart)}>
 									<LocalMallOutlinedIcon />
 									<span className='number'>
-										{loading
+										{isCartLoading
 											? 0
-											: cartData?.data?.cart?.count
-											? cartData?.data?.cart?.count
+											: showImportProductsCartData?.count
+											? showImportProductsCartData?.count
 											: 0}
 									</span>
 								</div>
 								<span className='text'>
 									المنتجات التي تمت اضافتها لسلة الاستيراد
 								</span>
-								{showCart && (
-									<CartMenu
-										data={cartData?.data?.cart}
-										reload={reload}
-										setReload={setReload}
-									/>
-								)}
+								{showCart && <CartMenu data={showImportProductsCartData} />}
 							</div>
 							{showCart && (
 								<div
@@ -118,21 +113,27 @@ const SouqOtlobha = () => {
 					</div>
 					<div className='mb-md-5 mb-3'>
 						<ProductsFilterOperations
+							page={pageTarget}
+							products={souqOtlobhaProducts?.products}
+							number={rowsCount}
 							showFilteringOptions={showFilteringOptions}
-							categories={categories}
-							products={products}
+							categories={souqOtlobhaProducts?.categories}
+							setSouqOtlobhaProductsData={setSouqOtlobhaProductsData}
 						/>
 					</div>
 					<div className='mb-3'>
-						<SouqOtlbhaProducts data={products} loading={loading} />
+						<SouqOtlbhaProducts
+							products={souqOtlobhaProductsData}
+							loading={isLoading}
+						/>
 					</div>
 
 					{/** Pagination */}
-					{products?.length !== 0 && !loading && (
+					{souqOtlobhaProductsData?.length !== 0 && !isLoading && (
 						<TablePagination
-							page={products}
-							pageCount={pageCount}
-							currentPage={currentPage}
+							page={souqOtlobhaProductsData}
+							pageCount={souqOtlobhaProducts?.page_count}
+							currentPage={souqOtlobhaProducts?.current_page}
 							pageTarget={pageTarget}
 							rowsCount={rowsCount}
 							setRowsCount={setRowsCount}

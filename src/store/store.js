@@ -73,6 +73,7 @@ import { evaluationThePlatformApi } from "./apiSlices/evaluationThePlatformApi";
 import { editUserDetailsApi } from "./apiSlices/editUserDetailsApi";
 import { logOutApi } from "./apiSlices/logOutApi";
 import { registrationMarketerStatusApi } from "./apiSlices/registrationMarketerStatusApi";
+import { souqOtlobhaProductsApi } from "./apiSlices/souqOtlobhaProductsApi";
 
 // store
 export const store = configureStore({
@@ -110,6 +111,7 @@ export const store = configureStore({
 			selectCategoriesApi.middleware,
 			getShippingCitiesApi.middleware,
 			shippingCompaniesApi.middleware,
+			souqOtlobhaProductsApi.middleware,
 			selectPaymentsTypesApi.middleware,
 			postalSubscriptionsApi.middleware,
 			selectPageCategoriesApi.middleware,
@@ -162,7 +164,12 @@ export const store = configureStore({
 			selectEtlbohaSubCategoriesApi.reducer,
 		[registrationMarketerStatusApi.reducerPath]:
 			registrationMarketerStatusApi.reducer,
-		// [categoriesSlice.reducerPath]: categoriesSlice.reducer,
+		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
 
 		AddActivity: AddActivity,
 		ReplyModal: ReplyModalSlice,

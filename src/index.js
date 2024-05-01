@@ -50,7 +50,14 @@ import { Academy } from "./pages/Academy";
 import { CourseDetails } from "./pages/Academy/Courses";
 import { ExplainDetails } from "./pages/Academy/Explains";
 
-import { AddNewProduct, EditProduct, Products } from "./pages/Products";
+// Products Pages ...
+import {
+	AddNewProduct,
+	EditImportProducts,
+	EditProduct,
+	Products,
+} from "./pages/Products";
+
 import { ErrorPage } from "./pages/ErrorPage";
 import { VerifyStore } from "./pages/VerifyStore";
 import { TemplateSetting } from "./pages/TemplateSetting";
@@ -85,12 +92,9 @@ import NotificationProvider from "./Context/NotificationProvider";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 
 // Souq Otlobha  Pages
-import {
-	SouqOtlobha,
-	ProductRefund,
-	ShowImportEtlobhaProduct,
-} from "./pages/nestedPages/SouqOtlbha";
+import { SouqOtlobha, ProductRefund } from "./pages/nestedPages/SouqOtlbha";
 
+// main Information setting Page
 import { MainInformation } from "./pages/MainInformationSetting";
 
 // Login and reset password  pages
@@ -283,10 +287,10 @@ const router = createBrowserRouter([
 				path: "Products/EditProduct/:id",
 				element: <EditProduct />,
 			},
-			// ShowImportEtlobhaProduct page
+			// EditImportProducts page
 			{
-				path: "Products/ShowImportEtlobhaProduct/:id",
-				element: <ShowImportEtlobhaProduct />,
+				path: "Products/EditImportProducts/:id",
+				element: <EditImportProducts />,
 			},
 			// nested SouqOtlobha Page
 			{
