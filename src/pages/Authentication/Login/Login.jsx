@@ -91,6 +91,15 @@ const Login = () => {
 				const token = res.data.token;
 				document.cookie = `store_token=${token}; path=/`;
 
+				localStorage.setItem(
+					"name",
+					res.data?.user?.name + res.data?.user?.lastname
+				);
+				localStorage.setItem("userName", res.data?.user?.user_name);
+				localStorage.setItem("userImage", res.data?.user?.image);
+				localStorage.setItem("logo", res.data?.user?.store_logo);
+				localStorage.setItem("domain", res.data?.user?.store_domain);
+
 				if (rememberMe) {
 					// Set username, password, and remember_me status to context
 					// Replace with your function to set user info to context

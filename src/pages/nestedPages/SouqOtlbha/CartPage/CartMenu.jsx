@@ -1,39 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
+
 // Third party
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
-// ICONS
-import { Cross10 } from "../../../data/Icons";
 
-function CartMenu({ data, reload, setReload }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+// Icons
+import { Cross10 } from "../../../../data/Icons";
+
+// RTK Query
+import { useDeleteItemFromCartMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
+
+// Context
+import Context from "../../../../Context/context";
+
+function CartMenu({ data }) {
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+
 	// delete item from cart function
-	const deleteItemFromCart = (id) => {
-		axios
-			.get(`deleteImportCart/${id}`, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true) {
-					toast.success(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					setReload(!reload);
-				} else {
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					setReload(!reload);
-				}
-			});
+	const [deleteImportCart, { isLoading }] = useDeleteItemFromCartMutation();
+	const handleDeleteItemFromCart = async (id) => {
+		try {
+			await deleteImportCart({ id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteImportCart", err);
+		}
 	};
+
 	return (
 		<div className='cart-menu'>
 			{data?.totalCount > 0 ? (
@@ -69,8 +73,9 @@ function CartMenu({ data, reload, setReload }) {
 									</div>
 								</div>
 								<button
+									disabled={isLoading}
 									className='remove'
-									onClick={() => deleteItemFromCart(product?.id)}>
+									onClick={() => handleDeleteItemFromCart(product?.id)}>
 									<Cross10 />
 								</button>
 							</div>

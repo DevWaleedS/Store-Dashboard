@@ -174,6 +174,8 @@ const MainInformation = () => {
 			setDescriptionValue(mainInformation?.description || "");
 
 			setWorkDays(mainInformation?.workDays);
+			localStorage.setItem("domain", mainInformation?.domain);
+			localStorage.setItem("logo", mainInformation?.logo);
 		}
 	}, [mainInformation]);
 
@@ -249,6 +251,8 @@ const MainInformation = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
+				localStorage.setItem("logo", mainInformation?.logo);
+				localStorage.setItem("domain", mainInformation?.domain);
 
 				if (
 					response?.data?.data?.setting_store?.verification_status ===

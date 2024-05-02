@@ -4,10 +4,10 @@ import { Modal } from "reactstrap";
 import { toast } from "react-toastify";
 import axios from "axios";
 // Context
-import Context from "../../Context/context";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import Context from "../../../../Context/context";
+import { LoadingContext } from "../../../../Context/LoadingProvider";
 // Components
-import ProductOptions from "../nestedPages/SouqOtlbha/ProductOptions";
+import ProductOptions from "../ProductOptions";
 // Icons
 import Close from "@mui/icons-material/Close";
 

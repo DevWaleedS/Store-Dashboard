@@ -158,6 +158,13 @@ const EditUserDetails = () => {
 					? userProfileData?.phonenumber.slice(5)
 					: userProfileData?.phonenumber,
 			});
+
+			localStorage.setItem(
+				"name",
+				userProfileData?.name + userProfileData?.lastname
+			);
+			localStorage.setItem("userName", userProfileData?.user_name);
+			localStorage.setItem("userImage", userProfileData?.image);
 		}
 	}, [userProfileData]);
 
@@ -272,6 +279,17 @@ const EditUserDetails = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
+
+				localStorage.setItem(
+					"name",
+					response?.data?.data?.users?.name +
+						response?.data?.data?.users?.lastname
+				);
+				localStorage.setItem(
+					"userName",
+					response?.data?.data?.users?.user_name
+				);
+				localStorage.setItem("userImage", response?.data?.data?.users?.image);
 
 				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/");

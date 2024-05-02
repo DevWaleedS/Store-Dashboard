@@ -14,10 +14,6 @@ import { tokens } from "../../Theme";
 import { Box, useTheme } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-// RTK Query
-import { useGetUserProfileDataQuery } from "../../store/apiSlices/editUserDetailsApi";
-import { useGetMainInformationQuery } from "../../store/apiSlices/mainInformationApi";
-
 const TopBar = ({ toggleSidebar }) => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette);
@@ -26,13 +22,6 @@ const TopBar = ({ toggleSidebar }) => {
 	const Z_index = useContext(Context);
 	const { navbarZindex } = Z_index;
 
-	// get user profile data from api...
-	const { data: userProfileData, isFetching: isProfileFetching } =
-		useGetUserProfileDataQuery();
-
-	// To show the store info that come from api
-	const { data: mainInformation, isFetching } = useGetMainInformationQuery();
-
 	return (
 		<Box
 			className={` ${navbarZindex ? "top-bar zIndex" : "top-bar"} `}
@@ -40,10 +29,7 @@ const TopBar = ({ toggleSidebar }) => {
 			<nav className='navbar navbar-expand-lg ' dir='ltr'>
 				<div className='container'>
 					{/* Store logo component */}
-					<StoreLogo
-						isFetching={isFetching}
-						storeLogo={mainInformation?.logo}
-					/>
+					<StoreLogo />
 
 					<div
 						className='w-100 d-flex flex-row-reverse align-items-center justify-content-between'
@@ -65,12 +51,7 @@ const TopBar = ({ toggleSidebar }) => {
 							<Notifications />
 
 							{/** UserProfileImage Component */}
-							<UserProfileImage
-								isFetching={isProfileFetching}
-								name={userProfileData?.name}
-								userName={userProfileData?.username}
-								userImage={userProfileData?.image}
-							/>
+							<UserProfileImage />
 						</ul>
 					</div>
 				</div>

@@ -46,12 +46,8 @@ import {
 } from "../data/Icons";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
-import { useGetMainInformationQuery } from "../store/apiSlices/mainInformationApi";
 
 const SideBar = ({ open, closeSidebar, verificationStatus }) => {
-	// To show the store info that come from api
-	const { data: mainInformation } = useGetMainInformationQuery();
-
 	const dispatch = useDispatch(false);
 	const dispatchVerifyModal = useDispatch(false);
 
@@ -75,7 +71,9 @@ const SideBar = ({ open, closeSidebar, verificationStatus }) => {
 					<a
 						as='li'
 						className='menu-link'
-						href={`https://template.atlbha.com/${mainInformation?.domain}`}
+						href={`https://template.atlbha.com/${localStorage.getItem(
+							"domain"
+						)}`}
 						target='_blank'
 						rel='noreferrer'>
 						<MenuItem>

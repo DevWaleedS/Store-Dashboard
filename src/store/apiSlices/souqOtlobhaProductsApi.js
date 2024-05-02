@@ -22,7 +22,7 @@ export const souqOtlobhaProductsApi = createApi({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
 		prepareHeaders,
 	}),
-	tagTypes: ["SouqOtlobhaProducts"],
+	tagTypes: ["SouqOtlobhaProducts, CartMenuData"],
 	endpoints: (builder) => ({
 		// get store souq otlboha products endpoint..
 		getSouqOtlobhaProducts: builder.query({
@@ -39,7 +39,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
-			providesTags: ["SouqOtlobhaProducts"],
+			providesTags: ["CartMenuData"],
 		}),
 
 		// get Product by id
@@ -71,11 +71,34 @@ export const souqOtlobhaProductsApi = createApi({
 				};
 			},
 
-			invalidatesTags: ["SouqOtlobhaProducts"],
+			invalidatesTags: ["CartMenuData"],
 		}),
 
 		// edit Product by id
 		editProductById: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `product/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["Products"],
+		}),
+
+		// delete Item From Cart
+		deleteItemFromCart: builder.mutation({
+			query: ({ id }) => ({
+				url: `deleteImportCart/${id}`,
+				method: "GET",
+			}),
+			invalidatesTags: ["CartMenuData"],
+		}),
+
+		// update Cart
+
+		// edit Product by id
+		updateCart: builder.mutation({
 			query: ({ id, body }) => {
 				return {
 					url: `product/${id}`,
@@ -95,4 +118,6 @@ export const {
 	useFilterSouqOtlobhaProductsByCategoriesMutation,
 	useShowSouqOtlobhaProductByIdQuery,
 	useImportProductToStoreProductsMutation,
+	useUpdateCartMutation,
+	useDeleteItemFromCartMutation,
 } = souqOtlobhaProductsApi;

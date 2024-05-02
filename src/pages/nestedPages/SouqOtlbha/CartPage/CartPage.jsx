@@ -1,26 +1,32 @@
 import React, { useState, useEffect, useContext } from "react";
 // Third party
 import { Helmet } from "react-helmet";
-import useFetch from "../../Hooks/UseFetch";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+
 // Context
-import Context from "../../Context/context";
-import { LoadingContext } from "../../Context/LoadingProvider";
+import Context from "../../../../Context/context";
+import { LoadingContext } from "../../../../Context/LoadingProvider";
+
 // Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
-// Icons
-import { HomeIcon, Cross10 } from "../../data/Icons";
 import OptionsModal from "./OptionsModal";
+import CircularLoading from "../../../../HelperComponents/CircularLoading";
+
+// Icons
+import { HomeIcon, Cross10 } from "../../../../data/Icons";
+
+// RTK Query
+import {
+	useDeleteItemFromCartMutation,
+	useImportProductToStoreProductsMutation,
+	useShowImportProductsCartDataQuery,
+} from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 
 function CartPage() {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("showImportCart");
+	// Show import products cart data
+	const { data: showImportProductsCartData, isLoading: isCartLoading } =
+		useShowImportProductsCartDataQuery();
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
@@ -32,11 +38,11 @@ function CartPage() {
 	const [modalData, setModalData] = useState(null);
 
 	useEffect(() => {
-		if (fetchedData?.data?.cart?.cartDetail) {
-			setProductInfo(fetchedData?.data?.cart?.cartDetail);
-			setNewProductInfo(fetchedData?.data?.cart?.cartDetail);
+		if (showImportProductsCartData?.cartDetail) {
+			setProductInfo(showImportProductsCartData?.cartDetail);
+			setNewProductInfo(showImportProductsCartData?.cartDetail);
 		}
-	}, [fetchedData?.data?.cart?.cartDetail]);
+	}, [showImportProductsCartData?.cartDetail]);
 
 	const updateQtyValue = (index, e) => {
 		const temp = newproductInfo?.map((item, idx) => {
@@ -76,27 +82,24 @@ function CartPage() {
 	};
 
 	// delete item from cart function
-	const deleteItemFromCart = (id) => {
-		axios
-			.get(`deleteImportCart/${id}`, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true) {
-					toast.success(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					setReload(!reload);
-				} else {
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					setReload(!reload);
-				}
-			});
+	const [deleteImportCart, { isLoading }] = useDeleteItemFromCartMutation();
+	const handleDeleteItemFromCart = async (id) => {
+		try {
+			await deleteImportCart({ id })
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteImportCart", err);
+		}
 	};
 
 	const findMatchingSubArray = (nestedArray, array) => {
@@ -114,8 +117,13 @@ function CartPage() {
 	};
 
 	// Handle Update Cart
-	const updateCart = () => {
+	const [importProductToStoreProducts, { isUpdateCartIsLoading }] =
+		useImportProductToStoreProductsMutation();
+
+	const handleUpdateCart = async () => {
 		setLoadingTitle("جاري تحديث السلة");
+
+		// data that send to api..
 		let formData = new FormData();
 		for (let i = 0; i < newproductInfo?.length; i++) {
 			formData.append([`data[${i}][id]`], newproductInfo?.[i]?.product?.id);
@@ -131,35 +139,47 @@ function CartPage() {
 				optionNames,
 				newproductInfo?.[i]?.options
 			);
-			if (Number(matchingSubArray?.id) !== null) {
-				formData.append(
-					[`data[${i}][option_id]`],
-					Number(matchingSubArray?.id)
-				);
+			if (
+				matchingSubArray &&
+				matchingSubArray.id !== undefined &&
+				matchingSubArray.id !== null
+			) {
+				formData.append(`data[${i}][option_id]`, matchingSubArray.id);
 			}
 		}
-		axios
-			.post(`addImportCart`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (
-					res?.data?.success === true &&
-					res?.data?.message?.en === "Cart Added successfully"
-				) {
-					setLoadingTitle("");
-					setReload(!reload);
-					setEndActionTitle("تم تحديث السلة بنجاح");
-				} else {
-					setLoadingTitle("");
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-				}
+
+		// make request...
+		try {
+			const response = await importProductToStoreProducts({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setLoadingTitle("");
+				setEndActionTitle("تم تحديث السلة بنجاح");
+			} else {
+				setLoadingTitle("");
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+
+				toast.error(response?.data?.message?.en?.["data.0.price"]?.[0], {
+					theme: "light",
+				});
+				toast.error(response?.data?.message?.en?.["data.0.qty"]?.[0], {
+					theme: "light",
+				});
+				toast.error(response?.data?.message?.en?.["data.0.option"]?.[0], {
+					theme: "light",
+				});
+			}
+		} catch (error) {
+			console.error("Error changing handleUpdateCart:", error);
+		}
 	};
 
 	const updateCartDisabled = productInfo?.every((item) =>
@@ -210,9 +230,9 @@ function CartPage() {
 					<h3>سلة استيراد منتجات سوق اطلبها</h3>
 					<div className='block'>
 						<div className='container'>
-							{loading ? (
+							{isCartLoading ? (
 								<CircularLoading />
-							) : fetchedData?.data?.cart ? (
+							) : showImportProductsCartData ? (
 								<>
 									<div className='table-responsive'>
 										<table className='cart-table'>
@@ -243,17 +263,19 @@ function CartPage() {
 															<a href={`${product?.product?.id}`}>
 																{product?.product?.name}
 															</a>
-															<ul className='options'>
-																{product?.options?.map((option, index) => (
-																	<li
-																		key={index}
-																		onClick={() =>
-																			openOptionSModal(product)
-																		}>{`${
-																		index === 0 ? `${option}` : `/ ${option}`
-																	}`}</li>
-																))}
-															</ul>
+															{product?.options && (
+																<ul className='options'>
+																	{product?.options?.map((option, index) => (
+																		<li
+																			key={index}
+																			onClick={() =>
+																				openOptionSModal(product)
+																			}>{`${
+																			index === 0 ? `${option}` : `/ ${option}`
+																		}`}</li>
+																	))}
+																</ul>
+															)}
 														</td>
 														<td>{Number(product?.price)} ر.س</td>
 														<td>
@@ -333,8 +355,11 @@ function CartPage() {
 														</td>
 														<td>
 															<button
+																disabled={isLoading}
 																className='remove'
-																onClick={() => deleteItemFromCart(product?.id)}>
+																onClick={() =>
+																	handleDeleteItemFromCart(product?.id)
+																}>
 																<Cross10 />
 															</button>
 														</td>
@@ -347,10 +372,10 @@ function CartPage() {
 										<div className='buttons update-cart-btn'>
 											<Link to='/Products/SouqOtlobha'>العودة لسوق اطلبها</Link>
 											<button
-												onClick={() => updateCart()}
+												onClick={() => handleUpdateCart()}
 												type='button'
 												className='update'
-												disabled={updateCartDisabled}>
+												disabled={updateCartDisabled || isUpdateCartIsLoading}>
 												تحديث السلة
 											</button>
 										</div>
@@ -364,27 +389,29 @@ function CartPage() {
 														<thead>
 															<tr>
 																<th style={{ textAlign: "justify" }}>السعر</th>
-																<td>{fetchedData?.data?.cart?.subtotal} ر.س</td>
+																<td>
+																	{showImportProductsCartData?.subtotal} ر.س
+																</td>
 															</tr>
 														</thead>
 														<tbody>
 															<tr>
 																<th>الضريبة</th>
-																<td>{fetchedData?.data?.cart?.tax} ر.س</td>
+																<td>{showImportProductsCartData?.tax} ر.س</td>
 															</tr>
-															{fetchedData?.data?.cart?.overweight_price !==
+															{showImportProductsCartData?.overweight_price !==
 																null &&
-																fetchedData?.data?.cart?.overweight_price !==
+																showImportProductsCartData?.overweight_price !==
 																	0 && (
 																	<tr>
 																		<th>
 																			قيمة الوزن الزائد (
-																			{fetchedData?.data?.cart?.overweight} kg)
+																			{showImportProductsCartData?.overweight}{" "}
+																			kg)
 																		</th>
 																		<td>
 																			{
-																				fetchedData?.data?.cart
-																					?.overweight_price
+																				showImportProductsCartData?.overweight_price
 																			}{" "}
 																			ر.س
 																		</td>
@@ -393,15 +420,16 @@ function CartPage() {
 															<tr>
 																<th>الشحن</th>
 																<td>
-																	{fetchedData?.data?.cart?.shipping_price} ر.س
+																	{showImportProductsCartData?.shipping_price}{" "}
+																	ر.س
 																</td>
 															</tr>
 
-															{fetchedData?.data?.cart?.discount_total ? (
+															{showImportProductsCartData?.discount_total ? (
 																<tr>
 																	<th>
 																		الخصم
-																		{fetchedData?.data?.cart?.discount_type ===
+																		{showImportProductsCartData?.discount_type ===
 																		"percent" ? (
 																			<span
 																				style={{
@@ -410,15 +438,14 @@ function CartPage() {
 																				}}>
 																				(
 																				{
-																					fetchedData?.data?.cart
-																						?.discount_value
+																					showImportProductsCartData?.discount_value
 																				}
 																				%)
 																			</span>
 																		) : null}
 																	</th>
 																	<td>
-																		{fetchedData?.data?.cart?.discount_total}{" "}
+																		{showImportProductsCartData?.discount_total}{" "}
 																		ر.س
 																	</td>
 																</tr>
@@ -432,7 +459,7 @@ function CartPage() {
 																		(شامل الضريبة)
 																	</span>
 																</th>
-																<td>{fetchedData?.data?.cart?.total} ر.س</td>
+																<td>{showImportProductsCartData?.total} ر.س</td>
 															</tr>
 														</tfoot>
 													</table>
@@ -460,8 +487,6 @@ function CartPage() {
 				modalData={modalData}
 				openModal={openModal}
 				colseOptionModal={colseOptionModal}
-				reload={reload}
-				setReload={setReload}
 			/>
 		</>
 	);

@@ -37,7 +37,6 @@ import {
 	PostalSubscriptions,
 	PaintStore,
 	SEOStore,
-	CartPage,
 	CheckoutPage,
 	RequestDelegate,
 } from "./pages";
@@ -92,7 +91,11 @@ import NotificationProvider from "./Context/NotificationProvider";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 
 // Souq Otlobha  Pages
-import { SouqOtlobha, ProductRefund } from "./pages/nestedPages/SouqOtlbha";
+import {
+	SouqOtlobha,
+	ProductRefund,
+	CartPage,
+} from "./pages/nestedPages/SouqOtlbha";
 
 // main Information setting Page
 import { MainInformation } from "./pages/MainInformationSetting";

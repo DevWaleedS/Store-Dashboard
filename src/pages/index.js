@@ -5,7 +5,6 @@ export { default as RootLayOut } from "./RootLayout";
 export { default as Management } from "./Management";
 export { default as PaintStore } from "./PaintStore";
 export { default as SocialPages } from "./SocialPages";
-export { default as CartPage } from "./CartPage/CartPage";
 export { default as Notifications } from "./Notifications";
 export { default as PackageUpgrade } from "./PackageUpgrade";
 export { default as PaymentGateways } from "./PaymentGateways";

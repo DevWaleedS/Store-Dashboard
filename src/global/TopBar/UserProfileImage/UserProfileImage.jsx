@@ -48,7 +48,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 		},
 	},
 }));
-const UserProfileImage = ({ name, userName, userImage, isFetching }) => {
+const UserProfileImage = () => {
 	// Avatar Colors
 	const theme = useTheme();
 	const colors = tokens(theme.palette);
@@ -105,15 +105,16 @@ const UserProfileImage = ({ name, userName, userImage, isFetching }) => {
 					data-bs-toggle='dropdown'
 					aria-expanded='false'
 					color={colors.white[300]}>
-					{!isFetching ? (
+					{(localStorage.getItem("name") || localStorage.getItem("userName")) &&
+					localStorage.getItem("userImage") ? (
 						<>
 							<div className='dropdown-title d-md-flex align-items-center d-none'>
 								<span className='me-1 '>
-									{name !== null
-										? name === "null"
-											? userName
-											: name
-										: userName || "اسم التاجر"}
+									{localStorage.getItem("name") !== null
+										? localStorage.getItem("name") === "null"
+											? localStorage.getItem("userName")
+											: localStorage.getItem("name")
+										: localStorage.getItem("name") || "اسم التاجر"}
 								</span>
 
 								<IoIosArrowDown />
@@ -126,7 +127,7 @@ const UserProfileImage = ({ name, userName, userImage, isFetching }) => {
 								<Avatar
 									sx={{ border: "2px solid #ddd" }}
 									alt='avatarImage'
-									src={userImage}
+									src={localStorage.getItem("userImage")}
 								/>
 							</StyledBadge>
 						</>
