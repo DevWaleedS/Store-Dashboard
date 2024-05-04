@@ -31,7 +31,7 @@ import { TablePagination } from "./TablePagination";
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "" },
 	{ id: 2, ar_name: "جديد", en_name: "new" },
-	{ id: 5, ar_name: "قيد التجهيز", en_name: "ready" },
+	{ id: 5, ar_name: "قيد التجهيز", en_name: "pending" },
 	{ id: 4, ar_name: "تم الشحن", en_name: "completed" },
 	{ id: 3, ar_name: "الغاء الشحنة", en_name: "canceled" },
 ];
@@ -107,12 +107,11 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الكمية
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a" }}>
-					حالة الطلب
-				</TableCell>
-
 				<TableCell sx={{ color: "#02466a" }} align='center'>
 					إجمالي الطلب
+				</TableCell>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
+					حالة الطلب
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#02466a" }}>
@@ -135,54 +134,53 @@ function EnhancedTableToolbar(props) {
 	return (
 		<React.Fragment>
 			{/** Filter Section */}
-			<Toolbar>
-				<div className='row mb-0 filter-wrapper m-0 mt-4 order-toolbar'>
-					<div className='filter-row d-flex align-items-center gap-3 mb-3'>
-						<div className=''>
-							<h4>جدول المرتجعات</h4>
+			<Toolbar
+				sx={{
+					"&.MuiToolbar-root": {
+						paddingRight: "0 !important",
+						paddingLeft: "0 !important",
+					},
+				}}>
+				<div className='filter-wrapper  mt-4 order-toolbar'>
+					<div className='w-100 mb-4 d-flex flex-row align-items-center flex-wrap justify-content-between'>
+						<div className='search-input-box'>
+							<FiSearch />
+							<input
+								type='text'
+								autoComplete='false'
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+								placeholder=' ابحث برقم الطلب أو اسم العميل'
+							/>
 						</div>
-						<div className='w-100 d-flex flex-row align-items-center gap-3 flex-wrap justify-content-end'>
-							<div></div>
-
-							<div className='search-input-box'>
-								<FiSearch />
-								<input
-									type='text'
-									autoComplete='false'
-									value={search}
-									onChange={(e) => setSearch(e.target.value)}
-									placeholder=' ابحث برقم التتبع أو اسم شركة الشحن أو اسم العميل'
-								/>
-							</div>
-							<div className='select-input-box'>
-								<FiFilter className='filter-icon' />
-								<Select
-									displayEmpty
-									sx={selectFilterStyles}
-									IconComponent={IoIosArrowDown}
-									value={select}
-									onChange={(e) => setSelect(e.target.value)}
-									inputProps={{ "aria-label": "Without label" }}
-									renderValue={(selected) => {
-										if (select === "") {
-											return <p style={{ color: "#02466a" }}>فرز حسب</p>;
-										}
-										const result =
-											filtersTypes?.filter(
-												(item) => item?.en_name === selected
-											) || "";
-										return result[0]?.ar_name;
-									}}>
-									{filtersTypes?.map((item) => (
-										<MenuItem
-											sx={menuItemStyles}
-											key={item?.id}
-											value={item?.en_name}>
-											{item?.ar_name}
-										</MenuItem>
-									))}
-								</Select>
-							</div>
+						<div className='select-input-box'>
+							<FiFilter className='filter-icon' />
+							<Select
+								displayEmpty
+								sx={selectFilterStyles}
+								IconComponent={IoIosArrowDown}
+								value={select}
+								onChange={(e) => setSelect(e.target.value)}
+								inputProps={{ "aria-label": "Without label" }}
+								renderValue={(selected) => {
+									if (select === "") {
+										return <p style={{ color: "#02466a" }}>فرز حسب</p>;
+									}
+									const result =
+										filtersTypes?.filter(
+											(item) => item?.en_name === selected
+										) || "";
+									return result[0]?.ar_name;
+								}}>
+								{filtersTypes?.map((item) => (
+									<MenuItem
+										sx={menuItemStyles}
+										key={item?.id}
+										value={item?.en_name}>
+										{item?.ar_name}
+									</MenuItem>
+								))}
+							</Select>
 						</div>
 					</div>
 				</div>
@@ -217,14 +215,14 @@ export default function ReturnOrdersTable({
 	console.log(returnOrders);
 	return (
 		<Box sx={{ width: "100%" }}>
+			<EnhancedTableToolbar
+				search={search}
+				setSearch={setSearch}
+				rowCount={returnOrders?.length}
+				select={select}
+				setSelect={setSelect}
+			/>
 			<Paper sx={{ width: "100%", mb: 2 }}>
-				<EnhancedTableToolbar
-					search={search}
-					setSearch={setSearch}
-					rowCount={returnOrders?.length}
-					select={select}
-					setSelect={setSelect}
-				/>
 				<TableContainer>
 					<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 						<EnhancedTableHead rowCount={returnOrders?.length} />
@@ -301,7 +299,7 @@ export default function ReturnOrdersTable({
 													</TableCell>
 
 													<TableCell align='center'>
-														{row?.order?.totalCount}
+														{row?.order?.quantity}
 													</TableCell>
 
 													<TableCell align='center'>

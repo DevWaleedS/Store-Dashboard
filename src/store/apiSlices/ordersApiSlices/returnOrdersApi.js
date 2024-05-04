@@ -40,30 +40,34 @@ export const returnOrdersApi = createApi({
 		// search in store Orders
 		searchInReturnOrders: builder.mutation({
 			query: (arg) => ({
-				url: `searchOrder?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchReturnOrder?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
 				method: "GET",
 			}),
 		}),
 
 		// filter Orders by status
-		filterOrdersByStatus: builder.mutation({
+		filterReturnOrdersByStatus: builder.mutation({
 			query: (arg) => ({
-				url: `orders?page=${arg.page}&number=${arg.number}&order_status=${arg.orderStatus}`,
+				url: `returnOrderIndex?page=${arg.page}&number=${arg.number}&status=${arg.orderStatus}`,
 				method: "GET",
 			}),
 		}),
 
 		// get order by id
-		getOrderById: builder.query({
-			query: (id) => `orders/${id}`,
+		getReturnOrderById: builder.query({
+			query: (id) => `returnOrder/${id}`,
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data,
-			providesTags: (result, error, id) => [{ type: "Orders", id }],
+			transformResponse: (response, meta, arg) => response.data?.ReturnOrder,
+			providesTags: (result, error, id) => [{ type: "ReturnOrders", id }],
 		}),
 	}),
 });
 
 // Export endpoints and hooks
-export const { useGetReturnOrdersQuery, useSearchInReturnOrdersMutation } =
-	returnOrdersApi;
+export const {
+	useGetReturnOrdersQuery,
+	useSearchInReturnOrdersMutation,
+	useGetReturnOrderByIdQuery,
+	useFilterReturnOrdersByStatusMutation,
+} = returnOrdersApi;

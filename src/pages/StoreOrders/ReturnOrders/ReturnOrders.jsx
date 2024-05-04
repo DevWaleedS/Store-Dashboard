@@ -12,6 +12,7 @@ import { ReturnOrdersTable } from "../../../components/Tables";
 // Icons
 import { ArrowBack } from "../../../data/Icons";
 import {
+	useFilterReturnOrdersByStatusMutation,
 	useGetReturnOrdersQuery,
 	useSearchInReturnOrdersMutation,
 } from "../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
@@ -67,28 +68,28 @@ const ReturnOrders = () => {
 	// -------------------------------------------------------------
 
 	// Filter Orders by Order Status
-	// const [filterOrdersByStatus] = useFilterOrdersByStatusMutation();
-	// useEffect(() => {
-	// 	if (select !== "") {
-	// 		const fetchData = async () => {
-	// 			try {
-	// 				const response = await filterOrdersByStatus({
-	// 					orderStatus: select,
-	// 					page: pageTarget,
-	// 					number: rowsCount,
-	// 				});
+	const [filterReturnOrdersByStatus] = useFilterReturnOrdersByStatusMutation();
+	useEffect(() => {
+		if (select !== "") {
+			const fetchData = async () => {
+				try {
+					const response = await filterReturnOrdersByStatus({
+						orderStatus: select,
+						page: pageTarget,
+						number: rowsCount,
+					});
 
-	// 				setOrdersData(response?.data?.data?.orders);
-	// 			} catch (error) {
-	// 				console.error("Error fetching Products:", error);
-	// 			}
-	// 		};
+					setReturnOrdersData(response?.data?.data?.ReturnOrders);
+				} catch (error) {
+					console.error("Error fetching Products:", error);
+				}
+			};
 
-	// 		fetchData();
-	// 	} else {
-	// 		setOrdersData(orders?.data?.orders);
-	// 	}
-	// }, [select, filterOrdersByStatus]);
+			fetchData();
+		} else {
+			setReturnOrdersData(returnOrders?.ReturnOrders);
+		}
+	}, [select, filterReturnOrdersByStatus]);
 
 	// ---------------------------------------------------------------
 

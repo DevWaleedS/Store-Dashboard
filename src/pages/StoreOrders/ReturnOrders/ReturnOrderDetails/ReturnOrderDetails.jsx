@@ -56,11 +56,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 // RTK Query
-import {
-	useGetOrderByIdQuery,
-	useUpdateOrderStatusMutation,
-} from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
+import { useUpdateOrderStatusMutation } from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
 import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCitiesApi";
+import { useGetReturnOrderByIdQuery } from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
 
 // The Table title
 function EnhancedTableHead() {
@@ -87,7 +85,9 @@ function EnhancedTableHead() {
 const ReturnOrderDetails = () => {
 	// get current order by id
 	const { id } = useParams();
-	const { data: currentOrder, isFetching } = useGetOrderByIdQuery(id);
+	const { data: currentOrder, isFetching } = useGetReturnOrderByIdQuery(id);
+
+	console.log(currentOrder);
 
 	//get shipping cities data
 	const navigate = useNavigate();
@@ -267,7 +267,7 @@ const ReturnOrderDetails = () => {
 					<div className='head-category mb-5 pt-md-4'>
 						<div className='row '>
 							<div className='col-md-6 col-12'>
-								<h3>تفاصيل الطلب</h3>
+								<h3>تفاصيل طلب الارجاع</h3>
 								{/** breadcrumb */}
 								<nav aria-label='breadcrumb'>
 									<ol className='breadcrumb'>
@@ -276,11 +276,11 @@ const ReturnOrderDetails = () => {
 												<ArrowBack className='arrow-back-icon' />
 											</Link>
 											<Link to='/Orders' className='me-2'>
-												جدول الطلبات
+												جدول المرتجعات
 											</Link>
 										</li>
 										<li className='breadcrumb-item active ' aria-current='page'>
-											تفاصيل الطلب
+											تفاصيل طلب الارجاع
 										</li>
 									</ol>
 								</nav>
@@ -291,7 +291,7 @@ const ReturnOrderDetails = () => {
 										<h5>رقم الطلب</h5>
 									</div>
 									<div className='number'>
-										{isFetching ? 0 : currentOrder?.orders?.order_number}
+										{isFetching ? 0 : currentOrder?.order?.order_number}
 									</div>
 								</div>
 							</div>
@@ -318,7 +318,7 @@ const ReturnOrderDetails = () => {
 													<span className='me-2'>الحالة</span>
 												</div>
 												<div className='order-data-row'>
-													<span>{currentOrder?.orders?.status}</span>
+													<span>{currentOrder?.status}</span>
 												</div>
 											</div>
 											<div className='box'>
@@ -329,7 +329,7 @@ const ReturnOrderDetails = () => {
 
 												<div className='order-data-row'>
 													<span>
-														{moment(currentOrder?.orders?.created_at).format(
+														{moment(currentOrder?.order?.created_at).format(
 															"DD-MM-YYYY"
 														)}
 													</span>
@@ -341,7 +341,7 @@ const ReturnOrderDetails = () => {
 													<span className='me-3 price'>إجمالي الطلب</span>
 												</div>
 												<div className='order-data-row'>
-													<span>{currentOrder?.orders?.total_price} ر.س</span>
+													<span>{currentOrder?.order?.total_price} ر.س</span>
 												</div>
 											</div>
 											<div className='box'>
@@ -350,99 +350,28 @@ const ReturnOrderDetails = () => {
 													<span className='me-2'> عدد المنتجات</span>
 												</div>
 												<div className='order-data-row'>
-													<span>{currentOrder?.orders?.quantity}</span>
+													<span>{currentOrder?.order?.quantity}</span>
 												</div>
 											</div>
 											<div className='box'>
 												<div className='order-head-row'>
-													<Delevray style={{ width: "34px", height: "34px" }} />
-													<span className='me-2'>شركة الشحن</span>
+													<BsFillInfoSquareFill
+														style={{ width: "22px", height: "22px" }}
+													/>
+													<span className='me-2'>سبب الارجاع </span>
 												</div>
 												<div className='order-data-row'>
-													<span>
-														{currentOrder?.orders?.shippingtypes?.name}
-													</span>
+													<span>{currentOrder?.reason_txt?.title}</span>
 												</div>
 											</div>
 										</div>
-										<div className='boxes mb-4'>
-											{currentOrder?.orders?.shipping?.shipping_id && (
-												<div className='box mb-4'>
-													<div className='order-head-row'>
-														<FaServicestack />
-														<span className='me-2'>رقم التتبع</span>{" "}
-														<span
-															className='me-2'
-															style={{
-																display: "block",
-																fontSize: "1rem",
-															}}>
-															( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
-															<a
-																href={currentOrder?.orders?.trackingLink}
-																target='_blank'
-																rel='noreferrer'>
-																<BiLinkExternal
-																	style={{
-																		width: "16px",
-																		cursor: "pointer",
-																	}}
-																/>
-															</a>
-															)
-														</span>
-													</div>
-													<div className='order-data-row track_id_box'>
-														<div className='d-flex justify-content-center align-items-center'>
-															<span className='track_id_input'>
-																{currentOrder?.orders?.shipping?.track_id}
-															</span>
-															{copy ? (
-																<div className='copy-track_id-icon'>
-																	<AiFillCheckCircle color='#1dbbbe' />
-																</div>
-															) : (
-																<div className='copy-track_id-icon'>
-																	<AiFillCopy
-																		color='#1dbbbe'
-																		style={{ cursor: "pointer" }}
-																		onClick={() => {
-																			setCopy(true);
-																			setTimeout(() => {
-																				navigator.clipboard.writeText(
-																					currentOrder?.orders?.shipping
-																						?.track_id
-																				);
-																				setCopy(false);
-																			}, 1000);
-																		}}
-																	/>
-																</div>
-															)}
-														</div>
-													</div>
-												</div>
-											)}
-											{currentOrder?.orders?.shipping?.shipping_id && (
-												<div className='box mb-4'>
-													<div className='order-head-row'>
-														<PiTrafficSign />
-														<span className='me-2'>رقم البوليصة</span>
-													</div>
-													<div className='order-data-row'>
-														<span>
-															{currentOrder?.orders?.shipping?.shipping_id}
-														</span>
-													</div>
-												</div>
-											)}
-										</div>
+
 										<div className=''>
 											<div className='order-head-row'>
 												<BsFillInfoSquareFill
 													style={{ width: "22px", height: "22px" }}
 												/>
-												<span className='me-2'>ملاحظات الطلب</span>
+												<span className='me-2'>ملاحظات طلب الارجاع</span>
 											</div>
 											<div className='order-data-row'>
 												<span
@@ -450,7 +379,7 @@ const ReturnOrderDetails = () => {
 														whiteSpace: "normal",
 														textAlign: "center",
 													}}>
-													{currentOrder?.orders?.description}
+													{currentOrder?.comment}
 												</span>
 											</div>
 										</div>
@@ -464,14 +393,14 @@ const ReturnOrderDetails = () => {
 											<div className='d-flex justify-content-between  align-content-center gap-1'>
 												<h6>عدد القطع:</h6>
 												<p style={{ fontSize: "14px", fontWight: "400" }}>
-													{currentOrder?.orders?.totalCount === 1 && (
+													{currentOrder?.order?.totalCount === 1 && (
 														<>(قطعة واحده)</>
 													)}
-													{currentOrder?.orders?.totalCount === 2 && (
+													{currentOrder?.order?.totalCount === 2 && (
 														<>(قطعتين)</>
 													)}
-													{currentOrder?.orders?.totalCount > 2 && (
-														<>({currentOrder?.orders?.totalCount} قطعة)</>
+													{currentOrder?.order?.totalCount > 2 && (
+														<>({currentOrder?.order?.totalCount} قطعة)</>
 													)}
 												</p>
 											</div>
@@ -482,62 +411,60 @@ const ReturnOrderDetails = () => {
 												aria-labelledby='tableTitle'>
 												<EnhancedTableHead />
 												<TableBody>
-													{currentOrder?.orders?.orderItem?.map(
-														(row, index) => (
-															<TableRow hover tabIndex={-1} key={index}>
-																<TableCell
-																	component='th'
-																	id={index}
-																	scope='row'
-																	align='right'>
-																	<div
-																		className='flex items-center'
-																		style={{
-																			display: "flex",
-																			justifyContent: "start",
-																			alignItems: "center",
-																			gap: "7px",
-																		}}>
-																		{(index + 1).toLocaleString("en-US", {
-																			minimumIntegerDigits: 2,
-																			useGrouping: false,
-																		})}
-																	</div>
-																</TableCell>
+													{currentOrder?.order?.orderItem?.map((row, index) => (
+														<TableRow hover tabIndex={-1} key={index}>
+															<TableCell
+																component='th'
+																id={index}
+																scope='row'
+																align='right'>
+																<div
+																	className='flex items-center'
+																	style={{
+																		display: "flex",
+																		justifyContent: "start",
+																		alignItems: "center",
+																		gap: "7px",
+																	}}>
+																	{(index + 1).toLocaleString("en-US", {
+																		minimumIntegerDigits: 2,
+																		useGrouping: false,
+																	})}
+																</div>
+															</TableCell>
 
-																<TableCell align='right'>
-																	<div className='d-flex flex-row align-items-center'>
-																		<img
-																			className='rounded-circle img_icons'
-																			src={row?.product?.cover}
-																			alt='client'
-																		/>
-																		<span
-																			className='me-2'
-																			style={{
-																				minWidth: "400px",
-																				maxWidth: "550px",
-																				whiteSpace: "nowrap",
-																				overflow: "hidden",
-																				textOverflow: "ellipsis",
-																			}}>
-																			{row?.product?.name}
-																		</span>
-																	</div>
-																</TableCell>
-																<TableCell align='right' sx={{ width: "90px" }}>
-																	<div className='text-center'>
-																		<span>{row?.quantity}</span>
-																	</div>
-																</TableCell>
-																<TableCell align='center'>
-																	<span className='table-price_span'>
-																		{row?.sum} ر.س
+															<TableCell align='right'>
+																<div className='d-flex flex-row align-items-center'>
+																	<img
+																		className='rounded-circle img_icons'
+																		src={row?.product?.cover}
+																		alt='client'
+																	/>
+																	<span
+																		className='me-2'
+																		style={{
+																			minWidth: "400px",
+																			maxWidth: "550px",
+																			whiteSpace: "nowrap",
+																			overflow: "hidden",
+																			textOverflow: "ellipsis",
+																		}}>
+																		{row?.product?.name}
 																	</span>
-																</TableCell>
-															</TableRow>
-														)
-													)}
+																</div>
+															</TableCell>
+															<TableCell align='right' sx={{ width: "90px" }}>
+																<div className='text-center'>
+																	<span>{row?.quantity}</span>
+																</div>
+															</TableCell>
+															<TableCell align='center'>
+																<span className='table-price_span'>
+																	{row?.sum} ر.س
+																</span>
+															</TableCell>
+														</TableRow>
+													))}
 													<TableRow>
 														<TableCell
 															colSpan={3}
@@ -553,7 +480,7 @@ const ReturnOrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{currentOrder?.orders?.subtotal} ر.س
+																{currentOrder?.order?.subtotal} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -572,7 +499,7 @@ const ReturnOrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{currentOrder?.orders?.tax} ر.س
+																{currentOrder?.order?.tax} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -591,11 +518,11 @@ const ReturnOrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{currentOrder?.orders?.shipping_price} ر.س
+																{currentOrder?.order?.shipping_price} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
-													{currentOrder?.orders?.codprice !== 0 && (
+													{currentOrder?.order?.codprice !== 0 && (
 														<TableRow>
 															<TableCell
 																colSpan={3}
@@ -614,14 +541,14 @@ const ReturnOrderDetails = () => {
 																<span
 																	className='table-price_span'
 																	style={{ fontWeight: "500" }}>
-																	{currentOrder?.orders?.codprice} ر.س
+																	{currentOrder?.order?.codprice} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
 													)}
 
-													{currentOrder?.orders?.overweight !== 0 &&
-														currentOrder?.orders?.overweight_price !== 0 && (
+													{currentOrder?.order?.overweight !== 0 &&
+														currentOrder?.order?.overweight_price !== 0 && (
 															<TableRow>
 																<TableCell
 																	colSpan={3}
@@ -631,7 +558,7 @@ const ReturnOrderDetails = () => {
 																	style={{ borderBottom: "none" }}>
 																	<span style={{ fontWeight: "700" }}>
 																		تكلفة الوزن الزائد (
-																		{currentOrder?.orders?.overweight}{" "}
+																		{currentOrder?.order?.overweight}{" "}
 																		<span>kg</span>)
 																	</span>
 																</TableCell>
@@ -642,12 +569,12 @@ const ReturnOrderDetails = () => {
 																	<span
 																		className='table-price_span'
 																		style={{ fontWeight: "500" }}>
-																		{currentOrder?.orders?.overweight_price} ر.س
+																		{currentOrder?.order?.overweight_price} ر.س
 																	</span>
 																</TableCell>
 															</TableRow>
 														)}
-													{currentOrder?.orders?.discount !== 0 && (
+													{currentOrder?.order?.discount !== 0 && (
 														<TableRow>
 															<TableCell
 																colSpan={3}
@@ -663,7 +590,7 @@ const ReturnOrderDetails = () => {
 																<span
 																	className='table-price_span'
 																	style={{ fontWeight: "500" }}>
-																	{currentOrder?.orders?.discount} ر.س
+																	{currentOrder?.order?.discount} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
@@ -691,7 +618,7 @@ const ReturnOrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{currentOrder?.orders?.total_price} ر.س
+																{currentOrder?.order?.total_price} ر.س
 															</span>
 														</TableCell>
 													</TableRow>
@@ -714,7 +641,7 @@ const ReturnOrderDetails = () => {
 																alt=''
 																loading={"lazy"}
 																className=' img-fluid'
-																src={currentOrder?.orders?.user?.image}
+																src={currentOrder?.order?.user?.image}
 															/>
 														</div>
 													</div>
@@ -726,7 +653,7 @@ const ReturnOrderDetails = () => {
 															<div className='info-box'>
 																<User className='client-icon' />
 																<span className=' text-overflow'>
-																	{`${currentOrder?.orders?.user?.name} ${currentOrder?.orders?.user?.lastname}`}
+																	{`${currentOrder?.order?.user?.name} ${currentOrder?.order?.user?.lastname}`}
 																</span>
 															</div>
 														</div>
@@ -735,19 +662,19 @@ const ReturnOrderDetails = () => {
 															<div className='info-box'>
 																<Phone />
 																<span style={{ direction: "ltr" }}>
-																	{currentOrder?.orders?.user?.phonenumber?.startsWith(
+																	{currentOrder?.order?.user?.phonenumber?.startsWith(
 																		"+966"
 																	)
-																		? currentOrder?.orders?.user?.phonenumber?.slice(
+																		? currentOrder?.order?.user?.phonenumber?.slice(
 																				4
 																		  )
-																		: currentOrder?.orders?.user?.phonenumber?.startsWith(
+																		: currentOrder?.order?.user?.phonenumber?.startsWith(
 																				"00966"
 																		  )
-																		? currentOrder?.orders?.user?.phonenumber?.slice(
+																		? currentOrder?.order?.user?.phonenumber?.slice(
 																				5
 																		  )
-																		: currentOrder?.orders?.user?.phonenumber}
+																		: currentOrder?.order?.user?.phonenumber}
 																</span>
 															</div>
 														</div>
@@ -764,7 +691,7 @@ const ReturnOrderDetails = () => {
 																<Message />
 
 																<span className='text-overflow'>
-																	{currentOrder?.orders?.user?.email}
+																	{currentOrder?.order?.user?.email}
 																</span>
 															</div>
 														</div>
@@ -780,7 +707,7 @@ const ReturnOrderDetails = () => {
 																/>
 																<span style={{ whiteSpace: "normal" }}>
 																	{translateProvinceName(
-																		currentOrder?.orders?.OrderAddress?.district
+																		currentOrder?.order?.OrderAddress?.district
 																	)}
 																</span>
 															</div>
@@ -798,13 +725,12 @@ const ReturnOrderDetails = () => {
 																/>
 																<span style={{ whiteSpace: "normal" }}>
 																	{translateCityName(
-																		currentOrder?.orders?.OrderAddress?.city
+																		currentOrder?.order?.OrderAddress?.city
 																	)}
 																</span>
 															</div>
 														</div>
-														{currentOrder?.orders?.OrderAddress
-															?.postal_code && (
+														{currentOrder?.order?.OrderAddress?.postal_code && (
 															<div className='col-md-6 col-12 mb-3'>
 																<h6 className='mb-3'>الرمز البريدي</h6>
 																<div className='info-box'>
@@ -817,7 +743,7 @@ const ReturnOrderDetails = () => {
 																	/>
 																	<span style={{ whiteSpace: "normal" }}>
 																		{
-																			currentOrder?.orders?.OrderAddress
+																			currentOrder?.order?.OrderAddress
 																				?.postal_code
 																		}
 																	</span>
@@ -830,7 +756,7 @@ const ReturnOrderDetails = () => {
 																<Location />
 																<span style={{ whiteSpace: "normal" }}>
 																	{
-																		currentOrder?.orders?.OrderAddress
+																		currentOrder?.order?.OrderAddress
 																			?.street_address
 																	}
 																</span>
@@ -889,9 +815,9 @@ const ReturnOrderDetails = () => {
 													IconComponent={IoIosArrowDown}
 													displayEmpty
 													disabled={
-														currentOrder?.orders?.status === "تم الشحن" ||
-														currentOrder?.orders?.status === "ملغي" ||
-														currentOrder?.orders?.status === "مكتمل"
+														currentOrder?.status === "تم الشحن" ||
+														currentOrder?.status === "ملغي" ||
+														currentOrder?.status === "مكتمل"
 															? true
 															: false
 													}
@@ -970,9 +896,9 @@ const ReturnOrderDetails = () => {
 													IconComponent={IoIosArrowDown}
 													displayEmpty
 													disabled={
-														currentOrder?.orders?.status === "تم الشحن" ||
-														currentOrder?.orders?.status === "ملغي" ||
-														currentOrder?.orders?.status === "مكتمل"
+														currentOrder?.status === "تم الشحن" ||
+														currentOrder?.status === "ملغي" ||
+														currentOrder?.status === "مكتمل"
 															? true
 															: false
 													}
@@ -1020,9 +946,9 @@ const ReturnOrderDetails = () => {
 											<div className='col-lg-9 col-md-9 col-12'>
 												<input
 													disabled={
-														currentOrder?.orders?.status === "تم الشحن" ||
-														currentOrder?.orders?.status === "ملغي" ||
-														currentOrder?.orders?.status === "مكتمل"
+														currentOrder?.status === "تم الشحن" ||
+														currentOrder?.status === "ملغي" ||
+														currentOrder?.status === "مكتمل"
 															? true
 															: false
 													}
@@ -1089,9 +1015,9 @@ const ReturnOrderDetails = () => {
 												<ArrowDown
 													style={{
 														cursor:
-															currentOrder?.orders?.status === "تم الشحن" ||
-															currentOrder?.orders?.status === "ملغي" ||
-															currentOrder?.orders?.status === "مكتمل"
+															currentOrder?.status === "تم الشحن" ||
+															currentOrder?.status === "ملغي" ||
+															currentOrder?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",
 													}}
@@ -1109,7 +1035,7 @@ const ReturnOrderDetails = () => {
 													<li
 														onClick={() => handleUpdateOrderStatus("ready")}
 														style={
-															currentOrder?.orders?.status === "قيد التجهيز"
+															currentOrder?.status === "قيد التجهيز"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1118,7 +1044,7 @@ const ReturnOrderDetails = () => {
 																: { cursor: "pointer" }
 														}>
 														قيد التجهيز
-														{currentOrder?.orders?.status === " قيد التجهيز" ? (
+														{currentOrder?.status === " قيد التجهيز" ? (
 															<span style={{ fontSize: "1rem" }}>
 																{" "}
 																(تم تغيير حالة الطلب إلى قيد التجهيز من قبل ){" "}
@@ -1134,7 +1060,7 @@ const ReturnOrderDetails = () => {
 													<li
 														onClick={() => handleUpdateOrderStatus("completed")}
 														style={
-															currentOrder?.orders?.status === "تم الشحن"
+															currentOrder?.status === "تم الشحن"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1148,7 +1074,7 @@ const ReturnOrderDetails = () => {
 													<li
 														onClick={() => handleUpdateOrderStatus("canceled")}
 														style={
-															currentOrder?.orders?.status === "ملغي"
+															currentOrder?.status === "ملغي"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1191,21 +1117,21 @@ const ReturnOrderDetails = () => {
 									/>
 								</div>
 
-								{currentOrder?.orders?.shipping &&
-									currentOrder?.orders?.shippingtypes?.name !== "اخرى" && (
+								{currentOrder?.order?.shipping &&
+									currentOrder?.order?.shippingtypes?.name !== "اخرى" && (
 										<button
 											disabled={
-												currentOrder?.orders?.status === "تم الشحن" ||
-												currentOrder?.orders?.status === "ملغي" ||
-												currentOrder?.orders?.status === "مكتمل"
+												currentOrder?.status === "تم الشحن" ||
+												currentOrder?.status === "ملغي" ||
+												currentOrder?.status === "مكتمل"
 													? true
 													: false
 											}
 											style={{
 												cursor:
-													currentOrder?.orders?.status === "تم الشحن" ||
-													currentOrder?.orders?.status === "ملغي" ||
-													currentOrder?.orders?.status === "مكتمل"
+													currentOrder?.status === "تم الشحن" ||
+													currentOrder?.status === "ملغي" ||
+													currentOrder?.status === "مكتمل"
 														? "not-allowed"
 														: "pointer",
 											}}
@@ -1229,9 +1155,9 @@ const ReturnOrderDetails = () => {
 												<Print
 													style={{
 														cursor:
-															currentOrder?.orders?.status === "تم الشحن" ||
-															currentOrder?.orders?.status === "ملغي" ||
-															currentOrder?.orders?.status === "مكتمل"
+															currentOrder?.status === "تم الشحن" ||
+															currentOrder?.status === "ملغي" ||
+															currentOrder?.status === "مكتمل"
 																? "not-allowed"
 																: "pointer",
 													}}
