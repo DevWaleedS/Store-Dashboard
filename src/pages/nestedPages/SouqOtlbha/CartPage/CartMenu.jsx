@@ -46,7 +46,7 @@ function CartMenu({ data }) {
 						{data?.cartDetail?.map((product) => (
 							<div className='product'>
 								<div className='image'>
-									<Link to={`${product?.product?.id}`}>
+									<Link to={`ProductRefund/${product?.product?.id}`}>
 										<img
 											src={product?.product?.cover}
 											alt={product?.product?.name}
@@ -55,9 +55,9 @@ function CartMenu({ data }) {
 								</div>
 								<div className='info'>
 									<div className='name'>
-										<a href={`${product?.product?.id}`}>
+										<Link to={`ProductRefund/${product?.product?.id}`}>
 											{product?.product?.name}
-										</a>
+										</Link>
 										<ul className='product-options'>
 											{product?.options?.map((option, index) => (
 												<li key={index}>{`${

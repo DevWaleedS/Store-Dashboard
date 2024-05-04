@@ -8,6 +8,7 @@ export { default as CategoryTable } from "./CategoryTable";
 export { default as BigOrdersTable } from "./BigOrdersTable";
 export { default as OrdersTableData } from "./OrdersTableData";
 export { default as BigProductsTable } from "./BigProductsTable";
+export { default as ReturnOrdersTable } from "./ReturnOrdersTable";
 export { default as ProductsTableData } from "./ProductsTableData";
 export { default as UserAndManagementTable } from "./UserAndManagementTable";
 export { default as PostalSubscriptionsTable } from "./PostalSubscriptionsTable";

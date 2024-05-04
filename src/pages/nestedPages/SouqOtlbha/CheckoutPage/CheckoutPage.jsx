@@ -1,37 +1,49 @@
 import React, { useState, useEffect, useContext } from "react";
+
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
-import useFetch from "../../Hooks/UseFetch";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+
 // Context
-import Context from "../../Context/context";
+import Context from "../../../../Context/context";
+
 // Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import CircularLoading from "../../../../HelperComponents/CircularLoading";
+
 // Icons
-import { HomeIcon, Check9x7Svg } from "../../data/Icons";
 import { useDispatch } from "react-redux";
-import { openMessage } from "../../store/slices/SuccessMessageModalSlice";
 import { CiDiscount1 } from "react-icons/ci";
+import { HomeIcon, Check9x7Svg } from "../../../../data/Icons";
+
+// Redux
+import { openMessage } from "../../../../store/slices/SuccessMessageModalSlice";
+
+// RTK Query
+import {
+	useAppLyDiscountCouponMutation,
+	useCheckOutCartMutation,
+	useShowImportCartQuery,
+} from "../../../../store/apiSlices/souqOtlobhaProductsApi";
+import { useImportPaymentMethodsQuery } from "../../../../store/apiSlices/importPaymentMethodApi";
+import { useGetDefaultAddressQuery } from "../../../../store/apiSlices/selectorsApis/defaultAddressApi";
+import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCitiesApi";
 
 function CheckoutPage() {
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
 
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
-	const { fetchedData, loading, reload, setReload } =
-		useFetch("showImportCart");
-	const { fetchedData: paymentMethods } = useFetch("paymentmethodsImport");
-	const { fetchedData: citiesData } = useFetch(
-		"https://backend.atlbha.com/api/selector/shippingcities/5"
-	);
-	const { fetchedData: defaultAddress } = useFetch(
-		"https://backend.atlbha.com/api/show_default_address"
-	);
+	// get cart data..
+	const { data: cartData, isLoading } = useShowImportCartQuery();
+
+	// get payment methods..
+	const { data: paymentMethods } = useImportPaymentMethodsQuery();
+
+	// get shipping cities..
+	const { data: shippingCitiesData } = useGetShippingCitiesQuery(5);
+
+	// get default address..
+	const { data: defaultAddress } = useGetDefaultAddressQuery();
 
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
@@ -59,16 +71,13 @@ function CheckoutPage() {
 		if (defaultAddress) {
 			setShipping({
 				...shipping,
-				id: defaultAddress?.data?.orderAddress?.id,
-				district: defaultAddress?.data?.orderAddress?.district,
-				city: defaultAddress?.data?.orderAddress?.city,
-				address: defaultAddress?.data?.orderAddress?.street_address,
-				postCode: defaultAddress?.data?.orderAddress?.postCode,
-				notes: defaultAddress?.data?.orderAddress?.notes,
-				defaultAddress:
-					defaultAddress?.data?.orderAddress?.default_address === "1"
-						? true
-						: false,
+				id: defaultAddress?.id,
+				district: defaultAddress?.district,
+				city: defaultAddress?.city,
+				address: defaultAddress?.street_address,
+				postCode: defaultAddress?.postCode,
+				notes: defaultAddress?.notes,
+				defaultAddress: defaultAddress?.default_address === "1" ? true : false,
 			});
 		}
 	}, [defaultAddress]);
@@ -98,6 +107,7 @@ function CheckoutPage() {
 	};
 	/** ----------------------------- */
 
+	// handle set cities by arabic
 	function removeDuplicates(arr) {
 		const unique = arr?.filter((obj, index) => {
 			return (
@@ -109,13 +119,19 @@ function CheckoutPage() {
 	}
 
 	const getCityFromProvince =
-		citiesData?.data?.cities?.filter(
+		shippingCitiesData?.cities?.filter(
 			(obj) => obj?.region?.name_en === shipping?.district
 		) || [];
 
-	const handleCheckout = () => {
+	// --------------------------------------------------------
+
+	// handle check out cart
+	const [checkOutCart, { isCartLoading }] = useCheckOutCartMutation();
+	const handleCheckout = async () => {
 		resetError();
 		setBtnLoading(true);
+
+		// data that send to api...
 		let formData = new FormData();
 		formData.append("district", shipping?.district);
 		formData.append("city", shipping?.city);
@@ -131,86 +147,100 @@ function CheckoutPage() {
 		);
 		formData.append("description", shipping?.notes || "");
 		formData.append("default_address", shipping?.defaultAddress ? 1 : 0);
-		axios
-			.post(`checkoutImport`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					if (res?.data?.message?.en === "order send successfully") {
-						setBtnLoading(false);
-						dispatch(openMessage());
-						navigate("/Products/SouqOtlobha");
 
-						setReload(!reload);
-					} else {
-						setBtnLoading(false);
-						toast.error(res?.data?.message?.ar, { theme: "colored" });
-						setReload(!reload);
-					}
+		// make request...
+		try {
+			const response = await checkOutCart({
+				body: formData,
+			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				if (response?.data?.message?.en === "order send successfully") {
+					setBtnLoading(false);
+					dispatch(openMessage());
+					navigate("/Products/SouqOtlobha");
 				} else {
 					setBtnLoading(false);
-					setError({
-						district: res?.data?.message?.en?.district?.[0] || "",
-						city: res?.data?.message?.en?.city?.[0] || "",
-						address: res?.data?.message?.en?.street_address?.[0] || "",
-						postCode: res?.data?.message?.en?.postal_code?.[0] || "",
-						notes: res?.data?.message?.en?.description?.[0] || "",
-						paymentMethod: res?.data?.message?.en?.paymentype_id?.[0] || "",
-					});
-					toast.error(res?.data?.message?.en?.district?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.city?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.street_address?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.description?.[0], {
-						theme: "light",
-					});
-					toast.error(res?.data?.message?.en?.paymentype_id?.[0], {
-						theme: "light",
-					});
-					setReload(!reload);
+					toast.error(response?.data?.message?.ar, { theme: "colored" });
 				}
-			});
+			} else {
+				setBtnLoading(false);
+				setError({
+					district: response?.data?.message?.en?.district?.[0] || "",
+					city: response?.data?.message?.en?.city?.[0] || "",
+					address: response?.data?.message?.en?.street_address?.[0] || "",
+					postCode: response?.data?.message?.en?.postal_code?.[0] || "",
+					notes: response?.data?.message?.en?.description?.[0] || "",
+					paymentMethod: response?.data?.message?.en?.paymentype_id?.[0] || "",
+				});
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing checkOutCart:", error);
+		}
 	};
 
 	// handle apply code
-	const applyDiscountCode = () => {
+	const [appLyDiscountCoupon, { isApplyDiscountLoading }] =
+		useAppLyDiscountCouponMutation();
+	const handleApplyDiscountCoupon = async () => {
 		setCoupon("");
 		setLoadingCoupon(true);
 		setCouponError(null);
+
+		// data that send to api..
 		let formData = new FormData();
 		formData.append("code", coupon);
-		axios
-			.post(`applyCoupon/${fetchedData?.data?.cart?.id}`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (
-					res?.data?.success === true &&
-					res?.data?.message?.en === "coupon updated successfully"
-				) {
-					setEndActionTitle(res?.data?.message?.ar);
-					setReload(!reload);
-					setLoadingCoupon(false);
-				} else {
-					toast.error(res?.data?.message?.ar, {
-						theme: "light",
-					});
-					setCouponError(res?.data?.message?.ar);
-					setLoadingCoupon(false);
-				}
+
+		// make request...
+		try {
+			const response = await appLyDiscountCoupon({
+				body: formData,
+				id: cartData?.id,
 			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				setEndActionTitle(response?.data?.message?.ar);
+				setLoadingCoupon(false);
+			} else {
+				setBtnLoading(false);
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing appLyDiscountCoupon:", error);
+		}
 	};
 
 	const renderCouponInput = () => {
@@ -237,10 +267,10 @@ function CheckoutPage() {
 								placeholder='كود الخصم'
 							/>
 							<button
-								onClick={applyDiscountCode}
+								onClick={handleApplyDiscountCoupon}
 								type='button'
 								className='btn btn-primary'
-								disabled={loadingCoupon}>
+								disabled={loadingCoupon || isApplyDiscountLoading}>
 								تطبيق
 							</button>
 						</form>
@@ -252,7 +282,7 @@ function CheckoutPage() {
 	};
 
 	const renderPaymentsList = () => {
-		const paymentsData = paymentMethods?.data?.payment_types?.map((payment) => {
+		const paymentsData = paymentMethods?.map((payment) => {
 			const renderPayment = () => (
 				<li className='item'>
 					<label className='header'>
@@ -335,9 +365,9 @@ function CheckoutPage() {
 					<h3>الدفع</h3>
 					<div className='block'>
 						<div className='container'>
-							{loading ? (
+							{isLoading ? (
 								<CircularLoading />
-							) : fetchedData?.data?.cart ? (
+							) : cartData ? (
 								<div className='row'>
 									<div className='col-12 col-lg-6 col-xl-7'>
 										<div className='card mb-lg-0'>
@@ -361,7 +391,7 @@ function CheckoutPage() {
 														id='country'
 														className='form-control'>
 														<option value=''>اختر المنطقة...</option>
-														{removeDuplicates(citiesData?.data?.cities)?.map(
+														{removeDuplicates(shippingCitiesData?.cities)?.map(
 															(district, index) => (
 																<option
 																	key={index}
@@ -526,93 +556,81 @@ function CheckoutPage() {
 														</tr>
 													</thead>
 													<tbody className='products'>
-														{fetchedData?.data?.cart?.cartDetail?.map(
-															(item) => (
-																<tr key={item?.id}>
-																	<td
-																		style={{
-																			display: "flex",
-																			flexDirection: "column",
-																			alignItems: "start",
-																			gap: "0.2rem",
-																		}}>
-																		<div className='d-flex flex-row align-items-center gap-1'>
-																			<span
-																				style={{
-																					maxWidth: "170px",
-																					overflow: "hidden",
-																					textOverflow: "ellipsis",
-																					whiteSpace: "nowrap",
-																				}}>
-																				{item?.product?.name}
-																			</span>{" "}
-																			× <span>{item?.qty}</span>
-																		</div>
-																		<ul className='product-options'>
-																			{item?.options?.map((option, index) => (
-																				<li key={index}>{`${
-																					index === 0
-																						? `${option}`
-																						: `/ ${option}`
-																				}`}</li>
-																			))}
-																		</ul>
-																	</td>
-																	<td>{item?.sum} ر.س</td>
-																</tr>
-															)
-														)}
+														{cartData?.cartDetail?.map((item) => (
+															<tr key={item?.id}>
+																<td
+																	style={{
+																		display: "flex",
+																		flexDirection: "column",
+																		alignItems: "start",
+																		gap: "0.2rem",
+																	}}>
+																	<div className='d-flex flex-row align-items-center gap-1'>
+																		<span
+																			style={{
+																				maxWidth: "170px",
+																				overflow: "hidden",
+																				textOverflow: "ellipsis",
+																				whiteSpace: "nowrap",
+																			}}>
+																			{item?.product?.name}
+																		</span>{" "}
+																		× <span>{item?.qty}</span>
+																	</div>
+																	<ul className='product-options'>
+																		{item?.options?.map((option, index) => (
+																			<li key={index}>{`${
+																				index === 0
+																					? `${option}`
+																					: `/ ${option}`
+																			}`}</li>
+																		))}
+																	</ul>
+																</td>
+																<td>{item?.sum} ر.س</td>
+															</tr>
+														))}
 													</tbody>
 													<tbody className='subtotals'>
 														<tr>
 															<th>السعر</th>
-															<td>{fetchedData?.data?.cart?.subtotal} ر.س</td>
+															<td>{cartData?.subtotal} ر.س</td>
 														</tr>
 														<tr>
 															<th>الضريبة</th>
-															<td>{fetchedData?.data?.cart?.tax} ر.س</td>
+															<td>{cartData?.cart?.tax} ر.س</td>
 														</tr>
-														{fetchedData?.data?.cart?.overweight_price !==
-															null &&
-															fetchedData?.data?.cart?.overweight_price !==
-																0 && (
+														{cartData?.overweight_price !== null &&
+															cartData?.overweight_price !== 0 && (
 																<tr>
 																	<th>
-																		قيمة الوزن الزائد (
-																		{fetchedData?.data?.cart?.overweight} kg)
+																		قيمة الوزن الزائد ({cartData?.overweight}{" "}
+																		kg)
 																	</th>
-																	<td>
-																		{fetchedData?.data?.cart?.overweight_price}{" "}
-																		ر.س
-																	</td>
+																	<td>{cartData?.overweight_price} ر.س</td>
 																</tr>
 															)}
 														<tr>
 															<th>الشحن</th>
-															<td>
-																{fetchedData?.data?.cart?.shipping_price} ر.س
-															</td>
+															<td>{cartData?.shipping_price} ر.س</td>
 														</tr>
 
-														{fetchedData?.data?.cart?.discount_total ? (
+														{cartData?.discount_total ? (
 															<tr>
 																<th>
 																	الخصم
-																	{fetchedData?.data?.cart?.discount_type ===
-																	"percent" ? (
+																	{cartData?.discount_type === "percent" ? (
 																		<span
 																			style={{
 																				fontSize: "0.85rem",
 																				color: "#7e7e7e",
 																			}}>
-																			({fetchedData?.data?.cart?.discount_value}
+																			({cartData?.discount_value}
 																			%)
 																		</span>
 																	) : null}
 																</th>
-																<td>
-																	{fetchedData?.data?.cart?.discount_total} ر.س
-																</td>
+																<td>{cartData?.discount_total} ر.س</td>
 															</tr>
 														) : null}
 													</tbody>
@@ -623,7 +641,7 @@ function CheckoutPage() {
 																الإجمالي{" "}
 																<span className='tax-text'>(شامل الضريبة)</span>
 															</th>
-															<td>{fetchedData?.data?.cart?.total} ر.س</td>
+															<td>{cartData?.total} ر.س</td>
 														</tr>
 													</tfoot>
 												</table>
@@ -633,7 +651,7 @@ function CheckoutPage() {
 
 												<button
 													className='checkout-btn'
-													disabled={btnLoading}
+													disabled={btnLoading || isCartLoading}
 													onClick={() => handleCheckout()}>
 													تأكيد الطلب
 												</button>

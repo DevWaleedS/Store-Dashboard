@@ -22,7 +22,7 @@ export const souqOtlobhaProductsApi = createApi({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
 		prepareHeaders,
 	}),
-	tagTypes: ["SouqOtlobhaProducts, CartMenuData"],
+	tagTypes: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
 	endpoints: (builder) => ({
 		// get store souq otlboha products endpoint..
 		getSouqOtlobhaProducts: builder.query({
@@ -35,7 +35,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get show Import Cart
 		showImportProductsCartData: builder.query({
-			query: (arg) => `showImportCart`,
+			query: () => `showImportCart`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -51,6 +51,15 @@ export const souqOtlobhaProductsApi = createApi({
 			providesTags: (result, error, id) => [
 				{ type: "SouqOtlobhaProducts", id },
 			],
+		}),
+
+		// show import Cart
+		showImportCart: builder.query({
+			query: () => `showImportCart`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.cart,
+			providesTags: ["CartMenuData"],
 		}),
 
 		// filter products by categories
@@ -96,8 +105,6 @@ export const souqOtlobhaProductsApi = createApi({
 		}),
 
 		// update Cart
-
-		// edit Product by id
 		updateCart: builder.mutation({
 			query: ({ id, body }) => {
 				return {
@@ -107,6 +114,30 @@ export const souqOtlobhaProductsApi = createApi({
 				};
 			},
 			invalidatesTags: ["Products"],
+		}),
+
+		// handleCheckout
+		checkOutCart: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `checkoutImport`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
+		}),
+
+		// apply Discount Code
+		appLyDiscountCoupon: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `applyCoupon/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+			invalidatesTags: ["CheckOutPage"],
 		}),
 	}),
 });
@@ -120,4 +151,7 @@ export const {
 	useImportProductToStoreProductsMutation,
 	useUpdateCartMutation,
 	useDeleteItemFromCartMutation,
+	useShowImportCartQuery,
+	useCheckOutCartMutation,
+	useAppLyDiscountCouponMutation,
 } = souqOtlobhaProductsApi;

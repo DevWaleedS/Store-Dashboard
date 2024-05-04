@@ -6,17 +6,17 @@ import { Link } from "react-router-dom";
 
 // Components
 import { OrdersQuickDetails } from "./index";
-import { TopBarSearchInput } from "../../global";
-import { BigOrdersTable } from "../../components/Tables";
+import { TopBarSearchInput } from "../../../global";
+import { BigOrdersTable } from "../../../components/Tables";
 
 // Icons
-import { ArrowBack } from "../../data/Icons";
+import { ArrowBack } from "../../../data/Icons";
 
 import {
 	useFilterOrdersByStatusMutation,
 	useGetOrdersQuery,
 	useSearchInOrdersMutation,
-} from "../../store/apiSlices/ordersApi";
+} from "../../../store/apiSlices/ordersApiSlices/ordersApi";
 
 const Orders = () => {
 	const [pageTarget, setPageTarget] = useState(1);

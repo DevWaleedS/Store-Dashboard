@@ -251,18 +251,20 @@ function CartPage() {
 													<tr key={product?.id}>
 														<td>
 															<div className='image'>
-																<a href={`${product?.product?.id}`}>
+																<Link
+																	to={`/Products/SouqOtlobha/ProductRefund/${product?.product?.id}`}>
 																	<img
 																		src={product?.product?.cover}
 																		alt='product-img'
 																	/>
-																</a>
+																</Link>
 															</div>
 														</td>
 														<td className='name'>
-															<a href={`${product?.product?.id}`}>
+															<Link
+																to={`/Products/SouqOtlobha/ProductRefund/${product?.product?.id}`}>
 																{product?.product?.name}
-															</a>
+															</Link>
 															{product?.options && (
 																<ul className='options'>
 																	{product?.options?.map((option, index) => (

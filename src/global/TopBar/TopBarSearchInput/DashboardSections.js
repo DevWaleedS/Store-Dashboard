@@ -34,6 +34,7 @@ import {
 import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import { BsCartX } from "react-icons/bs";
 
 export const dashboardSections = [
 	{
@@ -83,6 +84,12 @@ export const dashboardSections = [
 		sectionName: "الطلبات",
 		route: "Orders",
 		icon: <Orders />,
+	},
+	{
+		id: 4,
+		sectionName: "المرتجعات",
+		route: "ReturnOrders",
+		icon: <BsCartX />,
 	},
 	{
 		id: 5,

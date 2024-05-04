@@ -7,12 +7,12 @@ import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../../Context/context";
-import { LoadingContext } from "../../../Context/LoadingProvider";
+import Context from "../../../../Context/context";
+import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // Components
-import { TopBarSearchInput } from "../../../global";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { TopBarSearchInput } from "../../../../global";
+import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
 // MUI
 import Select from "@mui/material/Select";
@@ -45,7 +45,7 @@ import {
 	WalletIcon,
 	DateIcon,
 	Delevray,
-} from "../../../data/Icons";
+} from "../../../../data/Icons";
 
 // Table
 import Table from "@mui/material/Table";
@@ -59,8 +59,8 @@ import TableRow from "@mui/material/TableRow";
 import {
 	useGetOrderByIdQuery,
 	useUpdateOrderStatusMutation,
-} from "../../../store/apiSlices/ordersApi";
-import { useGetShippingCitiesQuery } from "../../../store/apiSlices/getShippingCitiesApi";
+} from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
+import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCitiesApi";
 
 // The Table title
 function EnhancedTableHead() {

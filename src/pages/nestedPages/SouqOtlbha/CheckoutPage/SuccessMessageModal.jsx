@@ -12,8 +12,7 @@ import Modal from "@mui/material/Modal";
 
 // Icons
 import { CiCircleCheck } from "react-icons/ci";
-
-import { closeMessage } from "../../store/slices/SuccessMessageModalSlice";
+import { closeMessage } from "../../../../store/slices/SuccessMessageModalSlice";
 
 const style = {
 	position: "absolute",

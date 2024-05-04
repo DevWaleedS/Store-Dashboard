@@ -5,3 +5,4 @@ export { default as SouqOtlbhaProducts } from "./SouqOtlbhaProducts/SouqOtlbhaPr
 export { default as ProductsFilterOperations } from "./ProductsFilterOperations/ProductsFilterOperations";
 export { default as CartMenu } from "./CartPage/CartMenu";
 export { default as CartPage } from "./CartPage/CartPage";
+export { default as CheckoutPage } from "./CheckoutPage/CheckoutPage";

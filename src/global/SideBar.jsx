@@ -16,6 +16,8 @@ import Context from "../Context/context";
 
 // Icons
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import { BiCartAdd } from "react-icons/bi";
+import { BsCartX } from "react-icons/bs";
 import { IoWallet } from "react-icons/io5";
 import {
 	Academy,
@@ -122,18 +124,35 @@ const SideBar = ({ open, closeSidebar, verificationStatus }) => {
 						<span className='me-2'> المنتجات</span>
 					</MenuItem>
 				</NavLink>
-				<NavLink
-					className='menu-link'
-					to='Orders'
-					onClick={() => {
-						closeSidebar();
-						handleOpenVerificationModal();
-					}}>
-					<MenuItem>
-						<Orders />
-						<span className='me-2'>الطلبات </span>
-					</MenuItem>
-				</NavLink>
+
+				{/** Markting Sub menu */}
+				<SubMenu label='الطلبات' icon={<Orders />} as='li'>
+					<NavLink
+						className='sub-menu-link'
+						to='Orders'
+						onClick={() => {
+							closeSidebar();
+							handleOpenVerificationModal();
+						}}>
+						<MenuItem>
+							<BiCartAdd />
+							<span className='me-2'> الطلبات</span>
+						</MenuItem>
+					</NavLink>
+
+					<NavLink
+						className='sub-menu-link'
+						to='ReturnOrders'
+						onClick={() => {
+							closeSidebar();
+							handleOpenVerificationModal();
+						}}>
+						<MenuItem>
+							<BsCartX />
+							<span className='me-2'>المرتجعات</span>
+						</MenuItem>
+					</NavLink>
+				</SubMenu>
 				<NavLink
 					className='menu-link'
 					to='PlatformServices'

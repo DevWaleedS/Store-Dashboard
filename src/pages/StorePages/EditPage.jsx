@@ -76,6 +76,7 @@ const EditPage = () => {
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
+	const [selectedCategories, setSelectedCategories] = useState([]);
 	const [page, setPage] = useState({
 		title: "",
 		page_desc: "",
@@ -89,8 +90,8 @@ const EditPage = () => {
 	});
 
 	const {
-		handleSubmit,
 		register,
+		handleSubmit,
 		reset,
 		control,
 		formState: { errors },
@@ -105,7 +106,6 @@ const EditPage = () => {
 		},
 	});
 
-	console.log(control);
 	const [tag, setTag] = useState("");
 	const [titleLength, setTitleLength] = useState(false);
 	const [descriptionLength, setDescriptionLength] = useState(false);
@@ -152,28 +152,30 @@ const EditPage = () => {
 	// -----------------------------------------------------
 
 	useEffect(() => {
-		if (currentPage) {
-			setPage({
-				...page,
-				title: currentPage?.title,
-				page_desc: currentPage?.page_desc,
-				page_content: currentPage?.page_content || "",
-				seo_title: currentPage?.seo_title,
-				seo_link: currentPage?.seo_link,
-				seo_desc: currentPage?.seo_desc,
-				tags: currentPage?.tags,
-				pageCategory: currentPage?.pageCategory?.map((item) => item?.id),
-				image: currentPage?.image,
-			});
-			setEditorValue(currentPage?.page_content);
-		}
+		setPage({
+			...page,
+			title: currentPage?.title,
+			page_desc: currentPage?.page_desc,
+			page_content: currentPage?.page_content || "",
+			seo_title: currentPage?.seo_title,
+			seo_link: currentPage?.seo_link,
+			seo_desc: currentPage?.seo_desc,
+			tags: currentPage?.tags,
+			pageCategory: currentPage?.pageCategory?.map((item) => item?.id) || [],
+			image: currentPage?.image,
+		});
+		setEditorValue(currentPage?.page_content);
+
+		// Update selected categories when pageCategory changes
+		setSelectedCategories(
+			currentPage?.pageCategory?.map((item) => item?.id) || []
+		);
 	}, [currentPage]);
 
 	useEffect(() => {
 		reset(page);
-	}, [currentPage, reset, page]);
+	}, [reset, page]);
 
-	console.log(page);
 	// -------------------------------------------------
 
 	// Add Post image
@@ -287,14 +289,15 @@ const EditPage = () => {
 
 		// data that send to api
 		let formData = new FormData();
+		formData.append("_method", "PUT");
 		formData.append("title", data?.title);
 		formData.append("page_desc", data?.page_desc);
 		formData.append("page_content", editorValue || page?.page_content);
 		formData.append("seo_title", data?.seo_title);
 		formData.append("seo_desc", data?.seo_desc);
 		formData.append("tags", page?.tags?.join(","));
-		for (let i = 0; i < page?.pageCategory?.length; i++) {
-			formData.append([`pageCategory[${i}]`], page?.pageCategory[i]);
+		for (let i = 0; i < selectedCategories?.length; i++) {
+			formData.append([`pageCategory[${i}]`], selectedCategories[i]);
 		}
 		if (images.length !== 0) {
 			formData.append("image", itsPost ? images[0] || "" : "");
@@ -504,7 +507,6 @@ const EditPage = () => {
 													<div className='input-icon'>
 														<DocsIcon />
 													</div>
-
 													<input
 														name='seo_title'
 														className='w-100'
@@ -523,15 +525,13 @@ const EditPage = () => {
 													<label
 														htmlFor='page-title-input'
 														className='d-block mb-1'>
-														رابط صفحة تعريفية ( SEO Page URL ){" "}
-														<span className='fs-6 text-danger'>(تلقائي)</span>
+														رابط صفحة تعريفية ( SEO Page URL )
 													</label>
 													<div className='input-icon'>
 														<DocsIcon />
 													</div>
 													<input
 														name='seo_link'
-														readOnly
 														className='w-100 seo_link'
 														type='text'
 														placeholder='رابط صفحة تعريفية ( SEO Page URL )'
@@ -574,20 +574,15 @@ const EditPage = () => {
 														<div className='title'>
 															<h4>
 																تصنيف الصفحة
-																<span className='important-hint'> * </span>
+																<span className='important-hint'> *</span>
 															</h4>
 														</div>
-														<div className='body page-category '>
-															<FormGroup
-																className=''
-																sx={{ overflow: "hidden" }}>
-																{pagesCategory?.map((cat, index) =>
-																	isLoading ? (
-																		<p>...</p>
-																	) : (
+														<div className='body page-category'>
+															<FormGroup sx={{ overflow: "hidden" }}>
+																{!isLoading && Array.isArray(pagesCategory) ? (
+																	pagesCategory.map((cat) => (
 																		<FormControlLabel
-																			value={cat?.id}
-																			key={index}
+																			key={cat?.id}
 																			sx={{
 																				py: 1,
 																				mr: 0,
@@ -602,49 +597,41 @@ const EditPage = () => {
 																			}}
 																			control={
 																				<Checkbox
-																					checked={
-																						page?.pageCategory?.includes(
-																							cat?.id
-																						) || false
-																					}
+																					checked={selectedCategories.includes(
+																						cat?.id
+																					)}
 																					onChange={(e) => {
-																						const categoryId = parseInt(
-																							e.target.value
-																						);
+																						const categoryId = cat.id;
 																						const isChecked = e.target.checked;
 
-																						if (isChecked) {
-																							setPage((prevPage) => ({
-																								...prevPage,
-																								pageCategory: [
-																									...prevPage.pageCategory,
-																									categoryId,
-																								],
-																							}));
-																						} else {
-																							setPage((prevPage) => ({
-																								...prevPage,
-																								pageCategory:
-																									prevPage.pageCategory.filter(
-																										(item) =>
-																											item !== categoryId
-																									),
-																							}));
-																						}
+																						// Update selected categories state
+																						setSelectedCategories(
+																							(prevCategories) =>
+																								isChecked
+																									? [
+																											...prevCategories,
+																											categoryId,
+																									  ]
+																									: prevCategories.filter(
+																											(item) =>
+																												item !== categoryId
+																									  )
+																						);
 																					}}
-																					sx={{
-																						"& path": { fill: "#000000" },
-																					}}
+																					sx={{ "& path": { fill: "#000000" } }}
 																				/>
 																			}
 																			label={cat?.name}
 																		/>
-																	)
+																	))
+																) : (
+																	<p>Loading categories...</p>
 																)}
 															</FormGroup>
 														</div>
 													</div>
 												</div>
+
 												<div className='col-md-6 col-12'>
 													<div className='wrapper'>
 														<div className='title'>

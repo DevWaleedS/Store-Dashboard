@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
 import { TopBarSearchInput } from "../../../global";
-import SuccessMessageModal from "../../CheckoutPage/SuccessMessageModal";
+import SuccessMessageModal from "./CheckoutPage/SuccessMessageModal";
 import { TablePagination } from "../../../components/Tables/TablePagination";
 import {
 	SouqOtlbhaProducts,

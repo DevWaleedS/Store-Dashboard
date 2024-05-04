@@ -37,12 +37,11 @@ import {
 	PostalSubscriptions,
 	PaintStore,
 	SEOStore,
-	CheckoutPage,
 	RequestDelegate,
 } from "./pages";
 
+// rating and comments of store
 import { Rating } from "./pages/Rating";
-import { OrderDetails, Orders } from "./pages/Orders/index";
 
 // Academy Component
 import { Academy } from "./pages/Academy";
@@ -95,6 +94,7 @@ import {
 	SouqOtlobha,
 	ProductRefund,
 	CartPage,
+	CheckoutPage,
 } from "./pages/nestedPages/SouqOtlbha";
 
 // main Information setting Page
@@ -131,6 +131,13 @@ import BillingInfo from "./pages/Wallet/BillingInfo";
 
 // reports
 import { Reports } from "./pages/Reports";
+
+/** Store orders and return orders */
+import { OrderDetails, Orders } from "./pages/StoreOrders/Orders";
+import {
+	ReturnOrderDetails,
+	ReturnOrders,
+} from "./pages/StoreOrders/ReturnOrders";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -252,16 +259,29 @@ const router = createBrowserRouter([
 			// 	element: <MarketingCampaign />,
 			// },
 
+			/** Store orders and return orders */
 			{
 				path: "Orders",
 				element: <Orders />,
 			},
+
 			// nested order page
 			{
 				path: "Orders/OrderDetails/:id",
 				element: <OrderDetails />,
 			},
 
+			{
+				path: "ReturnOrders",
+				element: <ReturnOrders />,
+			},
+
+			{
+				path: "ReturnOrders/ReturnOrderDetails/:id",
+				element: <ReturnOrderDetails />,
+			},
+
+			/** Store Pages  */
 			{
 				path: "Pages",
 				element: <Pages />,

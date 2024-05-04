@@ -104,6 +104,8 @@ export const pagesApi = createApi({
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.pages,
+
+			providesTags: (result, error, id) => [{ type: "Pages", id }],
 		}),
 
 		// edit Page by id
@@ -111,7 +113,7 @@ export const pagesApi = createApi({
 			query: ({ id, body }) => {
 				return {
 					url: `page/${id}`,
-					method: "PUT",
+					method: "POST",
 					body: body,
 				};
 			},

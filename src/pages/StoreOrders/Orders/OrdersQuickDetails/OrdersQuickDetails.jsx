@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Completed, FileIcon, PageIcon, Product } from "../../../data/Icons";
+import { Completed, FileIcon, PageIcon, Product } from "../../../../data/Icons";
 
 // Icons
 

@@ -33,7 +33,8 @@ import { categoriesApi } from "./apiSlices/categoriesApi";
 
 import { productsApi } from "./apiSlices/productsApi";
 import ChangeCategoriesForSomeSelectedProductsSlice from "./slices/ChangeCategoriesForSomeSelectedProducts";
-import { ordersApi } from "./apiSlices/ordersApi";
+import { ordersApi } from "./apiSlices/ordersApiSlices/ordersApi";
+import { returnOrdersApi } from "./apiSlices/ordersApiSlices/returnOrdersApi";
 import { loginApi } from "./apiSlices/loginApi";
 import { couponApi } from "./apiSlices/couponApi";
 import { emptyCartsApi } from "./apiSlices/emptyCartsApi";
@@ -44,7 +45,7 @@ import { AcademyApi } from "./apiSlices/academyApi";
 import { technicalSupportApi } from "./apiSlices/technicalSupportApi";
 import { notificationsApi } from "./apiSlices/notificationsApi";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { getShippingCitiesApi } from "./apiSlices/getShippingCitiesApi";
+import { selectShippingCitiesApi } from "./apiSlices/selectorsApis/selectShippingCitiesApi";
 import { platformServicesApi } from "./apiSlices/platformServicesApi";
 
 // selector apis
@@ -74,6 +75,8 @@ import { editUserDetailsApi } from "./apiSlices/editUserDetailsApi";
 import { logOutApi } from "./apiSlices/logOutApi";
 import { registrationMarketerStatusApi } from "./apiSlices/registrationMarketerStatusApi";
 import { souqOtlobhaProductsApi } from "./apiSlices/souqOtlobhaProductsApi";
+import { importPaymentMethodApi } from "./apiSlices/importPaymentMethodApi";
+import { defaultAddressApi } from "./apiSlices/selectorsApis/defaultAddressApi";
 
 // store
 export const store = configureStore({
@@ -96,8 +99,10 @@ export const store = configureStore({
 			verifyStoreApi.middleware,
 			socialPagesApi.middleware,
 			selectBanksApi.middleware,
+			returnOrdersApi.middleware,
 			selectCitiesApi.middleware,
 			notificationsApi.middleware,
+			defaultAddressApi.middleware,
 			editUserDetailsApi.middleware,
 			mainInformationApi.middleware,
 			selectCountriesApi.middleware,
@@ -109,11 +114,12 @@ export const store = configureStore({
 			technicalSupportApi.middleware,
 			platformServicesApi.middleware,
 			selectCategoriesApi.middleware,
-			getShippingCitiesApi.middleware,
 			shippingCompaniesApi.middleware,
+			importPaymentMethodApi.middleware,
 			souqOtlobhaProductsApi.middleware,
 			selectPaymentsTypesApi.middleware,
 			postalSubscriptionsApi.middleware,
+			selectShippingCitiesApi.middleware,
 			selectPageCategoriesApi.middleware,
 			selectImportProductsApi.middleware,
 			selectEtlobahCategoryApi.middleware,
@@ -140,7 +146,9 @@ export const store = configureStore({
 		[verifyStoreApi.reducerPath]: verifyStoreApi.reducer,
 		[selectBanksApi.reducerPath]: selectBanksApi.reducer,
 		[selectCitiesApi.reducerPath]: selectCitiesApi.reducer,
+		[returnOrdersApi.reducerPath]: returnOrdersApi.reducer,
 		[notificationsApi.reducerPath]: notificationsApi.reducer,
+		[defaultAddressApi.reducerPath]: defaultAddressApi.reducer,
 		[maintenanceModeApi.reducerPath]: maintenanceModeApi.reducer,
 		[selectCountriesApi.reducerPath]: selectCountriesApi.reducer,
 		[templateSettingApi.reducerPath]: templateSettingApi.reducer,
@@ -153,10 +161,10 @@ export const store = configureStore({
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
-		[getShippingCitiesApi.reducerPath]: getShippingCitiesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
 		[selectPaymentsTypesApi.reducerPath]: selectPaymentsTypesApi.reducer,
 		[selectImportProductsApi.reducerPath]: selectImportProductsApi.reducer,
+		[selectShippingCitiesApi.reducerPath]: selectShippingCitiesApi.reducer,
 		[selectPageCategoriesApi.reducerPath]: selectPageCategoriesApi.reducer,
 		[selectEtlobahCategoryApi.reducerPath]: selectEtlobahCategoryApi.reducer,
 		[evaluationThePlatformApi.reducerPath]: evaluationThePlatformApi.reducer,
@@ -165,9 +173,7 @@ export const store = configureStore({
 		[registrationMarketerStatusApi.reducerPath]:
 			registrationMarketerStatusApi.reducer,
 		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
-		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
-		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
-		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		[importPaymentMethodApi.reducerPath]: importPaymentMethodApi.reducer,
 		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
 		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
 

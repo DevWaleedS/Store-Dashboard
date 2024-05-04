@@ -19,23 +19,23 @@ const prepareHeaders = (headers) => {
 };
 
 // Create API slice
-export const getShippingCitiesApi = createApi({
-	reducerPath: "getShippingCitiesApi",
+export const defaultAddressApi = createApi({
+	reducerPath: "defaultAddressApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/selector/",
+		baseUrl: "https://backend.atlbha.com/api/",
 		prepareHeaders,
 	}),
 
 	endpoints: (builder) => ({
-		// get store Orders endpoint..
-		getShippingCities: builder.query({
-			query: (shippingId) => `shippingcities/${shippingId}`,
+		// get default AddressApi endpoint..
+		getDefaultAddress: builder.query({
+			query: () => `show_default_address`,
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data,
+			transformResponse: (response, meta, arg) => response.data?.orderAddress,
 		}),
 	}),
 });
 
 // Export endpoints and hooks
-export const { useGetShippingCitiesQuery } = getShippingCitiesApi;
+export const { useGetDefaultAddressQuery } = defaultAddressApi;
