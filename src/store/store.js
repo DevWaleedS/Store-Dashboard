@@ -77,6 +77,7 @@ import { registrationMarketerStatusApi } from "./apiSlices/registrationMarketerS
 import { souqOtlobhaProductsApi } from "./apiSlices/souqOtlobhaProductsApi";
 import { importPaymentMethodApi } from "./apiSlices/importPaymentMethodApi";
 import { defaultAddressApi } from "./apiSlices/selectorsApis/defaultAddressApi";
+import { selectShippingCompaniesApi } from "./apiSlices/selectorsApis/selectShippingCompaniesApi";
 
 // store
 export const store = configureStore({
@@ -124,10 +125,15 @@ export const store = configureStore({
 			selectImportProductsApi.middleware,
 			selectEtlobahCategoryApi.middleware,
 			evaluationThePlatformApi.middleware,
+			selectShippingCompaniesApi.middleware,
 			selectEtlbohaSubCategoriesApi.middleware,
 			registrationMarketerStatusApi.middleware
 		),
 	reducer: {
+		[selectEtlbohaSubCategoriesApi.reducerPath]:
+			selectEtlbohaSubCategoriesApi.reducer,
+		[registrationMarketerStatusApi.reducerPath]:
+			registrationMarketerStatusApi.reducer,
 		[pagesApi.reducerPath]: pagesApi.reducer,
 		[loginApi.reducerPath]: loginApi.reducer,
 		[logOutApi.reducerPath]: logOutApi.reducer,
@@ -162,20 +168,16 @@ export const store = configureStore({
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
+		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		[importPaymentMethodApi.reducerPath]: importPaymentMethodApi.reducer,
 		[selectPaymentsTypesApi.reducerPath]: selectPaymentsTypesApi.reducer,
 		[selectImportProductsApi.reducerPath]: selectImportProductsApi.reducer,
 		[selectShippingCitiesApi.reducerPath]: selectShippingCitiesApi.reducer,
 		[selectPageCategoriesApi.reducerPath]: selectPageCategoriesApi.reducer,
 		[selectEtlobahCategoryApi.reducerPath]: selectEtlobahCategoryApi.reducer,
 		[evaluationThePlatformApi.reducerPath]: evaluationThePlatformApi.reducer,
-		[selectEtlbohaSubCategoriesApi.reducerPath]:
-			selectEtlbohaSubCategoriesApi.reducer,
-		[registrationMarketerStatusApi.reducerPath]:
-			registrationMarketerStatusApi.reducer,
-		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
-		[importPaymentMethodApi.reducerPath]: importPaymentMethodApi.reducer,
-		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
-		// [souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
+		[selectShippingCompaniesApi.reducerPath]:
+			selectShippingCompaniesApi.reducer,
 
 		AddActivity: AddActivity,
 		ReplyModal: ReplyModalSlice,

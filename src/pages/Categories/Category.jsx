@@ -14,7 +14,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { CategoryTable } from "../../components/Tables";
 
-//Redux And RTK Query
+// RTK Query
 import {
 	useFilterCategoriesMutation,
 	useGetCategoriesDataQuery,
@@ -82,7 +82,7 @@ const Category = () => {
 		};
 	}, [tabSelected, search, pageTarget, rowsCount]);
 
-	// display categories by tapSelect
+	// Display categories by tapSelect
 	useEffect(() => {
 		if (categories) {
 			setCategoriesData(
@@ -93,7 +93,7 @@ const Category = () => {
 		}
 	}, [tabSelected, categories]);
 
-	// handle filtration
+	// Handle filtration
 	useEffect(() => {
 		if (category_id !== "") {
 			const fetchData = async () => {

@@ -120,6 +120,7 @@ const AddCategory = () => {
 		setLoadingTitle("جاري حفظ النشاط");
 		resetCategoryError();
 
+		// data that send to api...
 		const formData = new FormData();
 		formData.append("name", data?.name);
 		if (icons?.length > 0) {

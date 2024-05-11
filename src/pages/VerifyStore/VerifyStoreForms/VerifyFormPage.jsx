@@ -6,8 +6,9 @@ import React, {
 	useImperativeHandle,
 } from "react";
 
+import { Skeleton } from "@mui/material";
+
 // Components
-import useFetch from "../../../Hooks/UseFetch";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Context
@@ -24,8 +25,11 @@ import {
 	useShowVerificationQuery,
 	useUpdateVerificationMutation,
 } from "../../../store/apiSlices/verifyStoreApi";
-import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
 import { useGetCitiesQuery } from "../../../store/apiSlices/selectorsApis/selectCitiesApi";
+import {
+	useGetCategoriesQuery,
+	useGetSubCategoriesByCategoriesIdsQuery,
+} from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 // third party
 import { toast } from "react-toastify";
@@ -51,9 +55,6 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	// Handle show Verification  data
 	const { isFetching } = useShowVerificationQuery();
 
-	// Categories Selector
-	const { data: selectCategories } = useGetCategoriesQuery();
-
 	// cities selector
 	const { data: cities } = useGetCitiesQuery();
 
@@ -65,10 +66,13 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const { setLoadingTitle } = LoadingStore;
 
 	/** ------------------------------------------------------------------------- */
-	// handle add activity
 
+	// handle add activity
 	const { activity } = useSelector((state) => state.AddActivity);
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
+
+	// categories and sub categories data
+	const { data: selectCategories } = useGetCategoriesQuery();
 
 	const selectedActivity = selectCategories?.filter((item) => {
 		return activity?.some((ele) => {
@@ -79,17 +83,15 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const queryParams = selectedActivity
 		?.map((sub) => `category_id[]=${sub?.id}`)
 		.join("&");
-	const { fetchedData: subActivitiesList } = useFetch(
-		`selector/subcategories?${queryParams}`
-	);
 
-	const selectedSubActivities = subActivitiesList?.data?.categories?.filter(
-		(item) => {
-			return subActivities?.some((ele) => {
-				return ele === item?.id;
-			});
-		}
-	);
+	const { data: subCategories, isLoading } =
+		useGetSubCategoriesByCategoriesIdsQuery({ categoriesIds: queryParams });
+
+	const selectedSubActivities = subCategories?.filter((item) => {
+		return subActivities?.some((ele) => {
+			return ele === item?.id;
+		});
+	});
 	/** ------------------------------------------------------------------------- */
 
 	const [file, setFile] = useState([]);
@@ -301,7 +303,14 @@ const VerifyFormPage = forwardRef((props, ref) => {
 							<h5 className='label'>نوع النشاط الفرعي</h5>
 						</div>
 						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1'>
-							{selectedSubActivities?.length === 0 ? (
+							{isLoading ? (
+								<div className='main-categories w-100'>
+									<Skeleton width={100} height={32} variant='rounded' />
+									<Skeleton width={150} height={32} variant='rounded' />
+									<Skeleton width={100} height={32} variant='rounded' />
+									<Skeleton width={150} height={32} variant='rounded' />
+								</div>
+							) : selectedSubActivities?.length === 0 ? (
 								<div style={{ fontSize: "16px", color: "#1dbbbe" }}>
 									لا توجد أنشطة فرعية
 								</div>

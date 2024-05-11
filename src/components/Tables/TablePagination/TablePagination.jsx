@@ -13,8 +13,10 @@ const TablePagination = ({
 	currentPage,
 	setRowsCount,
 }) => {
-	const handleChange = (value) => {
+	const handleChange = (event, value) => {
 		setPageTarget(value);
+
+		// im add this to use it in notifications menu
 		localStorage.setItem("notificationPageTarget", value);
 	};
 

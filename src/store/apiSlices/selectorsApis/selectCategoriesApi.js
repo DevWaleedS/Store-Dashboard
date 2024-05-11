@@ -30,7 +30,18 @@ export const selectCategoriesApi = createApi({
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.categories,
 		}),
+
+		// get SubCategories
+		getSubCategoriesByCategoriesIds: builder.query({
+			query: ({ categoriesIds }) => `selector/subcategories?${categoriesIds}`,
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.categories,
+		}),
 	}),
 });
 
-export const { useGetCategoriesQuery } = selectCategoriesApi;
+export const {
+	useGetCategoriesQuery,
+	useGetSubCategoriesByCategoriesIdsQuery,
+} = selectCategoriesApi;

@@ -14,25 +14,18 @@ import { LoadingContext } from "../../../../Context/LoadingProvider";
 import { TopBarSearchInput } from "../../../../global";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
-// MUI
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-
 // TO print this page
 import ReactToPrint from "react-to-print";
 
 // Icons
-import { PiTrafficSign } from "react-icons/pi";
-import { BiLinkExternal } from "react-icons/bi";
-import { IoIosArrowDown } from "react-icons/io";
-import { FaMountainCity, FaSignsPost } from "react-icons/fa6";
-import { FaServicestack, FaCity } from "react-icons/fa";
+
+import { FaMountainCity, FaSignsPost, FaArrowRight } from "react-icons/fa6";
+import { FaCity } from "react-icons/fa";
 
 import { BsFillInfoSquareFill } from "react-icons/bs";
-import { AiFillCopy, AiFillCheckCircle } from "react-icons/ai";
+
 import {
 	ArrowBack,
-	ArrowDown,
 	User,
 	ListIcon,
 	Location,
@@ -44,7 +37,6 @@ import {
 	StatusIcon,
 	WalletIcon,
 	DateIcon,
-	Delevray,
 } from "../../../../data/Icons";
 
 // Table
@@ -56,9 +48,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 // RTK Query
-import { useUpdateOrderStatusMutation } from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
 import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCitiesApi";
-import { useGetReturnOrderByIdQuery } from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
+import {
+	useAcceptOrRejectReturnOrderMutation,
+	useGetReturnOrderByIdQuery,
+} from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
 
 // The Table title
 function EnhancedTableHead() {
@@ -87,76 +81,28 @@ const ReturnOrderDetails = () => {
 	const { id } = useParams();
 	const { data: currentOrder, isFetching } = useGetReturnOrderByIdQuery(id);
 
-	console.log(currentOrder);
-
 	//get shipping cities data
 	const navigate = useNavigate();
-	const [shippingId, setShippingId] = useState(null);
-	const { data: shippingCitiesData } = useGetShippingCitiesQuery(shippingId);
-
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-
-	const [copy, setCopy] = useState(false);
 	const [printError, setPrintError] = useState("");
-	const [shipping, setShipping] = useState({
-		district: "",
-		city: "",
-		address: "",
-	});
 
-	// Handle errors
-	const [error, setError] = useState({
-		district: "",
-		city: "",
-		address: "",
-	});
-	const resetError = () => {
-		setError({
-			district: "",
-			city: "",
-			address: "",
-		});
-	};
-	// ----------------------------------------------------
-
-	// To handle the shipping information
-	useEffect(() => {
-		if (currentOrder?.orders?.shipping) {
-			setShipping({
-				...shipping,
-				district: currentOrder?.orders?.shipping?.district,
-				city: currentOrder?.orders?.shipping?.city,
-				address: currentOrder?.orders?.shipping?.street_address,
-				weight: currentOrder?.orders?.shipping?.weight,
-			});
-		}
-	}, [currentOrder?.orders?.shipping]);
+	const [shippingId, setShippingId] = useState(null);
 
 	useEffect(() => {
-		if (currentOrder?.orders?.shippingtypes) {
-			setShippingId(currentOrder?.orders?.shippingtypes?.id);
+		if (currentOrder?.order?.shippingtypes) {
+			setShippingId(currentOrder?.order?.shippingtypes?.id);
 		}
-	}, [currentOrder?.orders?.shippingtypes]);
+	}, [currentOrder?.order?.shippingtypes]);
+
+	const { data: shippingCitiesData } = useGetShippingCitiesQuery(
+		shippingId || 1
+	);
+
 	// ----------------------------------------------------
-
-	function removeDuplicates(arr) {
-		const unique = arr?.filter((obj, index) => {
-			return (
-				index ===
-				arr?.findIndex((o) => obj?.region?.name_en === o?.region?.name_en)
-			);
-		});
-		return unique;
-	}
-
-	const getCityFromProvince =
-		shippingCitiesData?.cities?.filter(
-			(obj) => obj?.region?.name_en === shipping?.district
-		) || [];
-
+	// to translate city and province
 	function translateCityName(name) {
 		const unique = shippingCitiesData?.cities?.filter(
 			(obj) => obj?.name_en === name
@@ -168,34 +114,27 @@ const ReturnOrderDetails = () => {
 		const unique = shippingCitiesData?.cities?.filter((obj) => {
 			return obj?.region?.name_en === name;
 		});
-
 		return unique?.[0]?.region?.name || name;
 	}
 
 	// -----------------------------------------------------
 
 	// To handle update order Status
-	const [updateOrderStatus] = useUpdateOrderStatusMutation();
-
-	const handleUpdateOrderStatus = async (status) => {
-		setLoadingTitle("جاري تعديل حالة الطلب");
-		resetError();
+	const [acceptOrRejectReturnOrder, { isLoading }] =
+		useAcceptOrRejectReturnOrderMutation();
+	const handleAcceptReturnOrder = async (status) => {
+		setLoadingTitle(
+			`جاري ${status === "accept" ? "قبول " : "رفض"} طلب الارجاع`
+		);
 
 		// Data that send to API
 		let data = {
 			status: status,
 		};
-
-		if (status === "ready" || status === "canceled") {
-			data.district = shipping?.district;
-			data.city = shipping?.city;
-			data.street_address = shipping?.address;
-		}
-
 		try {
-			const response = await updateOrderStatus({
+			const response = await acceptOrRejectReturnOrder({
 				id,
-				body: data, // Sending JSON object
+				body: data,
 			});
 
 			// Handle response
@@ -203,17 +142,12 @@ const ReturnOrderDetails = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				navigate("/Orders");
+				navigate("/ReturnOrders");
 				setLoadingTitle("");
 				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
-				setError({
-					district: response?.data?.message?.en?.district?.[0] || "",
-					city: response?.data?.message?.en?.city?.[0] || "",
-					address: response?.data?.message?.en?.street_address?.[0] || "",
-					weight: response?.data?.message?.en?.weight?.[0] || "",
-				});
+
 				// Handle display errors using toast notifications
 				toast.error(
 					response?.data?.message?.ar
@@ -231,7 +165,7 @@ const ReturnOrderDetails = () => {
 				);
 			}
 		} catch (error) {
-			console.error("Error changing update order status :", error);
+			console.error("Error changing update acceptOrRejectReturnOrder:", error);
 		}
 	};
 
@@ -241,7 +175,7 @@ const ReturnOrderDetails = () => {
 	const printSticker = () => {
 		setPrintError("");
 		// this will open the sticker in new tap
-		window.open(currentOrder?.orders?.shipping?.sticker, "_blank");
+		window.open(currentOrder?.order?.shipping_return?.sticker, "_blank");
 		// this will open the sticker in new tap
 	};
 	// -------------------------------------------------
@@ -272,10 +206,10 @@ const ReturnOrderDetails = () => {
 								<nav aria-label='breadcrumb'>
 									<ol className='breadcrumb'>
 										<li className='breadcrumb-item'>
-											<Link to='/Orders'>
+											<Link to='/ReturnOrders'>
 												<ArrowBack className='arrow-back-icon' />
 											</Link>
-											<Link to='/Orders' className='me-2'>
+											<Link to='/ReturnOrders' className='me-2'>
 												جدول المرتجعات
 											</Link>
 										</li>
@@ -305,7 +239,7 @@ const ReturnOrderDetails = () => {
 						</section>
 					) : (
 						<section className='order-details-body'>
-							<div className='mb-md-5 mb-4'>
+							<div>
 								<div className='order-details-box mb-5'>
 									<div className='title mb-4'>
 										<h5>بيانات الطلب</h5>
@@ -366,23 +300,25 @@ const ReturnOrderDetails = () => {
 											</div>
 										</div>
 
-										<div className=''>
-											<div className='order-head-row'>
-												<BsFillInfoSquareFill
-													style={{ width: "22px", height: "22px" }}
-												/>
-												<span className='me-2'>ملاحظات طلب الارجاع</span>
+										{currentOrder?.comment && (
+											<div className=''>
+												<div className='order-head-row'>
+													<BsFillInfoSquareFill
+														style={{ width: "22px", height: "22px" }}
+													/>
+													<span className='me-2'>ملاحظات طلب الارجاع</span>
+												</div>
+												<div className='order-data-row'>
+													<span
+														style={{
+															whiteSpace: "normal",
+															textAlign: "center",
+														}}>
+														{currentOrder?.comment}
+													</span>
+												</div>
 											</div>
-											<div className='order-data-row'>
-												<span
-													style={{
-														whiteSpace: "normal",
-														textAlign: "center",
-													}}>
-													{currentOrder?.comment}
-												</span>
-											</div>
-										</div>
+										)}
 									</div>
 								</div>
 
@@ -627,7 +563,7 @@ const ReturnOrderDetails = () => {
 										</TableContainer>
 									</div>
 								</div>
-								<div className='mb-md-5 mb-4'>
+								<div className='mb-3'>
 									<div className='order-details-box'>
 										<div className='title mb-4'>
 											<h5>بيانات العميل</h5>
@@ -769,218 +705,6 @@ const ReturnOrderDetails = () => {
 									</div>
 								</div>
 							</div>
-							<div className='mb-md-5 mb-4'>
-								<div className='order-details-box'>
-									<div className='title mb-5'>
-										<h5>اضافة بيانات الشحنة</h5>
-									</div>
-									<div className='px-md-3'>
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='product-category'>
-													المنطقة<span className='important-hint'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<Select
-													name='district'
-													value={shipping?.district}
-													onChange={(e) => {
-														setShipping({
-															...shipping,
-															district: e.target.value,
-														});
-													}}
-													sx={{
-														fontSize: "18px",
-														width: "100%",
-														backgroundColor: "#cce4ff38",
-														boxShadow: "0 0 5px 0px #eded",
-														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
-														"& .MuiOutlinedInput-root": {
-															"& :hover": {
-																border: "none",
-															},
-														},
-														"& .MuiOutlinedInput-notchedOutline": {
-															border: "none",
-														},
-														"& .MuiSelect-icon": {
-															right: "95%",
-														},
-													}}
-													IconComponent={IoIosArrowDown}
-													displayEmpty
-													disabled={
-														currentOrder?.status === "تم الشحن" ||
-														currentOrder?.status === "ملغي" ||
-														currentOrder?.status === "مكتمل"
-															? true
-															: false
-													}
-													inputProps={{ "aria-label": "Without label" }}
-													renderValue={(selected) => {
-														if (!selected || shipping?.district === "") {
-															return (
-																<p className='text-[#ADB5B9]'>اختر المنطقة</p>
-															);
-														}
-														return translateProvinceName(selected);
-													}}>
-													{removeDuplicates(shippingCitiesData?.cities)?.map(
-														(district, index) => {
-															return (
-																<MenuItem
-																	key={index}
-																	className='souq_storge_category_filter_items'
-																	sx={{
-																		backgroundColor: "rgba(211, 211, 211, 1)",
-																		height: "3rem",
-																		"&:hover": {},
-																	}}
-																	value={district?.region?.name_en}>
-																	{district?.region?.name}
-																</MenuItem>
-															);
-														}
-													)}
-												</Select>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{error?.district}
-												</span>
-											</div>
-										</div>
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='product-category'>
-													المدينة<span className='important-hint'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<Select
-													name='category_id'
-													value={shipping?.city}
-													onChange={(e) => {
-														setShipping({
-															...shipping,
-															city: e.target.value,
-														});
-													}}
-													sx={{
-														fontSize: "18px",
-														width: "100%",
-														backgroundColor: "#cce4ff38",
-														boxShadow: "0 0 5px 0px #eded",
-														"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-															{
-																paddingRight: "20px",
-															},
-														"& .MuiOutlinedInput-root": {
-															"& :hover": {
-																border: "none",
-															},
-														},
-														"& .MuiOutlinedInput-notchedOutline": {
-															border: "none",
-														},
-														"& .MuiSelect-icon": {
-															right: "95%",
-														},
-													}}
-													IconComponent={IoIosArrowDown}
-													displayEmpty
-													disabled={
-														currentOrder?.status === "تم الشحن" ||
-														currentOrder?.status === "ملغي" ||
-														currentOrder?.status === "مكتمل"
-															? true
-															: false
-													}
-													inputProps={{ "aria-label": "Without label" }}
-													renderValue={(selected) => {
-														if (!selected || shipping?.city === "") {
-															return (
-																<p className='text-[#ADB5B9]'>اختر المدينة</p>
-															);
-														}
-														const result =
-															getCityFromProvince?.filter(
-																(district) => district?.name_en === selected
-															) || "";
-														return result[0]?.name;
-													}}>
-													{getCityFromProvince?.map((city, index) => {
-														return (
-															<MenuItem
-																key={index}
-																className='souq_storge_category_filter_items'
-																sx={{
-																	backgroundColor: "rgba(211, 211, 211, 1)",
-																	height: "3rem",
-																	"&:hover": {},
-																}}
-																value={city?.name_en}>
-																{city?.name}
-															</MenuItem>
-														);
-													})}
-												</Select>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>{error?.city}</span>
-											</div>
-										</div>
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='product-name'>
-													العنوان <span className='important-hint'>*</span>
-												</label>
-											</div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<input
-													disabled={
-														currentOrder?.status === "تم الشحن" ||
-														currentOrder?.status === "ملغي" ||
-														currentOrder?.status === "مكتمل"
-															? true
-															: false
-													}
-													type='text'
-													placeholder='عنوان الشحنة'
-													name='name'
-													value={shipping?.address}
-													onChange={(e) =>
-														setShipping({
-															...shipping,
-															address: e.target.value,
-														})
-													}
-													style={{
-														width: "100%",
-														height: "56px",
-														padding: "5px 1rem",
-														backgroundColor: "#cce4ff38",
-														boxShadow: "0 0 5px 0px #eded",
-													}}
-												/>
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-9 col-md-9 col-12'>
-												<span className='fs-6 text-danger'>
-													{error?.address}
-												</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</section>
 					)}
 				</section>
@@ -989,117 +713,13 @@ const ReturnOrderDetails = () => {
 				<section className={`${isFetching ? "d-none" : "order-details-body"}`}>
 					<div className='mb-md-5 mb-4'>
 						<div className='order-details-box'>
-							<div className='title mb-4'>
-								<h5> حالة الشحن</h5>
-							</div>
 							<div className='px-md-3'>
-								<div
-									className='order-action-box accordion-box mb-3'
-									id='accordionExample'>
-									<div className='accordion-item w-100'>
-										<button
-											type='button'
-											className='accordion-button  text-end '
-											data-bs-toggle='collapse'
-											data-bs-target='#collapseOne'
-											aria-expanded='true'
-											aria-controls='collapseOne'>
-											<div className='action-title w-100 d-flex flex-wrap'>
-												<ListIcon className='list-icon' />
-												<span className='me-2' style={{ fontSize: "18px" }}>
-													{" "}
-													اختيار حالة الشحن
-												</span>
-											</div>
-											<div className='action-icon'>
-												<ArrowDown
-													style={{
-														cursor:
-															currentOrder?.status === "تم الشحن" ||
-															currentOrder?.status === "ملغي" ||
-															currentOrder?.status === "مكتمل"
-																? "not-allowed"
-																: "pointer",
-													}}
-												/>
-											</div>
-										</button>
-
-										<div
-											id='collapseOne'
-											className='accordion-collapse collapse '
-											aria-labelledby='headingOne'
-											data-bs-parent='#accordionExample'>
-											<div className='accordion-body'>
-												<ul className='select-status p-0'>
-													<li
-														onClick={() => handleUpdateOrderStatus("ready")}
-														style={
-															currentOrder?.status === "قيد التجهيز"
-																? {
-																		pointerEvents: "none",
-																		opacity: "0.6",
-																		cursor: "not-allowed",
-																  }
-																: { cursor: "pointer" }
-														}>
-														قيد التجهيز
-														{currentOrder?.status === " قيد التجهيز" ? (
-															<span style={{ fontSize: "1rem" }}>
-																{" "}
-																(تم تغيير حالة الطلب إلى قيد التجهيز من قبل ){" "}
-															</span>
-														) : (
-															<span style={{ fontSize: "1rem" }}>
-																{" "}
-																(يرجى ملء بيانات الشحنة أولاً){" "}
-															</span>
-														)}
-													</li>
-
-													<li
-														onClick={() => handleUpdateOrderStatus("completed")}
-														style={
-															currentOrder?.status === "تم الشحن"
-																? {
-																		pointerEvents: "none",
-																		opacity: "0.6",
-																		cursor: "not-allowed",
-																  }
-																: { cursor: "pointer" }
-														}>
-														تم الشحن
-													</li>
-
-													<li
-														onClick={() => handleUpdateOrderStatus("canceled")}
-														style={
-															currentOrder?.status === "ملغي"
-																? {
-																		pointerEvents: "none",
-																		opacity: "0.6",
-																		cursor: "not-allowed",
-																  }
-																: { cursor: "pointer" }
-														}>
-														الغاء الشحنة
-														<span style={{ fontSize: "1rem", color: "red" }}>
-															{" "}
-															(إلغاء الطلب بالكامل){" "}
-														</span>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-
 								<div className='order-action-box mb-3'>
 									<div className='action-title'>
 										<ListIcon className='list-icon' />
 										<span className='me-2' style={{ fontSize: "18px" }}>
 											{" "}
-											تصدير الطلب
+											تصدير طلب الارجاع
 										</span>
 									</div>
 
@@ -1117,21 +737,14 @@ const ReturnOrderDetails = () => {
 									/>
 								</div>
 
-								{currentOrder?.order?.shipping &&
-									currentOrder?.order?.shippingtypes?.name !== "اخرى" && (
+								{currentOrder?.order?.shipping_return?.sticker &&
+									currentOrder?.order?.shippingtypes?.name !== "اخرى" &&
+									currentOrder?.status !== "جديد" && (
 										<button
-											disabled={
-												currentOrder?.status === "تم الشحن" ||
-												currentOrder?.status === "ملغي" ||
-												currentOrder?.status === "مكتمل"
-													? true
-													: false
-											}
+											disabled={currentOrder?.status === "جديد" ? true : false}
 											style={{
 												cursor:
-													currentOrder?.status === "تم الشحن" ||
-													currentOrder?.status === "ملغي" ||
-													currentOrder?.status === "مكتمل"
+													currentOrder?.status === "جديد"
 														? "not-allowed"
 														: "pointer",
 											}}
@@ -1143,7 +756,7 @@ const ReturnOrderDetails = () => {
 													className='me-2 ms-2'
 													style={{ fontSize: "18px" }}>
 													{" "}
-													طباعة بوليصة الشحن
+													طباعة بوليصة الارجاع
 												</span>
 												{printError && (
 													<span className='fs-6 text-danger'>
@@ -1155,9 +768,7 @@ const ReturnOrderDetails = () => {
 												<Print
 													style={{
 														cursor:
-															currentOrder?.status === "تم الشحن" ||
-															currentOrder?.status === "ملغي" ||
-															currentOrder?.status === "مكتمل"
+															currentOrder?.status !== "جديد"
 																? "not-allowed"
 																: "pointer",
 													}}
@@ -1168,6 +779,46 @@ const ReturnOrderDetails = () => {
 							</div>
 						</div>
 					</div>
+				</section>
+
+				{/* Save and cancel buttons */}
+				<section className={`${isFetching ? "d-none" : "order-details-body"}`}>
+					{currentOrder?.status === "جديد" ? (
+						<div className='row d-flex justify-content-center align-items-center'>
+							<div className='col-lg-4 col-6'>
+								<button
+									className='save-btn'
+									disabled={isLoading}
+									onClick={() => {
+										handleAcceptReturnOrder("accept");
+									}}>
+									قبول طلب الارجاع
+								</button>
+							</div>
+							<div className='col-lg-4 col-6'>
+								<button
+									className='close-btn'
+									disabled={isLoading}
+									onClick={() => {
+										handleAcceptReturnOrder("reject");
+									}}>
+									رفض طلب الارجاع
+								</button>
+							</div>
+						</div>
+					) : (
+						<div className='row d-flex justify-content-center align-items-center'>
+							<div className='col-6'>
+								<button
+									className='close-btn '
+									disabled={isLoading}
+									onClick={() => navigate("/ReturnOrders")}>
+									<FaArrowRight className=' ps-2' />
+									العوده إلى جدول المرتجعات
+								</button>
+							</div>
+						</div>
+					)}
 				</section>
 			</section>
 		</>

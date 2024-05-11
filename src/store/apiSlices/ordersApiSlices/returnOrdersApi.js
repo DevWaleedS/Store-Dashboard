@@ -61,6 +61,19 @@ export const returnOrdersApi = createApi({
 			transformResponse: (response, meta, arg) => response.data?.ReturnOrder,
 			providesTags: (result, error, id) => [{ type: "ReturnOrders", id }],
 		}),
+
+		// Accept or reject Return Order,
+		acceptOrRejectReturnOrder: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `returnOrder/${id}`,
+					method: "POST",
+					body: body,
+				};
+			},
+
+			invalidatesTags: ["ReturnOrders"],
+		}),
 	}),
 });
 
@@ -70,4 +83,5 @@ export const {
 	useSearchInReturnOrdersMutation,
 	useGetReturnOrderByIdQuery,
 	useFilterReturnOrdersByStatusMutation,
+	useAcceptOrRejectReturnOrderMutation,
 } = returnOrdersApi;

@@ -30,10 +30,9 @@ import { TablePagination } from "./TablePagination";
 // filter orders by
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "" },
-	{ id: 2, ar_name: "جديد", en_name: "new" },
-	{ id: 5, ar_name: "قيد التجهيز", en_name: "pending" },
-	{ id: 4, ar_name: "تم الشحن", en_name: "completed" },
-	{ id: 3, ar_name: "الغاء الشحنة", en_name: "canceled" },
+	{ id: 2, ar_name: "جديد", en_name: "pending" },
+	{ id: 5, ar_name: "تم الاسترجاع", en_name: "accept" },
+	{ id: 4, ar_name: "لم يتم الاسترجاع", en_name: "reject" },
 ];
 
 // Style The MUI Select
@@ -311,25 +310,21 @@ export default function ReturnOrdersTable({
 																className='status d-flex justify-content-center align-items-center'
 																style={{
 																	backgroundColor:
-																		row?.status === "تم الشحن"
-																			? "#ebfcf1"
-																			: row?.status === "جديد"
+																		row?.status === "جديد"
 																			? "#d4ebf7"
-																			: row?.status === "ملغي"
+																			: row?.status === "لم يتم الاسترجاع"
 																			? "#ffebeb"
-																			: row?.status === "قيد التجهيز"
-																			? "#ffecd1c7"
-																			: "#9df1ba",
+																			: row?.status === "تم الاسترجاع"
+																			? "#9df1ba"
+																			: null,
 																	color:
-																		row?.status === "تم الشحن"
-																			? "##9df1ba"
-																			: row?.status === "جديد"
+																		row?.status === "جديد"
 																			? "#0077ff"
-																			: row?.status === "ملغي"
+																			: row?.status === "لم يتم الاسترجاع"
 																			? "#ff7b7b"
-																			: row?.status === "قيد التجهيز"
-																			? "#ff9f1a"
-																			: "#07b543",
+																			: row?.status === "تم الاسترجاع"
+																			? "#07b543"
+																			: null,
 																	borderRadius: "16px",
 																	padding: "4px 12px",
 																	fontWeight: 500,

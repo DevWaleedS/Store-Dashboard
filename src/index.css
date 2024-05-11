@@ -4639,7 +4639,8 @@ textarea {
 
 /* ------------------- */
 .add-bank-Account .form-footer button,
-.add-form-wrapper .form-footer button {
+.add-form-wrapper .form-footer button,
+.order-details-body button {
 	width: 100%;
 	height: 60px;
 	font-size: 22px;
@@ -4652,13 +4653,15 @@ textarea {
 }
 
 .add-form-wrapper .form-footer button.save-btn,
-.add-bank-Account .form-footer button.save-btn {
+.add-bank-Account .form-footer button.save-btn,
+.order-details-body button.save-btn {
 	background-color: var(--second-500);
 	color: var(--white-100);
 }
 
 .add-form-wrapper .form-footer button.close-btn,
-.add-bank-Account .form-footer button.close-btn {
+.add-bank-Account .form-footer button.close-btn,
+.order-details-body button.close-btn {
 	background-color: transparent;
 	border: 1px solid var(--second-500);
 	color: var(--second-500);
