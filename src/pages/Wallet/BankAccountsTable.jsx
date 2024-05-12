@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { openEditBankAccountModal } from "../../store/slices/EditBankAccountModal";
 import { openCommentModal } from "../../store/slices/BankAccStatusCommentModal";
 import { useGetBanksQuery } from "../../store/apiSlices/selectorsApis/selectBanksApi";
+import { EditIcon } from "../../data/Icons";
 
 function EnhancedTableHead(props) {
 	return (
@@ -38,7 +39,9 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#67747B" }}>
 					حالة الحساب
 				</TableCell>
-				<TableCell align='center'></TableCell>
+				{props?.supplierStatus !== "Active" && (
+					<TableCell align='center'>الاجراء</TableCell>
+				)}
 			</TableRow>
 		</TableHead>
 	);
@@ -78,7 +81,9 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 							</TableBody>
 						) : (
 							<>
-								<EnhancedTableHead />
+								<EnhancedTableHead
+									supplierStatus={bankAccount?.SupplierDetails?.SupplierStatus}
+								/>
 								<TableBody>
 									<TableCell align='center'>{bankAccountName}</TableCell>
 									<TableCell align='center'>
@@ -187,11 +192,12 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 									{bankAccount?.SupplierDetails?.SupplierStatus !==
 										"Active" && (
 										<TableCell align='center'>
-											<button
+											<EditIcon
+												title='تعديل الحساب البنكي '
+												style={{ cursor: "pointer" }}
 												onClick={() => dispatch(openEditBankAccountModal())}
-												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>تعديل بيانات الحساب</span>
-											</button>
+												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'
+											/>
 										</TableCell>
 									)}
 								</TableBody>

@@ -1072,6 +1072,7 @@ const OrderDetails = () => {
 									id='accordionExample'>
 									<div className='accordion-item w-100'>
 										<button
+											style={{ height: "auto" }}
 											type='button'
 											className='accordion-button  text-end '
 											data-bs-toggle='collapse'
@@ -1081,7 +1082,6 @@ const OrderDetails = () => {
 											<div className='action-title w-100 d-flex flex-wrap'>
 												<ListIcon className='list-icon' />
 												<span className='me-2' style={{ fontSize: "18px" }}>
-													{" "}
 													اختيار حالة الشحن
 												</span>
 											</div>
@@ -1109,7 +1109,8 @@ const OrderDetails = () => {
 													<li
 														onClick={() => handleUpdateOrderStatus("ready")}
 														style={
-															currentOrder?.orders?.status === "قيد التجهيز"
+															currentOrder?.orders?.status === "قيد التجهيز" ||
+															currentOrder?.orders?.status === "تم الشحن"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1134,7 +1135,8 @@ const OrderDetails = () => {
 													<li
 														onClick={() => handleUpdateOrderStatus("completed")}
 														style={
-															currentOrder?.orders?.status === "تم الشحن"
+															currentOrder?.orders?.status === "تم الشحن" ||
+															currentOrder?.orders?.status === "جديد"
 																? {
 																		pointerEvents: "none",
 																		opacity: "0.6",
@@ -1158,8 +1160,7 @@ const OrderDetails = () => {
 														}>
 														الغاء الشحنة
 														<span style={{ fontSize: "1rem", color: "red" }}>
-															{" "}
-															(إلغاء الطلب بالكامل){" "}
+															(إلغاء الطلب بالكامل)
 														</span>
 													</li>
 												</ul>
@@ -1172,7 +1173,6 @@ const OrderDetails = () => {
 									<div className='action-title'>
 										<ListIcon className='list-icon' />
 										<span className='me-2' style={{ fontSize: "18px" }}>
-											{" "}
 											تصدير الطلب
 										</span>
 									</div>
