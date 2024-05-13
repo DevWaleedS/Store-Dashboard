@@ -23,6 +23,7 @@ import { UserAndManagementTable } from "../components/Tables";
 const Management = () => {
 	const { fetchedData, loading, reload, setReload } = useFetch("user");
 	const { fetchedData: roles } = useFetch("selector/roles");
+
 	const navigate = useNavigate();
 	const [roll_id, setRoll_id] = useState("");
 	const [search, setSearch] = useState("");
@@ -97,6 +98,7 @@ const Management = () => {
 						</div>
 					</div>
 				</div>
+
 				<div className='table-filter'>
 					<div className='row'>
 						<div className='col-12'>
@@ -210,7 +212,6 @@ const Management = () => {
 						</div>
 					</div>
 				</div>
-
 				<div className='management-table'>
 					<UserAndManagementTable
 						data={filterUsers}

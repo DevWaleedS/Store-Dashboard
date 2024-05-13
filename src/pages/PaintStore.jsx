@@ -3,9 +3,9 @@ import React, { useState, useEffect, useContext } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 // components
+import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // context
@@ -26,7 +26,6 @@ import {
 	Caaard,
 	Category,
 	Footer,
-	HomeIcon,
 	Icons,
 	Menuu,
 } from "../data/Icons";
@@ -474,23 +473,8 @@ const PaintStore = () => {
 				<title>لوحة تحكم اطلبها | هوية المتجر</title>
 			</Helmet>
 			<section className='paint-store-page'>
-				<div className='head-category mb-3'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item  ' aria-current='page'>
-									هوية المتجر
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb currentPage={"التسويق"} mb={"mb-3"} />
+
 				{isLoading ? (
 					<div className='data-container'>
 						<CircularLoading />

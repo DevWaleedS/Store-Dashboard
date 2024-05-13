@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // CONTEXT
 import Context from "../Context/context";
@@ -13,6 +13,7 @@ import { Switch } from "@mui/material";
 
 // Components
 import { TopBarSearchInput } from "../global";
+import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
 import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
@@ -29,7 +30,7 @@ import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 // Icons
-import { HomeIcon } from "../data/Icons";
+
 import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
@@ -228,24 +229,9 @@ const PaymentGateways = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-3'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
 
-								<li className='breadcrumb-item active' aria-current='page'>
-									بوابات الدفع
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb currentPage={"بوابات الدفع"} mb={"mb-3"} />
+
 				{isLoading ? (
 					<div className='row'>
 						<div

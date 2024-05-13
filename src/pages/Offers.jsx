@@ -12,6 +12,7 @@ import moment from "moment";
 import Context from "../Context/context";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { HomeIcon } from "../data/Icons";
+import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 
 const Offers = () => {
 	const store_token = document.cookie
@@ -49,26 +50,7 @@ const Offers = () => {
 				<title>لوحة تحكم اطلبها | العروض الخاصة</title>
 			</Helmet>
 			<section className='offers-page p-lg-3'>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item ' aria-current='page'>
-									التسويق
-								</li>
-								<li className='breadcrumb-item active' aria-current='page'>
-									العروض الخاصة
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb currentPage={"العروض الخاصة"} parentPage={"التسويق"} />
 
 				<div className='row mb-md-5 mb-4'>
 					<div className='add-offer-btn-wrapper d-flex justify-content-end '>
