@@ -24,9 +24,9 @@ const TechnicalSupport = () => {
 	/** get technical Support data */
 	useEffect(() => {
 		if (technicalSupport?.data?.Technicalsupports?.length !== 0) {
-			setTechnicalSupportData(technicalSupport?.data?.Technicalsupports);
+			setTechnicalSupportData(technicalSupport?.data);
 		}
-	}, [technicalSupport?.data?.Technicalsupports]);
+	}, [technicalSupport?.data?.Technicalsupports?.length]);
 
 	// handle search in Technical Support
 	const [searchInTechnicalSupport] = useSearchInPostalSubscriptionsMutation();
@@ -37,11 +37,9 @@ const TechnicalSupport = () => {
 					try {
 						const response = await searchInTechnicalSupport({
 							query: search,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setTechnicalSupportData(response?.data?.data?.Technicalsupports);
+						setTechnicalSupportData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching searchInTechnicalSupport:", error);
 					}
@@ -49,7 +47,7 @@ const TechnicalSupport = () => {
 
 				fetchData();
 			} else {
-				setTechnicalSupportData(technicalSupport?.data?.Technicalsupports);
+				setTechnicalSupportData(technicalSupport?.data);
 			}
 		}, 500);
 		return () => {
@@ -101,14 +99,14 @@ const TechnicalSupport = () => {
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable
-							data={technicalSupportData}
+							data={technicalSupportData?.Technicalsupports}
 							loading={isLoading}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={technicalSupport?.data?.page_count}
-							currentPage={technicalSupport?.data?.current_page}
+							pageCount={technicalSupportData?.page_count}
+							currentPage={technicalSupportData?.current_page}
 						/>
 					</div>
 				</div>

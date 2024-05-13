@@ -98,9 +98,9 @@ const Pages = () => {
 
 	useEffect(() => {
 		if (pagesData?.data?.pages?.length !== 0) {
-			setPageArray(pagesData?.data?.pages);
+			setPageArray(pagesData?.data);
 		}
-	}, [pagesData?.data?.pages]);
+	}, [pagesData?.data?.pages?.length]);
 
 	// -----------------------------------------------------------
 
@@ -113,11 +113,9 @@ const Pages = () => {
 					try {
 						const response = await searchInPages({
 							query: search,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setPageArray(response?.data?.data?.pages);
+						setPageArray(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching searchInPages:", error);
 					}
@@ -125,7 +123,7 @@ const Pages = () => {
 
 				fetchData();
 			} else {
-				setPageArray(pagesData?.data?.pages);
+				setPageArray(pagesData?.data);
 			}
 		}, 500);
 		return () => {
@@ -142,11 +140,9 @@ const Pages = () => {
 				try {
 					const response = await filterPagesByStatus({
 						select,
-						page: pageTarget,
-						number: rowsCount,
 					});
 
-					setPageArray(response?.data?.data?.pages);
+					setPageArray(response?.data?.data);
 				} catch (error) {
 					console.error("Error fetching filterPagesByStatus:", error);
 				}
@@ -154,7 +150,7 @@ const Pages = () => {
 
 			fetchData();
 		} else {
-			setPageArray(pagesData?.data?.pages);
+			setPageArray(pagesData?.data);
 		}
 	}, [select, filterPagesByStatus]);
 
@@ -253,7 +249,7 @@ const Pages = () => {
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable
-							data={pageArray}
+							data={pageArray?.pages}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
@@ -261,8 +257,8 @@ const Pages = () => {
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={pagesData?.data?.page_count}
-							currentPage={pagesData?.data?.current_page}
+							pageCount={pageArray?.page_count}
+							currentPage={pageArray?.current_page}
 						/>
 					</div>
 				</div>

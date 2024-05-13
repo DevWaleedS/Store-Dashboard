@@ -40,9 +40,9 @@ const EmptyCarts = () => {
 	/** get data */
 	useEffect(() => {
 		if (emptyCarts?.data?.carts?.length !== 0) {
-			setEmptyCartsData(emptyCarts?.data?.carts);
+			setEmptyCartsData(emptyCarts?.data);
 		}
-	}, [emptyCarts?.data?.carts]);
+	}, [emptyCarts?.data?.carts?.length]);
 
 	// -------------------------------------------------------------------------
 
@@ -55,11 +55,9 @@ const EmptyCarts = () => {
 					try {
 						const response = await searchInEmptyCarts({
 							query: search,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setEmptyCartsData(response?.data?.data?.carts);
+						setEmptyCartsData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching searchInEmptyCarts:", error);
 					}
@@ -67,7 +65,7 @@ const EmptyCarts = () => {
 
 				fetchData();
 			} else {
-				setEmptyCartsData(emptyCarts?.data?.carts);
+				setEmptyCartsData(emptyCarts?.data);
 			}
 		}, 500);
 		return () => {
@@ -105,7 +103,7 @@ const EmptyCarts = () => {
 				<div className='row'>
 					<div className='carts-table'>
 						<CartsTables
-							cartsData={emptyCartsData}
+							cartsData={emptyCartsData?.carts}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
@@ -113,8 +111,8 @@ const EmptyCarts = () => {
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={emptyCarts?.data?.page_count}
-							currentPage={emptyCarts?.data?.current_page}
+							pageCount={emptyCartsData?.page_count}
+							currentPage={emptyCartsData?.current_page}
 						/>
 					</div>
 				</div>

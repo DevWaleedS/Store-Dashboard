@@ -37,7 +37,7 @@ export const ordersApi = createApi({
 		// search in store Orders
 		searchInOrders: builder.mutation({
 			query: (arg) => ({
-				url: `searchOrder?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchOrder?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -45,7 +45,7 @@ export const ordersApi = createApi({
 		// filter Orders by status
 		filterOrdersByStatus: builder.mutation({
 			query: (arg) => ({
-				url: `orders?page=${arg.page}&number=${arg.number}&order_status=${arg.orderStatus}`,
+				url: `orders?order_status=${arg.orderStatus}`,
 				method: "GET",
 			}),
 		}),

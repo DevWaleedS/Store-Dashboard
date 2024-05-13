@@ -51,7 +51,7 @@ export const postalSubscriptionsApi = createApi({
 		// search in store PostalSubscriptions
 		searchInPostalSubscriptions: builder.mutation({
 			query: (arg) => ({
-				url: `searchSubscriptionEmail?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchSubscriptionEmail?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),

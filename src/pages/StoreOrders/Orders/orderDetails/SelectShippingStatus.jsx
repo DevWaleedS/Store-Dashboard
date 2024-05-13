@@ -158,7 +158,6 @@ const SelectShippingStatus = ({
 		currentOrder?.orders?.status !== "ملغي" &&
 		currentOrder?.orders?.status !== "مكتمل" && (
 			<section>
-				{" "}
 				<div className='title mb-4'>
 					<h5>حالة الشحن</h5>
 					<div

@@ -23,9 +23,9 @@ const CoursesTraining = ({ searchCourses }) => {
 	/** get courses data */
 	useEffect(() => {
 		if (courses?.data?.courses?.length !== 0) {
-			setCoursesData(courses?.data?.courses);
+			setCoursesData(courses?.data);
 		}
-	}, [courses?.data?.courses]);
+	}, [courses?.data?.courses?.length]);
 
 	// -----------------------------------------------------------
 
@@ -38,11 +38,9 @@ const CoursesTraining = ({ searchCourses }) => {
 					try {
 						const response = await searchInAcademyCourses({
 							query: searchCourses,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setCoursesData(response?.data?.data?.courses);
+						setCoursesData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching searchInAcademyCourses:", error);
 					}
@@ -50,7 +48,7 @@ const CoursesTraining = ({ searchCourses }) => {
 
 				fetchData();
 			} else {
-				setCoursesData(courses?.data?.courses);
+				setCoursesData(courses?.data);
 			}
 		}, 500);
 		return () => {
@@ -89,9 +87,9 @@ const CoursesTraining = ({ searchCourses }) => {
 			{/** Pagination */}
 			{courseData?.length !== 0 && !isLoading && (
 				<TablePagination
-					page={courseData}
-					pageCount={courses?.data?.page_count}
-					currentPage={courses?.data?.current_page}
+					page={courseData?.courses}
+					pageCount={courseData?.page_count}
+					currentPage={courseData?.current_page}
 					pageTarget={pageTarget}
 					rowsCount={rowsCount}
 					setRowsCount={setRowsCount}

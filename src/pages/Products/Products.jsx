@@ -64,6 +64,9 @@ const Products = () => {
 	const [fileError, setFileError] = useState("");
 	const [category_id, setCategory_id] = useState("");
 
+	const [currentPage, setCurrentPage] = useState(1);
+	const [pageCount, setPageCount] = useState(1);
+
 	// Fetch store Products
 	const { data: storeProducts, isLoading: storeProductsIsLoading } =
 		useGetStoreProductsQuery({
@@ -95,6 +98,16 @@ const Products = () => {
 					? storeProducts?.data?.products
 					: importedProducts?.data?.import_products
 			);
+			setCurrentPage(
+				tabSelected === 1
+					? storeProducts?.data?.current_page
+					: importedProducts?.data?.current_page
+			);
+			setPageCount(
+				tabSelected === 1
+					? storeProducts?.data?.page_count
+					: importedProducts?.data?.page_count
+			);
 		}
 	}, [tabSelected, storeProducts, importedProducts]);
 
@@ -112,18 +125,25 @@ const Products = () => {
 							tabSelected === 1
 								? await searchInStoreProducts({
 										query: search,
-										page: pageTarget,
-										number: rowsCount,
 								  })
 								: await searchInImportedProducts({
 										query: search,
-										page: pageTarget,
-										number: rowsCount,
 								  });
 
 						setProductsData(
 							response.data.data?.products ??
 								response.data.data?.import_products
+						);
+
+						setCurrentPage(
+							tabSelected === 1
+								? response.data.data?.current_page
+								: response.data.data?.current_page
+						);
+						setPageCount(
+							tabSelected === 1
+								? response.data.data?.page_count
+								: response.data.data?.page_count
 						);
 					} catch (error) {
 						console.error("Error fetching Products:", error);
@@ -151,13 +171,9 @@ const Products = () => {
 						tabSelected === 1
 							? await filterStoreProductsByCategories({
 									category_id,
-									page: pageTarget,
-									number: rowsCount,
 							  })
 							: await filterImportedProductsByCategories({
 									category_id,
-									page: pageTarget,
-									number: rowsCount,
 							  });
 					const responseData = response.data?.data;
 
@@ -165,6 +181,16 @@ const Products = () => {
 						tabSelected === 1
 							? responseData.products
 							: responseData.import_products
+					);
+					setCurrentPage(
+						tabSelected === 1
+							? responseData?.current_page
+							: responseData?.current_page
+					);
+					setPageCount(
+						tabSelected === 1
+							? responseData?.page_count
+							: responseData?.page_count
 					);
 				} catch (error) {
 					console.error("Error fetching Products:", error);
@@ -177,6 +203,17 @@ const Products = () => {
 				tabSelected === 1
 					? storeProducts?.data?.products
 					: importedProducts?.data?.import_products
+			);
+
+			setCurrentPage(
+				tabSelected === 1
+					? storeProducts?.data?.current_page
+					: importedProducts?.data?.current_page
+			);
+			setPageCount(
+				tabSelected === 1
+					? storeProducts?.data?.page_count
+					: importedProducts?.data?.page_count
 			);
 		}
 	}, [
@@ -324,16 +361,8 @@ const Products = () => {
 						pageTarget={pageTarget}
 						tabSelectedId={tabSelected}
 						setPageTarget={setPageTarget}
-						pageCount={
-							tabSelected === 1
-								? storeProducts?.page_count
-								: importedProducts?.page_count
-						}
-						currentPage={
-							tabSelected === 1
-								? storeProducts?.current_page
-								: importedProducts?.current_page
-						}
+						pageCount={pageCount}
+						currentPage={currentPage}
 					/>
 				</div>
 

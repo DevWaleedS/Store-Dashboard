@@ -109,9 +109,9 @@ const Coupon = () => {
 	/** get contact data */
 	useEffect(() => {
 		if (coupons?.data?.coupons?.length !== 0) {
-			setCouponsData(coupons?.data?.coupons);
+			setCouponsData(coupons?.data);
 		}
-	}, [coupons?.data?.coupons]);
+	}, [coupons?.data?.coupons?.length]);
 	// -----------------------------------------------------------
 
 	// handle search in Coupons
@@ -123,11 +123,9 @@ const Coupon = () => {
 					try {
 						const response = await searchInCoupons({
 							query: search,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setCouponsData(response?.data?.data?.coupons);
+						setCouponsData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching Products:", error);
 					}
@@ -135,7 +133,7 @@ const Coupon = () => {
 
 				fetchData();
 			} else {
-				setCouponsData(coupons?.data?.coupons);
+				setCouponsData(coupons?.data);
 			}
 		}, 500);
 		return () => {
@@ -152,11 +150,9 @@ const Coupon = () => {
 				try {
 					const response = await filterCouponsByStatus({
 						select,
-						page: pageTarget,
-						number: rowsCount,
 					});
 
-					setCouponsData(response.data?.data?.coupons);
+					setCouponsData(response.data?.data);
 				} catch (error) {
 					console.error("Error fetching Products:", error);
 				}
@@ -164,7 +160,7 @@ const Coupon = () => {
 
 			fetchData();
 		} else {
-			setCouponsData(coupons?.data?.coupons);
+			setCouponsData(coupons?.data);
 		}
 	}, [select, filterCouponsByStatus]);
 
@@ -263,7 +259,7 @@ const Coupon = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<CouponTable
-							coupons={couponsData}
+							coupons={couponsData?.coupons}
 							search={search}
 							select={select}
 							loading={isLoading}
@@ -273,8 +269,8 @@ const Coupon = () => {
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={coupons?.data?.page_count}
-							currentPage={coupons?.data?.current_page}
+							pageCount={couponsData?.page_count}
+							currentPage={couponsData?.current_page}
 						/>
 					</div>
 				</div>

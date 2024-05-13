@@ -69,7 +69,7 @@ export const couponApi = createApi({
 		// search in store Coupons
 		searchInCoupons: builder.mutation({
 			query: (arg) => ({
-				url: `searchCouponName?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchCouponName?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -81,8 +81,8 @@ export const couponApi = createApi({
 					arg.select === "all"
 						? `coupons?page=${arg.page}&number=${arg.number}`
 						: arg.select === "fixed" || arg.select === "percent"
-						? `coupons?page=${arg.page}&number=${arg.number}&discount_type=${arg.select}`
-						: `coupons?page=${arg.page}&number=${arg.number}&status=${arg.select}`,
+						? `coupons?discount_type=${arg.select}`
+						: `coupons?status=${arg.select}`,
 
 				method: "GET",
 			}),

@@ -36,6 +36,9 @@ const Category = () => {
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
+	const [currentPage, setCurrentPage] = useState(1);
+	const [pageCount, setPageCount] = useState(1);
+
 	// Fetch categories based on search query and tabSelected
 	const { data: categories, isLoading } = useGetCategoriesDataQuery({
 		page: pageTarget,
@@ -45,6 +48,28 @@ const Category = () => {
 	const [searchInStoreCategories] = useSearchInStoreCategoriesMutation();
 	const [searchInEtlbohaCategories] = useSearchInEtlbohaCategoriesMutation();
 	const [filterCategories] = useFilterCategoriesMutation();
+
+	// Display categories by tapSelect
+	useEffect(() => {
+		if (categories) {
+			setCategoriesData(
+				tabSelected === 1
+					? categories.data.store_categories
+					: categories.data.etlobha_categories
+			);
+
+			setCurrentPage(
+				tabSelected === 1
+					? categories?.data?.current_page
+					: categories?.data?.current_page
+			);
+			setPageCount(
+				tabSelected === 1
+					? categories?.data?.page_count
+					: categories?.data?.page_count
+			);
+		}
+	}, [tabSelected, categories]);
 
 	// handle search categories
 	useEffect(() => {
@@ -56,18 +81,25 @@ const Category = () => {
 							tabSelected === 1
 								? await searchInStoreCategories({
 										query: search,
-										page: pageTarget,
-										number: rowsCount,
 								  })
 								: await searchInEtlbohaCategories({
 										query: search,
-										page: pageTarget,
-										number: rowsCount,
 								  });
 
 						setCategoriesData(
 							response.data.data?.store_categories ??
 								response.data.data?.etlobha_categories
+						);
+
+						setCurrentPage(
+							tabSelected === 1
+								? response.data?.data?.current_page
+								: response.data?.data?.current_page
+						);
+						setPageCount(
+							tabSelected === 1
+								? response.data?.data?.page_count
+								: response.data?.data?.page_count
 						);
 					} catch (error) {
 						console.error("Error fetching categories:", error);
@@ -82,17 +114,6 @@ const Category = () => {
 		};
 	}, [tabSelected, search, pageTarget, rowsCount]);
 
-	// Display categories by tapSelect
-	useEffect(() => {
-		if (categories) {
-			setCategoriesData(
-				tabSelected === 1
-					? categories.data.store_categories
-					: categories.data.etlobha_categories
-			);
-		}
-	}, [tabSelected, categories]);
-
 	// Handle filtration
 	useEffect(() => {
 		if (category_id !== "") {
@@ -105,6 +126,17 @@ const Category = () => {
 							? response.data?.data.store_categories
 							: response.data?.data.etlobha_categories
 					);
+
+					setCurrentPage(
+						tabSelected === 1
+							? response.data?.data?.current_page
+							: response.data?.data?.current_page
+					);
+					setPageCount(
+						tabSelected === 1
+							? response.data?.data?.page_count
+							: response.data?.data?.page_count
+					);
 				} catch (error) {
 					console.error("Error fetching categories:", error);
 				}
@@ -116,6 +148,16 @@ const Category = () => {
 				tabSelected === 1
 					? categories?.data?.store_categories
 					: categories?.data?.etlobha_categories
+			);
+			setCurrentPage(
+				tabSelected === 1
+					? categories?.data?.current_page
+					: categories?.data?.current_page
+			);
+			setPageCount(
+				tabSelected === 1
+					? categories?.data?.page_count
+					: categories?.data?.page_count
 			);
 		}
 	}, [category_id, filterCategories, tabSelected]);
@@ -282,16 +324,8 @@ const Category = () => {
 							tabSelectedId={tabSelected}
 							categories={categoriesData}
 							setPageTarget={setPageTarget}
-							pageCount={
-								tabSelected === 1
-									? categories?.data?.store_page_count
-									: categories?.data?.etlobha_page_count
-							}
-							currentPage={
-								tabSelected === 1
-									? categories?.data?.store_current_page
-									: categories?.data?.etlobha_current_page
-							}
+							pageCount={pageCount}
+							currentPage={currentPage}
 						/>
 					</div>
 				</div>

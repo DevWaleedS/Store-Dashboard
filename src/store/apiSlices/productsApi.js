@@ -85,7 +85,7 @@ export const productsApi = createApi({
 		// search in store products
 		searchInStoreProducts: builder.mutation({
 			query: (arg) => ({
-				url: `searchProduct?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchProduct?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -93,7 +93,7 @@ export const productsApi = createApi({
 		// search in Imported products
 		searchInImportedProducts: builder.mutation({
 			query: (arg) => ({
-				url: `searchImportProduct?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchImportProduct?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -101,7 +101,7 @@ export const productsApi = createApi({
 		// filter products by categories
 		filterStoreProductsByCategories: builder.mutation({
 			query: (arg) => ({
-				url: `product?page=${arg.page}&number=${arg.number}&category_id=${arg.category_id}`,
+				url: `product?category_id=${arg.category_id}`,
 				method: "GET",
 			}),
 		}),
@@ -109,7 +109,7 @@ export const productsApi = createApi({
 		// filter products by categories
 		filterImportedProductsByCategories: builder.mutation({
 			query: (arg) => ({
-				url: `importedProducts?page=${arg.page}&number=${arg.number}&category_id=${arg.category_id}`,
+				url: `importedProducts?category_id=${arg.category_id}`,
 				method: "GET",
 			}),
 		}),

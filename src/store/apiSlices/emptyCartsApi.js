@@ -51,7 +51,7 @@ export const emptyCartsApi = createApi({
 		// search in store EmptyCarts
 		searchInEmptyCarts: builder.mutation({
 			query: (arg) => ({
-				url: `searchCartName?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchCartName?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),

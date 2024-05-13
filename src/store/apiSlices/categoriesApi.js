@@ -69,7 +69,7 @@ export const categoriesApi = createApi({
 		// search in store categories
 		searchInStoreCategories: builder.mutation({
 			query: (arg) => ({
-				url: `searchCategory?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchCategory?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -77,7 +77,7 @@ export const categoriesApi = createApi({
 		// search in  etlbha categories
 		searchInEtlbohaCategories: builder.mutation({
 			query: (arg) => ({
-				url: `searchCategoryEtlobha?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchCategoryEtlobha?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),

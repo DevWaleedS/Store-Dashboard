@@ -141,7 +141,7 @@ function EnhancedTableToolbar(props) {
 					},
 				}}>
 				<div className='filter-wrapper  mt-4 order-toolbar'>
-					<div className='w-100 mb-4 d-flex flex-row align-items-center flex-wrap justify-content-between'>
+					<div className='w-100 mb-4 d-flex flex-row align-items-center flex-wrap justify-content-between gap-md-0 gap-3'>
 						<div className='search-input-box'>
 							<FiSearch />
 							<input

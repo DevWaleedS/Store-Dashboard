@@ -19,10 +19,10 @@ import {
 } from "../../../store/apiSlices/ordersApiSlices/ordersApi";
 
 const Orders = () => {
-	const [pageTarget, setPageTarget] = useState(1);
-	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
+	const [rowsCount, setRowsCount] = useState(10);
+	const [pageTarget, setPageTarget] = useState(1);
 	const [ordersData, setOrdersData] = useState([]);
 
 	// get orders data
@@ -33,9 +33,9 @@ const Orders = () => {
 
 	useEffect(() => {
 		if (orders?.data?.orders?.length !== 0) {
-			setOrdersData(orders?.data?.orders);
+			setOrdersData(orders?.data);
 		}
-	}, [orders?.data?.orders]);
+	}, [orders?.data?.orders?.length]);
 
 	//handle search in orders
 	const [searchInOrders] = useSearchInOrdersMutation();
@@ -46,11 +46,9 @@ const Orders = () => {
 					try {
 						const response = await searchInOrders({
 							query: search,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setOrdersData(response?.data?.data?.orders);
+						setOrdersData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching Products:", error);
 					}
@@ -58,7 +56,7 @@ const Orders = () => {
 
 				fetchData();
 			} else {
-				setOrdersData(orders?.data?.orders);
+				setOrdersData(orders?.data);
 			}
 		}, 500);
 		return () => {
@@ -76,11 +74,9 @@ const Orders = () => {
 				try {
 					const response = await filterOrdersByStatus({
 						orderStatus: select,
-						page: pageTarget,
-						number: rowsCount,
 					});
 
-					setOrdersData(response?.data?.data?.orders);
+					setOrdersData(response?.data?.data);
 				} catch (error) {
 					console.error("Error fetching Products:", error);
 				}
@@ -88,7 +84,7 @@ const Orders = () => {
 
 			fetchData();
 		} else {
-			setOrdersData(orders?.data?.orders);
+			setOrdersData(orders?.data);
 		}
 	}, [select, filterOrdersByStatus]);
 
@@ -140,7 +136,7 @@ const Orders = () => {
 				{/** Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
-						orders={ordersData}
+						orders={ordersData?.orders}
 						search={search}
 						select={select}
 						loading={isLoading}
@@ -150,8 +146,8 @@ const Orders = () => {
 						pageTarget={pageTarget}
 						setRowsCount={setRowsCount}
 						setPageTarget={setPageTarget}
-						pageCount={orders?.data?.page_count}
-						currentPage={orders?.data?.current_page}
+						pageCount={ordersData?.page_count}
+						currentPage={ordersData?.current_page}
 					/>
 				</div>
 			</section>

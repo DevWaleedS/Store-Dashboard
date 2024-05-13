@@ -31,9 +31,15 @@ import { TablePagination } from "./TablePagination";
 const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "" },
 	{ id: 2, ar_name: "جديد", en_name: "new" },
-	{ id: 5, ar_name: "قيد التجهيز", en_name: "ready" },
-	{ id: 4, ar_name: "تم الشحن", en_name: "completed" },
-	{ id: 3, ar_name: "الغاء الشحنة", en_name: "canceled" },
+	{ id: 3, ar_name: "قيد التجهيز", en_name: "ready" },
+	{ id: 4, ar_name: "تم الشحن", en_name: "delivery_in_progress" },
+	{ id: 5, ar_name: "مكتمل", en_name: "completed" },
+	{
+		id: 6,
+		ar_name: "غير مكتمل",
+		en_name: "not_completed",
+	},
+	{ id: 7, ar_name: "ملغي", en_name: "canceled" },
 ];
 
 // Style The MUI Select

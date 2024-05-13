@@ -47,9 +47,9 @@ const PostalSubscriptions = () => {
 	/** get data */
 	useEffect(() => {
 		if (postalSubscriptions?.data?.subsicriptions?.length !== 0) {
-			setPostalSubscriptionsData(postalSubscriptions?.data?.subsicriptions);
+			setPostalSubscriptionsData(postalSubscriptions?.data);
 		}
-	}, [postalSubscriptions?.data?.subsicriptions]);
+	}, [postalSubscriptions?.data?.subsicriptions?.length]);
 
 	// -------------------------------------------------------------------------------------------
 
@@ -63,11 +63,9 @@ const PostalSubscriptions = () => {
 					try {
 						const response = await searchInPostalSubscriptions({
 							query: search,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setPostalSubscriptionsData(response?.data?.data?.subsicriptions);
+						setPostalSubscriptionsData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching searchInPostalSubscriptions:", error);
 					}
@@ -75,7 +73,7 @@ const PostalSubscriptions = () => {
 
 				fetchData();
 			} else {
-				setPostalSubscriptionsData(postalSubscriptions?.data?.subsicriptions);
+				setPostalSubscriptionsData(postalSubscriptions?.data);
 			}
 		}, 500);
 		return () => {
@@ -153,7 +151,7 @@ const PostalSubscriptions = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<PostalSubscriptionsTable
-							data={postalSubscriptionsData}
+							data={postalSubscriptionsData?.subsicriptions}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}
@@ -161,8 +159,8 @@ const PostalSubscriptions = () => {
 							pageTarget={pageTarget}
 							setRowsCount={setRowsCount}
 							setPageTarget={setPageTarget}
-							pageCount={postalSubscriptions?.data?.page_count}
-							currentPage={postalSubscriptions?.data?.current_page}
+							pageCount={postalSubscriptionsData?.page_count}
+							currentPage={postalSubscriptionsData?.current_page}
 						/>
 					</div>
 				</div>

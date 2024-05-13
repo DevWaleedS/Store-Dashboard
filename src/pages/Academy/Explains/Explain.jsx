@@ -31,9 +31,9 @@ const Explain = ({ searchExplain }) => {
 	/** get courses data */
 	useEffect(() => {
 		if (explainVideos?.data?.explainvideos?.length !== 0) {
-			setExplainVideosData(explainVideos?.data?.explainvideos);
+			setExplainVideosData(explainVideos?.data);
 		}
-	}, [explainVideos?.data?.explainvideos]);
+	}, [explainVideos?.data?.explainvideos?.length]);
 
 	// -----------------------------------------------------------
 
@@ -47,11 +47,9 @@ const Explain = ({ searchExplain }) => {
 					try {
 						const response = await searchInAcademyExplainVideos({
 							query: searchExplain,
-							page: pageTarget,
-							number: rowsCount,
 						});
 
-						setExplainVideosData(response?.data?.data?.explainvideos);
+						setExplainVideosData(response?.data?.data);
 					} catch (error) {
 						console.error(
 							"Error fetching searchInAcademyExplainVideos:",
@@ -62,7 +60,7 @@ const Explain = ({ searchExplain }) => {
 
 				fetchData();
 			} else {
-				setExplainVideosData(explainVideos?.data?.explainvideos);
+				setExplainVideosData(explainVideos?.data);
 			}
 		}, 500);
 		return () => {
@@ -115,9 +113,9 @@ const Explain = ({ searchExplain }) => {
 			{/** Pagination */}
 			{explainVideosData?.length !== 0 && !isLoading && (
 				<TablePagination
-					page={explainVideosData}
-					pageCount={explainVideos?.data?.page_count}
-					currentPage={explainVideos?.data?.current_page}
+					page={explainVideosData?.explainvideos}
+					pageCount={explainVideosData?.page_count}
+					currentPage={explainVideosData?.current_page}
 					pageTarget={pageTarget}
 					rowsCount={rowsCount}
 					setRowsCount={setRowsCount}

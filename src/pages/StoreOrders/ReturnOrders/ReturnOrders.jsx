@@ -32,9 +32,9 @@ const ReturnOrders = () => {
 
 	useEffect(() => {
 		if (returnOrders?.ReturnOrders?.length !== 0) {
-			setReturnOrdersData(returnOrders?.ReturnOrders);
+			setReturnOrdersData(returnOrders);
 		}
-	}, [returnOrders?.ReturnOrders]);
+	}, [returnOrders?.ReturnOrders?.length]);
 
 	//handle search in orders
 	const [searchInReturnOrders] = useSearchInReturnOrdersMutation();
@@ -49,7 +49,7 @@ const ReturnOrders = () => {
 							number: rowsCount,
 						});
 
-						setReturnOrdersData(response?.data?.data?.ReturnOrders);
+						setReturnOrdersData(response?.data?.data);
 					} catch (error) {
 						console.error("Error fetching ReturnOrders:", error);
 					}
@@ -57,7 +57,7 @@ const ReturnOrders = () => {
 
 				fetchData();
 			} else {
-				setReturnOrdersData(returnOrders?.ReturnOrders);
+				setReturnOrdersData(returnOrders);
 			}
 		}, 500);
 		return () => {
@@ -79,7 +79,7 @@ const ReturnOrders = () => {
 						number: rowsCount,
 					});
 
-					setReturnOrdersData(response?.data?.data?.ReturnOrders);
+					setReturnOrdersData(response?.data?.data);
 				} catch (error) {
 					console.error("Error fetching Products:", error);
 				}
@@ -87,7 +87,7 @@ const ReturnOrders = () => {
 
 			fetchData();
 		} else {
-			setReturnOrdersData(returnOrders?.ReturnOrders);
+			setReturnOrdersData(returnOrders);
 		}
 	}, [select, filterReturnOrdersByStatus]);
 
@@ -125,7 +125,7 @@ const ReturnOrders = () => {
 				{/** Orders table */}
 				<div className='tables'>
 					<ReturnOrdersTable
-						returnOrders={returnOrdersData}
+						returnOrders={returnOrdersData?.ReturnOrders}
 						search={search}
 						select={select}
 						loading={isLoading}
@@ -135,8 +135,8 @@ const ReturnOrders = () => {
 						pageTarget={pageTarget}
 						setRowsCount={setRowsCount}
 						setPageTarget={setPageTarget}
-						pageCount={returnOrders?.page_count}
-						currentPage={returnOrders?.current_page}
+						pageCount={returnOrdersData?.page_count}
+						currentPage={returnOrdersData?.current_page}
 					/>
 				</div>
 			</section>

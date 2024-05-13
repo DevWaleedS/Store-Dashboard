@@ -39,7 +39,7 @@ export const AcademyApi = createApi({
 		// search in Academy courses
 		searchInAcademyCourses: builder.mutation({
 			query: (arg) => ({
-				url: `searchCourseName?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchCourseName?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -47,7 +47,7 @@ export const AcademyApi = createApi({
 		// search in Academy explain videos
 		searchInAcademyExplainVideos: builder.mutation({
 			query: (arg) => ({
-				url: `explainVideoName?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `explainVideoName?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),

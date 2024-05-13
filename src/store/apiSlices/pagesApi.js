@@ -69,7 +69,7 @@ export const pagesApi = createApi({
 		// search in store Pages
 		searchInPages: builder.mutation({
 			query: (arg) => ({
-				url: `searchPageName?query=${arg.query}&page=${arg.page}&number=${arg.number}`,
+				url: `searchPageName?query=${arg.query}`,
 				method: "GET",
 			}),
 		}),
@@ -80,7 +80,7 @@ export const pagesApi = createApi({
 				url:
 					arg.select === "all"
 						? `page?page=${arg.page}&number=${arg.number}`
-						: `page?page=${arg.page}&number=${arg.number}&status=${arg.select}`,
+						: `page?status=${arg.select}`,
 
 				method: "GET",
 			}),
