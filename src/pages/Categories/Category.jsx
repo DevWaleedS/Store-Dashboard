@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Icons
 import { MdAdd } from "react-icons/md";
-import { HomeIcon } from "../../data/Icons";
 import { BsSearch } from "react-icons/bs";
 import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 
@@ -12,6 +11,8 @@ import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+
+import { Breadcrumb } from "../../components";
 import { CategoryTable } from "../../components/Tables";
 
 // RTK Query
@@ -170,23 +171,7 @@ const Category = () => {
 				<title>لوحة تحكم اطلبها | الأنشطة</title>
 			</Helmet>
 			<div className='category p-lg-3'>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									الأنشطة
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb currentPage={"الأنشطة"} />
 
 				<div className='mb-3'>
 					<div className='mb-4 option-info-label d-flex  justify-content-start align-items-center gap-2'>

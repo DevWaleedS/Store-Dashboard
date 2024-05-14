@@ -193,8 +193,8 @@ function CheckoutPage() {
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
 				<Breadcrumb
+					parentPage={"الدفع"}
 					currentPage={"	سوق اطلبها"}
-					parentPage={"	الدفع"}
 					route={"/Products/SouqOtlobha"}
 				/>
 

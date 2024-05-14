@@ -473,7 +473,7 @@ const PaintStore = () => {
 				<title>لوحة تحكم اطلبها | هوية المتجر</title>
 			</Helmet>
 			<section className='paint-store-page'>
-				<Breadcrumb currentPage={"التسويق"} mb={"mb-3"} />
+				<Breadcrumb currentPage={" هوية المتجر"} mb={"mb-3"} />
 
 				{isLoading ? (
 					<div className='data-container'>

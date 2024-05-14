@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Components
 
@@ -21,7 +21,6 @@ import { TagsInput } from "react-tag-input-component";
 
 // Icons
 import {
-	HomeIcon,
 	BlogIcon,
 	InstagramIcon,
 	LinkIcon,
@@ -36,6 +35,7 @@ import {
 	useUpdateSeoMutation,
 } from "../store/apiSlices/SEOImprovementsApi";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+import { Breadcrumb } from "../components";
 
 const PaintStore = () => {
 	// get seo data
@@ -176,23 +176,8 @@ const PaintStore = () => {
 				<title>لوحة تحكم اطلبها | تحسينات SEO</title>
 			</Helmet>
 			<section className='seo-store-page'>
-				<div className='head-category mb-3'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item  ' aria-current='page'>
-									تحسينات SEO
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb mb={"mb-3"} currentPage={"تحسينات SEO"} />
+
 				{isLoading ? (
 					<div className='data-container'>
 						<CircularLoading />

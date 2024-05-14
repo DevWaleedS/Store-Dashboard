@@ -2,15 +2,15 @@ import React, { useState, useContext, useEffect } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Icons
 import { BiSearch } from "react-icons/bi";
-import { ArrowBack } from "../../data/Icons";
 
 // Components
 import Explain from "./Explains/Explain";
 import CoursesTraining from "./Courses/CoursesTraining";
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 
 // Context
 import Context from "../../Context/context";
@@ -50,19 +50,7 @@ const Academy = () => {
 				<div className='head-category mb-md-5 mb-3'>
 					<div className='row'>
 						<div className='col-md-6 col-12'>
-							<nav aria-label='breadcrumb'>
-								<ol className='breadcrumb'>
-									<li className='breadcrumb-item'>
-										<ArrowBack />
-										<Link to='/' className='me-2'>
-											الرئيسية
-										</Link>
-									</li>
-									<li className='breadcrumb-item active' aria-current='page'>
-										الأكاديمية
-									</li>
-								</ol>
-							</nav>
+							<Breadcrumb currentPage={"الأكاديمية"} />
 						</div>
 						<div className='col-md-6 col-12 d-flex justify-content-end'>
 							<div className='pages-search-bx w-100'>

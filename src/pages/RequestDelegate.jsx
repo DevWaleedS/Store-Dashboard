@@ -2,15 +2,14 @@ import React, { useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // MUI
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 
-// ICONS
-import { HomeIcon } from "../data/Icons";
+// Icons
 import { IoIosArrowDown } from "react-icons/io";
 
 // Components
@@ -20,6 +19,7 @@ import { DelegateTable } from "../components/Tables";
 // RTK Query
 import { useGetCitiesQuery } from "../store/apiSlices/selectorsApis/selectCitiesApi";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+import { Breadcrumb } from "../components";
 
 const RequestDelegate = () => {
 	// cities selector
@@ -50,26 +50,12 @@ const RequestDelegate = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-4'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item ' aria-current='page'>
-									خدمات المنصة
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									المندوبين
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb
+					mb={" mb-md-4"}
+					parentPage={"	خدمات المنصة"}
+					currentPage={"	المندوبين"}
+				/>
 
 				<div
 					id='select-delegate'

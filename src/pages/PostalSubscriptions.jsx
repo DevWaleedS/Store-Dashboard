@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Components
+import { Breadcrumb } from "../components";
 import { PostalSubscriptionsTable } from "../components/Tables";
 
 // Icons
-import { HomeIcon } from "../data/Icons";
+
 import { BsSearch } from "react-icons/bs";
 
 // Export File
@@ -104,26 +105,11 @@ const PostalSubscriptions = () => {
 				<title>لوحة تحكم اطلبها | الاشتراكات البريدية</title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item' aria-current='page'>
-									التسويق
-								</li>
-								<li className='breadcrumb-item active' aria-current='page'>
-									الاشتراكات البريدية
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb
+					parentPage={"التسويق"}
+					currentPage={"الاشتراكات البريدية"}
+				/>
+
 				<div className='coupon-form mb-3'>
 					<div className='add-category'>
 						<div className='input-group'>

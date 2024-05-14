@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 
 // MUI
 import { Button } from "@mui/material";
@@ -12,12 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetActivity } from "../../store/slices/AddActivity";
 import { resetSubActivity } from "../../store/slices/AddSubActivity";
 
-// Icons
-import { HomeIcon } from "../../data/Icons";
-
 // Components
 import ActivityType from "./VerifyStoreForms/ActivityType";
 import VerifyFormPage from "./VerifyStoreForms/VerifyFormPage";
+import { Breadcrumb } from "../../components";
 
 const cursor = {
 	cursor: "pointer",
@@ -55,26 +52,12 @@ const VerifyStore = () => {
 				<title>لوحة تحكم اطلبها | توثيق المتجر</title>
 			</Helmet>
 			<section className='verify-store-page p-lg-3'>
-				<div className='head-category mb-md-4 mb-2'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item ' aria-current='page'>
-									بيانات المتجر
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									توثيق المتجر
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb
+					mb={"mb-md-4 mb-2"}
+					currentPage={"	توثيق المتجر"}
+					parentPage={"بيانات المتجر"}
+				/>
+
 				{/** current step */}
 				<div className='page-wrapper'>
 					<div className='row mb-4'>

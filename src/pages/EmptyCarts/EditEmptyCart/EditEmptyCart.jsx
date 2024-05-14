@@ -6,7 +6,7 @@ import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Context
 import Context from "../../../Context/context";
@@ -19,10 +19,10 @@ import Modal from "@mui/material/Modal";
 
 // Components
 import UserDetails from "./UserDetails";
-import ProductsTableDetails from "./ProductsTableDetails";
 import DiscountDetails from "./DiscountDetails";
+import { Breadcrumb } from "../../../components";
 import SendOfferMessage from "./SendOfferMessage";
-
+import ProductsTableDetails from "./ProductsTableDetails";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Datepicker
@@ -30,7 +30,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 // Icons
-import howIcon from "../../../data/Icons/icon_24_home.svg";
 import { Communication, DateIcon } from "../../../data/Icons";
 
 // RTK Query
@@ -267,34 +266,13 @@ const EditEmptyCart = () => {
 						<div className='user-cart-data'>
 							<div className='d-flex'>
 								<div className='col-12'>
-									<div className='head-category mb-md-5 pt-md-4'>
-										<div className='row'>
-											<div className='col-12'>
-												<nav aria-label='breadcrumb'>
-													<ol className='breadcrumb'>
-														<li className='breadcrumb-item'>
-															<img src={howIcon} alt='' loading='lazy' />
-															<Link to='/' className='me-2'>
-																الرئيسية
-															</Link>
-														</li>
-														<li
-															className='breadcrumb-item '
-															aria-current='page'>
-															<Link to='/Carts' className='me-2'>
-																السلات المتروكة
-															</Link>
-														</li>
-														<li
-															className='breadcrumb-item active'
-															aria-current='page'>
-															{currentCartData?.user?.name}
-														</li>
-													</ol>
-												</nav>
-											</div>
-										</div>
-									</div>
+									<Breadcrumb
+										mb={"mb-md-5"}
+										pt={"pt-md-4"}
+										route={"/Carts"}
+										parentPage={"السلات المتروكة"}
+										currentPage={currentCartData?.user?.name}
+									/>
 								</div>
 							</div>
 

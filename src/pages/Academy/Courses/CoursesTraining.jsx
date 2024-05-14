@@ -65,12 +65,12 @@ const CoursesTraining = ({ searchCourses }) => {
 					style={{ height: "200px" }}>
 					<CircularLoading />
 				</div>
-			) : courseData?.length === 0 ? (
+			) : courseData?.courses?.length === 0 ? (
 				<div className='d-flex justify-content-center align-items-center'>
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
-				courseData?.map((course) => (
+				courseData?.courses?.map((course) => (
 					<div className='widget-bx mb-md-4 mb-3' key={course?.id}>
 						<AcademyWidget
 							id={course?.id}
@@ -85,7 +85,7 @@ const CoursesTraining = ({ searchCourses }) => {
 			)}
 
 			{/** Pagination */}
-			{courseData?.length !== 0 && !isLoading && (
+			{courseData?.courses?.length !== 0 && !isLoading && (
 				<TablePagination
 					page={courseData?.courses}
 					pageCount={courseData?.page_count}

@@ -21,6 +21,7 @@ import {
 	useImportProductToStoreProductsMutation,
 	useShowImportProductsCartDataQuery,
 } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
+import { Breadcrumb } from "../../../../components";
 
 function CartPage() {
 	// Show import products cart data
@@ -204,28 +205,12 @@ function CartPage() {
 				<title>لوحة تحكم اطلبها | سلة الاستيراد </title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item' aria-current='page'>
-									<Link to='/Products/SouqOtlobha' className='me-2'>
-										سوق اطلبها
-									</Link>
-								</li>
-								<li className='breadcrumb-item active' aria-current='page'>
-									سلة الاستيراد
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb
+					parentPage={"سوق اطلبها"}
+					route={"/Products/SouqOtlobha"}
+					currentPage={"سلة الاستيراد"}
+				/>
+
 				<div className='cart-page'>
 					<h3>سلة استيراد منتجات سوق اطلبها</h3>
 					<div className='block'>

@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 
 // Components
 import { OrdersQuickDetails } from "./index";
+import { Breadcrumb } from "../../../components";
 import { TopBarSearchInput } from "../../../global";
 import { BigOrdersTable } from "../../../components/Tables";
 
-// Icons
-import { ArrowBack } from "../../../data/Icons";
-
+// RTK Query
 import {
 	useFilterOrdersByStatusMutation,
 	useGetOrdersQuery,
@@ -101,23 +99,8 @@ const Orders = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<ArrowBack />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									الطلبات
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb currentPage={"الطلبات"} />
 
 				{/* Orders Quick Details */}
 				<div className='data-boxes'>

@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 // third party
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 
 // MUI
 import { Button } from "@mui/material";
@@ -16,11 +15,11 @@ import DateRangePicker from "rsuite/DateRangePicker";
 import "rsuite/dist/rsuite.min.css";
 
 // import icons and images
-import { HomeIcon, PrintIcon, WalletIcon } from "../../data/Icons";
+import { PrintIcon, WalletIcon } from "../../data/Icons";
 
-// Pages Components
-
+// Components
 import SalesReports from "./SalesReports";
+import { Breadcrumb } from "../../components";
 import { TopBarSearchInput } from "../../global";
 import { useGetReportsByDateQuery } from "../../store/apiSlices/reportsApi";
 
@@ -51,26 +50,9 @@ const Reports = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-4'>
-					<div className='row'>
-						<div className='col-lg-6 col-md-6 col-sm-12 mb-md-2'>
-							<nav aria-label='breadcrumb'>
-								<ol className='breadcrumb'>
-									<li className='breadcrumb-item'>
-										<HomeIcon />
-										<Link to='/' className='me-2'>
-											الرئيسية
-										</Link>
-									</li>
 
-									<li className='breadcrumb-item active' aria-current='page'>
-										التقارير
-									</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
+				<Breadcrumb mb={"mb-md-4"} currentPage={"التقارير"} />
+
 				<div className='page-actions-row '>
 					<div className='row mb-md-4 mb-3'>
 						<div className='col-lg-6 col-md-6 col-sm-12 mb-2'>

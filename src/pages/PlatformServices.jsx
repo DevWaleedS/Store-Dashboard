@@ -4,9 +4,10 @@ import React, { useEffect, useState, useContext } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Components
+import { Breadcrumb } from "../components";
 import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
@@ -23,7 +24,6 @@ import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Icons
-import { HomeIcon } from "../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 
 // RTK Query
@@ -172,26 +172,9 @@ const PlatformServices = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-4 mb-3'>
-					<div className='row m-0'>
-						<div className='col-md-6 col-12 align-self-center'>
-							<nav aria-label='breadcrumb'>
-								<ol className='breadcrumb'>
-									<li className='breadcrumb-item'>
-										<HomeIcon />
-										<Link to='/' className='me-2'>
-											الرئيسية
-										</Link>
-									</li>
 
-									<li className='breadcrumb-item active ' aria-current='page'>
-										خدمات المنصة
-									</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
+				<Breadcrumb mb={"mb-md-4 mb-3"} currentPage={"خدمات المنصة"} />
+
 				<div className='delegate-request-form'>
 					<h5 className='form-name mb-md-5 mb-3'>
 						قم بتقديم طلب بالخدمات التي تحتاجها

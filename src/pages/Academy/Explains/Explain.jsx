@@ -77,13 +77,13 @@ const Explain = ({ searchExplain }) => {
 					style={{ height: "200px" }}>
 					<CircularLoading />
 				</div>
-			) : explainVideosData?.length === 0 ? (
+			) : explainVideosData?.explainvideos?.length === 0 ? (
 				<div className='d-flex justify-content-center align-items-center'>
 					<p className='text-center'>لاتوجد بيانات</p>
 				</div>
 			) : (
 				<div className='explain-boxes'>
-					{explainVideosData?.map((lesson) => (
+					{explainVideosData?.explainvideos?.map((lesson) => (
 						<div className='box' key={lesson?.id}>
 							<figure className='course-figure'>
 								<div className='course-prev-image'>
@@ -111,7 +111,7 @@ const Explain = ({ searchExplain }) => {
 			)}
 
 			{/** Pagination */}
-			{explainVideosData?.length !== 0 && !isLoading && (
+			{explainVideosData?.explainvideos?.length !== 0 && !isLoading && (
 				<TablePagination
 					page={explainVideosData?.explainvideos}
 					pageCount={explainVideosData?.page_count}

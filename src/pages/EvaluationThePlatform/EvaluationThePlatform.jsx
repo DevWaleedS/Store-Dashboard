@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
@@ -12,12 +12,12 @@ import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Icons
 import { UserImage } from "../../data/images";
-import { HomeIcon } from "../../data/Icons";
 
 // Css Styles
 import "./EvaluationThePlatform.css";
 
 // Components
+import { Breadcrumb } from "../../components";
 import { TextEditor } from "../../components/TextEditor";
 
 // RTK query
@@ -101,26 +101,7 @@ const EvaluationThePlatform = () => {
 				<title>لوحة تحكم اطلبها | تقييم المنصة</title>
 			</Helmet>
 			<section className='academy-page evaluationThePlatform p-lg-3'>
-				{/** pagination  */}
-				<div className='head-category mb-md-5 mb-3'>
-					<div className='row'>
-						<div className='col-md-6 col-12'>
-							<nav aria-label='breadcrumb'>
-								<ol className='breadcrumb'>
-									<li className='breadcrumb-item'>
-										<HomeIcon />
-										<Link to='/' className='me-2'>
-											الرئيسية
-										</Link>
-									</li>
-									<li className='breadcrumb-item active' aria-current='page'>
-										تقييم المنصة
-									</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
+				<Breadcrumb mb={"mb-md-5 mb-3"} currentPage={"تقييم المنصة"} />
 
 				<div className='row mb-5'>
 					<div className='col-12'>

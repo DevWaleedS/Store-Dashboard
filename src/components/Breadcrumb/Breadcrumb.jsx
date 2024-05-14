@@ -32,9 +32,13 @@ const Breadcrumb = ({
 						</li>
 						{parentPage && (
 							<li className='breadcrumb-item' aria-current='page'>
-								<Link to={route} className='me-2'>
-									{parentPage}
-								</Link>
+								{route ? (
+									<Link to={route} className='me-2'>
+										{parentPage}
+									</Link>
+								) : (
+									<div className='me-2'>{parentPage}</div>
+								)}
 							</li>
 						)}
 

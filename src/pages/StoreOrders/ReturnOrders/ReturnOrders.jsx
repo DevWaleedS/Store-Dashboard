@@ -16,6 +16,7 @@ import {
 	useGetReturnOrdersQuery,
 	useSearchInReturnOrdersMutation,
 } from "../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
+import { Breadcrumb } from "../../../components";
 
 const ReturnOrders = () => {
 	const [pageTarget, setPageTarget] = useState(1);
@@ -104,23 +105,8 @@ const ReturnOrders = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<ArrowBack />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									المرتجعات
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb currentPage={"المرتجعات"} />
 
 				{/** Orders table */}
 				<div className='tables'>

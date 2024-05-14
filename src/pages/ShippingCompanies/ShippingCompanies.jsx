@@ -3,11 +3,11 @@ import React, { useContext, useEffect, useState } from "react";
 // Third party
 
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
-
+import { Breadcrumb } from "../../components";
 import { TopBarSearchInput } from "../../global";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -22,13 +22,12 @@ import {
 	useGetShippingCompaniesQuery,
 	useUpdatePriceForOtherShippingCompanyMutation,
 } from "../../store/apiSlices/shippingCompaniesApi";
+import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 // Icons
-import { HomeIcon } from "../../data/Icons";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Switch } from "@mui/material";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 import { LoadingContext } from "../../Context/LoadingProvider";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 // switch style
 const switchStyle = {
@@ -333,26 +332,8 @@ const ShippingCompanies = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-5 mb-3'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item ' aria-current='page'>
-									بيانات المتجر
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									شركات الشحن
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb mb={"mb-md-5 mb-3"} currentPage={"	شركات الشحن"} />
 
 				<div className='row  mb-2'>
 					<div className='col-12 '>

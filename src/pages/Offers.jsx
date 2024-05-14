@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useFetch from "../Hooks/UseFetch";
 import Switch from "@mui/material/Switch";
 
@@ -11,7 +11,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import moment from "moment";
 import Context from "../Context/context";
 import CircularLoading from "../HelperComponents/CircularLoading";
-import { HomeIcon } from "../data/Icons";
+
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 
 const Offers = () => {

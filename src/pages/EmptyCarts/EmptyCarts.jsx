@@ -16,6 +16,7 @@ import {
 	useSearchInEmptyCartsMutation,
 } from "../../store/apiSlices/emptyCartsApi";
 import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+import { Breadcrumb } from "../../components";
 
 const EmptyCarts = () => {
 	const navigate = useNavigate();
@@ -79,26 +80,11 @@ const EmptyCarts = () => {
 				<title>لوحة تحكم اطلبها | السلات المتروكة</title>
 			</Helmet>
 			<section className='carts-page p-lg-3'>
-				<div className='head-category mb-md-4'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item  ' aria-current='page'>
-									التسويق
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									السلات المتروكة
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb
+					mb={"mb-md-4"}
+					currentPage={"السلات المتروكة"}
+					parentPage={"التسويق"}
+				/>
 
 				<div className='row'>
 					<div className='carts-table'>

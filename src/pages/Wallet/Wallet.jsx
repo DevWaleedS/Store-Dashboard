@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 // Third party
 
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // components
 import { TopBarSearchInput } from "../../global";
@@ -13,11 +13,11 @@ import {
 	EditBankAccountModal,
 	BankAccountsTable,
 } from "./index.js";
+import { Breadcrumb } from "../../components";
 import BillingTable from "../../components/Tables/BillingTable.jsx";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Icons
-import { HomeIcon } from "../../data/Icons";
 import { FiPlus } from "react-icons/fi";
 import { RiBankFill } from "react-icons/ri";
 import { FaFileInvoice } from "react-icons/fa";
@@ -78,24 +78,8 @@ const Wallet = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-3'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
 
-								<li className='breadcrumb-item active' aria-current='page'>
-									المحفظة و الفواتير
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb mb={"mb-3"} currentPage={"المحفظة و الفواتير"} />
 
 				<div className='data-container wallet-data-container'>
 					<>

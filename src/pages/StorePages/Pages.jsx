@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // ICONS
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
-import { ArrowBack } from "../../data/Icons";
 import { IoIosArrowDown } from "react-icons/io";
 
 //Mui
@@ -18,6 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import { Button } from "@mui/material";
 
 // Components
+import { Breadcrumb } from "../../components";
 import { PagesTable } from "../../components/Tables";
 
 // RTK Query
@@ -160,25 +160,7 @@ const Pages = () => {
 				<title>لوحة تحكم اطلبها | الصفحات</title>
 			</Helmet>
 			<section className='pages-page p-lg-3'>
-				<div className='head-category mb-md-4 mb-3'>
-					<div className='row'>
-						<div className='col-md-6 col-12'>
-							<nav aria-label='breadcrumb'>
-								<ol className='breadcrumb'>
-									<li className='breadcrumb-item'>
-										<ArrowBack />
-										<Link to='/' className='me-2'>
-											الرئيسية
-										</Link>
-									</li>
-									<li className='breadcrumb-item active' aria-current='page'>
-										الصفحات
-									</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
+				<Breadcrumb mb={"mb-md-4 mb-3"} currentPage={"الصفحات"} />
 
 				<div className='row mb-md-4 mb-3 add-category'>
 					{/* Search Input  */}

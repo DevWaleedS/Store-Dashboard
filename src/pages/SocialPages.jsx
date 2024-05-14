@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 // Context
 import Context from "../Context/context";
@@ -22,7 +21,6 @@ import { Button } from "@mui/material";
 import {
 	TiktokIcon,
 	Facebock,
-	HomeIcon,
 	Instagram,
 	SnaChat,
 	Twitter,
@@ -35,6 +33,7 @@ import {
 	useGetSocialMediaDataQuery,
 	useUpdateSocialMediaDataMutation,
 } from "../store/apiSlices/socialPagesApi";
+import { Breadcrumb } from "../components";
 
 const SocialPages = () => {
 	// to get all  data from server
@@ -175,26 +174,13 @@ const SocialPages = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-4 mb-3'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item ' aria-current='page'>
-									بيانات المتجر
-								</li>
-								<li className='breadcrumb-item active' aria-current='page'>
-									التواصل الاجتماعي
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb
+					mb={" mb-md-4 mb-3"}
+					parentPage={"بيانات المتجر"}
+					currentPage={"التواصل الاجتماعي"}
+				/>
+
 				<div>
 					<div className='social-links-form'>
 						{isFetching ? (

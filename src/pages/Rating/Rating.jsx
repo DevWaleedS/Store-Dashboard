@@ -3,20 +3,17 @@ import React, { useContext, useState } from "react";
 // Third Party
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
 
 // MUI
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-
-// Icons
-import { HomeIcon } from "../../data/Icons";
 
 // CONTEXT
 import Context from "../../Context/context";
 
 // Components
 import RatingWeight from "./RatingWeight";
+import { Breadcrumb } from "../../components";
 import { TopBarSearchInput } from "../../global";
 import { SendReplayModal } from "../../components/Modal";
 import { TablePagination } from "../../components/Tables/TablePagination";
@@ -124,23 +121,9 @@ const Rating = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-4'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									الأسئلة والتقييمات
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb mb={"mb-md-4"} currentPage={"الأسئلة والتقييمات"} />
+
 				<div className='row d-flex align-items-center title-page-row mb-md-5 mb-3'>
 					<div className='col-md-5'>
 						<h4 className='page-tile'>الأسئلة والتقييمات</h4>

@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { openVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAfterMainModal-slice";
 
 // Components
+import { Breadcrumb } from "../../components";
 import HoursWorks from "./HoursWorks/HoursWorks";
 import { TopBarSearchInput } from "../../global";
 import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
@@ -311,26 +312,12 @@ const MainInformation = () => {
 						<TopBarSearchInput />
 					</div>
 				</div>
-				<div className='head-category mb-md-4'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item ' aria-current='page'>
-									الإعدادات
-								</li>
-								<li className='breadcrumb-item active ' aria-current='page'>
-									البيانات الأساسية
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+
+				<Breadcrumb
+					mb={"mb-md-4"}
+					parentPage={"الإعدادات"}
+					currentPage={"	البيانات الأساسية"}
+				/>
 
 				<div className='main-info-form'>
 					{isFetching ? (

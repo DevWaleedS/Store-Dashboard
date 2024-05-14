@@ -3,7 +3,6 @@ import moment from "moment";
 
 import { Location, Message, Phone } from "../../../data/Icons";
 const UserDetails = ({ userData }) => {
-	console.log(userData);
 	return (
 		<div className='userData-container'>
 			<div className='container-title'>بيانات العميل</div>

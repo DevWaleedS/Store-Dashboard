@@ -43,11 +43,7 @@ import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 const RootLayout = () => {
 	// Handle show Verification  data
-	const {
-		data: showVerification,
-		isFetching,
-		refetch,
-	} = useShowVerificationQuery();
+	const { data: showVerification, isFetching } = useShowVerificationQuery();
 
 	// To open and close side bar in mobile screen
 	const [openSidebar, setOpenSidebar] = React.useState(false);
@@ -128,9 +124,7 @@ const RootLayout = () => {
 							/>
 
 							{title && <ActionCompleteComp />}
-
 							{loadingTitle && <LoadingRequest />}
-
 							{isOpenVerifyModal && (
 								<VerifyStoreModal
 									isFetching={isFetching}

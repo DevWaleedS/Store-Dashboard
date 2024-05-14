@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import moment from "moment";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Context
 import Context from "../../../../Context/context";
@@ -25,7 +25,6 @@ import { FaCity } from "react-icons/fa";
 import { BsFillInfoSquareFill } from "react-icons/bs";
 
 import {
-	ArrowBack,
 	User,
 	ListIcon,
 	Location,
@@ -53,6 +52,7 @@ import {
 	useAcceptOrRejectReturnOrderMutation,
 	useGetReturnOrderByIdQuery,
 } from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
+import { Breadcrumb } from "../../../../components";
 
 // The Table title
 function EnhancedTableHead() {
@@ -201,23 +201,13 @@ const ReturnOrderDetails = () => {
 					<div className='head-category mb-5 pt-md-4'>
 						<div className='row '>
 							<div className='col-md-6 col-12'>
-								<h3>تفاصيل طلب الارجاع</h3>
-								{/** breadcrumb */}
-								<nav aria-label='breadcrumb'>
-									<ol className='breadcrumb'>
-										<li className='breadcrumb-item'>
-											<Link to='/ReturnOrders'>
-												<ArrowBack className='arrow-back-icon' />
-											</Link>
-											<Link to='/ReturnOrders' className='me-2'>
-												جدول المرتجعات
-											</Link>
-										</li>
-										<li className='breadcrumb-item active ' aria-current='page'>
-											تفاصيل طلب الارجاع
-										</li>
-									</ol>
-								</nav>
+								<Breadcrumb
+									icon={"arrowRight"}
+									pageTile={"	تفاصيل طلب الارجاع"}
+									currentPage={"تفاصيل طلب الارجاع"}
+									parentPage={"جدول المرتجعات"}
+									route={"/ReturnOrders"}
+								/>
 							</div>
 							<div className='col-md-5 col-12 d-flex justify-content-md-end justify-content-center order__number'>
 								<div className='order-number'>

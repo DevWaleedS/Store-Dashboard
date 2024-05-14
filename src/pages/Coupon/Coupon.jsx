@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
-import { HomeIcon } from "../../data/Icons";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -15,6 +14,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+
+// Components
+import { Breadcrumb } from "../../components";
 import { CouponTable } from "../../components/Tables";
 
 // RTK Query
@@ -127,7 +129,7 @@ const Coupon = () => {
 
 						setCouponsData(response?.data?.data);
 					} catch (error) {
-						console.error("Error fetching Products:", error);
+						console.error("Error fetching searchInCoupons:", error);
 					}
 				};
 
@@ -172,26 +174,7 @@ const Coupon = () => {
 				<title>لوحة تحكم اطلبها | أكواد الخصم</title>
 			</Helmet>
 			<section className='coupon-page p-lg-3'>
-				<div className='head-category'>
-					<div className='row'>
-						<nav aria-label='breadcrumb'>
-							<ol className='breadcrumb'>
-								<li className='breadcrumb-item'>
-									<HomeIcon />
-									<Link to='/' className='me-2'>
-										الرئيسية
-									</Link>
-								</li>
-								<li className='breadcrumb-item' aria-current='page'>
-									التسويق
-								</li>
-								<li className='breadcrumb-item active' aria-current='page'>
-									أكواد الخصم
-								</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+				<Breadcrumb currentPage={"أكواد الخصم"} parentPage={"التسويق"} />
 				<div className='coupon-form mb-3'>
 					<div className='add-category'>
 						<div className='input-group'>
