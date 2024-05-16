@@ -56,7 +56,7 @@ const RenderShippingList = ({
 								className='input'
 								name='shippingCompany'
 								value={item?.id}
-								checked={JSON.parse(shippingSelect) === Number(item?.id)}
+								checked={Number(shippingSelect) === Number(item?.id)}
 								onChange={(e) => {
 									setShippingSelect(e.target.value);
 									setShipping({
