@@ -79,7 +79,7 @@ const LogInVerificationCode = () => {
 					setResetPasswordToken(res?.data?.data?.token);
 					if (res?.data?.message?.ar === "تم التحقق") {
 						// navigate("/auth/login");
-						localStorage.setItem("store_token", res?.data?.data?.token);
+						localStorage.setItem("storeToken", res?.data?.data?.token);
 						// NavigateToDashboardPage();
 						navigate("/");
 					} else {

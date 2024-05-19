@@ -15,10 +15,7 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 
 const Offers = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { fetchedData, loading, reload, setReload } = useFetch("offer");
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
@@ -30,7 +27,7 @@ const Offers = () => {
 			.get(`changeOfferStatus/${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

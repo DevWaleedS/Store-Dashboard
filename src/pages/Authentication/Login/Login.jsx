@@ -89,11 +89,14 @@ const Login = () => {
 
 			if (res?.success === true && res?.data?.status === 200) {
 				const token = res.data.token;
-				localStorage.setItem('store_token', token);
+				localStorage.setItem("storeToken", token);
 
 				localStorage.setItem(
 					"name",
-					res.data?.user?.name + res.data?.user?.lastname
+
+					res.data?.user?.lastname
+						? `${res.data?.user?.name} ${res.data?.user?.lastname}`
+						: `${res.data?.user?.name}`
 				);
 				localStorage.setItem("userName", res.data?.user?.user_name);
 				localStorage.setItem("userImage", res.data?.user?.image);
@@ -163,14 +166,6 @@ const Login = () => {
 	}, [password]);
 	// --------------------------------------------------------------------------------------------------
 
-	// this check if the dashboard is open from admin.atlbah
-	const store_token = new URLSearchParams(window.location.search).get(
-		"ddsdgsfdv"
-	);
-
-	useEffect(() => {
-		if (store_token) localStorage.setItem('store_token', store_token);
-	}, [store_token]);
 	// --------------------------------------------------------------------------------------------------
 
 	return (

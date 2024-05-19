@@ -79,11 +79,8 @@ const userStatusArray = [
 	{ id: 2, nameAr: "غير مفعل", nameEn: "not_active" },
 ];
 const EditUserPage = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	const { id } = useParams();
+	const storeToken = localStorage.getItem("storeToken");
 
 	const { fetchedData, loading, reload, setReload } = useFetch(`user/${id}`);
 	const { fetchedData: roles } = useFetch("selector/roles");
@@ -261,7 +258,7 @@ const EditUserPage = () => {
 			.post(`user/${fetchedData?.data?.users?.id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

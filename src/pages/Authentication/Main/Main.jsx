@@ -21,6 +21,7 @@ import { useShowRegistrationMarketerStatusQuery } from "../../../store/apiSlices
 
 // Css Styles file
 import "./Main.css";
+import GetStoreTokenFromLocalStorage from "../../../API/GetStoreTokenFromLocalStorage";
 
 // -------------------------------------------------
 const mainTitle = [
@@ -43,18 +44,11 @@ function Main() {
 	// show  registration marketer status
 	const { data: registrationMarketerStatus, isLoading } =
 		useShowRegistrationMarketerStatusQuery();
-
-	// to get store token from admin.atlbha.com
-
-	const { data: storetoken } = useStoreTokenQuery();
+	const storeToken = GetStoreTokenFromLocalStorage();
 
 	const navigate = useNavigate();
 	const parm = useParams();
 	const [activeTab, setActiveTab] = useState(0);
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 
 	// To handle add activeTab to current tab
 	useEffect(() => {
@@ -77,7 +71,7 @@ function Main() {
 		}
 	}, [parm?.type, registrationMarketerStatus]);
 
-	if (store_token) {
+	if (storeToken) {
 		return <Navigate to='/' />;
 	}
 

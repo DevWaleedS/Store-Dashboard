@@ -35,10 +35,7 @@ import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 const Products = () => {
 	const navigate = useNavigate();
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 
 	// Categories Selector
 	const { data: selectCategories } = useGetCategoriesQuery();
@@ -265,7 +262,7 @@ const Products = () => {
 			.post(`import-products`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

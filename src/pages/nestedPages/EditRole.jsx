@@ -55,10 +55,7 @@ const style = {
 };
 
 const EditRole = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { id } = useParams();
 	const { fetchedData: permissionsListData } = useFetch("permissions");
 	const { fetchedData, loading, reload, setReload } = useFetch(`roles/${id}`);
@@ -118,7 +115,7 @@ const EditRole = () => {
 			.post(`roles/${id}`, formData, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

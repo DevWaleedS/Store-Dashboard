@@ -55,10 +55,7 @@ const style = {
 };
 
 const CreateRole = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { fetchedData, loading, reload, setReload } = useFetch("permissions");
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
@@ -90,7 +87,7 @@ const CreateRole = () => {
 			.post("roles", data, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

@@ -82,10 +82,7 @@ const userStatusArray = [
 ];
 
 const AddNewUser = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { fetchedData: roles } = useFetch("selector/roles");
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
@@ -218,7 +215,7 @@ const AddNewUser = () => {
 			.post(`user`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {
