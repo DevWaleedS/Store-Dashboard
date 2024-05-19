@@ -78,6 +78,7 @@ import { souqOtlobhaProductsApi } from "./apiSlices/souqOtlobhaProductsApi";
 import { importPaymentMethodApi } from "./apiSlices/importPaymentMethodApi";
 import { defaultAddressApi } from "./apiSlices/selectorsApis/defaultAddressApi";
 import { selectShippingCompaniesApi } from "./apiSlices/selectorsApis/selectShippingCompaniesApi";
+import { getStoreTokenApi } from "./apiSlices/getStoreTokenApi";
 
 // store
 export const store = configureStore({
@@ -102,6 +103,7 @@ export const store = configureStore({
 			selectBanksApi.middleware,
 			returnOrdersApi.middleware,
 			selectCitiesApi.middleware,
+			getStoreTokenApi.middleware,
 			notificationsApi.middleware,
 			defaultAddressApi.middleware,
 			editUserDetailsApi.middleware,
@@ -153,6 +155,7 @@ export const store = configureStore({
 		[selectBanksApi.reducerPath]: selectBanksApi.reducer,
 		[selectCitiesApi.reducerPath]: selectCitiesApi.reducer,
 		[returnOrdersApi.reducerPath]: returnOrdersApi.reducer,
+		[getStoreTokenApi.reducerPath]: getStoreTokenApi.reducer,
 		[notificationsApi.reducerPath]: notificationsApi.reducer,
 		[defaultAddressApi.reducerPath]: defaultAddressApi.reducer,
 		[maintenanceModeApi.reducerPath]: maintenanceModeApi.reducer,

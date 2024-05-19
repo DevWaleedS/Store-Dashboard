@@ -16,6 +16,7 @@ import RegisterDelegate from "../RegisterDelegate/RegisterDelegate";
 import { SvgComponent } from "../../../data/Icons";
 
 // RTK Query
+import { useStoreTokenQuery } from "../../../store/apiSlices/getStoreTokenApi";
 import { useShowRegistrationMarketerStatusQuery } from "../../../store/apiSlices/registrationMarketerStatusApi";
 
 // Css Styles file
@@ -42,6 +43,10 @@ function Main() {
 	// show  registration marketer status
 	const { data: registrationMarketerStatus, isLoading } =
 		useShowRegistrationMarketerStatusQuery();
+
+	// to get store token from admin.atlbha.com
+
+	const { data: storetoken } = useStoreTokenQuery();
 
 	const navigate = useNavigate();
 	const parm = useParams();
