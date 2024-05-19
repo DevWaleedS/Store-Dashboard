@@ -3,11 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Function to prepare headers for HTTP requests
 
 const prepareHeaders = (headers) => {
-	const token =
-		document.cookie
-			?.split("; ")
-			?.find((cookie) => cookie.startsWith("store_token="))
-			?.split("=")[1] || null;
+	const token = localStorage.getItem("store_token");
 
 	if (token) {
 		headers.set("Authorization", `Bearer ${token}`);

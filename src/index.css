@@ -870,7 +870,8 @@ textarea {
 	justify-content: end;
 }
 
-.date-picker .rs-picker-default .rs-picker-toggle.rs-btn {
+.date-picker .rs-picker-default .rs-picker-toggle.rs-btn,
+.date-picker .rs-input-group.rs-input-group-inside{
 	background-color: #eff9ff !important;
 	color: var(--gray-100);
 	border-color: var(--second-200);
@@ -879,7 +880,29 @@ textarea {
 	height: 55px;
 	padding: 0 !important;
 }
-
+.date-picker .rs-input-group.rs-input-group-inside{
+	flex-direction: row-reverse;
+}
+.date-picker .rs-input-group.rs-input-group-inside .rs-input{
+	padding-right: 14px !important;
+	background-color: #eff9ff !important;
+}
+.date-picker .rs-input-group.rs-input-group-inside .rs-input-group-addon{
+    align-items: center;
+    background-color: #02466a;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 90px;
+    fill: #FFF;
+    border-radius: 0px 6px 6px 0px;
+}
+.date-picker svg.rs-picker-caret-icon.rs-icon.rs-icon {
+    fill: #FFF !important;
+    width: 20px !important;
+    height: 20px !important;
+}
 .date-picker .rs-picker-default .rs-picker-toggle.rs-btn .rs-stack {
 	width: 100%;
 	height: 100%;

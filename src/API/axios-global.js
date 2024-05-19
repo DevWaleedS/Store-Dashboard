@@ -1,14 +1,14 @@
 import axios from "axios";
 
 // Set the base URL for all Axios requests
+const TOKEN_AUTH = localStorage.getItem("store_token");
 const baseURL = "https://backend.atlbha.com/api/Store/";
 axios.defaults.baseURL = baseURL;
+axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN_AUTH}`;
 
 function getStoreTokenFromCookies() {
-	const cookieValue = document.cookie
-		.split("; ")
-		.find((row) => row.startsWith("store_token="));
-	return cookieValue ? cookieValue.split("=")[1] : null;
+	const store_token = localStorage.getItem("store_token");
+	return store_token ? store_token : null;
 }
 
 /**

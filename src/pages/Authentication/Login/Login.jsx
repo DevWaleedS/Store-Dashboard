@@ -89,7 +89,7 @@ const Login = () => {
 
 			if (res?.success === true && res?.data?.status === 200) {
 				const token = res.data.token;
-				document.cookie = `store_token=${token}; path=/`;
+				localStorage.setItem('store_token', token);
 
 				localStorage.setItem(
 					"name",
@@ -169,7 +169,7 @@ const Login = () => {
 	);
 
 	useEffect(() => {
-		if (store_token) document.cookie = `store_token=${store_token};   path=/`;
+		if (store_token) localStorage.setItem('store_token', store_token);
 	}, [store_token]);
 	// --------------------------------------------------------------------------------------------------
 
