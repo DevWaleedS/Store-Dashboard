@@ -40,13 +40,6 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 // Import Icons
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 import {
-	ChangeAllPagesStatusThunk,
-	ChangePagesStatusThunk,
-	DeleteAllDeletePagesThunk,
-	DeleteCouponThunk,
-	PagesThunk,
-} from "../../store/Thunk/PagesThunk";
-import {
 	useChangeAllPagesStatusMutation,
 	useChangePagesStatusMutation,
 	useDeleteAllPagesMutation,
