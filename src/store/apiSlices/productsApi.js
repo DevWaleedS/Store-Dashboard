@@ -110,6 +110,19 @@ export const productsApi = createApi({
 			}),
 		}),
 
+		// handle import products file
+		importProductsFile: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `import-products`,
+					method: "POST",
+					body: body,
+				};
+			},
+
+			invalidatesTags: ["Products"],
+		}),
+
 		// change Categories For Some Selected Products
 		changeCategoriesForSomeSelectedProducts: builder.mutation({
 			query: ({ queryParams, category_id, subcategory_id }) => {
@@ -179,15 +192,16 @@ export const productsApi = createApi({
 
 // Export endpoints and hooks
 export const {
+	useDeleteProductMutation,
 	useGetStoreProductsQuery,
 	useGetImportedProductsQuery,
 	useSearchInStoreProductsMutation,
-	useSearchInImportedProductsMutation,
-	useDeleteProductMutation,
+	useChangeSpecialStatusMutation,
 	useDeleteAllProductsMutation,
 	useChangeProductStatusMutation,
 	useChangeAllProductsStatusMutation,
-	useChangeSpecialStatusMutation,
+	useImportProductsFileMutation,
+	useSearchInImportedProductsMutation,
 	useFilterStoreProductsByCategoriesMutation,
 	useFilterImportedProductsByCategoriesMutation,
 	useChangeCategoriesForSomeSelectedProductsMutation,
