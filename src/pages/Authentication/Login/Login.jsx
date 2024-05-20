@@ -13,6 +13,7 @@ import { useLoginMutation } from "../../../store/apiSlices/loginApi";
 
 const Login = () => {
 	let type = "password";
+
 	const navigate = useNavigate();
 	// If user is not verify
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
@@ -88,12 +89,10 @@ const Login = () => {
 			const res = await login({ user_name: username, password }).unwrap();
 
 			if (res?.success === true && res?.data?.status === 200) {
-				const token = res.data.token;
-				localStorage.setItem("storeToken", token);
+				localStorage.setItem("storeToken", res.data.token);
 
 				localStorage.setItem(
 					"name",
-
 					res.data?.user?.lastname
 						? `${res.data?.user?.name} ${res.data?.user?.lastname}`
 						: `${res.data?.user?.name}`

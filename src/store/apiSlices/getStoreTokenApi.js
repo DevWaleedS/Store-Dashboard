@@ -18,7 +18,7 @@ export const getStoreTokenApi = createApi({
 	endpoints: (builder) => ({
 		// get store token endpoint..
 		storeToken: builder.query({
-			query: () => `storeToken`,
+			query: () => `store_token`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response,

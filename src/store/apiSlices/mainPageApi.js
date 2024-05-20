@@ -2,10 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Function to prepare headers for HTTP requests
 const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
+	// Use the custom hook to get the token
+	const storeToken = localStorage.getItem("storeToken");
 
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
+	if (storeToken) {
+		headers.set("Authorization", `Bearer ${storeToken}`);
 	}
 
 	return headers;

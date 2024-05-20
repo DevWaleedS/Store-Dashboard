@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 // third party
-import axios from "axios";
+
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -116,11 +116,11 @@ const AddCategory = () => {
 
 	// handle add new Category
 	const [addNewCategory] = useAddNewCategoryMutation();
+
 	const handleCreateNewCategory = async (data) => {
 		setLoadingTitle("جاري حفظ النشاط");
 		resetCategoryError();
 
-		// data that send to api...
 		const formData = new FormData();
 		formData.append("name", data?.name);
 		if (icons?.length > 0) {
@@ -136,44 +136,32 @@ const AddCategory = () => {
 		try {
 			const response = await addNewCategory({
 				body: formData,
-			});
+			}).unwrap();
 
-			// Handle response
-			if (
-				response.data?.success === true &&
-				response.data?.data?.status === 200
-			) {
+			if (response.success === true && response.data.status === 200) {
 				setLoadingTitle("");
 				navigate("/Category");
 				setSubCategories([]);
-				setEndActionTitle(response?.data?.message?.ar);
+				setEndActionTitle(response.data.message.ar);
 			} else {
 				setLoadingTitle("");
 
 				setCategoryError({
 					...categoryError,
-					name: response?.data?.message?.en?.name?.[0],
-					icon: response?.res?.data?.message?.en?.name?.[0],
+					name: response?.message?.en?.name?.[0],
+					icon: response?.message?.en?.icon?.[0],
 				});
 
-				// Handle display errors using toast notifications
-				toast.error(
-					response?.data?.message?.ar
-						? response.data.message.ar
-						: response.data.message.en,
-					{
-						theme: "light",
-					}
-				);
+				toast.error(response.message.ar || response.message.en, {
+					theme: "light",
+				});
 
-				Object.entries(response?.data?.message?.en)?.forEach(
-					([key, message]) => {
-						toast.error(message[0], { theme: "light" });
-					}
-				);
+				Object.entries(response.message.en)?.forEach(([key, message]) => {
+					toast.error(message[0], { theme: "light" });
+				});
 			}
 		} catch (error) {
-			console.error("Error changing addNewCategory:", error);
+			console.error("Error creating category:", error);
 		}
 	};
 

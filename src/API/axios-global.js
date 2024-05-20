@@ -1,11 +1,10 @@
 import axios from "axios";
-import GetStoreTokenFromLocalStorage from "./GetStoreTokenFromLocalStorage";
 
 // Set the base URL for all Axios requests
-const TOKEN_AUTH = localStorage.getItem("storeToken");
+const AUTH_TOKEN = localStorage.getItem("storeToken");
 const baseURL = "https://backend.atlbha.com/api/Store/";
 axios.defaults.baseURL = baseURL;
-axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN_AUTH}`;
+axios.defaults.headers.common["Authorization"] = `Bearer ${AUTH_TOKEN}`;
 
 /**
  * Axios request interceptor to append authorization headers when needed.
@@ -14,9 +13,8 @@ axios.interceptors.request.use(
 	(req) => {
 		// Do not add authorization header for login requests
 		if (!req.url.includes("login")) {
-			const storeToken = GetStoreTokenFromLocalStorage();
-			if (storeToken) {
-				req.headers.Authorization = `Bearer ${storeToken}`;
+			if (AUTH_TOKEN) {
+				req.headers.Authorization = `Bearer ${AUTH_TOKEN}`;
 			}
 		}
 		return req;

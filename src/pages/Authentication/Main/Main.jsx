@@ -16,12 +16,13 @@ import RegisterDelegate from "../RegisterDelegate/RegisterDelegate";
 import { SvgComponent } from "../../../data/Icons";
 
 // RTK Query
-import { useStoreTokenQuery } from "../../../store/apiSlices/getStoreTokenApi";
+
 import { useShowRegistrationMarketerStatusQuery } from "../../../store/apiSlices/registrationMarketerStatusApi";
 
 // Css Styles file
 import "./Main.css";
-import GetStoreTokenFromLocalStorage from "../../../API/GetStoreTokenFromLocalStorage";
+
+import { useStoreTokenQuery } from "../../../store/apiSlices/getStoreTokenApi";
 
 // -------------------------------------------------
 const mainTitle = [
@@ -44,7 +45,24 @@ function Main() {
 	// show  registration marketer status
 	const { data: registrationMarketerStatus, isLoading } =
 		useShowRegistrationMarketerStatusQuery();
-	const storeToken = GetStoreTokenFromLocalStorage();
+	const { data } = useStoreTokenQuery();
+	const storeToken = localStorage.getItem("storeToken");
+
+	useEffect(() => {
+		if (data?.token) {
+			localStorage.setItem("storeToken", data?.token);
+			localStorage.setItem(
+				"name",
+				data?.user?.lastname
+					? `${data?.user?.name} ${data?.user?.lastname}`
+					: `${data?.user?.name}`
+			);
+			localStorage.setItem("userName", data?.user?.user_name);
+			localStorage.setItem("userImage", data?.user?.image);
+			localStorage.setItem("logo", data?.user?.store?.logo);
+			localStorage.setItem("domain", data?.user?.store?.domain);
+		}
+	}, [data]);
 
 	const navigate = useNavigate();
 	const parm = useParams();
