@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
+import { useImportPaymentMethodsQuery } from "../../../../store/apiSlices/importPaymentMethodApi";
 
 const RenderPaymentsList = ({
-	paymentMethods,
 	paymentSelect,
 	setPaymentSelect,
 	paymentMethodError,
 }) => {
+	// get payment methods..
+	const { data: paymentMethods } = useImportPaymentMethodsQuery();
+
 	// To select fist item by default
 	useEffect(() => {
 		if (paymentMethods?.length !== 0) {

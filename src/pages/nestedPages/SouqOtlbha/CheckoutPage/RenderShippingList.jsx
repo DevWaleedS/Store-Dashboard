@@ -1,17 +1,17 @@
 import React, { useEffect, useImperativeHandle, forwardRef } from "react";
+
+// RTK Query
 import { useReCalculateCartByShippingIdMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
+import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCompaniesApi";
 
 const RenderShippingList = forwardRef(
 	(
-		{
-			shippingCompanies,
-			shippingSelect,
-			setShippingSelect,
-			setShipping,
-			shippingTypeErrors,
-		},
+		{ shippingSelect, setShippingSelect, setShipping, shippingTypeErrors },
 		ref
 	) => {
+		// get shipping Companies..
+		const { data: shippingCompanies } = useGetShippingCompaniesQuery();
+
 		// TO HANDLE NAME OF DAYS
 		const daysDefinition = (time) => {
 			const timeValue = Number(time);

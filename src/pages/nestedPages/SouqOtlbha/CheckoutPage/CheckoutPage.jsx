@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 // Components
 import RenderAddress from "./RenderAddress";
+import RenderCartIsEmpty from "./RenderCartIsEmpty";
+import { Breadcrumb } from "../../../../components";
 import RenderCouponInput from "./RenderCouponInput";
 import RenderPaymentsList from "./RenderPaymentsList";
 import RenderShippingList from "./RenderShippingList";
@@ -22,29 +24,20 @@ import {
 	useCheckOutCartMutation,
 	useShowImportCartQuery,
 } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
-import { useImportPaymentMethodsQuery } from "../../../../store/apiSlices/importPaymentMethodApi";
 import { useGetDefaultAddressQuery } from "../../../../store/apiSlices/selectorsApis/defaultAddressApi";
-import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCompaniesApi";
-import RenderCartIsEmpty from "./RenderCartIsEmpty";
-import { Breadcrumb } from "../../../../components";
 
 function CheckoutPage() {
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
 
+	// im using this with forwardRef  to share isLoading from RenderShippingList
 	const shippingListRef = useRef();
 
 	// get cart data..
 	const { data: cartData, isLoading } = useShowImportCartQuery();
 
-	// get payment methods..
-	const { data: paymentMethods } = useImportPaymentMethodsQuery();
-
 	// get default address..
 	const { data: defaultAddress } = useGetDefaultAddressQuery();
-
-	// get shipping Companies..
-	const { data: shippingCompanies } = useGetShippingCompaniesQuery();
 
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [shippingSelect, setShippingSelect] = useState(null);
@@ -237,7 +230,6 @@ function CheckoutPage() {
 
 												<RenderPaymentsList
 													paymentSelect={paymentSelect}
-													paymentMethods={paymentMethods}
 													setPaymentSelect={setPaymentSelect}
 													paymentMethodError={error?.paymentMethod}
 												/>
@@ -247,7 +239,6 @@ function CheckoutPage() {
 													setShipping={setShipping}
 													shippingSelect={shippingSelect}
 													setShippingSelect={setShippingSelect}
-													shippingCompanies={shippingCompanies}
 													shippingTypeErrors={error?.shippingType}
 												/>
 
