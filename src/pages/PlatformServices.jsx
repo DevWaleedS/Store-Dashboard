@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import { Breadcrumb } from "../components";
@@ -32,7 +30,9 @@ import {
 	useGetPlatformServicesSelectorQuery,
 	useRequestNewServiceMutation,
 } from "../store/apiSlices/platformServicesApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
 
 // ---------------------------------------------
 
@@ -61,7 +61,8 @@ const selectStyle = {
 // -----------------------------------------------------
 
 const PlatformServices = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
@@ -85,14 +86,6 @@ const PlatformServices = () => {
 		description: "",
 	});
 	// ---------------------------------------------
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	// To get Activity and store name
 	useEffect(() => {

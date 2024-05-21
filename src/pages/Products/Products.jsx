@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import { FormSearchWeight, ImportEndExportProducts } from "./index";
@@ -21,21 +20,16 @@ import {
 	useSearchInImportedProductsMutation,
 	useSearchInStoreProductsMutation,
 } from "../../store/apiSlices/productsApi";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 const Products = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
 
 	// Categories Selector
 	const { data: selectCategories } = useGetCategoriesQuery();
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	const [search, setSearch] = useState("");
 	const [pageCount, setPageCount] = useState(1);

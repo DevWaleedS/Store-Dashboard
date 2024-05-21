@@ -44,7 +44,22 @@ const RenderCouponInput = ({
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
+				if (
+					response?.data?.message?.en === "The coupon is invalid" ||
+					response?.data?.message?.en === "The coupon is already used"
+				) {
+					toast.error(
+						response?.data?.message?.ar
+							? response.data.message.ar
+							: response.data.message.en,
+						{
+							theme: "light",
+						}
+					);
+				} else {
+					setEndActionTitle(response?.data?.message?.ar);
+				}
+
 				setLoadingCoupon(false);
 			} else {
 				setBtnLoading(false);

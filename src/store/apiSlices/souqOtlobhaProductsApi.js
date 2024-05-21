@@ -135,19 +135,32 @@ export const souqOtlobhaProductsApi = createApi({
 			},
 			invalidatesTags: ["CheckOutPage"],
 		}),
+
+		// re-calculate cart by shipping id
+		reCalculateCartByShippingId: builder.mutation({
+			query: ({ id }) => {
+				return {
+					url: `shippingCalculation/${id}`,
+					method: "GET",
+				};
+			},
+
+			invalidatesTags: ["CartMenuData"],
+		}),
 	}),
 });
 
 // Export endpoints and hooks
 export const {
+	useUpdateCartMutation,
+	useCheckOutCartMutation,
+	useShowImportCartQuery,
+	useDeleteItemFromCartMutation,
 	useGetSouqOtlobhaProductsQuery,
+	useAppLyDiscountCouponMutation,
 	useShowImportProductsCartDataQuery,
-	useFilterSouqOtlobhaProductsByCategoriesMutation,
+	useReCalculateCartByShippingIdMutation,
 	useShowSouqOtlobhaProductByIdQuery,
 	useImportProductToStoreProductsMutation,
-	useUpdateCartMutation,
-	useDeleteItemFromCartMutation,
-	useShowImportCartQuery,
-	useCheckOutCartMutation,
-	useAppLyDiscountCouponMutation,
+	useFilterSouqOtlobhaProductsByCategoriesMutation,
 } = souqOtlobhaProductsApi;

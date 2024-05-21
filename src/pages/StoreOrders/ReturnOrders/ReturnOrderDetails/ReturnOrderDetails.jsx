@@ -51,6 +51,7 @@ import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectors
 import {
 	useAcceptOrRejectReturnOrderMutation,
 	useGetReturnOrderByIdQuery,
+	useRefundReturnOrderMutation,
 } from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
 import { Breadcrumb } from "../../../../components";
 
@@ -119,7 +120,7 @@ const ReturnOrderDetails = () => {
 
 	// -----------------------------------------------------
 
-	// To handle update order Status
+	//  handle update order Status
 	const [acceptOrRejectReturnOrder, { isLoading }] =
 		useAcceptOrRejectReturnOrderMutation();
 	const handleAcceptReturnOrder = async (status) => {
@@ -167,6 +168,13 @@ const ReturnOrderDetails = () => {
 		} catch (error) {
 			console.error("Error changing update acceptOrRejectReturnOrder:", error);
 		}
+	};
+
+	// handle refund return order
+	const [refundReturnOrder] = useRefundReturnOrderMutation();
+
+	const handleRefundReturnOrder = async () => {
+		setLoadingTitle("جاري رد المبلغ للمستخدم");
 	};
 
 	// -------------------------------------------------
@@ -731,13 +739,7 @@ const ReturnOrderDetails = () => {
 									currentOrder?.order?.shippingtypes?.name !== "اخرى" &&
 									currentOrder?.status !== "جديد" && (
 										<button
-											disabled={currentOrder?.status === "جديد" ? true : false}
-											style={{
-												cursor:
-													currentOrder?.status === "جديد"
-														? "not-allowed"
-														: "pointer",
-											}}
+											style={{ cursor: "pointer" }}
 											onClick={() => printSticker()}
 											className='order-action-box mb-3'>
 											<div className='action-title'>
@@ -745,7 +747,6 @@ const ReturnOrderDetails = () => {
 												<span
 													className='me-2 ms-2'
 													style={{ fontSize: "18px" }}>
-													{" "}
 													طباعة بوليصة الارجاع
 												</span>
 												{printError && (
@@ -755,14 +756,7 @@ const ReturnOrderDetails = () => {
 												)}
 											</div>
 											<div className='action-icon'>
-												<Print
-													style={{
-														cursor:
-															currentOrder?.status !== "جديد"
-																? "not-allowed"
-																: "pointer",
-													}}
-												/>
+												<Print style={{ cursor: "pointer" }} />
 											</div>
 										</button>
 									)}

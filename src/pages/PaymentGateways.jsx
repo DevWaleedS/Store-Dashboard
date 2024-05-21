@@ -27,12 +27,13 @@ import {
 	useGetPaymentGatewaysQuery,
 } from "../store/apiSlices/paymentGatewaysApi";
 import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 // Icons
-
 import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
 
 // switch styles
 const switchStyle = {
@@ -83,6 +84,9 @@ const PaymentGateways = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	// to get all  data from server
 	const { data: paymentGateways, isLoading } = useGetPaymentGatewaysQuery();
 
@@ -96,14 +100,6 @@ const PaymentGateways = () => {
 	const [allPayments, setAllPayments] = useState([]);
 
 	// -----------------------------------------------------------
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	// Side Effects
 	useEffect(() => {

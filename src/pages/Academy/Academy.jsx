@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 
 // Icons
 import { BiSearch } from "react-icons/bi";
@@ -15,11 +14,12 @@ import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 // Context
 import Context from "../../Context/context";
 
-// RTK Query
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 const Academy = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
 	// to handle CoursesTraining and Explain in Academy Section
 	const academyToggleContext = useContext(Context);
 	const { togglePage, setTogglePag } = academyToggleContext;
@@ -32,14 +32,6 @@ const Academy = () => {
 	};
 	const [searchCourses, setSearchCourses] = useState("");
 	const [searchExplain, setSearchExplain] = useState("");
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	return (
 		<>

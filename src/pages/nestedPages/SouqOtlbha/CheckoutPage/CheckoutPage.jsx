@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -24,13 +24,15 @@ import {
 } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 import { useImportPaymentMethodsQuery } from "../../../../store/apiSlices/importPaymentMethodApi";
 import { useGetDefaultAddressQuery } from "../../../../store/apiSlices/selectorsApis/defaultAddressApi";
-import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/shippingCompaniesApi";
+import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCompaniesApi";
 import RenderCartIsEmpty from "./RenderCartIsEmpty";
 import { Breadcrumb } from "../../../../components";
 
 function CheckoutPage() {
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
+
+	const shippingListRef = useRef();
 
 	// get cart data..
 	const { data: cartData, isLoading } = useShowImportCartQuery();
@@ -47,7 +49,7 @@ function CheckoutPage() {
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [shippingSelect, setShippingSelect] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
-	const [shippingPrice, setShippingPrice] = useState(null);
+
 	const [shipping, setShipping] = useState({
 		id: null,
 		district: "",
@@ -215,7 +217,10 @@ function CheckoutPage() {
 									<div className='col-12 col-lg-6 col-xl-5 mt-4 mt-lg-0'>
 										<div className='card mb-lg-0'>
 											<div className='card-body'>
-												<RenderCheckoutInfo cartData={cartData} />
+												<RenderCheckoutInfo
+													cartData={cartData}
+													isCartLoading={shippingListRef.current?.isLoading}
+												/>
 
 												<RenderCouponInput
 													coupon={coupon}
@@ -237,10 +242,10 @@ function CheckoutPage() {
 													paymentMethodError={error?.paymentMethod}
 												/>
 												<RenderShippingList
+													ref={shippingListRef}
 													shipping={shipping}
 													setShipping={setShipping}
 													shippingSelect={shippingSelect}
-													setShippingPrice={setShippingPrice}
 													setShippingSelect={setShippingSelect}
 													shippingCompanies={shippingCompanies}
 													shippingTypeErrors={error?.shippingType}

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // Third party
 
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 
 // components
 import { TopBarSearchInput } from "../../global";
@@ -34,10 +33,14 @@ import {
 	useGetCurrentBankAccountQuery,
 	useGetWalletDataQuery,
 } from "../../store/apiSlices/walletApi.js";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi.js";
+
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification.js";
 
 const Wallet = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	const dispatch = useDispatch();
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
@@ -58,14 +61,6 @@ const Wallet = () => {
 			number: rowsCount,
 		}
 	);
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	return (
 		<>

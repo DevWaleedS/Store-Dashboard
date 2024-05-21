@@ -23,6 +23,7 @@ export const returnOrdersApi = createApi({
 		prepareHeaders,
 	}),
 	tagTypes: ["ReturnOrders"],
+
 	endpoints: (builder) => ({
 		// get return OrderIndex endpoint..
 		getReturnOrders: builder.query({
@@ -70,14 +71,22 @@ export const returnOrdersApi = createApi({
 
 			invalidatesTags: ["ReturnOrders"],
 		}),
+
+		// Refund return order
+		refundReturnOrder: builder.mutation({
+			query: ({ id }) => {
+				return { url: `refundReturnOrder/${id}`, method: "POST" };
+			},
+		}),
 	}),
 });
 
 // Export endpoints and hooks
 export const {
 	useGetReturnOrdersQuery,
-	useSearchInReturnOrdersMutation,
 	useGetReturnOrderByIdQuery,
+	useRefundReturnOrderMutation,
+	useSearchInReturnOrdersMutation,
 	useFilterReturnOrdersByStatusMutation,
 	useAcceptOrRejectReturnOrderMutation,
 } = returnOrdersApi;

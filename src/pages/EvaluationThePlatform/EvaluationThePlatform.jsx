@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Context
 import Context from "../../Context/context";
@@ -22,10 +21,14 @@ import { TextEditor } from "../../components/TextEditor";
 
 // RTK query
 import { useAddEvaluationThePlatformApiMutation } from "../../store/apiSlices/evaluationThePlatformApi";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 const EvaluationThePlatform = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const contextStore = useContext(Context);
@@ -38,14 +41,6 @@ const EvaluationThePlatform = () => {
 
 	// To handle errors
 	const [evaluationError, setEvaluationError] = useState("");
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	// send add Evaluation The Platform Function
 	const [addEvaluationThePlatform, { isLoading }] =

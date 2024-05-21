@@ -164,38 +164,48 @@ const Rating = () => {
 						</div>
 					</div>
 				</div>
-				<div className='rating-wrapper'>
-					<div className='rating-bx mb-md-5 mb-3'>
-						<RatingWeight
-							setCommentDetails={setCommentDetails}
-							RatingData={ratingData?.data?.comment_of_products}
-							loading={isLoading}
-							pageTarget={pageTarget}
-							rowsCount={rowsCount}
-						/>
+				{ratingData?.data?.comment_of_products?.length === 0 ? (
+					<div className='rating-wrapper'>
+						<h4
+							style={{ height: "70vh" }}
+							className='d-flex justify-content-center align-items-center'>
+							لا يوجد تقييمات حتى هذه اللحظة!
+						</h4>
 					</div>
-
-					{/** Pagination */}
-					{ratingData?.data?.comment_of_products?.length !== 0 &&
-						!isLoading && (
-							<TablePagination
-								page={ratingData?.data?.comment_of_products}
-								pageCount={ratingData?.data?.page_count}
-								currentPage={ratingData?.data?.current_page}
+				) : (
+					<div className='rating-wrapper'>
+						<div className='rating-bx mb-md-5 mb-3'>
+							<RatingWeight
+								setCommentDetails={setCommentDetails}
+								RatingData={ratingData?.data?.comment_of_products}
+								loading={isLoading}
 								pageTarget={pageTarget}
 								rowsCount={rowsCount}
-								setRowsCount={setRowsCount}
-								setPageTarget={setPageTarget}
 							/>
-						)}
+						</div>
 
-					{/* send rating replay component */}
-					<SendReplayModal
-						fetchedData={ratingData?.data?.comment_of_products}
-						loading={isLoading}
-						commentDetails={commentDetails}
-					/>
-				</div>
+						{/** Pagination */}
+						{ratingData?.data?.comment_of_products?.length !== 0 &&
+							!isLoading && (
+								<TablePagination
+									page={ratingData?.data?.comment_of_products}
+									pageCount={ratingData?.data?.page_count}
+									currentPage={ratingData?.data?.current_page}
+									pageTarget={pageTarget}
+									rowsCount={rowsCount}
+									setRowsCount={setRowsCount}
+									setPageTarget={setPageTarget}
+								/>
+							)}
+
+						{/* send rating replay component */}
+						<SendReplayModal
+							fetchedData={ratingData?.data?.comment_of_products}
+							loading={isLoading}
+							commentDetails={commentDetails}
+						/>
+					</div>
+				)}
 			</section>
 		</>
 	);

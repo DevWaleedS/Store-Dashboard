@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const RenderPaymentsList = ({
 	paymentMethods,
@@ -6,7 +6,14 @@ const RenderPaymentsList = ({
 	setPaymentSelect,
 	paymentMethodError,
 }) => {
-	const paymentsData = paymentMethods?.map((payment, idx) => (
+	// To select fist item by default
+	useEffect(() => {
+		if (paymentMethods?.length !== 0) {
+			setPaymentSelect(paymentMethods?.[0]?.id);
+		}
+	}, [paymentMethods?.length]);
+
+	const paymentsData = paymentMethods?.map((payment) => (
 		<li className='item' key={payment?.id}>
 			<label className='header'>
 				<div className='d-flex flex-row align-items-center'>
@@ -16,8 +23,8 @@ const RenderPaymentsList = ({
 								type='radio'
 								className='input'
 								name='checkout_payment_method'
-								value={JSON.stringify(payment)}
-								checked={JSON.parse(paymentSelect)?.id === Number(payment?.id)}
+								value={payment?.id}
+								checked={Number(paymentSelect) === Number(payment?.id)}
 								onChange={(e) => setPaymentSelect(e.target.value)}
 							/>
 							<span className='input-radio-circle' />

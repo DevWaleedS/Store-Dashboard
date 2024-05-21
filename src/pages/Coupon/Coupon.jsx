@@ -25,7 +25,9 @@ import {
 	useGetCouponsQuery,
 	useSearchInCouponsMutation,
 } from "../../store/apiSlices/couponApi";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 // filter Coupon by
 const filtersTypes = [
@@ -87,6 +89,9 @@ const menuItemStyles = {
 };
 
 const Coupon = () => {
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	const navigate = useNavigate();
 	const [couponsData, setCouponsData] = useState([]);
 	const [pageTarget, setPageTarget] = useState(1);
@@ -99,14 +104,6 @@ const Coupon = () => {
 		page: pageTarget,
 		number: rowsCount,
 	});
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	/** get contact data */
 	useEffect(() => {
