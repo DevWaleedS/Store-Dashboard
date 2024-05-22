@@ -61,6 +61,7 @@ function Main() {
 			localStorage.setItem("userImage", data?.user?.image);
 			localStorage.setItem("logo", data?.user?.store?.logo);
 			localStorage.setItem("domain", data?.user?.store?.domain);
+			localStorage.setItem("store_id", data?.user?.store_id);
 		}
 	}, [data]);
 

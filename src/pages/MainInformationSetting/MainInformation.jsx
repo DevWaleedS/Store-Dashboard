@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -34,7 +33,6 @@ import {
 	CityIcon,
 	CountryIcon,
 	Document,
-	HomeIcon,
 	Timer,
 } from "../../data/Icons";
 
@@ -177,6 +175,7 @@ const MainInformation = () => {
 			setWorkDays(mainInformation?.workDays);
 			localStorage.setItem("domain", mainInformation?.domain);
 			localStorage.setItem("logo", mainInformation?.logo);
+			localStorage.setItem("store_id", mainInformation?.id);
 		}
 	}, [mainInformation]);
 

@@ -101,6 +101,7 @@ const Login = () => {
 				localStorage.setItem("userImage", res.data?.user?.image);
 				localStorage.setItem("logo", res.data?.user?.store_logo);
 				localStorage.setItem("domain", res.data?.user?.store_domain);
+				localStorage.setItem("store_id", res.data?.user?.store_id);
 
 				if (rememberMe) {
 					// Set username, password, and remember_me status to context

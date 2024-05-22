@@ -55,7 +55,6 @@ const BankAccStatusComment = ({ comment }) => {
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='d-flex p-2 justify-content-end'>
-						{" "}
 						<CloseIcon
 							className='close_video_icon'
 							style={{ cursor: "pointer" }}

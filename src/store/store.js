@@ -12,7 +12,7 @@ import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
 import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
 import AddBankAccountModal from "./slices/AddBankAccountModal";
 import EditBankAccountModal from "./slices/EditBankAccountModal";
-import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
+
 import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
 import BankAccountAlert from "./slices/BankAccountAlert";
 import CategoriesSlice from "./slices/CategoriesSlice";
@@ -185,7 +185,7 @@ export const store = configureStore({
 		ImportProductHintModal: ImportProductHintModal,
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
-		SuccessMessage: SuccessMessageModalSlice,
+
 		BankAccStatusCommentModal,
 		BankAccountAlert,
 		CategoriesSlice,

@@ -18,9 +18,9 @@ import CircularLoading from "../../../../HelperComponents/CircularLoading";
 import ReactToPrint from "react-to-print";
 
 // Icons
-
-import { FaMountainCity, FaSignsPost, FaArrowRight } from "react-icons/fa6";
+import { BsCartX } from "react-icons/bs";
 import { FaCity } from "react-icons/fa";
+import { FaMountainCity, FaSignsPost, FaArrowRight } from "react-icons/fa6";
 
 import { BsFillInfoSquareFill } from "react-icons/bs";
 
@@ -88,7 +88,6 @@ const ReturnOrderDetails = () => {
 	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [printError, setPrintError] = useState("");
 
 	const [shippingId, setShippingId] = useState(null);
 
@@ -117,7 +116,6 @@ const ReturnOrderDetails = () => {
 		});
 		return unique?.[0]?.region?.name || name;
 	}
-
 	// -----------------------------------------------------
 
 	//  handle update order Status
@@ -169,22 +167,43 @@ const ReturnOrderDetails = () => {
 			console.error("Error changing update acceptOrRejectReturnOrder:", error);
 		}
 	};
+	// -----------------------------------------------------
 
 	// handle refund return order
+	const [refundError, setRefundError] = useState("");
 	const [refundReturnOrder] = useRefundReturnOrderMutation();
 
 	const handleRefundReturnOrder = async () => {
 		setLoadingTitle("جاري رد المبلغ للمستخدم");
-	};
 
+		try {
+			const response = await refundReturnOrder({
+				id,
+			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				navigate("/ReturnOrders");
+				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
+			} else {
+				setLoadingTitle("");
+				setRefundError(response?.data?.message?.ar);
+				// Handle display errors using toast notifications
+				toast.error(response?.data?.message?.ar, { theme: "light" });
+			}
+		} catch (error) {
+			console.error("Error changing update refundReturnOrder:", error);
+		}
+	};
 	// -------------------------------------------------
 
 	// Handle print sticker Function
 	const printSticker = () => {
-		setPrintError("");
-		// this will open the sticker in new tap
 		window.open(currentOrder?.order?.shipping_return?.sticker, "_blank");
-		// this will open the sticker in new tap
 	};
 	// -------------------------------------------------
 
@@ -749,14 +768,38 @@ const ReturnOrderDetails = () => {
 													style={{ fontSize: "18px" }}>
 													طباعة بوليصة الارجاع
 												</span>
-												{printError && (
+											</div>
+											<div className='action-icon'>
+												<Print style={{ cursor: "pointer" }} />
+											</div>
+										</button>
+									)}
+
+								{(currentOrder?.order?.paymenttype?.id === 1 ||
+									currentOrder?.order?.paymenttype?.name === "مدى" ||
+									currentOrder?.order?.paymenttype?.id === 5 ||
+									currentOrder?.order?.paymenttype?.name ===
+										"الدفع الأجل (مدفوع)") &&
+									currentOrder?.status === "تم الاسترجاع" && (
+										<button
+											style={{ cursor: "pointer" }}
+											onClick={() => handleRefundReturnOrder()}
+											className='order-action-box mb-3'>
+											<div className='action-title'>
+												<ListIcon className='list-icon' />
+												<span
+													className='me-2 ms-2'
+													style={{ fontSize: "18px" }}>
+													رد المبلغ للعميل
+												</span>
+												{refundError && (
 													<span className='fs-6 text-danger'>
-														({printError})
+														({refundError})
 													</span>
 												)}
 											</div>
 											<div className='action-icon'>
-												<Print style={{ cursor: "pointer" }} />
+												<BsCartX style={{ cursor: "pointer" }} />
 											</div>
 										</button>
 									)}

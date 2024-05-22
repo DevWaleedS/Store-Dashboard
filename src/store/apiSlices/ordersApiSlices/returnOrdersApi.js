@@ -75,7 +75,7 @@ export const returnOrdersApi = createApi({
 		// Refund return order
 		refundReturnOrder: builder.mutation({
 			query: ({ id }) => {
-				return { url: `refundReturnOrder/${id}`, method: "POST" };
+				return { url: `refundReturnOrder/${id}`, method: "GET" };
 			},
 		}),
 	}),

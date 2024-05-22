@@ -15,14 +15,14 @@ const prepareHeaders = (headers) => {
 export const souqOtlobhaProductsApi = createApi({
 	reducerPath: "souqOtlobhaProductsApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
+		baseUrl: "https://backend.atlbha.com/api/",
 		prepareHeaders,
 	}),
 	tagTypes: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
 	endpoints: (builder) => ({
 		// get store souq otlboha products endpoint..
 		getSouqOtlobhaProducts: builder.query({
-			query: (arg) => `etlobhaShow?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => `Store/etlobhaShow?page=${arg.page}&number=${arg.number}`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data,
@@ -40,7 +40,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get Product by id
 		showSouqOtlobhaProductById: builder.query({
-			query: (id) => `etlobhaProductShow/${id}`,
+			query: (id) => `Store/etlobhaProductShow/${id}`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.products,
@@ -51,7 +51,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// show import Cart
 		showImportCart: builder.query({
-			query: () => `showImportCart`,
+			query: () => `Store/showImportCart`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -61,7 +61,7 @@ export const souqOtlobhaProductsApi = createApi({
 		// filter products by categories
 		filterSouqOtlobhaProductsByCategories: builder.mutation({
 			query: ({ mainCategoryId, subCategoriesSelectedIds, page, number }) => ({
-				url: `etlobhaShow?&number=${number}&category_id=${mainCategoryId}&${subCategoriesSelectedIds}&page=${page}`,
+				url: `Store/etlobhaShow?&number=${number}&category_id=${mainCategoryId}&${subCategoriesSelectedIds}&page=${page}`,
 				method: "GET",
 			}),
 		}),
@@ -70,7 +70,7 @@ export const souqOtlobhaProductsApi = createApi({
 		importProductToStoreProducts: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `addImportCart`,
+					url: `Store/addImportCart`,
 					method: "POST",
 					body: body,
 				};
@@ -83,7 +83,7 @@ export const souqOtlobhaProductsApi = createApi({
 		editProductById: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `product/${id}`,
+					url: `Store/product/${id}`,
 					method: "POST",
 					body: body,
 				};
@@ -94,7 +94,7 @@ export const souqOtlobhaProductsApi = createApi({
 		// delete Item From Cart
 		deleteItemFromCart: builder.mutation({
 			query: ({ id }) => ({
-				url: `deleteImportCart/${id}`,
+				url: `Store/deleteImportCart/${id}`,
 				method: "GET",
 			}),
 			invalidatesTags: ["CartMenuData"],
@@ -104,7 +104,7 @@ export const souqOtlobhaProductsApi = createApi({
 		updateCart: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `product/${id}`,
+					url: `Store/product/${id}`,
 					method: "POST",
 					body: body,
 				};
@@ -116,7 +116,7 @@ export const souqOtlobhaProductsApi = createApi({
 		checkOutCart: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `checkoutImport`,
+					url: `Store/checkoutImport`,
 					method: "POST",
 					body: body,
 				};
@@ -124,11 +124,33 @@ export const souqOtlobhaProductsApi = createApi({
 			invalidatesTags: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
 		}),
 
+		// checkout with madfu payment method
+		loginWithMadfu: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `madfu/login`,
+					method: "POST",
+					body: body,
+				};
+			},
+		}),
+
+		// handle create order with madfu payment method
+		createOrderWithMadfu: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `madfu/create-order`,
+					method: "POST",
+					body: body,
+				};
+			},
+		}),
+
 		// apply Discount Code
 		appLyDiscountCoupon: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `applyCoupon/${id}`,
+					url: `Store/applyCoupon/${id}`,
 					method: "POST",
 					body: body,
 				};
@@ -140,7 +162,7 @@ export const souqOtlobhaProductsApi = createApi({
 		reCalculateCartByShippingId: builder.mutation({
 			query: ({ id }) => {
 				return {
-					url: `shippingCalculation/${id}`,
+					url: `Store/shippingCalculation/${id}`,
 					method: "GET",
 				};
 			},
@@ -155,12 +177,14 @@ export const {
 	useUpdateCartMutation,
 	useCheckOutCartMutation,
 	useShowImportCartQuery,
+	useLoginWithMadfuMutation,
 	useDeleteItemFromCartMutation,
 	useGetSouqOtlobhaProductsQuery,
 	useAppLyDiscountCouponMutation,
+	useCreateOrderWithMadfuMutation,
 	useShowImportProductsCartDataQuery,
-	useReCalculateCartByShippingIdMutation,
 	useShowSouqOtlobhaProductByIdQuery,
+	useReCalculateCartByShippingIdMutation,
 	useImportProductToStoreProductsMutation,
 	useFilterSouqOtlobhaProductsByCategoriesMutation,
 } = souqOtlobhaProductsApi;
