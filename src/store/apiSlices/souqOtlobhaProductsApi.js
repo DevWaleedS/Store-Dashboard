@@ -31,7 +31,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get show Import Cart
 		showImportProductsCartData: builder.query({
-			query: () => `showImportCart`,
+			query: () => `Store/showImportCart`,
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
