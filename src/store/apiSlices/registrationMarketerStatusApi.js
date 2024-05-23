@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const registrationMarketerStatusApi = createApi({
 	reducerPath: "registrationMarketerStatusApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.sa/api/selector/",
+		baseUrl: "https://backend.atlbha.com/api/selector/",
 	}),
 
 	endpoints: (builder) => ({

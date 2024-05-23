@@ -211,7 +211,6 @@ export default function ReturnOrdersTable({
 }) {
 	const navigate = useNavigate();
 
-	console.log(returnOrders);
 	return (
 		<Box sx={{ width: "100%" }}>
 			<EnhancedTableToolbar
@@ -235,7 +234,7 @@ export default function ReturnOrdersTable({
 								</TableRow>
 							) : (
 								<Fragment>
-									{returnOrders?.length === 0 ? (
+									{!returnOrders || returnOrders?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={8}>
 												<p className='text-center'>لاتوجد بيانات</p>

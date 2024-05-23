@@ -201,12 +201,6 @@ const ShippingCompanies = () => {
 						theme: "light",
 					}
 				);
-
-				Object.entries(response?.data?.message?.en)?.forEach(
-					([key, message]) => {
-						toast.error(message[0], { theme: "light" });
-					}
-				);
 			}
 		} catch (error) {
 			console.error("Error changing changeShippingComponyStatus:", error);

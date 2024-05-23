@@ -11,9 +11,6 @@ import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
-//redux
-import { useDispatch } from "react-redux";
-
 // MUI
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -223,7 +220,6 @@ export default function PagesTable({
 	pageCount,
 	currentPage,
 }) {
-	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
 	const contextStore = useContext(Context);
