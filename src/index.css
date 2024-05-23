@@ -871,7 +871,7 @@ textarea {
 }
 
 .date-picker .rs-picker-default .rs-picker-toggle.rs-btn,
-.date-picker .rs-input-group.rs-input-group-inside{
+.date-picker .rs-input-group.rs-input-group-inside {
 	background-color: #eff9ff !important;
 	color: var(--gray-100);
 	border-color: var(--second-200);
@@ -880,28 +880,28 @@ textarea {
 	height: 55px;
 	padding: 0 !important;
 }
-.date-picker .rs-input-group.rs-input-group-inside{
+.date-picker .rs-input-group.rs-input-group-inside {
 	flex-direction: row-reverse;
 }
-.date-picker .rs-input-group.rs-input-group-inside .rs-input{
+.date-picker .rs-input-group.rs-input-group-inside .rs-input {
 	padding-right: 14px !important;
 	background-color: #eff9ff !important;
 }
-.date-picker .rs-input-group.rs-input-group-inside .rs-input-group-addon{
-    align-items: center;
-    background-color: #02466a;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-    width: 90px;
-    fill: #FFF;
-    border-radius: 0px 6px 6px 0px;
+.date-picker .rs-input-group.rs-input-group-inside .rs-input-group-addon {
+	align-items: center;
+	background-color: #02466a;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	width: 90px;
+	fill: #fff;
+	border-radius: 0px 6px 6px 0px;
 }
 .date-picker svg.rs-picker-caret-icon.rs-icon.rs-icon {
-    fill: #FFF !important;
-    width: 20px !important;
-    height: 20px !important;
+	fill: #fff !important;
+	width: 20px !important;
+	height: 20px !important;
 }
 .date-picker .rs-picker-default .rs-picker-toggle.rs-btn .rs-stack {
 	width: 100%;
@@ -5463,7 +5463,7 @@ input:disabled {
 	border-radius: 8px;
 }
 
-.print-billing-btn {
+.order-details-body button.print-billing-btn {
 	color: #eff9ff;
 	font-size: 22px;
 	font-weight: 400;
@@ -5476,6 +5476,7 @@ input:disabled {
 	-ms-border-radius: 6px;
 	-o-border-radius: 6px;
 }
+
 /* ------------------ */
 .order-details-body {
 	width: 90%;
@@ -11434,6 +11435,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	#printableArea .row .order__number .order-number .number {
 		width: 98px;
 		height: 35px;
+		font-size: 16px;
+		border-radius: 6px;
+	}
+
+	.order-details-body button.print-billing-btn {
+		height: 35px;
+		width: max-content;
+		padding: 0 12px;
 		font-size: 16px;
 	}
 

@@ -780,7 +780,8 @@ const ReturnOrderDetails = () => {
 									currentOrder?.order?.paymenttype?.id === 5 ||
 									currentOrder?.order?.paymenttype?.name ===
 										"الدفع الأجل (مدفوع)") &&
-									currentOrder?.status === "تم الاسترجاع" && (
+									currentOrder?.status === "تم الاسترجاع" &&
+									currentOrder.refund_status !== 0 && (
 										<button
 											style={{ cursor: "pointer" }}
 											onClick={() => handleRefundReturnOrder()}
@@ -835,7 +836,7 @@ const ReturnOrderDetails = () => {
 						</div>
 					) : (
 						<div className='row d-flex justify-content-center align-items-center'>
-							<div className='col-6'>
+							<div className='col-md-4 col-12'>
 								<button
 									className='close-btn '
 									disabled={isLoading}

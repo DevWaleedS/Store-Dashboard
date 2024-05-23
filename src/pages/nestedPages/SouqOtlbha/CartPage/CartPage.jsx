@@ -10,10 +10,11 @@ import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // Components
 import OptionsModal from "./OptionsModal";
+import { Breadcrumb } from "../../../../components";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
 // Icons
-import { HomeIcon, Cross10 } from "../../../../data/Icons";
+import { Cross10 } from "../../../../data/Icons";
 
 // RTK Query
 import {
@@ -21,7 +22,6 @@ import {
 	useImportProductToStoreProductsMutation,
 	useShowImportProductsCartDataQuery,
 } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
-import { Breadcrumb } from "../../../../components";
 
 function CartPage() {
 	// Show import products cart data
