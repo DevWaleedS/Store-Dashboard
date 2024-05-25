@@ -16,13 +16,11 @@ import RegisterDelegate from "../RegisterDelegate/RegisterDelegate";
 import { SvgComponent } from "../../../data/Icons";
 
 // RTK Query
-
+import { useStoreTokenQuery } from "../../../store/apiSlices/getStoreTokenApi";
 import { useShowRegistrationMarketerStatusQuery } from "../../../store/apiSlices/registrationMarketerStatusApi";
 
 // Css Styles file
 import "./Main.css";
-
-import { useStoreTokenQuery } from "../../../store/apiSlices/getStoreTokenApi";
 
 // -------------------------------------------------
 const mainTitle = [
