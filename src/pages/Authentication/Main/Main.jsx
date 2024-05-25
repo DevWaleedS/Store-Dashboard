@@ -42,15 +42,17 @@ const imgSubTitle = [
 ];
 
 function Main() {
-	// show  registration marketer status
+	// show registration marketer status
 	const { data: registrationMarketerStatus, isLoading } =
 		useShowRegistrationMarketerStatusQuery();
 	const { data } = useStoreTokenQuery();
-	const storeToken = localStorage.getItem("storeToken");
+	const [storeToken, setStoreToken] = useState(null);
 
 	useEffect(() => {
 		if (data?.token) {
 			localStorage.setItem("storeToken", data?.token);
+			setStoreToken(localStorage.getItem("storeToken"));
+
 			localStorage.setItem(
 				"name",
 				data?.user?.lastname

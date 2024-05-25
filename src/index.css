@@ -4675,6 +4675,21 @@ textarea {
 	-o-border-radius: 8px;
 }
 
+@media (max-width: 768px) {
+	.add-bank-Account .form-footer button,
+	.add-form-wrapper .form-footer button,
+	.order-details-body button {
+		height: 44px;
+		font-size: 18px;
+		font-weight: 400;
+		border-radius: 6px;
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		-ms-border-radius: 6px;
+		-o-border-radius: 6px;
+}
+}
+
 .add-form-wrapper .form-footer button.save-btn,
 .add-bank-Account .form-footer button.save-btn,
 .order-details-body button.save-btn {
@@ -11091,7 +11106,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		top: 70px;
 		right: 0;
 		padding: 0;
-		/* padding-bottom: 80px; */
 		z-index: 99;
 	}
 
@@ -11106,7 +11120,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.main-content {
-		/* margin-top: 70px; */
 		padding: 16px;
 		height: auto;
 	}
@@ -11915,7 +11928,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	/*  change product cateories  */
-
 	.MuiToolbar-root .edit-all-categories-btn {
 		margin: 10px auto;
 		font-size: 16px;
@@ -12444,7 +12456,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.user-cart-data .userData-container .container-body .user-name {
-		/* padding-right: 24px; */
 		text-align: right;
 	}
 
@@ -12565,7 +12576,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	/* seo-page */
-
 	.seo-weight-edit-box .title {
 		padding: 20px 16px;
 	}
@@ -12712,7 +12722,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	/* academy-page */
-
 	.academy-page .btns-group-container button {
 		height: 90px;
 		font-size: 18px;
