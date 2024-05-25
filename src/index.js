@@ -338,12 +338,12 @@ const router = createBrowserRouter([
 			},
 
 			{
-				path: "Products/SouqOtlobha/successCheckout",
+				path: "Products/SouqOtlobha/success",
 				element: <CheckoutStatus />,
 			},
 
 			{
-				path: "Products/SouqOtlobha/failedCheckout",
+				path: "Products/SouqOtlobha/failed",
 				element: <CheckoutStatus />,
 			},
 

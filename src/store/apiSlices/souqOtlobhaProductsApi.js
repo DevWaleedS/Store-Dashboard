@@ -100,6 +100,13 @@ export const souqOtlobhaProductsApi = createApi({
 			invalidatesTags: ["CartMenuData"],
 		}),
 
+		// remove all cart items
+		removeCartItems: builder.mutation({
+			query: () => `Store/showImportCart?delete=1`,
+
+			invalidatesTags: ["CartMenuData"],
+		}),
+
 		// update Cart
 		updateCart: builder.mutation({
 			query: ({ id, body }) => {
@@ -178,6 +185,7 @@ export const {
 	useCheckOutCartMutation,
 	useShowImportCartQuery,
 	useLoginWithMadfuMutation,
+	useRemoveCartItemsMutation,
 	useDeleteItemFromCartMutation,
 	useGetSouqOtlobhaProductsQuery,
 	useAppLyDiscountCouponMutation,

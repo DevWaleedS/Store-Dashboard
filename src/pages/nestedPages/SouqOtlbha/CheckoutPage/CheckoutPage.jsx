@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import RenderAddress from "./RenderAddress";
@@ -14,9 +13,6 @@ import RenderPaymentsList from "./RenderPaymentsList";
 import RenderShippingList from "./RenderShippingList";
 import RenderCheckoutInfo from "./RenderCheckoutInfo";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
-
-// Redux
-import { useDispatch } from "react-redux";
 
 // RTK Query
 import {
@@ -36,12 +32,12 @@ function CheckoutPage() {
 
 	// get default address..
 	const { data: defaultAddress } = useGetDefaultAddressQuery();
+
 	// using it madfu checkout
 	const [merchantReference, setMerchantReference] = useState(null);
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [shippingSelect, setShippingSelect] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
-
 	const [shipping, setShipping] = useState({
 		id: null,
 		district: "",
@@ -101,7 +97,6 @@ function CheckoutPage() {
 			shippingType: "",
 		});
 	};
-
 	// --------------------------------------------------------
 
 	// handle check out cart
@@ -117,10 +112,6 @@ function CheckoutPage() {
 		formData.append("street_address", shipping?.address);
 		formData.append("paymentype_id", paymentSelect || "");
 		formData.append("shippingtype_id", shippingSelect || "");
-		formData.append(
-			"cod",
-			JSON.parse(paymentSelect)?.name === "الدفع عند الاستلام" ? 1 : 0
-		);
 		formData.append("description", shipping?.notes || "");
 		formData.append("default_address", shipping?.defaultAddress ? 1 : 0);
 
@@ -150,16 +141,11 @@ function CheckoutPage() {
 						response?.data?.message?.en === "order send successfully"
 					) {
 						// to handle madfu login
-						if (paymentSelect === 5) {
+						if (+paymentSelect === 5) {
 							handleLoginWithMadu();
+
 							setMerchantReference(response?.data?.data?.order?.order_number);
-						} else {
-							toast.success(response?.data?.message?.ar, { theme: "colored" });
-							window.location.replace(`/Products/SouqOtlobha/successCheckout`);
 						}
-					} else {
-						setBtnLoading(false);
-						toast.error(response?.data?.message?.ar, { theme: "colored" });
 					}
 				} else {
 					setBtnLoading(false);
@@ -202,14 +188,17 @@ function CheckoutPage() {
 	const handleLoginWithMadu = async () => {
 		const formData = new FormData();
 		formData.append("uuid", localStorage.getItem("domain"));
-		formData.append("store_id", localStorage.getItem("storeId"));
+		formData.append("store_id", localStorage.getItem("store_id"));
 		try {
 			const response = await loginWithMadfu({
 				body: formData,
 			});
 
-			if (response?.data?.data?.data?.status) {
-				handleCreateOrderWithMadfu(response.data.data.token);
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				handleCreateOrderWithMadfu(response.data.data.data.token);
 			}
 		} catch (error) {
 			console.error("Error changing checkOutCart:", error);
@@ -250,19 +239,17 @@ function CheckoutPage() {
 		formData.append("guest_order_data", JSON.stringify(guestOrderData));
 		formData.append("order", JSON.stringify(orderInfo));
 		formData.append("order_details", JSON.stringify(orderDetails));
-		formData.append(
-			"url",
-			`https://store.atlbha.com/Products/SouqOtlobha/Checkout`
-		);
+		formData.append("url", `http://store.atlbha.com/Products/SouqOtlobha`);
 
 		try {
 			const response = await createOrderWithMadfu({ body: formData });
-			if (response && response.status === 200) {
-				window.location.href = response.data.checkoutLink;
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				window.location.href = response.data.data.data.checkoutLink;
 			} else {
-				Object.entries(response?.data?.errors)?.forEach(([key, message]) => {
-					toast.error(message[0], { theme: "colored" });
-				});
+				toast.error(response?.message, { theme: "colored" });
 			}
 		} catch (error) {
 			console.log(error);

@@ -4687,7 +4687,7 @@ textarea {
 		-moz-border-radius: 6px;
 		-ms-border-radius: 6px;
 		-o-border-radius: 6px;
-}
+	}
 }
 
 .add-form-wrapper .form-footer button.save-btn,
@@ -7562,7 +7562,8 @@ input:disabled {
 	width: 100%;
 }
 
-.cart-page .cart-table tbody tr td .remove {
+.cart-page .cart-table tbody tr td .remove,
+.render-checkout-info .remove {
 	flex-shrink: 0;
 	margin-top: -6px;
 	margin-left: -6px;
@@ -7577,7 +7578,8 @@ input:disabled {
 	color: #fff;
 }
 
-.cart-page .cart-table tbody tr td .remove:hover {
+.cart-page .cart-table tbody tr td .remove:hover,
+.render-checkout-info .remove:hover {
 	fill: #fff;
 	background-color: var(--second-500);
 	border-color: var(--second-500);

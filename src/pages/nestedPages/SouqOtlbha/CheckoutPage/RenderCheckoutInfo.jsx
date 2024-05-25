@@ -1,11 +1,45 @@
 import React from "react";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
+import { Cross10 } from "../../../../data/Icons";
+import { toast } from "react-toastify";
+import { useRemoveCartItemsMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 
 const RenderCheckoutInfo = ({ cartData, isCartLoading }) => {
+	// handle remove cart items function
+	const [removeCartItems, { isLoading }] = useRemoveCartItemsMutation();
+	const handleRemoveCartItems = async () => {
+		try {
+			await removeCartItems()
+				.unwrap()
+
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						toast.success(data?.message?.ar, {
+							theme: "light",
+						});
+					}
+				});
+		} catch (err) {
+			console.error("Failed to delete the deleteImportCart", err);
+		}
+	};
+
 	return (
 		<>
 			{" "}
-			<h3 className='card-title'>تفاصيل الطلب</h3>
+			<div className='d-flex justify-content-between align-content-center render-checkout-info'>
+				<h3 className='card-title'>تفاصيل الطلب</h3>
+				<button
+					disabled={isLoading}
+					className='remove '
+					onClick={() => handleRemoveCartItems()}>
+					<Cross10 />
+				</button>
+			</div>
 			<table className='checkout-totals'>
 				{isCartLoading ? (
 					<tbody>
@@ -43,6 +77,7 @@ const RenderCheckoutInfo = ({ cartData, isCartLoading }) => {
 											</span>{" "}
 											× <span>{item?.qty}</span>
 										</div>
+
 										<ul className='product-options'>
 											{item?.options?.map((option, index) => (
 												<li key={index}>{`${

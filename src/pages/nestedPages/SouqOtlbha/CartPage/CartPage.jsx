@@ -372,6 +372,7 @@ function CartPage() {
 											<div className='card'>
 												<div className='card-body'>
 													<h3>إجمالي السلة</h3>
+
 													<table>
 														<thead>
 															<tr>
