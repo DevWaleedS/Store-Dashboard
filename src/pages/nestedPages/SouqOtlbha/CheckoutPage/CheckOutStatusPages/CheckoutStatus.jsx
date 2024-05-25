@@ -49,7 +49,7 @@ const CheckoutStatus = () => {
 			<helmet>
 				<title>
 					لوحة تحكم اطلبها |
-					{location.pathname === "/Products/SouqOtlobha/successCheckout"
+					{location.pathname === "/Products/SouqOtlobha/success"
 						? "عملية دفع ناجحة"
 						: "فشل الدفع"}
 				</title>
@@ -60,7 +60,7 @@ const CheckoutStatus = () => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
 					<Box component={"div"} sx={style}>
-						{location.pathname === "/Products/SouqOtlobha/successCheckout" ? (
+						{location.pathname === "/Products/SouqOtlobha/success" ? (
 							<div
 								className='text-center add-product-from-store'
 								style={{ padding: "45px 45px 0 45px" }}>
