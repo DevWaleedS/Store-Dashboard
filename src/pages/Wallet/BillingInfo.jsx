@@ -317,7 +317,7 @@ const BillingInfo = () => {
 										</div>
 										<div className='box'>
 											<div className='order-head-row'>
-												<span className='me-2'>السعر بعد الرسوم</span>
+												<span className='me-2'>السعر بعد خصم الرسوم</span>
 											</div>
 											<div className='order-data-row'>
 												<span>{billing?.price_after_deduction}ر.س</span>
