@@ -11,15 +11,12 @@ import { TopBarSearchInput } from "../../global";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// Context
-import Context from "../../Context/context";
-
 // RTK Query
 import {
-	useChangeOtherShippingCompanyStatusAndAddPriceMutation,
-	useChangeShippingComponyStatusMutation,
 	useGetShippingCompaniesQuery,
+	useChangeShippingComponyStatusMutation,
 	useUpdatePriceForOtherShippingCompanyMutation,
+	useChangeOtherShippingCompanyStatusAndAddPriceMutation,
 } from "../../store/apiSlices/shippingCompaniesApi";
 
 // Icons
@@ -81,9 +78,6 @@ const ShippingCompanies = () => {
 
 	// to get all  data from server
 	const { data: shippingCompanies, isLoading } = useGetShippingCompaniesQuery();
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -190,7 +184,7 @@ const ShippingCompanies = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
+				console.log(response?.data?.message?.ar);
 			} else {
 				// Handle display errors using toast notifications
 				toast.error(
@@ -229,7 +223,7 @@ const ShippingCompanies = () => {
 					response.data?.success === true &&
 					response.data?.data?.status === 200
 				) {
-					setEndActionTitle(response?.data?.message?.ar);
+					console.log(response?.data?.message?.ar);
 				} else {
 					// Handle display errors using toast notifications
 					toast.error(
@@ -283,7 +277,6 @@ const ShippingCompanies = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

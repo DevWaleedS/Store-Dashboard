@@ -30,7 +30,6 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 import { useDispatch, useSelector } from "react-redux";
@@ -291,8 +290,7 @@ export default function BigProductsTable({
 	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
@@ -353,8 +351,6 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -372,8 +368,6 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -397,8 +391,6 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -416,8 +408,6 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -434,8 +424,6 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

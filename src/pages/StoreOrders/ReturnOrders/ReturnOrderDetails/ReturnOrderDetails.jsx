@@ -7,14 +7,13 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../../../Context/context";
 import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // Components
 import { TopBarSearchInput } from "../../../../global";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
-// TO print this page
+// To print this page
 import ReactToPrint from "react-to-print";
 
 // Icons
@@ -84,8 +83,7 @@ const ReturnOrderDetails = () => {
 
 	//get shipping cities data
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -143,7 +141,6 @@ const ReturnOrderDetails = () => {
 			) {
 				navigate("/ReturnOrders");
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -188,7 +185,6 @@ const ReturnOrderDetails = () => {
 			) {
 				navigate("/ReturnOrders");
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 				setRefundError(response?.data?.message?.ar);

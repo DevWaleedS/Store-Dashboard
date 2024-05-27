@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const emptyCartsApi = createApi({
 	reducerPath: "emptyCartsApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["EmptyCarts"],
+
 	endpoints: (builder) => ({
 		// get store EmptyCarts endpoint..
 		getEmptyCarts: builder.query({
-			query: (arg) => `admin?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({ url: `admin?page=${arg.page}&number=${arg.number}` }),
 			providesTags: ["EmptyCarts"],
 		}),
 
@@ -54,7 +46,7 @@ export const emptyCartsApi = createApi({
 
 		// get empty cart by id
 		getEmptyCartById: builder.query({
-			query: (id) => `cartShow/${id}`,
+			query: (id) => ({ url: `cartShow/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -67,7 +59,7 @@ export const emptyCartsApi = createApi({
 				return {
 					url: `sendOfferCart/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["EmptyCarts"],

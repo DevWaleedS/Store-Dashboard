@@ -1,27 +1,17 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../../API/axiosBaseQuery";
 
 export const selectPaymentsTypesApi = createApi({
 	reducerPath: "selectPaymentsTypesApi",
 
-	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
+	// base url
+	baseQuery: axiosBaseQuery({
+		baseUrl: "https://backend.atlbha.com/api/Store/selector",
 	}),
 
 	endpoints: (builder) => ({
 		getPaymentsTypes: builder.query({
-			query: () => "selector/payment_types",
+			query: () => ({ url: "/payment_types" }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.payment_types,

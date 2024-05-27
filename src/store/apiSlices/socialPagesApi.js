@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const socialPagesApi = createApi({
 	reducerPath: "socialPagesApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["SocialMedia"],
+
 	endpoints: (builder) => ({
 		// get store Academy courses endpoint..
 		getSocialMediaData: builder.query({
-			query: () => `socialMedia_store_show`,
+			query: () => ({ url: `socialMedia_store_show` }),
 			providesTags: ["SocialMedia"],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -35,7 +27,7 @@ export const socialPagesApi = createApi({
 				return {
 					url: `socialMedia_store_update`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["SocialMedia"],

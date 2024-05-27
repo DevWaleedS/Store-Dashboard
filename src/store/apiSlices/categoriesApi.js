@@ -1,28 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const categoriesApi = createApi({
 	reducerPath: "categoriesApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
+
 	tagTypes: ["Categories"],
 	endpoints: (builder) => ({
 		// get categories
 		getCategoriesData: builder.query({
-			query: (arg) => `category?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `category?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["Categories"],
 		}),
 
@@ -70,7 +64,7 @@ export const categoriesApi = createApi({
 			}),
 		}),
 
-		// search in  etlbha categories
+		// search in etlbha categories
 		searchInEtlbohaCategories: builder.mutation({
 			query: (arg) => ({
 				url: `searchCategoryEtlobha?query=${arg.query}`,
@@ -86,35 +80,30 @@ export const categoriesApi = createApi({
 			}),
 		}),
 
-		//add new category
+		// add new category
 		addNewCategory: builder.mutation({
-			query: ({ body }) => {
-				return {
-					url: `category`,
-					method: "POST",
-					body: body,
-				};
-			},
+			query: ({ body }) => ({
+				url: `category`,
+				method: "POST",
+				data: body,
+			}),
 			invalidatesTags: ["Categories"],
 		}),
 
 		// get category by id
 		getCategoryById: builder.query({
-			query: (id) => `category/${id}`,
-
-			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data,
+			query: (id) => ({ url: `category/${id}` }),
+			transformResponse: (response) => response.data,
 			providesTags: ["Categories"],
 		}),
+
 		// edit category by id
 		editCategoryById: builder.mutation({
-			query: ({ id, body }) => {
-				return {
-					url: `category/${id}`,
-					method: "POST",
-					body: body,
-				};
-			},
+			query: ({ id, body }) => ({
+				url: `category/${id}`,
+				method: "POST",
+				data: body,
+			}),
 			invalidatesTags: ["Categories"],
 		}),
 	}),

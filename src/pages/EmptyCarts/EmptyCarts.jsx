@@ -18,7 +18,7 @@ import { Breadcrumb } from "../../components";
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 const EmptyCarts = () => {
-	// to Handle if the user is not verify  her account
+	// to Handle if the user is not verify her account
 	UseAccountVerification();
 
 	const [pageTarget, setPageTarget] = useState(1);
@@ -33,10 +33,10 @@ const EmptyCarts = () => {
 
 	/** get data */
 	useEffect(() => {
-		if (emptyCarts?.data?.carts?.length !== 0) {
-			setEmptyCartsData(emptyCarts?.data);
+		if (emptyCarts?.data) {
+			setEmptyCartsData(emptyCarts.data);
 		}
-	}, [emptyCarts?.data?.carts?.length]);
+	}, [emptyCarts?.data]);
 
 	// -------------------------------------------------------------------------
 
@@ -59,13 +59,15 @@ const EmptyCarts = () => {
 
 				fetchData();
 			} else {
-				setEmptyCartsData(emptyCarts?.data);
+				if (emptyCarts?.data) {
+					setEmptyCartsData(emptyCarts.data);
+				}
 			}
 		}, 500);
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
+	}, [search, pageTarget, rowsCount, emptyCarts?.data]);
 
 	return (
 		<>

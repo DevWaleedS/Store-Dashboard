@@ -1,4 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
+
 import AddActivity from "./slices/AddActivity";
 import AddSubActivity from "./slices/AddSubActivity";
 import VideoModalSlice from "./slices/VideoModal-slice";
@@ -34,7 +36,6 @@ import { pagesApi } from "./apiSlices/pagesApi";
 import { AcademyApi } from "./apiSlices/academyApi";
 import { technicalSupportApi } from "./apiSlices/technicalSupportApi";
 import { notificationsApi } from "./apiSlices/notificationsApi";
-import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { selectShippingCitiesApi } from "./apiSlices/selectorsApis/selectShippingCitiesApi";
 import { platformServicesApi } from "./apiSlices/platformServicesApi";
 

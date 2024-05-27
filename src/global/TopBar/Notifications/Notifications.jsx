@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 // MUI
 import Badge from "@mui/material/Badge";
@@ -19,13 +19,7 @@ import {
 	useMarkSingleNotificationAsReadMutation,
 } from "../../../store/apiSlices/notificationsApi";
 
-// Context
-import Context from "../../../Context/context";
-
 const Notifications = () => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	const navigate = useNavigate();
 	const [closeMenu, setCloseMenu] = useState(false);
 	const [countOfNotifications, setCountOfNotifications] = useState(false);
@@ -81,8 +75,6 @@ const Notifications = () => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

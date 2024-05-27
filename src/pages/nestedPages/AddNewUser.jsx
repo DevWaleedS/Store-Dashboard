@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // import Dropzone Library
@@ -87,8 +86,6 @@ const AddNewUser = () => {
 	const navigate = useNavigate();
 	const [reload, setReload] = useState(false);
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const {
@@ -221,7 +218,7 @@ const AddNewUser = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					navigate("/Management");
 					setReload(!reload);
 				} else {

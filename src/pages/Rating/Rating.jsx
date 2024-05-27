@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 // Third Party
 import { toast } from "react-toastify";
@@ -7,9 +7,6 @@ import { Helmet } from "react-helmet";
 // MUI
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-
-// CONTEXT
-import Context from "../../Context/context";
 
 // Components
 import RatingWeight from "./RatingWeight";
@@ -20,8 +17,8 @@ import { TablePagination } from "../../components/Tables/TablePagination";
 
 // RTK Query
 import {
-	useChangeCommentActivationMutation,
 	useGetRatingQuery,
+	useChangeCommentActivationMutation,
 } from "../../store/apiSlices/ratingApi";
 
 // switch style
@@ -70,9 +67,6 @@ const switchStyle = {
 };
 
 const Rating = () => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
@@ -101,8 +95,6 @@ const Rating = () => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

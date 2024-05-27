@@ -8,7 +8,6 @@ import { useDropzone } from "react-dropzone";
 import { Link, useNavigate } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
@@ -60,9 +59,6 @@ const EditUserDetails = () => {
 	const navigate = useNavigate();
 	// get user profile data from api...
 	const { data: userProfileData, isFetching } = useGetUserProfileDataQuery();
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -291,7 +287,6 @@ const EditUserDetails = () => {
 				);
 				localStorage.setItem("userImage", response?.data?.data?.users?.image);
 
-				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/");
 			} else {
 				setLoadingTitle("");

@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { openReplyModal } from "../../store/slices/ReplyModal-slice";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 
 // Third party
@@ -41,8 +40,6 @@ import {
 // IMPORT IMAGES
 const RatingWeight = ({ setCommentDetails, loading, RatingData }) => {
 	const dispatch = useDispatch();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
@@ -80,8 +77,6 @@ const RatingWeight = ({ setCommentDetails, loading, RatingData }) => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -102,8 +97,6 @@ const RatingWeight = ({ setCommentDetails, loading, RatingData }) => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

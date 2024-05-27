@@ -121,8 +121,6 @@ const AddCoupon = () => {
 
 	const navigate = useNavigate();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -265,7 +263,6 @@ const AddCoupon = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/Coupon");
 			} else {
 				setLoadingTitle("");

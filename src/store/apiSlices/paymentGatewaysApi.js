@@ -1,30 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const paymentGatewaysApi = createApi({
 	reducerPath: "paymentGatewaysApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
-	}),
 
+	// base url
+	baseQuery: axiosBaseQuery({
+		baseUrl: "https://backend.atlbha.com/api/Store/",
+	}),
 	tagTypes: ["PaymentGateways"],
 
 	endpoints: (builder) => ({
 		// get Payment Gateways endpoint..
 		getPaymentGateways: builder.query({
-			query: () => `paymenttype`,
+			query: () => ({ url: `paymenttype` }),
 
 			providesTags: (result, error, id) => [{ type: "PaymentGateways", id }],
 

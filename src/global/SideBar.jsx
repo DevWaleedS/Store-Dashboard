@@ -3,22 +3,19 @@ import React, { useContext } from "react";
 // Use Sidebar Pro to create sidebar
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
-// use Nav lINKS
+// Use Nav Link
 import { NavLink, Link } from "react-router-dom";
 
 // Redux
 import { useDispatch } from "react-redux";
 import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
 import { openMaintenanceModeModal } from "../store/slices/MaintenanceModeModal";
+import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
 
 // Context
 import Context from "../Context/context";
 
 // Icons
-import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
-import { BiCartAdd } from "react-icons/bi";
-import { BsCartX } from "react-icons/bs";
-import { IoWallet } from "react-icons/io5";
 import {
 	Academy,
 	BsCart,
@@ -46,8 +43,11 @@ import {
 	Template,
 	Verification,
 } from "../data/Icons";
+import { BsCartX } from "react-icons/bs";
+import { BiCartAdd } from "react-icons/bi";
+import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
-import { openDelegateRequestAlert } from "../store/slices/DelegateRequestAlert-slice";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 const SideBar = ({ open, closeSidebar, verificationStatus }) => {
 	const dispatch = useDispatch(false);

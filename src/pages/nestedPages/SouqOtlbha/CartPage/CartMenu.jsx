@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 // Third party
 import { Link } from "react-router-dom";
@@ -10,13 +10,7 @@ import { Cross10 } from "../../../../data/Icons";
 // RTK Query
 import { useDeleteItemFromCartMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 
-// Context
-import Context from "../../../../Context/context";
-
 function CartMenu({ data }) {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	// delete item from cart function
 	const [deleteImportCart, { isLoading }] = useDeleteItemFromCartMutation();
 	const handleDeleteItemFromCart = async (id) => {
@@ -29,8 +23,6 @@ function CartMenu({ data }) {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

@@ -13,7 +13,6 @@ import { TablePagination } from "../components/Tables/TablePagination";
 import DeleteOneModalComp from "../components/DeleteOneModal/DeleteOneModal";
 
 // Context
-import Context from "../Context/context";
 import { DeleteContext } from "../Context/DeleteProvider";
 import { NotificationContext } from "../Context/NotificationProvider";
 
@@ -46,8 +45,6 @@ const Notifications = () => {
 	const { notificationTitle, setNotificationTitle, setItems, setActionType } =
 		NotificationStore;
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
@@ -98,8 +95,6 @@ const Notifications = () => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -117,8 +112,6 @@ const Notifications = () => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

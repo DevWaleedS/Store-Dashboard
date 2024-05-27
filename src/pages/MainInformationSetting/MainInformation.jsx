@@ -11,7 +11,6 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Redux
@@ -75,8 +74,6 @@ const MainInformation = () => {
 	const { data: cities } = useGetCitiesQuery();
 	const { data: countries } = useGetCountriesQuery();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -259,8 +256,6 @@ const MainInformation = () => {
 					"لم يتم الطلب"
 				) {
 					dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
-				} else {
-					setEndActionTitle(response?.data?.message?.ar);
 				}
 			} else {
 				setLoadingTitle("");

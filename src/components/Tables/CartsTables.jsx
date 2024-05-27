@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
@@ -34,9 +33,6 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 // Import icon
 import { FiSearch } from "react-icons/fi";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
-
-//redux
-import { useDispatch } from "react-redux";
 
 import {
 	useDeleteAllEmptyCartsMutation,
@@ -184,8 +180,6 @@ export default function CartsTables({
 	const navigate = useNavigate();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
@@ -237,8 +231,6 @@ export default function CartsTables({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -256,8 +248,6 @@ export default function CartsTables({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

@@ -10,7 +10,6 @@ import CircularLoading from "../HelperComponents/CircularLoading";
 import TextareaCode from "../components/TextareaCode/TextareaCode";
 
 // Context
-import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // MUI
@@ -44,8 +43,7 @@ const PaintStore = () => {
 
 	// get seo data
 	const { data: Seo, isLoading } = useGetSEODataQuery();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [updateLinkValue, setUpdateLinkValue] = useState("");
@@ -127,7 +125,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

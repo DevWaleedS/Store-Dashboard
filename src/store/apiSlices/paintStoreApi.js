@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const paintStoreApi = createApi({
 	reducerPath: "paintStoreApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["PaintStore"],
+
 	endpoints: (builder) => ({
 		// get store PaintStore endpoint..
 		getPaintStoreTheme: builder.query({
-			query: () => `theme`,
+			query: () => ({ url: `theme` }),
 			providesTags: ["PaintStore"],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -35,7 +27,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themePrimaryUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],
@@ -47,7 +39,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themeSecondaryUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],
@@ -59,7 +51,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themeFontColorUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],
@@ -71,7 +63,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themeHeaderUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],
@@ -83,7 +75,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themeLayoutUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],
@@ -95,7 +87,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themeIconUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],
@@ -107,7 +99,7 @@ export const paintStoreApi = createApi({
 				return {
 					url: `themeFooterUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["PaintStore"],

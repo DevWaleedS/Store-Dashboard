@@ -15,7 +15,6 @@ import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { Button, FormControl, Switch } from "@mui/material";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // RTK Query
@@ -52,8 +51,6 @@ const switchStyle = {
 };
 
 const SliderUploader = ({ sliders, loading }) => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -199,7 +196,6 @@ const SliderUploader = ({ sliders, loading }) => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

@@ -1,34 +1,29 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const AcademyApi = createApi({
 	reducerPath: "AcademyApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
+
 	tagTypes: ["Academy"],
+
 	endpoints: (builder) => ({
 		// get store Academy courses endpoint..
 		getAcademyCourses: builder.query({
-			query: (arg) => `course?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({ url: `course?page=${arg.page}&number=${arg.number}` }),
 			providesTags: ["Academy"],
 		}),
 
 		// get store Academy explain videos endpoint..
 		getAcademyExplainVideos: builder.query({
-			query: (arg) => `explainVideos?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `explainVideos?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["Academy"],
 		}),
 
@@ -50,13 +45,13 @@ export const AcademyApi = createApi({
 
 		// get academy course by id
 		getAcademyCourseById: builder.query({
-			query: ({ courseId }) => `course/${courseId}`,
+			query: ({ courseId }) => ({ url: `course/${courseId}` }),
 			providesTags: ["Academy"],
 		}),
 
 		// get academy explain video by id
 		getAcademyExplainVideoById: builder.query({
-			query: ({ videoId }) => `explainVideos/${videoId}`,
+			query: ({ videoId }) => ({ url: `explainVideos/${videoId}` }),
 			providesTags: ["Academy"],
 		}),
 	}),

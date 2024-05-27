@@ -1,34 +1,29 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const productsApi = createApi({
 	reducerPath: "productsApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["Products"],
 	endpoints: (builder) => ({
 		// get store products endpoint..
 		getStoreProducts: builder.query({
-			query: (arg) => `product?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `product?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["Products"],
 		}),
 
 		// get souq otlbha  products endpoint..
 		getImportedProducts: builder.query({
-			query: (arg) => `importedProducts?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `importedProducts?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["Products"],
 		}),
 
@@ -116,7 +111,7 @@ export const productsApi = createApi({
 				return {
 					url: `import-products`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 
@@ -138,7 +133,7 @@ export const productsApi = createApi({
 				}
 
 				// Return URL, method, and payload
-				return { url, method, body: JSON.stringify(payload) };
+				return { url, method, data: JSON.stringify(payload) };
 			},
 			invalidatesTags: ["Products"],
 		}),
@@ -149,7 +144,7 @@ export const productsApi = createApi({
 				return {
 					url: `product`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 
@@ -158,7 +153,7 @@ export const productsApi = createApi({
 
 		// get Product by id
 		getProductById: builder.query({
-			query: (id) => `product/${id}`,
+			query: (id) => ({ url: `product/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.product,
@@ -170,7 +165,7 @@ export const productsApi = createApi({
 				return {
 					url: `product/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Products"],
@@ -182,7 +177,7 @@ export const productsApi = createApi({
 				return {
 					url: `updateimportproduct/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Products"],

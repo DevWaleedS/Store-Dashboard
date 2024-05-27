@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-// CONTEXT
-import Context from "../Context/context";
 
 // MUI
 import { Switch } from "@mui/material";
@@ -93,9 +90,6 @@ const PaymentGateways = () => {
 	// showSupplier bank account
 	const { data: currentBankAccount } = useGetCurrentBankAccountQuery();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
 	const [allPayments, setAllPayments] = useState([]);
 
@@ -132,7 +126,7 @@ const PaymentGateways = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
+				console.log(response?.data?.message?.ar);
 			} else {
 				// Handle display errors using toast notifications
 				toast.error(
@@ -169,7 +163,7 @@ const PaymentGateways = () => {
 					response.data?.success === true &&
 					response.data?.data?.status === 200
 				) {
-					setEndActionTitle(response?.data?.message?.ar);
+					console.log(response?.data?.message?.ar);
 				} else {
 					// Handle display errors using toast notifications
 					toast.error(
@@ -178,12 +172,6 @@ const PaymentGateways = () => {
 							: response.data.message.en,
 						{
 							theme: "light",
-						}
-					);
-
-					Object.entries(response?.data?.message?.en)?.forEach(
-						([key, message]) => {
-							toast.error(message[0], { theme: "light" });
 						}
 					);
 				}

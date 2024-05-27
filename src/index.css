@@ -11842,13 +11842,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.add-form-wrapper .add-image-btn-box {
-		height: 100px;
+		height: 140px;
 		margin-bottom: 10px;
 	}
 
 	.add-form-wrapper .add-image-btn-box svg {
 		width: 22px;
-		height: 16px;
+		height: 22px;
 	}
 
 	.add-form-wrapper .add-image-btn-box label {

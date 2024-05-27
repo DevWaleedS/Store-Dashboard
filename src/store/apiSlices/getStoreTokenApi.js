@@ -1,24 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	headers.set("Accept", `application/json`);
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const getStoreTokenApi = createApi({
 	reducerPath: "getStoreTokenApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/",
-		prepareHeaders,
 	}),
 
 	endpoints: (builder) => ({
 		// get store token endpoint..
 		storeToken: builder.query({
-			query: () => `store_token`,
+			query: () => ({ url: `store_token` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response,

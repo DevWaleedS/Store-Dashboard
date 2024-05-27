@@ -17,7 +17,6 @@ import { useDispatch } from "react-redux";
 import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // MUI
@@ -79,8 +78,6 @@ const CreateOffer = () => {
 	const dispatch = useDispatch(false);
 	const [reload, setReload] = useState(false);
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const {
@@ -359,7 +356,6 @@ const CreateOffer = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Offers");
 					setReload(!reload);
 				} else {

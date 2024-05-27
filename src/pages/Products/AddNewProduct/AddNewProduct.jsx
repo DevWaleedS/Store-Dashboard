@@ -117,13 +117,8 @@ const AddNewProduct = () => {
 	const navigate = useNavigate();
 
 	const contextStore = useContext(Context);
-	const {
-		setEndActionTitle,
-		productHasOptions,
-		attributes,
-		optionsSection,
-		clearOptions,
-	} = contextStore;
+	const { productHasOptions, attributes, optionsSection, clearOptions } =
+		contextStore;
 	const LoadingStore = useContext(LoadingContext);
 
 	const { setLoadingTitle } = LoadingStore;
@@ -452,7 +447,6 @@ const AddNewProduct = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/Products");
 
 				setEditorValue("");

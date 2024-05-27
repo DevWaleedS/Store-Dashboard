@@ -1,28 +1,21 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const souqOtlobhaProductsApi = createApi({
 	reducerPath: "souqOtlobhaProductsApi",
-	baseQuery: fetchBaseQuery({
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/",
-		prepareHeaders,
 	}),
 	tagTypes: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
+
 	endpoints: (builder) => ({
 		// get store souq otlboha products endpoint..
 		getSouqOtlobhaProducts: builder.query({
-			query: (arg) => `Store/etlobhaShow?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `Store/etlobhaShow?page=${arg.page}&number=${arg.number}`,
+			}),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data,
@@ -31,7 +24,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get show Import Cart
 		showImportProductsCartData: builder.query({
-			query: () => `Store/showImportCart`,
+			query: () => ({ url: `Store/showImportCart` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -40,7 +33,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get Product by id
 		showSouqOtlobhaProductById: builder.query({
-			query: (id) => `Store/etlobhaProductShow/${id}`,
+			query: (id) => ({ url: `Store/etlobhaProductShow/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.products,
@@ -51,7 +44,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// show import Cart
 		showImportCart: builder.query({
-			query: () => `Store/showImportCart`,
+			query: () => ({ url: `Store/showImportCart` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -72,7 +65,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `Store/addImportCart`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 
@@ -85,7 +78,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `Store/product/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Products"],
@@ -102,7 +95,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// remove all cart items
 		removeCartItems: builder.mutation({
-			query: () => `Store/showImportCart?delete=1`,
+			query: () => ({ url: `Store/showImportCart?delete=1` }),
 
 			invalidatesTags: ["CartMenuData"],
 		}),
@@ -113,7 +106,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `Store/product/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Products"],
@@ -125,7 +118,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `Store/checkoutImport`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
@@ -137,7 +130,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `madfu/login`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 		}),
@@ -148,7 +141,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `madfu/create-order`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 		}),
@@ -159,7 +152,7 @@ export const souqOtlobhaProductsApi = createApi({
 				return {
 					url: `Store/applyCoupon/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["CheckOutPage"],

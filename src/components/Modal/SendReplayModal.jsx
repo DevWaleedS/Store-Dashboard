@@ -62,8 +62,6 @@ const contentStyles = {
 };
 
 const SendReplayModal = ({ commentDetails }) => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const { isOpenReplyModal } = useSelector((state) => state.ReplyModal);
 	const dispatch = useDispatch(false);
 
@@ -98,7 +96,6 @@ const SendReplayModal = ({ commentDetails }) => {
 				response?.data?.success === true &&
 				response?.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
 				dispatch(closeReplyModal());
 
 				resetsMessage();

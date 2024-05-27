@@ -15,7 +15,6 @@ import { MdFileUpload } from "react-icons/md";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // RTK Query
@@ -51,8 +50,6 @@ const switchStyle = {
 	},
 };
 const BannerUploader = ({ Banners, loading }) => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -192,7 +189,6 @@ const BannerUploader = ({ Banners, loading }) => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

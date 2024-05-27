@@ -5,7 +5,6 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
@@ -31,8 +30,7 @@ const EvaluationThePlatform = () => {
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	// -----------------------------------------------------------
 
 	// To get the editor content
@@ -66,7 +64,6 @@ const EvaluationThePlatform = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 
 				setEditorValue("");
 			} else {

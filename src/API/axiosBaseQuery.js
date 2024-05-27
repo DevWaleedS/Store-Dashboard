@@ -1,14 +1,20 @@
-import axios from "./axios-global";
+import axios from "axios";
 
 const axiosBaseQuery =
 	({ baseUrl } = { baseUrl: "" }) =>
-	async ({ url, method, data, params }) => {
+	async ({ url, method, data, params, headers = {} }) => {
+		const storeToken = localStorage.getItem("storeToken");
+
 		try {
 			const result = await axios({
 				url: baseUrl + url,
 				method,
 				data,
 				params,
+				headers: {
+					...headers,
+					Authorization: `Bearer ${storeToken}`,
+				},
 			});
 			return { data: result.data };
 		} catch (axiosError) {

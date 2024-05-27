@@ -62,7 +62,6 @@ const AddCategory = () => {
 	const contextStore = useContext(Context);
 
 	const { subCategories, setSubCategories } = contextStore;
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -114,9 +113,9 @@ const AddCategory = () => {
 		});
 	};
 
-	// handle add new Category
-	const [addNewCategory] = useAddNewCategoryMutation();
+	// Handle profile data
 
+	const [addNewCategory] = useAddNewCategoryMutation();
 	const handleCreateNewCategory = async (data) => {
 		setLoadingTitle("جاري حفظ النشاط");
 		resetCategoryError();
@@ -142,7 +141,6 @@ const AddCategory = () => {
 				setLoadingTitle("");
 				navigate("/Category");
 				setSubCategories([]);
-				setEndActionTitle(response.data.message.ar);
 			} else {
 				setLoadingTitle("");
 

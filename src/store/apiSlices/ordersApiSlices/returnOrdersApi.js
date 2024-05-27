@@ -1,33 +1,23 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	// Set Content-Type header for JSON requests
-	headers.set("Content-Type", "application/json");
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../../API/axiosBaseQuery";
 
 // Create API slice
 export const returnOrdersApi = createApi({
 	reducerPath: "returnOrdersApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
+
 	tagTypes: ["ReturnOrders"],
 
 	endpoints: (builder) => ({
 		// get return OrderIndex endpoint..
 		getReturnOrders: builder.query({
-			query: (arg) => `returnOrderIndex?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `returnOrderIndex?page=${arg.page}&number=${arg.number}`,
+			}),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data,
@@ -52,7 +42,7 @@ export const returnOrdersApi = createApi({
 
 		// get order by id
 		getReturnOrderById: builder.query({
-			query: (id) => `returnOrder/${id}`,
+			query: (id) => ({ url: `returnOrder/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.ReturnOrder,
@@ -65,7 +55,7 @@ export const returnOrdersApi = createApi({
 				return {
 					url: `returnOrder/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 

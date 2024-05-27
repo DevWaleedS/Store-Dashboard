@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const pagesApi = createApi({
 	reducerPath: "pagesApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["Pages"],
+
 	endpoints: (builder) => ({
 		// get store Pages endpoint..
 		getPages: builder.query({
-			query: (arg) => `page?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({ url: `page?page=${arg.page}&number=${arg.number}` }),
 			providesTags: ["Pages"],
 		}),
 
@@ -88,7 +80,7 @@ export const pagesApi = createApi({
 				return {
 					url: `page-publish`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Pages"],
@@ -96,7 +88,7 @@ export const pagesApi = createApi({
 
 		// get Page by id
 		getPageById: builder.query({
-			query: (id) => `page/${id}`,
+			query: (id) => ({ url: `page/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.pages,
@@ -110,7 +102,7 @@ export const pagesApi = createApi({
 				return {
 					url: `page/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Pages"],

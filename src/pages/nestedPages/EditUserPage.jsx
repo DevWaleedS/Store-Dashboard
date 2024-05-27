@@ -9,7 +9,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
@@ -84,8 +83,7 @@ const EditUserPage = () => {
 
 	const { fetchedData, loading, reload, setReload } = useFetch(`user/${id}`);
 	const { fetchedData: roles } = useFetch("selector/roles");
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const navigate = useNavigate();
@@ -264,7 +262,7 @@ const EditUserPage = () => {
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					navigate("/Management");
 					setReload(!reload);
 				} else {

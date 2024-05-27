@@ -10,7 +10,6 @@ import { TopBarSearchInput } from "../global";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // Context
-import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // MUI
@@ -63,8 +62,7 @@ const selectStyle = {
 const PlatformServices = () => {
 	// to Handle if the user is not verify  her account
 	UseAccountVerification();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	// ------------------------------------------------------------
@@ -125,7 +123,6 @@ const PlatformServices = () => {
 			) {
 				setLoadingTitle("");
 
-				setEndActionTitle(response?.data?.message?.ar);
 				setData({ ...data, services: [], name: "", description: "" });
 			} else {
 				setLoadingTitle("");

@@ -1,9 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { CiDiscount1 } from "react-icons/ci";
 import { useAppLyDiscountCouponMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 import { toast } from "react-toastify";
-import Context from "../../../../Context/context";
 
 const RenderCouponInput = ({
 	setShowCoupon,
@@ -17,9 +16,6 @@ const RenderCouponInput = ({
 	couponError,
 	loadingCoupon,
 }) => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	// handle apply code
 	const [appLyDiscountCoupon, { isApplyDiscountLoading }] =
 		useAppLyDiscountCouponMutation();
@@ -56,8 +52,6 @@ const RenderCouponInput = ({
 							theme: "light",
 						}
 					);
-				} else {
-					setEndActionTitle(response?.data?.message?.ar);
 				}
 
 				setLoadingCoupon(false);
@@ -78,6 +72,7 @@ const RenderCouponInput = ({
 			console.error("Error changing appLyDiscountCoupon:", error);
 		}
 	};
+
 	return (
 		<div className='apply-coupon'>
 			<div

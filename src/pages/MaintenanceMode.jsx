@@ -1,7 +1,8 @@
+// React and React DOM
 import React, { useContext, useState, useEffect, Fragment } from "react";
-
-// Third party
 import ReactDom from "react-dom";
+
+// Third-party libraries
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
@@ -20,7 +21,6 @@ import { Button, Switch } from "@mui/material";
 
 // Icons
 import { RiText } from "react-icons/ri";
-import { TextIcon } from "../data/Icons";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 // Component
@@ -32,7 +32,7 @@ import {
 	useUpdateMaintenanceModeMutation,
 } from "../store/apiSlices/maintenanceModeApi";
 
-// style content
+// Styles
 const style = {
 	position: "fixed",
 	top: "50%",
@@ -44,7 +44,6 @@ const style = {
 	backgroundColor: "#fff",
 	boxShadow: 24,
 	p: 0,
-
 	"@media(max-width:768px)": {
 		top: "50%",
 	},
@@ -67,13 +66,11 @@ const switchStyle = {
 		transform: "translate(8px,6px)",
 		color: "#fff",
 	},
-
 	"&:hover": {
 		"& .MuiSwitch-thumb": {
 			boxShadow: "none",
 		},
 	},
-
 	"& .MuiSwitch-switchBase": {
 		padding: 1,
 		"&.Mui-checked": {
@@ -88,15 +85,12 @@ const switchStyle = {
 };
 
 const MaintenanceModeModal = () => {
-	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
-	const { setNavbarZindex } = Z_index;
 
-	// get data from api
+	const { setNavbarZindex } = Z_index;
 	const { data: maintenancesMode, isLoading } =
 		useGetMaintenanceModeDataQuery();
 
-	// create video modal function
 	const { isOpenMaintenanceModeModal } = useSelector(
 		(state) => state.MaintenanceModeModal
 	);
@@ -106,8 +100,6 @@ const MaintenanceModeModal = () => {
 		title: "",
 		message: "",
 	});
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const dispatch = useDispatch(false);
@@ -118,25 +110,14 @@ const MaintenanceModeModal = () => {
 		formState: { errors },
 	} = useForm({
 		mode: "onBlur",
-		defaultValues: {
-			title: "",
-			message: "",
-		},
+		defaultValues: { title: "", message: "" },
 	});
+	const [dataError, setDataError] = useState({ title: "", message: "" });
 
-	// to handle errors
-	const [dataError, setDataError] = useState({
-		title: "",
-		message: "",
-	});
 	const resetDataError = () => {
-		setDataError({
-			title: "",
-			message: "",
-		});
+		setDataError({ title: "", message: "" });
 	};
 
-	// to set all data info from api
 	useEffect(() => {
 		if (maintenancesMode) {
 			setMaintenanceModeValue({
@@ -153,15 +134,11 @@ const MaintenanceModeModal = () => {
 		reset(maintenanceModeValue);
 	}, [maintenanceModeValue, reset]);
 
-	/** --------------------------------------------------------- */
-
-	//  update maintenance mode values
 	const [UpdateMaintenanceMode] = useUpdateMaintenanceModeMutation();
+
 	const handleUpdateMaintenanceMode = async (data) => {
 		setLoadingTitle("جاري تعديل وضع الصيانة");
 		resetDataError();
-
-		// data that send to api...
 		let formData = new FormData();
 		formData.append("title", data?.title);
 		formData.append("message", data?.message);
@@ -170,22 +147,15 @@ const MaintenanceModeModal = () => {
 			maintenanceStatus === true ? "active" : "not_active"
 		);
 
-		// make request...
 		try {
-			const response = await UpdateMaintenanceMode({
-				body: formData,
-			});
-
-			// Handle response
+			const response = await UpdateMaintenanceMode({ body: formData });
 			if (
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
-				dispatch(closeMaintenanceModeModal());
-
 				setNavbarZindex(false);
+				dispatch(closeMaintenanceModeModal());
 			} else {
 				setLoadingTitle("");
 				setNavbarZindex(false);
@@ -194,17 +164,12 @@ const MaintenanceModeModal = () => {
 					title: response?.data?.message?.en?.title?.[0],
 					message: response?.data?.message?.en?.message?.[0],
 				});
-
-				// Handle display errors using toast notifications
 				toast.error(
 					response?.data?.message?.ar
 						? response.data.message.ar
 						: response.data.message.en,
-					{
-						theme: "light",
-					}
+					{ theme: "light" }
 				);
-
 				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });
@@ -218,7 +183,6 @@ const MaintenanceModeModal = () => {
 
 	return (
 		<section className='maintenance-page p-3'>
-			{/** Modal  */}
 			<div className='row'>
 				<div className='modal maintenance-modal'>
 					<Modal
@@ -273,7 +237,7 @@ const MaintenanceModeModal = () => {
 												</div>
 												<div className='col-12 mb-3'>
 													<div className='modal-input-group'>
-														<label htmlFor=' maintenance-title-input'>
+														<label htmlFor='maintenance-title-input'>
 															عنوان وضع الصيانة
 														</label>
 														<div className='modal-input-icon'>
@@ -309,10 +273,9 @@ const MaintenanceModeModal = () => {
 														</label>
 														<div className='modal-input-icon'>
 															<span>
-																<TextIcon />
+																<RiText />
 															</span>
 														</div>
-
 														<textarea
 															name='message'
 															id='maintenance-message'

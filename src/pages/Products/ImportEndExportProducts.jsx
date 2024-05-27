@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 
 // context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // component
@@ -23,8 +22,7 @@ const ImportEndExportProducts = ({ productsData }) => {
 	const navigate = useNavigate();
 	const [file, setFile] = useState("");
 	const [fileError, setFileError] = useState("");
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -82,7 +80,6 @@ const ImportEndExportProducts = ({ productsData }) => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
 				setLoadingTitle("");
 				setFile("");
 			} else {

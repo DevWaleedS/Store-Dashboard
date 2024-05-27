@@ -17,12 +17,15 @@ const AxiosInterceptors = ({ children }) => {
 		const responseInterceptors = axios.interceptors.response.use(
 			(response) => {
 				// Handle successful responses globally
+
 				if (
 					response.status === 200 &&
+					response?.data?.success &&
 					["delete", "patch", "post", "put"].includes(response.config.method)
 				) {
 					setEndActionTitle(response.data.message?.ar);
 				}
+
 				return response;
 			},
 			(error) => {

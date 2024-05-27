@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("storeToken");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const shippingCompaniesApi = createApi({
 	reducerPath: "shippingCompaniesApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["ShippingCompanies"],
+
 	endpoints: (builder) => ({
 		// get Shipping Companies endpoint..
 		getShippingCompanies: builder.query({
-			query: () => `shippingtype`,
+			query: () => ({ url: `shippingtype` }),
 			providesTags: (result, error, id) => [{ type: "ShippingCompanies", id }],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -61,7 +53,7 @@ export const shippingCompaniesApi = createApi({
 				return {
 					url: `updatePrice/${otherShipCompanyId}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["ShippingCompanies"],
