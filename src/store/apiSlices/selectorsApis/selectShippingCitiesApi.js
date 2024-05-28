@@ -7,7 +7,7 @@ export const selectShippingCitiesApi = createApi({
 
 	// base url
 	baseQuery: axiosBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/selector",
+		baseUrl: "https://backend.atlbha.com/api/selector/",
 	}),
 
 	endpoints: (builder) => ({
