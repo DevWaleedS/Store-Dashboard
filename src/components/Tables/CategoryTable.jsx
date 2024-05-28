@@ -243,6 +243,8 @@ export default function EnhancedTable({
 	const { notificationTitle } = NotificationStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setItemId, setActionDelete, actionDelete } = DeleteStore;
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	//------------------------------------------------------------------------
 
@@ -300,6 +302,8 @@ export default function EnhancedTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -317,6 +321,8 @@ export default function EnhancedTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -339,6 +345,8 @@ export default function EnhancedTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -356,6 +364,8 @@ export default function EnhancedTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

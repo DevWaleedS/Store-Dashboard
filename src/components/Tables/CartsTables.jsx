@@ -38,6 +38,7 @@ import {
 	useDeleteAllEmptyCartsMutation,
 	useDeleteEmptyCartsMutation,
 } from "../../store/apiSlices/emptyCartsApi";
+import Context from "../../Context/context";
 
 function EnhancedTableHead(props) {
 	return (
@@ -182,6 +183,8 @@ export default function CartsTables({
 	const { notificationTitle } = NotificationStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	// _____________________________________________________________________ //
 	const [selected, setSelected] = useState([]);
@@ -231,6 +234,8 @@ export default function CartsTables({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -248,6 +253,8 @@ export default function CartsTables({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

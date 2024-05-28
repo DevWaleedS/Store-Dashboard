@@ -42,6 +42,7 @@ import {
 } from "../../store/apiSlices/productsApi";
 import { ChangeCategoriesForSomeSelectedProducts } from "../../pages/Products";
 import { openModal } from "../../store/slices/ChangeCategoriesForSomeSelectedProducts";
+import Context from "../../Context/context";
 
 const switchStyle = {
 	width: "50px",
@@ -290,7 +291,8 @@ export default function BigProductsTable({
 	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
@@ -351,6 +353,8 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -368,6 +372,8 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -391,6 +397,8 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -408,6 +416,8 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -424,6 +434,8 @@ export default function BigProductsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

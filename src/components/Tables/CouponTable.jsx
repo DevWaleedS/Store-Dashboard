@@ -41,6 +41,7 @@ import {
 	useDeleteAllCouponsMutation,
 	useDeleteCouponMutation,
 } from "../../store/apiSlices/couponApi";
+import Context from "../../Context/context";
 
 const switchStyle = {
 	width: "50px",
@@ -255,6 +256,9 @@ export default function CouponTable({
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
+
 	/** --------------------------------------------------- */
 	// select all items
 	const [selected, setSelected] = useState([]);
@@ -302,6 +306,8 @@ export default function CouponTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -319,6 +325,8 @@ export default function CouponTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -341,6 +349,8 @@ export default function CouponTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {

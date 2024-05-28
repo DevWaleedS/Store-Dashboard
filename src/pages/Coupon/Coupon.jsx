@@ -107,10 +107,10 @@ const Coupon = () => {
 
 	/** get contact data */
 	useEffect(() => {
-		if (coupons?.data?.coupons?.length !== 0) {
+		if (coupons?.data) {
 			setCouponsData(coupons?.data);
 		}
-	}, [coupons?.data?.coupons?.length]);
+	}, [coupons?.data]);
 	// -----------------------------------------------------------
 
 	// handle search in Coupons
@@ -161,7 +161,7 @@ const Coupon = () => {
 		} else {
 			setCouponsData(coupons?.data);
 		}
-	}, [select, filterCouponsByStatus]);
+	}, [select, filterCouponsByStatus, coupons?.data]);
 
 	// -------------------------------------------------------------------------------
 

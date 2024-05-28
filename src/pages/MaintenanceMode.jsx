@@ -16,7 +16,6 @@ import { closeMaintenanceModeModal } from "../store/slices/MaintenanceModeModal"
 
 // MUI
 import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
 import { Button, Switch } from "@mui/material";
 
 // Icons
@@ -192,120 +191,113 @@ const MaintenanceModeModal = () => {
 						onClose={() => {
 							setNavbarZindex(false);
 							dispatch(closeMaintenanceModeModal());
-						}}
-						closeAfterTransition>
-						<Fade in={isOpenMaintenanceModeModal}>
-							{isLoading ? (
-								<CircularLoading />
-							) : (
-								<div style={style}>
-									<form onSubmit={handleSubmit(handleUpdateMaintenanceMode)}>
-										<div className='maintenance-modal-header d-flex justify-content-between align-items-center'>
-											<span> وضع الصيانة</span>
-											<AiOutlineCloseCircle
-												onClick={() => {
-													setNavbarZindex(false);
-													dispatch(closeMaintenanceModeModal());
+						}}>
+						<div style={style}>
+							<form onSubmit={handleSubmit(handleUpdateMaintenanceMode)}>
+								<div className='maintenance-modal-header d-flex justify-content-between align-items-center'>
+									<span> وضع الصيانة</span>
+									<AiOutlineCloseCircle
+										onClick={() => {
+											setNavbarZindex(false);
+											dispatch(closeMaintenanceModeModal());
+										}}
+									/>
+								</div>
+								<div className='maintenance-modal-body'>
+									<div className='row mx-0 mb-4'>
+										<div className='modal-body-header d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
+											<div>
+												<h5 className='mb-2'>وضع الصيانة</h5>
+												<p className='modal-desc'>
+													عند تفعيل وضع الصيانة ستتمكن لوحدك من الدخول للمتجر
+													،والعمل على تجهيزه، ستظهر للعملاء صفحة الصيانة للاطلاع
+													عليها قم بالدخول إلى متجرك من متصفح آخر أو بتسجيل
+													الخروج من لوحة التحكم
+												</p>
+											</div>
+										</div>
+									</div>
+									<div className='row maintenance-modal-form mx-0'>
+										<div className='col-12 mb-3'>
+											<Switch
+												name='status'
+												onChange={(e) => {
+													setMaintenanceStatus(e.target.checked);
 												}}
+												checked={maintenanceStatus}
+												className='d-flex mx-auto'
+												sx={switchStyle}
 											/>
 										</div>
-										<div className='maintenance-modal-body'>
-											<div className='row mx-0 mb-4'>
-												<div className='modal-body-header d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
-													<div>
-														<h5 className='mb-2'>وضع الصيانة</h5>
-														<p className='modal-desc'>
-															عند تفعيل وضع الصيانة ستتمكن لوحدك من الدخول
-															للمتجر ،والعمل على تجهيزه، ستظهر للعملاء صفحة
-															الصيانة للاطلاع عليها قم بالدخول إلى متجرك من
-															متصفح آخر أو بتسجيل الخروج من لوحة التحكم
-														</p>
-													</div>
+										<div className='col-12 mb-3'>
+											<div className='modal-input-group'>
+												<label htmlFor='maintenance-title-input'>
+													عنوان وضع الصيانة
+												</label>
+												<div className='modal-input-icon'>
+													<span>
+														<RiText />
+													</span>
 												</div>
-											</div>
-											<div className='row maintenance-modal-form mx-0'>
-												<div className='col-12 mb-3'>
-													<Switch
-														name='status'
-														onChange={(e) => {
-															setMaintenanceStatus(e.target.checked);
-														}}
-														checked={maintenanceStatus}
-														className='d-flex mx-auto'
-														sx={switchStyle}
-													/>
-												</div>
-												<div className='col-12 mb-3'>
-													<div className='modal-input-group'>
-														<label htmlFor='maintenance-title-input'>
-															عنوان وضع الصيانة
-														</label>
-														<div className='modal-input-icon'>
-															<span>
-																<RiText />
-															</span>
-														</div>
-														<input
-															name='title'
-															type='text'
-															id='maintenance-title-input'
-															placeholder='المتجر مغلق مؤقتاََ للصيانة'
-															{...register("title", {
-																required: "حقل العنوان مطلوب",
-																pattern: {
-																	value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																	message:
-																		" العنوان يجب أن يكون نصاً ولا يحتوي على حروف خاصه مثل الأقوس والرموز",
-																},
-															})}
-														/>
-														<br />
-														<span className='fs-6 text-danger'>
-															{dataError?.title}
-															{errors?.title && errors.title.message}
-														</span>
-													</div>
-												</div>
-												<div className='col-12'>
-													<div className='modal-input-group'>
-														<label htmlFor='maintenance-message'>
-															الرسالة النصية للعملاء
-														</label>
-														<div className='modal-input-icon'>
-															<span>
-																<RiText />
-															</span>
-														</div>
-														<textarea
-															name='message'
-															id='maintenance-message'
-															placeholder='نص الرسالة التي ستظهر للعملاء'
-															{...register("message", {
-																required: "حقل الرسالة مطلوب",
-															})}
-														/>
-														<br />
-														<span className='fs-6 text-danger'>
-															{dataError?.message}
-															{errors?.message && errors.message.message}
-														</span>
-													</div>
-												</div>
+												<input
+													name='title'
+													type='text'
+													id='maintenance-title-input'
+													placeholder='المتجر مغلق مؤقتاََ للصيانة'
+													{...register("title", {
+														required: "حقل العنوان مطلوب",
+														pattern: {
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+															message:
+																" العنوان يجب أن يكون نصاً ولا يحتوي على حروف خاصه مثل الأقوس والرموز",
+														},
+													})}
+												/>
+												<br />
+												<span className='fs-6 text-danger'>
+													{dataError?.title}
+													{errors?.title && errors.title.message}
+												</span>
 											</div>
 										</div>
-										<div className='maintenance-modal-footer'>
-											<div className='col-12'>
-												<div className='modal-input-button d-flex justify-content-center'>
-													<Button className='next-btn' type='submit'>
-														حفظ
-													</Button>
+										<div className='col-12'>
+											<div className='modal-input-group'>
+												<label htmlFor='maintenance-message'>
+													الرسالة النصية للعملاء
+												</label>
+												<div className='modal-input-icon'>
+													<span>
+														<RiText />
+													</span>
 												</div>
+												<textarea
+													name='message'
+													id='maintenance-message'
+													placeholder='نص الرسالة التي ستظهر للعملاء'
+													{...register("message", {
+														required: "حقل الرسالة مطلوب",
+													})}
+												/>
+												<br />
+												<span className='fs-6 text-danger'>
+													{dataError?.message}
+													{errors?.message && errors.message.message}
+												</span>
 											</div>
 										</div>
-									</form>
+									</div>
 								</div>
-							)}
-						</Fade>
+								<div className='maintenance-modal-footer'>
+									<div className='col-12'>
+										<div className='modal-input-button d-flex justify-content-center'>
+											<Button className='next-btn' type='submit'>
+												حفظ
+											</Button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
 					</Modal>
 				</div>
 			</div>

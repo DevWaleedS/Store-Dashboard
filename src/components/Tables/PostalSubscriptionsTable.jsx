@@ -36,6 +36,7 @@ import {
 	useDeleteAllPostalSubscriptionsMutation,
 	useDeletePostalSubscriptionsMutation,
 } from "../../store/apiSlices/postalSubscriptionsApi";
+import Context from "../../Context/context";
 
 function EnhancedTableHead(props) {
 	return (
@@ -151,7 +152,8 @@ export default function PostalSubscriptionsTable({
 }) {
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
@@ -203,6 +205,8 @@ export default function PostalSubscriptionsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -220,6 +224,8 @@ export default function PostalSubscriptionsTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
