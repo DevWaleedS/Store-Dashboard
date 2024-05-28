@@ -20,7 +20,7 @@ import { PrintIcon, WalletIcon } from "../../data/Icons";
 // Components
 import SalesReports from "./SalesReports";
 import { Breadcrumb } from "../../components";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import { useGetReportsByDateQuery } from "../../store/apiSlices/reportsApi";
 
 const Reports = () => {

@@ -22,7 +22,6 @@ import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
-import SideBar from "../global/SideBar";
 
 // App Modal
 import MaintenanceMode from "./MaintenanceMode";
@@ -39,6 +38,7 @@ import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 // Using AXiso Global To wrapping the dashboard
 import AxiosInterceptors from "../API/AxiosInterceptors";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+import SideBar from "../global/Sidebar/SideBar";
 
 const RootLayout = () => {
 	// Handle show Verification  data

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 // Components
 import { Breadcrumb } from "../../components";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 

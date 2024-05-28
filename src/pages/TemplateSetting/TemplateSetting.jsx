@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 // Components
 import { Breadcrumb } from "../../components";
 import TemplateUpdate from "./TemplateUpdate";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 
 const TemplateSetting = () => {
 	return (

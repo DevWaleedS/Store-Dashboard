@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 // Components
 import { OrdersQuickDetails } from "./index";
 import { Breadcrumb } from "../../../components";
-import { TopBarSearchInput } from "../../../global";
+import { TopBarSearchInput } from "../../../global/TopBar";
 import { BigOrdersTable } from "../../../components/Tables";
 
 // RTK Query

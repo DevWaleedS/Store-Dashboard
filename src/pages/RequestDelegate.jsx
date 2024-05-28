@@ -12,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import { IoIosArrowDown } from "react-icons/io";
 
 // Components
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 import { DelegateTable } from "../components/Tables";
 
 // RTK Query

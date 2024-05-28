@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 
 // Third Party
 import { Helmet } from "react-helmet";

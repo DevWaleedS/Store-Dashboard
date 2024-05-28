@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 // Components
-import { TopBarSearchInput } from "../../../global";
+import { TopBarSearchInput } from "../../../global/TopBar";
 import { ReturnOrdersTable } from "../../../components/Tables";
 
 import {

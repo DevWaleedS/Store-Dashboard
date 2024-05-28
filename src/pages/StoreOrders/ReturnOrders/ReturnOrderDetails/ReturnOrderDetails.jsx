@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // Components
-import { TopBarSearchInput } from "../../../../global";
+import { TopBarSearchInput } from "../../../../global/TopBar";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
 // To print this page

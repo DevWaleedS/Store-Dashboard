@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
-import { TopBarSearchInput } from "../../../global";
+import { TopBarSearchInput } from "../../../global/TopBar";
 
 import { TablePagination } from "../../../components/Tables/TablePagination";
 import {

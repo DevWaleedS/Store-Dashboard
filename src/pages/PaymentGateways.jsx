@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Switch } from "@mui/material";
 
 // Components
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";

@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 // Components
-import { TopBarSearchInput } from "../global";
+
 import { FormatNotifications } from "../components";
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import CircularLoading from "../HelperComponents/CircularLoading";
@@ -29,6 +29,7 @@ import {
 	useDeleteNotificationsMutation,
 	useGetNotificationsQuery,
 } from "../store/apiSlices/notificationsApi";
+import { TopBarSearchInput } from "../global/TopBar";
 
 const Notifications = () => {
 	const [pageTarget, setPageTarget] = useState(1);

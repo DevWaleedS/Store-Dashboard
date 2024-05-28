@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // third party
 import moment from "moment";
 import { Helmet } from "react-helmet";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import { Link, useParams } from "react-router-dom";
 
 // Table

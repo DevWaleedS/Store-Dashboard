@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 
 // components
-import { TopBarSearchInput } from "../../global";
 import {
 	WalletQuickDetails,
 	AddBankAccountModal,
@@ -36,6 +34,9 @@ import {
 
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification.js";
+
+// global components
+import { TopBarSearchInput } from "../../global/TopBar";
 
 const Wallet = () => {
 	// to Handle if the user is not verify  her account

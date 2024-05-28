@@ -20,7 +20,7 @@ import { openVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAft
 // Components
 import { Breadcrumb } from "../../components";
 import HoursWorks from "./HoursWorks/HoursWorks";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
 import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
 import CircularLoading from "../../HelperComponents/CircularLoading";

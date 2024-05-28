@@ -11,7 +11,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // Components
 import RatingWeight from "./RatingWeight";
 import { Breadcrumb } from "../../components";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import { SendReplayModal } from "../../components/Modal";
 import { TablePagination } from "../../components/Tables/TablePagination";
 
