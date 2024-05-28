@@ -22,6 +22,7 @@ import {
 	useShowImportCartQuery,
 } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 import { useGetDefaultAddressQuery } from "../../../../store/apiSlices/selectorsApis/defaultAddressApi";
+import { useNavigate } from "react-router-dom";
 
 function CheckoutPage() {
 	// im using this with forwardRef  to share isLoading from RenderShippingList
@@ -34,6 +35,7 @@ function CheckoutPage() {
 	const { data: defaultAddress } = useGetDefaultAddressQuery();
 
 	// using it madfu checkout
+	const navigate = useNavigate();
 	const [merchantReference, setMerchantReference] = useState(null);
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [shippingSelect, setShippingSelect] = useState(null);
@@ -127,8 +129,6 @@ function CheckoutPage() {
 				response.data?.data?.status === 200
 			) {
 				if (response?.data?.message?.en === "order send successfully") {
-					setBtnLoading(false);
-
 					if (
 						response?.data?.message?.en === "order send successfully" &&
 						response?.data?.data?.payment?.IsSuccess === true &&
@@ -137,22 +137,20 @@ function CheckoutPage() {
 					) {
 						window.location.href =
 							response?.data?.data?.payment?.Data?.PaymentURL;
-					} else if (
-						response?.data?.message?.en === "order send successfully"
-					) {
+					} else {
 						// to handle madfu login
 						if (+paymentSelect === 5) {
 							handleLoginWithMadu();
-
 							setMerchantReference(response?.data?.data?.order?.order_number);
+						} else {
+							navigate("/Products/SouqOtlobha/success");
+							setBtnLoading(false);
 						}
 					}
-				} else {
-					setBtnLoading(false);
-					toast.error(response?.data?.message?.ar, { theme: "colored" });
 				}
 			} else {
 				setBtnLoading(false);
+
 				setError({
 					district: response?.data?.message?.en?.district?.[0] || "",
 					city: response?.data?.message?.en?.city?.[0] || "",
@@ -199,6 +197,12 @@ function CheckoutPage() {
 				response.data?.data?.status === 200
 			) {
 				handleCreateOrderWithMadfu(response.data.data.data.token);
+			} else {
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
 			}
 		} catch (error) {
 			console.error("Error changing checkOutCart:", error);
@@ -247,9 +251,16 @@ function CheckoutPage() {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
+				setBtnLoading(false);
 				window.location.href = response.data.data.data.checkoutLink;
 			} else {
 				toast.error(response?.message, { theme: "colored" });
+				setBtnLoading(false);
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
 			}
 		} catch (error) {
 			console.log(error);
@@ -321,7 +332,11 @@ function CheckoutPage() {
 													className='checkout-btn'
 													disabled={btnLoading || isCartLoading}
 													onClick={() => handleCheckout()}>
-													تأكيد الطلب
+													{btnLoading || isCartLoading ? (
+														<CircularLoading />
+													) : (
+														"تأكيد الطلب"
+													)}
 												</button>
 											</div>
 										</div>

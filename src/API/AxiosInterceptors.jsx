@@ -21,6 +21,11 @@ const AxiosInterceptors = ({ children }) => {
 				if (
 					response.status === 200 &&
 					response?.data?.success &&
+					![
+						"https://backend.atlbha.com/api/Store/checkoutImport",
+						"https://backend.atlbha.com/api/madfu/login",
+						"https://backend.atlbha.com/api/madfu/create-order",
+					].includes(response.config.url) &&
 					["delete", "patch", "post", "put"].includes(response.config.method)
 				) {
 					setEndActionTitle(response.data.message?.ar);
@@ -40,13 +45,6 @@ const AxiosInterceptors = ({ children }) => {
 
 					switch (error.response.status) {
 						case HTTP_UNAUTHORIZED:
-							// Log out the user
-							document.cookie.split(";").forEach((cookie) => {
-								const eqPos = cookie.indexOf("=");
-								const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-								document.cookie =
-									name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-							});
 							localStorage.clear();
 							navigate("/auth/login");
 							break;

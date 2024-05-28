@@ -8317,6 +8317,10 @@ input:disabled {
 .checkout-page .block .card .card-body .checkout-btn:hover {
 	background-color: var(--primary-500);
 }
+.checkout-page .block .card .card-body .checkout-btn:disabled {
+	background-color: #ddd;
+	cursor: not-allowed;
+}
 
 .checkout-page .empty {
 	display: flex;

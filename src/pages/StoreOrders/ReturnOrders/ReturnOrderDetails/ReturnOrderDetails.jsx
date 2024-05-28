@@ -190,6 +190,12 @@ const ReturnOrderDetails = () => {
 				setRefundError(response?.data?.message?.ar);
 				// Handle display errors using toast notifications
 				toast.error(response?.data?.message?.ar, { theme: "light" });
+
+				Object.entries(response?.data?.message?.en)?.forEach(
+					([key, message]) => {
+						toast.error(message[0], { theme: "light" });
+					}
+				);
 			}
 		} catch (error) {
 			console.error("Error changing update refundReturnOrder:", error);
