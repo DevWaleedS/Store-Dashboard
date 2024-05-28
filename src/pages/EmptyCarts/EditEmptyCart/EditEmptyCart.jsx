@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 import { TextEditorContext } from "../../../Context/TextEditorProvider";
 
@@ -65,8 +64,7 @@ const EditEmptyCart = () => {
 	const { data: currentCartData, isFetching } = useGetEmptyCartByIdQuery(id);
 
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -212,7 +210,7 @@ const EditEmptyCart = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
+
 				navigate("/EmptyCarts");
 
 				setEditorValue("");
@@ -269,7 +267,7 @@ const EditEmptyCart = () => {
 									<Breadcrumb
 										mb={"mb-md-5"}
 										pt={"pt-md-4"}
-										route={"/Carts"}
+										route={"/EmptyCarts"}
 										parentPage={"السلات المتروكة"}
 										currentPage={currentCartData?.user?.name}
 									/>

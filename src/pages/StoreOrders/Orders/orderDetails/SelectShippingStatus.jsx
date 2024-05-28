@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Context
-import Context from "../../../../Context/context";
 import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // RTK Query
@@ -90,8 +89,7 @@ const SelectShippingStatus = ({
 	currentOrder,
 }) => {
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -125,7 +123,6 @@ const SelectShippingStatus = ({
 			) {
 				navigate("/Orders");
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 				setError({

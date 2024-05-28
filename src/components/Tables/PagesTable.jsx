@@ -7,12 +7,8 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
-
-//redux
-import { useDispatch } from "react-redux";
 
 // MUI
 import PropTypes from "prop-types";
@@ -40,18 +36,12 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 // Import Icons
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 import {
-	ChangeAllPagesStatusThunk,
-	ChangePagesStatusThunk,
-	DeleteAllDeletePagesThunk,
-	DeleteCouponThunk,
-	PagesThunk,
-} from "../../store/Thunk/PagesThunk";
-import {
 	useChangeAllPagesStatusMutation,
 	useChangePagesStatusMutation,
 	useDeleteAllPagesMutation,
 	useDeletePageMutation,
 } from "../../store/apiSlices/pagesApi";
+import Context from "../../Context/context";
 
 function EnhancedTableHead(props) {
 	return (
@@ -230,14 +220,12 @@ export default function PagesTable({
 	pageCount,
 	currentPage,
 }) {
-	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
-
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 	// ---------------------------------------------
 
 	// Handle Select all Items
@@ -318,7 +306,6 @@ export default function PagesTable({
 	// change category status
 	const [changePagesStatus] = useChangePagesStatusMutation();
 	const [changeAllPagesStatus] = useChangeAllPagesStatusMutation();
-
 	const changeItemStatus = async (id) => {
 		try {
 			await changePagesStatus({ pageId: id })

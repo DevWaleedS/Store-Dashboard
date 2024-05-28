@@ -1,28 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const couponApi = createApi({
 	reducerPath: "couponApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["Coupons"],
+
 	endpoints: (builder) => ({
 		// get store Coupons endpoint..
 		getCoupons: builder.query({
-			query: (arg) => `coupons?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `coupons?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["Coupons"],
 		}),
 
@@ -90,7 +84,7 @@ export const couponApi = createApi({
 				return {
 					url: `coupons`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Coupons"],
@@ -98,7 +92,7 @@ export const couponApi = createApi({
 
 		// get coupon by id
 		getCouponById: builder.query({
-			query: (id) => `coupons/${id}`,
+			query: (id) => ({ url: `coupons/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.Coupons,
@@ -111,7 +105,7 @@ export const couponApi = createApi({
 				return {
 					url: `coupons/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Coupons"],

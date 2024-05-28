@@ -30,7 +30,6 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +42,7 @@ import {
 } from "../../store/apiSlices/productsApi";
 import { ChangeCategoriesForSomeSelectedProducts } from "../../pages/Products";
 import { openModal } from "../../store/slices/ChangeCategoriesForSomeSelectedProducts";
+import Context from "../../Context/context";
 
 const switchStyle = {
 	width: "50px",

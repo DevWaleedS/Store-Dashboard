@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // MUI
@@ -57,8 +56,6 @@ const ProductRefund = () => {
 	const { data: currentProduct, isFetching } =
 		useShowSouqOtlobhaProductByIdQuery(id);
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -204,7 +201,7 @@ const ProductRefund = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
+
 				navigate("/Products/SouqOtlobha");
 			} else {
 				setLoadingTitle("");

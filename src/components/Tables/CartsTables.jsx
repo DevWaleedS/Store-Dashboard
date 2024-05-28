@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
@@ -35,13 +34,11 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import { FiSearch } from "react-icons/fi";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 
-//redux
-import { useDispatch } from "react-redux";
-
 import {
 	useDeleteAllEmptyCartsMutation,
 	useDeleteEmptyCartsMutation,
 } from "../../store/apiSlices/emptyCartsApi";
+import Context from "../../Context/context";
 
 function EnhancedTableHead(props) {
 	return (
@@ -184,10 +181,10 @@ export default function CartsTables({
 	const navigate = useNavigate();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	// _____________________________________________________________________ //
 	const [selected, setSelected] = useState([]);

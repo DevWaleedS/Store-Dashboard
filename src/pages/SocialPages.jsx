@@ -6,12 +6,11 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 // Context
-import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // Components
 
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // MUI
@@ -39,8 +38,6 @@ const SocialPages = () => {
 	// to get all  data from server
 	const { data: socialMedia, isFetching } = useGetSocialMediaDataQuery();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [socialValue, setSocialValue] = useState({
@@ -129,7 +126,6 @@ const SocialPages = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 				setError({

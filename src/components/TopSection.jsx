@@ -4,7 +4,7 @@ import * as React from "react";
 import { HomeIcon } from "../data/Icons";
 
 // Search Components
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 
 const TopSection = () => {
 	return (

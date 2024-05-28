@@ -1,0 +1,72 @@
+.checkout-icon {
+	width: 100px;
+	height: 100px;
+}
+
+.checkout-icon.success-checkout-icon {
+	color: var(--second-500);
+}
+
+.checkout-status-title {
+	font-size: 45px;
+	font-weight: 500;
+	margin-bottom: 10px;
+}
+
+.checkout-status-title.success-status-title {
+	color: var(--second-500);
+}
+.checkout-status-title.failed-status-title {
+	color: #0c486b;
+}
+
+.checkout-status-sub-title {
+	font-size: 26px;
+	font-weight: 400;
+	margin-bottom: 20px;
+	white-space: normal;
+}
+
+.checkout-status-btn {
+	min-width: 220px;
+	height: 48px;
+	background-color: var(--second-500);
+	font-size: 1.1rem;
+	font-weight: 500;
+	border-radius: 6px;
+	border: none;
+	outline: none;
+	color: var(--white-100);
+	transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+	.checkout-status-container {
+		height: 70vh;
+	}
+	.checkout-icon {
+		width: 80px;
+		height: 80px;
+	}
+
+	.checkout-status-title {
+		font-size: 35px;
+		margin-bottom: 10px;
+	}
+
+	.checkout-status-sub-title {
+		font-size: 22px;
+		margin-bottom: 10px;
+	}
+
+	.checkout-status-btn {
+		min-width: 98%;
+		font-size: 1rem;
+		font-weight: 400;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+	}
+}

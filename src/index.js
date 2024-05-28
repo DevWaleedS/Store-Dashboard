@@ -89,13 +89,14 @@ import UserAuthorProvider from "./Context/UserAuthorProvider";
 import NotificationProvider from "./Context/NotificationProvider";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
 
-// Souq Otlobha  Pages
+// Souq Otlobha and checkout Pages
 import {
 	SouqOtlobha,
 	ProductRefund,
 	CartPage,
 	CheckoutPage,
 } from "./pages/nestedPages/SouqOtlbha";
+import { CheckoutStatus } from "./pages/nestedPages/SouqOtlbha/CheckoutPage/CheckOutStatusPages";
 
 // main Information setting Page
 import { MainInformation } from "./pages/MainInformationSetting";
@@ -334,6 +335,16 @@ const router = createBrowserRouter([
 			{
 				path: "Products/SouqOtlobha/Checkout",
 				element: <CheckoutPage />,
+			},
+
+			{
+				path: "Products/SouqOtlobha/success",
+				element: <CheckoutStatus />,
+			},
+
+			{
+				path: "Products/SouqOtlobha/failed",
+				element: <CheckoutStatus />,
 			},
 
 			{

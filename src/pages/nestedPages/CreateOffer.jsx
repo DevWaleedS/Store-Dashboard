@@ -17,7 +17,6 @@ import { useDispatch } from "react-redux";
 import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // MUI
@@ -71,10 +70,7 @@ const style = {
 };
 
 const CreateOffer = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { fetchedData: categories } = useFetch("selector/mainCategories");
 	const { fetchedData: payments } = useFetch("selector/payment_types");
 	const { fetchedData: products } = useFetch("selector/products");
@@ -82,8 +78,6 @@ const CreateOffer = () => {
 	const dispatch = useDispatch(false);
 	const [reload, setReload] = useState(false);
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const {
@@ -356,13 +350,12 @@ const CreateOffer = () => {
 			.post(`offer`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
 					navigate("/Offers");
 					setReload(!reload);
 				} else {

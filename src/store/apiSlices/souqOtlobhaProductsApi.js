@@ -1,28 +1,21 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const souqOtlobhaProductsApi = createApi({
 	reducerPath: "souqOtlobhaProductsApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
+	// base url
+	baseQuery: axiosBaseQuery({
+		baseUrl: "https://backend.atlbha.com/api/",
 	}),
 	tagTypes: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
+
 	endpoints: (builder) => ({
 		// get store souq otlboha products endpoint..
 		getSouqOtlobhaProducts: builder.query({
-			query: (arg) => `etlobhaShow?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `Store/etlobhaShow?page=${arg.page}&number=${arg.number}`,
+			}),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data,
@@ -31,7 +24,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get show Import Cart
 		showImportProductsCartData: builder.query({
-			query: () => `showImportCart`,
+			query: () => ({ url: `Store/showImportCart` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -40,7 +33,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// get Product by id
 		showSouqOtlobhaProductById: builder.query({
-			query: (id) => `etlobhaProductShow/${id}`,
+			query: (id) => ({ url: `Store/etlobhaProductShow/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.products,
@@ -51,7 +44,7 @@ export const souqOtlobhaProductsApi = createApi({
 
 		// show import Cart
 		showImportCart: builder.query({
-			query: () => `showImportCart`,
+			query: () => ({ url: `Store/showImportCart` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.cart,
@@ -61,7 +54,7 @@ export const souqOtlobhaProductsApi = createApi({
 		// filter products by categories
 		filterSouqOtlobhaProductsByCategories: builder.mutation({
 			query: ({ mainCategoryId, subCategoriesSelectedIds, page, number }) => ({
-				url: `etlobhaShow?&number=${number}&category_id=${mainCategoryId}&${subCategoriesSelectedIds}&page=${page}`,
+				url: `Store/etlobhaShow?&number=${number}&category_id=${mainCategoryId}&${subCategoriesSelectedIds}&page=${page}`,
 				method: "GET",
 			}),
 		}),
@@ -70,9 +63,9 @@ export const souqOtlobhaProductsApi = createApi({
 		importProductToStoreProducts: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `addImportCart`,
+					url: `Store/addImportCart`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 
@@ -83,9 +76,9 @@ export const souqOtlobhaProductsApi = createApi({
 		editProductById: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `product/${id}`,
+					url: `Store/product/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Products"],
@@ -94,9 +87,16 @@ export const souqOtlobhaProductsApi = createApi({
 		// delete Item From Cart
 		deleteItemFromCart: builder.mutation({
 			query: ({ id }) => ({
-				url: `deleteImportCart/${id}`,
+				url: `Store/deleteImportCart/${id}`,
 				method: "GET",
 			}),
+			invalidatesTags: ["CartMenuData"],
+		}),
+
+		// remove all cart items
+		removeCartItems: builder.mutation({
+			query: () => ({ url: `Store/showImportCart?delete=1` }),
+
 			invalidatesTags: ["CartMenuData"],
 		}),
 
@@ -104,9 +104,9 @@ export const souqOtlobhaProductsApi = createApi({
 		updateCart: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `product/${id}`,
+					url: `Store/product/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["Products"],
@@ -116,38 +116,76 @@ export const souqOtlobhaProductsApi = createApi({
 		checkOutCart: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `checkoutImport`,
+					url: `Store/checkoutImport`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["SouqOtlobhaProducts", "CartMenuData", "CheckOutPage"],
+		}),
+
+		// checkout with madfu payment method
+		loginWithMadfu: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `madfu/login`,
+					method: "POST",
+					data: body,
+				};
+			},
+		}),
+
+		// handle create order with madfu payment method
+		createOrderWithMadfu: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `madfu/create-order`,
+					method: "POST",
+					data: body,
+				};
+			},
 		}),
 
 		// apply Discount Code
 		appLyDiscountCoupon: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `applyCoupon/${id}`,
+					url: `Store/applyCoupon/${id}`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["CheckOutPage"],
+		}),
+
+		// re-calculate cart by shipping id
+		reCalculateCartByShippingId: builder.mutation({
+			query: ({ id }) => {
+				return {
+					url: `Store/shippingCalculation/${id}`,
+					method: "GET",
+				};
+			},
+
+			invalidatesTags: ["CartMenuData"],
 		}),
 	}),
 });
 
 // Export endpoints and hooks
 export const {
-	useGetSouqOtlobhaProductsQuery,
-	useShowImportProductsCartDataQuery,
-	useFilterSouqOtlobhaProductsByCategoriesMutation,
-	useShowSouqOtlobhaProductByIdQuery,
-	useImportProductToStoreProductsMutation,
 	useUpdateCartMutation,
-	useDeleteItemFromCartMutation,
-	useShowImportCartQuery,
 	useCheckOutCartMutation,
+	useShowImportCartQuery,
+	useLoginWithMadfuMutation,
+	useRemoveCartItemsMutation,
+	useDeleteItemFromCartMutation,
+	useGetSouqOtlobhaProductsQuery,
 	useAppLyDiscountCouponMutation,
+	useCreateOrderWithMadfuMutation,
+	useShowImportProductsCartDataQuery,
+	useShowSouqOtlobhaProductByIdQuery,
+	useReCalculateCartByShippingIdMutation,
+	useImportProductToStoreProductsMutation,
+	useFilterSouqOtlobhaProductsByCategoriesMutation,
 } = souqOtlobhaProductsApi;

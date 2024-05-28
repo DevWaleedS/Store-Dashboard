@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // MUI
 import {
@@ -9,17 +9,17 @@ import {
 	Select,
 } from "@mui/material";
 import Box from "@mui/material/Box";
+import { toast } from "react-toastify";
 import Checkbox from "@mui/material/Checkbox";
 
 //Icons
-import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../store/slices/ChangeCategoriesForSomeSelectedProducts";
+import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
 import { useChangeCategoriesForSomeSelectedProductsMutation } from "../../store/apiSlices/productsApi";
-import { toast } from "react-toastify";
-import Context from "../../Context/context";
+
+// RTK Query
 import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 // Style the modal
@@ -82,8 +82,6 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 	);
 
 	const dispatch = useDispatch();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const [categories, setCategories] = useState([]);
 	const [category_id, setCategory_id] = useState("");
 	const [subcategory_id, setSubcategory_id] = useState([]);
@@ -141,7 +139,6 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response.data?.message?.ar);
 				handleCloseChangeCategoriesModal();
 				setSelected([]);
 				setCategory_id([]);

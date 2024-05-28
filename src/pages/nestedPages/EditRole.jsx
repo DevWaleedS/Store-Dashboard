@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
@@ -55,10 +54,7 @@ const style = {
 };
 
 const EditRole = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { id } = useParams();
 	const { fetchedData: permissionsListData } = useFetch("permissions");
 	const { fetchedData, loading, reload, setReload } = useFetch(`roles/${id}`);
@@ -68,8 +64,7 @@ const EditRole = () => {
 	});
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -118,13 +113,13 @@ const EditRole = () => {
 			.post(`roles/${id}`, formData, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					navigate("/Management");
 					setReload(!reload);
 				} else {

@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Redux
@@ -58,9 +57,6 @@ const contentStyles = {
 };
 
 const SendSupportReplayModal = ({ supportDetails }) => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
@@ -95,7 +91,6 @@ const SendSupportReplayModal = ({ supportDetails }) => {
 				response?.data?.success === true &&
 				response?.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
 				dispatch(closeReplyModal());
 				resetsMessage();
 				navigate("/Support");

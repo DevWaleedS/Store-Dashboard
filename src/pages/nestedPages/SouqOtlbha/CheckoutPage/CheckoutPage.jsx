@@ -1,53 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import RenderAddress from "./RenderAddress";
+import RenderCartIsEmpty from "./RenderCartIsEmpty";
+import { Breadcrumb } from "../../../../components";
 import RenderCouponInput from "./RenderCouponInput";
 import RenderPaymentsList from "./RenderPaymentsList";
 import RenderShippingList from "./RenderShippingList";
 import RenderCheckoutInfo from "./RenderCheckoutInfo";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
-// Redux
-import { useDispatch } from "react-redux";
-import { openMessage } from "../../../../store/slices/SuccessMessageModalSlice";
-
 // RTK Query
 import {
 	useCheckOutCartMutation,
+	useCreateOrderWithMadfuMutation,
+	useLoginWithMadfuMutation,
 	useShowImportCartQuery,
 } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
-import { useImportPaymentMethodsQuery } from "../../../../store/apiSlices/importPaymentMethodApi";
 import { useGetDefaultAddressQuery } from "../../../../store/apiSlices/selectorsApis/defaultAddressApi";
-import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/shippingCompaniesApi";
-import RenderCartIsEmpty from "./RenderCartIsEmpty";
-import { Breadcrumb } from "../../../../components";
 
 function CheckoutPage() {
-	const dispatch = useDispatch(true);
-	const navigate = useNavigate();
+	// im using this with forwardRef  to share isLoading from RenderShippingList
+	const shippingListRef = useRef();
 
 	// get cart data..
 	const { data: cartData, isLoading } = useShowImportCartQuery();
 
-	// get payment methods..
-	const { data: paymentMethods } = useImportPaymentMethodsQuery();
-
 	// get default address..
 	const { data: defaultAddress } = useGetDefaultAddressQuery();
 
-	// get shipping Companies..
-	const { data: shippingCompanies } = useGetShippingCompaniesQuery();
-
+	// using it madfu checkout
+	const [merchantReference, setMerchantReference] = useState(null);
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	const [shippingSelect, setShippingSelect] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
-	const [shippingPrice, setShippingPrice] = useState(null);
 	const [shipping, setShipping] = useState({
 		id: null,
 		district: "",
@@ -107,8 +97,6 @@ function CheckoutPage() {
 			shippingType: "",
 		});
 	};
-	/** ----------------------------- */
-
 	// --------------------------------------------------------
 
 	// handle check out cart
@@ -122,16 +110,8 @@ function CheckoutPage() {
 		formData.append("district", shipping?.district);
 		formData.append("city", shipping?.city);
 		formData.append("street_address", shipping?.address);
-		// formData.append("postal_code", shipping?.postCode);
-		formData.append(
-			"paymentype_id",
-			JSON.parse(paymentSelect) ? JSON.parse(paymentSelect)?.id : ""
-		);
-		formData.append("shippingtype_id", JSON.parse(shippingSelect) || "");
-		formData.append(
-			"cod",
-			JSON.parse(paymentSelect)?.name === "الدفع عند الاستلام" ? 1 : 0
-		);
+		formData.append("paymentype_id", paymentSelect || "");
+		formData.append("shippingtype_id", shippingSelect || "");
 		formData.append("description", shipping?.notes || "");
 		formData.append("default_address", shipping?.defaultAddress ? 1 : 0);
 
@@ -148,8 +128,25 @@ function CheckoutPage() {
 			) {
 				if (response?.data?.message?.en === "order send successfully") {
 					setBtnLoading(false);
-					dispatch(openMessage());
-					navigate("/Products/SouqOtlobha");
+
+					if (
+						response?.data?.message?.en === "order send successfully" &&
+						response?.data?.data?.payment?.IsSuccess === true &&
+						response?.data?.data?.payment?.Message ===
+							"Invoice Created Successfully!"
+					) {
+						window.location.href =
+							response?.data?.data?.payment?.Data?.PaymentURL;
+					} else if (
+						response?.data?.message?.en === "order send successfully"
+					) {
+						// to handle madfu login
+						if (+paymentSelect === 5) {
+							handleLoginWithMadu();
+
+							setMerchantReference(response?.data?.data?.order?.order_number);
+						}
+					}
 				} else {
 					setBtnLoading(false);
 					toast.error(response?.data?.message?.ar, { theme: "colored" });
@@ -186,6 +183,79 @@ function CheckoutPage() {
 		}
 	};
 
+	// handle checkout with madfu
+	const [loginWithMadfu] = useLoginWithMadfuMutation();
+	const handleLoginWithMadu = async () => {
+		const formData = new FormData();
+		formData.append("uuid", localStorage.getItem("domain"));
+		formData.append("store_id", localStorage.getItem("store_id"));
+		try {
+			const response = await loginWithMadfu({
+				body: formData,
+			});
+
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				handleCreateOrderWithMadfu(response.data.data.data.token);
+			}
+		} catch (error) {
+			console.error("Error changing checkOutCart:", error);
+		}
+	};
+
+	// handle create order with madfu
+	const [createOrderWithMadfu] = useCreateOrderWithMadfuMutation();
+	const handleCreateOrderWithMadfu = async (token) => {
+		// Create or retrieve guestOrderData, orderInfo, and orderDetails here or pass from somewhere
+		const guestOrderData = {
+			CustomerMobile: cartData?.user?.phonenumber.startsWith("+966")
+				? cartData?.user?.phonenumber.slice(4)
+				: cartData?.user?.phonenumber.startsWith("00966")
+				? cartData?.user?.phonenumber.slice(5)
+				: cartData?.user?.phonenumber,
+			CustomerName: cartData?.user?.name + " " + cartData?.user?.lastname,
+		};
+
+		const orderDetails = cartData?.cartDetail?.map((item) => ({
+			productName: item?.product?.name,
+			SKU: item?.product?.id,
+			productImage: item?.product?.cover,
+			count: parseInt(item.qty),
+			totalAmount: item?.sum,
+		}));
+
+		const orderInfo = {
+			Taxes: cartData?.tax,
+			ActualValue: cartData?.total,
+			Amount: cartData?.subtotal,
+			MerchantReference: merchantReference,
+		};
+
+		// data that send  to api...
+		const formData = new FormData();
+		formData.append("token", token);
+		formData.append("guest_order_data", JSON.stringify(guestOrderData));
+		formData.append("order", JSON.stringify(orderInfo));
+		formData.append("order_details", JSON.stringify(orderDetails));
+		formData.append("url", `http://store.atlbha.com/Products/SouqOtlobha`);
+
+		try {
+			const response = await createOrderWithMadfu({ body: formData });
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				window.location.href = response.data.data.data.checkoutLink;
+			} else {
+				toast.error(response?.message, { theme: "colored" });
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<>
 			<Helmet>
@@ -215,7 +285,10 @@ function CheckoutPage() {
 									<div className='col-12 col-lg-6 col-xl-5 mt-4 mt-lg-0'>
 										<div className='card mb-lg-0'>
 											<div className='card-body'>
-												<RenderCheckoutInfo cartData={cartData} />
+												<RenderCheckoutInfo
+													cartData={cartData}
+													isCartLoading={shippingListRef.current?.isLoading}
+												/>
 
 												<RenderCouponInput
 													coupon={coupon}
@@ -232,17 +305,15 @@ function CheckoutPage() {
 
 												<RenderPaymentsList
 													paymentSelect={paymentSelect}
-													paymentMethods={paymentMethods}
 													setPaymentSelect={setPaymentSelect}
 													paymentMethodError={error?.paymentMethod}
 												/>
 												<RenderShippingList
+													ref={shippingListRef}
 													shipping={shipping}
 													setShipping={setShipping}
 													shippingSelect={shippingSelect}
-													setShippingPrice={setShippingPrice}
 													setShippingSelect={setShippingSelect}
-													shippingCompanies={shippingCompanies}
 													shippingTypeErrors={error?.shippingType}
 												/>
 

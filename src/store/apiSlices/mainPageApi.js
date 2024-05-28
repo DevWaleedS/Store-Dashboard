@@ -1,26 +1,15 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 export const mainPageApi = createApi({
 	reducerPath: "mainPageApi",
 
-	baseQuery: fetchBaseQuery({
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 
 	endpoints: (builder) => ({
-		getMainPageData: builder.query({ query: () => "index" }),
+		getMainPageData: builder.query({ query: () => ({ url: "index" }) }),
 	}),
 });
 

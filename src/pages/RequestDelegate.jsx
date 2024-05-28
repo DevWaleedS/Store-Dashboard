@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 
 // MUI
 import Select from "@mui/material/Select";
@@ -13,31 +12,28 @@ import FormControl from "@mui/material/FormControl";
 import { IoIosArrowDown } from "react-icons/io";
 
 // Components
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 import { DelegateTable } from "../components/Tables";
 
 // RTK Query
 import { useGetCitiesQuery } from "../store/apiSlices/selectorsApis/selectCitiesApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+
 import { Breadcrumb } from "../components";
 
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
+
 const RequestDelegate = () => {
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	// cities selector
 	const { data: cities } = useGetCitiesQuery();
 	const [cityId, setCityId] = React.useState("");
-	const navigate = useNavigate();
 	const handleCategoryChange = (event) => {
 		setCityId(event.target.value);
 	};
 	// ------------------------------------------------------------------------------
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	return (
 		<>

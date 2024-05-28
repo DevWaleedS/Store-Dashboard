@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const mainInformationApi = createApi({
 	reducerPath: "mainInformationApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["MainInformation"],
+
 	endpoints: (builder) => ({
 		// get store Academy courses endpoint..
 		getMainInformation: builder.query({
-			query: () => `setting_store_show`,
+			query: () => ({ url: `setting_store_show` }),
 			providesTags: ["MainInformation"],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -35,7 +27,7 @@ export const mainInformationApi = createApi({
 				return {
 					url: `setting_store_update`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["MainInformation"],

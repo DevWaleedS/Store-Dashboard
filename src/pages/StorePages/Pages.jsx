@@ -97,10 +97,10 @@ const Pages = () => {
 	});
 
 	useEffect(() => {
-		if (pagesData?.data?.pages?.length !== 0) {
-			setPageArray(pagesData?.data);
+		if (pagesData?.data) {
+			setPageArray(pagesData.data);
 		}
-	}, [pagesData?.data?.pages?.length]);
+	}, [pagesData?.data]);
 
 	// -----------------------------------------------------------
 
@@ -115,7 +115,7 @@ const Pages = () => {
 							query: search,
 						});
 
-						setPageArray(response?.data?.data);
+						setPageArray(response?.data?.data || []);
 					} catch (error) {
 						console.error("Error fetching searchInPages:", error);
 					}
@@ -123,13 +123,16 @@ const Pages = () => {
 
 				fetchData();
 			} else {
-				setPageArray(pagesData?.data);
+				if (pagesData?.data) {
+					setPageArray(pagesData.data);
+				}
 			}
 		}, 500);
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
+	}, [search, pageTarget, rowsCount, pagesData?.data]);
+
 	// -------------------------------------------------------------------------------
 
 	// filter by status
@@ -142,7 +145,7 @@ const Pages = () => {
 						select,
 					});
 
-					setPageArray(response?.data?.data);
+					setPageArray(response?.data?.data || []);
 				} catch (error) {
 					console.error("Error fetching filterPagesByStatus:", error);
 				}
@@ -150,9 +153,11 @@ const Pages = () => {
 
 			fetchData();
 		} else {
-			setPageArray(pagesData?.data);
+			if (pagesData?.data) {
+				setPageArray(pagesData.data);
+			}
 		}
-	}, [select, filterPagesByStatus]);
+	}, [select, filterPagesByStatus, pagesData?.data]);
 
 	return (
 		<>

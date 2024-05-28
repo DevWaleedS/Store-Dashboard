@@ -9,7 +9,6 @@ import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // context
-import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // MUI
@@ -47,8 +46,6 @@ const PaintStore = () => {
 	// get store theme data
 	const { data: storeTheme, isLoading } = useGetPaintStoreThemeQuery();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [expanded, setExpanded] = useState(false);
@@ -106,7 +103,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -152,7 +148,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -198,7 +193,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -244,7 +238,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -290,7 +283,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -336,7 +328,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -383,7 +374,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

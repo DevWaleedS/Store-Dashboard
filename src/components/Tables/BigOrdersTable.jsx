@@ -246,7 +246,7 @@ export default function BigOrdersTable({
 								</TableRow>
 							) : (
 								<Fragment>
-									{orders?.length === 0 ? (
+									{!orders || orders?.length === 0 ? (
 										<TableRow>
 											<TableCell colSpan={8}>
 												<p className='text-center'>لاتوجد بيانات</p>

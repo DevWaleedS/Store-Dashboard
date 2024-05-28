@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import { Breadcrumb } from "../components";
 import { PostalSubscriptionsTable } from "../components/Tables";
 
 // Icons
-
 import { BsSearch } from "react-icons/bs";
 
 // Export File
@@ -21,10 +19,14 @@ import {
 	useGetPostalSubscriptionsQuery,
 	useSearchInPostalSubscriptionsMutation,
 } from "../store/apiSlices/postalSubscriptionsApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
 
 const PostalSubscriptions = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify her account
+	UseAccountVerification();
+
 	const [search, setSearch] = useState("");
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
@@ -37,20 +39,12 @@ const PostalSubscriptions = () => {
 		});
 	// --------------------------------------------------------------------------
 
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
-
 	/** get data */
 	useEffect(() => {
-		if (postalSubscriptions?.data?.subsicriptions?.length !== 0) {
+		if (postalSubscriptions?.data) {
 			setPostalSubscriptionsData(postalSubscriptions?.data);
 		}
-	}, [postalSubscriptions?.data?.subsicriptions?.length]);
+	}, [postalSubscriptions?.data]);
 
 	// -------------------------------------------------------------------------------------------
 
@@ -66,7 +60,7 @@ const PostalSubscriptions = () => {
 							query: search,
 						});
 
-						setPostalSubscriptionsData(response?.data?.data);
+						setPostalSubscriptionsData(response?.data || []);
 					} catch (error) {
 						console.error("Error fetching searchInPostalSubscriptions:", error);
 					}
@@ -74,13 +68,15 @@ const PostalSubscriptions = () => {
 
 				fetchData();
 			} else {
-				setPostalSubscriptionsData(postalSubscriptions?.data);
+				if (postalSubscriptions?.data) {
+					setPostalSubscriptionsData(postalSubscriptions.data);
+				}
 			}
 		}, 500);
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
+	}, [search, pageTarget, rowsCount, postalSubscriptions?.data]);
 
 	const fileType =
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -89,7 +85,7 @@ const PostalSubscriptions = () => {
 	// Export To CSV
 	const exportToCSV = () => {
 		const ws = XLSX.utils.json_to_sheet(
-			postalSubscriptionsData?.map((item) => ({
+			postalSubscriptionsData?.subsicriptions?.map((item) => ({
 				email: item?.email,
 			}))
 		);

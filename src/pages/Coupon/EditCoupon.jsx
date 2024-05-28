@@ -11,7 +11,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Datepicker
@@ -134,8 +133,6 @@ const EditCoupon = () => {
 	const navigate = useNavigate();
 	const currentDate = new Date();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -308,8 +305,6 @@ const EditCoupon = () => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -379,7 +374,7 @@ const EditCoupon = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
+
 				navigate("/Coupon");
 			} else {
 				setLoadingTitle("");

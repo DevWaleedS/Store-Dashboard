@@ -1,29 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const reportsApi = createApi({
 	reducerPath: "reportsApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["Reports"],
+
 	endpoints: (builder) => ({
 		// get Maintenance mode data endpoint..
 		getReportsByDate: builder.query({
-			query: (arg) =>
-				`reports?startDate=${arg.startDate}&endDate=${arg.endDate}`,
+			query: (arg) => ({
+				url: `reports?startDate=${arg.startDate}&endDate=${arg.endDate}`,
+			}),
 
 			providesTags: ["Reports"],
 

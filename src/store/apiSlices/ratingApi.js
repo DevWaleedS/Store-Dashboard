@@ -1,28 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const ratingApi = createApi({
 	reducerPath: "ratingApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["Rating"],
+
 	endpoints: (builder) => ({
 		// get store Rating endpoint..
 		getRating: builder.query({
-			query: (arg) => `comment?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `comment?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["Rating"],
 		}),
 
@@ -63,7 +57,7 @@ export const ratingApi = createApi({
 				let payload = { comment_id, comment_text };
 
 				// Return URL, method, and payload
-				return { url, method, body: JSON.stringify(payload) };
+				return { url, method, data: JSON.stringify(payload) };
 			},
 			invalidatesTags: ["Rating"],
 		}),

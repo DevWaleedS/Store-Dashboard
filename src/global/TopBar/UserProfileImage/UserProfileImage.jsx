@@ -59,25 +59,14 @@ const UserProfileImage = () => {
 	// To log out from dashboard!
 	const [logOut] = useLogOutMutation();
 	const handleLogOut = async () => {
-		// Clear all cookies
-		for (const cookie of document.cookie.split(";")) {
-			const [name] = cookie.trim().split("=");
-
-			// Set the cookie's expiration to a past date to delete it
-			document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-		}
-
 		// make request...
 		try {
 			const response = await logOut();
-
-			// Handle response
+			localStorage.clear();
 			if (
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				localStorage.clear();
-
 				navigate("/auth/login");
 			} else {
 				// Handle display errors using toast notifications

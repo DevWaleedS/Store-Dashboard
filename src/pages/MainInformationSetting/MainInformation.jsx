@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect, Fragment } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -12,7 +11,6 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Redux
@@ -22,7 +20,7 @@ import { openVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAft
 // Components
 import { Breadcrumb } from "../../components";
 import HoursWorks from "./HoursWorks/HoursWorks";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
 import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -34,7 +32,6 @@ import {
 	CityIcon,
 	CountryIcon,
 	Document,
-	HomeIcon,
 	Timer,
 } from "../../data/Icons";
 
@@ -77,8 +74,6 @@ const MainInformation = () => {
 	const { data: cities } = useGetCitiesQuery();
 	const { data: countries } = useGetCountriesQuery();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -177,6 +172,7 @@ const MainInformation = () => {
 			setWorkDays(mainInformation?.workDays);
 			localStorage.setItem("domain", mainInformation?.domain);
 			localStorage.setItem("logo", mainInformation?.logo);
+			localStorage.setItem("store_id", mainInformation?.id);
 		}
 	}, [mainInformation]);
 
@@ -260,8 +256,6 @@ const MainInformation = () => {
 					"لم يتم الطلب"
 				) {
 					dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
-				} else {
-					setEndActionTitle(response?.data?.message?.ar);
 				}
 			} else {
 				setLoadingTitle("");

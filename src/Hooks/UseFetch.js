@@ -2,10 +2,8 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 
 export default function useFetch(url) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// change this token
+	const storeToken = localStorage.getItem("storeToken");
 	const [fetchedData, setFetchedData] = useState(null);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
@@ -20,7 +18,7 @@ export default function useFetch(url) {
 				const response = await axios.get(url, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
+						Authorization: `Bearer ${storeToken}`,
 					},
 				});
 
@@ -44,7 +42,7 @@ export default function useFetch(url) {
 		return () => {
 			isMounted = false;
 		};
-	}, [url, reload, store_token]);
+	}, [url, reload, storeToken]);
 
 	// استخدام useMemo لتجنب إعادة حساب القيم بشكل غير ضروري
 	const memoizedValues = useMemo(

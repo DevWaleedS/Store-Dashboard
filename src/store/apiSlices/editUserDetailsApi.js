@@ -1,40 +1,33 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const editUserDetailsApi = createApi({
 	reducerPath: "editUserDetailsApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["EditUserDetails"],
+
 	endpoints: (builder) => ({
 		// get User Profile data endpoint..
 		getUserProfileData: builder.query({
-			query: () => `profile`,
+			query: () => ({ url: `profile` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.users,
 			providesTags: ["EditUserDetails"],
 		}),
+
 		// update Store Main Information
 		editUserProfileData: builder.mutation({
 			query: ({ body }) => {
 				return {
 					url: `profile`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["EditUserDetails"],

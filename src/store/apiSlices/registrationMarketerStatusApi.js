@@ -1,16 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const registrationMarketerStatusApi = createApi({
 	reducerPath: "registrationMarketerStatusApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.sa/api/selector/",
+
+	// base url
+	baseQuery: axiosBaseQuery({
+		baseUrl: "https://backend.atlbha.com/api/selector/",
 	}),
 
 	endpoints: (builder) => ({
 		// show registration marketer status endpoint..
 		showRegistrationMarketerStatus: builder.query({
-			query: () => `registrationMarketer`,
+			query: () => ({ url: `registrationMarketer` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) =>

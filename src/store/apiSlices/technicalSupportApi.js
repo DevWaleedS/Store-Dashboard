@@ -1,29 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const technicalSupportApi = createApi({
 	reducerPath: "technicalSupportApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
-	}),
 
+	// base url
+	baseQuery: axiosBaseQuery({
+		baseUrl: "https://backend.atlbha.com/api/Store/",
+	}),
 	tagTypes: ["TechnicalSupport"],
+
 	endpoints: (builder) => ({
 		// get store Technical Support endpoint..
 		getTechnicalSupport: builder.query({
-			query: (arg) => `technicalSupport?page=${arg.page}&number=${arg.number}`,
+			query: (arg) => ({
+				url: `technicalSupport?page=${arg.page}&number=${arg.number}`,
+			}),
 			providesTags: ["TechnicalSupport"],
 		}),
 
@@ -64,7 +57,7 @@ export const technicalSupportApi = createApi({
 
 		// show Technical Support by id
 		showTechnicalSupportById: builder.query({
-			query: (id) => `technicalSupport/${id}`,
+			query: (id) => ({ url: `technicalSupport/${id}` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) =>
@@ -78,7 +71,7 @@ export const technicalSupportApi = createApi({
 				return {
 					url: `replayTechnicalSupport`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["TechnicalSupport"],

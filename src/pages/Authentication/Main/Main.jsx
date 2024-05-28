@@ -40,21 +40,34 @@ const imgSubTitle = [
 ];
 
 function Main() {
-	// show  registration marketer status
+	// show registration marketer status
 	const { data: registrationMarketerStatus, isLoading } =
 		useShowRegistrationMarketerStatusQuery();
+	const { data } = useStoreTokenQuery();
+	const [storeToken, setStoreToken] = useState(null);
 
-	// to get store token from admin.atlbha.com
+	useEffect(() => {
+		if (data?.token) {
+			localStorage.setItem("storeToken", data?.token);
+			setStoreToken(localStorage.getItem("storeToken"));
 
-	const { data: storetoken } = useStoreTokenQuery();
+			localStorage.setItem(
+				"name",
+				data?.user?.lastname
+					? `${data?.user?.name} ${data?.user?.lastname}`
+					: `${data?.user?.name}`
+			);
+			localStorage.setItem("userName", data?.user?.user_name);
+			localStorage.setItem("userImage", data?.user?.image);
+			localStorage.setItem("logo", data?.user?.store?.logo);
+			localStorage.setItem("domain", data?.user?.store?.domain);
+			localStorage.setItem("store_id", data?.user?.store_id);
+		}
+	}, [data]);
 
 	const navigate = useNavigate();
 	const parm = useParams();
 	const [activeTab, setActiveTab] = useState(0);
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 
 	// To handle add activeTab to current tab
 	useEffect(() => {
@@ -77,7 +90,7 @@ function Main() {
 		}
 	}, [parm?.type, registrationMarketerStatus]);
 
-	if (store_token) {
+	if (storeToken) {
 		return <Navigate to='/' />;
 	}
 

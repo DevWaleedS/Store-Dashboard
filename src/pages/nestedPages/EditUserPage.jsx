@@ -9,7 +9,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
@@ -79,16 +78,12 @@ const userStatusArray = [
 	{ id: 2, nameAr: "غير مفعل", nameEn: "not_active" },
 ];
 const EditUserPage = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
 	const { id } = useParams();
+	const storeToken = localStorage.getItem("storeToken");
 
 	const { fetchedData, loading, reload, setReload } = useFetch(`user/${id}`);
 	const { fetchedData: roles } = useFetch("selector/roles");
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const navigate = useNavigate();
@@ -261,13 +256,13 @@ const EditUserPage = () => {
 			.post(`user/${fetchedData?.data?.users?.id}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					navigate("/Management");
 					setReload(!reload);
 				} else {

@@ -123,7 +123,6 @@ const EditProduct = () => {
 	const dispatch = useDispatch(false);
 	const contextStore = useContext(Context);
 	const {
-		setEndActionTitle,
 		productHasOptions,
 		setProductHasOptions,
 
@@ -540,7 +539,6 @@ const EditProduct = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/Products");
 
 				setEditorValue("");

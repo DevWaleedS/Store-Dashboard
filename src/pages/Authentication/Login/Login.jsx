@@ -5,6 +5,8 @@ import { ReactComponent as EyeClose } from "../../../data/Icons/eye_close.svg";
 import "./Login.css";
 import { UserAuth } from "../../../Context/UserAuthorProvider";
 import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
+
+// Rtk Query
 import { useLoginMutation } from "../../../store/apiSlices/loginApi";
 
 /** -----------------------------------------------------------------------------------------------------------
@@ -13,6 +15,7 @@ import { useLoginMutation } from "../../../store/apiSlices/loginApi";
 
 const Login = () => {
 	let type = "password";
+
 	const navigate = useNavigate();
 	// If user is not verify
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
@@ -76,7 +79,6 @@ const Login = () => {
 	 */
 
 	const [login, { isLoading }] = useLoginMutation();
-
 	const handleLogin = async () => {
 		// Reset any previous errors
 		setError("");
@@ -88,17 +90,19 @@ const Login = () => {
 			const res = await login({ user_name: username, password }).unwrap();
 
 			if (res?.success === true && res?.data?.status === 200) {
-				const token = res.data.token;
-				localStorage.setItem('store_token', token);
+				localStorage.setItem("storeToken", res.data.token);
 
 				localStorage.setItem(
 					"name",
-					res.data?.user?.name + res.data?.user?.lastname
+					res.data?.user?.lastname
+						? `${res.data?.user?.name} ${res.data?.user?.lastname}`
+						: `${res.data?.user?.name}`
 				);
 				localStorage.setItem("userName", res.data?.user?.user_name);
 				localStorage.setItem("userImage", res.data?.user?.image);
 				localStorage.setItem("logo", res.data?.user?.store_logo);
 				localStorage.setItem("domain", res.data?.user?.store_domain);
+				localStorage.setItem("store_id", res.data?.user?.store_id);
 
 				if (rememberMe) {
 					// Set username, password, and remember_me status to context
@@ -131,11 +135,8 @@ const Login = () => {
 		}
 	};
 
-	/**
-	 * ----------------------------------------------------------------------------------------------
-	 * to handle press enter key on your keyboard
-	 * -----------------------------------------------------------------------------------------------
-	 */
+	/**  To handle press enter key on your keyboard
+	 * ----------------------------------------------------------------------------------------*/
 
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
@@ -153,24 +154,12 @@ const Login = () => {
 	};
 
 	/**
-	 * ----------------------------------------------------------------------------------------------
 	 * TO HANDLE VALIDATION PASSWORD
-	 * ----------------------------------------------------------------------------------------------
-	 */
+	 * -------------------------------------------------------------------------------------*/
 	useEffect(() => {
 		const passwordValidation = PWD_REGEX.test(password);
 		setValidPssWord(passwordValidation);
 	}, [password]);
-	// --------------------------------------------------------------------------------------------------
-
-	// this check if the dashboard is open from admin.atlbah
-	const store_token = new URLSearchParams(window.location.search).get(
-		"ddsdgsfdv"
-	);
-
-	useEffect(() => {
-		if (store_token) localStorage.setItem('store_token', store_token);
-	}, [store_token]);
 	// --------------------------------------------------------------------------------------------------
 
 	return (

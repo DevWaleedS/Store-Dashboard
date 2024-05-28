@@ -9,7 +9,6 @@ import { BsArrowLeft } from "react-icons/bs";
 import { CommentIcon } from "../../../data/Icons";
 
 // Context
-import Context from "../../../Context/context";
 import { LoadingContext } from "../../../Context/LoadingProvider";
 
 // MUI
@@ -19,8 +18,6 @@ import { Button, FormControl, Switch } from "@mui/material";
 import { useUpdateClientsCommentsMutation } from "../../../store/apiSlices/templateSettingApi";
 
 const UpdateComments = ({ Comments, loading }) => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -61,7 +58,6 @@ const UpdateComments = ({ Comments, loading }) => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

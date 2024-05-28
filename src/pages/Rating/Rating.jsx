@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 // Third Party
 import { toast } from "react-toastify";
@@ -8,20 +8,17 @@ import { Helmet } from "react-helmet";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-// CONTEXT
-import Context from "../../Context/context";
-
 // Components
 import RatingWeight from "./RatingWeight";
 import { Breadcrumb } from "../../components";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import { SendReplayModal } from "../../components/Modal";
 import { TablePagination } from "../../components/Tables/TablePagination";
 
 // RTK Query
 import {
-	useChangeCommentActivationMutation,
 	useGetRatingQuery,
+	useChangeCommentActivationMutation,
 } from "../../store/apiSlices/ratingApi";
 
 // switch style
@@ -70,9 +67,6 @@ const switchStyle = {
 };
 
 const Rating = () => {
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 
@@ -101,8 +95,6 @@ const Rating = () => {
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
@@ -164,38 +156,48 @@ const Rating = () => {
 						</div>
 					</div>
 				</div>
-				<div className='rating-wrapper'>
-					<div className='rating-bx mb-md-5 mb-3'>
-						<RatingWeight
-							setCommentDetails={setCommentDetails}
-							RatingData={ratingData?.data?.comment_of_products}
-							loading={isLoading}
-							pageTarget={pageTarget}
-							rowsCount={rowsCount}
-						/>
+				{ratingData?.data?.comment_of_products?.length === 0 ? (
+					<div className='rating-wrapper'>
+						<h4
+							style={{ height: "70vh" }}
+							className='d-flex justify-content-center align-items-center'>
+							لا يوجد تقييمات حتى هذه اللحظة!
+						</h4>
 					</div>
-
-					{/** Pagination */}
-					{ratingData?.data?.comment_of_products?.length !== 0 &&
-						!isLoading && (
-							<TablePagination
-								page={ratingData?.data?.comment_of_products}
-								pageCount={ratingData?.data?.page_count}
-								currentPage={ratingData?.data?.current_page}
+				) : (
+					<div className='rating-wrapper'>
+						<div className='rating-bx mb-md-5 mb-3'>
+							<RatingWeight
+								setCommentDetails={setCommentDetails}
+								RatingData={ratingData?.data?.comment_of_products}
+								loading={isLoading}
 								pageTarget={pageTarget}
 								rowsCount={rowsCount}
-								setRowsCount={setRowsCount}
-								setPageTarget={setPageTarget}
 							/>
-						)}
+						</div>
 
-					{/* send rating replay component */}
-					<SendReplayModal
-						fetchedData={ratingData?.data?.comment_of_products}
-						loading={isLoading}
-						commentDetails={commentDetails}
-					/>
-				</div>
+						{/** Pagination */}
+						{ratingData?.data?.comment_of_products?.length !== 0 &&
+							!isLoading && (
+								<TablePagination
+									page={ratingData?.data?.comment_of_products}
+									pageCount={ratingData?.data?.page_count}
+									currentPage={ratingData?.data?.current_page}
+									pageTarget={pageTarget}
+									rowsCount={rowsCount}
+									setRowsCount={setRowsCount}
+									setPageTarget={setPageTarget}
+								/>
+							)}
+
+						{/* send rating replay component */}
+						<SendReplayModal
+							fetchedData={ratingData?.data?.comment_of_products}
+							loading={isLoading}
+							commentDetails={commentDetails}
+						/>
+					</div>
+				)}
 			</section>
 		</>
 	);

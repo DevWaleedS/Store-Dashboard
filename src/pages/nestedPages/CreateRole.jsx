@@ -12,7 +12,6 @@ import useFetch from "../../Hooks/UseFetch";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // MUI
@@ -55,15 +54,11 @@ const style = {
 };
 
 const CreateRole = () => {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const { fetchedData, loading, reload, setReload } = useFetch("permissions");
 	const [permissions, setPermissions] = useState([]);
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const {
@@ -90,13 +85,13 @@ const CreateRole = () => {
 			.post("roles", data, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
 					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
+
 					navigate("/Management");
 					setReload(!reload);
 				} else {

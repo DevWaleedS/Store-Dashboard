@@ -22,13 +22,12 @@ import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
-import SideBar from "../global/SideBar";
 
 // App Modal
 import MaintenanceMode from "./MaintenanceMode";
-import { DelegateRequestAlert, VerifyStoreModal } from "../components/Modal";
 import { VerifayStoreAlert } from "../components/Modal";
 import { VerifayAfterMainInfoAlert } from "../components/Modal";
+import { DelegateRequestAlert, VerifyStoreModal } from "../components/Modal";
 
 import LoadingRequest from "../components/LoadingRequest/LoadingRequest";
 import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteComp";
@@ -37,9 +36,9 @@ import ActionCompleteComp from "../components/ActionCompleteComp/ActionCompleteC
 import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 
 // Using AXiso Global To wrapping the dashboard
-import "../API/axios-global";
 import AxiosInterceptors from "../API/AxiosInterceptors";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+import SideBar from "../global/Sidebar/SideBar";
 
 const RootLayout = () => {
 	// Handle show Verification  data

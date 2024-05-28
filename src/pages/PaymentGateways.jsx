@@ -1,18 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-// CONTEXT
-import Context from "../Context/context";
-
 // MUI
 import { Switch } from "@mui/material";
 
 // Components
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import CircularLoading from "../HelperComponents/CircularLoading";
 import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
@@ -27,12 +24,13 @@ import {
 	useGetPaymentGatewaysQuery,
 } from "../store/apiSlices/paymentGatewaysApi";
 import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 // Icons
-
 import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
 
 // switch styles
 const switchStyle = {
@@ -83,27 +81,19 @@ const PaymentGateways = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	// to get all  data from server
 	const { data: paymentGateways, isLoading } = useGetPaymentGatewaysQuery();
 
 	// showSupplier bank account
 	const { data: currentBankAccount } = useGetCurrentBankAccountQuery();
 
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
 	const [allPayments, setAllPayments] = useState([]);
 
 	// -----------------------------------------------------------
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	// Side Effects
 	useEffect(() => {
@@ -136,7 +126,7 @@ const PaymentGateways = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
+				console.log(response?.data?.message?.ar);
 			} else {
 				// Handle display errors using toast notifications
 				toast.error(
@@ -145,12 +135,6 @@ const PaymentGateways = () => {
 						: response.data.message.en,
 					{
 						theme: "light",
-					}
-				);
-
-				Object.entries(response?.data?.message?.en)?.forEach(
-					([key, message]) => {
-						toast.error(message[0], { theme: "light" });
 					}
 				);
 			}
@@ -179,7 +163,7 @@ const PaymentGateways = () => {
 					response.data?.success === true &&
 					response.data?.data?.status === 200
 				) {
-					setEndActionTitle(response?.data?.message?.ar);
+					console.log(response?.data?.message?.ar);
 				} else {
 					// Handle display errors using toast notifications
 					toast.error(
@@ -188,12 +172,6 @@ const PaymentGateways = () => {
 							: response.data.message.en,
 						{
 							theme: "light",
-						}
-					);
-
-					Object.entries(response?.data?.message?.en)?.forEach(
-						([key, message]) => {
-							toast.error(message[0], { theme: "light" });
 						}
 					);
 				}

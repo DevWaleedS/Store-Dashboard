@@ -1,22 +1,11 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 // Third Party
-import axios from "axios";
-import * as XLSX from "xlsx";
 import { Helmet } from "react-helmet";
-import * as FileSaver from "file-saver";
-import { useNavigate } from "react-router-dom";
 
 // Components
-import { DropCSVFiles, FormSearchWeight } from "./index";
+import { FormSearchWeight, ImportEndExportProducts } from "./index";
 import { BigProductsTable } from "../../components/Tables";
-
-// Icons
-import { MdAdd } from "react-icons/md";
-
-// Context
-import Context from "../../Context/context";
-import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
@@ -31,41 +20,25 @@ import {
 	useSearchInImportedProductsMutation,
 	useSearchInStoreProductsMutation,
 } from "../../store/apiSlices/productsApi";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 const Products = () => {
-	const navigate = useNavigate();
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
 
 	// Categories Selector
 	const { data: selectCategories } = useGetCategoriesQuery();
 
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
-
-	const [pageTarget, setPageTarget] = useState(1);
-	const [rowsCount, setRowsCount] = useState(10);
-	const [file, setFile] = useState("");
 	const [search, setSearch] = useState("");
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
-	const LoadingStore = useContext(LoadingContext);
-	const { setLoadingTitle } = LoadingStore;
-	const [tabSelected, setTabSelected] = useState(1);
-	const [productsData, setProductsData] = useState([]);
-	const [fileError, setFileError] = useState("");
-	const [category_id, setCategory_id] = useState("");
-
-	const [currentPage, setCurrentPage] = useState(1);
 	const [pageCount, setPageCount] = useState(1);
+	const [rowsCount, setRowsCount] = useState(10);
+	const [pageTarget, setPageTarget] = useState(1);
+	const [tabSelected, setTabSelected] = useState(1);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [category_id, setCategory_id] = useState("");
+	const [productsData, setProductsData] = useState([]);
 
 	// Fetch store Products
 	const { data: storeProducts, isLoading: storeProductsIsLoading } =
@@ -223,65 +196,6 @@ const Products = () => {
 		filterStoreProductsByCategories,
 	]);
 
-	// ----------------------------------------------------------------------------------------------
-	const fileType =
-		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-	const fileExtension = ".xlsx";
-	const handleFile = (file) => {
-		setFile(file[0]);
-	};
-
-	// Export the product file
-	const exportToCSV = () => {
-		const ws = XLSX.utils.json_to_sheet(
-			productsData?.map((item) => ({
-				id: item?.id,
-				name: item?.name,
-				description: item?.description,
-				short_description: item?.short_description,
-				SEOdescription: item?.SEOdescription.map((seo) => seo),
-				selling_price: item?.selling_price,
-				category_id: item?.category?.name,
-				discount_price: item?.discount_price,
-				subcategory_id: item?.subcategory?.map((sub) => sub?.name)?.toString(),
-				weight: item?.weight,
-				stock: item?.stock,
-				cover: item?.cover,
-			}))
-		);
-		const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-		const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-		const data = new Blob([excelBuffer], { type: fileType });
-		FileSaver.saveAs(data, "StoreProducts" + fileExtension);
-	};
-
-	// Import the product file
-	const uploadFile = () => {
-		setLoadingTitle("جاري رفع الملف");
-		setFileError("");
-		let formData = new FormData();
-		formData.append("file", file);
-		axios
-			.post(`import-products`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
-				},
-			})
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setLoadingTitle("");
-					setEndActionTitle(res?.data?.message?.ar);
-					setFile("");
-					// setReload(!reload);
-				} else {
-					setLoadingTitle("");
-					setFileError(res?.data?.message?.en?.file?.[0]);
-					// setReload(!reload);
-				}
-			});
-	};
-
 	return (
 		<>
 			<Helmet>
@@ -297,45 +211,9 @@ const Products = () => {
 					/>
 				</div>
 				<div className='mb-3'>
-					<div className='mange-file d-flex justify-content-between bg-white '>
-						<div className='export-upload-btn-group d-flex justify-content-between'>
-							<div className='export-files'>
-								<button
-									onClick={exportToCSV}
-									className='export-btn'
-									type='button'>
-									تصدير
-								</button>
-							</div>
-							<div className='upload-files'>
-								<button
-									onClick={uploadFile}
-									className='w-100 h-100 upload-files-input'>
-									رفع ملف
-								</button>
-							</div>
-						</div>
-
-						<div className='drop-files '>
-							<DropCSVFiles
-								file={file}
-								handleFile={handleFile}
-								fileError={fileError}
-							/>
-						</div>
-						<div className='add-new-product'>
-							<button
-								className=' add-new-product-btn w-100'
-								type='button'
-								onClick={() => {
-									navigate("AddProduct");
-								}}>
-								<MdAdd />
-								<span className='me-2'>اضافة منتج جديد</span>
-							</button>
-						</div>
-					</div>
+					<ImportEndExportProducts productsData={productsData} />
 				</div>
+
 				<div className='filters-btn'>
 					<button
 						className={`btn ${tabSelected === 1 ? "active" : ""}`}

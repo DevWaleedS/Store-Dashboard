@@ -7,20 +7,19 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../../../Context/context";
 import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // Components
-import { TopBarSearchInput } from "../../../../global";
+import { TopBarSearchInput } from "../../../../global/TopBar";
 import CircularLoading from "../../../../HelperComponents/CircularLoading";
 
-// TO print this page
+// To print this page
 import ReactToPrint from "react-to-print";
 
 // Icons
-
-import { FaMountainCity, FaSignsPost, FaArrowRight } from "react-icons/fa6";
+import { BsCartX } from "react-icons/bs";
 import { FaCity } from "react-icons/fa";
+import { FaMountainCity, FaSignsPost, FaArrowRight } from "react-icons/fa6";
 
 import { BsFillInfoSquareFill } from "react-icons/bs";
 
@@ -51,6 +50,7 @@ import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectors
 import {
 	useAcceptOrRejectReturnOrderMutation,
 	useGetReturnOrderByIdQuery,
+	useRefundReturnOrderMutation,
 } from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
 import { Breadcrumb } from "../../../../components";
 
@@ -83,11 +83,9 @@ const ReturnOrderDetails = () => {
 
 	//get shipping cities data
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [printError, setPrintError] = useState("");
 
 	const [shippingId, setShippingId] = useState(null);
 
@@ -116,10 +114,9 @@ const ReturnOrderDetails = () => {
 		});
 		return unique?.[0]?.region?.name || name;
 	}
-
 	// -----------------------------------------------------
 
-	// To handle update order Status
+	//  handle update order Status
 	const [acceptOrRejectReturnOrder, { isLoading }] =
 		useAcceptOrRejectReturnOrderMutation();
 	const handleAcceptReturnOrder = async (status) => {
@@ -144,7 +141,6 @@ const ReturnOrderDetails = () => {
 			) {
 				navigate("/ReturnOrders");
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 
@@ -168,15 +164,42 @@ const ReturnOrderDetails = () => {
 			console.error("Error changing update acceptOrRejectReturnOrder:", error);
 		}
 	};
+	// -----------------------------------------------------
 
+	// handle refund return order
+	const [refundError, setRefundError] = useState("");
+	const [refundReturnOrder] = useRefundReturnOrderMutation();
+
+	const handleRefundReturnOrder = async () => {
+		setLoadingTitle("جاري رد المبلغ للمستخدم");
+
+		try {
+			const response = await refundReturnOrder({
+				id,
+			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				navigate("/ReturnOrders");
+				setLoadingTitle("");
+			} else {
+				setLoadingTitle("");
+				setRefundError(response?.data?.message?.ar);
+				// Handle display errors using toast notifications
+				toast.error(response?.data?.message?.ar, { theme: "light" });
+			}
+		} catch (error) {
+			console.error("Error changing update refundReturnOrder:", error);
+		}
+	};
 	// -------------------------------------------------
 
 	// Handle print sticker Function
 	const printSticker = () => {
-		setPrintError("");
-		// this will open the sticker in new tap
 		window.open(currentOrder?.order?.shipping_return?.sticker, "_blank");
-		// this will open the sticker in new tap
 	};
 	// -------------------------------------------------
 
@@ -731,13 +754,7 @@ const ReturnOrderDetails = () => {
 									currentOrder?.order?.shippingtypes?.name !== "اخرى" &&
 									currentOrder?.status !== "جديد" && (
 										<button
-											disabled={currentOrder?.status === "جديد" ? true : false}
-											style={{
-												cursor:
-													currentOrder?.status === "جديد"
-														? "not-allowed"
-														: "pointer",
-											}}
+											style={{ cursor: "pointer" }}
 											onClick={() => printSticker()}
 											className='order-action-box mb-3'>
 											<div className='action-title'>
@@ -745,24 +762,41 @@ const ReturnOrderDetails = () => {
 												<span
 													className='me-2 ms-2'
 													style={{ fontSize: "18px" }}>
-													{" "}
 													طباعة بوليصة الارجاع
 												</span>
-												{printError && (
+											</div>
+											<div className='action-icon'>
+												<Print style={{ cursor: "pointer" }} />
+											</div>
+										</button>
+									)}
+
+								{(currentOrder?.order?.paymenttype?.id === 1 ||
+									currentOrder?.order?.paymenttype?.name === "مدى" ||
+									currentOrder?.order?.paymenttype?.id === 5 ||
+									currentOrder?.order?.paymenttype?.name ===
+										"الدفع الأجل (مدفوع)") &&
+									currentOrder?.status === "تم الاسترجاع" &&
+									currentOrder.refund_status !== 0 && (
+										<button
+											style={{ cursor: "pointer" }}
+											onClick={() => handleRefundReturnOrder()}
+											className='order-action-box mb-3'>
+											<div className='action-title'>
+												<ListIcon className='list-icon' />
+												<span
+													className='me-2 ms-2'
+													style={{ fontSize: "18px" }}>
+													رد المبلغ للعميل
+												</span>
+												{refundError && (
 													<span className='fs-6 text-danger'>
-														({printError})
+														({refundError})
 													</span>
 												)}
 											</div>
 											<div className='action-icon'>
-												<Print
-													style={{
-														cursor:
-															currentOrder?.status !== "جديد"
-																? "not-allowed"
-																: "pointer",
-													}}
-												/>
+												<BsCartX style={{ cursor: "pointer" }} />
 											</div>
 										</button>
 									)}
@@ -798,7 +832,7 @@ const ReturnOrderDetails = () => {
 						</div>
 					) : (
 						<div className='row d-flex justify-content-center align-items-center'>
-							<div className='col-6'>
+							<div className='col-md-4 col-12'>
 								<button
 									className='close-btn '
 									disabled={isLoading}

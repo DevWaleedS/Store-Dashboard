@@ -18,10 +18,7 @@ function OptionsModal({
 	reload,
 	setReload,
 }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -129,7 +126,7 @@ function OptionsModal({
 			.post(`addImportCart`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

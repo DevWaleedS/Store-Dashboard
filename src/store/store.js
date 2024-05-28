@@ -1,4 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
+
 import AddActivity from "./slices/AddActivity";
 import AddSubActivity from "./slices/AddSubActivity";
 import VideoModalSlice from "./slices/VideoModal-slice";
@@ -12,22 +14,12 @@ import VerifyStoreAlertModalSlice from "./slices/VerifyStoreAlertModal-slice";
 import VerifyStoreAlertAfterMainModalSlice from "./slices/VerifyStoreAlertAfterMainModal-slice";
 import AddBankAccountModal from "./slices/AddBankAccountModal";
 import EditBankAccountModal from "./slices/EditBankAccountModal";
-import SuccessMessageModalSlice from "./slices/SuccessMessageModalSlice";
+
 import BankAccStatusCommentModal from "./slices/BankAccStatusCommentModal";
 import BankAccountAlert from "./slices/BankAccountAlert";
 import CategoriesSlice from "./slices/CategoriesSlice";
 import ProductsSlice from "./slices/ProductsSlice";
-import OrdersSlice from "./slices/OrdersSlice";
-import CouponsSlice from "./slices/CouponsSlice";
-import EmptyCartsSlice from "./slices/EmptyCartsSlice";
-import PostalSubscriptionsSlice from "./slices/PostalSubscriptionsSlice";
-import RatingSlice from "./slices/RatingSlice";
-import PagesSlice from "./slices/PagesSlice";
-import AcademySlice from "./slices/AcademySlice";
-import TechnicalSupportSlice from "./slices/TechnicalSupportSlice";
-import SouqOtlobhaSlice from "./slices/SouqOtlobhaSlice";
-import NotificationsSlice from "./slices/NotificationsSlice";
-import CategoriesSelectSlice from "./slices/CategoriesSelectSlice";
+
 import { mainPageApi } from "./apiSlices/mainPageApi";
 import { categoriesApi } from "./apiSlices/categoriesApi";
 
@@ -44,7 +36,6 @@ import { pagesApi } from "./apiSlices/pagesApi";
 import { AcademyApi } from "./apiSlices/academyApi";
 import { technicalSupportApi } from "./apiSlices/technicalSupportApi";
 import { notificationsApi } from "./apiSlices/notificationsApi";
-import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { selectShippingCitiesApi } from "./apiSlices/selectorsApis/selectShippingCitiesApi";
 import { platformServicesApi } from "./apiSlices/platformServicesApi";
 
@@ -187,7 +178,6 @@ export const store = configureStore({
 		VideoModal: VideoModalSlice,
 		AddSubActivity: AddSubActivity,
 		VerifyModal: VerifyStoreModalSlice,
-		CategoriesSelect: CategoriesSelectSlice,
 		AddSubCategorySlice: AddSubCategorySlice,
 		MaintenanceModeModal: MaintenanceModeModal,
 		DelegateRequestAlert: DelegateRequestAlert,
@@ -196,21 +186,11 @@ export const store = configureStore({
 		ImportProductHintModal: ImportProductHintModal,
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
-		SuccessMessage: SuccessMessageModalSlice,
+
 		BankAccStatusCommentModal,
 		BankAccountAlert,
 		CategoriesSlice,
 		ProductsSlice,
-		OrdersSlice,
-		CouponsSlice,
-		EmptyCartsSlice,
-		PostalSubscriptionsSlice,
-		RatingSlice,
-		PagesSlice,
-		AcademySlice,
-		TechnicalSupportSlice,
-		SouqOtlobhaSlice,
-		NotificationsSlice,
 
 		ChangeCategoriesForSomeSelectedProductsSlice,
 	},

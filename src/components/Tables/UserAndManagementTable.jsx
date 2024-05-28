@@ -198,10 +198,7 @@ export default function UserAndManagementTable({
 	reload,
 	setReload,
 }) {
-	const store_token = document.cookie
-		?.split("; ")
-		?.find((cookie) => cookie.startsWith("store_token="))
-		?.split("=")[1];
+	const storeToken = localStorage.getItem("storeToken");
 	const NotificationStore = useContext(NotificationContext);
 	const { confirm, setConfirm, actionTitle, setActionTitle } =
 		NotificationStore;
@@ -294,7 +291,7 @@ export default function UserAndManagementTable({
 				.get(`userdeleteall?${queryParams}`, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
+						Authorization: `Bearer ${storeToken}`,
 					},
 				})
 				.then((res) => {
@@ -315,7 +312,7 @@ export default function UserAndManagementTable({
 				.get(`userchangeSatusall?${queryParams}`, {
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${store_token}`,
+						Authorization: `Bearer ${storeToken}`,
 					},
 				})
 				.then((res) => {
@@ -339,7 +336,7 @@ export default function UserAndManagementTable({
 			.get(`userchangeSatusall?id[]=${id}`, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${store_token}`,
+					Authorization: `Bearer ${storeToken}`,
 				},
 			})
 			.then((res) => {

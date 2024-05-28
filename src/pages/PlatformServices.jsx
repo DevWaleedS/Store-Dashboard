@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Components
 import { Breadcrumb } from "../components";
-import { TopBarSearchInput } from "../global";
+import { TopBarSearchInput } from "../global/TopBar";
 import CircularLoading from "../HelperComponents/CircularLoading";
 
 // Context
-import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // MUI
@@ -32,7 +29,9 @@ import {
 	useGetPlatformServicesSelectorQuery,
 	useRequestNewServiceMutation,
 } from "../store/apiSlices/platformServicesApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
 
 // ---------------------------------------------
 
@@ -61,9 +60,9 @@ const selectStyle = {
 // -----------------------------------------------------
 
 const PlatformServices = () => {
-	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	// ------------------------------------------------------------
@@ -85,14 +84,6 @@ const PlatformServices = () => {
 		description: "",
 	});
 	// ---------------------------------------------
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	// To get Activity and store name
 	useEffect(() => {
@@ -132,7 +123,6 @@ const PlatformServices = () => {
 			) {
 				setLoadingTitle("");
 
-				setEndActionTitle(response?.data?.message?.ar);
 				setData({ ...data, services: [], name: "", description: "" });
 			} else {
 				setLoadingTitle("");

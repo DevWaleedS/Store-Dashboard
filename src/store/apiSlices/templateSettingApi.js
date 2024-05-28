@@ -1,29 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const templateSettingApi = createApi({
 	reducerPath: "templateSettingApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
-	}),
 
+	// base url
+	baseQuery: axiosBaseQuery({
+		baseUrl: "https://backend.atlbha.com/api/Store/",
+	}),
 	tagTypes: ["TemplateSetting"],
+
 	endpoints: (builder) => ({
 		// get store Template setting endpoint..
 		getTemplateSetting: builder.query({
-			query: () => `homepage`,
+			query: () => ({ url: `homepage` }),
 			providesTags: ["TemplateSetting"],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -36,7 +27,7 @@ export const templateSettingApi = createApi({
 				return {
 					url: `sliderUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["TemplateSetting"],
@@ -48,7 +39,7 @@ export const templateSettingApi = createApi({
 				return {
 					url: `banarUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["TemplateSetting"],
@@ -60,7 +51,7 @@ export const templateSettingApi = createApi({
 				return {
 					url: `commentUpdate`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["TemplateSetting"],

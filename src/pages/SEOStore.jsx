@@ -4,15 +4,12 @@ import React, { useState, useEffect, useContext } from "react";
 
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Components
-
 import CircularLoading from "../HelperComponents/CircularLoading";
 import TextareaCode from "../components/TextareaCode/TextareaCode";
 
 // Context
-import Context from "../Context/context";
 import { LoadingContext } from "../Context/LoadingProvider";
 
 // MUI
@@ -34,17 +31,19 @@ import {
 	useGetSEODataQuery,
 	useUpdateSeoMutation,
 } from "../store/apiSlices/SEOImprovementsApi";
-import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
+
 import { Breadcrumb } from "../components";
 
+// custom hook
+import UseAccountVerification from "../Hooks/UseAccountVerification";
+
 const PaintStore = () => {
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	// get seo data
 	const { data: Seo, isLoading } = useGetSEODataQuery();
 
-	const navigate = useNavigate();
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const [updateLinkValue, setUpdateLinkValue] = useState("");
@@ -81,14 +80,6 @@ const PaintStore = () => {
 		});
 	};
 	// --------------------------------------------------------------
-
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	useEffect(() => {
 		setUpdateLinkValue(Seo?.[0]?.google_analytics);
@@ -134,7 +125,6 @@ const PaintStore = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

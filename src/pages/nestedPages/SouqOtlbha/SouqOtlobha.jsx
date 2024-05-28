@@ -5,8 +5,8 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
-import { TopBarSearchInput } from "../../../global";
-import SuccessMessageModal from "./CheckoutPage/SuccessMessageModal";
+import { TopBarSearchInput } from "../../../global/TopBar";
+
 import { TablePagination } from "../../../components/Tables/TablePagination";
 import {
 	SouqOtlbhaProducts,
@@ -142,9 +142,6 @@ const SouqOtlobha = () => {
 					)}
 				</div>
 			</section>
-
-			{/* This will be open after checkout */}
-			<SuccessMessageModal />
 		</>
 	);
 };

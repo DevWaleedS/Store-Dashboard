@@ -1,7 +1,8 @@
+// React and React DOM
 import React, { useContext, useState, useEffect, Fragment } from "react";
-
-// Third party
 import ReactDom from "react-dom";
+
+// Third-party libraries
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 
@@ -15,12 +16,10 @@ import { closeMaintenanceModeModal } from "../store/slices/MaintenanceModeModal"
 
 // MUI
 import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
 import { Button, Switch } from "@mui/material";
 
 // Icons
 import { RiText } from "react-icons/ri";
-import { TextIcon } from "../data/Icons";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 // Component
@@ -32,7 +31,7 @@ import {
 	useUpdateMaintenanceModeMutation,
 } from "../store/apiSlices/maintenanceModeApi";
 
-// style content
+// Styles
 const style = {
 	position: "fixed",
 	top: "50%",
@@ -44,7 +43,6 @@ const style = {
 	backgroundColor: "#fff",
 	boxShadow: 24,
 	p: 0,
-
 	"@media(max-width:768px)": {
 		top: "50%",
 	},
@@ -67,13 +65,11 @@ const switchStyle = {
 		transform: "translate(8px,6px)",
 		color: "#fff",
 	},
-
 	"&:hover": {
 		"& .MuiSwitch-thumb": {
 			boxShadow: "none",
 		},
 	},
-
 	"& .MuiSwitch-switchBase": {
 		padding: 1,
 		"&.Mui-checked": {
@@ -88,15 +84,12 @@ const switchStyle = {
 };
 
 const MaintenanceModeModal = () => {
-	// To change z-index of navbar when maintain mode is open
 	const Z_index = useContext(Context);
-	const { setNavbarZindex } = Z_index;
 
-	// get data from api
+	const { setNavbarZindex } = Z_index;
 	const { data: maintenancesMode, isLoading } =
 		useGetMaintenanceModeDataQuery();
 
-	// create video modal function
 	const { isOpenMaintenanceModeModal } = useSelector(
 		(state) => state.MaintenanceModeModal
 	);
@@ -106,8 +99,6 @@ const MaintenanceModeModal = () => {
 		title: "",
 		message: "",
 	});
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 	const dispatch = useDispatch(false);
@@ -118,25 +109,14 @@ const MaintenanceModeModal = () => {
 		formState: { errors },
 	} = useForm({
 		mode: "onBlur",
-		defaultValues: {
-			title: "",
-			message: "",
-		},
+		defaultValues: { title: "", message: "" },
 	});
+	const [dataError, setDataError] = useState({ title: "", message: "" });
 
-	// to handle errors
-	const [dataError, setDataError] = useState({
-		title: "",
-		message: "",
-	});
 	const resetDataError = () => {
-		setDataError({
-			title: "",
-			message: "",
-		});
+		setDataError({ title: "", message: "" });
 	};
 
-	// to set all data info from api
 	useEffect(() => {
 		if (maintenancesMode) {
 			setMaintenanceModeValue({
@@ -153,15 +133,11 @@ const MaintenanceModeModal = () => {
 		reset(maintenanceModeValue);
 	}, [maintenanceModeValue, reset]);
 
-	/** --------------------------------------------------------- */
-
-	//  update maintenance mode values
 	const [UpdateMaintenanceMode] = useUpdateMaintenanceModeMutation();
+
 	const handleUpdateMaintenanceMode = async (data) => {
 		setLoadingTitle("جاري تعديل وضع الصيانة");
 		resetDataError();
-
-		// data that send to api...
 		let formData = new FormData();
 		formData.append("title", data?.title);
 		formData.append("message", data?.message);
@@ -170,22 +146,15 @@ const MaintenanceModeModal = () => {
 			maintenanceStatus === true ? "active" : "not_active"
 		);
 
-		// make request...
 		try {
-			const response = await UpdateMaintenanceMode({
-				body: formData,
-			});
-
-			// Handle response
+			const response = await UpdateMaintenanceMode({ body: formData });
 			if (
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
-				dispatch(closeMaintenanceModeModal());
-
 				setNavbarZindex(false);
+				dispatch(closeMaintenanceModeModal());
 			} else {
 				setLoadingTitle("");
 				setNavbarZindex(false);
@@ -194,17 +163,12 @@ const MaintenanceModeModal = () => {
 					title: response?.data?.message?.en?.title?.[0],
 					message: response?.data?.message?.en?.message?.[0],
 				});
-
-				// Handle display errors using toast notifications
 				toast.error(
 					response?.data?.message?.ar
 						? response.data.message.ar
 						: response.data.message.en,
-					{
-						theme: "light",
-					}
+					{ theme: "light" }
 				);
-
 				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });
@@ -218,7 +182,6 @@ const MaintenanceModeModal = () => {
 
 	return (
 		<section className='maintenance-page p-3'>
-			{/** Modal  */}
 			<div className='row'>
 				<div className='modal maintenance-modal'>
 					<Modal
@@ -228,121 +191,113 @@ const MaintenanceModeModal = () => {
 						onClose={() => {
 							setNavbarZindex(false);
 							dispatch(closeMaintenanceModeModal());
-						}}
-						closeAfterTransition>
-						<Fade in={isOpenMaintenanceModeModal}>
-							{isLoading ? (
-								<CircularLoading />
-							) : (
-								<div style={style}>
-									<form onSubmit={handleSubmit(handleUpdateMaintenanceMode)}>
-										<div className='maintenance-modal-header d-flex justify-content-between align-items-center'>
-											<span> وضع الصيانة</span>
-											<AiOutlineCloseCircle
-												onClick={() => {
-													setNavbarZindex(false);
-													dispatch(closeMaintenanceModeModal());
+						}}>
+						<div style={style}>
+							<form onSubmit={handleSubmit(handleUpdateMaintenanceMode)}>
+								<div className='maintenance-modal-header d-flex justify-content-between align-items-center'>
+									<span> وضع الصيانة</span>
+									<AiOutlineCloseCircle
+										onClick={() => {
+											setNavbarZindex(false);
+											dispatch(closeMaintenanceModeModal());
+										}}
+									/>
+								</div>
+								<div className='maintenance-modal-body'>
+									<div className='row mx-0 mb-4'>
+										<div className='modal-body-header d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
+											<div>
+												<h5 className='mb-2'>وضع الصيانة</h5>
+												<p className='modal-desc'>
+													عند تفعيل وضع الصيانة ستتمكن لوحدك من الدخول للمتجر
+													،والعمل على تجهيزه، ستظهر للعملاء صفحة الصيانة للاطلاع
+													عليها قم بالدخول إلى متجرك من متصفح آخر أو بتسجيل
+													الخروج من لوحة التحكم
+												</p>
+											</div>
+										</div>
+									</div>
+									<div className='row maintenance-modal-form mx-0'>
+										<div className='col-12 mb-3'>
+											<Switch
+												name='status'
+												onChange={(e) => {
+													setMaintenanceStatus(e.target.checked);
 												}}
+												checked={maintenanceStatus}
+												className='d-flex mx-auto'
+												sx={switchStyle}
 											/>
 										</div>
-										<div className='maintenance-modal-body'>
-											<div className='row mx-0 mb-4'>
-												<div className='modal-body-header d-flex flex-md-row flex-column-reverse justify-content-between align-items-center'>
-													<div>
-														<h5 className='mb-2'>وضع الصيانة</h5>
-														<p className='modal-desc'>
-															عند تفعيل وضع الصيانة ستتمكن لوحدك من الدخول
-															للمتجر ،والعمل على تجهيزه، ستظهر للعملاء صفحة
-															الصيانة للاطلاع عليها قم بالدخول إلى متجرك من
-															متصفح آخر أو بتسجيل الخروج من لوحة التحكم
-														</p>
-													</div>
+										<div className='col-12 mb-3'>
+											<div className='modal-input-group'>
+												<label htmlFor='maintenance-title-input'>
+													عنوان وضع الصيانة
+												</label>
+												<div className='modal-input-icon'>
+													<span>
+														<RiText />
+													</span>
 												</div>
-											</div>
-											<div className='row maintenance-modal-form mx-0'>
-												<div className='col-12 mb-3'>
-													<Switch
-														name='status'
-														onChange={(e) => {
-															setMaintenanceStatus(e.target.checked);
-														}}
-														checked={maintenanceStatus}
-														className='d-flex mx-auto'
-														sx={switchStyle}
-													/>
-												</div>
-												<div className='col-12 mb-3'>
-													<div className='modal-input-group'>
-														<label htmlFor=' maintenance-title-input'>
-															عنوان وضع الصيانة
-														</label>
-														<div className='modal-input-icon'>
-															<span>
-																<RiText />
-															</span>
-														</div>
-														<input
-															name='title'
-															type='text'
-															id='maintenance-title-input'
-															placeholder='المتجر مغلق مؤقتاََ للصيانة'
-															{...register("title", {
-																required: "حقل العنوان مطلوب",
-																pattern: {
-																	value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
-																	message:
-																		" العنوان يجب أن يكون نصاً ولا يحتوي على حروف خاصه مثل الأقوس والرموز",
-																},
-															})}
-														/>
-														<br />
-														<span className='fs-6 text-danger'>
-															{dataError?.title}
-															{errors?.title && errors.title.message}
-														</span>
-													</div>
-												</div>
-												<div className='col-12'>
-													<div className='modal-input-group'>
-														<label htmlFor='maintenance-message'>
-															الرسالة النصية للعملاء
-														</label>
-														<div className='modal-input-icon'>
-															<span>
-																<TextIcon />
-															</span>
-														</div>
-
-														<textarea
-															name='message'
-															id='maintenance-message'
-															placeholder='نص الرسالة التي ستظهر للعملاء'
-															{...register("message", {
-																required: "حقل الرسالة مطلوب",
-															})}
-														/>
-														<br />
-														<span className='fs-6 text-danger'>
-															{dataError?.message}
-															{errors?.message && errors.message.message}
-														</span>
-													</div>
-												</div>
+												<input
+													name='title'
+													type='text'
+													id='maintenance-title-input'
+													placeholder='المتجر مغلق مؤقتاََ للصيانة'
+													{...register("title", {
+														required: "حقل العنوان مطلوب",
+														pattern: {
+															value: /^[^-\s][\u0600-\u06FF-A-Za-z0-9 ]+$/i,
+															message:
+																" العنوان يجب أن يكون نصاً ولا يحتوي على حروف خاصه مثل الأقوس والرموز",
+														},
+													})}
+												/>
+												<br />
+												<span className='fs-6 text-danger'>
+													{dataError?.title}
+													{errors?.title && errors.title.message}
+												</span>
 											</div>
 										</div>
-										<div className='maintenance-modal-footer'>
-											<div className='col-12'>
-												<div className='modal-input-button d-flex justify-content-center'>
-													<Button className='next-btn' type='submit'>
-														حفظ
-													</Button>
+										<div className='col-12'>
+											<div className='modal-input-group'>
+												<label htmlFor='maintenance-message'>
+													الرسالة النصية للعملاء
+												</label>
+												<div className='modal-input-icon'>
+													<span>
+														<RiText />
+													</span>
 												</div>
+												<textarea
+													name='message'
+													id='maintenance-message'
+													placeholder='نص الرسالة التي ستظهر للعملاء'
+													{...register("message", {
+														required: "حقل الرسالة مطلوب",
+													})}
+												/>
+												<br />
+												<span className='fs-6 text-danger'>
+													{dataError?.message}
+													{errors?.message && errors.message.message}
+												</span>
 											</div>
 										</div>
-									</form>
+									</div>
 								</div>
-							)}
-						</Fade>
+								<div className='maintenance-modal-footer'>
+									<div className='col-12'>
+										<div className='modal-input-button d-flex justify-content-center'>
+											<Button className='next-btn' type='submit'>
+												حفظ
+											</Button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
 					</Modal>
 				</div>
 			</div>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // third party
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -64,7 +63,6 @@ const EditCategory = () => {
 	const dispatch = useDispatch(true);
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const { subCategories, setSubCategories } = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -162,7 +160,6 @@ const EditCategory = () => {
 				setLoadingTitle("");
 				navigate("/Category");
 				setSubCategories([]);
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

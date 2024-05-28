@@ -10,10 +10,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 // Components
 import { Plans } from "../components";
-import { TopBarSearchInput } from "../global";
 
 // Icons
 import { HomeIcon } from "../data/Icons";
+import { TopBarSearchInput } from "../global/TopBar";
 
 const PackageUpgrade = () => {
 	const [yearlyPlan, setYearlyPlan] = useState(false);

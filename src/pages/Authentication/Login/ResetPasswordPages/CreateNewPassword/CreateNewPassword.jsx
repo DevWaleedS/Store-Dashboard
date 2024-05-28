@@ -72,7 +72,7 @@ const CreateNewPassword = () => {
 			.post("https://backend.atlbha.com/api/password/reset-password", formData)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					localStorage.setItem("store_token", res?.data?.data?.token);
+					localStorage.setItem("storeToken", res?.data?.data?.token);
 					if (
 						!resetPasswordToken ||
 						res?.data?.message?.en === "This password reset token is invalid."

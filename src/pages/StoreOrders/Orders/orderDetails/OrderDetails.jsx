@@ -10,7 +10,7 @@ import ExportOrder from "./ExportOrder";
 import CustomerInfo from "./CustomerInfo";
 import OrderItemsInfo from "./OrderItemsInfo";
 import AddStoreAddress from "./AddStoreAddress";
-import { TopBarSearchInput } from "../../../../global";
+import { TopBarSearchInput } from "../../../../global/TopBar";
 import SelectShippingStatus from "./SelectShippingStatus";
 import PrintShippingSticker from "./PrintShippingSticker";
 import Breadcrumb from "../../../../components/Breadcrumb/Breadcrumb";

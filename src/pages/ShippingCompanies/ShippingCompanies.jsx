@@ -3,31 +3,29 @@ import React, { useContext, useEffect, useState } from "react";
 // Third party
 
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
 import { Breadcrumb } from "../../components";
-import { TopBarSearchInput } from "../../global";
+import { TopBarSearchInput } from "../../global/TopBar";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
-// Context
-import Context from "../../Context/context";
-
 // RTK Query
 import {
-	useChangeOtherShippingCompanyStatusAndAddPriceMutation,
-	useChangeShippingComponyStatusMutation,
 	useGetShippingCompaniesQuery,
+	useChangeShippingComponyStatusMutation,
 	useUpdatePriceForOtherShippingCompanyMutation,
+	useChangeOtherShippingCompanyStatusAndAddPriceMutation,
 } from "../../store/apiSlices/shippingCompaniesApi";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 // Icons
 import { Switch } from "@mui/material";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { LoadingContext } from "../../Context/LoadingProvider";
+
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 // switch style
 const switchStyle = {
@@ -75,12 +73,11 @@ const switchStyle = {
 };
 
 const ShippingCompanies = () => {
+	// to Handle if the user is not verify  her account
+	UseAccountVerification();
+
 	// to get all  data from server
 	const { data: shippingCompanies, isLoading } = useGetShippingCompaniesQuery();
-
-	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -100,13 +97,6 @@ const ShippingCompanies = () => {
 	});
 
 	// -----------------------------------------------------------
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
 
 	// Side Effects to filter other shipping
 	useEffect(() => {
@@ -194,7 +184,7 @@ const ShippingCompanies = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				setEndActionTitle(response?.data?.message?.ar);
+				console.log(response?.data?.message?.ar);
 			} else {
 				// Handle display errors using toast notifications
 				toast.error(
@@ -203,12 +193,6 @@ const ShippingCompanies = () => {
 						: response.data.message.en,
 					{
 						theme: "light",
-					}
-				);
-
-				Object.entries(response?.data?.message?.en)?.forEach(
-					([key, message]) => {
-						toast.error(message[0], { theme: "light" });
 					}
 				);
 			}
@@ -239,7 +223,7 @@ const ShippingCompanies = () => {
 					response.data?.success === true &&
 					response.data?.data?.status === 200
 				) {
-					setEndActionTitle(response?.data?.message?.ar);
+					console.log(response?.data?.message?.ar);
 				} else {
 					// Handle display errors using toast notifications
 					toast.error(
@@ -293,7 +277,6 @@ const ShippingCompanies = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 

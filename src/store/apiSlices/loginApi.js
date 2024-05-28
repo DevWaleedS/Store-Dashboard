@@ -1,9 +1,12 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const loginApi = createApi({
 	reducerPath: "loginApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/",
 	}),
 
@@ -13,7 +16,7 @@ export const loginApi = createApi({
 			query: (credentials) => ({
 				url: `loginapi`,
 				method: "POST",
-				body: credentials,
+				data: credentials,
 			}),
 		}),
 	}),

@@ -2,10 +2,6 @@ import React, { useState, useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
-
-// Icons
-import { HomeIcon } from "../../data/Icons";
 
 // Components
 import { CartsTables } from "../../components/Tables";
@@ -15,11 +11,16 @@ import {
 	useGetEmptyCartsQuery,
 	useSearchInEmptyCartsMutation,
 } from "../../store/apiSlices/emptyCartsApi";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+
 import { Breadcrumb } from "../../components";
 
+// custom hook
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
+
 const EmptyCarts = () => {
-	const navigate = useNavigate();
+	// to Handle if the user is not verify her account
+	UseAccountVerification();
+
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
@@ -30,20 +31,12 @@ const EmptyCarts = () => {
 		number: rowsCount,
 	});
 
-	// to Handle if the user is not verify  her account
-	const { data: showVerification } = useShowVerificationQuery();
-	useEffect(() => {
-		if (showVerification?.verification_status !== "تم التوثيق") {
-			navigate("/");
-		}
-	}, [showVerification?.verification_status, navigate]);
-
 	/** get data */
 	useEffect(() => {
-		if (emptyCarts?.data?.carts?.length !== 0) {
-			setEmptyCartsData(emptyCarts?.data);
+		if (emptyCarts?.data) {
+			setEmptyCartsData(emptyCarts.data);
 		}
-	}, [emptyCarts?.data?.carts?.length]);
+	}, [emptyCarts?.data]);
 
 	// -------------------------------------------------------------------------
 
@@ -66,13 +59,15 @@ const EmptyCarts = () => {
 
 				fetchData();
 			} else {
-				setEmptyCartsData(emptyCarts?.data);
+				if (emptyCarts?.data) {
+					setEmptyCartsData(emptyCarts.data);
+				}
 			}
 		}, 500);
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
+	}, [search, pageTarget, rowsCount, emptyCarts?.data]);
 
 	return (
 		<>

@@ -241,10 +241,10 @@ export default function EnhancedTable({
 	const dispatch = useDispatch();
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setItemId, setActionDelete, actionDelete } = DeleteStore;
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	//------------------------------------------------------------------------
 

@@ -8,7 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 // Context
-import Context from "../../../Context/context";
 import { TextEditorContext } from "../../../Context/TextEditorProvider";
 
 // Components
@@ -125,8 +124,7 @@ const EditImportProducts = () => {
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+
 	const editorContent = useContext(TextEditorContext);
 	const { setEditorValue } = editorContent;
 
@@ -319,7 +317,6 @@ const EditImportProducts = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/Products");
 			} else {
 				setLoadingTitle("");

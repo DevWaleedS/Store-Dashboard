@@ -1,28 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-// Function to prepare headers for HTTP requests
-const prepareHeaders = (headers) => {
-	const token = localStorage.getItem("store_token");
-
-	if (token) {
-		headers.set("Authorization", `Bearer ${token}`);
-	}
-
-	return headers;
-};
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const maintenanceModeApi = createApi({
 	reducerPath: "maintenanceModeApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
-		prepareHeaders,
 	}),
 	tagTypes: ["MaintenanceMode"],
+
 	endpoints: (builder) => ({
 		// get Maintenance mode data endpoint..
 		getMaintenanceModeData: builder.query({
-			query: () => `maintenance`,
+			query: () => ({ url: `maintenance` }),
 			providesTags: ["MaintenanceMode"],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -35,7 +27,7 @@ export const maintenanceModeApi = createApi({
 				return {
 					url: `updateMaintenance`,
 					method: "POST",
-					body: body,
+					data: body,
 				};
 			},
 			invalidatesTags: ["MaintenanceMode"],

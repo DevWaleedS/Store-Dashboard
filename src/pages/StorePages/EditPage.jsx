@@ -8,7 +8,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Context
-import Context from "../../Context/context";
 import { LoadingContext } from "../../Context/LoadingProvider";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
@@ -69,9 +68,6 @@ const EditPage = () => {
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
-
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -316,7 +312,6 @@ const EditPage = () => {
 				response.data?.data?.status === 200
 			) {
 				setLoadingTitle("");
-				setEndActionTitle(response?.data?.message?.ar);
 				navigate("/Pages");
 				setEditorValue("");
 			} else {

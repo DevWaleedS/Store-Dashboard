@@ -1,19 +1,22 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axiosBaseQuery from "../../API/axiosBaseQuery";
 
 // Create API slice
 export const getStoreTokenApi = createApi({
 	reducerPath: "getStoreTokenApi",
-	baseQuery: fetchBaseQuery({
+
+	// base url
+	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/",
 	}),
 
 	endpoints: (builder) => ({
 		// get store token endpoint..
 		storeToken: builder.query({
-			query: () => `store_token/411`,
+			query: () => ({ url: `store_token` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
-			transformResponse: (response, meta, arg) => response.data?.token,
+			transformResponse: (response, meta, arg) => response,
 			providesTags: ["StoreToken"],
 		}),
 	}),

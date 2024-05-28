@@ -1,111 +1,128 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useImperativeHandle, forwardRef } from "react";
 
-const RenderShippingList = ({
-	shippingCompanies,
-	shippingSelect,
-	setShippingSelect,
-	setShipping,
-	shipping,
-	shippingTypeErrors,
-	setShippingPrice,
-}) => {
-	// TO HANDLE NAME OF DAYS
-	const daysDefinition = (time) => {
-		let timeValue = Number(time);
-		if (timeValue === 0) {
-			return;
-		}
-		if (timeValue === 1) {
-			return "يوم واحد";
-		} else if (timeValue === 2) {
-			return "يومين";
-		} else if (timeValue <= 10 && timeValue >= 3) {
-			return `${timeValue} أيام`;
-		} else {
+// RTK Query
+import { useReCalculateCartByShippingIdMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
+import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCompaniesApi";
+
+const RenderShippingList = forwardRef(
+	(
+		{ shippingSelect, setShippingSelect, setShipping, shippingTypeErrors },
+		ref
+	) => {
+		// get shipping Companies..
+		const { data: shippingCompanies } = useGetShippingCompaniesQuery();
+
+		// TO HANDLE NAME OF DAYS
+		const daysDefinition = (time) => {
+			const timeValue = Number(time);
+			if (timeValue === 0) return;
+			if (timeValue === 1) return "يوم واحد";
+			if (timeValue === 2) return "يومين";
+			if (timeValue >= 3 && timeValue <= 10) return `${timeValue} أيام`;
 			return `${timeValue} يوم`;
-		}
-	};
+		};
 
-	// to set setShippingSelect into other if no longer any shipping companies
-	useEffect(() => {
-		if (shippingCompanies?.length === 1) {
-			setShippingSelect(5);
-		}
-	}, [shippingCompanies?.length]);
+		// To select first item by default
+		useEffect(() => {
+			if (shippingCompanies?.length !== 0) {
+				setShippingSelect(shippingCompanies?.[0]?.id);
+			}
+		}, [shippingCompanies?.length]);
 
-	// handle shipping price
+		// Re-calculate cart based on ShippingId
+		const [reCalculateCartByShippingId, { isLoading }] =
+			useReCalculateCartByShippingIdMutation();
 
-	const shipping_price = shippingCompanies?.filter(
-		(company) => Number(company?.id) === Number(shippingSelect)
-	)?.[0]?.price;
+		// Use useImperativeHandle to expose isLoading to parent component
+		useImperativeHandle(ref, () => ({
+			isLoading,
+		}));
 
-	useEffect(() => {
-		if (shipping_price) {
-			setShippingPrice(Number(shipping_price));
-		}
-	}, [shipping_price]);
+		const handleReCalculateCartByShippingId = async () => {
+			// make request...
+			try {
+				await reCalculateCartByShippingId({
+					id: shippingSelect,
+				});
+			} catch (error) {
+				console.error("Error changing checkOutCart:", error);
+			}
+		};
 
-	const shippingData = shippingCompanies?.map((item) => (
-		<li className='item' key={item?.id}>
-			<label className='header'>
-				<div className='d-flex flex-row align-items-center'>
-					<span className='input-radio'>
-						<span className='body'>
-							<input
-								type='radio'
-								className='input'
-								name='shippingCompany'
-								value={item?.id}
-								checked={Number(shippingSelect) === Number(item?.id)}
-								onChange={(e) => {
-									setShippingSelect(e.target.value);
-									setShipping({
-										...shipping,
-										shippingtype_id: e.target.value,
-									});
-								}}
-							/>
-							<span className='input-radio-circle' />
-						</span>
-					</span>
+		// This effect to auto-fetch re-calculate cart api based on ShippingId
+		useEffect(() => {
+			if (shippingSelect) {
+				handleReCalculateCartByShippingId();
+			}
+		}, [shippingSelect]);
 
-					<div
-						className='d-flex flex-row align-items-center'
-						style={{ gap: "5px" }}>
-						<span className='payment-methods__item-title'>{item?.name}</span>
-						{item?.time !== "0" && item?.price !== "0" && (
-							<span style={{ fontSize: "0.8rem", color: "#919191" }}>
-								{item?.time !== null
-									? `مدة التوصيل : ${daysDefinition(item?.time)}`
-									: ""}
+		// handle on change to set shipping id and send it to api
+		const handleShippingChange = (id) => {
+			setShippingSelect(id);
+			setShipping((prevShipping) => ({
+				...prevShipping,
+				shippingtype_id: id,
+			}));
+		};
+
+		const shippingData = shippingCompanies?.map((shipping) => (
+			<li className='item' key={shipping?.id}>
+				<label className='header'>
+					<div className='d-flex flex-row align-items-center'>
+						<span className='input-radio'>
+							<span className='body'>
+								<input
+									type='radio'
+									className='input'
+									name='shippingCompany'
+									value={shipping?.id}
+									checked={Number(shippingSelect) === Number(shipping?.id)}
+									onChange={(e) => handleShippingChange(e.target.value)}
+								/>
+								<span className='input-radio-circle' />
 							</span>
-						)}
-					</div>
-				</div>
-				<img
-					src={item?.image}
-					alt=''
-					width='40'
-					height='20'
-					style={{ objectFit: "contain" }}
-				/>
-			</label>
-		</li>
-	));
+						</span>
 
-	return (
-		<div className='payment-methods'>
-			<h6>يرجى اختيار شركة الشحن </h6>
-			<ul className='list'>{shippingData}</ul>
-			{shippingTypeErrors && (
-				<span
-					style={{ fontSize: "0.85rem", fontWeight: "500" }}
-					className='text-danger'>
-					{shippingTypeErrors}
-				</span>
-			)}
-		</div>
-	);
-};
+						<div
+							className='d-flex flex-row align-items-center'
+							style={{ gap: "5px" }}>
+							<span className='payment-methods__item-title'>
+								{shipping?.name}
+							</span>
+							{shipping?.time !== "0" && shipping?.price !== "0" && (
+								<span style={{ fontSize: "0.8rem", color: "#919191" }}>
+									{shipping?.time
+										? `مدة التوصيل : ${daysDefinition(shipping?.time)}`
+										: ""}
+								</span>
+							)}
+						</div>
+					</div>
+					<img
+						src={shipping?.image}
+						alt=''
+						width='40'
+						height='20'
+						style={{ objectFit: "contain" }}
+					/>
+				</label>
+			</li>
+		));
+
+		return (
+			<div className='payment-methods'>
+				<h6>يرجى اختيار شركة الشحن </h6>
+				<ul className='list'>{shippingData}</ul>
+				{shippingTypeErrors && (
+					<span
+						style={{ fontSize: "0.85rem", fontWeight: "500" }}
+						className='text-danger'>
+						{shippingTypeErrors}
+					</span>
+				)}
+			</div>
+		);
+	}
+);
 
 export default RenderShippingList;

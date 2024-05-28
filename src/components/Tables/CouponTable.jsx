@@ -28,7 +28,6 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 
 // Context
-import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
@@ -42,6 +41,7 @@ import {
 	useDeleteAllCouponsMutation,
 	useDeleteCouponMutation,
 } from "../../store/apiSlices/couponApi";
+import Context from "../../Context/context";
 
 const switchStyle = {
 	width: "50px",
@@ -253,10 +253,11 @@ export default function CouponTable({
 }) {
 	const NotificationStore = useContext(NotificationContext);
 	const { notificationTitle } = NotificationStore;
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
+
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	/** --------------------------------------------------- */
 	// select all items
@@ -367,8 +368,6 @@ export default function CouponTable({
 						toast.error(data?.message?.ar, {
 							theme: "light",
 						});
-					} else {
-						setEndActionTitle(data?.message?.ar);
 					}
 				});
 		} catch (err) {
