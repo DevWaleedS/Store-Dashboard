@@ -15,14 +15,14 @@ const OrdersQuickDetails = ({
 		{
 			id: 1,
 			icon: <Completed />,
-			title: "طلبات مكتمله ",
+			title: "طلبات مكتملة ",
 			numbers: completed,
 			color: "#3ae374",
 		},
 		{
 			id: 2,
 			icon: <FileIcon />,
-			title: "طلبات ملغيه",
+			title: "طلبات ملغية",
 			numbers: canceled,
 			color: "#ff9f1a",
 		},
