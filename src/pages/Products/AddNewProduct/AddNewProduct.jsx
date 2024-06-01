@@ -1172,7 +1172,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div className='tax-text'>
-												تأكد ان المخزون يشمل إجمالي الكميه الخاصه بخيارات المنتج
+												تأكد ان المخزون يشمل إجمالي الكميه الخاصة بخيارات المنتج
 											</div>
 											<Controller
 												name={"stock"}
@@ -1269,7 +1269,7 @@ const AddNewProduct = () => {
 									{/* Key words */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
+											<label htmlFor='seo'>الكلمات المفتاحية للمنتج </label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<TagsInput

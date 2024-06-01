@@ -283,7 +283,7 @@ const AddBankAccountModal = () => {
 							</span>
 						) : (
 							<span className='tax-text pe-2'>
-								ارفق شهادة الايبان بالحساب البنكي pdf
+								ارفق شهادة الايبان الخاصة بالحساب البنكي pdf
 							</span>
 						)}
 					</div>

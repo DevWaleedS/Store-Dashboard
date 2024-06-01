@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import "./PaymentGateways.css"
+
 // Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
@@ -9,11 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { Switch } from "@mui/material";
 
 // Components
-import { TopBarSearchInput } from "../global/TopBar";
-import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import CircularLoading from "../HelperComponents/CircularLoading";
-import { openAddBankAccountModal } from "../store/slices/AddBankAccountModal";
-import { openCommentModal } from "../store/slices/BankAccStatusCommentModal";
+import { TopBarSearchInput } from "../../global/TopBar";
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import CircularLoading from "../../HelperComponents/CircularLoading";
+import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
+import { openCommentModal } from "../../store/slices/BankAccStatusCommentModal";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -22,15 +24,17 @@ import { useDispatch } from "react-redux";
 import {
 	useChangePaymentStatusMutation,
 	useGetPaymentGatewaysQuery,
-} from "../store/apiSlices/paymentGatewaysApi";
-import { useGetCurrentBankAccountQuery } from "../store/apiSlices/walletApi";
+} from "../../store/apiSlices/paymentGatewaysApi";
+import { useGetCurrentBankAccountQuery } from "../../store/apiSlices/walletApi";
 
 // Icons
 import { IoWallet } from "react-icons/io5";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
 // custom hook
-import UseAccountVerification from "../Hooks/UseAccountVerification";
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
+import PaymentRecieving from "./PaymentRecieving";
+import AllPaymentGateways from "./AllPaymentGateways";
 
 // switch styles
 const switchStyle = {
@@ -114,34 +118,62 @@ const PaymentGateways = () => {
 
 	// ------------------------------------------------------------------------
 
-	// Handle change Status Of Payment gateway
 	const [changePaymentStatus] = useChangePaymentStatusMutation();
-	const handleChangePaymentStatus = async (id) => {
-		// make request...
-		try {
-			const response = await changePaymentStatus(id);
-
-			// Handle response
-			if (
-				response.data?.success === true &&
-				response.data?.data?.status === 200
-			) {
-				console.log(response?.data?.message?.ar);
-			} else {
-				// Handle display errors using toast notifications
-				toast.error(
-					response?.data?.message?.ar
-						? response.data.message.ar
-						: response.data.message.en,
-					{
-						theme: "light",
-					}
-				);
+  const changePaymentStatusFunc = async (id) => {
+	// make request...
+    try {
+		const response = await changePaymentStatus(id);
+  
+		// Handle response
+		if (
+		  response.data?.success === true &&
+		  response.data?.data?.status === 200
+		) {
+		  console.log(response?.data?.message?.ar);
+		  toast.success(response?.data?.message?.ar)
+		} else {
+		  // Handle display errors using toast notifications
+		  toast.error(
+			response?.data?.message?.ar
+			  ? response.data.message.ar
+			  : response.data.message.en,
+			{
+			  theme: "light",
 			}
-		} catch (error) {
-			console.error("Error changing changePaymentStatus:", error);
+		  );
 		}
-	};
+	  } catch (error) {
+		console.error("Error changing changePaymentStatus:", error);
+	  }
+  }
+
+
+  const [madfou3Status, setMadfou3Status] = useState(false);
+  const [isMadfou3ModalOpen, setIsMadfou3ModalOpen] = useState(false);
+
+  const showMadfou3Modal = () => setIsMadfou3ModalOpen(true);
+  const hideMadfou3Modal = () => setIsMadfou3ModalOpen(false);
+
+  
+  const handleChangePaymentStatus = async (id) => {
+    const madfou3 = allPayments.find(
+      (item) => item.name === "الدفع الأجل (مدفوع)"
+    );
+    if (id === madfou3.id) {
+		const isMadfou3 = madfou3.is_madfu;
+		setMadfou3Status(isMadfou3);
+	
+		console.log(isMadfou3);
+	
+		if (!isMadfou3) {
+		  showMadfou3Modal();
+		}
+	  }
+
+	  changePaymentStatusFunc(id);
+
+
+  };
 
 	// handle change status of  Cash O nDelivery Status
 	const handleChangeCashOnDeliveryStatus = async (id) => {
@@ -298,103 +330,9 @@ const PaymentGateways = () => {
 						</div>
 
 						<div className='data-container '>
-							<div className='row other-shipping-company mb-4'>
-								<div className='mb-4 option-info-label d-flex d-md-none  justify-content-start align-items-center gap-2'>
-									<IoMdInformationCircleOutline />
-									<span>
-										يمكنك استخدام خيار الدفع عند الاستلام كطريقه من ضمن طرق
-										الدفع المختلفة التي نوفرها لك
-									</span>
-								</div>
-								{cashOnDelivery?.map((item) => (
-									<div className='col-xl-3 col-lg-6 col-12' key={item.id}>
-										<div className='data-widget'>
-											<div className='data'>
-												<div className='image-box'>
-													<img
-														className='img-fluid'
-														src={item?.image}
-														alt={item?.name}
-														style={{ width: "110px" }}
-													/>
-												</div>
-												{item?.name ? (
-													<div className='current-price mt-1 w-100 d-flex justify-content-center'>
-														{item?.name}
-													</div>
-												) : null}
-											</div>
-										</div>
-									</div>
-								))}
-								{cashOnDelivery?.length !== 0 && (
-									<div className='col-xl-8 col-lg-6 col-12'>
-										<div className='mb-5 option-info-label d-none d-md-flex  justify-content-start align-items-center gap-2'>
-											<IoMdInformationCircleOutline />
-											<span>
-												يمكنك استخدام خيار الدفع عند الاستلام كطريقه من ضمن طرق
-												الدفع المختلفة التي نوفرها لك
-											</span>
-										</div>
-										<div className=''>
-											<div className='tax-text'>
-												تفعيل/تعطيل الدفع عند الاستلام{" "}
-											</div>
-											<div
-												className='switch-box d-flex justify-content-center align-items-center mb-2'
-												style={{
-													height: "50px",
-													backgroundColor: "#f7f8f8",
-												}}>
-												<Switch
-													onChange={() => {
-														handleChangeCashOnDeliveryStatus(
-															cashOnDelivery[0]?.id
-														);
-													}}
-													checked={
-														cashOnDelivery[0]?.status === "نشط" ? true : false
-													}
-													sx={switchStyle}
-												/>
-											</div>
-										</div>
-									</div>
-								)}
-							</div>
+							<PaymentRecieving cashOnDelivery={cashOnDelivery} handleChangeCashOnDeliveryStatus={handleChangeCashOnDeliveryStatus} switchStyle={switchStyle} />
 
-							<div className='row'>
-								{allPayments?.length !== 0 &&
-									allPayments?.map((item) => (
-										<div className='col-xl-3 col-6' key={item.id}>
-											<div className='data-widget'>
-												<div className='data'>
-													<div className='image-box'>
-														<img
-															className='img-fluid'
-															src={item?.image}
-															alt={item?.name}
-															style={{ width: "110px" }}
-														/>
-													</div>
-													{item?.description ? (
-														<div className='current-price mt-1 w-100 d-flex justify-content-center'>
-															<span>الرسوم:</span> {item?.description}
-														</div>
-													) : null}
-												</div>
-												<div className='switch-box'>
-													<Switch
-														name={item?.name}
-														checked={item?.status === "نشط" ? true : false}
-														onChange={() => handleChangePaymentStatus(item?.id)}
-														sx={switchStyle}
-													/>
-												</div>
-											</div>
-										</div>
-									))}
-							</div>
+							<AllPaymentGateways allPayments={allPayments} handleChangePaymentStatus={handleChangePaymentStatus} switchStyle={switchStyle} showMadfou3Modal={showMadfou3Modal} isMadfou3ModalOpen={isMadfou3ModalOpen} hideMadfou3Modal={hideMadfou3Modal} />
 						</div>
 					</>
 				)}

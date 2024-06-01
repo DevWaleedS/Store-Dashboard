@@ -1533,7 +1533,7 @@ const EditProduct = () => {
 										{/* Key words */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='seo'>الكلمات المفتاحيه للمنتج </label>
+												<label htmlFor='seo'>الكلمات المفتاحية للمنتج </label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<TagsInput

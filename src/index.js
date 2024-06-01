@@ -25,7 +25,6 @@ import "./index.css";
 
 import {
 	Offers,
-	PaymentGateways,
 	Management,
 	SocialPages,
 	//PackageUpgrade,
@@ -61,6 +60,7 @@ import { VerifyStore } from "./pages/VerifyStore";
 import { TemplateSetting } from "./pages/TemplateSetting";
 import { ShippingCompanies } from "./pages/ShippingCompanies";
 import { DashboardHomePage } from "./pages/DashboardHomePage";
+import { PaymentGateways } from "./pages/PaymentGateways";
 // ---------------------------------------------------------------------------------------//
 
 // Import Nested Pages
