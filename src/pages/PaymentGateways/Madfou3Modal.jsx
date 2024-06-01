@@ -1,13 +1,32 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { toast } from "react-toastify";
+import { useMadfuAuthMutation } from "../../store/apiSlices/madfuApi";
 
 const Madfou3Modal = ({ isShowing, hide }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const store_id = localStorage.getItem("store_id");
 
-  const handleSubmit = (e) => {
+
+  const [madfuAuth, { isLoading }] = useMadfuAuthMutation();
+
+  const madfuAuthHandel = async (id, body) => {
+    try {
+      const response = await madfuAuth({ id, body }).unwrap();
+      console.log("Response:", response);
+      toast.success(response.message.ar);
+      hide()
+    } catch (error) {
+      console.error("Failed to login:", error);
+      toast.error("فشل تسجيل الدخول");
+    }
+  };
+
+
+
+  const handleSubmitMadfou3Form = (e) => {
     e.preventDefault();
 
     if (username === "") {
@@ -19,8 +38,9 @@ const Madfou3Modal = ({ isShowing, hide }) => {
       return;
     }
 
-    console.log("Username:", username);
-    console.log("Password:", password);
+
+    const body = { username, password };
+    madfuAuthHandel(store_id, body);
   };
 
   return isShowing
@@ -52,7 +72,7 @@ const Madfou3Modal = ({ isShowing, hide }) => {
               </svg>
               <span>لاستخدام مدفوع قم بادخال اسم المستخدم و كلمه السر التي حصلت عليها من مدفوع</span>
             </div>
-            <form className="Madfou3Modal-form" onSubmit={handleSubmit}>
+            <form className="Madfou3Modal-form" onSubmit={handleSubmitMadfou3Form}>
               <div className="position-relative">
                 <label htmlFor="username">اسم المستخدم</label>
                 <input
