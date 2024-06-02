@@ -41,7 +41,11 @@ const Category = () => {
 	const [pageCount, setPageCount] = useState(1);
 
 	// Fetch categories based on search query and tabSelected
-	const { data: categories, isLoading } = useGetCategoriesDataQuery({
+	const {
+		data: categories,
+		isLoading,
+		refetch,
+	} = useGetCategoriesDataQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
@@ -49,6 +53,10 @@ const Category = () => {
 	const [searchInStoreCategories] = useSearchInStoreCategoriesMutation();
 	const [searchInEtlbohaCategories] = useSearchInEtlbohaCategoriesMutation();
 	const [filterCategories] = useFilterCategoriesMutation();
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	// Display categories by tapSelect
 	useEffect(() => {

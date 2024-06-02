@@ -159,6 +159,15 @@ const RegisterBox = () => {
 			.post("https://backend.atlbha.com/api/registerapi", formData)
 			.then((res) => {
 				if (res?.data?.success === true && res?.data?.data?.status === 200) {
+					localStorage.setItem(
+						"name",
+						res.data?.data?.user?.lastname
+							? `${res.data?.data?.user?.name} ${res.data?.data?.user?.lastname}`
+							: `${res.data?.data?.user?.name}`
+					);
+					localStorage.setItem("userName", res.data?.data?.user?.user_name);
+					localStorage.setItem("userImage", res.data?.data?.user?.image);
+
 					setEmail(registerInfo?.email);
 					setResendButtonDisabled(true);
 					setDisabledBtn(true);

@@ -21,25 +21,33 @@ const Orders = () => {
 	const [select, setSelect] = useState("");
 	const [rowsCount, setRowsCount] = useState(10);
 	const [pageTarget, setPageTarget] = useState(1);
-	const [ordersData, setOrdersData] = useState([]);
+	const [ordersData, setOrdersData] = useState(null);
 
 	// get orders data
-	const { data: orders, isLoading } = useGetOrdersQuery({
+	const {
+		data: orders,
+		isLoading,
+		refetch,
+	} = useGetOrdersQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
 
 	useEffect(() => {
-		if (orders?.data?.orders?.length !== 0) {
+		refetch();
+	}, [refetch]);
+
+	useEffect(() => {
+		if (orders) {
 			setOrdersData(orders?.data);
 		}
-	}, [orders?.data?.orders?.length]);
+	}, [orders]);
 
-	//handle search in orders
+	// handle search in orders
 	const [searchInOrders] = useSearchInOrdersMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
-			if (search !== "") {
+			if (search) {
 				const fetchData = async () => {
 					try {
 						const response = await searchInOrders({
@@ -48,7 +56,7 @@ const Orders = () => {
 
 						setOrdersData(response?.data?.data);
 					} catch (error) {
-						console.error("Error fetching Products:", error);
+						console.error("Error fetching orders:", error);
 					}
 				};
 
@@ -60,14 +68,12 @@ const Orders = () => {
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
-
-	// -------------------------------------------------------------
+	}, [search]);
 
 	// Filter Orders by Order Status
 	const [filterOrdersByStatus] = useFilterOrdersByStatusMutation();
 	useEffect(() => {
-		if (select !== "") {
+		if (select) {
 			const fetchData = async () => {
 				try {
 					const response = await filterOrdersByStatus({
@@ -76,7 +82,7 @@ const Orders = () => {
 
 					setOrdersData(response?.data?.data);
 				} catch (error) {
-					console.error("Error fetching Products:", error);
+					console.error("Error filtering orders:", error);
 				}
 			};
 
@@ -85,8 +91,6 @@ const Orders = () => {
 			setOrdersData(orders?.data);
 		}
 	}, [select, filterOrdersByStatus]);
-
-	// ---------------------------------------------------------------
 
 	return (
 		<>
@@ -116,7 +120,7 @@ const Orders = () => {
 					</div>
 				</div>
 
-				{/** Orders table */}
+				{/* Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
 						orders={ordersData?.orders}

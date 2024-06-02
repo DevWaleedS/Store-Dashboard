@@ -49,15 +49,12 @@ export const ratingApi = createApi({
 
 		// send Replay To Comment
 		sendReplayToComment: builder.mutation({
-			query: ({ comment_text, comment_id }) => {
-				const url = `replaycomment`;
-				const method = "POST";
-
-				// Construct payload object
-				let payload = { comment_id, comment_text };
-
-				// Return URL, method, and payload
-				return { url, method, data: JSON.stringify(payload) };
+			query: ({ body }) => {
+				return {
+					url: `replaycomment`,
+					method: "POST",
+					data: body,
+				};
 			},
 			invalidatesTags: ["Rating"],
 		}),

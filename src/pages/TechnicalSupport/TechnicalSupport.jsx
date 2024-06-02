@@ -18,24 +18,31 @@ const TechnicalSupport = () => {
 	const [search, setSearch] = useState("");
 	const [technicalSupportData, setTechnicalSupportData] = useState([]);
 
-	const { data: technicalSupport, isLoading } = useGetTechnicalSupportQuery({
+	const {
+		data: technicalSupport,
+		isLoading,
+		refetch,
+	} = useGetTechnicalSupportQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
-	// -----------------------------------------------------------
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	/** get technical Support data */
 	useEffect(() => {
-		if (technicalSupport?.data?.Technicalsupports?.length !== 0) {
+		if (technicalSupport) {
 			setTechnicalSupportData(technicalSupport?.data);
 		}
-	}, [technicalSupport?.data?.Technicalsupports?.length]);
+	}, [technicalSupport]);
 
 	// handle search in Technical Support
 	const [searchInTechnicalSupport] = useSearchInPostalSubscriptionsMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
-			if (search !== "") {
+			if (search) {
 				const fetchData = async () => {
 					try {
 						const response = await searchInTechnicalSupport({
@@ -56,7 +63,7 @@ const TechnicalSupport = () => {
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
+	}, [search, searchInTechnicalSupport, technicalSupport]);
 
 	return (
 		<>

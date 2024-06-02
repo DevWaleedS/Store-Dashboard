@@ -26,6 +26,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
+import Context from "../../Context/context";
 
 // switch style
 const switchStyle = {
@@ -73,6 +74,8 @@ const switchStyle = {
 };
 
 const ShippingCompanies = () => {
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 	// to Handle if the user is not verify  her account
 	UseAccountVerification();
 
@@ -184,7 +187,7 @@ const ShippingCompanies = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				console.log(response?.data?.message?.ar);
+				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				// Handle display errors using toast notifications
 				toast.error(
@@ -223,7 +226,7 @@ const ShippingCompanies = () => {
 					response.data?.success === true &&
 					response.data?.data?.status === 200
 				) {
-					console.log(response?.data?.message?.ar);
+					setEndActionTitle(response?.data?.message?.ar);
 				} else {
 					// Handle display errors using toast notifications
 					toast.error(

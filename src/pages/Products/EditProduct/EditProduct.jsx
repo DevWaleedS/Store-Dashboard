@@ -1160,7 +1160,6 @@ const EditProduct = () => {
 																title='قم بالضغط علي الحقل لتعديل السعر'
 																value={value}
 																onChange={(e) => {
-																	// setDefaultOptionPrice(e.target.value);
 																	setProduct({
 																		...product,
 																		selling_price: e.target.value.replace(
@@ -1201,7 +1200,6 @@ const EditProduct = () => {
 																id='price'
 																value={value}
 																onChange={(e) => {
-																	// setDefaultOptionPrice(e.target.value);
 																	setProduct({
 																		...product,
 																		selling_price: e.target.value.replace(
