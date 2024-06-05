@@ -80,13 +80,13 @@ const switchStyle = {
 };
 
 const PaymentGateways = () => {
+	// To handle if the user is not verify  her account
+	UseAccountVerification();
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const contextStore = useContext(Context);
 	const { setEndActionTitle } = contextStore;
-
-	// to Handle if the user is not verify  her account
-	UseAccountVerification();
 
 	// to get all  data from server
 	const { data: paymentGateways, isLoading } = useGetPaymentGatewaysQuery();
@@ -335,11 +335,11 @@ const PaymentGateways = () => {
 
 							<AllPaymentGateways
 								allPayments={allPayments}
-								handleChangePaymentStatus={handleChangePaymentStatus}
 								switchStyle={switchStyle}
 								showMadfou3Modal={showMadfou3Modal}
-								isMadfou3ModalOpen={isMadfou3ModalOpen}
 								hideMadfou3Modal={hideMadfou3Modal}
+								isMadfou3ModalOpen={isMadfou3ModalOpen}
+								handleChangePaymentStatus={handleChangePaymentStatus}
 							/>
 						</div>
 					</>

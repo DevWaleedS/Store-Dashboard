@@ -5524,7 +5524,7 @@ input:disabled {
 
 .order-details-body .order-details-box .order-details-data .boxes .box {
 	flex: 1;
-	min-width: 200px;
+	min-width: 300px;
 }
 
 .order-details-body .order-details-box .order-details-data .order-head-row {

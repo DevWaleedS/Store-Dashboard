@@ -1,120 +1,124 @@
-.Madfou3Modal-overlay *{
-  -webkit-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+.Madfou3Modal-overlay * {
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 }
 .Madfou3Modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5555;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 5555;
+	overflow-y: auto;
+
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .Madfou3Modal {
-  background: white;
-  padding: 60px 40px;
-  border-radius: 8px;
-  max-width: 630px;
-  width: 100%;
-  margin: 0 15px;
-  max-height: 90%;
-  overflow-y: auto;
+	position: relative;
+	top: 16%;
+	background: white;
+	padding: 60px 40px 40px;
+	border-radius: 8px;
+	max-width: 630px;
+
+	margin: 0 15px;
 }
 
 .Madfou3Modal .closebtn {
-  background: transparent;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  line-height: 1;
+	background: transparent;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	line-height: 1;
 }
 
 .Madfou3Modal .closebtn svg {
-  fill: #000;
+	fill: #000;
 }
 
 .Madfou3Modal .closebtn:hover svg {
-  fill: #4ac9cb;
-  transform: rotate(360deg);
+	fill: #4ac9cb;
+	transform: rotate(360deg);
 }
 
 .Madfou3Modal .note {
-  color: #909090;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1.6;
-  margin: 0 0 50px;
-  display: block;
-  text-wrap: wrap;
-  text-align: center;
+	color: #909090;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.6;
+	margin: 0 0 50px;
+	display: block;
+	text-wrap: wrap;
+	text-align: center;
 }
 
-.Madfou3Modal-form {}
-
 .Madfou3Modal-form label {
-  display: block;
-  line-height: 1;
-  margin-bottom: 12px;
-  font-weight: 600;
-  font-size: 18px;
-  color: #909090;
+	display: block;
+	line-height: 1;
+	margin-bottom: 12px;
+	font-weight: 600;
+	font-size: 18px;
+	color: #909090;
 }
 
 .Madfou3Modal-form input {
-  width: 100%;
-  border: 2px solid #DDD !important;
-  line-height: 50px;
-  height: 50px;
-  padding: 0 15px;
-  font-size: 17px;
-  font-weight: 500;
-  border-radius: 50px;
-  margin-bottom: 30px;
+	width: 100%;
+	border: 2px solid #ddd !important;
+	line-height: 50px;
+	height: 50px;
+	padding: 0 15px;
+	font-size: 17px;
+	font-weight: 500;
+	border-radius: 50px;
+	margin-bottom: 30px;
 }
 
 .Madfou3Modal-form input:hover,
 .Madfou3Modal-form input:focus {
-  border-color: #4ac9cb !important;
+	border-color: #4ac9cb !important;
 }
 
 .Madfou3Modal-form .btn {
-  width: 100%;
-  height: 50px;
-  border-radius: 50px !important;
-  background-color: #4ac9cb;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  color: #FFF;
-  transition: all 0.3s ease-in-out;
+	width: 100%;
+	height: 50px;
+	border-radius: 50px !important;
+	background-color: #4ac9cb;
+	font-size: 1rem;
+	font-weight: 500;
+	border-radius: 6px;
+	border: none;
+	outline: none;
+	color: #fff;
+	transition: all 0.3s ease-in-out;
 }
 
 .Madfou3Modal-form .btn:hover,
 .Madfou3Modal-form .btn:focus {
-  background-color: #02466a;
+	background-color: #02466a;
 }
 
-.showPassword{
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 20px;
-  cursor: pointer;
-  
+.showPassword {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 20px;
+	cursor: pointer;
 }
-.showPassword svg{
-  fill: #909090;
-  width: 25px;
+.showPassword svg {
+	fill: #909090;
+	width: 25px;
+}
+.showPassword:hover svg {
+	fill: #4ac9cb;
+}
 
-}
-.showPassword:hover svg{
-  fill: #4ac9cb;
+@media (max-width: 768px) {
+	.Madfou3Modal {
+		top: 14%;
+	}
 }

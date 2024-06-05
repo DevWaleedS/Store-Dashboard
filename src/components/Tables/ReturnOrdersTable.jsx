@@ -104,13 +104,11 @@ function EnhancedTableHead(props) {
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					الكمية
+					حالة الطلب
 				</TableCell>
+
 				<TableCell sx={{ color: "#02466a" }} align='center'>
 					إجمالي الطلب
-				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a" }}>
-					حالة الطلب
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#02466a" }}>
@@ -296,13 +294,6 @@ export default function ReturnOrdersTable({
 														{row?.reason_txt?.title}
 													</TableCell>
 
-													<TableCell align='center'>
-														{row?.order?.quantity}
-													</TableCell>
-
-													<TableCell align='center'>
-														{row?.order?.total_price} ر.س
-													</TableCell>
 													<TableCell align='right' sx={{ width: "90px" }}>
 														<div className='sub-categories'>
 															<span
@@ -332,6 +323,10 @@ export default function ReturnOrdersTable({
 																{row?.status}
 															</span>
 														</div>
+													</TableCell>
+
+													<TableCell align='center'>
+														{row?.order?.total_price} ر.س
 													</TableCell>
 
 													<TableCell align='right'>

@@ -6,7 +6,7 @@ import "./Login.css";
 import { UserAuth } from "../../../Context/UserAuthorProvider";
 import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
 
-// Rtk Query
+// RTk Query
 import { useLoginMutation } from "../../../store/apiSlices/loginApi";
 
 /** -----------------------------------------------------------------------------------------------------------
@@ -91,46 +91,37 @@ const Login = () => {
 
 			if (res?.success === true && res?.data?.status === 200) {
 				localStorage.setItem("storeToken", res.data.token);
-
+				localStorage.setItem("userName", res.data?.user?.user_name);
+				localStorage.setItem("userImage", res.data?.user?.image);
+				localStorage.setItem("logo", res.data?.user?.store_logo);
+				localStorage.setItem("domain", res.data?.user?.store_domain);
+				localStorage.setItem("store_id", res.data?.user?.store_id);
 				localStorage.setItem(
 					"name",
 					res.data?.user?.lastname
 						? `${res.data?.user?.name} ${res.data?.user?.lastname}`
 						: `${res.data?.user?.name}`
 				);
-				localStorage.setItem("userName", res.data?.user?.user_name);
-				localStorage.setItem("userImage", res.data?.user?.image);
-				localStorage.setItem("logo", res.data?.user?.store_logo);
-				localStorage.setItem("domain", res.data?.user?.store_domain);
-				localStorage.setItem("store_id", res.data?.user?.store_id);
 
 				if (rememberMe) {
-					// Set username, password, and remember_me status to context
-					// Replace with your function to set user info to context
 					setUserInfoToUserAuthContext();
 				} else {
-					// Remove username, password, and remember_me status from context
-					// Replace with your function to remove user info from context
 					removeUserInfoUserAuthContext();
 				}
 
-				// If the user is logged in, navigate them to the dashboard
-				// Replace "/" with the desired dashboard route
 				navigate("/");
 			} else {
 				setUsernameError(res?.message?.en?.user_name?.[0]);
 				setPasswordError(res?.message?.en?.password?.[0]);
 				setError(res?.message?.ar);
 				if (res?.message?.en === "User not verified") {
-					// Set email and navigate to verification code page
-					// Replace "/LogInVerificationCode" with the verification code page route
 					setEmail(username);
 					navigate("/LogInVerificationCode");
 				}
 			}
 		} catch (error) {
 			console.error("Login error:", error);
-			// Handle login error
+
 			setError("An error occurred during login.");
 		}
 	};
