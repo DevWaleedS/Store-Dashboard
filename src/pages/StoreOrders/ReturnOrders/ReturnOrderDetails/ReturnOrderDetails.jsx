@@ -395,7 +395,7 @@ const ReturnOrderDetails = () => {
 															</TableCell>
 															<TableCell align='center'>
 																<span className='table-price_span'>
-																	{row?.sum} ر.س
+																	{currentOrder?.order?.total_price} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
@@ -438,98 +438,7 @@ const ReturnOrderDetails = () => {
 															</span>
 														</TableCell>
 													</TableRow>
-													<TableRow>
-														<TableCell
-															colSpan={3}
-															component='th'
-															scope='row'
-															align='right'
-															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "700" }}>الشحن</span>
-														</TableCell>
-														<TableCell
-															align='center'
-															style={{ borderBottom: "none" }}>
-															<span
-																className='table-price_span'
-																style={{ fontWeight: "500" }}>
-																{currentOrder?.order?.shipping_price} ر.س
-															</span>
-														</TableCell>
-													</TableRow>
-													{currentOrder?.order?.codprice !== 0 && (
-														<TableRow>
-															<TableCell
-																colSpan={3}
-																component='th'
-																scope='row'
-																align='right'
-																style={{ borderBottom: "none" }}>
-																<span style={{ fontWeight: "700" }}>
-																	الدفع عند الإستلام
-																</span>
-															</TableCell>
 
-															<TableCell
-																align='center'
-																style={{ borderBottom: "none" }}>
-																<span
-																	className='table-price_span'
-																	style={{ fontWeight: "500" }}>
-																	{currentOrder?.order?.codprice} ر.س
-																</span>
-															</TableCell>
-														</TableRow>
-													)}
-
-													{currentOrder?.order?.overweight !== 0 &&
-														currentOrder?.order?.overweight_price !== 0 && (
-															<TableRow>
-																<TableCell
-																	colSpan={3}
-																	component='th'
-																	scope='row'
-																	align='right'
-																	style={{ borderBottom: "none" }}>
-																	<span style={{ fontWeight: "700" }}>
-																		تكلفة الوزن الزائد (
-																		{currentOrder?.order?.overweight}{" "}
-																		<span>kg</span>)
-																	</span>
-																</TableCell>
-
-																<TableCell
-																	align='center'
-																	style={{ borderBottom: "none" }}>
-																	<span
-																		className='table-price_span'
-																		style={{ fontWeight: "500" }}>
-																		{currentOrder?.order?.overweight_price} ر.س
-																	</span>
-																</TableCell>
-															</TableRow>
-														)}
-													{currentOrder?.order?.discount !== 0 && (
-														<TableRow>
-															<TableCell
-																colSpan={3}
-																component='th'
-																scope='row'
-																align='right'
-																style={{ borderBottom: "none" }}>
-																<span style={{ fontWeight: "700" }}>الخصم</span>
-															</TableCell>
-															<TableCell
-																align='center'
-																style={{ borderBottom: "none" }}>
-																<span
-																	className='table-price_span'
-																	style={{ fontWeight: "500" }}>
-																	{currentOrder?.order?.discount} ر.س
-																</span>
-															</TableCell>
-														</TableRow>
-													)}
 													<TableRow>
 														<TableCell
 															colSpan={3}
