@@ -10,7 +10,7 @@ import { BsSearch } from "react-icons/bs";
 import { FiFilter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 
-//Mui
+// MUI
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -89,26 +89,32 @@ const Pages = () => {
 	const [select, setSelect] = useState("");
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-	const [pageArray, setPageArray] = useState([]);
+	const [pageArray, setPageArray] = useState(null);
 
-	const { data: pagesData, isLoading } = useGetPagesQuery({
+	const {
+		data: pagesData,
+		isLoading,
+		refetch,
+	} = useGetPagesQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
 
 	useEffect(() => {
-		if (pagesData?.data) {
+		refetch();
+	}, [refetch]);
+
+	useEffect(() => {
+		if (pagesData) {
 			setPageArray(pagesData.data);
 		}
-	}, [pagesData?.data]);
-
-	// -----------------------------------------------------------
+	}, [pagesData]);
 
 	// handle search in Pages
 	const [searchInPages] = useSearchInPagesMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
-			if (search !== "") {
+			if (search) {
 				const fetchData = async () => {
 					try {
 						const response = await searchInPages({
@@ -123,7 +129,7 @@ const Pages = () => {
 
 				fetchData();
 			} else {
-				if (pagesData?.data) {
+				if (pagesData) {
 					setPageArray(pagesData.data);
 				}
 			}
@@ -131,14 +137,12 @@ const Pages = () => {
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount, pagesData?.data]);
-
-	// -------------------------------------------------------------------------------
+	}, [search, searchInPages, pagesData]);
 
 	// filter by status
 	const [filterPagesByStatus] = useFilterPagesByStatusMutation();
 	useEffect(() => {
-		if (select !== "") {
+		if (select) {
 			const fetchData = async () => {
 				try {
 					const response = await filterPagesByStatus({
@@ -153,11 +157,11 @@ const Pages = () => {
 
 			fetchData();
 		} else {
-			if (pagesData?.data) {
+			if (pagesData) {
 				setPageArray(pagesData.data);
 			}
 		}
-	}, [select, filterPagesByStatus, pagesData?.data]);
+	}, [select, filterPagesByStatus, pagesData]);
 
 	return (
 		<>
@@ -200,18 +204,17 @@ const Pages = () => {
 										if (select === "") {
 											return <p style={{ color: "#02466a" }}>فرز حسب</p>;
 										}
-										const result =
-											filtersTypes?.filter(
-												(item) => item?.en_name === selected
-											) || "";
-										return result[0]?.ar_name;
+										const result = filtersTypes.find(
+											(item) => item.en_name === selected
+										);
+										return result ? result.ar_name : "";
 									}}>
-									{filtersTypes?.map((item) => (
+									{filtersTypes.map((item) => (
 										<MenuItem
 											sx={menuItemStyles}
-											key={item?.id}
-											value={item?.en_name}>
-											{item?.ar_name}
+											key={item.id}
+											value={item.en_name}>
+											{item.ar_name}
 										</MenuItem>
 									))}
 								</Select>

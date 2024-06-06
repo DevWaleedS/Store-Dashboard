@@ -1,38 +1,33 @@
-import React, { Fragment, useEffect, useState, useContext } from "react";
-
-// Third party
+import React, { useState, useEffect, useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import {
+	Box,
+	Table,
+	Paper,
+	Switch,
+	Toolbar,
+	Tooltip,
+	Checkbox,
+	TableRow,
+	TableBody,
+	TableCell,
+	TableHead,
+	IconButton,
+	TableContainer,
+} from "@mui/material";
 
-// MUI
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import Paper from "@mui/material/Paper";
-import Switch from "@mui/material/Switch";
-import Toolbar from "@mui/material/Toolbar";
-import Tooltip from "@mui/material/Tooltip";
-import Checkbox from "@mui/material/Checkbox";
-import TableRow from "@mui/material/TableRow";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import IconButton from "@mui/material/IconButton";
-import TableContainer from "@mui/material/TableContainer";
-
-// Components
-import { TablePagination } from "./TablePagination";
+import { DeleteIcon, EditIcon } from "../../data/Icons";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 import CircularLoading from "../../HelperComponents/CircularLoading";
-
-// Icons
-import { DeleteIcon, EditIcon } from "../../data/Icons";
-
-// Context
+import Context from "../../Context/context";
+import TablePagination from "./TablePagination/TablePagination";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
-import { useDispatch, useSelector } from "react-redux";
+
 import {
 	useChangeAllProductsStatusMutation,
 	useChangeProductStatusMutation,
@@ -40,9 +35,8 @@ import {
 	useDeleteAllProductsMutation,
 	useDeleteProductMutation,
 } from "../../store/apiSlices/productsApi";
-import { ChangeCategoriesForSomeSelectedProducts } from "../../pages/Products";
 import { openModal } from "../../store/slices/ChangeCategoriesForSomeSelectedProducts";
-import Context from "../../Context/context";
+import { ChangeCategoriesForSomeSelectedProducts } from "../../pages/Products";
 
 const switchStyle = {
 	width: "50px",
@@ -61,13 +55,9 @@ const switchStyle = {
 		transform: "translate(6px,6px)",
 		color: "#fff",
 	},
-
-	"&:hover": {
-		"& .MuiSwitch-thumb": {
-			boxShadow: "none",
-		},
+	"&:hover .MuiSwitch-thumb": {
+		boxShadow: "none",
 	},
-
 	"& .MuiSwitch-switchBase": {
 		padding: 1,
 		"&.Mui-checked": {
@@ -94,7 +84,6 @@ function EnhancedTableHead(props) {
 					}}>
 					م
 				</TableCell>
-
 				<TableCell
 					align='center'
 					sx={{
@@ -121,7 +110,6 @@ function EnhancedTableHead(props) {
 					نشر
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='center'>
-					{" "}
 					اجراء
 				</TableCell>
 			</TableRow>
@@ -152,15 +140,14 @@ function EnhancedTableToolbar(props) {
 			sx={{
 				pl: { sm: 2 },
 				pr: { xs: 1, sm: 1 },
-
 				display: "flex",
 				justifyContent: "space-between",
 				flexDirection: "row-reverse",
 			}}>
-			<div className=' d-flex flex-row-reverse  justify-content-between align-items-center '>
+			<div className='d-flex flex-row-reverse justify-content-between align-items-center'>
 				<div></div>
 				{numSelected > 0 && (
-					<div className=' d-flex justify-content-start align-items-center flex-wrap '>
+					<div className='d-flex justify-content-start align-items-center flex-wrap'>
 						<Tooltip
 							className='delete-all'
 							onClick={() => {
@@ -176,7 +163,7 @@ function EnhancedTableToolbar(props) {
 							</IconButton>
 						</Tooltip>
 						<Tooltip
-							className='switch-all '
+							className='switch-all'
 							onClick={() => {
 								setNotificationTitle(
 									"سيتم تغيير حالة جميع المنتجات التي قمت بتحديدهم"
@@ -185,43 +172,7 @@ function EnhancedTableToolbar(props) {
 								setActionType("changeStatusAll");
 							}}>
 							<IconButton>
-								<Switch
-									sx={{
-										width: "50px",
-										"& .MuiSwitch-track": {
-											width: 26,
-											height: 14,
-											opacity: 1,
-											backgroundColor: "#ff9f1a",
-											boxSizing: "border-box",
-										},
-										"& .MuiSwitch-thumb": {
-											boxShadow: "none",
-											width: 10,
-											height: 10,
-											borderRadius: 5,
-											transform: "translate(6px,6px)",
-											color: "#fff",
-										},
-										"&:hover": {
-											"& .MuiSwitch-thumb": {
-												boxShadow: "none",
-											},
-										},
-
-										"& .MuiSwitch-switchBase": {
-											padding: 1,
-											"&.Mui-checked": {
-												transform: "translateX(11px)",
-												color: "#fff",
-												"& + .MuiSwitch-track": {
-													opacity: 1,
-													backgroundColor: "#3AE374",
-												},
-											},
-										},
-									}}
-								/>
+								<Switch sx={switchStyle} />
 								تعطيل الكل
 							</IconButton>
 						</Tooltip>
@@ -238,7 +189,7 @@ function EnhancedTableToolbar(props) {
 				)}
 			</div>
 
-			<div className=' d-flex align-items-center flex-row-reverse pe-0'>
+			<div className='d-flex align-items-center flex-row-reverse pe-0'>
 				<h2
 					className='h4'
 					style={{
@@ -296,21 +247,17 @@ export default function BigProductsTable({
 	const DeleteStore = useContext(DeleteContext);
 	const { setActionDelete, actionDelete, setItemId } = DeleteStore;
 
-	// ----------------------------------------------------------------------------
 	const [selected, setSelected] = useState([]);
 	const handleSelectAllClick = (event) => {
 		if (event.target.checked) {
 			const newSelected = products?.map((n) => n.id);
-
 			setSelected(newSelected);
-
 			return;
 		}
 		setSelected([]);
 	};
 	const handleClick = (event, id) => {
 		const selectedIndex = selected.indexOf(id);
-
 		let newSelected = [];
 
 		if (selectedIndex === -1) {
@@ -329,9 +276,7 @@ export default function BigProductsTable({
 		setSelected(newSelected);
 	};
 	const isSelected = (id) => selected.indexOf(id) !== -1;
-	/** --------------------------------------------------------------- */
 
-	//to reset the taps to default value
 	useEffect(() => {
 		if (tabSelectedId) {
 			setPageTarget(1);
@@ -339,7 +284,6 @@ export default function BigProductsTable({
 		}
 	}, [tabSelectedId]);
 
-	// Delete items
 	const [deleteProduct] = useDeleteProductMutation();
 	const [deleteAllProducts] = useDeleteAllProductsMutation();
 
@@ -347,7 +291,6 @@ export default function BigProductsTable({
 		try {
 			await deleteProduct({ id })
 				.unwrap()
-
 				.then((data) => {
 					if (!data?.success) {
 						toast.error(data?.message?.ar, {
@@ -361,12 +304,12 @@ export default function BigProductsTable({
 			console.error("Failed to delete the category", err);
 		}
 	};
+
 	const handleDeleteAllItems = async (selected) => {
 		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 		try {
 			await deleteAllProducts({ selected: queryParams })
 				.unwrap()
-
 				.then((data) => {
 					if (!data?.success) {
 						toast.error(data?.message?.ar, {
@@ -380,9 +323,7 @@ export default function BigProductsTable({
 			console.error("Failed to delete the category", err);
 		}
 	};
-	//------------------------------------------------------------------------
 
-	// change category status
 	const [changeProductStatus] = useChangeProductStatusMutation();
 	const [changeSpecialStatus] = useChangeSpecialStatusMutation();
 	const [changeAllProductsStatus] = useChangeAllProductsStatusMutation();
@@ -391,7 +332,6 @@ export default function BigProductsTable({
 		try {
 			await changeProductStatus({ id })
 				.unwrap()
-
 				.then((data) => {
 					if (!data?.success) {
 						toast.error(data?.message?.ar, {
@@ -402,15 +342,15 @@ export default function BigProductsTable({
 					}
 				});
 		} catch (err) {
-			console.error("Failed to delete the category", err);
+			console.error("Failed to change the product status", err);
 		}
 	};
+
 	const handleChangeAllItemsStatus = async (selected) => {
 		const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 		try {
 			await changeAllProductsStatus({ selected: queryParams })
 				.unwrap()
-
 				.then((data) => {
 					if (!data?.success) {
 						toast.error(data?.message?.ar, {
@@ -421,14 +361,14 @@ export default function BigProductsTable({
 					}
 				});
 		} catch (err) {
-			console.error("Failed to change Status for category", err);
+			console.error("Failed to change status for all products", err);
 		}
 	};
+
 	const handleChangeSpecialStatus = async (id) => {
 		try {
 			await changeSpecialStatus({ id })
 				.unwrap()
-
 				.then((data) => {
 					if (!data?.success) {
 						toast.error(data?.message?.ar, {
@@ -439,11 +379,10 @@ export default function BigProductsTable({
 					}
 				});
 		} catch (err) {
-			console.error("Failed to delete the category", err);
+			console.error("Failed to change special status", err);
 		}
 	};
 
-	/** open modal */
 	const handleOpenChangeCategoriesModal = () => {
 		dispatch(openModal());
 	};
@@ -467,6 +406,7 @@ export default function BigProductsTable({
 						onSelectAllClick={handleSelectAllClick}
 						handleOpenChangeCategoriesModal={handleOpenChangeCategoriesModal}
 					/>
+
 					<TableContainer>
 						<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
 							<EnhancedTableHead
@@ -484,194 +424,185 @@ export default function BigProductsTable({
 									</TableRow>
 								) : (
 									<>
-										<Fragment>
-											{products?.length === 0 ? (
-												<TableRow>
-													<TableCell colSpan={8}>
-														<p className='text-center'>لاتوجد بيانات</p>
-													</TableCell>
-												</TableRow>
-											) : (
-												products?.map((row, index) => {
-													const isItemSelected = isSelected(row.id);
-													const labelId = `enhanced-table-checkbox-${index}`;
+										{products?.length === 0 ? (
+											<TableRow>
+												<TableCell colSpan={8}>
+													<p className='text-center'>لاتوجد بيانات</p>
+												</TableCell>
+											</TableRow>
+										) : (
+											products?.map((row, index) => {
+												const isItemSelected = isSelected(row.id);
+												const labelId = `enhanced-table-checkbox-${index}`;
 
-													return (
-														<TableRow
-															sx={{
-																backgroundColor: row?.is_import
-																	? "#dfe2aa"
-																	: "",
-															}}
-															role='checkbox'
-															aria-checked={isItemSelected}
-															tabIndex={-1}
-															key={index}
-															selected={isItemSelected}>
-															<TableCell
-																component='th'
-																id={labelId}
-																scope='row'
-																align='right'>
-																<div className='flex items-center gap-4 '>
-																	<Checkbox
-																		sx={{
+												return (
+													<TableRow
+														sx={{
+															backgroundColor: row?.is_import ? "#dfe2aa" : "",
+														}}
+														role='checkbox'
+														aria-checked={isItemSelected}
+														tabIndex={-1}
+														key={index}
+														selected={isItemSelected}>
+														<TableCell
+															component='th'
+															id={labelId}
+															scope='row'
+															align='right'>
+															<div className='flex items-center gap-4'>
+																<Checkbox
+																	sx={{
+																		color: "#356b88",
+																		"& .MuiSvgIcon-root": {
 																			color: "#356b88",
-																			"& .MuiSvgIcon-root": {
-																				color: "#356b88",
-																			},
-																		}}
-																		checked={isItemSelected}
-																		onClick={(event) =>
-																			handleClick(event, row?.id)
-																		}
-																		inputProps={{
-																			"aria-labelledby": labelId,
-																		}}
-																	/>
-																	{(index + 1).toLocaleString("en-US", {
-																		minimumIntegerDigits: 2,
-																		useGrouping: false,
-																	})}
-																</div>
-															</TableCell>
+																		},
+																	}}
+																	checked={isItemSelected}
+																	onClick={(event) =>
+																		handleClick(event, row?.id)
+																	}
+																	inputProps={{
+																		"aria-labelledby": labelId,
+																	}}
+																/>
+																{(index + 1).toLocaleString("en-US", {
+																	minimumIntegerDigits: 2,
+																	useGrouping: false,
+																})}
+															</div>
+														</TableCell>
 
-															<TableCell align='center'>
-																<div
-																	className='cate-prim d-flex align-items-center justify-content-start'
+														<TableCell align='center'>
+															<div
+																className='cate-prim d-flex align-items-center justify-content-start'
+																style={{
+																	width: "300px",
+																}}>
+																<img
+																	className='img_icons'
+																	src={row?.cover}
+																	alt='img'
+																/>
+
+																<span
+																	className='me-3'
 																	style={{
-																		width: " 300px",
+																		maxWidth: "100%",
+																		whiteSpace: "nowrap",
+																		overflow: "hidden",
+																		textOverflow: "ellipsis",
 																	}}>
-																	<img
-																		className='img_icons'
-																		src={row?.cover}
-																		alt='img'
-																	/>
+																	{row?.name}
+																</span>
+															</div>
+														</TableCell>
+														<TableCell align='right'>
+															{row?.category?.name}
+														</TableCell>
+														<TableCell align='center'>
+															{row?.discount_price &&
+															row?.discount_price !== "0" ? (
+																<>
+																	<span className='me-1 d-block'>
+																		{row?.discount_price} ر.س
+																	</span>
 
-																	<span
-																		className='me-3'
+																	<del
+																		className='original-price'
 																		style={{
-																			maxWidth: "100%",
-																			whiteSpace: "nowrap",
-																			overflow: "hidden",
-																			textOverflow: "ellipsis",
+																			fontSize: "13px",
+																			fontWeight: "400",
+																			color: "#b3b3b3",
 																		}}>
-																		{row?.name}
-																	</span>
-																</div>
-															</TableCell>
-															<TableCell align='right'>
-																{row?.category?.name}
-															</TableCell>
-															<TableCell align='center'>
-																{row?.discount_price &&
-																row?.discount_price !== "0" ? (
-																	<>
-																		<span className='me-1 d-block'>
-																			{row?.discount_price} ر.س
-																		</span>
+																		{row?.selling_price} ر.س
+																	</del>
+																</>
+															) : (
+																<> {row?.selling_price} ر.س</>
+															)}
+														</TableCell>
+														<TableCell align='center'>{row?.stock}</TableCell>
+														<TableCell align='center'>
+															<div
+																className='form-check form-switch'
+																style={{ margin: "0 auto" }}>
+																<Switch
+																	onChange={() =>
+																		handleChangeSpecialStatus(row?.id)
+																	}
+																	checked={row?.special === "مميز"}
+																	sx={switchStyle}
+																/>
+															</div>
+														</TableCell>
 
-																		<del
-																			className='original-price'
-																			style={{
-																				fontSize: "13px",
-																				fontWeight: " 400",
-																				color: "#b3b3b3",
-																			}}>
-																			{row?.selling_price} ر.س
-																		</del>
-																	</>
-																) : (
-																	<> {row?.selling_price} ر.س</>
-																)}
-															</TableCell>
-															<TableCell align='center'>{row?.stock}</TableCell>
-															<TableCell align='center'>
-																<div
-																	className='form-check form-switch'
-																	style={{ margin: "0 auto" }}>
-																	<Switch
-																		onChange={() =>
-																			handleChangeSpecialStatus(row?.id)
-																		}
-																		checked={
-																			row?.special === "مميز" ? true : false
-																		}
-																		sx={switchStyle}
+														<TableCell align='center'>
+															<div
+																className='form-check form-switch'
+																style={{ margin: "0 auto" }}>
+																<Switch
+																	onChange={() => changeItemStatus(row?.id)}
+																	checked={row?.status === "نشط"}
+																	sx={switchStyle}
+																/>
+															</div>
+														</TableCell>
+
+														<TableCell align='right'>
+															<div className='actions d-flex justify-content-evenly'>
+																<Link
+																	to={
+																		row?.is_import
+																			? `EditImportProducts/${row?.id}`
+																			: `EditProduct/${row?.id}`
+																	}
+																	style={{ cursor: "pointer" }}>
+																	<EditIcon title='تعديل المنتج' />
+																</Link>
+																<span>
+																	<DeleteIcon
+																		title='حذف المنتج'
+																		onClick={() => {
+																			setActionDelete(
+																				"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
+																			);
+																			setItemId(row.id);
+																		}}
+																		style={{
+																			cursor: "pointer",
+																			color: "red",
+																			fontSize: "1.2rem",
+																		}}
 																	/>
-																</div>
-															</TableCell>
-
-															<TableCell align='center'>
-																<div
-																	className='form-check form-switch'
-																	style={{ margin: "0 auto" }}>
-																	<Switch
-																		onChange={() => changeItemStatus(row?.id)}
-																		checked={
-																			row?.status === "نشط" ? true : false
-																		}
-																		sx={switchStyle}
-																	/>
-																</div>
-															</TableCell>
-
-															<TableCell align='right'>
-																<div className='actions d-flex justify-content-evenly'>
-																	<Link
-																		to={
-																			row?.is_import
-																				? `EditImportProducts/${row?.id}`
-																				: `EditProduct/${row?.id}`
-																		}
-																		style={{ cursor: "pointer" }}>
-																		<EditIcon title='تعديل المنتج' />
-																	</Link>
-																	<span>
-																		<DeleteIcon
-																			title='حذف المنتج'
-																			onClick={() => {
-																				setActionDelete(
-																					"سيتم حذف المنتج وهذه الخطوة غير قابلة للرجوع"
-																				);
-																				setItemId(row.id);
-																			}}
-																			style={{
-																				cursor: "pointer",
-																				color: "red",
-																				fontSize: "1.2rem",
-																			}}
-																		/>
-																	</span>
-																</div>
-															</TableCell>
-														</TableRow>
-													);
-												})
-											)}
-										</Fragment>
+																</span>
+															</div>
+														</TableCell>
+													</TableRow>
+												);
+											})
+										)}
 									</>
 								)}
 							</TableBody>
 						</Table>
 					</TableContainer>
 				</Paper>
+
 				{products?.length !== 0 && !loading && (
 					<TablePagination
-						data={products}
 						pageCount={pageCount}
 						currentPage={currentPage}
+						setPageTarget={setPageTarget}
+						setRowsCount={setRowsCount}
 						pageTarget={pageTarget}
 						rowsCount={rowsCount}
-						setRowsCount={setRowsCount}
-						setPageTarget={setPageTarget}
 					/>
 				)}
 			</Box>
 			{actionDelete && (
 				<DeleteOneModalComp handleDeleteSingleItem={handleDeleteSingleItem} />
 			)}
-
 			{notificationTitle && (
 				<DeleteModal
 					handleDeleteAllItems={handleDeleteAllItems}

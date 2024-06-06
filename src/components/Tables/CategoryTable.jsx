@@ -649,7 +649,7 @@ export default function EnhancedTable({
 																				} else {
 																					dispatch(
 																						openDeleteCategoryAlert(
-																							"لا يمكن حذف الانشطة لانها تحتوى على منتجات"
+																							"لا يمكن حذف الأنشطة لأنها تحتوى على منتجات"
 																						)
 																					);
 																				}

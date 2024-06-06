@@ -69,7 +69,7 @@ function CheckoutPage() {
 				postCode: defaultAddress?.postCode,
 				notes: defaultAddress?.notes,
 				shippingtype_id: defaultAddress?.shippingtype_id,
-				defaultAddress: defaultAddress?.default_address === "1" ? true : false,
+				defaultAddress: defaultAddress?.default_address === 1 ? true : false,
 			});
 
 			setShippingSelect(defaultAddress?.shippingtype_id || 1);

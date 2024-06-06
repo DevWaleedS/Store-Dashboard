@@ -41,7 +41,11 @@ const Category = () => {
 	const [pageCount, setPageCount] = useState(1);
 
 	// Fetch categories based on search query and tabSelected
-	const { data: categories, isLoading } = useGetCategoriesDataQuery({
+	const {
+		data: categories,
+		isLoading,
+		refetch,
+	} = useGetCategoriesDataQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
@@ -49,6 +53,10 @@ const Category = () => {
 	const [searchInStoreCategories] = useSearchInStoreCategoriesMutation();
 	const [searchInEtlbohaCategories] = useSearchInEtlbohaCategoriesMutation();
 	const [filterCategories] = useFilterCategoriesMutation();
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	// Display categories by tapSelect
 	useEffect(() => {
@@ -61,13 +69,13 @@ const Category = () => {
 
 			setCurrentPage(
 				tabSelected === 1
-					? categories?.data?.current_page
-					: categories?.data?.current_page
+					? categories?.data?.store_current_page
+					: categories?.data?.etlobha_current_page
 			);
 			setPageCount(
 				tabSelected === 1
-					? categories?.data?.page_count
-					: categories?.data?.page_count
+					? categories?.data?.store_page_count
+					: categories?.data?.etlobha_page_count
 			);
 		}
 	}, [tabSelected, categories]);
@@ -94,13 +102,13 @@ const Category = () => {
 
 						setCurrentPage(
 							tabSelected === 1
-								? response.data?.data?.current_page
-								: response.data?.data?.current_page
+								? response.data?.data?.store_current_page
+								: response.data?.data?.etlobha_current_page
 						);
 						setPageCount(
 							tabSelected === 1
-								? response.data?.data?.page_count
-								: response.data?.data?.page_count
+								? response.data?.data?.store_page_count
+								: response.data?.data?.etlobha_page_count
 						);
 					} catch (error) {
 						console.error("Error fetching categories:", error);
@@ -130,13 +138,13 @@ const Category = () => {
 
 					setCurrentPage(
 						tabSelected === 1
-							? response.data?.data?.current_page
-							: response.data?.data?.current_page
+							? response.data?.data?.store_current_page
+							: response.data?.data?.etlobha_current_page
 					);
 					setPageCount(
 						tabSelected === 1
-							? response.data?.data?.page_count
-							: response.data?.data?.page_count
+							? response.data?.data?.store_page_count
+							: response.data?.data?.etlobha_page_count
 					);
 				} catch (error) {
 					console.error("Error fetching categories:", error);
@@ -152,13 +160,13 @@ const Category = () => {
 			);
 			setCurrentPage(
 				tabSelected === 1
-					? categories?.data?.current_page
-					: categories?.data?.current_page
+					? categories?.data?.store_current_page
+					: categories?.data?.etlobha_current_page
 			);
 			setPageCount(
 				tabSelected === 1
-					? categories?.data?.page_count
-					: categories?.data?.page_count
+					? categories?.data?.store_page_count
+					: categories?.data?.etlobha_page_count
 			);
 		}
 	}, [category_id, filterCategories, tabSelected]);

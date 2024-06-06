@@ -89,7 +89,10 @@ const RenderCouponInput = ({
 					<form className='coupon-form'>
 						<input
 							value={coupon}
-							onChange={(e) => setCoupon(e.target.value)}
+							onChange={(e) => {
+								setCoupon(e.target.value);
+								setCouponError("");
+							}}
 							type='text'
 							className='form-control'
 							id='input-coupon-code'

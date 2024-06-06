@@ -87,8 +87,7 @@ const MaintenanceModeModal = () => {
 	const Z_index = useContext(Context);
 
 	const { setNavbarZindex } = Z_index;
-	const { data: maintenancesMode, isLoading } =
-		useGetMaintenanceModeDataQuery();
+	const { data: maintenancesMode } = useGetMaintenanceModeDataQuery();
 
 	const { isOpenMaintenanceModeModal } = useSelector(
 		(state) => state.MaintenanceModeModal

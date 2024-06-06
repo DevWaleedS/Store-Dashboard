@@ -87,8 +87,7 @@ const SendReplayModal = ({ commentDetails }) => {
 
 		try {
 			const response = await sendReplayToComment({
-				comment_text: editorValue,
-				comment_id: commentDetails?.id,
+				body: formData,
 			});
 
 			// Handle response

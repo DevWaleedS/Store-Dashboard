@@ -274,6 +274,7 @@ const ReturnOrderDetails = () => {
 													<span>{currentOrder?.status}</span>
 												</div>
 											</div>
+
 											<div className='box'>
 												<div className='order-head-row'>
 													<DateIcon className='date-icon' />
@@ -288,6 +289,7 @@ const ReturnOrderDetails = () => {
 													</span>
 												</div>
 											</div>
+
 											<div className='box'>
 												<div className='order-head-row'>
 													<WalletIcon />
@@ -297,15 +299,7 @@ const ReturnOrderDetails = () => {
 													<span>{currentOrder?.order?.total_price} ر.س</span>
 												</div>
 											</div>
-											<div className='box'>
-												<div className='order-head-row'>
-													<Quantity />
-													<span className='me-2'> عدد المنتجات</span>
-												</div>
-												<div className='order-data-row'>
-													<span>{currentOrder?.order?.quantity}</span>
-												</div>
-											</div>
+
 											<div className='box'>
 												<div className='order-head-row'>
 													<BsFillInfoSquareFill
@@ -345,20 +339,6 @@ const ReturnOrderDetails = () => {
 									<div className='order-details-box'>
 										<div className='title mb-4 d-flex justify-content-between  align-content-center  flex-wrap'>
 											<h5>تفاصيل المنتجات</h5>
-											<div className='d-flex justify-content-between  align-content-center gap-1'>
-												<h6>عدد القطع:</h6>
-												<p style={{ fontSize: "14px", fontWight: "400" }}>
-													{currentOrder?.order?.totalCount === 1 && (
-														<>(قطعة واحده)</>
-													)}
-													{currentOrder?.order?.totalCount === 2 && (
-														<>(قطعتين)</>
-													)}
-													{currentOrder?.order?.totalCount > 2 && (
-														<>({currentOrder?.order?.totalCount} قطعة)</>
-													)}
-												</p>
-											</div>
 										</div>
 										<TableContainer>
 											<Table
@@ -366,7 +346,7 @@ const ReturnOrderDetails = () => {
 												aria-labelledby='tableTitle'>
 												<EnhancedTableHead />
 												<TableBody>
-													{currentOrder?.order?.orderItem?.map((row, index) => (
+													{currentOrder?.orderItem?.map((row, index) => (
 														<TableRow hover tabIndex={-1} key={index}>
 															<TableCell
 																component='th'
@@ -410,7 +390,7 @@ const ReturnOrderDetails = () => {
 															</TableCell>
 															<TableCell align='right' sx={{ width: "90px" }}>
 																<div className='text-center'>
-																	<span>{row?.quantity}</span>
+																	<span>{row?.return_qty}</span>
 																</div>
 															</TableCell>
 															<TableCell align='center'>

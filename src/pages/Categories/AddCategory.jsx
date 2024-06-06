@@ -114,7 +114,6 @@ const AddCategory = () => {
 	};
 
 	// Handle profile data
-
 	const [addNewCategory] = useAddNewCategoryMutation();
 	const handleCreateNewCategory = async (data) => {
 		setLoadingTitle("جاري حفظ النشاط");

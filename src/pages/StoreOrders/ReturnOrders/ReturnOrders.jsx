@@ -22,10 +22,18 @@ const ReturnOrders = () => {
 	const [returnOrdersData, setReturnOrdersData] = useState([]);
 
 	// get orders data
-	const { data: returnOrders, isLoading } = useGetReturnOrdersQuery({
+	const {
+		data: returnOrders,
+		isLoading,
+		refetch,
+	} = useGetReturnOrdersQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	useEffect(() => {
 		if (returnOrders?.ReturnOrders?.length !== 0) {

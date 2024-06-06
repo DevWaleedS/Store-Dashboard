@@ -35,8 +35,8 @@ const filtersTypes = [
 	{ id: 2, ar_name: "مبلغ ثابت", en_name: "fixed" },
 	{ id: 3, ar_name: "نسبة مئوية", en_name: "percent" },
 	{ id: 4, ar_name: "منتهي", en_name: "expired" },
-	{ id: 4, ar_name: "نشط", en_name: "active" },
-	{ id: 4, ar_name: "غير نشط", en_name: "not_active" },
+	{ id: 5, ar_name: "نشط", en_name: "active" },
+	{ id: 6, ar_name: "غير نشط", en_name: "not_active" },
 ];
 
 const selectFilterStyles = {
@@ -89,35 +89,42 @@ const menuItemStyles = {
 };
 
 const Coupon = () => {
-	// to Handle if the user is not verify  her account
+	// to Handle if the user is not verify her account
 	UseAccountVerification();
 
 	const navigate = useNavigate();
-	const [couponsData, setCouponsData] = useState([]);
+	const [couponsData, setCouponsData] = useState(null);
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
 	const [search, setSearch] = useState("");
 	const [select, setSelect] = useState("");
 
 	//get all coupons data
-	const { data: coupons, isLoading } = useGetCouponsQuery({
+	const {
+		data: coupons,
+		isLoading,
+		refetch,
+	} = useGetCouponsQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
 
 	/** get contact data */
 	useEffect(() => {
-		if (coupons?.data) {
+		if (coupons) {
 			setCouponsData(coupons?.data);
 		}
-	}, [coupons?.data]);
-	// -----------------------------------------------------------
+	}, [coupons]);
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	// handle search in Coupons
 	const [searchInCoupons] = useSearchInCouponsMutation();
 	useEffect(() => {
 		const debounce = setTimeout(() => {
-			if (search !== "") {
+			if (search) {
 				const fetchData = async () => {
 					try {
 						const response = await searchInCoupons({
@@ -138,13 +145,12 @@ const Coupon = () => {
 		return () => {
 			clearTimeout(debounce);
 		};
-	}, [search, pageTarget, rowsCount]);
-	// -------------------------------------------------------------------------------
+	}, [search, searchInCoupons, coupons?.data]);
 
 	// filter by status or discount type
 	const [filterCouponsByStatus] = useFilterCouponsByStatusMutation();
 	useEffect(() => {
-		if (select !== "") {
+		if (select) {
 			const fetchData = async () => {
 				try {
 					const response = await filterCouponsByStatus({
@@ -162,8 +168,6 @@ const Coupon = () => {
 			setCouponsData(coupons?.data);
 		}
 	}, [select, filterCouponsByStatus, coupons?.data]);
-
-	// -------------------------------------------------------------------------------
 
 	return (
 		<>
@@ -188,8 +192,6 @@ const Coupon = () => {
 								<BsSearch className='search-icon' />
 							</div>
 
-							{/**/}
-
 							<div className='select-input input-box '>
 								<FormControl sx={{ width: "100%" }}>
 									<FiFilter className='filter-icon' />
@@ -201,21 +203,20 @@ const Coupon = () => {
 										IconComponent={IoIosArrowDown}
 										inputProps={{ "aria-label": "Without label" }}
 										renderValue={(selected) => {
-											if (select === "") {
+											if (selected === "") {
 												return <p style={{ color: "#02466a" }}>فرز حسب</p>;
 											}
-											const result =
-												filtersTypes?.filter(
-													(item) => item?.en_name === selected
-												) || "";
-											return result[0]?.ar_name;
+											const result = filtersTypes.find(
+												(item) => item.en_name === selected
+											);
+											return result ? result.ar_name : "";
 										}}>
-										{filtersTypes?.map((item) => (
+										{filtersTypes.map((item) => (
 											<MenuItem
 												sx={menuItemStyles}
-												key={item?.id}
-												value={item?.en_name}>
-												{item?.ar_name}
+												key={item.id}
+												value={item.en_name}>
+												{item.ar_name}
 											</MenuItem>
 										))}
 									</Select>
