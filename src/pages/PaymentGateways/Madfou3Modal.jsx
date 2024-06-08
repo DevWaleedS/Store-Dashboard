@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { toast } from "react-toastify";
-import { useMadfuAuthMutation } from "../../store/apiSlices/madfuApi";
+import { useMadfuAuthMutation } from "../../store/apiSlices/paymentGatewaysApi";
 
 const Madfou3Modal = ({ isShowing, hide }) => {
 	const [madfuAuthData, setMadfuAuthData] = useState({

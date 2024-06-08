@@ -296,7 +296,7 @@ const ReturnOrderDetails = () => {
 													<span className='me-3 price'>إجمالي الطلب</span>
 												</div>
 												<div className='order-data-row'>
-													<span>{currentOrder?.order?.total_price} ر.س</span>
+													<span>{currentOrder?.return_total} ر.س</span>
 												</div>
 											</div>
 
@@ -395,49 +395,11 @@ const ReturnOrderDetails = () => {
 															</TableCell>
 															<TableCell align='center'>
 																<span className='table-price_span'>
-																	{currentOrder?.order?.total_price} ر.س
+																	{row?.total} ر.س
 																</span>
 															</TableCell>
 														</TableRow>
 													))}
-													<TableRow>
-														<TableCell
-															colSpan={3}
-															component='th'
-															scope='row'
-															align='right'
-															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "700" }}>السعر</span>
-														</TableCell>
-														<TableCell
-															align='center'
-															style={{ borderBottom: "none" }}>
-															<span
-																className='table-price_span'
-																style={{ fontWeight: "500" }}>
-																{currentOrder?.order?.subtotal} ر.س
-															</span>
-														</TableCell>
-													</TableRow>
-													<TableRow>
-														<TableCell
-															colSpan={3}
-															component='th'
-															scope='row'
-															align='right'
-															style={{ borderBottom: "none" }}>
-															<span style={{ fontWeight: "700" }}>الضريبة</span>
-														</TableCell>
-														<TableCell
-															align='center'
-															style={{ borderBottom: "none" }}>
-															<span
-																className='table-price_span'
-																style={{ fontWeight: "500" }}>
-																{currentOrder?.order?.tax} ر.س
-															</span>
-														</TableCell>
-													</TableRow>
 
 													<TableRow>
 														<TableCell
@@ -462,7 +424,7 @@ const ReturnOrderDetails = () => {
 															<span
 																className='table-price_span'
 																style={{ fontWeight: "500" }}>
-																{currentOrder?.order?.total_price} ر.س
+																{currentOrder?.return_total} ر.س
 															</span>
 														</TableCell>
 													</TableRow>

@@ -32,9 +32,24 @@ export const paymentGatewaysApi = createApi({
 			},
 			invalidatesTags: ["PaymentGateways"],
 		}),
+
+		madfuAuth: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `madfu-auth/${id}`,
+					method: "POST",
+					data: body,
+				};
+			},
+
+			invalidatesTags: ["PaymentGateways"],
+		}),
 	}),
 });
 
 // Export endpoints and hooks
-export const { useGetPaymentGatewaysQuery, useChangePaymentStatusMutation } =
-	paymentGatewaysApi;
+export const {
+	useMadfuAuthMutation,
+	useGetPaymentGatewaysQuery,
+	useChangePaymentStatusMutation,
+} = paymentGatewaysApi;

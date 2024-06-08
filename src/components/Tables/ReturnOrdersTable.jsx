@@ -326,7 +326,7 @@ export default function ReturnOrdersTable({
 													</TableCell>
 
 													<TableCell align='center'>
-														{row?.order?.total_price} ر.س
+														{row?.return_total} ر.س
 													</TableCell>
 
 													<TableCell align='right'>

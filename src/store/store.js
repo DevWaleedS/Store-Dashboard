@@ -70,7 +70,6 @@ import { importPaymentMethodApi } from "./apiSlices/importPaymentMethodApi";
 import { defaultAddressApi } from "./apiSlices/selectorsApis/defaultAddressApi";
 import { selectShippingCompaniesApi } from "./apiSlices/selectorsApis/selectShippingCompaniesApi";
 import { getStoreTokenApi } from "./apiSlices/getStoreTokenApi";
-import { madfuApi } from "./apiSlices/madfuApi";
 
 // store
 export const store = configureStore({
@@ -121,8 +120,7 @@ export const store = configureStore({
 			evaluationThePlatformApi.middleware,
 			selectShippingCompaniesApi.middleware,
 			selectEtlbohaSubCategoriesApi.middleware,
-			registrationMarketerStatusApi.middleware,
-			madfuApi.middleware,
+			registrationMarketerStatusApi.middleware
 		),
 	reducer: {
 		[selectEtlbohaSubCategoriesApi.reducerPath]:
@@ -172,7 +170,7 @@ export const store = configureStore({
 		[selectPageCategoriesApi.reducerPath]: selectPageCategoriesApi.reducer,
 		[selectEtlobahCategoryApi.reducerPath]: selectEtlobahCategoryApi.reducer,
 		[evaluationThePlatformApi.reducerPath]: evaluationThePlatformApi.reducer,
-		[madfuApi.reducerPath]: madfuApi.reducer,
+
 		[selectShippingCompaniesApi.reducerPath]:
 			selectShippingCompaniesApi.reducer,
 
