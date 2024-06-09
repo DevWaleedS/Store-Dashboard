@@ -54,7 +54,9 @@ const RootLayout = () => {
 	const { loadingTitle } = LoadingStore;
 
 	// To handle Open Verify Modal
-	const { isOpenVerifyModal } = useSelector((state) => state.VerifyModal);
+	const { isOpenVerifyModal, isVerifyStoreAlertModalOpen } = useSelector(
+		(state) => state.VerifyModal
+	);
 
 	// Open Maintenance Mode Modal
 	const { isOpenMaintenanceModeModal } = useSelector(
@@ -124,7 +126,8 @@ const RootLayout = () => {
 
 							{title && <ActionCompleteComp />}
 							{loadingTitle && <LoadingRequest />}
-							{isOpenVerifyModal && (
+
+							{!isVerifyStoreAlertOpen && isOpenVerifyModal && (
 								<VerifyStoreModal
 									isFetching={isFetching}
 									verificationStatus={showVerification?.verification_status}

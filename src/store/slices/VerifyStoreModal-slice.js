@@ -3,6 +3,7 @@ import { StoreVerificationThunk } from "../Thunk/storeVerificationThunk";
 
 const initialValueState = {
 	isOpenVerifyModal: false,
+
 	verificationStoreStatus: "",
 };
 

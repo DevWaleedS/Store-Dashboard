@@ -228,6 +228,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 			) {
 				setLoadingTitle("");
 				dispatchVerifyAlert(openVerifyStoreAlertModal());
+
 				navigate("/");
 				dispatch(resetActivity());
 				dispatch(resetSubActivity());

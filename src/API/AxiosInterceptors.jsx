@@ -25,6 +25,7 @@ const AxiosInterceptors = ({ children }) => {
 						"https://backend.atlbha.com/api/Store/checkoutImport",
 						"https://backend.atlbha.com/api/madfu/login",
 						"https://backend.atlbha.com/api/madfu/create-order",
+						"https://backend.atlbha.com/api/Store/verification_update",
 					].includes(response.config.url) &&
 					["delete", "patch", "post", "put"].includes(response.config.method)
 				) {
