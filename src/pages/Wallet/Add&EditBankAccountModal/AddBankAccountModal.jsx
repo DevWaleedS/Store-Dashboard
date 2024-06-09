@@ -399,11 +399,7 @@ const AddBankAccountModal = () => {
 					supplierCode: response?.data?.message?.en?.supplierCode?.[0],
 				});
 
-				Object.entries(response?.data?.message?.en)?.forEach(
-					([key, message]) => {
-						toast.error(message[0], { theme: "light" });
-					}
-				);
+			
 			}
 		} catch (error) {
 			console.error("Error changing addBankAccount:", error);
