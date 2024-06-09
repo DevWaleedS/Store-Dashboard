@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
 import ReactDom from "react-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
+import { closeVerifyModal } from "../../store/slices/VerifyStoreModal-slice";
 import { closeVerifyStoreAlertModal } from "../../store/slices/VerifyStoreAlertModal-slice";
-import { useNavigate } from "react-router-dom";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -54,6 +55,7 @@ const VerifyAlert = () => {
 							onClick={() => {
 								navigate("/");
 								dispatch(closeVerifyStoreAlertModal());
+								dispatch(closeVerifyModal());
 							}}
 							style={{
 								color: "#fff",

@@ -127,6 +127,7 @@ const RootLayout = () => {
 							{title && <ActionCompleteComp />}
 							{loadingTitle && <LoadingRequest />}
 
+							{/* if isVerifyStoreAlertOpen is not open and */}
 							{!isVerifyStoreAlertOpen && isOpenVerifyModal && (
 								<VerifyStoreModal
 									isFetching={isFetching}
