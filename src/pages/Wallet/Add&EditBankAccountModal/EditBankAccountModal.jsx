@@ -110,6 +110,16 @@ const EditBankAccountModal = () => {
 
 	useEffect(() => {
 		if (bankAccount) {
+			const documentUser = bankAccount?.SupplierDocumentUser || [];
+			const currentCivilIdFile =
+				documentUser.find((doc) => doc.type === 1)?.file || "";
+			const currentBankAccountLetterFile =
+				documentUser.find((doc) => doc.type === 21)?.file || "";
+			const currentWebsiteImageFile =
+				documentUser.find((doc) => doc.type === 25)?.file || "";
+			const currentNationalAddressFile =
+				documentUser.find((doc) => doc.type === 5)?.file || "";
+
 			setBankAccountInfo({
 				...bankAccountInfo,
 				bankId: bankAccount?.supplierUser?.bankId || "",
@@ -120,20 +130,13 @@ const EditBankAccountModal = () => {
 					? bankAccount?.supplierUser?.iban.slice(2)
 					: bankAccount?.supplierUser?.iban || "",
 
-				currentCivilIdFile: bankAccount?.SupplierDocumentUser[0]?.file || "",
-
-				currentBankAccountLetterFile:
-					bankAccount?.SupplierDocumentUser[1]?.file || "",
-
-				currentWebsiteImageFile:
-					bankAccount?.SupplierDocumentUser[2]?.file || "",
-
-				currentNationalAddressFile:
-					bankAccount?.SupplierDocumentUser[3]?.file || "",
+				currentCivilIdFile,
+				currentBankAccountLetterFile,
+				currentWebsiteImageFile,
+				currentNationalAddressFile,
 			});
 		}
 	}, [bankAccount]);
-
 	const {
 		register,
 		handleSubmit,
@@ -600,7 +603,7 @@ const EditBankAccountModal = () => {
 										{(bankAccountErr?.bankId || errors?.bankId) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankId}
-												{errors?.bankId.message}
+												{errors?.bankId?.message}
 											</div>
 										)}
 									</div>
@@ -636,7 +639,7 @@ const EditBankAccountModal = () => {
 											errors?.bankAccountHolderName) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankAccountHolderName}
-												{errors?.bankAccountHolderName.message}
+												{errors?.bankAccountHolderName?.message}
 											</div>
 										)}
 									</div>
@@ -666,7 +669,7 @@ const EditBankAccountModal = () => {
 										{(bankAccountErr?.bankAccount || errors?.bankAccount) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankAccount}
-												{errors?.bankAccount.message}
+												{errors?.bankAccount?.message}
 											</div>
 										)}
 									</div>
@@ -701,7 +704,7 @@ const EditBankAccountModal = () => {
 										{(bankAccountErr?.iban || errors?.iban) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.iban}
-												{errors?.iban.message}
+												{errors?.iban?.message}
 											</div>
 										)}
 									</div>
@@ -744,7 +747,7 @@ const EditBankAccountModal = () => {
 										{(bankAccountErr?.civil_id || errors?.civil_id) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.civil_id}
-												{errors?.civil_id.message}
+												{errors?.civil_id?.message}
 											</div>
 										)}
 									</div>
@@ -790,7 +793,7 @@ const EditBankAccountModal = () => {
 											errors?.bankAccountLetter) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankAccountLetter}
-												{errors?.bankAccountLetter.message}
+												{errors?.bankAccountLetter?.message}
 											</div>
 										)}
 									</div>
@@ -834,7 +837,7 @@ const EditBankAccountModal = () => {
 											errors?.website_image) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.website_image}
-												{errors?.website_image.message}
+												{errors?.website_image?.message}
 											</div>
 										)}
 									</div>
@@ -880,7 +883,7 @@ const EditBankAccountModal = () => {
 											errors?.national_address) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.national_address}
-												{errors?.national_address.message}
+												{errors?.national_address?.message}
 											</div>
 										)}
 									</div>

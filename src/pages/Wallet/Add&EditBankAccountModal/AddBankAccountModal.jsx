@@ -554,7 +554,7 @@ const AddBankAccountModal = () => {
 										{(bankAccountErr?.bankId || errors?.bankId) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankId}
-												{errors?.bankId.message}
+												{errors?.bankId?.message}
 											</div>
 										)}
 									</div>
@@ -589,7 +589,7 @@ const AddBankAccountModal = () => {
 											errors?.bankAccountHolderName) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankAccountHolderName}
-												{errors?.bankAccountHolderName.message}
+												{errors?.bankAccountHolderName?.message}
 											</div>
 										)}
 									</div>
@@ -619,7 +619,7 @@ const AddBankAccountModal = () => {
 										{(bankAccountErr?.bankAccount || errors?.bankAccount) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankAccount}
-												{errors?.bankAccount.message}
+												{errors?.bankAccount?.message}
 											</div>
 										)}
 									</div>
@@ -654,7 +654,7 @@ const AddBankAccountModal = () => {
 										{(bankAccountErr?.iban || errors?.iban) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.iban}
-												{errors?.iban.message}
+												{errors?.iban?.message}
 											</div>
 										)}
 									</div>
@@ -682,7 +682,7 @@ const AddBankAccountModal = () => {
 										{(bankAccountErr?.civil_id || errors?.civil_id) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.civil_id}
-												{errors?.civil_id.message}
+												{errors?.civil_id?.message}
 											</div>
 										)}
 									</div>
@@ -711,7 +711,7 @@ const AddBankAccountModal = () => {
 											errors?.bankAccountLetter) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.bankAccountLetter}
-												{errors?.bankAccountLetter.message}
+												{errors?.bankAccountLetter?.message}
 											</div>
 										)}
 									</div>
@@ -740,7 +740,7 @@ const AddBankAccountModal = () => {
 											errors?.website_image) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.website_image}
-												{errors?.website_image.message}
+												{errors?.website_image?.message}
 											</div>
 										)}
 									</div>
@@ -769,7 +769,7 @@ const AddBankAccountModal = () => {
 											errors?.national_address) && (
 											<div className='fs-6 text-danger'>
 												{bankAccountErr?.national_address}
-												{errors?.national_address.message}
+												{errors?.national_address?.message}
 											</div>
 										)}
 									</div>

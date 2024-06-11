@@ -11,15 +11,16 @@ import { closeCommentModal } from "../../../store/slices/BankAccStatusCommentMod
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
+import { FailedCheckout } from "../../../data/Icons";
 
 const style = {
 	position: "absolute",
 	top: "50%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: 769,
+	width: 620,
 	maxWidth: "90%",
-	height: 402,
+	height: 220,
 	bgcolor: "#fff",
 	border: "1px solid #707070",
 	borderRadius: "16px",
@@ -27,13 +28,6 @@ const style = {
 	"@media(max-width:768px)": {
 		height: "auto",
 	},
-};
-
-const headingStyle = {
-	fontSize: "24px",
-	fontWight: 400,
-	letterSpacing: "0px",
-	color: "#011723",
 };
 
 const BankAccStatusComment = ({ comment }) => {
@@ -67,7 +61,19 @@ const BankAccStatusComment = ({ comment }) => {
 					<div
 						className='text-center add-product-from-store'
 						style={{ padding: "45px 45px 0 45px" }}>
-						<div className='my-4' style={headingStyle}>
+						<div>
+							<FailedCheckout
+								className=' mb-2 mb-md-3 '
+								style={{ width: "50px" }}
+							/>
+						</div>
+						<div
+							style={{
+								whiteSpace: "normal",
+								fontSize: "20px",
+								fontWeight: "400",
+								color: "#0f5575",
+							}}>
 							{comment}
 						</div>
 					</div>

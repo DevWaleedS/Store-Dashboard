@@ -33,8 +33,7 @@ import UseAccountVerification from "../../Hooks/UseAccountVerification";
 import PaymentRecieving from "./PaymentRecieving";
 import AllPaymentGateways from "./AllPaymentGateways";
 import Context from "../../Context/context";
-
-// switch styles
+// Switch styles
 const switchStyle = {
 	"& .MuiSwitch-track": {
 		width: 36,
@@ -52,17 +51,14 @@ const switchStyle = {
 		borderRadius: 4,
 		transform: "translate(6px,7px)",
 	},
-	"&:hover": {
-		"& .MuiSwitch-thumb": {
-			boxShadow: "none",
-		},
+	"&:hover .MuiSwitch-thumb": {
+		boxShadow: "none",
 	},
-
+	"& .MuiSwitch-switchBase:hover": {
+		boxShadow: "none",
+		backgroundColor: "none",
+	},
 	"& .MuiSwitch-switchBase": {
-		"&:hover": {
-			boxShadow: "none",
-			backgroundColor: "none",
-		},
 		padding: 1,
 		"&.Mui-checked": {
 			transform: "translateX(12px)",
@@ -71,83 +67,55 @@ const switchStyle = {
 				opacity: 1,
 				backgroundColor: "#3AE374",
 			},
-			"&:hover": {
-				boxShadow: "none",
-				backgroundColor: "none",
-			},
 		},
 	},
 };
 
 const PaymentGateways = () => {
-	// To handle if the user is not verify  her account
 	UseAccountVerification();
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const contextStore = useContext(Context);
-	const { setEndActionTitle } = contextStore;
+	const { setEndActionTitle } = useContext(Context);
 
-	// to get all  data from server
 	const { data: paymentGateways, isLoading } = useGetPaymentGatewaysQuery();
-
-	// showSupplier bank account
-	const { data: currentBankAccount } = useGetCurrentBankAccountQuery();
+	const { data: currentBankAccount, isLoading: bankIsLoading } =
+		useGetCurrentBankAccountQuery();
 
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
 	const [allPayments, setAllPayments] = useState([]);
+	const [madfou3Status, setMadfou3Status] = useState(false);
+	const [isMadfou3ModalOpen, setIsMadfou3ModalOpen] = useState(false);
 
-	// -----------------------------------------------------------
-
-	// Side Effects
 	useEffect(() => {
 		if (paymentGateways) {
 			setCashOnDelivery(
-				paymentGateways?.filter(
-					(paymenttypes) => paymenttypes?.name === "الدفع عند الاستلام"
+				paymentGateways.filter(
+					(paymenttypes) => paymenttypes.name === "الدفع عند الاستلام"
 				)
 			);
-
 			setAllPayments(
-				paymentGateways?.filter(
-					(paymenttypes) => paymenttypes?.name !== "الدفع عند الاستلام"
+				paymentGateways.filter(
+					(paymenttypes) => paymenttypes.name !== "الدفع عند الاستلام"
 				)
 			);
 		}
 	}, [paymentGateways]);
 
-	// ------------------------------------------------------------------------
-
 	const [changePaymentStatus] = useChangePaymentStatusMutation();
 	const changePaymentStatusFunc = async (id) => {
-		// make request...
 		try {
 			const response = await changePaymentStatus(id);
-
-			// Handle response
-			if (
-				response.data?.success === true &&
-				response.data?.data?.status === 200
-			) {
-				setEndActionTitle(response?.data?.message?.ar);
+			const { success, message, status } = response.data?.data;
+			if (success && status === 200) {
+				setEndActionTitle(message.ar);
 			} else {
-				// Handle display errors using toast notifications
-				toast.error(
-					response?.data?.message?.ar
-						? response.data.message.ar
-						: response.data.message.en,
-					{
-						theme: "light",
-					}
-				);
+				toast.error(message.ar || message.en, { theme: "light" });
 			}
 		} catch (error) {
 			console.error("Error changing changePaymentStatus:", error);
 		}
 	};
-
-	const [madfou3Status, setMadfou3Status] = useState(false);
-	const [isMadfou3ModalOpen, setIsMadfou3ModalOpen] = useState(false);
 
 	const showMadfou3Modal = () => setIsMadfou3ModalOpen(true);
 	const hideMadfou3Modal = () => setIsMadfou3ModalOpen(false);
@@ -157,70 +125,70 @@ const PaymentGateways = () => {
 			(item) => item.name === "الدفع الأجل (مدفوع)"
 		);
 		if (id === madfou3.id) {
-			const isMadfou3 = madfou3.is_madfu;
-			setMadfou3Status(isMadfou3);
-			if (!isMadfou3) {
+			if (!madfou3.is_madfu) {
 				showMadfou3Modal();
-			}
-			if (isMadfou3) {
+			} else {
 				changePaymentStatusFunc(id);
 			}
+			setMadfou3Status(madfou3.is_madfu);
 		} else {
 			changePaymentStatusFunc(id);
 		}
 	};
 
-	// handle change status of  Cash O nDelivery Status
 	const handleChangeCashOnDeliveryStatus = async (id) => {
 		if (
-			(cashOnDelivery[0]?.status === "نشط" && allPayments?.length === 0) ||
+			(cashOnDelivery[0]?.status === "نشط" && allPayments.length === 0) ||
 			(cashOnDelivery[0]?.status === "نشط" &&
-				allPayments?.every((item) => item?.status !== "نشط"))
+				allPayments.every((item) => item.status !== "نشط"))
 		) {
-			toast.error("يجب تفعيل طريقه دفع واحدة على الاقل", {
-				theme: "light",
-			});
+			toast.error("يجب تفعيل طريقه دفع واحدة على الاقل", { theme: "light" });
 		} else {
-			// make request...
-			try {
-				const response = await changePaymentStatus(id);
-
-				// Handle response
-				if (
-					response.data?.success === true &&
-					response.data?.data?.status === 200
-				) {
-					setEndActionTitle(response?.data?.message?.ar);
-				} else {
-					// Handle display errors using toast notifications
-					toast.error(
-						response?.data?.message?.ar
-							? response.data.message.ar
-							: response.data.message.en,
-						{
-							theme: "light",
-						}
-					);
-				}
-			} catch (error) {
-				console.error(
-					"Error changing handleChangeCashOnDeliveryStatus:",
-					error
-				);
-			}
+			changePaymentStatusFunc(id);
 		}
 	};
 
-	// handle open create bank account
 	const handleOpenBankAccount = () => {
 		dispatch(openAddBankAccountModal());
 		navigate("/wallet");
 	};
 
-	// handle open create bank account
 	const handleOpenBankComment = () => {
 		dispatch(openCommentModal());
 		navigate("/wallet");
+	};
+
+	const renderBankAccountStatus = () => {
+		const { SupplierStatus, Comment } =
+			currentBankAccount?.SupplierDetails || {};
+		const statusMap = {
+			Pending: "حسابك البنكي قيد المراجعه الآن",
+			Rejected: "تم رفض حسابك البنكي",
+			Closed: "تم اغلاق حسابك البنكي",
+			Dormant: "تم تجميد حسابك البنكي",
+		};
+		if (SupplierStatus && statusMap[SupplierStatus]) {
+			return (
+				<div
+					className={`mb-2 ${SupplierStatus.toLowerCase()} payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2`}>
+					<div className='d-flex gap-1'>
+						<IoMdInformationCircleOutline />
+						<span>{statusMap[SupplierStatus]}</span>
+					</div>
+					{Comment && (
+						<button
+							onClick={handleOpenBankComment}
+							className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+							<span>
+								الاطلاع على سبب{" "}
+								{SupplierStatus === "Rejected" ? "الرفض" : "التجميد"}
+							</span>
+						</button>
+					)}
+				</div>
+			);
+		}
+		return null;
 	};
 
 	return (
@@ -235,9 +203,9 @@ const PaymentGateways = () => {
 					</div>
 				</div>
 
-				<Breadcrumb currentPage={"بوابات الدفع"} mb={"mb-3"} />
+				<Breadcrumb currentPage='بوابات الدفع' mb='mb-3' />
 
-				{isLoading ? (
+				{isLoading || bankIsLoading ? (
 					<div className='row'>
 						<div
 							className='d-flex justify-content-center align-items-center col-12'
@@ -247,8 +215,8 @@ const PaymentGateways = () => {
 					</div>
 				) : (
 					<>
-						<div className='row  mb-2 '>
-							<div className='col-12 '>
+						<div className='row mb-2'>
+							<div className='col-12'>
 								{!currentBankAccount ? (
 									<div className='mb-2 payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
 										<div className='d-flex gap-1'>
@@ -258,73 +226,20 @@ const PaymentGateways = () => {
 												بوابات الدفع
 											</span>
 										</div>
-
 										<button
-											onClick={() => handleOpenBankAccount()}
-											className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto '>
-											<span>
-												<IoWallet />
-											</span>
+											onClick={handleOpenBankAccount}
+											className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
+											<IoWallet />
 											<span>اضافة حساب بنكي</span>
 										</button>
 									</div>
-								) : currentBankAccount?.data?.SupplierDetails
-										?.SupplierStatus === "Pending" ? (
-									<div className='mb-2 pending payments-hint option-info-label d-flex justify-content-start align-items-center gap-2 '>
-										<IoMdInformationCircleOutline />
-										<span>حسابك البنكي قيد المراجعه الآن</span>
-									</div>
-								) : currentBankAccount?.data?.SupplierDetails
-										?.SupplierStatus === "rejected" ? (
-									<div className='mb-2 rejected payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2 '>
-										<div className='d-flex gap-1'>
-											<IoMdInformationCircleOutline />
-											<span>تم رفض حسابك البنكي </span>
-										</div>
-										{currentBankAccount?.data?.SupplierDetails?.Comment && (
-											<button
-												onClick={() => handleOpenBankComment()}
-												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>الاطلاع على سبب الرفض</span>
-											</button>
-										)}
-									</div>
-								) : currentBankAccount?.data?.SupplierDetails
-										?.SupplierStatus === "Closed" ? (
-									<div className='mb-2 closed payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
-										<div className='d-flex gap-1'>
-											<IoMdInformationCircleOutline />
-											<span>تم اغلاق حسابك البنكي </span>
-										</div>
-										{currentBankAccount?.data?.SupplierDetails?.Comment && (
-											<button
-												onClick={() => handleOpenBankComment()}
-												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>الاطلاع على سبب الغلق</span>
-											</button>
-										)}
-									</div>
-								) : currentBankAccount?.data?.SupplierDetails
-										?.SupplierStatus === "Dormant" ? (
-									<div className='mb-2 dormant payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2'>
-										<div className='d-flex gap-1'>
-											<IoMdInformationCircleOutline />
-											<span>تم تجميد حسابك البنكي </span>
-										</div>
-
-										{currentBankAccount?.data?.SupplierDetails?.Comment && (
-											<button
-												onClick={() => handleOpenBankComment()}
-												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
-												<span>الاطلاع على سبب التجميد</span>
-											</button>
-										)}
-									</div>
-								) : null}
+								) : (
+									renderBankAccountStatus()
+								)}
 							</div>
 						</div>
 
-						<div className='data-container '>
+						<div className='data-container'>
 							<PaymentRecieving
 								cashOnDelivery={cashOnDelivery}
 								handleChangeCashOnDeliveryStatus={
@@ -332,7 +247,6 @@ const PaymentGateways = () => {
 								}
 								switchStyle={switchStyle}
 							/>
-
 							<AllPaymentGateways
 								allPayments={allPayments}
 								switchStyle={switchStyle}
