@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { Avatar, Skeleton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 // Redux
@@ -23,7 +22,7 @@ import { useGetUserProfileDataQuery } from "../../store/apiSlices/editUserDetail
 
 const VerifyStore = ({ verificationStatus, isFetching }) => {
 	// get user profile data from api...
-	const { data: userProfileData } = useGetUserProfileDataQuery();
+	const { data: userProfileData, isLoading } = useGetUserProfileDataQuery();
 
 	const { isOpenVerifyModal } = useSelector((state) => state.VerifyModal);
 	const dispatch = useDispatch(true);
@@ -53,46 +52,13 @@ const VerifyStore = ({ verificationStatus, isFetching }) => {
 				open={isOpenVerifyModal}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'>
-				<Box sx={style}>
-					<Typography
-						component={"div"}
-						id='modal-modal-description'
-						sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
-						<div className='d-flex justify-content-center align-items-center'>
-							{isFetching ? (
-								<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3 overflow-hidden'>
-									<p className='verify-message d-flex align-items-center gap-3'>
-										<Skeleton variant='circular'>
-											<Avatar />
-										</Skeleton>
-										<div>
-											<Skeleton
-												variant='text'
-												animation='wave'
-												width={300}
-												height={13}
-											/>
-
-											<Skeleton
-												variant='text'
-												animation='wave'
-												width={800}
-												height={30}
-											/>
-										</div>
-									</p>
-									<div className='btns-box'>
-										<Skeleton width={160} height={40} variant='rectangular' />
-									</div>
-									<IoMdCloseCircleOutline
-										style={{ cursor: "pointer", fill: "#02466a" }}
-										fill='#02466a'
-										onClick={() => {
-											dispatch(closeVerifyModal());
-										}}
-									/>
-								</div>
-							) : (
+				{(!isFetching || !isLoading) && (
+					<Box sx={style}>
+						<Typography
+							component={"div"}
+							id='modal-modal-description'
+							sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
+							<div className='d-flex justify-content-center align-items-center'>
 								<div className='d-flex justify-content-center align-items-center'>
 									{verificationStatus === "جاري التوثيق" ? (
 										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
@@ -217,10 +183,10 @@ const VerifyStore = ({ verificationStatus, isFetching }) => {
 										</div>
 									) : null}
 								</div>
-							)}
-						</div>
-					</Typography>
-				</Box>
+							</div>
+						</Typography>
+					</Box>
+				)}
 			</Modal>
 		</div>
 	);
