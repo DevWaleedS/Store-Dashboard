@@ -3,19 +3,19 @@ import React from "react";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 
-import { IoMdInformationCircleOutline } from "react-icons/io";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import { closeMessageAlert } from "../../../store/slices/BankAccountAlert";
+import { SuccessCheckout } from "../../../data/Icons";
 
 const style = {
 	position: "absolute",
 	top: "50%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: 500,
+	width: 520,
 	maxWidth: "90%",
 	height: 200,
 	bgcolor: "#fff",
@@ -25,6 +25,7 @@ const style = {
 	"@media(max-width:768px)": {
 		height: "auto",
 		top: "180px",
+		width: "90%",
 	},
 };
 
@@ -53,15 +54,20 @@ const AlertMessage = () => {
 					</div>
 					<div className='text-center delete-category-alert'>
 						<div>
-							<IoMdInformationCircleOutline
-								className='mb-2 mb-md-3'
-								style={{
-									color: "#3392ff",
-									fontSize: "45px",
-								}}
+							<SuccessCheckout
+								className=' mb-2 mb-md-3 '
+								style={{ width: "50px" }}
 							/>
 						</div>
-						{messageAlert}
+						<div
+							style={{
+								whiteSpace: "normal",
+								fontSize: "20px",
+								fontWeight: "400",
+								color: "#0f5575",
+							}}>
+							{messageAlert}
+						</div>
 					</div>
 				</Box>
 			</Modal>

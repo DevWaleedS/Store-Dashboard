@@ -16,8 +16,7 @@ const AxiosInterceptors = ({ children }) => {
 	useEffect(() => {
 		const responseInterceptors = axios.interceptors.response.use(
 			(response) => {
-				// Handle successful responses globally
-
+				// im using this condition to hide success message that coming from api
 				if (
 					response.status === 200 &&
 					response?.data?.success &&
@@ -26,6 +25,8 @@ const AxiosInterceptors = ({ children }) => {
 						"https://backend.atlbha.com/api/madfu/login",
 						"https://backend.atlbha.com/api/madfu/create-order",
 						"https://backend.atlbha.com/api/Store/verification_update",
+						"https://backend.atlbha.com/api/Store/createSupplier",
+						"https://backend.atlbha.com/api/Store/updateSupplier",
 					].includes(response.config.url) &&
 					["delete", "patch", "post", "put"].includes(response.config.method)
 				) {

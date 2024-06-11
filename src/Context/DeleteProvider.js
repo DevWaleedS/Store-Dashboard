@@ -5,6 +5,7 @@ export const DeleteContext = React.createContext({});
 const DeleteProvider = (props) => {
 	const [itemId, setItemId] = useState(null);
 	const [actionDelete, setActionDelete] = useState(null);
+	const [handleDeleteSingleItem, setHandleDeleteSingleItem] = useState(null);
 
 	// SET THIS TO HANDLE DELETE CATEGORIES THAT IS USED IN SOME PRODUCTS
 	const [possibilityOfDelete, setPossibilityOfDelete] = useState(false);
@@ -15,6 +16,8 @@ const DeleteProvider = (props) => {
 		setActionDelete,
 		possibilityOfDelete,
 		setPossibilityOfDelete,
+		handleDeleteSingleItem,
+		setHandleDeleteSingleItem,
 	};
 
 	return (

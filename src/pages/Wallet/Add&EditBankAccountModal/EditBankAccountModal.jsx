@@ -40,17 +40,15 @@ import {
 /* Modal Styles */
 const style = {
 	position: "absolute",
-	top: "120px",
+	top: "0%",
 	left: "50%",
 	transform: "translate(-50%, 0%)",
 	width: "992px",
 	maxWidth: "90%",
-	paddingBottom: "30px",
+	padding: "100px 0 30px 0",
 	"@media(max-width:768px)": {
-		position: "absolute",
-		top: "10px",
-
 		maxWidth: "95%",
+		padding: "80px 0 30px 0",
 	},
 };
 
@@ -105,6 +103,9 @@ const EditBankAccountModal = () => {
 
 		website_image: "",
 		currentWebsiteImageFile: "",
+
+		national_address: "",
+		currentNationalAddressFile: "",
 	});
 
 	useEffect(() => {
@@ -120,10 +121,15 @@ const EditBankAccountModal = () => {
 					: bankAccount?.supplierUser?.iban || "",
 
 				currentCivilIdFile: bankAccount?.SupplierDocumentUser[0]?.file || "",
+
 				currentBankAccountLetterFile:
 					bankAccount?.SupplierDocumentUser[1]?.file || "",
+
 				currentWebsiteImageFile:
 					bankAccount?.SupplierDocumentUser[2]?.file || "",
+
+				currentNationalAddressFile:
+					bankAccount?.SupplierDocumentUser[3]?.file || "",
 			});
 		}
 	}, [bankAccount]);
@@ -163,6 +169,7 @@ const EditBankAccountModal = () => {
 		civil_id: "",
 		bankAccountLetter: "",
 		website_image: "",
+		national_address: "",
 	});
 
 	const resetErrors = () => {
@@ -175,6 +182,7 @@ const EditBankAccountModal = () => {
 			civil_id: "",
 			bankAccountLetter: "",
 			website_image: "",
+			national_address: "",
 		});
 	};
 
@@ -231,7 +239,7 @@ const EditBankAccountModal = () => {
 
 	// handle CivilIdUploader
 	const CivilIdUploader = () => {
-		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+		const { getRootProps, getInputProps } = useDropzone({
 			onDrop: (files) =>
 				handleFileUpload(
 					files,
@@ -275,7 +283,7 @@ const EditBankAccountModal = () => {
 	};
 	// handle BankAccountLetterUploader
 	const BankAccountLetterUploader = () => {
-		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+		const { getRootProps, getInputProps } = useDropzone({
 			accept: {
 				"application/pdf": [".pdf"],
 			},
@@ -324,7 +332,7 @@ const EditBankAccountModal = () => {
 
 	// handle WebsiteImageUploader
 	const WebsiteImageUploader = () => {
-		const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+		const { getRootProps, getInputProps } = useDropzone({
 			onDrop: (files) =>
 				handleFileUpload(
 					files,
@@ -368,6 +376,50 @@ const EditBankAccountModal = () => {
 		);
 	};
 
+	// handle upload national address file
+	const NationalAddressUploader = () => {
+		const { getRootProps, getInputProps } = useDropzone({
+			onDrop: (files) =>
+				handleFileUpload(
+					files,
+					"national_address",
+					setBankAccountErr,
+					setBankAccountInfo,
+					toast
+				),
+		});
+
+		return (
+			<>
+				{" "}
+				<div
+					{...getRootProps({
+						className:
+							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
+					})}>
+					<div>
+						<BsFileEarmarkArrowUp />
+						{bankAccountInfo?.national_address[0]?.name ? (
+							<span className='tax-text docs-file-name pe-2'>
+								{bankAccountInfo?.national_address[0]?.name}
+							</span>
+						) : (
+							<span className='tax-text pe-2'>ارفق صورة من العنوان الوطني</span>
+						)}
+					</div>
+
+					<input
+						{...getInputProps()}
+						id='upload-docs-input'
+						name='upload-docs-input'
+					/>
+
+					<FaCloudUploadAlt />
+				</div>
+			</>
+		);
+	};
+
 	/** handle edit bank account   */
 	const [editBankAccount] = useEditBankAccountMutation();
 	const handleEditBankAccount = async (data) => {
@@ -392,6 +444,9 @@ const EditBankAccountModal = () => {
 
 		if (bankAccountInfo?.website_image?.length !== 0)
 			formData.append("website_image", bankAccountInfo?.website_image[0]);
+
+		if (bankAccountInfo?.national_address?.length !== 0)
+			formData.append("national_address", bankAccountInfo?.national_address[0]);
 
 		// make request...
 		try {
@@ -785,8 +840,54 @@ const EditBankAccountModal = () => {
 									</div>
 								</div>
 
-								<div className='form-footer row d-flex justify-content-center align-items-center'>
-									<div className='col-lg-4 col-6'>
+								{/* NationalAddressUploader */}
+								<div className='row  mb-5'>
+									<div className='col-12'>
+										<label>
+											العنوان الوطني
+											<span className='important-hint'>*</span>{" "}
+										</label>
+									</div>
+									<div className='col-12'>
+										{bankAccountInfo.currentNationalAddressFile ? (
+											<div className='d-flex justify-content-between'>
+												<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+												<div className='tax-text'>
+													<a
+														href={bankAccountInfo?.currentNationalAddressFile}
+														download={
+															bankAccountInfo?.currentNationalAddressFile
+														}
+														target='_blank'
+														rel='noreferrer'>
+														تحميل الملف الحالي{" "}
+													</a>
+												</div>
+											</div>
+										) : (
+											<div className='tax-text'>الحد الأقصى للملف 1MB</div>
+										)}
+
+										<NationalAddressUploader
+											bankAccountInfo={bankAccountInfo}
+											bankAccountErr={bankAccountErr}
+											setBankAccountInfo={setBankAccountInfo}
+											setBankAccountErr={setBankAccountErr}
+											toast={toast}
+										/>
+
+										{(bankAccountErr?.national_address ||
+											errors?.national_address) && (
+											<div className='fs-6 text-danger'>
+												{bankAccountErr?.national_address}
+												{errors?.national_address.message}
+											</div>
+										)}
+									</div>
+								</div>
+
+								<div className='form-footer flex-lg-row flex-column gap-lg-4 gap-2  d-flex justify-content-center align-items-center'>
+									<div className='col-lg-5 col-12'>
 										<button
 											disabled={isLoading}
 											className='save-btn'
@@ -794,7 +895,7 @@ const EditBankAccountModal = () => {
 											تعديل بيانات الحساب
 										</button>
 									</div>
-									<div className='col-lg-4 col-6'>
+									<div className='col-lg-5 col-12'>
 										<button
 											className='close-btn'
 											onClick={() => {

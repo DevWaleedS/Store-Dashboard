@@ -9,6 +9,7 @@ import { closeVerifyStoreAlertModal } from "../../store/slices/VerifyStoreAlertM
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { SuccessCheckout } from "../../data/Icons";
 
 const style = {
 	position: "absolute",
@@ -47,8 +48,19 @@ const VerifyAlert = () => {
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='store-alert-body text-center' style={contentStyle}>
-						<p>جاري مراجعة طلب التوثيق في أقل من 24 ساعة </p>
-						<p>ستصلك رسالة عبر البريد الالكتروني </p>
+						<div>
+							<SuccessCheckout
+								className=' mb-2 mb-md-3 '
+								style={{ width: "50px" }}
+							/>
+						</div>
+
+						<p style={{ whiteSpace: "normal", fontSize: "20px" }}>
+							جاري مراجعة طلب التوثيق في أقل من 24 ساعة{" "}
+						</p>
+						<p style={{ whiteSpace: "normal", fontSize: "16px" }}>
+							ستصلك رسالة عبر البريد الالكتروني{" "}
+						</p>
 					</div>
 					<div className='store-alert-footer d-flex justify-between'>
 						<button
@@ -59,7 +71,7 @@ const VerifyAlert = () => {
 							}}
 							style={{
 								color: "#fff",
-								fontSize: "24px",
+								fontSize: "1.4rem",
 								fontWight: 500,
 								height: "70px",
 								backgroundColor: "#1DBBBE",

@@ -134,6 +134,7 @@ const RootLayout = () => {
 									verificationStatus={showVerification?.verification_status}
 								/>
 							)}
+
 							{isVerifyStoreAlertOpen && <VerifayStoreAlert />}
 							{isOpenMaintenanceModeModal && <MaintenanceMode />}
 							{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
