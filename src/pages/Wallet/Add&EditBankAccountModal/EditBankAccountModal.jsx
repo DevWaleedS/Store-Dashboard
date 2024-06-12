@@ -55,10 +55,9 @@ const style = {
 const selectStyle = {
 	fontSize: "16px",
 	width: "100%",
-	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "0px",
-		},
+	"& #mui-component-select-bankId": {
+		paddingRight: "0px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -262,10 +261,12 @@ const EditBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 
 						{bankAccountInfo?.civil_id[0]?.name ? (
-							<span className='tax-text pe-2'>
+							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.civil_id[0]?.name}
 							</span>
 						) : (
@@ -279,6 +280,7 @@ const EditBankAccountModal = () => {
 						name='upload-docs-input'
 					/>
 
+					<div className='svg-container'></div>
 					<FaCloudUploadAlt />
 				</div>
 			</>
@@ -308,10 +310,12 @@ const EditBankAccountModal = () => {
 						className:
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
-					<div>
-						<BsFileEarmarkArrowUp />
+					<span>
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.bankAccountLetter[0]?.name ? (
-							<span className='tax-text pe-2'>
+							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.bankAccountLetter[0]?.name}
 							</span>
 						) : (
@@ -319,7 +323,7 @@ const EditBankAccountModal = () => {
 								ارفق شهادة الايبان بالحساب البنكي pdf
 							</span>
 						)}
-					</div>
+					</span>
 
 					<input
 						{...getInputProps()}
@@ -355,9 +359,11 @@ const EditBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.website_image[0]?.name ? (
-							<span className='tax-text pe-2'>
+							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.website_image[0]?.name}
 							</span>
 						) : (
@@ -401,7 +407,9 @@ const EditBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.national_address[0]?.name ? (
 							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.national_address[0]?.name}
@@ -539,7 +547,7 @@ const EditBankAccountModal = () => {
 							</div>
 
 							<form onSubmit={handleSubmit(handleEditBankAccount)}>
-								<div className='row  mb-3'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
 											{" "}
@@ -549,7 +557,9 @@ const EditBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<CiBank />
+											<div className='svg-container'>
+												<CiBank />
+											</div>
 											<Controller
 												name={"bankId"}
 												control={control}
@@ -609,7 +619,7 @@ const EditBankAccountModal = () => {
 									</div>
 								</div>
 
-								<div className='row  mb-3'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
 											اسم صاحب الحساب
@@ -618,7 +628,9 @@ const EditBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<CiUser />
+											<div className='svg-container'>
+												<CiUser />
+											</div>
 
 											<input
 												type='text'
@@ -645,7 +657,7 @@ const EditBankAccountModal = () => {
 									</div>
 								</div>
 
-								<div className='row  mb-3'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
 											رقم الحساب
@@ -654,7 +666,9 @@ const EditBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<BsCreditCard />
+											<div className='svg-container'>
+												<BsCreditCard />
+											</div>
 											<input
 												type='text'
 												name='bankAccount'
@@ -675,7 +689,7 @@ const EditBankAccountModal = () => {
 									</div>
 								</div>
 
-								<div className='row  mb-5'>
+								<div className='row mb-5'>
 									<div className='col-12'>
 										<label>
 											رقم الآيبان
@@ -684,7 +698,9 @@ const EditBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<BsCreditCard />
+											<div className='svg-container'>
+												<BsCreditCard />
+											</div>
 											<input
 												type='text'
 												name='iban'
@@ -711,7 +727,7 @@ const EditBankAccountModal = () => {
 								</div>
 
 								{/* CivilIdUploader */}
-								<div className='row  mb-5'>
+								<div className='row mb-5'>
 									<div className='col-12'>
 										<label>
 											الهوية الوطنية

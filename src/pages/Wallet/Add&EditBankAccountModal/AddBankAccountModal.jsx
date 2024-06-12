@@ -51,10 +51,9 @@ const style = {
 const selectStyle = {
 	fontSize: "16px",
 	width: "100%",
-	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-		{
-			paddingRight: "0px",
-		},
+	"& #mui-component-select-bankId": {
+		paddingRight: "0px",
+	},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
 			border: "none",
@@ -231,7 +230,9 @@ const AddBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.civil_id[0]?.name ? (
 							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.civil_id[0]?.name}
@@ -278,7 +279,9 @@ const AddBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.bankAccountLetter[0]?.name ? (
 							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.bankAccountLetter[0]?.name}
@@ -324,7 +327,9 @@ const AddBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.website_image[0]?.name ? (
 							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.website_image[0]?.name}
@@ -370,7 +375,9 @@ const AddBankAccountModal = () => {
 							"inputs-wrapper upload-civil-id mb-1 d-flex justify-content-between",
 					})}>
 					<div>
-						<BsFileEarmarkArrowUp />
+						<span className='svg-container'>
+							<BsFileEarmarkArrowUp />
+						</span>
 						{bankAccountInfo?.national_address[0]?.name ? (
 							<span className='tax-text docs-file-name pe-2'>
 								{bankAccountInfo?.national_address[0]?.name}
@@ -500,7 +507,7 @@ const AddBankAccountModal = () => {
 							</div>
 
 							<form onSubmit={handleSubmit(handleAddBankAccount)}>
-								<div className='row  mb-3'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
 											البنك
@@ -509,7 +516,9 @@ const AddBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<CiBank />
+											<div className='svg-container'>
+												<CiBank />
+											</div>
 											<Select
 												name='bankId'
 												displayEmpty
@@ -560,7 +569,7 @@ const AddBankAccountModal = () => {
 									</div>
 								</div>
 
-								<div className='row  mb-3'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
 											اسم صاحب الحساب
@@ -569,7 +578,9 @@ const AddBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<CiUser />
+											<div className='svg-container'>
+												<CiUser />
+											</div>
 											<input
 												type='text'
 												name='bankAccountHolderName'
@@ -595,7 +606,7 @@ const AddBankAccountModal = () => {
 									</div>
 								</div>
 
-								<div className='row  mb-3'>
+								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
 											رقم الحساب
@@ -604,7 +615,9 @@ const AddBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<BsCreditCard />
+											<div className='svg-container'>
+												<BsCreditCard />
+											</div>
 											<input
 												type='text'
 												name='bankAccount'
@@ -634,7 +647,9 @@ const AddBankAccountModal = () => {
 									</div>
 									<div className='col-12'>
 										<div className='inputs-wrapper'>
-											<BsCreditCard />
+											<div className='svg-container'>
+												<BsCreditCard />
+											</div>
 											<input
 												type='text'
 												name='iban'
