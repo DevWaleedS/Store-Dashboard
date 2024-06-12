@@ -101,37 +101,27 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 												className='status d-flex justify-content-center align-items-center'
 												style={{
 													backgroundColor:
-														bankAccount?.SupplierDetails?.SupplierStatus ===
-														"Active"
+														bankAccount?.supplierUser?.status === "Active"
 															? "#9df1ba"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Pending"
+															: bankAccount?.supplierUser?.status === "Pending"
 															? "#ffecd1c7"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Rejected"
+															: bankAccount?.supplierUser?.status === "Rejected"
 															? "#ffebeb"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Closed"
+															: bankAccount?.supplierUser?.status === "Closed"
 															? "#ffecd1c7"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Dormant"
+															: bankAccount?.supplierUser?.status === "Dormant"
 															? "#d4ebf7"
 															: null,
 													color:
-														bankAccount?.SupplierDetails?.SupplierStatus ===
-														"Active"
+														bankAccount?.supplierUser?.status === "Active"
 															? "##9df1ba"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Pending"
+															: bankAccount?.supplierUser?.status === "Pending"
 															? "#ff9f1a"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Rejected"
+															: bankAccount?.supplierUser?.status === "Rejected"
 															? "#ff7b7b"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Closed"
+															: bankAccount?.supplierUser?.status === "Closed"
 															? "#0077ff"
-															: bankAccount?.SupplierDetails?.SupplierStatus ===
-															  "Dormant"
+															: bankAccount?.supplierUser?.status === "Dormant"
 															? "#07b543"
 															: null,
 													borderRadius: "16px",
@@ -140,18 +130,14 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 													width: "120px",
 													maxWidth: "132px",
 												}}>
-												{bankAccount?.SupplierDetails?.SupplierStatus ===
-												"Pending" ? (
+												{bankAccount?.supplierUser?.status === "Pending" ? (
 													<>قيد المراجعه</>
-												) : bankAccount?.SupplierDetails?.SupplierStatus ===
-												  "Active" ? (
+												) : bankAccount?.supplierUser?.status === "Active" ? (
 													"نشط"
-												) : bankAccount?.SupplierDetails?.SupplierStatus ===
-												  "Rejected" ? (
+												) : bankAccount?.supplierUser?.status === "Rejected" ? (
 													<>
 														مرفوض
-														{bankAccount?.SupplierDetails?.SupplierStatus
-															?.Comment && (
+														{bankAccount?.supplierUser?.comment && (
 															<IoMdInformationCircleOutline
 																className='me-1'
 																style={{ cursor: "pointer" }}
@@ -159,12 +145,10 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 															/>
 														)}
 													</>
-												) : bankAccount?.SupplierDetails?.SupplierStatus ===
-												  "Closed" ? (
+												) : bankAccount?.supplierUser?.status === "Closed" ? (
 													<>
 														مغلق
-														{bankAccount?.SupplierDetails?.SupplierStatus
-															?.Comment && (
+														{bankAccount?.supplierUser?.comment && (
 															<IoMdInformationCircleOutline
 																className='me-1'
 																style={{ cursor: "pointer" }}
@@ -172,12 +156,10 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 															/>
 														)}
 													</>
-												) : bankAccount?.SupplierDetails?.SupplierStatus ===
-												  "Dormant" ? (
+												) : bankAccount?.supplierUser?.status === "Dormant" ? (
 													<>
 														مجمد
-														{bankAccount?.SupplierDetails?.SupplierStatus
-															?.Comment && (
+														{bankAccount?.supplierUser?.comment && (
 															<IoMdInformationCircleOutline
 																className='me-1'
 																style={{ cursor: "pointer" }}
@@ -189,8 +171,9 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 											</span>
 										</div>
 									</TableCell>
-									{bankAccount?.SupplierDetails?.SupplierStatus !==
-										"Active" && (
+
+									{console.log(bankAccount)}
+									{bankAccount?.supplierUser?.status !== "Active" && (
 										<TableCell align='center'>
 											<EditIcon
 												title='تعديل الحساب البنكي '

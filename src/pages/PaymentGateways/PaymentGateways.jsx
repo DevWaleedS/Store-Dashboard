@@ -159,29 +159,27 @@ const PaymentGateways = () => {
 	};
 
 	const renderBankAccountStatus = () => {
-		const { SupplierStatus, Comment } =
-			currentBankAccount?.SupplierDetails || {};
+		const { status, comment } = currentBankAccount?.supplierUser || {};
 		const statusMap = {
 			Pending: "حسابك البنكي قيد المراجعه الآن",
 			Rejected: "تم رفض حسابك البنكي",
 			Closed: "تم اغلاق حسابك البنكي",
 			Dormant: "تم تجميد حسابك البنكي",
 		};
-		if (SupplierStatus && statusMap[SupplierStatus]) {
+		if (status && statusMap[status]) {
 			return (
 				<div
-					className={`mb-2 ${SupplierStatus.toLowerCase()} payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2`}>
+					className={`mb-2 ${status.toLowerCase()} payments-hint option-info-label d-flex justify-content-start align-items-start align-items-md-center flex-column flex-md-row gap-2`}>
 					<div className='d-flex gap-1'>
 						<IoMdInformationCircleOutline />
-						<span>{statusMap[SupplierStatus]}</span>
+						<span>{statusMap[status]}</span>
 					</div>
-					{Comment && (
+					{comment && (
 						<button
 							onClick={handleOpenBankComment}
 							className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
 							<span>
-								الاطلاع على سبب{" "}
-								{SupplierStatus === "Rejected" ? "الرفض" : "التجميد"}
+								الاطلاع على سبب {status === "Rejected" ? "الرفض" : "التجميد"}
 							</span>
 						</button>
 					)}
