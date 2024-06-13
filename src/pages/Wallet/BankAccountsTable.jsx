@@ -82,7 +82,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 						) : (
 							<>
 								<EnhancedTableHead
-									supplierStatus={bankAccount?.SupplierDetails?.SupplierStatus}
+									supplierStatus={bankAccount?.supplierUser?.status}
 								/>
 								<TableBody>
 									<TableCell align='center'>{bankAccountName}</TableCell>
@@ -172,7 +172,6 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 										</div>
 									</TableCell>
 
-									{console.log(bankAccount)}
 									{bankAccount?.supplierUser?.status !== "APPROVED" && (
 										<TableCell align='center'>
 											<EditIcon
