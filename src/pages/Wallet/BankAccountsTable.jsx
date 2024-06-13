@@ -39,7 +39,7 @@ function EnhancedTableHead(props) {
 				<TableCell align='center' sx={{ color: "#67747B" }}>
 					حالة الحساب
 				</TableCell>
-				{props?.supplierStatus !== "Active" && (
+				{props?.supplierStatus !== "APPROVED" && (
 					<TableCell align='center'>الاجراء</TableCell>
 				)}
 			</TableRow>
@@ -101,7 +101,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 												className='status d-flex justify-content-center align-items-center'
 												style={{
 													backgroundColor:
-														bankAccount?.supplierUser?.status === "Active"
+														bankAccount?.supplierUser?.status === "APPROVED"
 															? "#9df1ba"
 															: bankAccount?.supplierUser?.status === "Pending"
 															? "#ffecd1c7"
@@ -113,7 +113,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 															? "#d4ebf7"
 															: null,
 													color:
-														bankAccount?.supplierUser?.status === "Active"
+														bankAccount?.supplierUser?.status === "APPROVED"
 															? "##9df1ba"
 															: bankAccount?.supplierUser?.status === "Pending"
 															? "#ff9f1a"
@@ -132,7 +132,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 												}}>
 												{bankAccount?.supplierUser?.status === "Pending" ? (
 													<>قيد المراجعه</>
-												) : bankAccount?.supplierUser?.status === "Active" ? (
+												) : bankAccount?.supplierUser?.status === "APPROVED" ? (
 													"نشط"
 												) : bankAccount?.supplierUser?.status === "Rejected" ? (
 													<>
@@ -173,7 +173,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 									</TableCell>
 
 									{console.log(bankAccount)}
-									{bankAccount?.supplierUser?.status !== "Active" && (
+									{bankAccount?.supplierUser?.status !== "APPROVED" && (
 										<TableCell align='center'>
 											<EditIcon
 												title='تعديل الحساب البنكي '
