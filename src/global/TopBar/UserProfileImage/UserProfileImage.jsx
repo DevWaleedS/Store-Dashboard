@@ -57,17 +57,19 @@ const UserProfileImage = () => {
 	// -----------------------------------------------------------------------------
 
 	// To log out from dashboard!
-	const [logOut] = useLogOutMutation();
+	const [logOut, { isLoading }] = useLogOutMutation();
 	const handleLogOut = async () => {
 		// make request...
 		try {
 			const response = await logOut();
-			localStorage.clear();
+
 			if (
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
+				localStorage.clear();
 				navigate("/auth/login");
+				window.location.reload();
 			} else {
 				// Handle display errors using toast notifications
 				toast.error(
@@ -140,13 +142,13 @@ const UserProfileImage = () => {
 						</Link>
 					</li>
 					<li className=''>
-						<Link
+						<button
+							disabled={isLoading}
 							className='dropdown-item d-flex justify-content-end align-items-center'
-							to=''
 							onClick={handleLogOut}>
 							<span className='me-2'>تسجيل الخروج</span>
 							<LogOutIcon />
-						</Link>
+						</button>
 					</li>
 				</ul>
 			</li>
