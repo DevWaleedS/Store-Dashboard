@@ -628,13 +628,9 @@ const ReturnOrderDetails = () => {
 										</button>
 									)}
 
-								{(currentOrder?.order?.paymenttype?.id === 1 ||
-									currentOrder?.order?.paymenttype?.name === "مدى" ||
-									currentOrder?.order?.paymenttype?.id === 5 ||
-									currentOrder?.order?.paymenttype?.name ===
-										"الدفع الأجل (مدفوع)") &&
+								{currentOrder?.order?.paymenttype?.id !== 4 &&
 									currentOrder?.status === "تم الاسترجاع" &&
-									currentOrder.refund_status !== 0 && (
+									currentOrder.refund_status === 0 && (
 										<button
 											style={{ cursor: "pointer" }}
 											onClick={() => handleRefundReturnOrder()}
