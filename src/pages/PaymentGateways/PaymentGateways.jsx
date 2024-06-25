@@ -87,33 +87,35 @@ const PaymentGateways = () => {
 	const [madfou3Status, setMadfou3Status] = useState(false);
 	const [isMadfou3ModalOpen, setIsMadfou3ModalOpen] = useState(false);
 
+	// handle filter COD Payment type by id
 	useEffect(() => {
 		if (paymentGateways) {
 			setCashOnDelivery(
-				paymentGateways.filter(
-					(paymenttypes) => paymenttypes.name === "الدفع عند الاستلام"
-				)
+				paymentGateways.filter((paymenttypes) => paymenttypes.id === 4)
 			);
 			setAllPayments(
-				paymentGateways.filter(
-					(paymenttypes) => paymenttypes.name !== "الدفع عند الاستلام"
-				)
+				paymentGateways.filter((paymenttypes) => paymenttypes.id !== 4)
 			);
 		}
 	}, [paymentGateways]);
 
 	const [changePaymentStatus] = useChangePaymentStatusMutation();
+
 	const changePaymentStatusFunc = async (id) => {
 		try {
-			const response = await changePaymentStatus(id);
-			const { success, message, status } = response.data?.data;
-			if (success && status === 200) {
-				setEndActionTitle(message.ar);
-			} else {
-				toast.error(message.ar || message.en, { theme: "light" });
-			}
-		} catch (error) {
-			console.error("Error changing changePaymentStatus:", error);
+			await changePaymentStatus(id)
+				.unwrap()
+				.then((data) => {
+					if (!data?.success) {
+						toast.error(data?.message?.ar, {
+							theme: "light",
+						});
+					} else {
+						setEndActionTitle(data?.message?.ar);
+					}
+				});
+		} catch (err) {
+			console.error("Failed to change the changePaymentStatus", err);
 		}
 	};
 
@@ -121,16 +123,16 @@ const PaymentGateways = () => {
 	const hideMadfou3Modal = () => setIsMadfou3ModalOpen(false);
 
 	const handleChangePaymentStatus = async (id) => {
-		const madfou3 = allPayments.find(
-			(item) => item.name === "الدفع الأجل (مدفوع)"
-		);
-		if (id === madfou3.id) {
-			if (!madfou3.is_madfu) {
+		// to get madfu from payment gateway array
+		const madfou3 = allPayments?.find((item) => item.id === 5);
+
+		if (id === madfou3?.id) {
+			if (!madfou3?.is_madfu) {
 				showMadfou3Modal();
 			} else {
 				changePaymentStatusFunc(id);
 			}
-			setMadfou3Status(madfou3.is_madfu);
+			setMadfou3Status(madfou3?.is_madfu);
 		} else {
 			changePaymentStatusFunc(id);
 		}
@@ -138,7 +140,7 @@ const PaymentGateways = () => {
 
 	const handleChangeCashOnDeliveryStatus = async (id) => {
 		if (
-			(cashOnDelivery[0]?.status === "نشط" && allPayments.length === 0) ||
+			(cashOnDelivery[0]?.status === "نشط" && allPayments?.length === 0) ||
 			(cashOnDelivery[0]?.status === "نشط" &&
 				allPayments.every((item) => item.status !== "نشط"))
 		) {
