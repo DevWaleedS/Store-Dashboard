@@ -427,8 +427,8 @@ const MainInformation = () => {
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور او عدم ظهور-
-											المتجر الخاص بك.
+											<> - </>قد يؤدي تغيير الدومين إلى حدوث خلل في ظهور أو عدم
+											ظهور المتجر الخاص بك.
 										</div>
 
 										<div
@@ -439,7 +439,7 @@ const MainInformation = () => {
 													: "d-none"
 											}
 											style={{ fontSize: "16px", whiteSpace: "normal" }}>
-											يجب أن يكون الدومين حروف انجليزية وأرقام فقط.-
+											<> - </> يجب أن يكون الدومين حروف انجليزية وأرقام فقط.
 										</div>
 
 										{settingErr?.domain && (
