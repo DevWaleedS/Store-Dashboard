@@ -436,9 +436,7 @@ const AddBankAccountModal = () => {
 
 				// Handle display errors using toast notifications
 				toast.error(
-					response?.data?.message?.ar
-						? response.data.message.ar
-						: response.data.message.en,
+					`${response.data.message.ar}: ${response.data.message.en}`,
 					{
 						theme: "light",
 					}

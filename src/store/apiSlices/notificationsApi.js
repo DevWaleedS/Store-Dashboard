@@ -42,7 +42,6 @@ export const notificationsApi = createApi({
 		}),
 
 		// mark Single Notification As Read
-
 		markSingleNotificationAsRead: builder.mutation({
 			query: ({ notificationId }) => ({
 				url: `NotificationRead?id[]=${notificationId}`,
