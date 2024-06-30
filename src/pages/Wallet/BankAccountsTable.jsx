@@ -101,27 +101,45 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 												className='status d-flex justify-content-center align-items-center'
 												style={{
 													backgroundColor:
-														bankAccount?.supplierUser?.status === "APPROVED"
+														bankAccount?.supplierUser?.status === "APPROVED" ||
+														bankAccount?.supplierUser?.status === "Approved"
 															? "#9df1ba"
-															: bankAccount?.supplierUser?.status === "Pending"
+															: bankAccount?.supplierUser?.status ===
+																	"PENDING" ||
+															  bankAccount?.supplierUser?.status === "Pending"
 															? "#ffecd1c7"
-															: bankAccount?.supplierUser?.status === "Rejected"
+															: bankAccount?.supplierUser?.status ===
+																	"REJECTED" ||
+															  bankAccount?.supplierUser?.status === "Rejected"
 															? "#ffebeb"
-															: bankAccount?.supplierUser?.status === "Closed"
+															: bankAccount?.supplierUser?.status ===
+																	"CLOSED" ||
+															  bankAccount?.supplierUser?.status === "Closed"
 															? "#ffecd1c7"
-															: bankAccount?.supplierUser?.status === "Dormant"
+															: bankAccount?.supplierUser?.status ===
+																	"DORMANT" ||
+															  bankAccount?.supplierUser?.status === "Dormant"
 															? "#d4ebf7"
 															: null,
 													color:
-														bankAccount?.supplierUser?.status === "APPROVED"
+														bankAccount?.supplierUser?.status === "APPROVED" ||
+														bankAccount?.supplierUser?.status === "Approved"
 															? "##9df1ba"
-															: bankAccount?.supplierUser?.status === "Pending"
+															: bankAccount?.supplierUser?.status ===
+																	"PENDING" ||
+															  bankAccount?.supplierUser?.status === "Pending"
 															? "#ff9f1a"
-															: bankAccount?.supplierUser?.status === "Rejected"
+															: bankAccount?.supplierUser?.status ===
+																	"REJECTED" ||
+															  bankAccount?.supplierUser?.status === "Rejected"
 															? "#ff7b7b"
-															: bankAccount?.supplierUser?.status === "Closed"
+															: bankAccount?.supplierUser?.status ===
+																	"CLOSED" ||
+															  bankAccount?.supplierUser?.status === "Closed"
 															? "#0077ff"
-															: bankAccount?.supplierUser?.status === "Dormant"
+															: bankAccount?.supplierUser?.status ===
+																	"DORMANT" ||
+															  bankAccount?.supplierUser?.status === "Dormant"
 															? "#07b543"
 															: null,
 													borderRadius: "16px",
@@ -130,11 +148,14 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 													width: "120px",
 													maxWidth: "132px",
 												}}>
-												{bankAccount?.supplierUser?.status === "Pending" ? (
+												{bankAccount?.supplierUser?.status === "PENDING" ||
+												bankAccount?.supplierUser?.status === "Pending" ? (
 													<>قيد المراجعه</>
-												) : bankAccount?.supplierUser?.status === "APPROVED" ? (
+												) : bankAccount?.supplierUser?.status === "APPROVED" ||
+												  bankAccount?.supplierUser?.status === "Approved" ? (
 													"نشط"
-												) : bankAccount?.supplierUser?.status === "Rejected" ? (
+												) : bankAccount?.supplierUser?.status === "REJECTED" ||
+												  bankAccount?.supplierUser?.status === "Rejected" ? (
 													<>
 														مرفوض
 														{bankAccount?.supplierUser?.comment && (
@@ -145,7 +166,8 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 															/>
 														)}
 													</>
-												) : bankAccount?.supplierUser?.status === "Closed" ? (
+												) : bankAccount?.supplierUser?.status === "CLOSED" ||
+												  bankAccount?.supplierUser?.status === "Closed" ? (
 													<>
 														مغلق
 														{bankAccount?.supplierUser?.comment && (
@@ -156,7 +178,8 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 															/>
 														)}
 													</>
-												) : bankAccount?.supplierUser?.status === "Dormant" ? (
+												) : bankAccount?.supplierUser?.status === "DORMANT" ||
+												  bankAccount?.supplierUser?.status === "Dormant" ? (
 													<>
 														مجمد
 														{bankAccount?.supplierUser?.comment && (
@@ -172,16 +195,17 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 										</div>
 									</TableCell>
 
-									{bankAccount?.supplierUser?.status !== "APPROVED" && (
-										<TableCell align='center'>
-											<EditIcon
-												title='تعديل الحساب البنكي '
-												style={{ cursor: "pointer" }}
-												onClick={() => dispatch(openEditBankAccountModal())}
-												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'
-											/>
-										</TableCell>
-									)}
+									{bankAccount?.supplierUser?.status !== "APPROVED" ||
+										(bankAccount?.supplierUser?.status !== "Approved" && (
+											<TableCell align='center'>
+												<EditIcon
+													title='تعديل الحساب البنكي '
+													style={{ cursor: "pointer" }}
+													onClick={() => dispatch(openEditBankAccountModal())}
+													className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'
+												/>
+											</TableCell>
+										))}
 								</TableBody>
 							</>
 						)}

@@ -164,9 +164,13 @@ const PaymentGateways = () => {
 		const { status, comment } = currentBankAccount?.supplierUser || {};
 		const statusMap = {
 			Pending: "حسابك البنكي قيد المراجعه الآن",
+			PENDING: "حسابك البنكي قيد المراجعه الآن",
 			Rejected: "تم رفض حسابك البنكي",
+			REJECTED: "تم رفض حسابك البنكي",
 			Closed: "تم اغلاق حسابك البنكي",
+			CLOSED: "تم اغلاق حسابك البنكي",
 			Dormant: "تم تجميد حسابك البنكي",
+			DORMANT: "تم تجميد حسابك البنكي",
 		};
 		if (status && statusMap[status]) {
 			return (
@@ -181,7 +185,10 @@ const PaymentGateways = () => {
 							onClick={handleOpenBankComment}
 							className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'>
 							<span>
-								الاطلاع على سبب {status === "Rejected" ? "الرفض" : "التجميد"}
+								الاطلاع على سبب{" "}
+								{status === "Rejected" || status === "REJECTED"
+									? "الرفض"
+									: "التجميد"}
 							</span>
 						</button>
 					)}

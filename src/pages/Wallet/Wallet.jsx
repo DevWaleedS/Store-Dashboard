@@ -162,8 +162,12 @@ const Wallet = () => {
 			<AddBankAccountModal />
 			<EditBankAccountModal />
 			<AlertMessage />
+
 			<BankAccStatusComment
-				comment={currentBankAccount?.data?.SupplierDetails?.Comment}
+				comment={
+					currentBankAccount?.supplierUser?.comment ||
+					currentBankAccount?.supplierUser?.Comment
+				}
 			/>
 		</>
 	);
