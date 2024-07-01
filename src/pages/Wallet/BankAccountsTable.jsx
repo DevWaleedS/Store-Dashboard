@@ -195,8 +195,7 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 										</div>
 									</TableCell>
 
-									{(bankAccount?.supplierUser?.status !== "APPROVED" ||
-										bankAccount?.supplierUser?.status !== "Approved") && (
+									{bankAccount?.supplierUser?.status !== "APPROVED" && (
 										<TableCell align='center'>
 											<EditIcon
 												title='تعديل الحساب البنكي '
