@@ -23,7 +23,7 @@ import FormGroup from "@mui/material/FormGroup";
 import { CloseOutlined } from "@mui/icons-material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-// ICONS
+// Icons
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { DocsIcon, PaperIcon } from "../../data/Icons";
 
@@ -81,7 +81,7 @@ const EditPage = () => {
 		seo_link: "",
 		seo_desc: "",
 		tags: [],
-		pageCategory: [],
+		pageCategory: null,
 		image: "",
 	});
 
@@ -105,7 +105,9 @@ const EditPage = () => {
 	const [tag, setTag] = useState("");
 	const [titleLength, setTitleLength] = useState(false);
 	const [descriptionLength, setDescriptionLength] = useState(false);
-	const itsPost = page?.pageCategory?.includes(1);
+	const itsPost = page?.pageCategory === 1;
+
+	console.log(page?.pageCategory);
 
 	// ---------------------------------------------------------
 	const addTags = () => {
@@ -157,7 +159,8 @@ const EditPage = () => {
 			seo_link: currentPage?.seo_link,
 			seo_desc: currentPage?.seo_desc,
 			tags: currentPage?.tags,
-			pageCategory: currentPage?.pageCategory?.map((item) => item?.id) || [],
+			pageCategory:
+				currentPage?.pageCategory?.map((item) => item?.id)[0] || null,
 			image: currentPage?.image,
 		});
 		setEditorValue(currentPage?.page_content);
@@ -292,6 +295,7 @@ const EditPage = () => {
 		formData.append("seo_title", data?.seo_title);
 		formData.append("seo_desc", data?.seo_desc);
 		formData.append("tags", page?.tags?.join(","));
+
 		for (let i = 0; i < selectedCategories?.length; i++) {
 			formData.append([`pageCategory[${i}]`], selectedCategories[i]);
 		}
@@ -598,7 +602,10 @@ const EditPage = () => {
 																					onChange={(e) => {
 																						const categoryId = cat.id;
 																						const isChecked = e.target.checked;
-
+																						setPage({
+																							...page,
+																							pageCategory: categoryId,
+																						});
 																						// Update selected categories state
 																						setSelectedCategories(
 																							(prevCategories) =>
@@ -675,6 +682,8 @@ const EditPage = () => {
 														</div>
 													</div>
 												</div>
+
+												{console.log(itsPost)}
 												{itsPost && (
 													<>
 														<div className='col-md-6 col-12'>

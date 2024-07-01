@@ -28,11 +28,10 @@ const Madfou3Modal = ({ isShowing, hide }) => {
 	const madfuAuthHandel = async (id, body) => {
 		try {
 			const response = await madfuAuth({ id, body }).unwrap();
-			console.log("Response:", response);
+
 			toast.success(response.message.ar);
 			hide();
 		} catch (error) {
-			console.error("Failed to login:", error);
 			toast.error("فشل تسجيل الدخول");
 		}
 	};
@@ -44,6 +43,7 @@ const Madfou3Modal = ({ isShowing, hide }) => {
 			toast.error("من فضلك قم بكتابة اسم المستخدم");
 			return;
 		}
+
 		if (madfuAuthData.password === "") {
 			toast.error("من فضلك قم بكتابة كلمه السر");
 			return;
@@ -76,7 +76,7 @@ const Madfou3Modal = ({ isShowing, hide }) => {
 
 	return isShowing
 		? ReactDOM.createPortal(
-				<div className='Madfou3Modal-overlay' onClick={hide}>
+				<div className='Madfou3Modal-overlay'>
 					<div className='Madfou3Modal' onClick={(e) => e.stopPropagation()}>
 						<button onClick={hide} className='closebtn'>
 							<svg
