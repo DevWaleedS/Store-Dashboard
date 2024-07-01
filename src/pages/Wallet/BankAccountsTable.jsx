@@ -195,17 +195,17 @@ const BankAccountsTable = ({ bankAccount, loading }) => {
 										</div>
 									</TableCell>
 
-									{bankAccount?.supplierUser?.status !== "APPROVED" ||
-										(bankAccount?.supplierUser?.status !== "Approved" && (
-											<TableCell align='center'>
-												<EditIcon
-													title='تعديل الحساب البنكي '
-													style={{ cursor: "pointer" }}
-													onClick={() => dispatch(openEditBankAccountModal())}
-													className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'
-												/>
-											</TableCell>
-										))}
+									{(bankAccount?.supplierUser?.status !== "APPROVED" ||
+										bankAccount?.supplierUser?.status !== "Approved") && (
+										<TableCell align='center'>
+											<EditIcon
+												title='تعديل الحساب البنكي '
+												style={{ cursor: "pointer" }}
+												onClick={() => dispatch(openEditBankAccountModal())}
+												className='d-flex justify-content-center justify-md-content-end align-items-center gap-1 me-md-auto'
+											/>
+										</TableCell>
+									)}
 								</TableBody>
 							</>
 						)}
