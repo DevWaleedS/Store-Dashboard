@@ -1,8 +1,9 @@
 import React from "react";
-import Madfou3Modal from "./Madfou3Modal";
+import Madfou3Modal from "./madfuCredentialsModal/Madfou3Modal";
 import { Switch } from "@mui/material";
 
 const AllPaymentGateways = ({
+	infoIsSend,
 	allPayments,
 	switchStyle,
 	hideMadfou3Modal,
@@ -43,7 +44,11 @@ const AllPaymentGateways = ({
 						</div>
 					))}
 			</div>
-			<Madfou3Modal isShowing={isMadfou3ModalOpen} hide={hideMadfou3Modal} />
+			<Madfou3Modal
+				infoIsSend={infoIsSend}
+				hide={hideMadfou3Modal}
+				isShowing={isMadfou3ModalOpen}
+			/>
 		</>
 	);
 };

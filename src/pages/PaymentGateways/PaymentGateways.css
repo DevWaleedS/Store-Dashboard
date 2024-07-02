@@ -66,7 +66,8 @@
 	color: #909090;
 }
 
-.Madfou3Modal-form input {
+.Madfou3Modal-form input,
+.Madfou3Modal-form .store-info-phonenumber {
 	width: 100%;
 	border: 2px solid #ddd !important;
 	line-height: 50px;
@@ -77,10 +78,26 @@
 	border-radius: 50px;
 	margin-bottom: 30px;
 }
-
-.Madfou3Modal-form input:hover,
-.Madfou3Modal-form input:focus {
+.Madfou3Modal-form .store-info-phonenumber:hover,
+.Madfou3Modal-form input:is(:hover, :focus) {
 	border-color: #4ac9cb !important;
+}
+
+.store-info-phonenumber input,
+.store-info-phonenumber input:is(:hover, :focus) {
+	all: unset !important;
+	direction: ltr;
+	text-align: end;
+	width: 90% !important;
+	line-height: 50px;
+	height: 100%;
+	font-size: 17px;
+	font-weight: 500;
+}
+.store-info-phonenumber span {
+	display: inline-block;
+	width: 10%;
+	margin-left: 20px;
 }
 
 .Madfou3Modal-form .btn {

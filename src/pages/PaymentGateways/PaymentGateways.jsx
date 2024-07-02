@@ -84,7 +84,6 @@ const PaymentGateways = () => {
 
 	const [cashOnDelivery, setCashOnDelivery] = useState([]);
 	const [allPayments, setAllPayments] = useState([]);
-	const [madfou3Status, setMadfou3Status] = useState(false);
 	const [isMadfou3ModalOpen, setIsMadfou3ModalOpen] = useState(false);
 
 	// handle filter COD Payment type by id
@@ -100,7 +99,6 @@ const PaymentGateways = () => {
 	}, [paymentGateways]);
 
 	const [changePaymentStatus] = useChangePaymentStatusMutation();
-
 	const changePaymentStatusFunc = async (id) => {
 		try {
 			await changePaymentStatus(id)
@@ -115,24 +113,24 @@ const PaymentGateways = () => {
 					}
 				});
 		} catch (err) {
-			console.error("Failed to change the changePaymentStatus", err);
+			console.error("Failed to change the Change Payment Status", err);
 		}
 	};
 
 	const showMadfou3Modal = () => setIsMadfou3ModalOpen(true);
 	const hideMadfou3Modal = () => setIsMadfou3ModalOpen(false);
 
-	const handleChangePaymentStatus = async (id) => {
-		// to get madfu from payment gateway array
-		const madfou3 = allPayments?.find((item) => item.id === 5);
+	// to get madfu from payment gateway array
+	const madfou3 = allPayments?.find((item) => item?.id === 5);
 
+	const handleChangePaymentStatus = async (id) => {
 		if (id === madfou3?.id) {
+			// to handle is madfu variable is false it will open madfu modal
 			if (!madfou3?.is_madfu) {
 				showMadfou3Modal();
 			} else {
 				changePaymentStatusFunc(id);
 			}
-			setMadfou3Status(madfou3?.is_madfu);
 		} else {
 			changePaymentStatusFunc(id);
 		}
@@ -257,6 +255,7 @@ const PaymentGateways = () => {
 							<AllPaymentGateways
 								allPayments={allPayments}
 								switchStyle={switchStyle}
+								infoIsSend={madfou3?.is_send}
 								showMadfou3Modal={showMadfou3Modal}
 								hideMadfou3Modal={hideMadfou3Modal}
 								isMadfou3ModalOpen={isMadfou3ModalOpen}

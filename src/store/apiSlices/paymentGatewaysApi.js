@@ -7,14 +7,14 @@ export const paymentGatewaysApi = createApi({
 
 	// base url
 	baseQuery: axiosBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
+		baseUrl: "https://backend.atlbha.com/api/",
 	}),
 	tagTypes: ["PaymentGateways"],
 
 	endpoints: (builder) => ({
 		// get Payment Gateways endpoint..
 		getPaymentGateways: builder.query({
-			query: () => ({ url: `paymenttype` }),
+			query: () => ({ url: `Store/paymenttype` }),
 
 			providesTags: (result, error, id) => [{ type: "PaymentGateways", id }],
 
@@ -26,7 +26,7 @@ export const paymentGatewaysApi = createApi({
 		changePaymentStatus: builder.mutation({
 			query: (id) => {
 				return {
-					url: `changePaymenttypeStatus/${id}`,
+					url: `Store/changePaymenttypeStatus/${id}`,
 					method: "GET",
 				};
 			},
@@ -44,6 +44,18 @@ export const paymentGatewaysApi = createApi({
 
 			invalidatesTags: ["PaymentGateways"],
 		}),
+
+		sendStoresInfoToMadfu: builder.mutation({
+			query: ({ id, body }) => {
+				return {
+					url: `madfu/sendStoresInfo`,
+					method: "POST",
+					data: body,
+				};
+			},
+
+			invalidatesTags: ["PaymentGateways"],
+		}),
 	}),
 });
 
@@ -52,4 +64,5 @@ export const {
 	useMadfuAuthMutation,
 	useGetPaymentGatewaysQuery,
 	useChangePaymentStatusMutation,
+	useSendStoresInfoToMadfuMutation,
 } = paymentGatewaysApi;
