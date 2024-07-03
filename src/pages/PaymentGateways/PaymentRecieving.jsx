@@ -20,13 +20,13 @@ const PaymentRecieving = ({
 			{cashOnDelivery?.map((item) => (
 				<div className='col-xl-3 col-lg-6 col-12' key={item.id}>
 					<div className='data-widget'>
-						<div className='data'>
+						<div className='data pt-4'>
 							<div className='image-box'>
 								<img
 									className='img-fluid'
 									src={item?.image}
 									alt={item?.name}
-									style={{ width: "110px" }}
+									style={{ width: "80px" }}
 								/>
 							</div>
 							{item?.name ? (
