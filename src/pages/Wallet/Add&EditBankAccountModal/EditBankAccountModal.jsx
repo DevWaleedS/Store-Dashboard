@@ -28,7 +28,7 @@ import { BsCreditCard } from "react-icons/bs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { BsFileEarmarkArrowUp } from "react-icons/bs";
-import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 
 // RTK Query
 import { useGetBanksQuery } from "../../../store/apiSlices/selectorsApis/selectBanksApi";
@@ -36,6 +36,7 @@ import {
 	useShowBankAccountQuery,
 	useEditBankAccountMutation,
 } from "../../../store/apiSlices/walletApi.js";
+import PageHint from "../../../components/PageHint.jsx";
 
 /* Modal Styles */
 const style = {
@@ -535,12 +536,12 @@ const EditBankAccountModal = () => {
 						<div className='form-body bg-white'>
 							<div className='row  mb-4'>
 								<div className='col-12 '>
-									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-										<IoMdInformationCircleOutline />
-										<span>
-											يجب كتابة البيانات الصحيحة ليتم رفعها للجهات المختصة
-										</span>
-									</div>
+									<PageHint
+										hint={`يجب كتابة البيانات الصحيحة ليتم رفعها للجهات المختصة`}
+										flex={
+											"d-flex justify-content-start align-items-center gap-2"
+										}
+									/>
 								</div>
 							</div>
 

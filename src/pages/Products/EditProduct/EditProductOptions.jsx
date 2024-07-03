@@ -44,6 +44,7 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Switch } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import ToggleButton from "@mui/material/ToggleButton";
+import { PageHint } from "../../../components";
 
 /* Modal Styles */
 const style = {
@@ -947,10 +948,12 @@ const AddProductOptionsModal = () => {
 						<div className='form-body bg-white'>
 							<div className='row  mb-2'>
 								<div className='col-12 '>
-									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-										<IoMdInformationCircleOutline />
-										<span>بإمكانك إدارة الكمية بناء على خيارات المنتج</span>
-									</div>
+									<PageHint
+										hint={`بإمكانك إدارة الكمية بناء على خيارات المنتج`}
+										flex={
+											"d-flex justify-content-start align-items-center gap-2"
+										}
+									/>
 								</div>
 							</div>
 

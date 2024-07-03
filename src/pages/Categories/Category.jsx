@@ -12,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-import { Breadcrumb } from "../../components";
+import { Breadcrumb, PageHint } from "../../components";
 import { CategoryTable } from "../../components/Tables";
 
 // RTK Query
@@ -182,12 +182,11 @@ const Category = () => {
 				<Breadcrumb currentPage={"الأنشطة"} />
 
 				<div className='mb-3'>
-					<div className='mb-4 option-info-label d-flex  justify-content-start align-items-center gap-2'>
-						<IoMdInformationCircleOutline />
-						<span>
-							سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك
-						</span>
-					</div>
+					<PageHint
+					 hint={`سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك`} 
+					 flex={'d-flex  justify-content-start align-items-center gap-2'} 
+					 />
+					
 					<div className='add-category'>
 						<>
 							<div className='input-group'>

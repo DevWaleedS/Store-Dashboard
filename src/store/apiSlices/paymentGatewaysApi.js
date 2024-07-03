@@ -36,7 +36,7 @@ export const paymentGatewaysApi = createApi({
 		madfuAuth: builder.mutation({
 			query: ({ id, body }) => {
 				return {
-					url: `madfu-auth/${id}`,
+					url: `Store/madfu-auth/${id}`,
 					method: "POST",
 					data: body,
 				};

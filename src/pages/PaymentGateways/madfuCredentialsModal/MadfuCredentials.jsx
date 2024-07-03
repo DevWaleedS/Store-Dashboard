@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useMadfuAuthMutation } from "../../../store/apiSlices/paymentGatewaysApi";
+import { PageHint } from "../../../components";
 
 const MadfuCredentials = ({ hide }) => {
 	const [madfuAuthData, setMadfuAuthData] = useState({
@@ -28,8 +29,6 @@ const MadfuCredentials = ({ hide }) => {
 	const madfuAuthHandel = async (id, body) => {
 		try {
 			const response = await madfuAuth({ id, body }).unwrap();
-
-			toast.success(response.message.ar);
 			hide();
 		} catch (error) {
 			toast.error("فشل تسجيل الدخول");
@@ -75,24 +74,13 @@ const MadfuCredentials = ({ hide }) => {
 	};
 	return (
 		<>
-			<div class='mb-5 option-info-label d-flex align-items-center gap-2'>
-				<svg
-					stroke='currentColor'
-					fill='currentColor'
-					stroke-width='0'
-					viewBox='0 0 512 512'
-					height='1em'
-					width='1em'
-					xmlns='http://www.w3.org/2000/svg'>
-					<path d='M256 90c44.3 0 86 17.3 117.4 48.6C404.7 170 422 211.7 422 256s-17.3 86-48.6 117.4C342 404.7 300.3 422 256 422s-86-17.3-117.4-48.6C107.3 342 90 300.3 90 256s17.3-86 48.6-117.4C170 107.3 211.7 90 256 90m0-42C141.1 48 48 141.1 48 256s93.1 208 208 208 208-93.1 208-208S370.9 48 256 48z'></path>
-					<path d='M277 360h-42V235h42v125zm0-166h-42v-42h42v42z'></path>
-				</svg>
-				<span>
-					قم بإدخال البيانات التالية التي حصلت عليها عند فتح حساب في مدفوع ، إذا
+			<PageHint
+				hint={`قم بإدخال البيانات التالية التي حصلت عليها عند فتح حساب في مدفوع ، إذا
 					كانت لديك مشكلة في الحصول علي هذه البيانات يمكنك التواصل مع مدفوع من
-					خلال هذا البريد الالكتروني (sales@madfu.com.sa)
-				</span>
-			</div>
+					خلال هذا البريد الالكتروني (sales@madfu.com.sa)`}
+				flex='d-flex align-items-center gap-2'
+			/>
+
 			<form className='Madfou3Modal-form' onSubmit={handleSubmitMadfou3Form}>
 				<div className='position-relative'>
 					<label htmlFor='username'>اسم المستخدم</label>

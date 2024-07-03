@@ -1,7 +1,6 @@
 import React, { Fragment, useContext, useState } from "react";
 
 // Third party
-
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
@@ -28,7 +27,7 @@ import {
 	AiOutlineMinus,
 } from "react-icons/ai";
 import { TiDeleteOutline } from "react-icons/ti";
-import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -44,6 +43,7 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { Switch } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import ToggleButton from "@mui/material/ToggleButton";
+import { PageHint } from "../../../components";
 
 /* Modal Styles */
 const style = {
@@ -943,10 +943,12 @@ const AddProductOptionsModal = () => {
 						<div className='form-body bg-white'>
 							<div className='row  mb-2'>
 								<div className='col-12 '>
-									<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-										<IoMdInformationCircleOutline />
-										<span>بإمكانك إدارة الكمية بناء على خيارات المنتج</span>
-									</div>
+									<PageHint
+										hint={`بإمكانك إدارة الكمية بناء على خيارات المنتج`}
+										flex={
+											"d-flex justify-content-start align-items-center gap-2"
+										}
+									/>
 								</div>
 							</div>
 

@@ -21,6 +21,7 @@ import { useChangeCategoriesForSomeSelectedProductsMutation } from "../../store/
 
 // RTK Query
 import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
+import { PageHint } from "../../components";
 
 // Style the modal
 const style = {
@@ -196,13 +197,14 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 							</div>
 						</div>
 					</section>
+
 					<section className='p-3'>
 						<div className='row mb-md-5 mb-3'>
 							<div className='col-12 '>
-								<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-									<IoMdInformationCircleOutline />
-									<span>بإمكانك تعديل أنشطة المنتجات التي قمت بتحديدها</span>
-								</div>
+								<PageHint
+									hint={`	بإمكانك تعديل أنشطة المنتجات التي قمت بتحديدها`}
+									flex={"d-flex justify-content-start align-items-center gap-2"}
+								/>
 							</div>
 						</div>
 						<div className='row mb-md-5 mb-3'>

@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 // Components
-import { Breadcrumb } from "../../components";
+import { Breadcrumb, PageHint } from "../../components";
 import { TopBarSearchInput } from "../../global/TopBar";
 import ShippingCompaniesData from "./ShippingCompaniesData";
 import CircularLoading from "../../HelperComponents/CircularLoading";
@@ -323,10 +323,10 @@ const ShippingCompanies = () => {
 
 				<div className='row  mb-2'>
 					<div className='col-12 '>
-						<div className='mb-2 option-info-label d-flex justify-content-start align-items-center gap-2 '>
-							<IoMdInformationCircleOutline />
-							<span> اشتراك واحد يتيح لك استخدام جميع شركات الشحن</span>
-						</div>
+						<PageHint
+							hint={`اشتراك واحد يتيح لك استخدام جميع شركات الشحن`}
+							flex={"d-flex justify-content-start align-items-center gap-2"}
+						/>
 					</div>
 				</div>
 				<div className='data-container '>
@@ -341,13 +341,14 @@ const ShippingCompanies = () => {
 					) : (
 						<>
 							<div className='row other-shipping-company mb-4'>
-								<div className='mb-4 option-info-label d-flex  justify-content-start align-items-center gap-2'>
-									<IoMdInformationCircleOutline />
-									<span>
-										من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة في
-										توصيل الطلبات وتحديد تكلفة الشحن المناسبة.
-									</span>
-								</div>
+								<PageHint
+									hint={`	من خلال تفعيل هذا الخيار يمكنك تحديد الطريقة المناسبة في
+										توصيل الطلبات وتحديد تكلفة الشحن المناسبة.`}
+									flex={
+										" d-flex  justify-content-start align-items-center gap-2"
+									}
+								/>
+
 								{otherShippingCompany?.map((item) => (
 									<div key={item?.id} className='col-xl-3 col-lg-4 col-12'>
 										<ShippingCompaniesData
