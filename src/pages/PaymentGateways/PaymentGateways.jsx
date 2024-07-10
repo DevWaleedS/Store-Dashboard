@@ -33,6 +33,8 @@ import UseAccountVerification from "../../Hooks/UseAccountVerification";
 import PaymentRecieving from "./PaymentRecieving";
 import AllPaymentGateways from "./AllPaymentGateways";
 import Context from "../../Context/context";
+import MadfuPaymentGateway from "./MadfuPaymentGateway/MadfuPaymentGateway";
+import Madfou3Modal from "./MadfuPaymentGateway/madfuCredentialsModal/Madfou3Modal";
 // Switch styles
 const switchStyle = {
 	"& .MuiSwitch-track": {
@@ -72,6 +74,7 @@ const switchStyle = {
 };
 
 const PaymentGateways = () => {
+	/* to check if the user is verify his account or not*/
 	UseAccountVerification();
 
 	const dispatch = useDispatch();
@@ -82,22 +85,28 @@ const PaymentGateways = () => {
 	const { data: currentBankAccount, isLoading: bankIsLoading } =
 		useGetCurrentBankAccountQuery();
 
-	const [cashOnDelivery, setCashOnDelivery] = useState([]);
+	const [madfou3, setMadfou3] = useState({});
 	const [allPayments, setAllPayments] = useState([]);
+	const [cashOnDelivery, setCashOnDelivery] = useState({});
 	const [isMadfou3ModalOpen, setIsMadfou3ModalOpen] = useState(false);
 
-	// handle filter COD Payment type by id
+	// handle payments  filters by id
 	useEffect(() => {
 		if (paymentGateways) {
-			setCashOnDelivery(
-				paymentGateways.filter((paymenttypes) => paymenttypes.id === 4)
-			);
+			/* filter to get COD payment it self */
+			setCashOnDelivery(paymentGateways.find((item) => item.id === 4));
+
+			/* filter to get ally payment expect COD or Madfu self */
 			setAllPayments(
-				paymentGateways.filter((paymenttypes) => paymenttypes.id !== 4)
+				paymentGateways.filter((item) => item.id !== 4 && item.id !== 5)
 			);
+
+			/* to get madfu from payment gateway array */
+			setMadfou3(paymentGateways?.find((item) => item?.id === 5));
 		}
 	}, [paymentGateways]);
 
+	// change status of payment
 	const [changePaymentStatus] = useChangePaymentStatusMutation();
 	const changePaymentStatusFunc = async (id) => {
 		try {
@@ -117,11 +126,9 @@ const PaymentGateways = () => {
 		}
 	};
 
+	/* handle open and close modal */
 	const showMadfou3Modal = () => setIsMadfou3ModalOpen(true);
 	const hideMadfou3Modal = () => setIsMadfou3ModalOpen(false);
-
-	// to get madfu from payment gateway array
-	const madfou3 = allPayments?.find((item) => item?.id === 5);
 
 	const handleChangePaymentStatus = async (id) => {
 		if (id === madfou3?.id) {
@@ -136,10 +143,11 @@ const PaymentGateways = () => {
 		}
 	};
 
+	/* change status of COD payment */
 	const handleChangeCashOnDeliveryStatus = async (id) => {
 		if (
-			(cashOnDelivery[0]?.status === "نشط" && allPayments?.length === 0) ||
-			(cashOnDelivery[0]?.status === "نشط" &&
+			(cashOnDelivery?.status === "نشط" && allPayments?.length === 0) ||
+			(cashOnDelivery?.status === "نشط" &&
 				allPayments.every((item) => item.status !== "نشط"))
 		) {
 			toast.error("يجب تفعيل طريقه دفع واحدة على الاقل", { theme: "light" });
@@ -148,11 +156,13 @@ const PaymentGateways = () => {
 		}
 	};
 
+	/* handle open bank modal */
 	const handleOpenBankAccount = () => {
 		dispatch(openAddBankAccountModal());
 		navigate("/wallet");
 	};
 
+	/* open comment of bank reject reason modal*/
 	const handleOpenBankComment = () => {
 		dispatch(openCommentModal());
 		navigate("/wallet");
@@ -245,21 +255,34 @@ const PaymentGateways = () => {
 						</div>
 
 						<div className='data-container'>
+							{/* COD payment */}
 							<PaymentRecieving
+								switchStyle={switchStyle}
 								cashOnDelivery={cashOnDelivery}
 								handleChangeCashOnDeliveryStatus={
 									handleChangeCashOnDeliveryStatus
 								}
-								switchStyle={switchStyle}
 							/>
-							<AllPaymentGateways
-								allPayments={allPayments}
-								switchStyle={switchStyle}
+							<div className='row'>
+								<AllPaymentGateways
+									allPayments={allPayments}
+									switchStyle={switchStyle}
+									handleChangePaymentStatus={handleChangePaymentStatus}
+								/>
+								<MadfuPaymentGateway
+									madfou3={madfou3}
+									switchStyle={switchStyle}
+									infoIsSend={madfou3?.is_send}
+									showMadfou3Modal={showMadfou3Modal}
+									handleChangePaymentStatus={handleChangePaymentStatus}
+								/>
+							</div>
+
+							<Madfou3Modal
+								hide={hideMadfou3Modal}
+								isMadfu={madfou3?.is_madfu}
 								infoIsSend={madfou3?.is_send}
-								showMadfou3Modal={showMadfou3Modal}
-								hideMadfou3Modal={hideMadfou3Modal}
-								isMadfou3ModalOpen={isMadfou3ModalOpen}
-								handleChangePaymentStatus={handleChangePaymentStatus}
+								isShowing={isMadfou3ModalOpen}
 							/>
 						</div>
 					</>

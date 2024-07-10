@@ -1,6 +1,6 @@
 import { Switch } from "@mui/material";
 import React from "react";
-import { IoMdInformationCircleOutline } from "react-icons/io";
+
 import { PageHint } from "../../components";
 
 const PaymentRecieving = ({
@@ -17,28 +17,27 @@ const PaymentRecieving = ({
 				flex={"d-flex d-md-none justify-content-start align-items-center gap-2"}
 			/>
 
-			{cashOnDelivery?.map((item) => (
-				<div className='col-xl-3 col-lg-6 col-12' key={item.id}>
-					<div className='data-widget'>
-						<div className='data pt-4'>
-							<div className='image-box'>
-								<img
-									className='img-fluid'
-									src={item?.image}
-									alt={item?.name}
-									style={{ width: "80px" }}
-								/>
-							</div>
-							{item?.name ? (
-								<div className='current-price mt-1 w-100 d-flex justify-content-center'>
-									{item?.name}
-								</div>
-							) : null}
+			<div className='col-xl-3 col-lg-6 col-12'>
+				<div className='data-widget'>
+					<div className='data pt-4'>
+						<div className='image-box'>
+							<img
+								className='img-fluid'
+								src={cashOnDelivery?.image}
+								alt={cashOnDelivery?.name}
+								style={{ width: "80px" }}
+							/>
 						</div>
+						{cashOnDelivery?.name ? (
+							<div className='current-price mt-1 w-100 d-flex justify-content-center'>
+								{cashOnDelivery?.name}
+							</div>
+						) : null}
 					</div>
 				</div>
-			))}
-			{cashOnDelivery?.length !== 0 && (
+			</div>
+
+			{cashOnDelivery && (
 				<div className='col-xl-8 col-lg-6 col-12'>
 					<PageHint
 						hint={`يمكنك استخدام خيار الدفع عند الاستلام كطريقه من ضمن طرق الدفع
@@ -59,9 +58,9 @@ const PaymentRecieving = ({
 							}}>
 							<Switch
 								onChange={() => {
-									handleChangeCashOnDeliveryStatus(cashOnDelivery[0]?.id);
+									handleChangeCashOnDeliveryStatus(cashOnDelivery?.id);
 								}}
-								checked={cashOnDelivery[0]?.status === "نشط" ? true : false}
+								checked={cashOnDelivery?.status === "نشط" ? true : false}
 								sx={switchStyle}
 							/>
 						</div>

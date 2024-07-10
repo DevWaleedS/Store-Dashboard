@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSendStoresInfoToMadfuMutation } from "../../../store/apiSlices/paymentGatewaysApi";
+import { useSendStoresInfoToMadfuMutation } from "../../../../store/apiSlices/paymentGatewaysApi";
 import { toast } from "react-toastify";
-import { useGetMainInformationQuery } from "../../../store/apiSlices/mainInformationApi";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
-import { PageHint } from "../../../components";
+import CircularLoading from "../../../../HelperComponents/CircularLoading";
+import { PageHint } from "../../../../components";
 
-const SendStoresInfo = () => {
-	// To get  store info that come from api
-	const { data: storeInfoData, isLoading: isStoreIfoLoading } =
-		useGetMainInformationQuery();
-
+const SendStoresInfo = ({ isStoreIfoLoading, storeInfoData }) => {
 	const [storeInfo, setStoreInfo] = useState({
 		name: "",
 		phonenumber: "",

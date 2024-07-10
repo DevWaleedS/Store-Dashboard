@@ -1,11 +1,19 @@
 import ReactDOM from "react-dom";
 import MadfuCredentials from "./MadfuCredentials";
 import SendStoresInfo from "./SendStoresInfo";
+import { useGetMainInformationQuery } from "../../../../store/apiSlices/mainInformationApi";
 
-const Madfou3Modal = ({ isShowing, hide, infoIsSend }) => {
+const Madfou3Modal = ({ isShowing, hide, infoIsSend, isMadfu }) => {
+	// To get  store info that come from api
+	const {
+		data: storeInfoData,
+		isLoading,
+		refetch,
+	} = useGetMainInformationQuery();
+
 	return isShowing
 		? ReactDOM.createPortal(
-				<div className='Madfou3Modal-overlay'>
+				<div className='Madfou3Modal-overlay' onClick={hide}>
 					<div className='Madfou3Modal' onClick={(e) => e.stopPropagation()}>
 						<button onClick={hide} className='closebtn'>
 							<svg
@@ -18,9 +26,18 @@ const Madfou3Modal = ({ isShowing, hide, infoIsSend }) => {
 						</button>
 
 						{!infoIsSend ? (
-							<SendStoresInfo />
+							<SendStoresInfo
+								storeInfoData={storeInfoData}
+								isStoreIfoLoading={isLoading}
+							/>
 						) : (
-							<MadfuCredentials hide={hide} />
+							<MadfuCredentials
+								hide={hide}
+								isMadfu={isMadfu}
+								refetch={refetch}
+								isStoreIfoLoading={isLoading}
+								storeInfoData={storeInfoData}
+							/>
 						)}
 					</div>
 				</div>,
