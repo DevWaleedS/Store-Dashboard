@@ -18,7 +18,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 // Third part
 
 import { ToastContainer } from "react-toastify";
-import { Outlet, ScrollRestoration, useNavigate } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
@@ -39,14 +39,8 @@ import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 import AxiosInterceptors from "../API/AxiosInterceptors";
 import SideBar from "../global/Sidebar/SideBar";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
-import { useLogOutMutation } from "../store/apiSlices/logOutApi";
-import { useStoreTokenQuery } from "../store/apiSlices/getStoreTokenApi";
 
 const RootLayout = () => {
-	const { data } = useStoreTokenQuery();
-	const [logOut] = useLogOutMutation();
-	const navigate = useNavigate();
-
 	// Handle show Verification  data
 	const { data: showVerification, isFetching } = useShowVerificationQuery();
 
@@ -96,51 +90,6 @@ const RootLayout = () => {
 			dispatchVerifyModal(closeVerifyModal());
 		};
 	}, [showVerification?.verification_status, dispatchVerifyModal]);
-
-	// this is to handle clear store-token that coming from store_token api
-
-	const handleLogOut = async () => {
-		// make request...
-		try {
-			const response = await logOut();
-
-			if (
-				response.data?.success === true &&
-				response.data?.data?.status === 200
-			) {
-				localStorage.clear();
-				navigate("/auth/login");
-			}
-		} catch (error) {
-			console.error("Error changing logout:", error);
-		}
-	};
-	useEffect(() => {
-		if (data?.token) {
-			const handleBeforeUnload = (event) => {
-				event.preventDefault();
-
-				const message =
-					"Are you sure you want to leave? Any unsaved changes will be lost.";
-
-				// Some browsers require preventDefault to show the dialog
-				event.preventDefault();
-				event.returnValue = message; // Most browsers ignore this and show a generic message
-
-				// Call your function here
-				handleLogOut();
-				window.location.reload();
-
-				return message; // Required for some older browsers
-			};
-
-			window.addEventListener("beforeunload", handleBeforeUnload);
-
-			return () => {
-				window.removeEventListener("beforeunload", handleBeforeUnload);
-			};
-		}
-	}, [data?.token]);
 
 	return (
 		<AxiosInterceptors>

@@ -21,7 +21,6 @@ import {
 
 // Icons
 import { Switch } from "@mui/material";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { LoadingContext } from "../../Context/LoadingProvider";
 
 // custom hook
@@ -86,7 +85,7 @@ const ShippingCompanies = () => {
 	const { setLoadingTitle } = LoadingStore;
 
 	const [validPriceFocus, setValidPriceFocus] = useState(false);
-	const [otherShippingCompany, setOtherShippingCompany] = useState([]);
+	const [otherShippingCompany, setOtherShippingCompany] = useState({});
 	const [allShippingCompanies, setAllShippingCompanies] = useState([]);
 	const [otherShipCompDetails, setOtherShipCompDetails] = useState({
 		id: "",
@@ -105,7 +104,7 @@ const ShippingCompanies = () => {
 	useEffect(() => {
 		if (shippingCompanies) {
 			setOtherShippingCompany(
-				shippingCompanies?.filter(
+				shippingCompanies?.find(
 					(shippingCompany) => shippingCompany?.name === "اخرى"
 				)
 			);
@@ -123,28 +122,26 @@ const ShippingCompanies = () => {
 		if (otherShippingCompany) {
 			setOtherShipCompDetails((prevDetails) => ({
 				...prevDetails,
-				id: otherShippingCompany[0]?.id,
-				status: otherShippingCompany[0]?.status === "نشط" ? true : false,
+				id: otherShippingCompany?.id,
+				status: otherShippingCompany?.status === "نشط" ? true : false,
 
 				// shipment price
 				price:
-					otherShippingCompany[0]?.price === "0"
+					otherShippingCompany?.price === "0"
 						? ""
-						: otherShippingCompany[0]?.price,
+						: otherShippingCompany?.price,
 
 				// shipment time
 				time:
-					otherShippingCompany[0]?.time === "0"
-						? ""
-						: otherShippingCompany[0]?.time,
+					otherShippingCompany?.time === "0" ? "" : otherShippingCompany?.time,
 				//shipment over price
-				overprice: !otherShippingCompany[0]?.overprice
+				overprice: !otherShippingCompany?.overprice
 					? ""
-					: otherShippingCompany[0]?.overprice,
+					: otherShippingCompany?.overprice,
 
-				currentOverprice: otherShippingCompany[0]?.overprice,
-				currentPrice: otherShippingCompany[0]?.price,
-				currentTime: otherShippingCompany[0]?.time,
+				currentOverprice: otherShippingCompany?.overprice,
+				currentPrice: otherShippingCompany?.price,
+				currentTime: otherShippingCompany?.time,
 			}));
 		}
 	}, [otherShippingCompany]);
@@ -209,7 +206,10 @@ const ShippingCompanies = () => {
 	const [changeOtherShippingCompanyStatusAndAddPrice] =
 		useChangeOtherShippingCompanyStatusAndAddPriceMutation();
 	const handleChangeOtherShippingCompanyStatusAndAddPrice = async (id) => {
+		// check if there some of a
 		if (
+			otherShippingCompany?.status === false ||
+			otherShippingCompany?.status === "غير نشط" ||
 			allShippingCompanies?.some((item) => item?.status === "نشط") ||
 			allShippingCompanies?.length === 0
 		) {
@@ -253,6 +253,7 @@ const ShippingCompanies = () => {
 			});
 		}
 	};
+
 	//--------------------------------------------------------------------------------
 
 	// handle update Price For Other Shipping Company
@@ -349,28 +350,26 @@ const ShippingCompanies = () => {
 									}
 								/>
 
-								{otherShippingCompany?.map((item) => (
-									<div key={item?.id} className='col-xl-3 col-lg-4 col-12'>
-										<ShippingCompaniesData
-											shippingCompanyName={item?.name}
-											currentShippingPrice={
-												otherShipCompDetails?.status &&
-												otherShipCompDetails?.currentPrice
-											}
-											currentShippingTime={
-												otherShipCompDetails?.status &&
-												otherShipCompDetails?.currentTime
-											}
-											currentShippingOverPrice={
-												otherShipCompDetails?.status &&
-												otherShipCompDetails?.currentOverprice
-											}
-											image={item?.image}
-											hideSwitch={true}
-										/>
-									</div>
-								))}
-								{otherShippingCompany?.length !== 0 && (
+								<div className='col-xl-3 col-lg-4 col-12'>
+									<ShippingCompaniesData
+										shippingCompanyName={otherShippingCompany?.name}
+										currentShippingPrice={
+											otherShipCompDetails?.status &&
+											otherShipCompDetails?.currentPrice
+										}
+										currentShippingTime={
+											otherShipCompDetails?.status &&
+											otherShipCompDetails?.currentTime
+										}
+										currentShippingOverPrice={
+											otherShipCompDetails?.status &&
+											otherShipCompDetails?.currentOverprice
+										}
+										image={otherShippingCompany?.image}
+										hideSwitch={true}
+									/>
+								</div>
+								{otherShippingCompany && (
 									<div className='col-xl-7 col-lg-6 col-12'>
 										<div className=''>
 											<div className='tax-text'>تفعيل/تعطيل الشحن الخاص </div>
@@ -383,11 +382,11 @@ const ShippingCompanies = () => {
 												<Switch
 													onChange={() => {
 														handleChangeOtherShippingCompanyStatusAndAddPrice(
-															otherShippingCompany[0]?.id
+															otherShippingCompany?.id
 														);
 													}}
 													checked={
-														otherShippingCompany[0]?.status === "نشط"
+														otherShippingCompany?.status === "نشط"
 															? true
 															: false
 													}

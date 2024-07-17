@@ -51,17 +51,24 @@ function Main() {
 			localStorage.setItem("storeToken", data?.token);
 			setStoreToken(localStorage.getItem("storeToken"));
 
+			// set user info to display it when dashboard is open.
+			localStorage.setItem("userName", data?.user?.user_name);
+			localStorage.setItem("userImage", data?.user?.image);
+			localStorage.setItem("logo", data?.user?.store?.logo);
+			localStorage.setItem("domain", data?.user?.store?.domain);
+			localStorage.setItem("store_id", data?.user?.store_id);
 			localStorage.setItem(
 				"name",
 				data?.user?.lastname
 					? `${data?.user?.name} ${data?.user?.lastname}`
 					: `${data?.user?.name}`
 			);
-			localStorage.setItem("userName", data?.user?.user_name);
-			localStorage.setItem("userImage", data?.user?.image);
-			localStorage.setItem("logo", data?.user?.store?.logo);
-			localStorage.setItem("domain", data?.user?.store?.domain);
-			localStorage.setItem("store_id", data?.user?.store_id);
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (!data) {
+			localStorage.clear();
 		}
 	}, [data]);
 

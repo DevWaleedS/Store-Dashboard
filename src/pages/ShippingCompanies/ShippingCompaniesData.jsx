@@ -67,7 +67,7 @@ const ShippingCompaniesData = ({
 			return `${timeValue} يوم`;
 		}
 	};
-	console.log(currentShippingOverPrice);
+
 	return (
 		<div className='data-widget'>
 			<div className='data'>
