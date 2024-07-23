@@ -47,30 +47,30 @@ function Main() {
 	const [storeToken, setStoreToken] = useState(null);
 
 	useEffect(() => {
-		if (data?.token) {
-			localStorage.setItem("storeToken", data?.token);
+		if (data?.data?.token) {
+			localStorage.setItem("storeToken", data?.data?.token);
 			setStoreToken(localStorage.getItem("storeToken"));
 
 			// set user info to display it when dashboard is open.
-			localStorage.setItem("userName", data?.user?.user_name);
-			localStorage.setItem("userImage", data?.user?.image);
-			localStorage.setItem("logo", data?.user?.store?.logo);
-			localStorage.setItem("domain", data?.user?.store?.domain);
-			localStorage.setItem("store_id", data?.user?.store_id);
+			localStorage.setItem("userName", data?.data?.user?.user_name);
+			localStorage.setItem("userImage", data?.data?.user?.image);
+			localStorage.setItem("logo", data?.data?.user?.store?.logo);
+			localStorage.setItem("domain", data?.data?.user?.store?.domain);
+			localStorage.setItem("store_id", data?.data?.user?.store_id);
 			localStorage.setItem(
 				"name",
-				data?.user?.lastname
-					? `${data?.user?.name} ${data?.user?.lastname}`
-					: `${data?.user?.name}`
+				data?.data?.user?.lastname
+					? `${data?.data?.user?.name} ${data?.data?.user?.lastname}`
+					: `${data?.data?.user?.name}`
 			);
 		}
-	}, [data]);
+	}, [data?.data]);
 
 	useEffect(() => {
-		if (!data) {
+		if (!data?.data) {
 			localStorage.clear();
 		}
-	}, [data]);
+	}, [data?.data]);
 
 	const navigate = useNavigate();
 	const parm = useParams();

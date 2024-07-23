@@ -42,6 +42,7 @@ import {
 } from "../../store/apiSlices/mainInformationApi";
 import { useGetCitiesQuery } from "../../store/apiSlices/selectorsApis/selectCitiesApi";
 import { useGetCountriesQuery } from "../../store/apiSlices/selectorsApis/selectCountriesApi";
+import DomainName from "./DomainName/DomainName";
 
 // select style
 const selectStyle = {
@@ -448,6 +449,21 @@ const MainInformation = () => {
 											</span>
 										)}
 									</div>
+
+									{/*
+											
+											
+											<DomainName
+												domain={domain}
+												settingErr={settingErr}
+												domainNameValidFocus={domainNameValidFocus}
+												setDomainNameFocus={setDomainNameFocus}
+												setDomain={setDomain}
+												setDomainNameValidFocus={setDomainNameValidFocus}
+												validDomainName={validDomainName}
+												domainNameFocus={domainNameFocus}
+											/>
+											*/}
 								</div>
 							</div>
 
