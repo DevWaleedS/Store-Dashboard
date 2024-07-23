@@ -307,7 +307,7 @@ const Notifications = () => {
 										{notification?.notifications?.length !== 0 &&
 											!isLoading && (
 												<TablePagination
-													data={notification?.notifications}
+													data={notification?.notifications || []}
 													pageCount={notification?.page_count}
 													currentPage={notification?.current_page}
 													pageTarget={pageTarget}

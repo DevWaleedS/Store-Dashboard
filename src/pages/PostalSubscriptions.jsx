@@ -133,7 +133,7 @@ const PostalSubscriptions = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<PostalSubscriptionsTable
-							data={postalSubscriptionsData?.subsicriptions}
+							data={postalSubscriptionsData?.subsicriptions || []}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}

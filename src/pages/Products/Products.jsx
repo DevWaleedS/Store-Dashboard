@@ -228,7 +228,7 @@ const Products = () => {
 				</div>
 				<div className='category-table'>
 					<BigProductsTable
-						products={productsData}
+						products={productsData || []}
 						loading={
 							tabSelected === 1
 								? storeProductsIsLoading

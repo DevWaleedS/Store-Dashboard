@@ -92,7 +92,7 @@ const TechnicalSupport = () => {
 				<div className='row'>
 					<div className='support-table'>
 						<SupportTable
-							data={technicalSupportData?.Technicalsupports}
+							data={technicalSupportData?.Technicalsupports | []}
 							loading={isLoading}
 							rowsCount={rowsCount}
 							pageTarget={pageTarget}

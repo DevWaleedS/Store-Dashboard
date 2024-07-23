@@ -183,10 +183,10 @@ const Category = () => {
 
 				<div className='mb-3'>
 					<PageHint
-					 hint={`سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك`} 
-					 flex={'d-flex  justify-content-start align-items-center gap-2'} 
-					 />
-					
+						hint={`سوف تظهر هذه الأنشطة بمجرد استخدامها في اضافة المنتجات الخاصة بك`}
+						flex={"d-flex  justify-content-start align-items-center gap-2"}
+					/>
+
 					<div className='add-category'>
 						<>
 							<div className='input-group'>
@@ -314,7 +314,7 @@ const Category = () => {
 							setRowsCount={setRowsCount}
 							pageTarget={pageTarget}
 							tabSelectedId={tabSelected}
-							categories={categoriesData}
+							categories={categoriesData || []}
 							setPageTarget={setPageTarget}
 							pageCount={pageCount}
 							currentPage={currentPage}

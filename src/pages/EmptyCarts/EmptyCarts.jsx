@@ -84,7 +84,7 @@ const EmptyCarts = () => {
 				<div className='row'>
 					<div className='carts-table'>
 						<CartsTables
-							cartsData={emptyCartsData?.carts}
+							cartsData={emptyCartsData?.carts || []}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}

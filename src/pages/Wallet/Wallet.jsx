@@ -145,7 +145,7 @@ const Wallet = () => {
 
 								{/* Billing Table */}
 								<BillingTable
-									billingInfo={billing?.billing}
+									billingInfo={billing?.billing || []}
 									loading={billingIsLoading}
 									pageTarget={pageTarget}
 									setRowsCount={setRowsCount}

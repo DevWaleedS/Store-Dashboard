@@ -240,7 +240,7 @@ const Coupon = () => {
 				<div className='row'>
 					<div className='coupon-table'>
 						<CouponTable
-							coupons={couponsData?.coupons}
+							coupons={couponsData?.coupons || []}
 							search={search}
 							select={select}
 							loading={isLoading}

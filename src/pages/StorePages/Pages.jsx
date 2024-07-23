@@ -239,7 +239,7 @@ const Pages = () => {
 				<div className='row'>
 					<div className='pages-table'>
 						<PagesTable
-							data={pageArray?.pages}
+							data={pageArray?.pages || []}
 							loading={isLoading}
 							search={search}
 							setSearch={setSearch}

@@ -189,10 +189,10 @@ const Rating = () => {
 									setPageTarget={setPageTarget}
 								/>
 							)}
-
+						{console.log(ratingData?.data?.comment_of_products)}
 						{/* send rating replay component */}
 						<SendReplayModal
-							fetchedData={ratingData?.data?.comment_of_products}
+							fetchedData={ratingData?.data?.comment_of_products || []}
 							loading={isLoading}
 							commentDetails={commentDetails}
 						/>
