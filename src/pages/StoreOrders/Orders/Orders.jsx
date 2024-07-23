@@ -24,10 +24,18 @@ const Orders = () => {
 	const [ordersData, setOrdersData] = useState(null);
 
 	// get orders data
-	const { data: orders, isLoading } = useGetOrdersQuery({
+	const {
+		data: orders,
+		isLoading,
+		refetch,
+	} = useGetOrdersQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	useEffect(() => {
 		if (orders?.data) {
