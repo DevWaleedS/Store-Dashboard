@@ -15,6 +15,7 @@ export const ordersApi = createApi({
 		// get store Orders endpoint..
 		getOrders: builder.query({
 			query: (arg) => ({ url: `orders?page=${arg.page}&number=${arg.number}` }),
+
 			providesTags: ["Orders"],
 		}),
 

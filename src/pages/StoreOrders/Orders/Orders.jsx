@@ -24,24 +24,16 @@ const Orders = () => {
 	const [ordersData, setOrdersData] = useState(null);
 
 	// get orders data
-	const {
-		data: orders,
-		isLoading,
-		refetch,
-	} = useGetOrdersQuery({
+	const { data: orders, isLoading } = useGetOrdersQuery({
 		page: pageTarget,
 		number: rowsCount,
 	});
 
 	useEffect(() => {
-		refetch();
-	}, [refetch]);
-
-	useEffect(() => {
-		if (orders) {
+		if (orders?.data) {
 			setOrdersData(orders?.data);
 		}
-	}, [orders]);
+	}, [orders?.data]);
 
 	// handle search in orders
 	const [searchInOrders] = useSearchInOrdersMutation();
@@ -123,7 +115,7 @@ const Orders = () => {
 				{/* Orders table */}
 				<div className='tables'>
 					<BigOrdersTable
-						orders={ordersData?.orders}
+						orders={ordersData?.orders || []}
 						search={search}
 						select={select}
 						loading={isLoading}
