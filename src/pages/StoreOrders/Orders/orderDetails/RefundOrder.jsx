@@ -74,7 +74,7 @@ const RefundOrder = ({ id, currentOrder }) => {
 						المبلغ المطلوب رده للعميل
 					</label>
 				</div>
-				<div className='d-flex justify-content-start align-items-center gap-3 '>
+				<div className='d-flex return-order-wrapper justify-content-start align-items-center gap-3 '>
 					<div className='return-order-price-input '>
 						<IoIosPricetags />
 

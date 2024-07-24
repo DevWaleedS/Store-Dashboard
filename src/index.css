@@ -11594,8 +11594,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.order-details-body .order-details-box .refund-order-btn {
 		height: 45px;
 	}
+	.return-order-wrapper {
+		flex-wrap: wrap;
+	}
 	.order-details-body .order-details-box .return-order-price-input input {
 		height: 100% !important;
+	}
+
+	.order-details-body .order-details-box .refund-order-btn {
+		width: 100%;
 	}
 
 	.order-details-body .order-details-box .order-action-box.accordion-box {
