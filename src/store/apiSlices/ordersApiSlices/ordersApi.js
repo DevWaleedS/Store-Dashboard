@@ -43,6 +43,7 @@ export const ordersApi = createApi({
 			transformResponse: (response, meta, arg) => response.data,
 			providesTags: (result, error, id) => [{ type: "Orders", id }],
 		}),
+
 		// update Order Status
 		updateOrderStatus: builder.mutation({
 			query: ({ id, body }) => {
@@ -55,14 +56,27 @@ export const ordersApi = createApi({
 
 			invalidatesTags: ["Orders"],
 		}),
+
+		// Refund order
+		refundOrder: builder.mutation({
+			query: ({ id, price }) => {
+				return {
+					url: `refundOrder/${id}?price=${price}`,
+					method: "GET",
+				};
+			},
+
+			invalidatesTags: ["Orders"],
+		}),
 	}),
 });
 
 // Export endpoints and hooks
 export const {
 	useGetOrdersQuery,
-	useSearchInOrdersMutation,
-	useFilterOrdersByStatusMutation,
 	useGetOrderByIdQuery,
+	useRefundOrderMutation,
+	useSearchInOrdersMutation,
 	useUpdateOrderStatusMutation,
+	useFilterOrdersByStatusMutation,
 } = ordersApi;

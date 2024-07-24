@@ -68,13 +68,25 @@ const CheckoutStatus = () => {
 									<SuccessCheckout className='checkout-icon' />
 								</h3>
 								<div className='content' style={{ marginBottom: "90px" }}>
-									<h1 className='checkout-status-title success-status-title '>
+									{/*<h1 className='checkout-status-title success-status-title '>
 										عملية دفع ناجحة!
+									</h1>*/}
+
+									<h1 className='checkout-status-title success-status-title '>
+										تمت إضافه المنتجات بنجاح
 									</h1>
-									<p style={contentStyles}>
+									{/*	<p style={contentStyles}>
 										بعد الموافقه ستجدها في قسم المنتجات{" "}
 										<span style={{ fontWeight: 500 }}>
-											وخلال ثلاث أيام توصلك المنتجات
+											وخلال ثلاث أيام ستصلك المنتجات
+										</span>{" "}
+									</p>*/}
+
+									<p style={contentStyles}>
+										سيتم التواصل معك لإتمام إجراءات الدفع و بعد الموافقه ستجدها
+										في قسم المنتجات{" "}
+										<span style={{ fontWeight: 500 }}>
+											وخلال ثلاث أيام ستصلك المنتجات
 										</span>{" "}
 									</p>
 								</div>

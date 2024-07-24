@@ -66,12 +66,6 @@ function Main() {
 		}
 	}, [data?.data]);
 
-	useEffect(() => {
-		if (!data?.data) {
-			localStorage.clear();
-		}
-	}, [data?.data]);
-
 	const navigate = useNavigate();
 	const parm = useParams();
 	const [activeTab, setActiveTab] = useState(0);

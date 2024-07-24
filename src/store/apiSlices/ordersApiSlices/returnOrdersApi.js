@@ -67,6 +67,8 @@ export const returnOrdersApi = createApi({
 			query: ({ id }) => {
 				return { url: `refundReturnOrder/${id}`, method: "GET" };
 			},
+
+			invalidatesTags: ["ReturnOrders"],
 		}),
 	}),
 });

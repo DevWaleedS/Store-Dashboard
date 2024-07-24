@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 // Components
 import OrderInfo from "./OrderInfo";
 import ExportOrder from "./ExportOrder";
+import RefundOrder from "./RefundOrder";
 import CustomerInfo from "./CustomerInfo";
 import OrderItemsInfo from "./OrderItemsInfo";
 import AddStoreAddress from "./AddStoreAddress";
@@ -86,6 +87,7 @@ const OrderDetails = () => {
 		}
 	}, [currentOrder?.orders?.shippingtypes]);
 
+	console.log(currentOrder?.orders?.status);
 	return (
 		<>
 			<Helmet>
@@ -152,18 +154,21 @@ const OrderDetails = () => {
 							</div>
 
 							{/* add Store address */}
-							<div className='mb-md-5 mb-4'>
-								<AddStoreAddress
-									error={error}
-									shipping={shipping}
-									setShipping={setShipping}
-									currentOrder={currentOrder}
-									removeDuplicates={removeDuplicates}
-									shippingCitiesData={shippingCitiesData}
-									getCityFromProvince={getCityFromProvince}
-									translateProvinceName={translateProvinceName}
-								/>
-							</div>
+
+							{currentOrder?.orders?.status !== "ملغي" && (
+								<div className='mb-md-5 mb-4'>
+									<AddStoreAddress
+										error={error}
+										shipping={shipping}
+										setShipping={setShipping}
+										currentOrder={currentOrder}
+										removeDuplicates={removeDuplicates}
+										shippingCitiesData={shippingCitiesData}
+										getCityFromProvince={getCityFromProvince}
+										translateProvinceName={translateProvinceName}
+									/>
+								</div>
+							)}
 						</section>
 					)}
 				</section>
@@ -182,9 +187,10 @@ const OrderDetails = () => {
 									currentOrder={currentOrder}
 								/>
 
+								{/* Return order */}
+								<RefundOrder currentOrder={currentOrder} id={id} />
 								{/* Export order */}
 								<ExportOrder componentRef={componentRef} />
-
 								{/* Print Shipping Sticker */}
 								<PrintShippingSticker currentOrder={currentOrder} />
 							</div>

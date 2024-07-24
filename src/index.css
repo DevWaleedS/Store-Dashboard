@@ -5742,7 +5742,8 @@ input:disabled {
 	background-color: var(--second-300);
 }
 
-.order-details-body .order-details-box .order-action-box .list-icon {
+.order-details-body .order-details-box .order-action-box .list-icon,
+.order-details-body .order-details-box .action-title .list-icon {
 	width: 20px;
 	height: 20px;
 }
@@ -5764,6 +5765,46 @@ input:disabled {
 	fill: red !important;
 }
 
+/* return order style */
+.order-details-body .order-details-box .return-order-price-input {
+	width: 100%;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	padding: 5px 1rem;
+	border: 1px solid rgba(204, 228, 255, 0.22);
+	box-shadow: rgba(238, 221, 238, 0.867) 0px 0px 5px 0px;
+}
+
+.order-details-body .order-details-box .return-order-price-input input {
+	background-color: transparent;
+	padding-right: 10px;
+}
+.order-details-body
+	.order-details-box
+	.return-order-price-input
+	.return-order-currency {
+	font-size: 18px;
+	position: absolute;
+	left: 0;
+	padding-left: 10px;
+}
+
+.order-details-body .order-details-box .refund-order-btn {
+	width: max-content;
+	height: 56px;
+	background-color: rgb(29, 187, 190);
+	color: #fff;
+	font-size: 18px;
+	font-weight: 400;
+	padding: 12px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+}
 /* -------------------------------------------------------------------------------------------------------------------------------- */
 /* course-details-page */
 
@@ -11545,10 +11586,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		font-size: 18px;
 		text-align: center;
 	}
-
 	.order-details-body .order-details-box .order-action-box {
-		height: 45px;
 		padding: 16px 20px;
+	}
+	.order-details-body .order-details-box .order-action-box,
+	.order-details-body .order-details-box .return-order-price-input,
+	.order-details-body .order-details-box .refund-order-btn {
+		height: 45px;
+	}
+	.order-details-body .order-details-box .return-order-price-input input {
+		height: 100% !important;
 	}
 
 	.order-details-body .order-details-box .order-action-box.accordion-box {
@@ -11556,7 +11603,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		height: auto;
 	}
 
-	.order-details-body .order-details-box .order-action-box .action-title svg {
+	.order-details-body .order-details-box .order-action-box .action-title svg,
+	.order-details-body .order-details-box .action-title .list-icon {
 		width: 15px;
 		height: 15px;
 	}

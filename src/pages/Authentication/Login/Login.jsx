@@ -96,6 +96,7 @@ const Login = () => {
 				localStorage.setItem("logo", res.data?.user?.store_logo);
 				localStorage.setItem("domain", res.data?.user?.store_domain);
 				localStorage.setItem("store_id", res.data?.user?.store_id);
+				localStorage.setItem("isUseLoginFunction", true);
 				localStorage.setItem(
 					"name",
 					res.data?.user?.lastname

@@ -150,16 +150,14 @@ const FormSearchWeight = ({
 					</div>
 
 					<div className='add-category-bt-box'>
-						{type !== "product" && (
-							<button
-								className='add-cat-btn'
-								onClick={() => {
-									dispatch(openProductHintModal());
-								}}>
-								<MdAdd />
-								{data.buttonValue}
-							</button>
-						)}
+						<button
+							className='add-cat-btn'
+							onClick={() => {
+								dispatch(openProductHintModal());
+							}}>
+							<MdAdd />
+							{data.buttonValue}
+						</button>
 					</div>
 				</div>
 			</form>

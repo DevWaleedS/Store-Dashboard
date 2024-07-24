@@ -112,7 +112,7 @@ function CheckoutPage() {
 		formData.append("district", shipping?.district);
 		formData.append("city", shipping?.city);
 		formData.append("street_address", shipping?.address);
-		formData.append("paymentype_id", paymentSelect || "");
+		// formData.append("paymentype_id", paymentSelect || "");
 		formData.append("shippingtype_id", shippingSelect || "");
 		formData.append("description", shipping?.notes || "");
 		formData.append("default_address", shipping?.defaultAddress ? 1 : 0);
@@ -314,11 +314,12 @@ function CheckoutPage() {
 													setLoadingCoupon={setLoadingCoupon}
 												/>
 
-												<RenderPaymentsList
+												{/*<RenderPaymentsList
 													paymentSelect={paymentSelect}
 													setPaymentSelect={setPaymentSelect}
 													paymentMethodError={error?.paymentMethod}
 												/>
+												*/}
 												<RenderShippingList
 													ref={shippingListRef}
 													shipping={shipping}
