@@ -3915,10 +3915,24 @@ nav.navigation {
 	text-align: right;
 	direction: rtl;
 }
-
+.domain-wrapper {
+	padding: 20px;
+	border-radius: 6px;
+	box-shadow: 0px 0px 12px 0 #f2f2f5;
+	border: 1px solid var(--second-500);
+}
+.domain-wrapper .domain-name .domain-input-label {
+	font-size: 1rem;
+	color: #02466a;
+}
 .domain-name input {
-	width: 75%;
-	padding-left: 5px !important;
+	width: 100%;
+	padding-left: 12px !important;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
 }
 
 .domain-name .main-domain-hint {
@@ -13786,11 +13800,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.domain-name,
-	.domain-name input,
 	.domain-name .main-domain-hint,
 	.store-email-input {
-		height: 45px !important;
 		font-size: 16px !important;
+	}
+	.domain-name input {
+		height: 45px !important;
 	}
 
 	.select-country .store-desc {
@@ -14217,10 +14232,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 		flex-direction: row !important;
 		justify-content: space-between !important;
 		align-items: center !important;
-	}
-
-	.domain-name input {
-		padding-right: 0 !important;
 	}
 
 	.user-cart-data .send-offer-btn span {

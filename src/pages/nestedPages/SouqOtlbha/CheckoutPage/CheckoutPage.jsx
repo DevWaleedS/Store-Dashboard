@@ -300,7 +300,6 @@ function CheckoutPage() {
 													cartData={cartData}
 													isCartLoading={shippingListRef.current?.isLoading}
 												/>
-
 												<RenderCouponInput
 													coupon={coupon}
 													cartId={cartData?.id}
@@ -313,13 +312,13 @@ function CheckoutPage() {
 													setCouponError={setCouponError}
 													setLoadingCoupon={setLoadingCoupon}
 												/>
-
 												{/*<RenderPaymentsList
 													paymentSelect={paymentSelect}
 													setPaymentSelect={setPaymentSelect}
 													paymentMethodError={error?.paymentMethod}
 												/>
 												*/}
+
 												<RenderShippingList
 													ref={shippingListRef}
 													shipping={shipping}
@@ -328,7 +327,6 @@ function CheckoutPage() {
 													setShippingSelect={setShippingSelect}
 													shippingTypeErrors={error?.shippingType}
 												/>
-
 												<button
 													className='checkout-btn'
 													disabled={btnLoading || isCartLoading}

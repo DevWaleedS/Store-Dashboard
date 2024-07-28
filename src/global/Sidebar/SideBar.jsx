@@ -137,9 +137,7 @@ const SideBar = ({ open, closeSidebar, verificationStatus }) => {
 			<Menu>
 				{verificationStatus === "تم التوثيق" ? (
 					<SidebarLink
-						href={`https://template.atlbha.com/${localStorage.getItem(
-							"domain"
-						)}`}
+						href={`https://${localStorage.getItem("domain")}`}
 						target='_blank'
 						rel='noreferrer'
 						icon={Eye}
