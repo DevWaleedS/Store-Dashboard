@@ -79,9 +79,11 @@ const RefundOrder = ({ id, currentOrder }) => {
 						<IoIosPricetags />
 
 						<input
-							name='return-order-price'
+							readOnly
 							type='text'
 							value={price}
+							name='return-order-price'
+							style={{ cursor: "default" }}
 							onChange={(e) => {
 								setPrice(e.target.value);
 							}}
