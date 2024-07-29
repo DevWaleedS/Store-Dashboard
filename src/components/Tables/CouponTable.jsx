@@ -28,6 +28,7 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 
 // Context
+import Context from "../../Context/context";
 import { DeleteContext } from "../../Context/DeleteProvider";
 import { NotificationContext } from "../../Context/NotificationProvider";
 
@@ -41,7 +42,6 @@ import {
 	useDeleteAllCouponsMutation,
 	useDeleteCouponMutation,
 } from "../../store/apiSlices/couponApi";
-import Context from "../../Context/context";
 
 const switchStyle = {
 	width: "50px",

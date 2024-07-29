@@ -9,11 +9,15 @@ import { LoadingContext } from "../../../../Context/LoadingProvider";
 import { IoIosPricetags } from "react-icons/io";
 import { ListIcon } from "../../../../data/Icons";
 import { useRefundOrderMutation } from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
+import Context from "../../../../Context/context";
 
 const RefundOrder = ({ id, currentOrder }) => {
 	const navigate = useNavigate();
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	// handle refund return order
 	const [refundError, setRefundError] = useState("");
@@ -51,6 +55,7 @@ const RefundOrder = ({ id, currentOrder }) => {
 			) {
 				navigate("/Orders");
 				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 				setRefundError(response?.data?.message?.ar);
