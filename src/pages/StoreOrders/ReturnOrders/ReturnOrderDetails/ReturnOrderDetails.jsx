@@ -52,6 +52,7 @@ import {
 	useRefundReturnOrderMutation,
 } from "../../../../store/apiSlices/ordersApiSlices/returnOrdersApi";
 import { Breadcrumb } from "../../../../components";
+import Context from "../../../../Context/context";
 
 // The Table title
 function EnhancedTableHead() {
@@ -85,6 +86,9 @@ const ReturnOrderDetails = () => {
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
+	const contextStore = useContext(Context);
+	const { setEndActionTitle } = contextStore;
 
 	const [shippingId, setShippingId] = useState(null);
 
@@ -120,7 +124,7 @@ const ReturnOrderDetails = () => {
 		useAcceptOrRejectReturnOrderMutation();
 	const handleAcceptReturnOrder = async (status) => {
 		setLoadingTitle(
-			`جاري ${status === "accept" ? "قبول " : "رفض"} طلب الارجاع`
+			`جاري ${status === "accept" ? "قبول " : "رفض"} طلب الاسترجاع`
 		);
 
 		// Data that send to API
@@ -184,6 +188,7 @@ const ReturnOrderDetails = () => {
 			) {
 				navigate("/ReturnOrders");
 				setLoadingTitle("");
+				setEndActionTitle(response?.data?.message?.ar);
 			} else {
 				setLoadingTitle("");
 				setRefundError(response?.data?.message?.ar);
@@ -225,8 +230,8 @@ const ReturnOrderDetails = () => {
 							<div className='col-md-6 col-12'>
 								<Breadcrumb
 									icon={"arrowRight"}
-									pageTile={"	تفاصيل طلب الارجاع"}
-									currentPage={"تفاصيل طلب الارجاع"}
+									pageTile={"	تفاصيل طلب الاسترجاع"}
+									currentPage={"تفاصيل طلب الاسترجاع"}
 									parentPage={"جدول المرتجعات"}
 									route={"/ReturnOrders"}
 								/>
@@ -298,7 +303,7 @@ const ReturnOrderDetails = () => {
 													<BsFillInfoSquareFill
 														style={{ width: "22px", height: "22px" }}
 													/>
-													<span className='me-2'>سبب الارجاع </span>
+													<span className='me-2'>سبب الاسترجاع </span>
 												</div>
 												<div className='order-data-row'>
 													<span>{currentOrder?.reason_txt?.title}</span>
@@ -312,7 +317,7 @@ const ReturnOrderDetails = () => {
 													<BsFillInfoSquareFill
 														style={{ width: "22px", height: "22px" }}
 													/>
-													<span className='me-2'>ملاحظات طلب الارجاع</span>
+													<span className='me-2'>ملاحظات طلب الاسترجاع</span>
 												</div>
 												<div className='order-data-row'>
 													<span
@@ -582,7 +587,7 @@ const ReturnOrderDetails = () => {
 										<ListIcon className='list-icon' />
 										<span className='me-2' style={{ fontSize: "18px" }}>
 											{" "}
-											تصدير طلب الارجاع
+											تصدير طلب الاسترجاع
 										</span>
 									</div>
 
@@ -612,7 +617,7 @@ const ReturnOrderDetails = () => {
 												<span
 													className='me-2 ms-2'
 													style={{ fontSize: "18px" }}>
-													طباعة بوليصة الارجاع
+													طباعة بوليصة الاسترجاع
 												</span>
 											</div>
 											<div className='action-icon'>
@@ -662,7 +667,7 @@ const ReturnOrderDetails = () => {
 									onClick={() => {
 										handleAcceptReturnOrder("accept");
 									}}>
-									قبول طلب الارجاع
+									قبول طلب الاسترجاع
 								</button>
 							</div>
 							<div className='col-lg-4 col-6'>
@@ -672,7 +677,7 @@ const ReturnOrderDetails = () => {
 									onClick={() => {
 										handleAcceptReturnOrder("reject");
 									}}>
-									رفض طلب الارجاع
+									رفض طلب الاسترجاع
 								</button>
 							</div>
 						</div>

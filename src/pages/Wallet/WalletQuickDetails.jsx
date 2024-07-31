@@ -15,8 +15,16 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		{
 			id: 4,
 			icon: <IoWallet />,
-			title: "بانتظار التحويل",
+			title: "بانتظار الإيداع",
 			numbers: supplierDashboard?.TotalAwaitingToTransfer,
+			color: "#ff9f1a",
+		},
+
+		{
+			id: 4,
+			icon: <IoWallet />,
+			title: "بانتظار التحويل",
+			numbers: supplierDashboard?.TotalAwaitingBalance,
 			color: "#ff9f1a",
 		},
 
@@ -40,7 +48,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 	return (
 		<Fragment>
 			{details?.map((detail) => (
-				<div className='col-xl-3 col-lg-6 col-sm-6' key={detail.id}>
+				<div className='col-xl-4 col-lg-6 col-sm-6' key={detail.id}>
 					<div className='wallet-data-box data-box mb-4'>
 						<div className='d-flex flex-row align-items-center gap-1'>
 							<div className='col-2 d-flex justify-content-md-start justify-content-center align-items-center'>

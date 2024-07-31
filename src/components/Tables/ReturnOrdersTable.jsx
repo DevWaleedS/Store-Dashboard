@@ -100,7 +100,7 @@ function EnhancedTableHead(props) {
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					سبب الارجاع
+					سبب الاسترجاع
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#02466a" }}>

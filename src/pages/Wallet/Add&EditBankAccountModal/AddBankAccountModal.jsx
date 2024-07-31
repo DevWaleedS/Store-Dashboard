@@ -33,6 +33,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { BsFileEarmarkArrowUp } from "react-icons/bs";
 import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
 import PageHint from "../../../components/PageHint.jsx";
+import { useShowVerificationQuery } from "../../../store/apiSlices/verifyStoreApi.js";
 
 /* Modal Styles */
 const style = {
@@ -71,6 +72,8 @@ const selectStyle = {
 /**----------------------------------------------------------------------------- */
 
 const AddBankAccountModal = () => {
+	const { data: showVerification } = useShowVerificationQuery();
+
 	// get banks selector
 	const { data: banks } = useGetBanksQuery();
 
@@ -451,10 +454,44 @@ const AddBankAccountModal = () => {
 					bankAccount: response?.data?.message?.en?.bankAccount?.[0],
 					iban: response?.data?.message?.en?.iban?.[0],
 					supplierCode: response?.data?.message?.en?.supplierCode?.[0],
+					civil_id: response?.data?.message?.en?.civil_id?.[0],
+					bankAccountLetter:
+						response?.data?.message?.en?.bankAccountLetter?.[0],
+					website_image: response?.data?.message?.en?.website_image?.[0],
+					national_address: response?.data?.message?.en?.national_address?.[0],
 				});
 			}
 		} catch (error) {
 			console.error("Error changing addBankAccount:", error);
+		}
+	};
+
+	const handleAddDocsErrors = (e) => {
+		e.preventDefault();
+		if (!bankAccountInfo?.civil_id) {
+			toast.warning(".يرجى إرفاق الهوية الوطنية", {
+				theme: "light",
+			});
+		}
+
+		if (!bankAccountInfo?.website_image) {
+			toast.warning(".يرجى إرفاق  صورة من المتجر الخاص بك", {
+				theme: "light",
+			});
+		}
+
+		if (
+			!bankAccountInfo?.national_address &&
+			showVerification?.verification_type === "maeruf"
+		) {
+			toast.warning(".يرجى إرفاق  العنوان الوطني", {
+				theme: "light",
+			});
+		}
+		if (!bankAccountInfo?.bankAccountLetter) {
+			toast.warning(".يرجى إرفاق  شهادة الآيبان", {
+				theme: "light",
+			});
 		}
 	};
 
@@ -505,7 +542,11 @@ const AddBankAccountModal = () => {
 								</div>
 							</div>
 
-							<form onSubmit={handleSubmit(handleAddBankAccount)}>
+							<form
+								onSubmit={(e) => {
+									handleSubmit(handleAddBankAccount);
+									handleAddDocsErrors(e);
+								}}>
 								<div className='row mb-3'>
 									<div className='col-12'>
 										<label>
