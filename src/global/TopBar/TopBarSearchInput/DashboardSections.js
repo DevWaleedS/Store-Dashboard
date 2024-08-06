@@ -35,6 +35,7 @@ import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import { BsCartX } from "react-icons/bs";
+import { BiSolidRocket } from "react-icons/bi";
 
 export const dashboardSections = [
 	{
@@ -257,6 +258,12 @@ export const dashboardSections = [
 		sectionName: "صفحات التواصل",
 		route: "SocialPages",
 		icon: <Social />,
+	},
+	{
+		id: 2234231,
+		sectionName: "ترقية الباقة",
+		route: "upgrade-packages",
+		icon: <BiSolidRocket />,
 	},
 	{
 		id: 22,

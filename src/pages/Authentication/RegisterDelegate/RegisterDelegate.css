@@ -68,7 +68,7 @@
 	left: -45px;
 	top: 45px;
 }
-.register-form .user-form div span {
+.register-form .user-form .comparison-packages-icon {
 	cursor: pointer;
 	position: relative;
 	display: flex;
@@ -76,20 +76,23 @@
 	justify-content: flex-start;
 	transition: ease 0.3s;
 }
-.register-form .user-form div .box span::before {
+.register-form .user-form .comparison-packages-icon svg {
+	width: 26px;
+}
+.register-form .user-form .comparison-packages-icon::before {
 	content: "مقارنة الباقات";
 	position: absolute;
-	/* display: none; */
-	top: -35px;
+	top: -28px;
+	right: -30px;
 	width: 110px;
 	color: #1dbbbe;
 	font-size: 18px;
-	font-weight: 400;
+	font-weight: 500;
 	text-align: center;
 	opacity: 0;
 	transition: ease 0.3s;
 }
-.register-form .user-form div .box span:hover::before {
+.register-form .user-form .comparison-packages-icon:hover::before {
 	display: block;
 	content: "مقارنة الباقات";
 	opacity: 1;

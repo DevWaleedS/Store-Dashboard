@@ -121,3 +121,5 @@ export { ReactComponent as Check9x7Svg } from "./check-9x7.svg";
 export { ReactComponent as JacoLiveIcon } from "./jacoLive.svg";
 export { ReactComponent as SuccessCheckout } from "./successCheckout.svg";
 export { ReactComponent as FailedCheckout } from "./failedCheckout.svg";
+export { ReactComponent as ComparisonPackages } from "./comparisonPackages.svg";
+export { ReactComponent as SvgUser } from "./icon-24-user.svg";

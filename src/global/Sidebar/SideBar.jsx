@@ -43,7 +43,7 @@ import {
 	Verification,
 } from "../../data/Icons";
 import { BsCartX } from "react-icons/bs";
-import { BiCartAdd } from "react-icons/bi";
+import { BiCartAdd, BiSolidRocket } from "react-icons/bi";
 import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
@@ -109,7 +109,7 @@ const SideBar = ({ open, closeSidebar, verificationStatus }) => {
 				isVerifyStoreModal: handleOpenVerificationStatus,
 			},
 			{ to: "SocialPages", icon: Social, label: "صفحات التواصل" },
-			// { to: "PackageUpgrade", icon: SlRocket, label: " ترقية الباقة" },
+			{ to: "upgrade-packages", icon: BiSolidRocket, label: " ترقية الباقة" },
 		],
 
 		setting: [

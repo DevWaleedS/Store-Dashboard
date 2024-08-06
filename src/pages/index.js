@@ -6,7 +6,6 @@ export { default as Management } from "./Management";
 export { default as PaintStore } from "./PaintStore";
 export { default as SocialPages } from "./SocialPages";
 export { default as Notifications } from "./Notifications";
-export { default as PackageUpgrade } from "./PackageUpgrade";
 export { default as MaintenanceMode } from "./MaintenanceMode";
 export { default as RequestDelegate } from "./RequestDelegate";
 export { default as PlatformServices } from "./PlatformServices";

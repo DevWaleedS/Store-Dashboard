@@ -70,6 +70,8 @@ import { importPaymentMethodApi } from "./apiSlices/importPaymentMethodApi";
 import { defaultAddressApi } from "./apiSlices/selectorsApis/defaultAddressApi";
 import { selectShippingCompaniesApi } from "./apiSlices/selectorsApis/selectShippingCompaniesApi";
 import { getStoreTokenApi } from "./apiSlices/getStoreTokenApi";
+import { selectPackageApi } from "./apiSlices/selectorsApis/selectPackageApi";
+import { upgradePackagesApi } from "./apiSlices/upgradePackagesApi";
 
 // store
 export const store = configureStore({
@@ -95,6 +97,7 @@ export const store = configureStore({
 			returnOrdersApi.middleware,
 			selectCitiesApi.middleware,
 			getStoreTokenApi.middleware,
+			selectPackageApi.middleware,
 			notificationsApi.middleware,
 			defaultAddressApi.middleware,
 			editUserDetailsApi.middleware,
@@ -106,6 +109,8 @@ export const store = configureStore({
 			requestDelegateApi.middleware,
 			SEOImprovementsApi.middleware,
 			technicalSupportApi.middleware,
+			upgradePackagesApi.middleware,
+
 			platformServicesApi.middleware,
 			selectCategoriesApi.middleware,
 			shippingCompaniesApi.middleware,
@@ -146,9 +151,12 @@ export const store = configureStore({
 		[selectBanksApi.reducerPath]: selectBanksApi.reducer,
 		[selectCitiesApi.reducerPath]: selectCitiesApi.reducer,
 		[returnOrdersApi.reducerPath]: returnOrdersApi.reducer,
+		[selectPackageApi.reducerPath]: selectPackageApi.reducer,
 		[getStoreTokenApi.reducerPath]: getStoreTokenApi.reducer,
 		[notificationsApi.reducerPath]: notificationsApi.reducer,
 		[defaultAddressApi.reducerPath]: defaultAddressApi.reducer,
+		[upgradePackagesApi.reducerPath]: upgradePackagesApi.reducer,
+
 		[maintenanceModeApi.reducerPath]: maintenanceModeApi.reducer,
 		[selectCountriesApi.reducerPath]: selectCountriesApi.reducer,
 		[templateSettingApi.reducerPath]: templateSettingApi.reducer,

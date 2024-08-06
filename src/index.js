@@ -25,9 +25,8 @@ import "./index.css";
 
 import {
 	Offers,
-	Management,
+	// Management,
 	SocialPages,
-	//PackageUpgrade,
 	//MarketingCampaign,
 	//BranchesAndWarehouses,
 	Notifications,
@@ -140,6 +139,10 @@ import {
 	ReturnOrders,
 } from "./pages/StoreOrders/ReturnOrders";
 
+// packages
+import UpgradePackages from "./pages/Packages/UpgradePackages";
+import ComparePackages from "./pages/Packages/ComparePackages";
+
 /**
  * ----------------------------------------------------------------------------------------------
  *  ALL App Routes
@@ -169,6 +172,11 @@ const router = createBrowserRouter([
 	{
 		path: "CreateNewPassword",
 		element: <CreateNewPassword />,
+	},
+
+	{
+		path: "compare-packages",
+		element: <ComparePackages />,
 	},
 	{
 		path: "/",
@@ -421,10 +429,12 @@ const router = createBrowserRouter([
 				path: "SocialPages",
 				element: <SocialPages />,
 			},
-			// {
-			// 	path: "PackageUpgrade",
-			// 	element: <PackageUpgrade />,
-			// },
+
+			// packages
+			{
+				path: "upgrade-packages",
+				element: <UpgradePackages />,
+			},
 
 			{
 				path: "ShippingCompanies",

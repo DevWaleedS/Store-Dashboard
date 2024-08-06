@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Icons
 import { MdErrorOutline } from "react-icons/md";
-import { ReactComponent as SvgUser } from "../../../data/Icons/icon-24-user.svg";
 
 // MUI
 import { Typography } from "@mui/material";
@@ -25,14 +24,16 @@ import ConfirmPasswordField from "../ConfirmPasswordField/ConfirmPasswordField";
 // Modal Components
 import TermsModal from "../TermsModal/TermsModal";
 import AlertModal from "../Login/ResetPasswordPages/AlertModal/AlertModal";
+import SelectPackage from "./SelectPackage";
+import UserNameInput from "./UserNameInput";
+import UserEmailInput from "./UserEmailInput";
+import UserPhoneNumberInput from "./UserPhoneNumberInput";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  	=> TO HANDLE THE REG_EXPRESS <=
  *  ------------------------------------------------- */
-const USER_REGEX = /^[A-Za-z0-9]+$/;
+
 const PWD_REGEX = /^.{8,24}$/;
-const PHONE_REGEX = /^(5\d{8})$/;
-const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
 const RegisterBox = () => {
 	const navigate = useNavigate();
@@ -59,10 +60,7 @@ const RegisterBox = () => {
 	 *  	=> TO  CREATE THE VALIDATION AND ERRORS <=
 	 *  ------------------------------------------------- */
 	const [validUserName, setValidUserName] = useState(false);
-	const [userNameFocus, setUserNameFocus] = useState(false);
-
 	const [validPhoneNumber, setValidPhoneNumber] = useState(false);
-	const [phoneNumberFocus, setPhoneNumberFocus] = useState(false);
 
 	const [validPssWord, setValidPssWord] = useState(false);
 	const [pssWordFocus, setPssWordFocus] = useState(false);
@@ -71,20 +69,23 @@ const RegisterBox = () => {
 	const [confirmPssWordFocus, setConfirmPssWordFocus] = useState(false);
 
 	const [validEmail, setValidEmail] = useState(false);
-	const [emailFocus, setEmailFocus] = useState(false);
 
 	const [usernameError, setUsernameError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 	const [confirmPasswordError, setConfirmPasswordError] = useState("");
 	const [phonenumberError, setPhonenumberError] = useState("");
 	const [emailError, setEmailError] = useState("");
+	const [packageError, setPackageError] = useState(false);
+
 	const [checkboxError, setCheckboxError] = useState("");
 	const [error, setError] = useState("");
+
 	// to assign the owner info into state
 	const [registerInfo, setRegisterInfo] = useState({
-		user_name: "",
-		email: "",
-		phonenumber: "",
+		user_name: localStorage.getItem("user_name") || "",
+		email: localStorage.getItem("email") || "",
+		phonenumber: localStorage.getItem("phonenumber") || "",
+		package_id: localStorage.getItem("package_id") || "",
 	});
 
 	const handleRegisterInfo = (e) => {
@@ -92,29 +93,12 @@ const RegisterBox = () => {
 		setRegisterInfo((prevStoreInfo) => {
 			return { ...prevStoreInfo, [name]: value };
 		});
+		localStorage.setItem(`${name}`, value);
 	};
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> THE SIDE EFFECTS <=
 	 *  ------------------------------------------------- */
-
-	// TO HANDLE VALIDATION FOR USER NAME
-	useEffect(() => {
-		const UserNameValidation = USER_REGEX.test(registerInfo?.user_name);
-		setValidUserName(UserNameValidation);
-	}, [registerInfo?.user_name]);
-
-	// TO HANDLE VALIDATION FOR EMAIL
-	useEffect(() => {
-		const emailValidation = EMAIL_REGEX.test(registerInfo?.email);
-		setValidEmail(emailValidation);
-	}, [registerInfo?.email]);
-
-	// TO HANDLE VALIDATION STORE PHONE NUMBER
-	useEffect(() => {
-		const phoneNumberValidation = PHONE_REGEX.test(registerInfo?.phonenumber);
-		setValidPhoneNumber(phoneNumberValidation);
-	}, [registerInfo?.phonenumber]);
 
 	// TO HANDLE VALIDATION PASSWORD
 	useEffect(() => {
@@ -146,11 +130,13 @@ const RegisterBox = () => {
 		setPhonenumberError("");
 		setEmailError("");
 		setCheckboxError("");
+		setPackageError("");
 
 		let formData = new FormData();
 		formData.append("user_type", "store");
 		formData.append("password", password);
 		formData.append("email", registerInfo?.email);
+		formData.append("package_id", registerInfo?.package_id);
 		formData.append("user_name", registerInfo?.user_name);
 		formData.append("phonenumber", "+966" + registerInfo?.phonenumber);
 		formData.append("checkbox_field", isChecked);
@@ -187,6 +173,7 @@ const RegisterBox = () => {
 						setUsernameError(res?.data?.message?.en?.user_name?.[0]);
 						setPasswordError(res?.data?.message?.en?.password?.[0]);
 						setPhonenumberError(res?.data?.message?.en?.phonenumber?.[0]);
+						setPackageError(res?.data?.message?.en?.package_id?.[0]);
 						setEmailError(res?.data?.message?.en?.email?.[0]);
 						setCheckboxError(res?.data?.message?.en?.checkbox_field?.[0]);
 					}
@@ -205,159 +192,35 @@ const RegisterBox = () => {
 					<h4 className='title'>بيانات المتجر</h4>
 					<div className='content'>
 						<form onSubmit={handleSubmit}>
-							<div className='name'>
-								<h5 className='d-flex flex-row'>
-									اسم المستخدم <span style={{ color: "red" }}>*</span>
-								</h5>
-								<input
-									style={{ paddingRight: "42px" }}
-									type='text'
-									name='user_name'
-									value={registerInfo?.user_name}
-									onChange={handleRegisterInfo}
-									required
-									placeholder='اسم المستخدم باللغة الانجليزية'
-									aria-invalid={validUserName ? "false" : "true"}
-									aria-describedby='uidnote'
-									onFocus={() => setUserNameFocus(true)}
-									onBlur={() => setUserNameFocus(true)}
-								/>
-								<div id='span-icon'>
-									<SvgUser />
-								</div>
-							</div>
-							<p
-								id='uidnote'
-								className={
-									userNameFocus && registerInfo?.user_name && !validUserName
-										? " d-block wrong-text "
-										: "d-none"
-								}
-								style={{
-									color: "red",
-									marginTop: "-20px",
-									direction: "rtl",
-									padding: "10px 10px 10px 20px",
-									borderRadius: "8px",
-								}}>
-								<MdErrorOutline className='ms-1' />
-								يجب ان يكون اسم المستخدم حروف انجليزيه وارقام وبدون مسافات
-							</p>
+							<UserNameInput
+								registerInfo={registerInfo}
+								usernameError={usernameError}
+								validUserName={validUserName}
+								setValidUserName={setValidUserName}
+								handleRegisterInfo={handleRegisterInfo}
+							/>
 
-							{usernameError && (
-								<p
-									className={"wrong-text w-100"}
-									style={{
-										color: "red",
-										marginTop: "-20px",
-										direction: "rtl",
-									}}>
-									{usernameError}
-								</p>
-							)}
-							<div>
-								<h5 className='d-flex flex-row'>
-									البريد الإلكتروني <span style={{ color: "red" }}>*</span>
-								</h5>
-								<input
-									type='email'
-									name='email'
-									value={registerInfo?.email}
-									onChange={handleRegisterInfo}
-									placeholder='atlbha@gmail.com'
-									required
-									aria-invalid={validEmail ? "false" : "true"}
-									aria-describedby='email'
-									onFocus={() => setEmailFocus(true)}
-									onBlur={() => setEmailFocus(true)}
-								/>
-								<p
-									id='email'
-									className={
-										emailFocus && registerInfo?.email && !validEmail
-											? " d-block wrong-text "
-											: "d-none"
-									}
-									style={{
-										color: "red",
-										direction: "rtl",
-										padding: "10px 10px 10px 20px",
-										borderRadius: "8px",
-									}}>
-									<MdErrorOutline className='ms-1' />
-									تأكد من كتابة الايميل الصحيح
-								</p>
-								{emailError && (
-									<span
-										className='wrong-text w-100'
-										style={{ color: "red", direction: "rtl" }}>
-										{emailError}
-									</span>
-								)}
-							</div>
+							<UserEmailInput
+								validEmail={validEmail}
+								emailError={emailError}
+								registerInfo={registerInfo}
+								setValidEmail={setValidEmail}
+								handleRegisterInfo={handleRegisterInfo}
+							/>
 
-							<div className='phone'>
-								<h5 className='d-flex flex-row'>
-									رقم الجوال <span style={{ color: "red" }}>*</span>
-								</h5>
-								<section className='d-flex align-items-center flex-row input_wrapper'>
-									<input
-										className='phone_input'
-										style={{
-											width: "100%",
-											height: "100%",
-											border: "none",
-											outline: "none",
-											boxShadow: "none",
-											padding: " 0 25px 0 0",
-											borderRadius: "none",
-										}}
-										type='tel'
-										name='phonenumber'
-										maxLength='9'
-										minLength='9'
-										value={registerInfo?.phonenumber}
-										onChange={handleRegisterInfo}
-										placeholder='500000000'
-										required
-										aria-invalid={validPhoneNumber ? "false" : "true"}
-										aria-describedby='phoneNumber'
-										onFocus={() => setPhoneNumberFocus(true)}
-										onBlur={() => setPhoneNumberFocus(true)}
-									/>
-									<div className='country_key'>966</div>
-								</section>
+							<UserPhoneNumberInput
+								registerInfo={registerInfo}
+								phonenumberError={phonenumberError}
+								validPhoneNumber={validPhoneNumber}
+								handleRegisterInfo={handleRegisterInfo}
+								setValidPhoneNumber={setValidPhoneNumber}
+							/>
 
-								<p
-									id='phoneNumber'
-									className={
-										phoneNumberFocus &&
-										registerInfo?.phonenumber &&
-										!validPhoneNumber
-											? " d-block wrong-text "
-											: "d-none"
-									}
-									style={{
-										color: "red",
-										direction: "rtl",
-										padding: "10px 10px 10px 20px",
-										borderRadius: "8px",
-									}}>
-									<MdErrorOutline className='ms-1' />
-									تأكد ان رقم الجوال يبدأ برقم 5 ولا يقل عن 9 أرقام
-								</p>
-							</div>
-							{phonenumberError && (
-								<span
-									className='wrong-text w-100 '
-									style={{
-										color: "red",
-										marginTop: "-10px",
-										direction: "rtl",
-									}}>
-									{phonenumberError}
-								</span>
-							)}
+							<SelectPackage
+								packageError={packageError}
+								package_id={registerInfo?.package_id}
+								handleRegisterInfo={handleRegisterInfo}
+							/>
 
 							<PasswordField
 								name='password'

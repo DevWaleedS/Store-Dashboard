@@ -23,6 +23,7 @@ const LogoHeader = () => {
 				location.pathname === "/LogInVerificationCode" ||
 				location.pathname === "/CreateNewPassword" ? (
 					<div
+						style={{ cursor: "pointer" }}
 						className='box-logo d-flex justify-content-start align-items-center'
 						onClick={handleGoBack}>
 						<ArrowBack />

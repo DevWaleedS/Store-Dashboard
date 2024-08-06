@@ -95,6 +95,24 @@
 	opacity: 1;
 }
 
+.pack-price {
+	font-weight: 500;
+	font-size: 20px;
+	padding-right: 5px;
+}
+
+.pack-currency {
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.pack-discount-price {
+	font-weight: 300;
+	color: #575757;
+	font-size: 16px;
+	text-decoration: line-through;
+}
+
 @media (max-width: 1200px) {
 	.register-form .user-form div .box {
 		cursor: pointer;
