@@ -5,13 +5,22 @@ import { useGetUpgradePackagesQuery } from "../../store/apiSlices/upgradePackage
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 import "./Packages.css";
+import { useNavigate } from "react-router-dom";
 
 const PackagesPlans = () => {
+	const navigate = useNavigate();
 	const { data: upgradePackages, isLoading } = useGetUpgradePackagesQuery();
 
 	const packagesIsNotActive = upgradePackages?.every?.(
 		(pack) => pack?.status === "غير نشط"
 	);
+
+	const handleNavigateToCheckoutPackages = (item) => {
+		if (!item?.is_selected) {
+			navigate("/checkout-packages");
+			localStorage.setItem("package_id", item?.id);
+		}
+	};
 
 	return (
 		<div>
@@ -54,11 +63,7 @@ const PackagesPlans = () => {
 									)}
 								</h2>
 								<p className='package-type '>/سنوياََ</p>
-								<div
-									style={{
-										width: "max-content",
-										margin: "auto",
-									}}>
+								<div>
 									{item?.plans?.map((plan, index) => {
 										return (
 											<h2
@@ -66,24 +71,36 @@ const PackagesPlans = () => {
 													color: !plan?.selected ? "#ADB5B9" : "",
 													fontSize: "20px",
 													fontWeight: "400",
-													letterSpacing: "  0.2px",
+													display: "flex",
+													justifyContent: "start",
+													alignItems: "start",
+													marginBottom: "10px",
 												}}
 												key={index}>
 												<IoCheckmarkSharp
 													style={{
 														color: plan?.selected ? "#3AE374" : "#ADB5B9",
 														display: "inline-block",
-														marginLeft: "1rem",
-														width: "28px",
-														height: "28px",
+														marginLeft: "0.1rem",
+														width: "22px",
+														height: "22px",
 													}}
 												/>
-												{plan?.name}
+												<span
+													style={{
+														whiteSpace: "normal",
+														display: "inline-block",
+														lineHeight: "1.6",
+													}}>
+													{plan?.name}
+												</span>
 											</h2>
 										);
 									})}
 								</div>
 							</div>
+
+							{console.log("item?.is_selected", item?.is_selected)}
 
 							<button
 								className=''
@@ -98,7 +115,9 @@ const PackagesPlans = () => {
 									letterSpacing: " 0.2px",
 									fontWeight: 500,
 								}}
-								onClick={() => {}}>
+								onClick={() => {
+									handleNavigateToCheckoutPackages(item);
+								}}>
 								{item?.is_selected ? " الباقة الحالية " : " ترقية الباقة "}
 							</button>
 						</div>

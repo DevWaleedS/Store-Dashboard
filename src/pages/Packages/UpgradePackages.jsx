@@ -7,8 +7,11 @@ import { Helmet } from "react-helmet";
 import { TopBarSearchInput } from "../../global/TopBar";
 import PackagesPlans from "./PackagesPlans";
 import { Breadcrumb, PageHint } from "../../components";
+import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
 
 const UpgradePackages = () => {
+	const { data: showVerification } = useShowVerificationQuery();
+
 	return (
 		<>
 			<Helmet>
@@ -29,7 +32,11 @@ const UpgradePackages = () => {
 
 				<div className='row '>
 					<PageHint
-						hint={`نوفر لك مجموعة متنوعة من الباقات، بامكانك اختيار الباقة التي تتناسب مع إحتياجات متجرك بكل سهولة.`}
+						hint={
+							!showVerification?.package_id
+								? `لكي تتمكن من مواصلة نشاطك بشكل احترافي قم باختيار الباقة التي تناسب متجرك.`
+								: `نوفر لك مجموعة متنوعة من الباقات، بامكانك اختيار الباقة التي تتناسب مع إحتياجات متجرك بكل سهولة.`
+						}
 						flex={"d-flex justify-content-start align-items-center gap-2"}
 					/>
 				</div>

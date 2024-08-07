@@ -80,11 +80,7 @@ const ComparePackages = () => {
 									)}
 								</h2>
 								<p className='package-type '>/سنوياََ</p>
-								<div
-									style={{
-										width: "max-content",
-										margin: "auto",
-									}}>
+								<div>
 									{item?.plans?.map((plan, index) => {
 										return (
 											<h2
@@ -92,19 +88,29 @@ const ComparePackages = () => {
 													color: !plan?.selected ? "#ADB5B9" : "",
 													fontSize: "20px",
 													fontWeight: "400",
-													letterSpacing: "  0.2px",
+													display: "flex",
+													justifyContent: "start",
+													alignItems: "start",
+													marginBottom: "10px",
 												}}
 												key={index}>
 												<IoCheckmarkSharp
 													style={{
 														color: plan?.selected ? "#3AE374" : "#ADB5B9",
 														display: "inline-block",
-														marginLeft: "1rem",
-														width: "28px",
-														height: "28px",
+														marginLeft: "0.1em",
+														width: "22px",
+														height: "22px",
 													}}
 												/>
-												{plan?.name}
+												<span
+													style={{
+														whiteSpace: "normal",
+														display: "inline-block",
+														lineHeight: "1.6",
+													}}>
+													{plan?.name}
+												</span>
 											</h2>
 										);
 									})}

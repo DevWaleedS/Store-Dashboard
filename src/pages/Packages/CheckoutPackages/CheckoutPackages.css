@@ -1,0 +1,25 @@
+.checkout-package__title h2,
+.checkout-package__title h4 {
+	white-space: normal;
+}
+.pack__name {
+	font-size: 18px;
+	font-weight: 500;
+}
+.change__package_btn {
+	all: unset;
+
+	text-decoration: underline;
+	color: var(--second-500);
+}
+
+@media (max-width: 768px) {
+	.checkout-package__title h2 {
+		font-size: 26px;
+		line-height: 30px;
+		margin-bottom: 12px;
+	}
+	.checkout-package__title h4 {
+		font-size: 20px;
+	}
+}

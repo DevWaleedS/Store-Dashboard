@@ -143,7 +143,7 @@ function CheckoutPage() {
 							handleLoginWithMadu();
 							setMerchantReference(response?.data?.data?.order?.order_number);
 						} else {
-							navigate("/Products/SouqOtlobha/success");
+							navigate("/paid-successfully");
 							setBtnLoading(false);
 						}
 					}

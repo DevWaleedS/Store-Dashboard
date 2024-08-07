@@ -714,7 +714,8 @@ const EditProduct = () => {
 																} else {
 																	setShortDescriptionLength(true);
 																}
-															}}></textarea>
+															}}
+														/>
 													)}
 												/>
 											</div>

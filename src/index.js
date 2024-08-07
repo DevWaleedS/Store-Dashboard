@@ -142,6 +142,7 @@ import {
 // packages
 import UpgradePackages from "./pages/Packages/UpgradePackages";
 import ComparePackages from "./pages/Packages/ComparePackages";
+import CheckoutPackages from "./pages/Packages/CheckoutPackages/CheckoutPackages";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -351,6 +352,16 @@ const router = createBrowserRouter([
 			},
 
 			{
+				path: "/subscribe-successfully",
+				element: <CheckoutStatus />,
+			},
+
+			{
+				path: "/subscribe-failed",
+				element: <CheckoutStatus />,
+			},
+
+			{
 				path: "Products/SouqOtlobha/failed",
 				element: <CheckoutStatus />,
 			},
@@ -434,6 +445,12 @@ const router = createBrowserRouter([
 			{
 				path: "upgrade-packages",
 				element: <UpgradePackages />,
+			},
+
+			// Checkout Packages
+			{
+				path: "checkout-packages",
+				element: <CheckoutPackages />,
 			},
 
 			{
