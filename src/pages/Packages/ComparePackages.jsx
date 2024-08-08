@@ -92,7 +92,7 @@ const ComparePackages = () => {
 		localStorage.setItem("package_id", id);
 	};
 	return (
-		<div className='p-5'>
+		<div className='py-5 px-3'>
 			<div>
 				<LogoHeader />
 				<div className='mt-5'>
