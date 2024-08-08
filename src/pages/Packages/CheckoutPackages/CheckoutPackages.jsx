@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./CheckoutPackages.css";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,12 @@ const CheckoutPackages = () => {
 	const selectedPackage = upgradePackages?.find(
 		(pack) => +pack?.id === +localStorage.getItem("package_id")
 	);
+
+	useEffect(() => {
+		if (mainInformation?.package_id) {
+			localStorage.setItem("package_id", mainInformation?.package_id);
+		}
+	}, [mainInformation]);
 
 	/** Errors  */
 	const [error, setError] = useState({
@@ -240,6 +246,7 @@ const CheckoutPackages = () => {
 	const handleGoBack = () => {
 		window.history.back();
 	};
+
 	return (
 		<>
 			<Helmet>

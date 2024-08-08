@@ -8,13 +8,18 @@ const UseIsSubscribeInPackages = () => {
 
 	useEffect(() => {
 		if (showVerification) {
-			if (!showVerification?.package_paid) {
-				navigate("/checkout-packages");
-			} else if (!showVerification?.package_id) {
+			if (!showVerification?.package_id) {
 				navigate("/upgrade-packages");
+			} else if (!showVerification?.package_paid) {
+				navigate("/checkout-packages");
 			}
 		}
-	}, [showVerification?.package_paid, showVerification?.package_id, navigate]);
+	}, [
+		showVerification?.package_paid,
+		showVerification?.package_id,
+		showVerification,
+		navigate,
+	]);
 };
 
 export default UseIsSubscribeInPackages;
