@@ -128,7 +128,7 @@
 }
 @media (max-width: 768px) {
 	.package-boxes .content-package {
-		width: 90%;
+		width: 100%;
 	}
 
 	.package-boxes .content-package .package_btn {
