@@ -36,7 +36,6 @@ const style = {
 const CheckoutPackages = () => {
 	const navigate = useNavigate();
 	const [btnLoading, setBtnLoading] = useState(false);
-
 	const [paymentSelect, setPaymentSelect] = useState(null);
 
 	// To show the store info that come from api
@@ -45,14 +44,12 @@ const CheckoutPackages = () => {
 		useGetUpgradePackagesQuery();
 
 	const selectedPackage = upgradePackages?.find(
-		(pack) => +pack?.id === +localStorage.getItem("package_id")
+		(pack) =>
+			pack?.id ===
+			(localStorage.getItem("package_id") !== null
+				? +localStorage.getItem("package_id")
+				: mainInformation?.package_id)
 	);
-
-	useEffect(() => {
-		if (mainInformation?.package_id) {
-			localStorage.setItem("package_id", mainInformation?.package_id);
-		}
-	}, [mainInformation]);
 
 	/** Errors  */
 	const [error, setError] = useState({
@@ -78,7 +75,7 @@ const CheckoutPackages = () => {
 
 		// data that send to api...
 		let formData = new FormData();
-		formData.append("package_id", +localStorage.getItem("package_id"));
+		formData.append("package_id", selectedPackage?.id);
 		formData.append("paymentype_id", paymentSelect || "");
 
 		// make request...
@@ -106,7 +103,7 @@ const CheckoutPackages = () => {
 						if (+paymentSelect === 5) {
 							handleLoginWithMadu();
 						} else {
-							navigate("/paid-successfully");
+							navigate("/success");
 							setBtnLoading(false);
 						}
 					}

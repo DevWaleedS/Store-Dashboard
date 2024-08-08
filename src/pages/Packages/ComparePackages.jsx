@@ -7,12 +7,81 @@ import "./Packages.css";
 import { ArrowBack } from "../../data/Icons";
 import LogoHeader from "../Authentication/LogoHeader/LogoHeader";
 
+// handle sorting plans based select value
+export const PackagePlan = ({ item }) => {
+	// Create a new sorted array without mutating the original array
+	const sortedPlans = [...(item || [])]?.sort((a, b) => {
+		if (a.selected === b.selected) return 0;
+		return a.selected ? -1 : 1;
+	});
+
+	return (
+		<div>
+			{sortedPlans.map((plan, index) => (
+				<h2
+					style={{
+						color: !plan?.selected ? "#ADB5B9" : "",
+						fontSize: "18px",
+						fontWeight: "400",
+						display: "flex",
+						justifyContent: "start",
+						alignItems: "start",
+						marginBottom: index === sortedPlans.length - 1 ? "20px" : "10px",
+					}}
+					key={index}>
+					<IoCheckmarkSharp
+						style={{
+							color: plan?.selected ? "#3AE374" : "#ADB5B9",
+							display: "inline-block",
+							marginLeft: "0.1em",
+							width: "22px",
+							height: "22px",
+						}}
+					/>
+					<span
+						style={{
+							color: plan?.selected ? "#011723" : "#ADB5B9",
+							whiteSpace: "normal",
+							fontWeight: plan?.selected ? "500" : "400",
+							display: "inline-block",
+							lineHeight: "1.6",
+						}}>
+						{plan?.name}
+					</span>
+				</h2>
+			))}
+		</div>
+	);
+};
+
 const ComparePackages = () => {
 	const { data: packages, isLoading } = useGetPackagesQuery();
 
+	/**/
+	// check if all packages are not active or not
 	const packagesIsNotActive = packages?.every?.(
 		(pack) => pack?.status === "غير نشط"
 	);
+
+	/**/
+	// Find the package with the highest yearly_price
+	const highestPricedPackage = packages?.reduce((max, item) => {
+		// Calculate the price considering the discount
+		const priceWithDiscount =
+			item.discount > 0 ? item.yearly_price - item.discount : item.yearly_price;
+
+		// Determine if the current item should be the new max
+		return priceWithDiscount >
+			(max
+				? max.discount > 0
+					? max.yearly_price - max.discount
+					: max.yearly_price
+				: 0)
+			? item
+			: max;
+	}, null);
+
+	console.log(highestPricedPackage);
 
 	const handleGoBack = () => {
 		window.history.back();
@@ -55,7 +124,11 @@ const ComparePackages = () => {
 					</h3>
 				) : (
 					packages?.map((item, idx) => (
-						<div key={idx} className=' p-4 content-package'>
+						<div
+							key={idx}
+							className={`p-4 content-package ${
+								item === highestPricedPackage ? "top-package" : ""
+							}`}>
 							<div className='w-100'>
 								<h2 className='d-flex align-items-center  text-center gap-4 mb-6 justify-content-center pack-name'>
 									{item?.name}
@@ -78,52 +151,19 @@ const ComparePackages = () => {
 											<span className='currency '>ر.س</span>
 										</span>
 									)}
+									<p className='package-type'>/سنوياََ</p>
 								</h2>
-								<p className='package-type '>/سنوياََ</p>
 								<div>
-									{item?.plans?.map((plan, index) => {
-										return (
-											<h2
-												style={{
-													color: !plan?.selected ? "#ADB5B9" : "",
-													fontSize: "20px",
-													fontWeight: "400",
-													display: "flex",
-													justifyContent: "start",
-													alignItems: "start",
-													marginBottom: "10px",
-												}}
-												key={index}>
-												<IoCheckmarkSharp
-													style={{
-														color: plan?.selected ? "#3AE374" : "#ADB5B9",
-														display: "inline-block",
-														marginLeft: "0.1em",
-														width: "22px",
-														height: "22px",
-													}}
-												/>
-												<span
-													style={{
-														whiteSpace: "normal",
-														display: "inline-block",
-														lineHeight: "1.6",
-													}}>
-													{plan?.name}
-												</span>
-											</h2>
-										);
-									})}
+									<PackagePlan item={item?.plans} />
 								</div>
 							</div>
 
 							<button
-								className=''
 								style={{
 									color: "#EFF9FF",
 									width: "100%",
 									height: "56px",
-									background: idx === 1 ? "#1DBBBE" : "#02466A ",
+									background: "#02466A ",
 									borderRadius: "8px",
 									fontSize: "20px",
 									letterSpacing: " 0.2px",

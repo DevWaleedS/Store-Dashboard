@@ -7,13 +7,77 @@ import CircularLoading from "../../HelperComponents/CircularLoading";
 import "./Packages.css";
 import { useNavigate } from "react-router-dom";
 
-const PackagesPlans = () => {
+// handle sorting plans based select value
+export const PackagePlan = ({ item }) => {
+	// Create a new sorted array without mutating the original array
+	const sortedPlans = [...(item || [])]?.sort((a, b) => {
+		if (a.selected === b.selected) return 0;
+		return a.selected ? -1 : 1;
+	});
+
+	return (
+		<div>
+			{sortedPlans.map((plan, index) => (
+				<h2
+					style={{
+						color: !plan?.selected ? "#ADB5B9" : "",
+						fontSize: "18px",
+						fontWeight: "400",
+						display: "flex",
+						justifyContent: "start",
+						alignItems: "start",
+						marginBottom: index === sortedPlans.length - 1 ? "20px" : "10px",
+					}}
+					key={index}>
+					<IoCheckmarkSharp
+						style={{
+							color: plan?.selected ? "#3AE374" : "#ADB5B9",
+							display: "inline-block",
+							marginLeft: "0.1em",
+							width: "22px",
+							height: "22px",
+						}}
+					/>
+					<span
+						style={{
+							color: plan?.selected ? "#011723" : "#ADB5B9",
+							whiteSpace: "normal",
+							fontWeight: plan?.selected ? "500" : "400",
+							display: "inline-block",
+							lineHeight: "1.6",
+						}}>
+						{plan?.name}
+					</span>
+				</h2>
+			))}
+		</div>
+	);
+};
+
+export const PackagesPlans = () => {
 	const navigate = useNavigate();
 	const { data: upgradePackages, isLoading } = useGetUpgradePackagesQuery();
 
 	const packagesIsNotActive = upgradePackages?.every?.(
 		(pack) => pack?.status === "غير نشط"
 	);
+
+	// Find the package with the highest yearly_price
+	const highestPricedPackage = upgradePackages?.reduce((max, item) => {
+		// Calculate the price considering the discount
+		const priceWithDiscount =
+			item.discount > 0 ? item.yearly_price - item.discount : item.yearly_price;
+
+		// Determine if the current item should be the new max
+		return priceWithDiscount >
+			(max
+				? max.discount > 0
+					? max.yearly_price - max.discount
+					: max.yearly_price
+				: 0)
+			? item
+			: max;
+	}, null);
 
 	const handleNavigateToCheckoutPackages = (item) => {
 		if (!item?.is_selected) {
@@ -24,7 +88,7 @@ const PackagesPlans = () => {
 
 	return (
 		<div>
-			<div className='package-boxes pb-5 d-flex flex-md-row flex-column gap-4 align-items-center flex-wrap'>
+			<div className='package-boxes pb-5 d-flex flex-md-row flex-column gap-4 align-items-center justify-content-center flex-wrap'>
 				{isLoading ? (
 					<div className='w-100 d-flex flex-column align-items-center justify-content-center'>
 						<CircularLoading />
@@ -36,9 +100,10 @@ const PackagesPlans = () => {
 				) : (
 					upgradePackages?.map((item, idx) => (
 						<div
-							style={{ border: item?.is_selected && "1px solid #1dbbbe" }}
 							key={idx}
-							className=' p-4 content-package'>
+							className={`p-4 content-package ${
+								item === highestPricedPackage ? "top-package" : ""
+							}`}>
 							<div className='w-100'>
 								<h2 className='d-flex align-items-center  text-center gap-4 mb-6 justify-content-center pack-name'>
 									{item?.name}
@@ -61,62 +126,21 @@ const PackagesPlans = () => {
 											<span className='currency '>ر.س</span>
 										</span>
 									)}
+									<p className='package-type '>/سنوياََ</p>
 								</h2>
-								<p className='package-type '>/سنوياََ</p>
 								<div>
-									{item?.plans?.map((plan, index) => {
-										return (
-											<h2
-												style={{
-													color: !plan?.selected ? "#ADB5B9" : "",
-													fontSize: "20px",
-													fontWeight: "400",
-													display: "flex",
-													justifyContent: "start",
-													alignItems: "start",
-													marginBottom: "10px",
-												}}
-												key={index}>
-												<IoCheckmarkSharp
-													style={{
-														color: plan?.selected ? "#3AE374" : "#ADB5B9",
-														display: "inline-block",
-														marginLeft: "0.1rem",
-														width: "22px",
-														height: "22px",
-													}}
-												/>
-												<span
-													style={{
-														whiteSpace: "normal",
-														display: "inline-block",
-														lineHeight: "1.6",
-													}}>
-													{plan?.name}
-												</span>
-											</h2>
-										);
-									})}
+									<PackagePlan item={item?.plans} />
 								</div>
 							</div>
 
 							<button
-								className=''
-								style={{
-									color: "#EFF9FF",
-									width: "100%",
-									height: "56px",
-									marginTop: "16px",
-									background: item?.is_selected ? "#1DBBBE" : "#02466A ",
-									borderRadius: "8px",
-									fontSize: "20px",
-									letterSpacing: " 0.2px",
-									fontWeight: 500,
-								}}
+								className={`package_btn ${
+									item?.is_selected ? "current_package_btn" : ""
+								}`}
 								onClick={() => {
 									handleNavigateToCheckoutPackages(item);
 								}}>
-								{item?.is_selected ? " الباقة الحالية " : " ترقية الباقة "}
+								{item?.is_selected ? " الباقة الحالية " : "إختر الباقة"}
 							</button>
 						</div>
 					))

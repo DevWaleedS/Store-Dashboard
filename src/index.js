@@ -352,17 +352,17 @@ const router = createBrowserRouter([
 			},
 
 			{
+				path: "Products/SouqOtlobha/failed",
+				element: <CheckoutStatus />,
+			},
+
+			{
 				path: "checkout-packages/success",
 				element: <CheckoutStatus />,
 			},
 
 			{
 				path: "checkout-packages/failed",
-				element: <CheckoutStatus />,
-			},
-
-			{
-				path: "Products/SouqOtlobha/failed",
 				element: <CheckoutStatus />,
 			},
 

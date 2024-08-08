@@ -1,5 +1,5 @@
 .package-boxes .content-package {
-	width: 352px;
+	width: 430px;
 	height: auto;
 	min-height: 608px;
 	padding: 12px 0;
@@ -28,14 +28,6 @@
 	min-height: 670px;
 }
 
-.package-boxes .content-package:nth-child(2) {
-	width: 352px;
-	height: auto;
-	min-height: 680px;
-	padding: 16px 0;
-	box-shadow: #24242429 0px 12px 24px;
-}
-
 .package-boxes .content-package .pack-name {
 	width: 100%;
 	display: flex;
@@ -54,9 +46,6 @@
 	margin-top: 25px;
 }
 
-.package-boxes .content-package span {
-	color: #011723;
-}
 .package-boxes .content-package span.currency {
 	font-size: 16px;
 	font-weight: 500 !important;
@@ -82,13 +71,73 @@
 	margin-right: 10px;
 }
 
+.package-boxes .content-package span {
+	color: #011723;
+}
 .package-boxes .content-package .package-type {
-	width: 100%;
 	font-size: 20px;
 	font-weight: 500;
 	margin-bottom: 25px;
+	color: var(--second-500);
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.package-boxes .content-package .package_btn {
+	color: #eff9ff;
+	width: 100%;
+	height: 56px;
+	background-color: #02466a;
+	font-size: 22px;
+	font-weight: 400;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-ms-border-radius: 8px;
+	-o-border-radius: 8px;
+}
+
+.package-boxes .content-package .current_package_btn {
+	background-color: transparent;
+	color: var(--second-500);
+	cursor: auto;
+	font-weight: 500;
+}
+
+/*  top package */
+.package-boxes .top-package {
+	min-height: 690px;
+	border: 1px solid var(--second-500);
+	box-shadow: #24242429 0px 12px 24px;
+}
+
+.package-boxes .top-package .pack-name {
+	font-size: 26px;
+	color: var(--second-500);
+	font-weight: 700;
+}
+.package-boxes .top-package span.price {
+	font-size: 38px;
+	font-weight: 800;
+}
+.package-boxes .top-package .package_btn {
+	background-color: var(--second-500) !important;
+	color: #fff;
+}
+@media (max-width: 768px) {
+	.package-boxes .content-package {
+		width: 90%;
+	}
+
+	.package-boxes .content-package .package_btn {
+		height: 48px;
+		font-size: 20px;
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		-ms-border-radius: 4px;
+		-o-border-radius: 4px;
+	}
 }
