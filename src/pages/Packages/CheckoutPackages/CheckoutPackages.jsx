@@ -143,7 +143,7 @@ const CheckoutPackages = () => {
 	const handleLoginWithMadu = async () => {
 		const formData = new FormData();
 		formData.append("uuid", localStorage.getItem("domain"));
-		formData.append("store_id", localStorage.getItem("store_id"));
+		formData.append("store_id", "atlbhaPlatform");
 		try {
 			const response = await loginWithMadfu({
 				body: formData,
@@ -155,6 +155,7 @@ const CheckoutPackages = () => {
 			) {
 				handleCreateOrderWithMadfu(response.data.data.data.token);
 			} else {
+				setBtnLoading(false);
 				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });
@@ -180,16 +181,18 @@ const CheckoutPackages = () => {
 				mainInformation?.user?.name + " " + mainInformation?.user?.lastname,
 		};
 
-		const orderDetails = {
-			productName: selectedPackage?.name,
-			SKU: selectedPackage?.id,
-			productImage: "",
-			count: parseInt(1),
-			totalAmount:
-				selectedPackage?.discount > 0
-					? selectedPackage?.yearly_price - selectedPackage?.discount
-					: selectedPackage?.yearly_price,
-		};
+		const orderDetails = [
+			{
+				productName: selectedPackage?.name,
+				SKU: selectedPackage?.id,
+				productImage: "",
+				count: parseInt(1),
+				totalAmount:
+					selectedPackage?.discount > 0
+						? selectedPackage?.yearly_price - selectedPackage?.discount
+						: selectedPackage?.yearly_price,
+			},
+		];
 
 		const orderInfo = {
 			Taxes: 0,
@@ -201,7 +204,7 @@ const CheckoutPackages = () => {
 				selectedPackage?.discount > 0
 					? selectedPackage?.yearly_price - selectedPackage?.discount
 					: selectedPackage?.yearly_price,
-			MerchantReference: localStorage.getItem("store_id"),
+			MerchantReference: `package_reference_${selectedPackage?.unique_id}`,
 		};
 
 		// data that send  to api...
@@ -210,7 +213,7 @@ const CheckoutPackages = () => {
 		formData.append("guest_order_data", JSON.stringify(guestOrderData));
 		formData.append("order", JSON.stringify(orderInfo));
 		formData.append("order_details", JSON.stringify(orderDetails));
-		formData.append("url", `http://store.atlbha.com/upgrade-packages`);
+		formData.append("url", `http://store.atlbha.com/checkout-packages`);
 
 		try {
 			const response = await createOrderWithMadfu({ body: formData });

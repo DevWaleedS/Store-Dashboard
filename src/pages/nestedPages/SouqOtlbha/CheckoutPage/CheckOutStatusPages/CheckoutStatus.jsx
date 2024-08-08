@@ -58,7 +58,7 @@ const CheckoutStatusModal = () => {
 				<title>
 					لوحة تحكم اطلبها |
 					{location.pathname === "/Products/SouqOtlobha/success" ||
-					location.pathname === "/subscribe-successfully"
+					location.pathname === "/checkout-packages/success"
 						? "عملية دفع ناجحة"
 						: "فشل الدفع"}
 				</title>
@@ -153,7 +153,7 @@ const CheckoutStatusModal = () => {
 				) : (
 					<Modal open={true}>
 						<Box component={"div"} sx={style}>
-							{location.pathname === "/subscribe-successfully" ? (
+							{location.pathname === "/checkout-packages/success" ? (
 								<div
 									className='text-center add-product-from-store'
 									style={{ padding: "40px 4px 0 40px" }}>

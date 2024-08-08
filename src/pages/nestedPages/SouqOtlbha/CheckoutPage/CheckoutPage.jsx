@@ -186,7 +186,7 @@ function CheckoutPage() {
 	const handleLoginWithMadu = async () => {
 		const formData = new FormData();
 		formData.append("uuid", localStorage.getItem("domain"));
-		formData.append("store_id", localStorage.getItem("store_id"));
+		formData.append("store_id", "atlbhaPlatform");
 		try {
 			const response = await loginWithMadfu({
 				body: formData,
@@ -198,6 +198,7 @@ function CheckoutPage() {
 			) {
 				handleCreateOrderWithMadfu(response.data.data.data.token);
 			} else {
+				setBtnLoading(false);
 				Object.entries(response?.data?.message?.en)?.forEach(
 					([key, message]) => {
 						toast.error(message[0], { theme: "light" });

@@ -352,12 +352,12 @@ const router = createBrowserRouter([
 			},
 
 			{
-				path: "/subscribe-successfully",
+				path: "checkout-packages/success",
 				element: <CheckoutStatus />,
 			},
 
 			{
-				path: "/subscribe-failed",
+				path: "checkout-packages/failed",
 				element: <CheckoutStatus />,
 			},
 

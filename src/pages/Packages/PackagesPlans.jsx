@@ -100,8 +100,6 @@ const PackagesPlans = () => {
 								</div>
 							</div>
 
-							{console.log("item?.is_selected", item?.is_selected)}
-
 							<button
 								className=''
 								style={{
