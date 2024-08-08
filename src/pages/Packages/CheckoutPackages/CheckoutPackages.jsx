@@ -244,7 +244,7 @@ const CheckoutPackages = () => {
 	};
 
 	const handleGoBack = () => {
-		window.history.back();
+		navigate("/");
 	};
 
 	return (
@@ -276,7 +276,7 @@ const CheckoutPackages = () => {
 															fontWeight: "500",
 															paddingRight: "10px",
 														}}>
-														العودة للخلف
+														العودة للصفحة الرئيسية
 													</span>
 												</div>
 											</div>

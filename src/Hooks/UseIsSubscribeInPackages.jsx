@@ -1,25 +1,26 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 
 const UseIsSubscribeInPackages = () => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { data: showVerification } = useShowVerificationQuery();
 
+	const checkoutSuccess = location.pathname === "/checkout-packages/success";
+	const failedSuccess = location.pathname === "/checkout-packages/failed";
+
 	useEffect(() => {
-		if (showVerification) {
-			if (!showVerification?.package_id) {
-				navigate("/upgrade-packages");
-			} else if (!showVerification?.package_paid) {
-				navigate("/checkout-packages");
+		setTimeout(() => {
+			if (showVerification && !checkoutSuccess && !failedSuccess) {
+				if (!showVerification?.package_id) {
+					navigate("/upgrade-packages");
+				} else if (!showVerification?.package_paid) {
+					navigate("/checkout-packages");
+				}
 			}
-		}
-	}, [
-		showVerification?.package_paid,
-		showVerification?.package_id,
-		showVerification,
-		navigate,
-	]);
+		}, 1000);
+	}, [showVerification, checkoutSuccess, failedSuccess, navigate]);
 };
 
 export default UseIsSubscribeInPackages;

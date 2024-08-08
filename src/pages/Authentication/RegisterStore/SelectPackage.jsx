@@ -35,7 +35,6 @@ const selectStyle = {
 		borderColor: "#e4e4e4",
 		borderWidth: "1px",
 	},
-
 	"& .MuiSelect-icon": {
 		right: "95%",
 	},
@@ -60,13 +59,6 @@ const SelectPackage = ({ packageError, package_id, handleRegisterInfo }) => {
 					name='package_id'
 					value={package_id}
 					onChange={handleRegisterInfo}
-					MenuProps={{
-						sx: {
-							"& .MuiPaper-root ": {
-								height: "350px",
-							},
-						},
-					}}
 					sx={selectStyle}
 					IconComponent={IoIosArrowDown}
 					displayEmpty

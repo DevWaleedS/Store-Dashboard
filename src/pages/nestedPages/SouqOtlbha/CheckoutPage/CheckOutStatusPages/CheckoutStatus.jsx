@@ -49,7 +49,6 @@ const CheckoutStatusModal = () => {
 	const location = useLocation();
 
 	const { data: upgradePackages } = useGetUpgradePackagesQuery();
-
 	const pack = upgradePackages?.find((pack) => pack?.is_selected);
 
 	return (
