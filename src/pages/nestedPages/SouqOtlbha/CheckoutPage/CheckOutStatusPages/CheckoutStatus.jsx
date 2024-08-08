@@ -172,7 +172,7 @@ const CheckoutStatusModal = () => {
 											بنجاح.
 											<span className='d-block' style={{ fontWeight: 500 }}>
 												{" "}
-												يمكنك الاستمتاع بكافة مميزات الآن.
+												يمكنك الاستمتاع بكافة مميزات الباقة الآن.
 											</span>{" "}
 										</p>
 									</div>
