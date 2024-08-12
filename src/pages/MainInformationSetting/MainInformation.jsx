@@ -130,7 +130,10 @@ const MainInformation = () => {
 			);
 			setDescriptionValue(mainInformation?.description || "");
 			setWorkDays(mainInformation?.workDays);
-			localStorage.setItem("domain", mainInformation?.domain);
+
+			if (domainType === "has_domain" || domainType === "pay_domain") {
+				localStorage.setItem("domain", mainInformation?.domain);
+			}
 			localStorage.setItem("logo", mainInformation?.logo);
 			localStorage.setItem("store_id", mainInformation?.id);
 		}
@@ -152,7 +155,10 @@ const MainInformation = () => {
 
 		formData.append("store_name", storeName);
 		formData.append("domain_type", domainType);
-		formData.append("domain", domain);
+
+		if (domainType === "has_domain" || domainType === "pay_domain") {
+			formData.append("domain", domain);
+		}
 		formData.append("country_id", country);
 		formData.append("city_id", city);
 		formData.append(

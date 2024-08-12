@@ -1,58 +1,11 @@
 import React from "react";
 
-import { IoCheckmarkSharp } from "react-icons/io5";
 import { useGetUpgradePackagesQuery } from "../../store/apiSlices/upgradePackagesApi";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 import "./Packages.css";
 import { useNavigate } from "react-router-dom";
-
-// handle sorting plans based select value
-export const PackagePlan = ({ item }) => {
-	// Create a new sorted array without mutating the original array
-	const sortedPlans = [...(item || [])]?.sort((a, b) => {
-		if (a.selected === b.selected) return 0;
-		return a.selected ? -1 : 1;
-	});
-
-	return (
-		<div>
-			{sortedPlans.map((plan, index) => (
-				<h2
-					style={{
-						color: !plan?.selected ? "#ADB5B9" : "",
-						fontSize: "18px",
-						fontWeight: "400",
-						display: "flex",
-						justifyContent: "start",
-						alignItems: "start",
-						marginBottom: index === sortedPlans.length - 1 ? "20px" : "10px",
-					}}
-					key={index}>
-					<IoCheckmarkSharp
-						style={{
-							color: plan?.selected ? "#3AE374" : "#ADB5B9",
-							display: "inline-block",
-							marginLeft: "0.1em",
-							width: "22px",
-							height: "22px",
-						}}
-					/>
-					<span
-						style={{
-							color: plan?.selected ? "#011723" : "#ADB5B9",
-							whiteSpace: "normal",
-							fontWeight: plan?.selected ? "500" : "400",
-							display: "inline-block",
-							lineHeight: "1.6",
-						}}>
-						{plan?.name}
-					</span>
-				</h2>
-			))}
-		</div>
-	);
-};
+import PackagesFeatures from "./PackagesFeatures";
 
 export const PackagesPlans = () => {
 	const navigate = useNavigate();
@@ -129,7 +82,7 @@ export const PackagesPlans = () => {
 									<p className='package-type '>/سنوياََ</p>
 								</h2>
 								<div>
-									<PackagePlan item={item?.plans} />
+									<PackagesFeatures packageFeatures={item?.plans || []} />
 								</div>
 							</div>
 

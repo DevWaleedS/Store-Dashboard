@@ -39,11 +39,8 @@ import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 import AxiosInterceptors from "../API/AxiosInterceptors";
 import SideBar from "../global/Sidebar/SideBar";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
-import UseIsSubscribeInPackages from "../Hooks/UseIsSubscribeInPackages";
 
 const RootLayout = () => {
-	// im use this hook to check if the user is paid package or not
-	UseIsSubscribeInPackages();
 	const { data: showVerification, isFetching } = useShowVerificationQuery();
 
 	// To open and close side bar in mobile screen

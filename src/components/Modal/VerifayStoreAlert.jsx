@@ -65,7 +65,7 @@ const VerifyAlert = () => {
 					<div className='store-alert-footer d-flex justify-between'>
 						<button
 							onClick={() => {
-								navigate("/");
+								navigate("/checkout-packages");
 								dispatch(closeVerifyStoreAlertModal());
 								dispatch(closeVerifyModal());
 							}}
@@ -78,7 +78,7 @@ const VerifyAlert = () => {
 								borderRadius: " 0 0 16px 16px",
 							}}
 							className='w-100'>
-							التوجه إلى الصفحة الرئيسية
+							التوجه إلى الاشتراك في الباقات و الدفع
 						</button>
 					</div>
 				</Box>

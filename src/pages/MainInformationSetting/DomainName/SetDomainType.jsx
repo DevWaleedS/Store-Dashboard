@@ -73,17 +73,19 @@ const SetDomainType = ({
 							</RadioGroup>
 						</div>
 
-						{domainType === value && (
+						{domainType === value && value !== "later_time" && (
 							<>
-								<div className='row  mb-4 domain-wrapper'>
-									<div className='col-12 '>
-										<PageHint
-											hint={hint}
-											flex={
-												"d-flex justify-content-start align-items-center gap-2"
-											}
-										/>
-									</div>
+								<div className='row mb-4 domain-wrapper'>
+									{hint && (
+										<div className='col-12 '>
+											<PageHint
+												hint={hint}
+												flex={
+													"d-flex justify-content-start align-items-center gap-2"
+												}
+											/>
+										</div>
+									)}
 
 									<div className=' w-100 domain-name col-12'>
 										<label className='domain-input-label d-flex'>

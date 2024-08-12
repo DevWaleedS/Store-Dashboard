@@ -16,16 +16,11 @@ import ActivityType from "./VerifyStoreForms/ActivityType";
 import VerifyFormPage from "./VerifyStoreForms/VerifyFormPage";
 import { Breadcrumb } from "../../components";
 
-import UseIsSubscribeInPackages from "../../Hooks/UseIsSubscribeInPackages";
-
 const cursor = {
 	cursor: "pointer",
 };
 
 const VerifyStore = () => {
-	// im use this hook to check if the user is paid package or not
-	UseIsSubscribeInPackages();
-
 	const VerifyFormPageRef = useRef(null);
 	const dispatch = useDispatch(true);
 	const { activity } = useSelector((state) => state.AddActivity);

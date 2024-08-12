@@ -108,14 +108,13 @@
 
 /*  top package */
 .package-boxes .top-package {
-	min-height: 690px;
+	min-height: 620px;
 	border: 1px solid var(--second-500);
 	box-shadow: #24242429 0px 12px 24px;
 }
 
 .package-boxes .top-package .pack-name {
 	font-size: 26px;
-	color: var(--second-500);
 	font-weight: 700;
 }
 .package-boxes .top-package span.price {

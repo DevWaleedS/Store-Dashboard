@@ -27,6 +27,7 @@ const DomainName = ({
 						</label>
 					</div>
 				</div>
+
 				{/* has domain name */}
 				<SetDomainType
 					domain={domain}
@@ -46,9 +47,21 @@ const DomainName = ({
 					setDomain={setDomain}
 					settingErr={settingErr}
 					domainType={domainType}
-					setDomainType={setDomainType}
 					label={"أريد شراء دومين"}
-					hint={`قم  بكتابه اسم الدومين الذي تريد الحصول عليه وإذا كان متوفر لدينا سيتم التواصل معك لإتمام إجراءات الشراء والتفعيل .`}
+					setDomainType={setDomainType}
+					hint={`يمكنك كتابة دومين لمتجرك ثم التواصل معنا لحجز الدومين وربطة مع المتجر .`}
+				/>
+
+				{/* later time */}
+				<SetDomainType
+					hint={""}
+					domain={domain}
+					value='later_time'
+					label={"في وقت لاحق"}
+					setDomain={setDomain}
+					settingErr={settingErr}
+					domainType={domainType}
+					setDomainType={setDomainType}
 				/>
 			</div>
 		</>

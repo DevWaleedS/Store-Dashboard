@@ -146,7 +146,7 @@ const VerifyStore = ({ verificationStatus, isFetching }) => {
 														? userProfileData?.username || "٠٠٠"
 														: userProfileData?.name}{" "}
 												</span>
-												فضلا أكمل البيانات الأساسية للمتجر لطلب التوثيق
+												فضلاََ إشترك ليكتمل تفعيل متجرك
 											</p>
 											<div className='btns-box' style={{ width: "250px" }}>
 												<Link
