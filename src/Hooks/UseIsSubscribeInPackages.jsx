@@ -12,7 +12,12 @@ const UseIsSubscribeInPackages = () => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			if (showVerification && !checkoutSuccess && !failedSuccess) {
+			if (
+				showVerification &&
+				!checkoutSuccess &&
+				!failedSuccess &&
+				showVerification?.verification_status === "تم التوثيق"
+			) {
 				if (!showVerification?.package_id) {
 					navigate("/upgrade-packages");
 				} else if (!showVerification?.package_paid) {

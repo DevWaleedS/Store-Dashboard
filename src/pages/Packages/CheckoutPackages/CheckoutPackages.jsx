@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import { Helmet } from "react-helmet";
 import RenderPaymentsList from "../../nestedPages/SouqOtlbha/CheckoutPage/RenderPaymentsList";
+import RenderCouponInput from "../../nestedPages/SouqOtlbha/CheckoutPage/RenderCouponInput";
 import { toast } from "react-toastify";
 import {
 	useCheckOutPackageMutation,
@@ -37,6 +38,11 @@ const CheckoutPackages = () => {
 	const navigate = useNavigate();
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [paymentSelect, setPaymentSelect] = useState(null);
+	// coupon
+	const [showCoupon, setShowCoupon] = useState(false);
+	const [loadingCoupon, setLoadingCoupon] = useState(false);
+	const [coupon, setCoupon] = useState(null);
+	const [couponError, setCouponError] = useState(null);
 
 	// To show the store info that come from api
 	const { data: mainInformation, isLoading } = useGetMainInformationQuery();
@@ -305,6 +311,19 @@ const CheckoutPackages = () => {
 															isCartLoading={isCartLoading}
 															selectedPackage={selectedPackage}
 															loadingPackages={loadingPackages}
+														/>
+
+														<RenderCouponInput
+															coupon={coupon}
+															setCoupon={setCoupon}
+															cartId={selectedPackage?.id}
+															showCoupon={showCoupon}
+															couponError={couponError}
+															setShowCoupon={setShowCoupon}
+															setBtnLoading={setBtnLoading}
+															loadingCoupon={loadingCoupon}
+															setCouponError={setCouponError}
+															setLoadingCoupon={setLoadingCoupon}
 														/>
 
 														<button
