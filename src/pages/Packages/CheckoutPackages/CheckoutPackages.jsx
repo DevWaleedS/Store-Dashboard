@@ -313,7 +313,7 @@ const CheckoutPackages = () => {
 															loadingPackages={loadingPackages}
 														/>
 
-														<RenderCouponInput
+														{/*<RenderCouponInput
 															coupon={coupon}
 															setCoupon={setCoupon}
 															cartId={selectedPackage?.id}
@@ -324,7 +324,7 @@ const CheckoutPackages = () => {
 															loadingCoupon={loadingCoupon}
 															setCouponError={setCouponError}
 															setLoadingCoupon={setLoadingCoupon}
-														/>
+														/>*/}
 
 														<button
 															className='checkout-btn'

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { PageHint } from "../../../components";
+import { DnsInfoLabel, PageHint } from "../../../components";
 
 const SetDomainType = ({
+	dns1,
+	dns2,
 	value,
 	label,
+	title,
 	hint,
 	domain,
 	settingErr,
@@ -80,13 +83,18 @@ const SetDomainType = ({
 										<div className='col-12 '>
 											<PageHint
 												hint={hint}
+												mb={"mb-3"}
 												flex={
-													"d-flex justify-content-start align-items-center gap-2"
+													"d-flex justify-content-start align-items-center gap-2 "
 												}
 											/>
 										</div>
 									)}
-
+									{dns1 && dns2 && title && (
+										<div className='col-12 '>
+											<DnsInfoLabel dns1={dns1} dns2={dns2} title={title} />
+										</div>
+									)}
 									<div className=' w-100 domain-name col-12'>
 										<label className='domain-input-label d-flex'>
 											يجب أن يكون الدومين حروف انجليزية وأرقام فقط

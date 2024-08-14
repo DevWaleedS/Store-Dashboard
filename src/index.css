@@ -1778,6 +1778,17 @@ nav.navigation {
 	color: #0b4aa0;
 }
 
+.dns_info_label {
+	text-align: left;
+	background-color: transparent;
+}
+
+.dns_info_label__info {
+	color: var(--bs-blue);
+	font-size: 15px;
+	font-weight: 500;
+}
+
 .option-info-label span,
 .product-options .option-info-label span,
 .change-categories-modal-content .option-info-label span {

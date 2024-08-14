@@ -37,7 +37,10 @@ const DomainName = ({
 					domainType={domainType}
 					setDomainType={setDomainType}
 					label={"لدي الدومين الخاص بي"}
-					hint={`قم بادخال اسم الدومين الخاص بك وسيتم التواصل معك لإتمام إجراءات التفعيل.`}
+					hint={`قم بادخال اسم الدومين الخاص بك ثم انسخ الـ DNS ثم قم بتغيير اعدادات الدومين وسيتم التواصل معك لإتمام إجراءات التفعيل.`}
+					title={"Nameservers"}
+					dns1={`ns1909215958.a2dns.com (190.92.159.58)`}
+					dns2={`ns1909215959.a2dns.com (190.92.159.59)`}
 				/>
 
 				{/* pay domain name */}
@@ -49,7 +52,7 @@ const DomainName = ({
 					domainType={domainType}
 					label={"أريد شراء دومين"}
 					setDomainType={setDomainType}
-					hint={`يمكنك كتابة دومين لمتجرك ثم التواصل معنا لحجز الدومين وربطة مع المتجر .`}
+					hint={`يمكنك كتابة دومين لمتجرك أو ابحث عن دومين في https://godaddy.com  ثم تواصل معنا لحجز الدومين وربطة مع المتجر .`}
 				/>
 
 				{/* later time */}

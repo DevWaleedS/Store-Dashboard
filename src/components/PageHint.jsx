@@ -1,8 +1,8 @@
 import React from "react";
 
-const PageHint = ({ flex, hint }) => {
+const PageHint = ({ flex, hint, mb }) => {
 	return (
-		<div className={` ${flex} mb-5 option-info-label`}>
+		<div className={` ${flex} ${mb ? mb : "mb-5"} option-info-label`}>
 			<svg
 				stroke='currentColor'
 				fill='currentColor'

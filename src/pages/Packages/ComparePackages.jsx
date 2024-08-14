@@ -7,8 +7,10 @@ import "./Packages.css";
 import { ArrowBack } from "../../data/Icons";
 import LogoHeader from "../Authentication/LogoHeader/LogoHeader";
 import PackagesFeatures from "./PackagesFeatures";
+import { useNavigate } from "react-router-dom";
 
 const ComparePackages = () => {
+	const navigate = useNavigate();
 	const { data: packages, isLoading } = useGetPackagesQuery();
 
 	/**/
@@ -40,7 +42,7 @@ const ComparePackages = () => {
 	};
 
 	const handleSelectPackageId = (id) => {
-		handleGoBack();
+		navigate("/auth/merchant");
 		localStorage.setItem("package_id", id);
 	};
 	return (
