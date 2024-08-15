@@ -71,6 +71,8 @@ const SideBar = ({
 		(pack) => pack?.is_selected && pack?.package_paid
 	);
 
+	console.log(!loadingPackages && selectedPackage);
+
 	const handleOpenVerificationModal = () => {
 		if (
 			verificationStatus !== "تم التوثيق" ||
@@ -163,7 +165,7 @@ const SideBar = ({
 					</div>
 				)}
 
-				{loadingPackages && selectedPackage && (
+				{!loadingPackages && selectedPackage && (
 					<div
 						onClick={() => navigate("/upgrade-packages")}
 						className='verify_box d-flex justify-content-center align-content-center gap-1 mouse-pointer'>

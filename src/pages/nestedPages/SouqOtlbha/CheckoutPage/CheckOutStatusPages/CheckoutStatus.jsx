@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import ReactDom from "react-dom";
 
 import { Box, Modal } from "@mui/material";
@@ -52,7 +52,11 @@ const CheckoutStatusModal = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const { data: upgradePackages, isLoading } = useGetUpgradePackagesQuery();
+	const {
+		data: upgradePackages,
+		isLoading,
+		refetch,
+	} = useGetUpgradePackagesQuery();
 	const pack = upgradePackages?.find(
 		(pack) => pack?.is_selected && pack?.package_paid
 	);
@@ -71,6 +75,10 @@ const CheckoutStatusModal = () => {
 			navigate("/");
 		}
 	};
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
 
 	return (
 		<>
