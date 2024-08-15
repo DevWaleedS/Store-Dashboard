@@ -20,7 +20,7 @@ const UseAccountVerification = () => {
 		location.pathname === "/Products/SouqOtlobha/success";
 	const failedSuccess =
 		location.pathname === "/checkout-packages/failed" ||
-		location.pathname === "Products/SouqOtlobha/failed";
+		location.pathname === "/Products/SouqOtlobha/failed";
 
 	// This is modal verification Store Status message That is display after dashboard is open
 	useEffect(() => {

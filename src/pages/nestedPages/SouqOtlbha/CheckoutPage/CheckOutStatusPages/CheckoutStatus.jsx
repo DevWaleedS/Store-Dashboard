@@ -11,6 +11,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./CheckOutStatus.css";
 import { useGetUpgradePackagesQuery } from "../../../../../store/apiSlices/upgradePackagesApi";
 import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+import { useShowVerificationQuery } from "../../../../../store/apiSlices/verifyStoreApi";
+import { useDispatch } from "react-redux";
+import { openVerifyModal } from "../../../../../store/slices/VerifyStoreModal-slice";
 
 // styles
 const style = {
@@ -53,6 +56,21 @@ const CheckoutStatusModal = () => {
 	const pack = upgradePackages?.find(
 		(pack) => pack?.is_selected && pack?.package_paid
 	);
+
+	const { data: showVerification } = useShowVerificationQuery();
+
+	const dispatch = useDispatch();
+	const handleOpenVerificationModal = () => {
+		if (
+			showVerification?.verification_status !== "تم التوثيق" ||
+			(!showVerification?.package_paid &&
+				!showVerification?.package_id &&
+				showVerification?.verification_status === "تم التوثيق")
+		) {
+			dispatch(openVerifyModal());
+			navigate("/");
+		}
+	};
 
 	return (
 		<>
@@ -199,23 +217,44 @@ const CheckoutStatusModal = () => {
 								</div>
 							)}
 							<div className='add-product-from-store-footer w-100'>
-								<button
-									onClick={() => {
-										navigate("/");
-									}}
-									style={{
-										color: "#1DBBBE",
-										fontSize: "24px",
-										fontWight: 500,
-										height: "70px",
+								{location.pathname === "/checkout-packages/success" ||
+								location.pathname === "/checkout-packages/failed" ? (
+									<button
+										onClick={() => {
+											handleOpenVerificationModal();
+										}}
+										style={{
+											color: "#1DBBBE",
+											fontSize: "24px",
+											fontWight: 500,
+											height: "70px",
 
-										backgroundColor: "#FFF",
-										borderTop: "1px solid #1DBBBE",
-										borderRadius: " 0 0 16px 16px",
-									}}
-									className='w-100'>
-									إغلاق
-								</button>
+											backgroundColor: "#FFF",
+											borderTop: "1px solid #1DBBBE",
+											borderRadius: " 0 0 16px 16px",
+										}}
+										className='w-100'>
+										إغلاق
+									</button>
+								) : (
+									<button
+										onClick={() => {
+											navigate("/");
+										}}
+										style={{
+											color: "#1DBBBE",
+											fontSize: "24px",
+											fontWight: 500,
+											height: "70px",
+
+											backgroundColor: "#FFF",
+											borderTop: "1px solid #1DBBBE",
+											borderRadius: " 0 0 16px 16px",
+										}}
+										className='w-100'>
+										إغلاق
+									</button>
+								)}
 							</div>
 						</Box>
 					</Modal>
