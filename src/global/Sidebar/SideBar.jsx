@@ -42,19 +42,33 @@ import {
 	Template,
 	Verification,
 } from "../../data/Icons";
+import { FaCrown } from "react-icons/fa6";
 import { BsCartX } from "react-icons/bs";
+import { MdVerified } from "react-icons/md";
 import { BiCartAdd, BiSolidRocket } from "react-icons/bi";
 import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import { useNavigate } from "react-router-dom";
 
-const SideBar = ({ open, closeSidebar, verificationStatus }) => {
+const SideBar = ({
+	PackageName,
+	open,
+	closeSidebar,
+	verificationStatus,
+	packagePaidStatus,
+	packageId,
+}) => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const Z_index = useContext(Context);
 	const { setNavbarZindex } = Z_index;
 
 	const handleOpenVerificationModal = () => {
-		if (verificationStatus !== "تم التوثيق") {
+		if (
+			verificationStatus !== "تم التوثيق" ||
+			(!packagePaidStatus && !packageId && verificationStatus === "تم التوثيق")
+		) {
 			dispatch(openVerifyModal());
 		}
 	};
@@ -134,6 +148,23 @@ const SideBar = ({ open, closeSidebar, verificationStatus }) => {
 			rtl={true}
 			className={`sidebar ${open ? "show" : ""}`}
 			style={{ height: "100%" }}>
+			<div className=' store_is_verified py-3 d-flex justify-content-start align-content-center gap-1 pe-2'>
+				{verificationStatus === "تم التوثيق" && (
+					<div className='verify_box d-flex justify-content-center align-content-center gap-1 '>
+						<MdVerified className='verify_icon' />
+						<p className='mb-0 pb-0'>متجر موثق</p>
+					</div>
+				)}
+
+				{PackageName && (
+					<div
+						onClick={() => navigate("/upgrade-packages")}
+						className='verify_box d-flex justify-content-center align-content-center gap-1 mouse-pointer'>
+						<FaCrown className='verify_icon' />
+						<p className='mb-0 pb-0'>{PackageName}</p>
+					</div>
+				)}
+			</div>
 			<Menu>
 				{verificationStatus === "تم التوثيق" ? (
 					<SidebarLink

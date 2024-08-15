@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from "react";
 
 import "./CheckoutPackages.css";
-import { useNavigate } from "react-router-dom";
-import { Box, Modal } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import {
+	Box,
+	Checkbox,
+	FormControlLabel,
+	Modal,
+	Typography,
+} from "@mui/material";
 import { Helmet } from "react-helmet";
 import RenderPaymentsList from "../../nestedPages/SouqOtlbha/CheckoutPage/RenderPaymentsList";
-import RenderCouponInput from "../../nestedPages/SouqOtlbha/CheckoutPage/RenderCouponInput";
 import { toast } from "react-toastify";
 import {
 	useCheckOutPackageMutation,
 	useCreateMadfuPaymentPackageOrderMutation,
+	useGetPackageIdQuery,
 	useLoginMadfuWithPaymentPackageMutation,
-} from "../../../store/apiSlices/checkoutPackagesApi";
+} from "../../../store/apiSlices/upgradePackagesApi";
 
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { useGetMainInformationQuery } from "../../../store/apiSlices/mainInformationApi";
 import { useGetUpgradePackagesQuery } from "../../../store/apiSlices/upgradePackagesApi";
 import PackageCheckoutInfo from "./PackageCheckoutInfo";
 import { ArrowBack } from "../../../data/Icons";
+import PackagesTermsModal from "./PackagesTermsModal/PackagesTermsModal";
+import RenderPackageCouponInput from "./RenderPackageCouponInput";
 
 // styles
 const style = {
@@ -44,17 +52,18 @@ const CheckoutPackages = () => {
 	const [coupon, setCoupon] = useState(null);
 	const [couponError, setCouponError] = useState(null);
 
+	// packages terms
+	const [isChecked, setIsChecked] = useState(false);
+	const [showTermsModal, setShowTermsModal] = useState(false);
+
 	// To show the store info that come from api
+	const { data: getPackageId, isGetPackagesLoading } = useGetPackageIdQuery();
 	const { data: mainInformation, isLoading } = useGetMainInformationQuery();
 	const { data: upgradePackages, isLoading: loadingPackages } =
 		useGetUpgradePackagesQuery();
 
 	const selectedPackage = upgradePackages?.find(
-		(pack) =>
-			pack?.id ===
-			(localStorage.getItem("package_id") !== null
-				? +localStorage.getItem("package_id")
-				: mainInformation?.package_id)
+		(pack) => pack?.id === getPackageId?.id
 	);
 
 	/** Errors  */
@@ -286,7 +295,7 @@ const CheckoutPackages = () => {
 										</div>
 										<div className='checkout-package__title mb-3'>
 											<h2 className='title__one'>
-												اشترك الآن وانقل مشروعك أونلاين
+												إشترك الآن وانقل مشروعك أونلاين
 											</h2>
 											<h4 className='title__two'>
 												احصل على مميزات مهمّة ومفيدة
@@ -308,15 +317,14 @@ const CheckoutPackages = () => {
 												<div className='card '>
 													<div className='card-body'>
 														<PackageCheckoutInfo
-															isCartLoading={isCartLoading}
+															isCartLoading={isGetPackagesLoading}
 															selectedPackage={selectedPackage}
 															loadingPackages={loadingPackages}
 														/>
 
-														{/*<RenderCouponInput
+														<RenderPackageCouponInput
 															coupon={coupon}
 															setCoupon={setCoupon}
-															cartId={selectedPackage?.id}
 															showCoupon={showCoupon}
 															couponError={couponError}
 															setShowCoupon={setShowCoupon}
@@ -324,11 +332,68 @@ const CheckoutPackages = () => {
 															loadingCoupon={loadingCoupon}
 															setCouponError={setCouponError}
 															setLoadingCoupon={setLoadingCoupon}
-														/>*/}
+															cartId={selectedPackage?.unique_id}
+														/>
+														<FormControlLabel
+															sx={{
+																width: "100%",
+																height: "100%",
+																display: "flex",
+																alignItems: "flex-start",
+																marginRight: "0",
+																marginBottom: "10px",
 
+																"& .MuiCheckbox-root": {
+																	color: "#1dbbbe",
+																},
+
+																"& .MuiSvgIcon-root": {
+																	width: "0.8em",
+																	height: "0.8em",
+																},
+															}}
+															value={isChecked}
+															control={
+																<>
+																	<Checkbox
+																		className='form-check-input'
+																		id='flexCheckDefault'
+																		checked={isChecked}
+																		onChange={(e) => {
+																			if (e.target.checked) {
+																				setIsChecked(1);
+																			} else {
+																				setIsChecked(0);
+																			}
+																		}}
+																	/>
+
+																	<Typography
+																		sx={{
+																			ml: 0,
+																			marginRight: "5px",
+																			fontSize: "15px",
+																			fontWeight: 400,
+																			color: "#67747B",
+
+																			whiteSpace: "break-spaces",
+																		}}>
+																		بالاشتراك فإنك توافق على
+																		<Link
+																			onClick={() => setShowTermsModal(true)}>
+																			{" "}
+																			شروط باقة متجر الاعمال
+																		</Link>{" "}
+																		في منصة اطلبها
+																	</Typography>
+																</>
+															}
+														/>
 														<button
 															className='checkout-btn'
-															disabled={btnLoading || isCartLoading}
+															disabled={
+																btnLoading || isCartLoading || !isChecked
+															}
 															onClick={() => handleCheckout()}>
 															{btnLoading || isCartLoading ? (
 																<CircularLoading />
@@ -347,6 +412,13 @@ const CheckoutPackages = () => {
 					</div>
 				</Box>
 			</Modal>
+
+			{/** terms modal*/}
+
+			<PackagesTermsModal
+				show={showTermsModal}
+				closeModal={() => setShowTermsModal(false)}
+			/>
 		</>
 	);
 };

@@ -28,8 +28,11 @@ const AxiosInterceptors = ({ children }) => {
 						"https://backend.atlbha.com/api/Store/createSupplier",
 						"https://backend.atlbha.com/api/Store/updateSupplier",
 						"https://backend.atlbha.com/api/Store/package_payment",
+						"https://backend.atlbha.com/api/Store/setPackage",
 					].includes(response.config.url) &&
-					["delete", "patch", "post", "put"].includes(response.config.method)
+					["delete", "patch", "post", "put"].includes(response.config.method) &&
+					response.data.message?.en !== "The coupon is invalid" &&
+					response.data.message?.en !== "The coupon is already used"
 				) {
 					setEndActionTitle(response.data.message?.ar);
 				}

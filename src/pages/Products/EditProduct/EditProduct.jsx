@@ -788,7 +788,12 @@ const EditProduct = () => {
 																}
 															/>
 														</div>
-														<span>( سيتم قبول الصور jpeg & png & jpg )</span>
+														<span
+															style={{
+																whiteSpace: "normal",
+															}}>
+															( سيتم قبول الصور jpeg & png & jpg )
+														</span>
 														<div className='tax-text '>
 															(الحد الأقصى للصورة 1MB)
 														</div>

@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { openVerifyAfterMainModal } from "../../store/slices/VerifyStoreAlertAfterMainModal-slice";
 
 // Components
-import { Breadcrumb } from "../../components";
+import { Breadcrumb, PageHint } from "../../components";
 import HoursWorks from "./HoursWorks/HoursWorks";
 import DomainName from "./DomainName/DomainName";
 import SelectCity from "./SelectCity/SelectCity";
@@ -116,7 +116,7 @@ const MainInformation = () => {
 			setDefaultStoreLogo(mainInformation?.logo);
 			setDefaultStoreIcon(mainInformation?.icon);
 			setStoreName(mainInformation?.store_name);
-			setDomainType(mainInformation?.domain_type);
+			setDomainType(mainInformation?.domain_type || "later_time");
 			setDomain([mainInformation?.domain]);
 			setCountry(mainInformation?.country?.id || 1);
 			setCity(mainInformation?.city?.id);
@@ -268,6 +268,13 @@ const MainInformation = () => {
 					currentPage={"	البيانات الأساسية"}
 				/>
 
+				{!mainInformation?.setting_is_done && !isFetching && (
+					<PageHint
+						hint={`قم بوضع إعدادات المتجر الأساسية لكي تتمكن من إستكمال باقي خطوات تفعيل المتجر بنجاح.`}
+						flex={"d-flex  justify-content-start align-items-center gap-2"}
+					/>
+				)}
+
 				<div className='main-info-form'>
 					{isFetching ? (
 						<div
@@ -418,7 +425,7 @@ const MainInformation = () => {
 											backgroundColor: "#1dbbbe",
 										}}
 										onClick={handleUpdateStoreMainInformation}>
-										حفظ
+										التالي
 									</Button>
 								</div>
 							</div>

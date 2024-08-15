@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "./CheckOutStatus.css";
 import { useGetUpgradePackagesQuery } from "../../../../../store/apiSlices/upgradePackagesApi";
+import CircularLoading from "../../../../../HelperComponents/CircularLoading";
 
 // styles
 const style = {
@@ -48,8 +49,10 @@ const CheckoutStatusModal = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const { data: upgradePackages } = useGetUpgradePackagesQuery();
-	const pack = upgradePackages?.find((pack) => pack?.is_selected);
+	const { data: upgradePackages, isLoading } = useGetUpgradePackagesQuery();
+	const pack = upgradePackages?.find(
+		(pack) => pack?.is_selected && pack?.package_paid
+	);
 
 	return (
 		<>
@@ -70,7 +73,7 @@ const CheckoutStatusModal = () => {
 								<div
 									className='text-center add-product-from-store'
 									style={{ padding: "45px 45px 0 45px" }}>
-									<h3 className='my-4' style={headingStyle}>
+									<h3 className='my-2 my-lg-4' style={headingStyle}>
 										<SuccessCheckout className='checkout-icon' />
 									</h3>
 									<div className='content' style={{ marginBottom: "90px" }}>
@@ -91,7 +94,7 @@ const CheckoutStatusModal = () => {
 										<p style={contentStyles}>
 											سيتم التواصل معك لإتمام إجراءات الدفع و بعد الموافقه
 											ستجدها في قسم المنتجات{" "}
-											<span style={{ fontWeight: 500 }}>
+											<span style={{ fontWeight: 500, whiteSpace: "normal" }}>
 												وخلال ثلاث أيام ستصلك المنتجات
 											</span>{" "}
 										</p>
@@ -156,7 +159,7 @@ const CheckoutStatusModal = () => {
 								<div
 									className='text-center add-product-from-store'
 									style={{ padding: "40px 4px 0 40px" }}>
-									<h3 className='my-4' style={headingStyle}>
+									<h3 className='my-2 my-lg-4' style={headingStyle}>
 										<SuccessCheckout className='checkout-icon' />
 									</h3>
 									<div className='content' style={{ marginBottom: "90px" }}>
@@ -166,10 +169,12 @@ const CheckoutStatusModal = () => {
 										<p style={contentStyles}>
 											تم الاشتراك في باقة{" "}
 											<span style={{ color: "#1dbbbe", fontWeight: 500 }}>
-												({pack?.name}){" "}
+												{isLoading ? "..." : pack?.name}
 											</span>{" "}
 											بنجاح.
-											<span className='d-block' style={{ fontWeight: 500 }}>
+											<span
+												className='d-block'
+												style={{ fontWeight: 500, whiteSpace: "normal" }}>
 												{" "}
 												يمكنك الاستمتاع بكافة مميزات الباقة الآن.
 											</span>{" "}

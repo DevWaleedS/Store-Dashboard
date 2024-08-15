@@ -1,11 +1,15 @@
 import React from "react";
 
-import { useGetUpgradePackagesQuery } from "../../store/apiSlices/upgradePackagesApi";
+import {
+	useGetUpgradePackagesQuery,
+	useSetPackageIdPrePaymentMutation,
+} from "../../store/apiSlices/upgradePackagesApi";
 import CircularLoading from "../../HelperComponents/CircularLoading";
 
 import "./Packages.css";
 import { useNavigate } from "react-router-dom";
 import PackagesFeatures from "./PackagesFeatures";
+import { toast } from "react-toastify";
 
 export const PackagesPlans = () => {
 	const navigate = useNavigate();
@@ -32,10 +36,38 @@ export const PackagesPlans = () => {
 			: max;
 	}, null);
 
-	const handleNavigateToCheckoutPackages = (item) => {
-		if (!item?.is_selected) {
-			navigate("/checkout-packages");
-			localStorage.setItem("package_id", item?.id);
+	// handle set package id and navigate user to checkout package
+	const [setPackageIdPrePayment] = useSetPackageIdPrePaymentMutation();
+	const handleNavigateToCheckoutPackages = async (pack) => {
+		// data that send to api...
+		let formData = new FormData();
+		formData.append("package_id", pack?.id);
+
+		// make request...
+		try {
+			const response = await setPackageIdPrePayment({
+				body: formData,
+			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				navigate("/checkout-packages");
+			} else {
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing setPackageIdPrePayment:", error);
 		}
 	};
 
@@ -86,15 +118,19 @@ export const PackagesPlans = () => {
 								</div>
 							</div>
 
-							<button
-								className={`package_btn ${
-									item?.is_selected ? "current_package_btn" : ""
-								}`}
-								onClick={() => {
-									handleNavigateToCheckoutPackages(item);
-								}}>
-								{item?.is_selected ? " الباقة الحالية " : "إختر الباقة"}
-							</button>
+							{item?.is_selected && item?.package_paid ? (
+								<button className='package_btn current_package_btn'>
+									الباقة الحالية
+								</button>
+							) : (
+								<button
+									className='package_btn'
+									onClick={() => {
+										handleNavigateToCheckoutPackages(item);
+									}}>
+									إختر الباقة
+								</button>
+							)}
 						</div>
 					))
 				)}

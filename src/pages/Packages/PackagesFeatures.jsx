@@ -65,13 +65,15 @@ const PackagesFeatures = ({ packageFeatures }) => {
 											onClick={() =>
 												plan?.name?.includes("مجانا رحلة تجارية الى الأمارات")
 													? navigateToCommercialFlightsPage(
-															"https://atlbha.sa/business-store"
+															"https://atlbha.com/business-store"
 													  )
 													: null
 											}
 											style={{
 												fontWeight: "300",
+												width: "100%",
 												padding: "10px 0 0 0",
+												background: "transparent",
 											}}>
 											(للمزيد من المعلومات)
 										</button>

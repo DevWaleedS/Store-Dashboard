@@ -4,7 +4,6 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
 // Context
-import Context from "../../Context/context";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Redux

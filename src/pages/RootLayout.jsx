@@ -1,11 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 // REDUX
-import { useSelector, useDispatch } from "react-redux";
-
-import {
-	closeVerifyModal,
-	openVerifyModal,
-} from "../store/slices/VerifyStoreModal-slice";
+import { useSelector } from "react-redux";
 
 // Context
 import Context from "../Context/context";
@@ -40,9 +35,11 @@ import AxiosInterceptors from "../API/AxiosInterceptors";
 import SideBar from "../global/Sidebar/SideBar";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 import UseIsSubscribeInPackages from "../Hooks/UseIsSubscribeInPackages";
+import UseAccountVerification from "../Hooks/UseAccountVerification";
 
 const RootLayout = () => {
-	UseIsSubscribeInPackages();
+	// UseIsSubscribeInPackages();
+	UseAccountVerification();
 	const { data: showVerification, isFetching } = useShowVerificationQuery();
 
 	// To open and close side bar in mobile screen
@@ -71,26 +68,6 @@ const RootLayout = () => {
 	const { isVerifyAfterMainOpen } = useSelector(
 		(state) => state.VerifyAfterMainModal
 	);
-	const dispatchVerifyModal = useDispatch(false);
-
-	// This is modal verification Store Status message That is display after dashboard is open
-	useEffect(() => {
-		const debounce = setTimeout(() => {
-			if (
-				showVerification?.verification_status === "لم يتم الطلب" ||
-				showVerification?.verification_status === "جاري التوثيق" ||
-				showVerification?.verification_status === "طلب جديد" ||
-				showVerification?.verification_status === "التوثيق مرفوض"
-			) {
-				dispatchVerifyModal(openVerifyModal());
-			}
-		}, 0);
-
-		return () => {
-			clearTimeout(debounce);
-			dispatchVerifyModal(closeVerifyModal());
-		};
-	}, [showVerification?.verification_status, dispatchVerifyModal]);
 
 	return (
 		<AxiosInterceptors>
@@ -130,6 +107,8 @@ const RootLayout = () => {
 								<VerifyStoreModal
 									isFetching={isFetching}
 									verificationStatus={showVerification?.verification_status}
+									packagePaidStatus={showVerification?.package_paid}
+									packageId={showVerification?.package_id}
 								/>
 							)}
 
@@ -142,7 +121,10 @@ const RootLayout = () => {
 								<div className='row'>
 									<div className='sidebar-col'>
 										<SideBar
+											PackageName={showVerification?.package}
 											verificationStatus={showVerification?.verification_status}
+											packagePaidStatus={showVerification?.package_paid}
+											packageId={showVerification?.package_id}
 											open={openSidebar}
 											closeSidebar={() => {
 												setOpenSidebar(!openSidebar);

@@ -72,7 +72,6 @@ import { selectShippingCompaniesApi } from "./apiSlices/selectorsApis/selectShip
 import { getStoreTokenApi } from "./apiSlices/getStoreTokenApi";
 import { selectPackageApi } from "./apiSlices/selectorsApis/selectPackageApi";
 import { upgradePackagesApi } from "./apiSlices/upgradePackagesApi";
-import { checkoutPackagesApi } from "./apiSlices/checkoutPackagesApi";
 
 // store
 export const store = configureStore({
@@ -111,7 +110,7 @@ export const store = configureStore({
 			SEOImprovementsApi.middleware,
 			technicalSupportApi.middleware,
 			upgradePackagesApi.middleware,
-			checkoutPackagesApi.middleware,
+
 			platformServicesApi.middleware,
 			selectCategoriesApi.middleware,
 			shippingCompaniesApi.middleware,
@@ -168,7 +167,7 @@ export const store = configureStore({
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
-		[checkoutPackagesApi.reducerPath]: checkoutPackagesApi.reducer,
+
 		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
 		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,

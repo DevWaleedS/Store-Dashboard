@@ -1,0 +1,33 @@
+.pagination_menu {
+	border: 1px solid #2d62ed;
+	border-radius: 0.375rem;
+}
+
+.pagination_row_count {
+	color: #0077ff;
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.pagination_arrow {
+	cursor: pointer;
+	width: 2.8rem;
+	height: 2.8rem;
+	background-color: #c6e1f0;
+	border-radius: 0.125rem;
+	-webkit-border-radius: 0.125rem;
+	-moz-border-radius: 0.125rem;
+	-ms-border-radius: 0.125rem;
+	-o-border-radius: 0.125rem;
+}
+
+@media (max-width: 768px) {
+	.pagination_row_count {
+		font-size: 18px;
+	}
+
+	.pagination_arrow {
+		width: 1.8rem;
+		height: 1.8rem;
+	}
+}

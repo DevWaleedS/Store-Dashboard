@@ -18,6 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 // RTK QUERY
 import { useLogOutMutation } from "../../../store/apiSlices/logOutApi";
+import { MdVerified } from "react-icons/md";
 
 // Style dot active on avatar image
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -100,6 +101,7 @@ const UserProfileImage = () => {
 					localStorage.getItem("userImage") ? (
 						<>
 							<div className='dropdown-title d-md-flex align-items-center d-none'>
+								<IoIosArrowDown />
 								<span className='me-1 '>
 									{localStorage.getItem("name") !== null
 										? localStorage.getItem("name") === "null"
@@ -107,8 +109,6 @@ const UserProfileImage = () => {
 											: localStorage.getItem("name")
 										: localStorage.getItem("name") || "اسم التاجر"}
 								</span>
-
-								<IoIosArrowDown />
 							</div>
 
 							<StyledBadge

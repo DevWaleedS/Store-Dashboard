@@ -58,14 +58,14 @@ const VerifyAlert = () => {
 						<p style={{ whiteSpace: "normal", fontSize: "20px" }}>
 							جاري مراجعة طلب التوثيق في أقل من 24 ساعة{" "}
 						</p>
-						<p style={{ whiteSpace: "normal", fontSize: "16px" }}>
+						<p style={{ whiteSpace: "normal", fontSize: "18px" }}>
 							ستصلك رسالة عبر البريد الالكتروني{" "}
 						</p>
 					</div>
 					<div className='store-alert-footer d-flex justify-between'>
 						<button
 							onClick={() => {
-								navigate("/checkout-packages");
+								navigate("/");
 								dispatch(closeVerifyStoreAlertModal());
 								dispatch(closeVerifyModal());
 							}}
@@ -78,7 +78,7 @@ const VerifyAlert = () => {
 								borderRadius: " 0 0 16px 16px",
 							}}
 							className='w-100'>
-							التوجه إلى الاشتراك في الباقات و الدفع
+							الصفحة الرئيسية
 						</button>
 					</div>
 				</Box>

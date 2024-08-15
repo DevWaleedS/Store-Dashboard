@@ -62,11 +62,42 @@ const PackageCheckoutInfo = ({
 										<th>السعر</th>
 										<td>{selectedPackage?.yearly_price} ر.س</td>
 									</tr>
-
 									{selectedPackage?.discount ? (
 										<tr>
 											<th>الخصم</th>
 											<td>{selectedPackage?.discount} ر.س</td>
+										</tr>
+									) : null}
+
+									{selectedPackage?.coupon_info ? (
+										<tr>
+											<th>
+												كود خصم
+												<span style={{ color: "#1dbbbe", fontSize: "1rem" }}>
+													{" "}
+													({selectedPackage?.coupon_info?.code}){" "}
+												</span>
+												{selectedPackage?.coupon_info?.discount_type ===
+												"نسبة مئوية" ? (
+													<p
+														style={{
+															display: "inline-block",
+															fontSize: "0.85rem",
+															color: "#7e7e7e",
+														}}>
+														({selectedPackage?.coupon_info?.discount}%)
+													</p>
+												) : null}
+											</th>
+											<td>
+												{selectedPackage?.coupon_info?.discount_type ===
+												"نسبة مئوية"
+													? `${
+															selectedPackage?.yearly_price *
+															(selectedPackage?.coupon_info?.discount / 100)
+													  } ر.س`
+													: `${selectedPackage?.coupon_info?.discount} ر.س`}
+											</td>
 										</tr>
 									) : null}
 								</tbody>
@@ -78,9 +109,9 @@ const PackageCheckoutInfo = ({
 										</th>
 										<td>
 											{selectedPackage?.discount > 0
-												? selectedPackage?.yearly_price -
+												? selectedPackage?.price_after_coupon -
 												  selectedPackage?.discount
-												: selectedPackage?.yearly_price}{" "}
+												: selectedPackage?.price_after_coupon}{" "}
 											ر.س
 										</td>
 									</tr>

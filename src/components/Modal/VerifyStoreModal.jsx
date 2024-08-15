@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 
 // Third party
 import ReactDom from "react-dom";
@@ -19,13 +19,18 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 
 // RTK Query
 import { useGetUserProfileDataQuery } from "../../store/apiSlices/editUserDetailsApi";
+import { useGetPackageIdQuery } from "../../store/apiSlices/upgradePackagesApi";
 
-const VerifyStore = ({ verificationStatus, isFetching }) => {
+const VerifyStore = ({
+	verificationStatus,
+	packagePaidStatus,
+	isFetching,
+	packageId,
+}) => {
 	// get user profile data from api...
 	const { data: userProfileData, isLoading } = useGetUserProfileDataQuery();
 
 	const { isOpenVerifyModal } = useSelector((state) => state.VerifyModal);
-	const dispatch = useDispatch(true);
 
 	// styles
 	const style = {
@@ -35,9 +40,13 @@ const VerifyStore = ({ verificationStatus, isFetching }) => {
 		transform: "translate(-50%, -50%)",
 		width: "100%",
 		maxWidth: "100%",
-		bgcolor: verificationStatus === "تم التوثيق" ? "#07bc0c" : "#ffdd00",
+		bgcolor:
+			verificationStatus !== "تم التوثيق" || !packagePaidStatus || !packageId
+				? "#ffdd00"
+				: "#07bc0c",
 		px: 4,
 		paddingBottom: "11px",
+
 		"@media(max-width:768px)": {
 			top: "70px",
 			left: 0,
@@ -48,157 +57,219 @@ const VerifyStore = ({ verificationStatus, isFetching }) => {
 
 	return (
 		<div>
-			<Modal
-				open={isOpenVerifyModal}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'>
-				{(!isFetching || !isLoading) && (
-					<Box sx={style}>
-						<Typography
-							component={"div"}
-							id='modal-modal-description'
-							sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
+			<Modal open={isOpenVerifyModal}>
+				<Box sx={style}>
+					<Typography
+						component={"div"}
+						id='modal-modal-description'
+						sx={{ mt: 2, "@media(max-width:768px)": { mt: 0 } }}>
+						<div className='d-flex justify-content-center align-items-center'>
 							<div className='d-flex justify-content-center align-items-center'>
-								<div className='d-flex justify-content-center align-items-center'>
-									{verificationStatus === "جاري التوثيق" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
-											<p className='verify-message'>
-												مرحبا{" "}
-												<span style={{ fontWeight: 600 }}>
-													{!userProfileData?.name
-														? userProfileData?.username || "٠٠٠"
-														: userProfileData?.name}{" "}
-												</span>{" "}
-												المتجر الخاص قيد المراجعة من قبل الجهات المختصة
-											</p>
-											<IoMdCloseCircleOutline
-												style={{ cursor: "pointer", fill: "#02466a" }}
-												fill='#02466a'
-												onClick={() => {
-													dispatch(closeVerifyModal());
-												}}
-											/>
-										</div>
-									) : verificationStatus === "طلب جديد" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
-											<p className='verify-message'>
-												مرحبا{" "}
-												<span style={{ fontWeight: 600 }}>
-													{!userProfileData?.name
-														? userProfileData?.username || "٠٠٠"
-														: userProfileData?.name}{" "}
-												</span>
-												تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من الجهات
-												المختصة
-											</p>
-											<div className='btns-box' style={{ width: "250px" }}>
-												<Link
-													to='/VerifyStore'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}>
-													التوثيق الأن
-												</Link>
-												<IoMdCloseCircleOutline
-													style={{ cursor: "pointer", fill: "#02466a" }}
-													fill='#02466a'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}
-												/>
-											</div>
-										</div>
-									) : verificationStatus === "التوثيق مرفوض" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
-											<p className='verify-message'>
-												مرحبا{" "}
-												<span style={{ fontWeight: 600 }}>
-													{!userProfileData?.name
-														? userProfileData?.username || "٠٠٠"
-														: userProfileData?.name}{" "}
-												</span>
-												طلب التوثيق مرفوض الرجاء التوجه إلى التوثيق لتعديل
-												البيانات
-											</p>
-											<div className='btns-box' style={{ width: "250px" }}>
-												<Link
-													to='/VerifyStore'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}>
-													التوثيق الأن
-												</Link>
-												<IoMdCloseCircleOutline
-													style={{ cursor: "pointer", fill: "#02466a" }}
-													fill='#02466a'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}
-												/>
-											</div>
-										</div>
-									) : verificationStatus === "لم يتم الطلب" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
-											<p className='verify-message'>
-												مرحبا{" "}
-												<span style={{ fontWeight: 600 }}>
-													{!userProfileData?.name
-														? userProfileData?.username || "٠٠٠"
-														: userProfileData?.name}{" "}
-												</span>
-												فضلاََ إشترك ليكتمل تفعيل متجرك
-											</p>
-											<div className='btns-box' style={{ width: "250px" }}>
-												<Link
-													to='/MainInformation'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}>
-													إكمال البيانات
-												</Link>
-												<IoMdCloseCircleOutline
-													style={{ cursor: "pointer", fill: "#02466a" }}
-													fill='#02466a'
-													onClick={() => {
-														dispatch(closeVerifyModal());
-													}}
-												/>
-											</div>
-										</div>
-									) : verificationStatus === "تم التوثيق" ? (
-										<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
-											<p className='verify-message text-white with-icon'>
-												تهانينا... المتجر الخاص بك مكتمل التوثيق
-												<MdVerified
-													style={{ fill: "#ffffff", marginRight: "5px" }}
-												/>
-											</p>
-											<IoMdCloseCircleOutline
-												style={{ cursor: "pointer", fill: "#ffffff" }}
-												fill='#fff'
-												onClick={() => {
-													dispatch(closeVerifyModal());
-												}}
-											/>
-										</div>
-									) : null}
-								</div>
+								{packageId && packagePaidStatus ? (
+									<StoreVerificationMessage
+										userProfileData={userProfileData}
+										verificationStatus={verificationStatus}
+										packagePaidStatus={packagePaidStatus}
+									/>
+								) : (
+									<SubscribeInPackagesMessage
+										packageId={packageId}
+										userProfileData={userProfileData}
+										packagePaidStatus={packagePaidStatus}
+									/>
+								)}
 							</div>
-						</Typography>
-					</Box>
-				)}
+						</div>
+					</Typography>
+				</Box>
 			</Modal>
 		</div>
 	);
 };
 
-const VerifyStoreModal = ({ verificationStatus, isFetching }) => {
+const StoreVerificationMessage = ({
+	verificationStatus,
+	packagePaidStatus,
+	userProfileData,
+}) => {
+	const dispatch = useDispatch(true);
+	return verificationStatus === "جاري التوثيق" ? (
+		<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+			<p className='verify-message'>
+				مرحبا{" "}
+				<span style={{ fontWeight: 600 }}>
+					{!userProfileData?.name
+						? userProfileData?.username || "٠٠٠"
+						: userProfileData?.name}{" "}
+				</span>{" "}
+				المتجر الخاص قيد المراجعة من قبل الجهات المختصة
+			</p>
+			<IoMdCloseCircleOutline
+				style={{ cursor: "pointer", fill: "#02466a" }}
+				fill='#02466a'
+				onClick={() => {
+					dispatch(closeVerifyModal());
+				}}
+			/>
+		</div>
+	) : verificationStatus === "طلب جديد" ? (
+		<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+			<p className='verify-message'>
+				مرحبا{" "}
+				<span style={{ fontWeight: 600 }}>
+					{!userProfileData?.name
+						? userProfileData?.username || "٠٠٠"
+						: userProfileData?.name}{" "}
+				</span>
+				تم إستلام طلب التوثيق الخاص بك وجاري المراجعة من الجهات المختصة
+			</p>
+			<div className='btns-box' style={{ width: "250px" }}>
+				<Link
+					to='/VerifyStore'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}>
+					التوثيق الأن
+				</Link>
+				<IoMdCloseCircleOutline
+					style={{ cursor: "pointer", fill: "#02466a" }}
+					fill='#02466a'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}
+				/>
+			</div>
+		</div>
+	) : verificationStatus === "التوثيق مرفوض" ? (
+		<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+			<p className='verify-message'>
+				مرحبا{" "}
+				<span style={{ fontWeight: 600 }}>
+					{!userProfileData?.name
+						? userProfileData?.username || "٠٠٠"
+						: userProfileData?.name}{" "}
+				</span>
+				طلب التوثيق مرفوض الرجاء التوجه إلى التوثيق لتعديل البيانات
+			</p>
+			<div className='btns-box' style={{ width: "250px" }}>
+				<Link
+					to='/VerifyStore'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}>
+					التوثيق الأن
+				</Link>
+				<IoMdCloseCircleOutline
+					style={{ cursor: "pointer", fill: "#02466a" }}
+					fill='#02466a'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}
+				/>
+			</div>
+		</div>
+	) : verificationStatus === "لم يتم الطلب" ? (
+		<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+			<p className='verify-message'>
+				مرحبا{" "}
+				<span style={{ fontWeight: 600 }}>
+					{!userProfileData?.name
+						? userProfileData?.username || "٠٠٠"
+						: userProfileData?.name}{" "}
+				</span>
+				فضلاََ قم بتوثيق المتجر ليكتمل تفعيل متجرك
+			</p>
+			<div className='btns-box' style={{ width: "250px" }}>
+				<Link
+					to='/VerifyStore'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}>
+					التوثيق الأن
+				</Link>
+				<IoMdCloseCircleOutline
+					style={{ cursor: "pointer", fill: "#02466a" }}
+					fill='#02466a'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}
+				/>
+			</div>
+		</div>
+	) : verificationStatus === "تم التوثيق" ? (
+		<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+			<p className='verify-message text-white with-icon'>
+				تهانينا... المتجر الخاص بك مكتمل التوثيق
+				<MdVerified style={{ fill: "#ffffff", marginRight: "5px" }} />
+			</p>
+			<IoMdCloseCircleOutline
+				style={{ cursor: "pointer", fill: "#ffffff" }}
+				fill='#fff'
+				onClick={() => {
+					dispatch(closeVerifyModal());
+				}}
+			/>
+		</div>
+	) : null;
+};
+
+const SubscribeInPackagesMessage = ({
+	packagePaidStatus,
+	userProfileData,
+	packageId,
+}) => {
+	const dispatch = useDispatch(true);
+	const { data: getPackageId, refetch } = useGetPackageIdQuery();
+
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
+
+	return (!packagePaidStatus || !packageId) && userProfileData ? (
+		<div className='d-flex justify-content-between verify-message-box align-items-center gap-md-5 gap-3'>
+			<p className='verify-message'>
+				مرحباً{" "}
+				<span style={{ fontWeight: 600 }}>
+					{!userProfileData?.name
+						? userProfileData?.username || "٠٠٠"
+						: userProfileData?.name}{" "}
+				</span>
+				فضلاََ إشترك في الباقة لتفعيل خصائص المتجر
+			</p>
+			<div className='btns-box' style={{ width: "250px" }}>
+				<Link
+					to={`${getPackageId?.id ? "checkout-packages" : "upgrade-packages"}`}
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}>
+					إشترك الآن
+				</Link>
+				<IoMdCloseCircleOutline
+					style={{ cursor: "pointer", fill: "#02466a" }}
+					fill='#02466a'
+					onClick={() => {
+						dispatch(closeVerifyModal());
+					}}
+				/>
+			</div>
+		</div>
+	) : null;
+};
+
+const VerifyStoreModal = ({
+	verificationStatus,
+	packagePaidStatus,
+	isFetching,
+	packageId,
+}) => {
 	return (
 		<Fragment>
 			{ReactDom.createPortal(
 				<VerifyStore
 					verificationStatus={verificationStatus}
+					packagePaidStatus={packagePaidStatus}
 					isFetching={isFetching}
+					packageId={packageId}
 				/>,
 				document.getElementById("verifay_store_modal")
 			)}

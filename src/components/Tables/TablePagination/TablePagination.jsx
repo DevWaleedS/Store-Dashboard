@@ -5,6 +5,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import PropTypes from "prop-types";
+import "./TablePagination.css";
 
 const TablePagination = ({
 	pageCount,
@@ -61,17 +62,12 @@ const TablePagination = ({
 				/>
 			</Stack>
 
-			<div
-				className='d-flex align-items-center gap-2 px-3 py-1'
-				style={{ border: "1px solid #2D62ED", borderRadius: "0.375rem" }}>
+			<div className='d-flex align-items-center gap-2 px-2 px-lg-3 py-2 pagination_menu'>
 				<Menu
 					id='basic-menu'
 					anchorEl={anchorEl}
 					open={open}
-					onClose={handleClose}
-					MenuListProps={{
-						"aria-labelledby": "basic-button",
-					}}>
+					onClose={handleClose}>
 					{rowsPerPagesCount.map((rowsPer, index) => (
 						<MenuItem
 							key={index}
@@ -87,14 +83,16 @@ const TablePagination = ({
 								"ul:has(&) li:hover": {
 									backgroundColor: "#C6E1F0",
 								},
+
+								"@media(max-width:1400px)": {
+									width: "2.1rem",
+								},
 							}}>
 							{rowsPer}
 						</MenuItem>
 					))}
 				</Menu>
-				<h2 style={{ color: "#0077FF", fontSize: "20px", fontWeight: "500" }}>
-					عدد الصفوف
-				</h2>
+				<p className='pagination_row_count'>عدد الصفوف</p>
 
 				<div
 					id='basic-button'
@@ -102,14 +100,7 @@ const TablePagination = ({
 					aria-haspopup='true'
 					aria-expanded={open ? "true" : undefined}
 					onClick={handleRowsClick}
-					className='d-flex justify-content-center align-items-center'
-					style={{
-						backgroundColor: "#c6e1f0",
-						cursor: "pointer",
-						borderRadius: "0.125rem",
-						width: "2.8rem",
-						height: "2.8rem",
-					}}>
+					className='d-flex justify-content-center align-items-center pagination_arrow'>
 					<MdOutlineKeyboardArrowDown color='#0099FB' fontSize='1.5rem' />
 				</div>
 			</div>

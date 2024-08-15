@@ -678,7 +678,12 @@ const AddNewProduct = () => {
 														<label htmlFor='add-image'> اسحب الصورة هنا</label>
 														<input {...getInputProps()} id='add-image' />
 													</div>
-													<span>( سيتم قبول الصور jpeg & png & jpg )</span>
+													<span
+														style={{
+															whiteSpace: "normal",
+														}}>
+														( سيتم قبول الصور jpeg & png & jpg )
+													</span>
 
 													<div className='tax-text '>
 														(الحد الأقصى للصورة 1MB)

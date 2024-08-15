@@ -137,7 +137,7 @@ const UploadStoreLogo = ({
 											<div className='add-image-btn'>
 												<label htmlFor='add-image'> اسحب الصورة هنا</label>
 											</div>
-											<span style={{ fontSize: "1rem", color: "#7d7d7d" }}>
+											<span className='upload_image_hint'>
 												( سيتم قبول الصور jpeg & png & jpg )
 											</span>
 										</div>

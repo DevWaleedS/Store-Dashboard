@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 // MUI
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { SuccessCheckout } from "../../data/Icons";
 
 const style = {
 	position: "absolute",
@@ -50,11 +51,8 @@ const VerifayAfterMainInfoAlert = () => {
 				aria-describedby='modal-modal-description'>
 				<Box component={"div"} sx={style}>
 					<div className='store-alert-body text-center' style={contentStyle}>
-						<p className='mb-2'>
-							{" "}
-							تم حفظ البيانات بنجاح
-							<CiCircleCheck />
-						</p>
+						<SuccessCheckout className='checkout-icon' />
+						<p className='mb-2'>تم حفظ البيانات بنجاح</p>
 						<p
 							style={{
 								whiteSpace: "normal",
@@ -62,17 +60,17 @@ const VerifayAfterMainInfoAlert = () => {
 								fontWeight: "500",
 							}}>
 							{" "}
-							هل تريد استكمال بيانات التوثيق لإنشاء المتجر؟
+							يمكنك الاشتراك في الباقة لتفعيل المتجر بالكامل
 						</p>
 					</div>
 					<div className='store-alert-footer d-flex flex-column flex-md-row  justify-content-center p-md-4 p-2 py-4 align-content-center verification-alert-btns gap-2'>
 						<button
 							onClick={() => {
-								navigate("/VerifyStore");
+								navigate("/Upgrade-Packages");
 								dispatch(closeVerifyAfterMainModal());
 							}}
 							className=' verification-now-btn'>
-							الآن
+							إشترك الآن
 						</button>
 						<button
 							onClick={() => {
@@ -85,7 +83,7 @@ const VerifayAfterMainInfoAlert = () => {
 								dispatch(closeVerifyAfterMainModal());
 							}}
 							className=' verification-later-btn'>
-							وقت اخر
+							وقت آخر
 						</button>
 					</div>
 				</Box>

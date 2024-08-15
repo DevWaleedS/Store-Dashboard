@@ -7,8 +7,12 @@ const UseIsSubscribeInPackages = () => {
 	const location = useLocation();
 	const { data: showVerification } = useShowVerificationQuery();
 
-	const checkoutSuccess = location.pathname === "/checkout-packages/success";
-	const failedSuccess = location.pathname === "/checkout-packages/failed";
+	const checkoutSuccess =
+		location.pathname === "/checkout-packages/success" ||
+		location.pathname === "/Products/SouqOtlobha/success";
+	const failedSuccess =
+		location.pathname === "/checkout-packages/failed" ||
+		location.pathname === "Products/SouqOtlobha/failed";
 
 	useEffect(() => {
 		setTimeout(() => {
