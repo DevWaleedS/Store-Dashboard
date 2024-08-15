@@ -59,7 +59,7 @@ const UseAccountVerification = () => {
 				navigate("/");
 				dispatchVerifyModal(openVerifyModal());
 			}
-		}, 100);
+		}, 0);
 
 		return () => {
 			clearTimeout(debounce);

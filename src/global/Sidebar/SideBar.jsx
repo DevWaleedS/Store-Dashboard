@@ -50,9 +50,9 @@ import { IoWallet } from "react-icons/io5";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import { useNavigate } from "react-router-dom";
+import { useGetUpgradePackagesQuery } from "../../store/apiSlices/upgradePackagesApi";
 
 const SideBar = ({
-	PackageName,
 	open,
 	closeSidebar,
 	verificationStatus,
@@ -63,6 +63,13 @@ const SideBar = ({
 	const dispatch = useDispatch();
 	const Z_index = useContext(Context);
 	const { setNavbarZindex } = Z_index;
+
+	const { data: upgradePackages, isLoading: loadingPackages } =
+		useGetUpgradePackagesQuery();
+
+	const selectedPackage = upgradePackages?.find(
+		(pack) => pack?.is_selected && pack?.package_paid
+	);
 
 	const handleOpenVerificationModal = () => {
 		if (
@@ -156,12 +163,12 @@ const SideBar = ({
 					</div>
 				)}
 
-				{PackageName && (
+				{loadingPackages && selectedPackage && (
 					<div
 						onClick={() => navigate("/upgrade-packages")}
 						className='verify_box d-flex justify-content-center align-content-center gap-1 mouse-pointer'>
 						<FaCrown className='verify_icon' />
-						<p className='mb-0 pb-0'>{PackageName}</p>
+						<p className='mb-0 pb-0'>{selectedPackage?.name}</p>
 					</div>
 				)}
 			</div>

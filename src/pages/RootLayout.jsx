@@ -121,7 +121,6 @@ const RootLayout = () => {
 								<div className='row'>
 									<div className='sidebar-col'>
 										<SideBar
-											PackageName={showVerification?.package}
 											verificationStatus={showVerification?.verification_status}
 											packagePaidStatus={showVerification?.package_paid}
 											packageId={showVerification?.package_id}
