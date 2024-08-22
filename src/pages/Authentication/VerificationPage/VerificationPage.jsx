@@ -129,7 +129,9 @@ const VerificationPage = () => {
 									onChange={(e) => setCodeValue(e)}
 									value={codeValue}
 									numInputs={6}
+									inputType='number'
 									className={"input"}
+									shouldAutoFocus='true'
 									renderInput={(props) => <input {...props} />}
 								/>
 							</div>

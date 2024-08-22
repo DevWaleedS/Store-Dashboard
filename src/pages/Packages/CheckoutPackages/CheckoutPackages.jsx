@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import "./CheckoutPackages.css";
+
 import { Link, useNavigate } from "react-router-dom";
 import {
 	Box,
@@ -44,6 +45,7 @@ const style = {
 
 const CheckoutPackages = () => {
 	const navigate = useNavigate();
+
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	// coupon
@@ -113,6 +115,8 @@ const CheckoutPackages = () => {
 					) {
 						window.location.href =
 							response?.data?.data?.payment?.Data?.PaymentURL;
+
+						setBtnLoading(false);
 					} else {
 						// to handle madfu login
 						if (+paymentSelect === 5) {
@@ -205,23 +209,14 @@ const CheckoutPackages = () => {
 				SKU: selectedPackage?.id,
 				productImage: "",
 				count: parseInt(1),
-				totalAmount:
-					selectedPackage?.discount > 0
-						? selectedPackage?.yearly_price - selectedPackage?.discount
-						: selectedPackage?.yearly_price,
+				totalAmount: selectedPackage?.price_after_coupon,
 			},
 		];
 
 		const orderInfo = {
 			Taxes: 0,
-			ActualValue:
-				selectedPackage?.discount > 0
-					? selectedPackage?.yearly_price - selectedPackage?.discount
-					: selectedPackage?.yearly_price,
-			Amount:
-				selectedPackage?.discount > 0
-					? selectedPackage?.yearly_price - selectedPackage?.discount
-					: selectedPackage?.yearly_price,
+			ActualValue: selectedPackage?.price_after_coupon,
+			Amount: selectedPackage?.price_after_coupon,
 			MerchantReference: `package_reference_${selectedPackage?.unique_id}`,
 		};
 
@@ -398,7 +393,7 @@ const CheckoutPackages = () => {
 															{btnLoading || isCartLoading ? (
 																<CircularLoading />
 															) : (
-																"ادفع واستفيد بالباقة"
+																"إشترك في الباقة"
 															)}
 														</button>
 													</div>

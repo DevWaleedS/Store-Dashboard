@@ -93,7 +93,7 @@ const PackageCheckoutInfo = ({
 												{selectedPackage?.coupon_info?.discount_type ===
 												"نسبة مئوية"
 													? `${
-															selectedPackage?.yearly_price *
+															selectedPackage?.price_after_coupon *
 															(selectedPackage?.coupon_info?.discount / 100)
 													  } ر.س`
 													: `${selectedPackage?.coupon_info?.discount} ر.س`}
@@ -107,13 +107,7 @@ const PackageCheckoutInfo = ({
 										<th>
 											الإجمالي <span className='tax-text'>(شامل الضريبة)</span>
 										</th>
-										<td>
-											{selectedPackage?.discount > 0
-												? selectedPackage?.price_after_coupon -
-												  selectedPackage?.discount
-												: selectedPackage?.price_after_coupon}{" "}
-											ر.س
-										</td>
+										<td>{selectedPackage?.price_after_coupon} ر.س</td>
 									</tr>
 								</tfoot>
 							</>

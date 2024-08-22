@@ -370,7 +370,7 @@ input::placeholder {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: #02466a;
+	background-color: var(--second-500);
 	margin: 20px 0;
 	border-radius: 32px;
 	color: #f7fcff;
@@ -383,7 +383,12 @@ input::placeholder {
 }
 .register-form .owner-form .box-pay button:disabled,
 .bt-main:disabled {
-	cursor: not-allowed !important;
+	background-color: #ddd;
+	cursor: not-allowed;
+}
+
+.register-form .owner-form .box-pay button:hover {
+	background-color: var(--primary-500);
 }
 
 .register-form .owner-form .box-pay ul {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 // Third party
-import axios from "axios";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 // Components
@@ -16,6 +16,8 @@ import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvid
 
 // Icons
 import { SvgComponent, SvgKey } from "../../../../../data/Icons";
+import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+import { useRestorePassWordMutation } from "../../../../../store/apiSlices/loginApi";
 
 const RestorePassword = () => {
 	const navigate = useNavigate();
@@ -32,7 +34,7 @@ const RestorePassword = () => {
 
 	// to send code on your email
 	const [phoneNumber, setPhoneNumber] = useState("");
-
+	const [btnLoading, setBtnLoading] = useState(false);
 	const [resetPasswordError, setResetPasswordError] = useState("");
 
 	// phone number regex
@@ -55,8 +57,12 @@ const RestorePassword = () => {
 	}, [showAlertModal]);
 
 	// send password function on your email
-	const sendPassWord = () => {
+	const [restorePassWord, { isLoading }] = useRestorePassWordMutation();
+	const sendPassWord = async () => {
+		setBtnLoading(true);
 		setResetPasswordError("");
+
+		// data that send to api
 		const formData = new FormData();
 		formData.append(
 			"phonenumber",
@@ -65,26 +71,40 @@ const RestorePassword = () => {
 				: `+966${phoneNumber}`
 		);
 
-		axios
-			.post("https://backend.atlbha.com/api/password/create", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setMessage(res?.data?.message?.ar);
-					setShowAlertModal(true);
-					setUserPhoneNumber(
-						phoneNumber?.startsWith("+966") || phoneNumber?.startsWith("00966")
-							? phoneNumber
-							: `+966${phoneNumber}`
-					);
-					localStorage.setItem("userEmail", res?.data?.data?.user?.email);
-
-					setResendButtonDisabled(true);
-					setDisabledBtn(true);
-					navigate("/SendVerificationCode");
-				} else {
-					setResetPasswordError(res?.data?.message?.ar);
-				}
+		// make request...
+		try {
+			const response = await restorePassWord({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setMessage(response?.data?.message?.ar);
+				setShowAlertModal(true);
+				setUserPhoneNumber(
+					phoneNumber?.startsWith("+966") || phoneNumber?.startsWith("00966")
+						? phoneNumber
+						: `+966${phoneNumber}`
+				);
+				localStorage.setItem("userEmail", response?.data?.data?.user?.email);
+				setBtnLoading(false);
+				setResendButtonDisabled(true);
+				setDisabledBtn(true);
+				navigate("/SendVerificationCode");
+			} else {
+				setBtnLoading(false);
+				setResetPasswordError(response?.data?.message?.ar);
+				// Handle display errors using toast notifications
+				toast.error(response?.data?.message?.ar, {
+					theme: "light",
+				});
+			}
+		} catch (error) {
+			console.error("Error restore password :", error);
+		}
 	};
 
 	return (
@@ -101,7 +121,10 @@ const RestorePassword = () => {
 								<div className='phone-number-wrapper'>
 									<input
 										value={phoneNumber}
-										onChange={(e) => setPhoneNumber(e.target.value)}
+										onChange={(e) => {
+											setPhoneNumber(e.target.value);
+											setResetPasswordError("");
+										}}
 										type='tel'
 										name='phoneNumber'
 										placeholder='ادخل رقم الجوال المستخدم في التسجيل '
@@ -136,9 +159,9 @@ const RestorePassword = () => {
 
 							<button
 								className='bt-main'
-								onClick={sendPassWord}
-								disabled={!phoneNumber}>
-								ارسال
+								disabled={btnLoading || !phoneNumber || isLoading}
+								onClick={sendPassWord}>
+								{btnLoading || isLoading ? <CircularLoading /> : "إرسال"}
 							</button>
 
 							{resetPasswordError && (
@@ -146,7 +169,6 @@ const RestorePassword = () => {
 									className={"wrong-text w-100"}
 									style={{
 										color: "red",
-
 										direction: "rtl",
 									}}>
 									{resetPasswordError}

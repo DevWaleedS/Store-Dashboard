@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 
 // Third party
-import axios from "axios";
 import { useNavigate } from "react-router-dom/dist";
 
 // Context
@@ -16,6 +15,8 @@ import { EyeClose, EyeOPen, SvgComponent } from "../../../../../data/Icons";
 
 // Styles
 import "./CreateNewPassword.css";
+import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+import { useReCreateNewPasswordMutation } from "../../../../../store/apiSlices/loginApi";
 
 const CreateNewPassword = () => {
 	let type = "password";
@@ -28,7 +29,7 @@ const CreateNewPassword = () => {
 
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
 	const { userPhoneNumber, resetPasswordToken } = ResetPasswordInfo;
-
+	const [btnLoading, setBtnLoading] = useState(false);
 	// to set remember me
 	const RememberMe = useContext(UserAuth);
 	const { rememberMe, setRememberMe } = RememberMe;
@@ -60,46 +61,62 @@ const CreateNewPassword = () => {
 		});
 	}
 
-	const reCreateNewPasswordFunction = () => {
+	const [reCreateNewPassword, { isLoading }] = useReCreateNewPasswordMutation();
+
+	const handleReCreateNewPasswordFunction = async () => {
 		setPasswordError("");
 		stMessErr("");
+		setBtnLoading(true);
 		const formData = new FormData();
 		formData.append("password", password);
 		formData.append("password_confirmation", confirmPassword);
 		formData.append("phonenumber", userPhoneNumber);
 		formData.append("token", resetPasswordToken);
-		axios
-			.post("https://backend.atlbha.com/api/password/reset-password", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					localStorage.setItem("storeToken", res?.data?.data?.token);
-					if (
-						!resetPasswordToken ||
-						res?.data?.message?.en === "This password reset token is invalid."
-					) {
-						navigate("/RestorePassword");
-					}
-					if (rememberMe) {
-						//Set password and remember_me status from context
-						setUserInfoToUserAuthContext();
 
-						// Navigate the user to login page
-						NavigateToLogInPage();
-					} else {
-						//remove password and remember_me status from context
-						removeUserInfoUserAuthContext();
-					}
-				} else {
-					stMessErr(res?.data?.message?.ar);
-					setPasswordError(res?.data?.message?.en?.password?.[0]);
-				}
+		// make request...
+		try {
+			const response = await reCreateNewPassword({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setBtnLoading(false);
+				localStorage.setItem("storeToken", response?.data?.data?.token);
+				if (
+					!resetPasswordToken ||
+					response?.data?.message?.en ===
+						"This password reset token is invalid."
+				) {
+					navigate("/RestorePassword");
+				}
+				if (rememberMe) {
+					//Set password and remember_me status from context
+					setUserInfoToUserAuthContext();
+
+					// Navigate the user to login page
+					NavigateToLogInPage();
+				} else {
+					//remove password and remember_me status from context
+					removeUserInfoUserAuthContext();
+				}
+			} else {
+				setBtnLoading(false);
+				stMessErr(response?.data?.message?.ar);
+				setPasswordError(response?.data?.message?.en?.password?.[0]);
+			}
+		} catch (error) {
+			console.error("Error reSendVerificationCodeByPhone :", error);
+		}
 	};
 
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
 			event.preventDefault();
-			reCreateNewPasswordFunction();
+			handleReCreateNewPasswordFunction();
 
 			if (rememberMe) {
 				//Set  password and remember_me status from context
@@ -225,14 +242,19 @@ const CreateNewPassword = () => {
 								<h6>تذكرني</h6>
 							</div>
 						</div>
-						<button className='bt-main' onClick={reCreateNewPasswordFunction}>
-							تسجيل الدخول
+						<button
+							className='bt-main'
+							disabled={
+								!confirmPassword || !password || btnLoading || isLoading
+							}
+							onClick={handleReCreateNewPasswordFunction}>
+							{btnLoading || isLoading ? <CircularLoading /> : "تسجيل الدخول"}
 						</button>
 						{messErr && (
 							<div
 								className='text-danger text-center w-100'
 								style={{ marginTop: "-16px", marginBottom: "16px" }}>
-								({messErr})
+								{messErr}
 							</div>
 						)}
 					</div>

@@ -144,6 +144,15 @@
 	color: #f7fcff;
 	margin-bottom: 20px;
 }
+.verificationBox-box .all-content .box-container-form .all button:disabled,
+.verificationBox-box
+	.all-content
+	.box-container-form
+	.all
+	button:disabled:hover {
+	background-color: #ddd;
+	cursor: not-allowed;
+}
 
 .verificationBox-box .all-content .box-container-form .all h4 {
 	display: flex;

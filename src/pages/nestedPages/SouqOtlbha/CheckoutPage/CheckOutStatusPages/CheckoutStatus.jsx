@@ -188,24 +188,29 @@ const CheckoutStatusModal = () => {
 									<h3 className='my-2 my-lg-4' style={headingStyle}>
 										<SuccessCheckout className='checkout-icon' />
 									</h3>
-									<div className='content' style={{ marginBottom: "90px" }}>
-										<h1 className='checkout-status-title success-status-title '>
-											عملية دفع ناجحة!
-										</h1>
-										<p style={contentStyles}>
-											تم الاشتراك في باقة{" "}
-											<span style={{ color: "#1dbbbe", fontWeight: 500 }}>
-												{isLoading ? "..." : pack?.name}
-											</span>{" "}
-											بنجاح.
-											<span
-												className='d-block'
-												style={{ fontWeight: 500, whiteSpace: "normal" }}>
-												{" "}
-												يمكنك الاستمتاع بكافة مميزات الباقة الآن.
-											</span>{" "}
-										</p>
-									</div>
+
+									{isLoading ? (
+										<CircularLoading />
+									) : (
+										<div className='content' style={{ marginBottom: "90px" }}>
+											<h1 className='checkout-status-title success-status-title '>
+												عملية دفع ناجحة!
+											</h1>
+											<p style={contentStyles}>
+												تم الاشتراك في باقة{" "}
+												<span style={{ color: "#1dbbbe", fontWeight: 500 }}>
+													{isLoading ? "..." : pack?.name}
+												</span>{" "}
+												بنجاح.
+												<span
+													className='d-block'
+													style={{ fontWeight: 500, whiteSpace: "normal" }}>
+													{" "}
+													يمكنك الاستمتاع بكافة مميزات الباقة الآن.
+												</span>{" "}
+											</p>
+										</div>
+									)}
 								</div>
 							) : (
 								<div
@@ -227,23 +232,25 @@ const CheckoutStatusModal = () => {
 							<div className='add-product-from-store-footer w-100'>
 								{location.pathname === "/checkout-packages/success" ||
 								location.pathname === "/checkout-packages/failed" ? (
-									<button
-										onClick={() => {
-											handleOpenVerificationModal();
-										}}
-										style={{
-											color: "#1DBBBE",
-											fontSize: "24px",
-											fontWight: 500,
-											height: "70px",
+									!isLoading && (
+										<button
+											onClick={() => {
+												handleOpenVerificationModal();
+											}}
+											style={{
+												color: "#1DBBBE",
+												fontSize: "24px",
+												fontWight: 500,
+												height: "70px",
 
-											backgroundColor: "#FFF",
-											borderTop: "1px solid #1DBBBE",
-											borderRadius: " 0 0 16px 16px",
-										}}
-										className='w-100'>
-										إغلاق
-									</button>
+												backgroundColor: "#FFF",
+												borderTop: "1px solid #1DBBBE",
+												borderRadius: " 0 0 16px 16px",
+											}}
+											className='w-100'>
+											إغلاق
+										</button>
+									)
 								) : (
 									<button
 										onClick={() => {

@@ -31,8 +31,13 @@ button.resend-code-btn {
 	color: #011723 !important;
 	cursor: pointer !important;
 }
+
+button.resend-code-btn .counter_wrapper {
+	color: #1dbbbe !important;
+}
 button.resend-code-btn:disabled {
 	cursor: not-allowed !important;
+	color: #c6c6c6 !important;
 }
 
 .verificationBox-box {
@@ -187,6 +192,15 @@ button.resend-code-btn:disabled {
 	-moz-border-radius: 32px;
 	-ms-border-radius: 32px;
 	-o-border-radius: 32px;
+}
+.verificationBox-box .all-content .box-container-form .all button:disabled,
+.verificationBox-box
+	.all-content
+	.box-container-form
+	.all
+	button:disabled:hover {
+	background-color: #ddd;
+	cursor: not-allowed;
 }
 .verificationBox-box .all-content .box-container-form .all h4 {
 	display: flex;

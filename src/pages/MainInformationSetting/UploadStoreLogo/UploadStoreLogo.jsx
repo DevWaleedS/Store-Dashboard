@@ -146,14 +146,18 @@ const UploadStoreLogo = ({
 
 								{/** upload btn */}
 
-								<div className='tax-text w-100 d-flex align-content-center gap-2 mb-2'>
+								<div
+									style={{ whiteSpace: "normal" }}
+									className='tax-text w-100 d-flex align-content-center gap-2 mb-2'>
 									- ( المقاس الأنسب 160 بكسل عرض و 114 بكسل الارتفاع اذا كان
 									الشعار مستطيل)
 									<span className='wrapper'>
 										<span className='simple-img rectangle-logo'> </span>
 									</span>
 								</div>
-								<div className='tax-text w-100 d-flex align-content-center gap-2 mb-2'>
+								<div
+									style={{ whiteSpace: "normal" }}
+									className='tax-text w-100 d-flex align-content-center gap-2 mb-2'>
 									- (المقاس الأنسب 110 بكسل عرض و 110 بكسل الارتفاع اذا كان
 									الشعار مربع)
 									<span className='wrapper'>

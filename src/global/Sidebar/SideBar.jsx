@@ -71,11 +71,9 @@ const SideBar = ({
 		(pack) => pack?.is_selected && pack?.package_paid
 	);
 
-	console.log(!loadingPackages && selectedPackage);
-
 	const handleOpenVerificationModal = () => {
 		if (
-			verificationStatus !== "تم التوثيق" ||
+			(packagePaidStatus && packageId && verificationStatus !== "تم التوثيق") ||
 			(!packagePaidStatus && !packageId && verificationStatus === "تم التوثيق")
 		) {
 			dispatch(openVerifyModal());
@@ -132,7 +130,6 @@ const SideBar = ({
 				isVerifyStoreModal: handleOpenVerificationStatus,
 			},
 			{ to: "SocialPages", icon: Social, label: "صفحات التواصل" },
-			{ to: "upgrade-packages", icon: BiSolidRocket, label: " ترقية الباقة" },
 		],
 
 		setting: [
@@ -239,7 +236,6 @@ const SideBar = ({
 						handleOpenVerificationModal();
 					}}
 				/>
-
 				{/** marketing Sub menu */}
 				<SidebarSubMenu
 					label='التسويق'
@@ -249,7 +245,6 @@ const SideBar = ({
 					href={submenuItems.marketing.href}
 					onVerify={handleOpenVerificationModal}
 				/>
-
 				<SidebarLink
 					to='Rating'
 					icon={Rating}
@@ -260,7 +255,6 @@ const SideBar = ({
 						handleOpenVerificationModal();
 					}}
 				/>
-
 				<SidebarLink
 					to='RequestDelegate'
 					icon={FaUserCheck}
@@ -275,7 +269,6 @@ const SideBar = ({
 						}
 					}}
 				/>
-
 				<SidebarLink
 					to='Pages'
 					icon={PagesIcon}
@@ -296,7 +289,6 @@ const SideBar = ({
 						handleOpenVerificationModal();
 					}}
 				/>
-
 				{/* Template sub menu */}
 				<SidebarSubMenu
 					label='القالب'
@@ -305,7 +297,6 @@ const SideBar = ({
 					onClose={closeSidebar}
 					onVerify={handleOpenVerificationModal}
 				/>
-
 				{/* Store Info Sub menu */}
 				<SidebarSubMenu
 					label='بيانات المتجر'
@@ -314,7 +305,6 @@ const SideBar = ({
 					onClose={closeSidebar}
 					onVerify={handleOpenVerificationModal}
 				/>
-
 				<SidebarLink
 					to='Support'
 					icon={Support}
@@ -355,7 +345,6 @@ const SideBar = ({
 						handleOpenVerificationModal();
 					}}
 				/>
-
 				{/** Setting Sub menu */}
 				<SidebarSubMenu
 					label='الاعدادات'
@@ -363,6 +352,16 @@ const SideBar = ({
 					items={submenuItems.setting}
 					onClose={closeSidebar}
 					onVerify={handleOpenVerificationModal}
+				/>
+
+				<SidebarLink
+					to='upgrade-packages'
+					icon={BiSolidRocket}
+					label=' ترقية الباقة'
+					className='menu-link'
+					onClick={() => {
+						closeSidebar();
+					}}
 				/>
 				<SidebarLink
 					to='Reports'

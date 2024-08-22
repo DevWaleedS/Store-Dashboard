@@ -114,6 +114,14 @@ ellipse {
 	-ms-border-radius: 32px;
 	-o-border-radius: 32px;
 }
+.form button:hover {
+	background-color: var(--primary-500);
+}
+.form button:disabled,
+.form button:disabled:hover {
+	background-color: #ddd;
+	cursor: not-allowed;
+}
 .form .box .wrong-text {
 	color: #ff3b3b;
 	font-size: 14px;

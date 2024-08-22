@@ -8,6 +8,7 @@ import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
 
 // RTk Query
 import { useLoginMutation } from "../../../store/apiSlices/loginApi";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  TO HANDLE THE REG_EXPRESS
@@ -15,7 +16,7 @@ import { useLoginMutation } from "../../../store/apiSlices/loginApi";
 
 const Login = () => {
 	let type = "password";
-
+	const [btnLoading, setBtnLoading] = useState(false);
 	const navigate = useNavigate();
 	// If user is not verify
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
@@ -84,12 +85,14 @@ const Login = () => {
 		setError("");
 		setUsernameError("");
 		setPasswordError("");
+		setBtnLoading(true);
 
 		try {
 			// Call the login mutation with the provided credentials
 			const res = await login({ user_name: username, password }).unwrap();
 
 			if (res?.success === true && res?.data?.status === 200) {
+				setBtnLoading(false);
 				localStorage.setItem("storeToken", res.data.token);
 				localStorage.setItem("userName", res.data?.user?.user_name);
 				localStorage.setItem("userImage", res.data?.user?.image);
@@ -112,6 +115,7 @@ const Login = () => {
 
 				navigate("/");
 			} else {
+				setBtnLoading(false);
 				setUsernameError(res?.message?.en?.user_name?.[0]);
 				setPasswordError(res?.message?.en?.password?.[0]);
 				setError(res?.message?.ar);
@@ -228,11 +232,12 @@ const Login = () => {
 				</div>
 				<h5 onClick={NavigateToRestorePassword}>نسيت كلمة المرور ؟</h5>
 			</div>
+
 			<button
 				className='bt-main'
 				onClick={handleLogin}
 				disabled={!username || !password || isLoading}>
-				تسجيل الدخول
+				{btnLoading || isLoading ? <CircularLoading /> : "تسجيل الدخول"}
 			</button>
 		</div>
 	);

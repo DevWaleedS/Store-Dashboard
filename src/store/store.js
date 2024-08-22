@@ -72,11 +72,13 @@ import { selectShippingCompaniesApi } from "./apiSlices/selectorsApis/selectShip
 import { getStoreTokenApi } from "./apiSlices/getStoreTokenApi";
 import { selectPackageApi } from "./apiSlices/selectorsApis/selectPackageApi";
 import { upgradePackagesApi } from "./apiSlices/upgradePackagesApi";
+import { atlbhaPagesApi } from "./apiSlices/atlbhaPagesApi";
 
 // store
 export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(
+			atlbhaPagesApi.middleware,
 			pagesApi.middleware,
 			loginApi.middleware,
 			logOutApi.middleware,
@@ -110,7 +112,6 @@ export const store = configureStore({
 			SEOImprovementsApi.middleware,
 			technicalSupportApi.middleware,
 			upgradePackagesApi.middleware,
-
 			platformServicesApi.middleware,
 			selectCategoriesApi.middleware,
 			shippingCompaniesApi.middleware,
@@ -128,6 +129,7 @@ export const store = configureStore({
 			registrationMarketerStatusApi.middleware
 		),
 	reducer: {
+		[atlbhaPagesApi.reducerPath]: atlbhaPagesApi.reducer,
 		[selectEtlbohaSubCategoriesApi.reducerPath]:
 			selectEtlbohaSubCategoriesApi.reducer,
 		[registrationMarketerStatusApi.reducerPath]:
@@ -167,7 +169,6 @@ export const store = configureStore({
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
-
 		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
 		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
@@ -178,7 +179,6 @@ export const store = configureStore({
 		[selectPageCategoriesApi.reducerPath]: selectPageCategoriesApi.reducer,
 		[selectEtlobahCategoryApi.reducerPath]: selectEtlobahCategoryApi.reducer,
 		[evaluationThePlatformApi.reducerPath]: evaluationThePlatformApi.reducer,
-
 		[selectShippingCompaniesApi.reducerPath]:
 			selectShippingCompaniesApi.reducer,
 

@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { ReactComponent as SvgComponent } from "../../../../../../data/Icons/Component 59 – 11.svg";
@@ -13,10 +12,15 @@ import "../SendVerificationCode.css";
 
 import LogoHeader from "../../../../LogoHeader/LogoHeader";
 import { AlertModal } from "../../AlertModal";
+import CircularLoading from "../../../../../../HelperComponents/CircularLoading";
+import {
+	useReSendVerificationCodeByPhoneMutation,
+	useVerifyUserMutation,
+} from "../../../../../../store/apiSlices/loginApi";
 
 const LogInVerificationCode = () => {
 	const navigate = useNavigate();
-
+	const [btnLoading, setBtnLoading] = useState(false);
 	const ResetPasswordInfo = useContext(ResetPasswordContext);
 	const {
 		email,
@@ -66,51 +70,78 @@ const LogInVerificationCode = () => {
 	// -------------------------------------------------------------------------------------------------- //
 
 	// SEND VERIFY CODE BY EMAIL AND CODE
-	const verifyCode = () => {
+
+	const [verifyUser, { isLoading }] = useVerifyUserMutation();
+	const verifyCode = async () => {
 		setVerError("");
+		setBtnLoading(true);
 		const formData = new FormData();
 		formData.append("user_name", email);
 		formData.append("code", codeValue);
 
-		axios
-			.post("https://backend.atlbha.com/api/verify-user", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setResetPasswordToken(res?.data?.data?.token);
-					if (res?.data?.message?.ar === "تم التحقق") {
-						// navigate("/auth/login");
-						localStorage.setItem("storeToken", res?.data?.data?.token);
-						// NavigateToDashboardPage();
-						navigate("/");
-					} else {
-						setVerError(res?.data?.message?.ar);
-					}
-				} else {
-					setVerError(
-						res?.data?.message?.en?.code?.[0] || res?.data?.message?.ar
-					);
-				}
+		// make request...
+		try {
+			const response = await verifyUser({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setBtnLoading(false);
+				setResetPasswordToken(response?.data?.data?.token);
+				if (response?.data?.message?.ar === "تم التحقق") {
+					// navigate("/auth/login");
+					localStorage.setItem("storeToken", response?.data?.data?.token);
+					// NavigateToDashboardPage();
+					navigate("/");
+				} else {
+					setVerError(response?.data?.message?.ar);
+				}
+			} else {
+				setBtnLoading(false);
+				setVerError(
+					response?.data?.message?.en?.code?.[0] || response?.data?.message?.ar
+				);
+			}
+		} catch (error) {
+			console.error("Error verifyUser :", error);
+		}
 	};
 
 	//  RE-SEND VERIFY CODE BY PHONE
-	const reSendVerificationCodeByPhone = () => {
+	const [reSendVerificationCodeByPhone, { isLoading: resSendLoading }] =
+		useReSendVerificationCodeByPhoneMutation();
+
+	const handleReSendVerificationCodeByPhone = async () => {
 		setErrMessage("");
 		const formData = new FormData();
 		formData.append("user_name", email);
-		axios
-			.post("https://backend.atlbha.com/api/send-verify-message", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setMessage("تم إرسال الكود إلى هاتفك");
-					setShowAlertModal(true);
-					setResendButtonDisabled(true);
-					setDisabledBtn(true);
-					setCountdown(60);
-				} else {
-					setErrMessage(res?.data?.message?.ar);
-				}
+
+		// make request...
+		try {
+			const response = await reSendVerificationCodeByPhone({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setMessage("تم إرسال الكود إلى هاتفك");
+				setShowAlertModal(true);
+				setResendButtonDisabled(true);
+				setDisabledBtn(true);
+				setCountdown(60);
+			} else {
+				setErrMessage(response?.data?.message?.ar);
+			}
+		} catch (error) {
+			console.error("Error reSendVerificationCodeByPhone :", error);
+		}
 	};
 
 	// to close Alert modal after timer end
@@ -145,9 +176,15 @@ const LogInVerificationCode = () => {
 							<h2>قمنا بإرسال كود التحقق لرقم جوالك</h2>
 							<div className='box'>
 								<OtpInput
-									onChange={(e) => setCodeValue(e)}
+									onChange={(e) => {
+										setCodeValue(e);
+										setErrMessage("");
+										setVerError("");
+									}}
 									value={codeValue}
 									numInputs={6}
+									inputType='number'
+									shouldAutoFocus='true'
 									className={"input"}
 									renderInput={(props) => <input {...props} />}
 								/>
@@ -163,8 +200,8 @@ const LogInVerificationCode = () => {
 							<button
 								className='bt-main'
 								onClick={verifyCode}
-								disabled={!codeValue || codeValue?.length !== 6}>
-								تسجيل الدخول
+								disabled={!codeValue || codeValue?.length !== 6 || isLoading}>
+								{btnLoading || isLoading ? <CircularLoading /> : "تسجيل الدخول"}
 							</button>
 							{errMessage && (
 								<div
@@ -175,14 +212,16 @@ const LogInVerificationCode = () => {
 							)}
 							<button
 								className='mb-2 resend-code-btn'
-								disabled={resendButtonDisabled}
-								onClick={reSendVerificationCodeByPhone}>
+								disabled={resendButtonDisabled || resSendLoading}
+								onClick={handleReSendVerificationCodeByPhone}>
 								<span>
 									<SvgRepeat style={{ width: "20px", marginLeft: "3px" }} />
 								</span>
 								اعد ارسال الكود
-								<span className={`${disapledBtn ? "d-inline" : "d-none"}`}>
-									{" "}
+								<span
+									className={`${
+										disapledBtn || resSendLoading ? "d-inline" : "d-none"
+									}`}>
 									{countdown === 0 ? " " : countdown}{" "}
 								</span>
 							</button>

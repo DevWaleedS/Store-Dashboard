@@ -119,9 +119,9 @@ export const PackagesPlans = () => {
 							</div>
 
 							{item?.is_selected && item?.package_paid ? (
-								<button className='package_btn current_package_btn'>
+								<div className='w-100 d-flex justify-content-center align-items-center current_package_btn'>
 									الباقة الحالية
-								</button>
+								</div>
 							) : (
 								<button
 									className='package_btn'

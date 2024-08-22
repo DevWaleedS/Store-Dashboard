@@ -12,6 +12,12 @@ import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvid
 
 import "./SendVerificationCode.css";
 import { AlertModal } from "../AlertModal";
+import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+import {
+	useReSendVerificationCodeByEmailMutation,
+	useRestorePassWordMutation,
+	useVerifyAccountMutation,
+} from "../../../../../store/apiSlices/loginApi";
 
 const SendVerificationCode = () => {
 	const navigate = useNavigate();
@@ -29,7 +35,7 @@ const SendVerificationCode = () => {
 		setMessage,
 		setResetPasswordToken,
 	} = ResetPasswordInfo;
-
+	const [btnLoading, setBtnLoading] = useState(false);
 	const [codeValue, setCodeValue] = useState("");
 	const [
 		reSendVerificationCodeByEmailDisabled,
@@ -68,75 +74,118 @@ const SendVerificationCode = () => {
 	// -------------------------------------------------------------------------------------------------- //
 
 	// SEND VERIFY CODE BY EMAIL AND CODE
-	const verifyCode = () => {
+	const [verifyAccount, { isloading: verifyAccountIsLoading }] =
+		useVerifyAccountMutation();
+	const verifyCode = async () => {
 		setVerError("");
+		setBtnLoading(true);
 		const formData = new FormData();
 		formData.append("phonenumber", userPhoneNumber);
 		formData.append("code", codeValue);
 
-		axios
-			.post("https://backend.atlbha.com/api/password/verify", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setResetPasswordToken(res?.data?.data?.token);
-
-					if (res?.data?.message?.en === "not verified") {
-						setVerError(
-							".لم يتم التحقق! يرجى ادخال الكود بشكل صحيح أو قم باعاة الارسال مره اخرى"
-						);
-					} else if (
-						res?.data?.message?.en === "This password reset token is invalid."
-					) {
-						setMessage(res?.data?.message?.ar);
-						navigate("/RestorePassword");
-					} else if (res?.data?.message?.en === "verified") {
-						setMessage(res?.data?.message?.ar);
-						navigate("/CreateNewPassword");
-					}
-				} else {
-					setVerError(res?.data?.message?.en?.code?.[0]);
-				}
+		// make request...
+		try {
+			const response = await verifyAccount({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setResetPasswordToken(response?.data?.data?.token);
+				setBtnLoading(false);
+
+				if (response?.data?.message?.en === "not verified") {
+					setVerError(
+						".لم يتم التحقق! يرجى ادخال الكود بشكل صحيح أو قم باعاة الارسال مره اخرى"
+					);
+				} else if (
+					response?.data?.message?.en ===
+					"This password reset token is invalid."
+				) {
+					setMessage(response?.data?.message?.ar);
+					navigate("/RestorePassword");
+				} else if (response?.data?.message?.en === "verified") {
+					setMessage(response?.data?.message?.ar);
+					navigate("/CreateNewPassword");
+				}
+			} else {
+				setVerError(response?.data?.message?.en?.code?.[0]);
+				setBtnLoading(false);
+			}
+		} catch (error) {
+			console.error("Error restore password :", error);
+		}
 	};
 
 	//  RE-SEND VERIFY CODE BY PHONE
-	const reSendVerificationCodeByPhone = () => {
+	const [restorePassWord, { isLoading: resendByPhoneIsLoading }] =
+		useRestorePassWordMutation();
+	const reSendVerificationCodeByPhone = async () => {
 		setErrMessage("");
+
 		const formData = new FormData();
 		formData.append("phonenumber", userPhoneNumber);
-		axios
-			.post("https://backend.atlbha.com/api/password/create", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setMessage("تم إرسال الكود إلى هاتفك");
-					setShowAlertModal(true);
-					setResendButtonDisabled(true);
-					setDisabledBtn(true);
-					setCountdown(60);
-				} else {
-					setErrMessage(res?.data?.message?.ar);
-				}
+
+		// make request...
+		try {
+			const response = await restorePassWord({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setMessage("تم إرسال الكود إلى هاتفك");
+				setShowAlertModal(true);
+				setResendButtonDisabled(true);
+				setDisabledBtn(true);
+				setCountdown(60);
+				setErrMessage("");
+			} else {
+				setErrMessage(response?.data?.message?.ar);
+			}
+		} catch (error) {
+			console.error("Error restore password :", error);
+		}
 	};
 
 	//  RE-SEND VERIFY CODE BY EMAIL
-	const reSendVerificationCodeByEmail = () => {
+	const [reSendVerificationCodeByEmail, { isLoading: resendByEmailIsLoading }] =
+		useReSendVerificationCodeByEmailMutation();
+	const handleReSendVerificationCodeByEmail = async () => {
 		setErrCodeByEmail("");
+		setReSendVerificationCodeByEmailDisabled(true);
 		const formData = new FormData();
 		formData.append("user_name", localStorage.getItem("userEmail"));
 
-		axios
-			.post("https://backend.atlbha.com/api/password/create-by-email", formData)
-			.then((res) => {
-				if (res?.data?.success === true && res?.data?.data?.status === 200) {
-					setMessage("تم إرسال الكود إلى البريد الإلكتروني");
-					setShowAlertModal(true);
-					setReSendVerificationCodeByEmailDisabled(true);
-					setCountdown(60);
-				} else {
-					setErrCodeByEmail(res?.data?.message?.ar);
-				}
+		// make request...
+		try {
+			const response = await reSendVerificationCodeByEmail({
+				body: formData,
 			});
+
+			// Handle response
+			if (
+				response?.data?.success === true &&
+				response?.data?.data?.status === 200
+			) {
+				setMessage("تم إرسال الكود إلى البريد الإلكتروني");
+				setShowAlertModal(true);
+				setErrCodeByEmail("");
+				setReSendVerificationCodeByEmailDisabled(false);
+				setCountdown(60);
+			} else {
+				setReSendVerificationCodeByEmailDisabled(false);
+				setErrCodeByEmail(response?.data?.message?.ar);
+			}
+		} catch (error) {
+			console.error("Error restore password :", error);
+		}
 	};
 
 	// to close Alert modal after timer end
@@ -171,9 +220,15 @@ const SendVerificationCode = () => {
 							<h2>قم بإدخال كود التحقق </h2>
 							<div className='box'>
 								<OtpInput
-									onChange={(e) => setCodeValue(e)}
+									onChange={(e) => {
+										setCodeValue(e);
+										setErrMessage("");
+										setErrCodeByEmail("");
+									}}
 									value={codeValue}
 									numInputs={6}
+									inputType='number'
+									shouldAutoFocus='true'
 									className={"input"}
 									renderInput={(props) => <input {...props} />}
 								/>
@@ -187,29 +242,40 @@ const SendVerificationCode = () => {
 							)}
 							<button
 								className='mb-2 resend-code-btn'
-								disabled={resendButtonDisabled}
+								disabled={resendButtonDisabled || resendByPhoneIsLoading}
 								onClick={reSendVerificationCodeByPhone}>
 								<span>
 									<SvgRepeat style={{ width: "20px", marginLeft: "3px" }} />
 								</span>
 								اعد ارسال الكود عبر رقم الجوال
-								<span className={`${disapledBtn ? "d-inline" : "d-none"}`}>
+								<span
+									className={`${
+										disapledBtn || resendByPhoneIsLoading
+											? "d-inline counter_wrapper"
+											: "d-none"
+									}`}>
 									{" "}
 									{countdown === 0 ? " " : countdown}{" "}
 								</span>
 							</button>
 							{errMessage && (
-								<div
-									className='text-danger text-center w-100'
-									style={{ marginTop: "-32px", marginRight: "-10px" }}>
-									({errMessage})
+								<div className='text-danger text-center w-100'>
+									{errMessage}
 								</div>
 							)}
 							<button
 								className='send-by-email-btn'
-								disabled={reSendVerificationCodeByEmailDisabled}
-								onClick={reSendVerificationCodeByEmail}>
-								ارسل الكود عبر البريد الالكتروني
+								disabled={
+									reSendVerificationCodeByEmailDisabled ||
+									resendByEmailIsLoading
+								}
+								onClick={handleReSendVerificationCodeByEmail}>
+								{reSendVerificationCodeByEmailDisabled ||
+								resendByEmailIsLoading ? (
+									<CircularLoading />
+								) : (
+									"ارسل الكود عبر البريد الالكتروني"
+								)}
 							</button>
 							{errCodeByEmail && (
 								<div
@@ -220,10 +286,19 @@ const SendVerificationCode = () => {
 							)}
 
 							<button
-								disabled={!codeValue}
+								disabled={
+									!codeValue ||
+									btnLoading ||
+									codeValue?.length !== 6 ||
+									verifyAccountIsLoading
+								}
 								className='bt-main'
 								onClick={verifyCode}>
-								تأكيد
+								{btnLoading || verifyAccountIsLoading ? (
+									<CircularLoading />
+								) : (
+									"تأكيد"
+								)}
 							</button>
 						</div>
 					</div>
