@@ -217,7 +217,7 @@ const CheckoutPackages = () => {
 			Taxes: 0,
 			ActualValue: selectedPackage?.price_after_coupon,
 			Amount: selectedPackage?.price_after_coupon,
-			MerchantReference: `package_reference_${selectedPackage?.unique_id}`,
+			MerchantReference: `package_reference_${selectedPackage?.unique_id + 1}`,
 		};
 
 		// data that send  to api...
