@@ -45,7 +45,7 @@ const style = {
 
 const CheckoutPackages = () => {
 	const navigate = useNavigate();
-
+	const [merchantReference, setMerchantReference] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [paymentSelect, setPaymentSelect] = useState(null);
 	// coupon
@@ -94,6 +94,14 @@ const CheckoutPackages = () => {
 		let formData = new FormData();
 		formData.append("package_id", selectedPackage?.id);
 		formData.append("paymentype_id", paymentSelect || "");
+
+		// handle set package_reference is the payment id is madfu
+		if (+paymentSelect === 5) {
+			setMerchantReference(
+				`package_reference_${selectedPackage?.unique_id}_${Date.now()}`
+			);
+			formData.append("package_reference", merchantReference);
+		}
 
 		// make request...
 		try {
@@ -217,7 +225,7 @@ const CheckoutPackages = () => {
 			Taxes: 0,
 			ActualValue: selectedPackage?.price_after_coupon,
 			Amount: selectedPackage?.price_after_coupon,
-			MerchantReference: `package_reference_${selectedPackage?.unique_id + 1}`,
+			MerchantReference: merchantReference,
 		};
 
 		// data that send  to api...
