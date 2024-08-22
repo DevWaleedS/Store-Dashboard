@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./CheckoutPackages.css";
 
@@ -45,6 +45,7 @@ const style = {
 
 const CheckoutPackages = () => {
 	const navigate = useNavigate();
+	const date = Date.now();
 	const [merchantReference, setMerchantReference] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
 	const [paymentSelect, setPaymentSelect] = useState(null);
@@ -84,6 +85,14 @@ const CheckoutPackages = () => {
 		});
 	};
 
+	// using this effect to handle merchantReference if paymentSelect is madfu...
+	useEffect(() => {
+		if (+paymentSelect === 5)
+			setMerchantReference(
+				`package_reference_${selectedPackage?.unique_id}_${date}`
+			);
+	}, [paymentSelect]);
+
 	// handle check out cart
 	const [checkOutPackage, { isCartLoading }] = useCheckOutPackageMutation();
 	const handleCheckout = async () => {
@@ -97,9 +106,6 @@ const CheckoutPackages = () => {
 
 		// handle set package_reference is the payment id is madfu
 		if (+paymentSelect === 5) {
-			setMerchantReference(
-				`package_reference_${selectedPackage?.unique_id}_${Date.now()}`
-			);
 			formData.append("package_reference", merchantReference);
 		}
 

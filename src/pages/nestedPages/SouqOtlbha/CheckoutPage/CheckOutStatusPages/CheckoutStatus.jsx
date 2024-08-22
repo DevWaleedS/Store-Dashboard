@@ -66,10 +66,15 @@ const CheckoutStatusModal = () => {
 	const dispatch = useDispatch();
 	const handleOpenVerificationModal = () => {
 		if (
-			showVerification?.verification_status !== "تم التوثيق" ||
 			(!showVerification?.package_paid &&
 				!showVerification?.package_id &&
-				showVerification?.verification_status === "تم التوثيق")
+				showVerification?.verification_status === "تم التوثيق") ||
+			(!showVerification?.package_paid &&
+				showVerification?.package_id &&
+				showVerification?.verification_status === "تم التوثيق") ||
+			(showVerification?.package_paid &&
+				showVerification?.package_id &&
+				showVerification?.verification_status !== "تم التوثيق")
 		) {
 			dispatch(openVerifyModal());
 			navigate("/");
