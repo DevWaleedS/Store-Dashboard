@@ -326,6 +326,7 @@ const CheckoutPackages = () => {
 												<div className='card '>
 													<div className='card-body'>
 														<PackageCheckoutInfo
+															packageId={selectedPackage?.id}
 															isCartLoading={isGetPackagesLoading}
 															selectedPackage={selectedPackage}
 															loadingPackages={loadingPackages}

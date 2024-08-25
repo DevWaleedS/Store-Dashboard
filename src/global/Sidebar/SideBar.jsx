@@ -45,8 +45,8 @@ import {
 import { FaCrown } from "react-icons/fa6";
 import { BsCartX } from "react-icons/bs";
 import { MdVerified } from "react-icons/md";
-import { BiCartAdd, BiSolidRocket } from "react-icons/bi";
 import { IoWallet } from "react-icons/io5";
+import { BiCartAdd, BiSolidRocket } from "react-icons/bi";
 import { FaCircle, FaUserCheck } from "react-icons/fa";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import { useNavigate } from "react-router-dom";

@@ -31,7 +31,7 @@ export const upgradePackagesApi = createApi({
 					data: body,
 				};
 			},
-			invalidatesTags: ["GetPackageId"],
+			invalidatesTags: ["GetPackageId", "GetPackages"],
 		}),
 
 		// set package id

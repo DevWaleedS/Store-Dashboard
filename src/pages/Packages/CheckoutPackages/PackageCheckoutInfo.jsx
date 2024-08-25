@@ -1,13 +1,36 @@
 import React from "react";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { useSetPackageIdPrePaymentMutation } from "../../../store/apiSlices/upgradePackagesApi";
+import { CircularProgress } from "@mui/material";
 
 const PackageCheckoutInfo = ({
+	packageId,
 	selectedPackage,
 	loadingPackages,
 	isCartLoading,
 }) => {
 	const navigate = useNavigate();
+
+	// handle set package id and navigate user to checkout package
+	const [setPackageIdPrePayment, { isLoading }] =
+		useSetPackageIdPrePaymentMutation();
+	const cancelCoupon = async () => {
+		// data that send to api...
+		let formData = new FormData();
+		formData.append("package_id", packageId);
+
+		// make request...
+		try {
+			await setPackageIdPrePayment({
+				body: formData,
+			});
+		} catch (error) {
+			console.error("Error changing setPackageIdPrePayment:", error);
+		}
+	};
+
 	return (
 		<>
 			<div className='checkout__info'>
@@ -73,21 +96,36 @@ const PackageCheckoutInfo = ({
 										<tr>
 											<th>
 												كود خصم
-												<span style={{ color: "#1dbbbe", fontSize: "1rem" }}>
-													{" "}
-													({selectedPackage?.coupon_info?.code}){" "}
+												<span className='coupon_box'>
+													<span style={{ color: "#1dbbbe", fontSize: "1rem" }}>
+														{" "}
+														{selectedPackage?.coupon_info?.code}{" "}
+													</span>
+													{selectedPackage?.coupon_info?.discount_type ===
+													"نسبة مئوية" ? (
+														<p
+															style={{
+																display: "inline-block",
+																fontSize: "0.85rem",
+																color: "#7e7e7e",
+															}}>
+															({selectedPackage?.coupon_info?.discount}%)
+														</p>
+													) : null}
+													<button
+														disabled={isLoading}
+														className='cancel_coupon__icon'
+														onClick={cancelCoupon}>
+														{isLoading ? (
+															<CircularProgress
+																size='12px'
+																sx={{ color: "#ccc" }}
+															/>
+														) : (
+															<IoIosClose className='close__coupon_icon' />
+														)}
+													</button>
 												</span>
-												{selectedPackage?.coupon_info?.discount_type ===
-												"نسبة مئوية" ? (
-													<p
-														style={{
-															display: "inline-block",
-															fontSize: "0.85rem",
-															color: "#7e7e7e",
-														}}>
-														({selectedPackage?.coupon_info?.discount}%)
-													</p>
-												) : null}
 											</th>
 											<td>
 												{selectedPackage?.coupon_info?.discount_type ===
