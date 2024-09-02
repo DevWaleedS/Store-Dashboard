@@ -94,7 +94,7 @@ const SelectShippingStatus = ({
 	const { setLoadingTitle } = LoadingStore;
 
 	// To handle update order Status
-	const [updateOrderStatus] = useUpdateOrderStatusMutation();
+	const [updateOrderStatus, { isLoading }] = useUpdateOrderStatusMutation();
 	const handleUpdateOrderStatus = async (status) => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
@@ -131,6 +131,7 @@ const SelectShippingStatus = ({
 					address: response?.data?.message?.en?.street_address?.[0] || "",
 					weight: response?.data?.message?.en?.weight?.[0] || "",
 				});
+
 				// Handle display errors using toast notifications
 				toast.error(
 					response?.data?.message?.ar
@@ -206,17 +207,16 @@ const SelectShippingStatus = ({
 												backgroundColor: "red",
 											},
 										}}>
-										<RadioGroup
-											aria-labelledby='demo-radio-buttons-group-label'
-											name='radio-buttons-group'>
+										<RadioGroup>
 											<FormControlLabel
 												value='ready'
 												className='mb-2'
 												control={<BpRadio />}
-												onClick={() => handleUpdateOrderStatus("ready")}
 												sx={formControlLabelStyle}
+												onClick={() => handleUpdateOrderStatus("ready")}
 												label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
 												disabled={
+													isLoading ||
 													currentOrder?.orders?.status === "قيد التجهيز" ||
 													currentOrder?.orders?.status === "تم الشحن" ||
 													currentOrder?.orders?.status === "ملغي"
@@ -233,6 +233,7 @@ const SelectShippingStatus = ({
 												sx={formControlLabelStyle}
 												value='delivery_in_progress'
 												disabled={
+													isLoading ||
 													currentOrder?.orders?.status === "جديد" ||
 													currentOrder?.orders?.status === "تم الشحن" ||
 													currentOrder?.orders?.status === "ملغي"
@@ -245,6 +246,7 @@ const SelectShippingStatus = ({
 												sx={formControlLabelStyle}
 												label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
 												disabled={
+													isLoading ||
 													currentOrder?.orders?.status === "تم الشحن" ||
 													currentOrder?.orders?.status === "ملغي"
 												}
