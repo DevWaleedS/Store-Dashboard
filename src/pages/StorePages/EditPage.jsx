@@ -107,8 +107,6 @@ const EditPage = () => {
 	const [descriptionLength, setDescriptionLength] = useState(false);
 	const itsPost = page?.pageCategory === 1;
 
-	console.log(page?.pageCategory);
-
 	// ---------------------------------------------------------
 	const addTags = () => {
 		setPage((prevPage) => ({
@@ -683,7 +681,6 @@ const EditPage = () => {
 													</div>
 												</div>
 
-												{console.log(itsPost)}
 												{itsPost && (
 													<>
 														<div className='col-md-6 col-12'>

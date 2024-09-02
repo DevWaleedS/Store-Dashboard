@@ -87,7 +87,6 @@ const OrderDetails = () => {
 		}
 	}, [currentOrder?.orders?.shippingtypes]);
 
-	console.log(currentOrder?.orders?.status);
 	return (
 		<>
 			<Helmet>
