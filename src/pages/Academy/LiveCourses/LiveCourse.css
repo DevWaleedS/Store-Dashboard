@@ -40,6 +40,7 @@
 	font-size: 32px;
 	font-weight: 500;
 	color: var(--second-500);
+	white-space: normal;
 }
 
 .live-course-description div,
@@ -53,5 +54,9 @@
 @media (max-width: 768px) {
 	.live-courses-boxes .box {
 		width: 100%;
+	}
+
+	.live-course-name {
+		font-size: 28px;
 	}
 }
