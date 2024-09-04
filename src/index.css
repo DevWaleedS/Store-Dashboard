@@ -12838,7 +12838,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 	/* academy-page */
 	.academy-page .btns-group-container button {
-		height: 90px;
+		height: 60px;
+		width: 100%;
 		font-size: 18px;
 	}
 

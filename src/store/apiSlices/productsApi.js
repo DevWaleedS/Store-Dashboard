@@ -120,20 +120,12 @@ export const productsApi = createApi({
 
 		// change Categories For Some Selected Products
 		changeCategoriesForSomeSelectedProducts: builder.mutation({
-			query: ({ queryParams, category_id, subcategory_id }) => {
-				const url = `updateCategory?${queryParams}`;
-				const method = "POST";
-
-				// Construct payload object
-				let payload = { category_id };
-
-				// If subcategory_id array is not empty, include it in the payload
-				if (subcategory_id && subcategory_id.length > 0) {
-					payload.subcategory_id = subcategory_id;
-				}
-
-				// Return URL, method, and payload
-				return { url, method, data: JSON.stringify(payload) };
+			query: ({ queryParams, body }) => {
+				return {
+					url: `updateCategory?${queryParams}`,
+					method: "POST",
+					data: body,
+				};
 			},
 			invalidatesTags: ["Products"],
 		}),

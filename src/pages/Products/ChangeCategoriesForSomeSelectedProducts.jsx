@@ -115,7 +115,7 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 	/**  close modal */
 	const handleCloseChangeCategoriesModal = () => {
 		dispatch(closeModal());
-		setCategory_id([]);
+		setCategory_id("");
 		setSubcategory_id([]);
 	};
 
@@ -127,11 +127,22 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 	const changeCategories = async () => {
 		resetProductError();
 
+		// data that send to api
+		let formData = new FormData();
+		formData.append("category_id", category_id);
+
+		// If subcategory_id array is not empty, include it in the payload
+		if (subcategory_id && subcategory_id.length > 0) {
+			subcategory_id.forEach((id, index) => {
+				formData.append(`subcategory_id[${index}]`, id);
+			});
+		}
+
 		try {
 			const queryParams = selected.map((id) => `id[]=${id}`).join("&");
 			const response = await changeCategoriesForSomeSelectedProducts({
 				queryParams,
-				category_id,
+				body: formData,
 				subcategory_id,
 			});
 
@@ -142,7 +153,7 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 			) {
 				handleCloseChangeCategoriesModal();
 				setSelected([]);
-				setCategory_id([]);
+				setCategory_id("");
 				setSubcategory_id([]);
 			} else {
 				setProductError({

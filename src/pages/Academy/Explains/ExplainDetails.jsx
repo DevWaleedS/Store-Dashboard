@@ -26,8 +26,6 @@ const ExplainDetails = () => {
 		videoId: id,
 	});
 
-	console.log(isLoading);
-
 	// This code to handle get the src from youtube iframe src
 	const [videoUrl, setVideoUrl] = useState(null);
 	useEffect(() => {

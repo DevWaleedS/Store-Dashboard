@@ -143,6 +143,7 @@ import {
 import UpgradePackages from "./pages/Packages/UpgradePackages";
 import ComparePackages from "./pages/Packages/ComparePackages";
 import CheckoutPackages from "./pages/Packages/CheckoutPackages/CheckoutPackages";
+import LiveCourseDetails from "./pages/Academy/LiveCourses/LiveCourseDetails";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -196,7 +197,11 @@ const router = createBrowserRouter([
 				element: <Academy />,
 			},
 			// Add CourseDetails page nested page for Academy page
-
+			// Add ExplainDetails page nested page for Academy page
+			{
+				path: "Academy/live-course-details/:id",
+				element: <LiveCourseDetails />,
+			},
 			{
 				path: "Academy/CourseDetails/:id",
 				element: <CourseDetails />,

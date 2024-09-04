@@ -3,13 +3,12 @@ import React, { useState, useContext } from "react";
 // Third Party
 import { Helmet } from "react-helmet";
 
-// Icons
-import { BiSearch } from "react-icons/bi";
-
 // Components
+import PageActions from "./PageActions";
 import Explain from "./Explains/Explain";
+import AcademyToggle from "./AcademyToggle";
+import LiveCourses from "./LiveCourses/LiveCourses";
 import CoursesTraining from "./Courses/CoursesTraining";
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 
 // Context
 import Context from "../../Context/context";
@@ -17,6 +16,12 @@ import Context from "../../Context/context";
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
+/**
+ * The main Academy component that renders the Academy page.
+ * It handles the toggling between the Courses/Training and Explain pages,
+ * as well as the search functionality for each page.
+ * It also checks if the user's account is verified before rendering the page.
+ */
 const Academy = () => {
 	// to Handle if the user is not verify  her account
 	UseAccountVerification();
@@ -24,14 +29,17 @@ const Academy = () => {
 	const academyToggleContext = useContext(Context);
 	const { togglePage, setTogglePag } = academyToggleContext;
 
+	const [searchCourses, setSearchCourses] = useState("");
+	const [searchExplain, setSearchExplain] = useState("");
+	const [searchLiveCourses, setSearchLiveCourses] = useState("");
+
 	// Set function to change between pages
 	const togglePagesHandle = (index) => {
 		setTogglePag(index);
 		setSearchCourses("");
 		setSearchExplain("");
+		setSearchLiveCourses("");
 	};
-	const [searchCourses, setSearchCourses] = useState("");
-	const [searchExplain, setSearchExplain] = useState("");
 
 	return (
 		<>
@@ -39,69 +47,31 @@ const Academy = () => {
 				<title>لوحة تحكم اطلبها | الأكاديمية</title>
 			</Helmet>
 			<section className='academy-page p-lg-3'>
-				<div className='head-category mb-md-5 mb-3'>
-					<div className='row'>
-						<div className='col-md-6 col-12'>
-							<Breadcrumb currentPage={"الأكاديمية"} />
-						</div>
-						<div className='col-md-6 col-12 d-flex justify-content-end'>
-							<div className='pages-search-bx w-100'>
-								{togglePage === 1 ? (
-									<div className='pages-search-bx'>
-										<BiSearch className='search-icon' />
-										<input
-											value={searchCourses}
-											onChange={(e) => setSearchCourses(e.target.value)}
-											type='text'
-											name='search'
-											id='search'
-											placeholder='البحث عن دورة معينة'
-										/>
-									</div>
-								) : (
-									<div className='pages-search-bx'>
-										<BiSearch className='search-icon' />
-										<input
-											value={searchExplain}
-											onChange={(e) => setSearchExplain(e.target.value)}
-											type='text'
-											name='search'
-											id='search'
-											placeholder='البحث عن شرح معين'
-										/>
-									</div>
-								)}
-							</div>
-						</div>
-					</div>
-				</div>
+				<PageActions
+					togglePage={togglePage}
+					searchExplain={searchExplain}
+					searchCourses={searchCourses}
+					setSearchExplain={setSearchExplain}
+					setSearchCourses={setSearchCourses}
+					searchLiveCourses={searchLiveCourses}
+					setSearchLiveCourses={setSearchLiveCourses}
+				/>
 
-				<div className='row mb-md-5 mb-3'>
-					<div className='btns-group-container d-flex justify-content-md-start justify-content-center align-items-center'>
-						<button
-							onClick={() => togglePagesHandle(1)}
-							className={togglePage === 1 ? "active" : ""}>
-							الدورات التدريبية
-						</button>
-
-						<button
-							onClick={() => togglePagesHandle(2)}
-							className={
-								togglePage === 2 ? "me-md-5 me-3 active" : "me-md-5 me-3"
-							}>
-							شروحات
-						</button>
-					</div>
-				</div>
+				<AcademyToggle
+					togglePage={togglePage}
+					togglePagesHandle={togglePagesHandle}
+				/>
 
 				<div className='row'>
 					<div className='academy-widgets-wrapper'>
 						{/** CoursesTraining and Explain Pages */}
 						{togglePage === 1 ? (
 							<CoursesTraining searchCourses={searchCourses} />
-						) : (
+						) : togglePage === 2 ? (
+							<LiveCourses searchLiveCourses={searchLiveCourses} />
+						) : togglePage === 3 ? (
 							<Explain searchExplain={searchExplain} />
-						)}
+						) : null}
 					</div>
 				</div>
 			</section>

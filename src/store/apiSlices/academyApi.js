@@ -19,6 +19,14 @@ export const AcademyApi = createApi({
 			providesTags: ["Academy"],
 		}),
 
+		// get Live courses endpoint..
+		getLiveCourses: builder.query({
+			query: (arg) => ({
+				url: `live_course?page=${arg.page}&number=${arg.number}`,
+			}),
+			providesTags: ["Academy"],
+		}),
+
 		// get store Academy explain videos endpoint..
 		getAcademyExplainVideos: builder.query({
 			query: (arg) => ({
@@ -35,6 +43,13 @@ export const AcademyApi = createApi({
 			}),
 		}),
 
+		// search in Academy courses
+		searchInLiveCourses: builder.mutation({
+			query: (arg) => ({
+				url: `searchLiveCourseName?query=${arg.query}`,
+				method: "GET",
+			}),
+		}),
 		// search in Academy explain videos
 		searchInAcademyExplainVideos: builder.mutation({
 			query: (arg) => ({
@@ -49,6 +64,11 @@ export const AcademyApi = createApi({
 			providesTags: ["Academy"],
 		}),
 
+		// get live course by id
+		getLiveCourseById: builder.query({
+			query: ({ id }) => ({ url: `live_course/${id}` }),
+			providesTags: ["Academy"],
+		}),
 		// get academy explain video by id
 		getAcademyExplainVideoById: builder.query({
 			query: ({ videoId }) => ({ url: `explainVideos/${videoId}` }),
@@ -60,6 +80,9 @@ export const AcademyApi = createApi({
 // Export endpoints and hooks
 export const {
 	useGetAcademyCoursesQuery,
+	useGetLiveCoursesQuery,
+	useGetLiveCourseByIdQuery,
+	useSearchInLiveCoursesMutation,
 	useGetAcademyCourseByIdQuery,
 	useGetAcademyExplainVideoByIdQuery,
 	useGetAcademyExplainVideosQuery,
