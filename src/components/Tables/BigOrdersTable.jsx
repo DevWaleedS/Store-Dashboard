@@ -32,7 +32,11 @@ const filtersTypes = [
 	{ id: 1, ar_name: "الكل", en_name: "" },
 	{ id: 2, ar_name: "جديد", en_name: "new" },
 	{ id: 3, ar_name: "قيد التجهيز", en_name: "ready" },
-	{ id: 4, ar_name: "تم الشحن", en_name: "delivery_in_progress" },
+	{
+		id: 4,
+		ar_name: "طلب مندوب لتسليم الشحنة",
+		en_name: "delivery_in_progress",
+	},
 	{ id: 5, ar_name: "مكتمل", en_name: "completed" },
 	{
 		id: 6,
@@ -310,7 +314,7 @@ export default function BigOrdersTable({
 																className='status d-flex justify-content-center align-items-center'
 																style={{
 																	backgroundColor:
-																		row?.status === "تم الشحن"
+																		row?.status === "طلب مندوب لتسليم الشحنة"
 																			? "#ebfcf1"
 																			: row?.status === "جديد"
 																			? "#d4ebf7"
@@ -320,7 +324,7 @@ export default function BigOrdersTable({
 																			? "#ffecd1c7"
 																			: "#9df1ba",
 																	color:
-																		row?.status === "تم الشحن"
+																		row?.status === "طلب مندوب لتسليم الشحنة"
 																			? "##9df1ba"
 																			: row?.status === "جديد"
 																			? "#0077ff"

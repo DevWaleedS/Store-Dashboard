@@ -5759,6 +5759,19 @@ input:disabled {
 	justify-content: space-between;
 }
 
+.shipping-address-input {
+	width: 100%;
+	height: 56px;
+	padding: 5px 14px;
+	background-color: #cce4ff38;
+	box-shadow: 0 0 5px 0px #cce4ff38;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-ms-border-radius: 6px;
+	-o-border-radius: 6px;
+}
+
 .table-price_span {
 	display: block;
 	width: 100%;
@@ -12460,7 +12473,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	}
 
 	.MuiButtonBase-root.MuiRadio-root {
-		padding: 0;
+		padding: 5px;
 	}
 
 	.create-offer-form-wrapper label {

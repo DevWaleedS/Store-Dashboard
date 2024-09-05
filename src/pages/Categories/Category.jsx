@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // Icons
 import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
-import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 
 // MUI
 import FormControl from "@mui/material/FormControl";

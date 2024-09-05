@@ -49,7 +49,7 @@ export const ordersApi = createApi({
 			query: ({ id, body }) => {
 				return {
 					url: `orders/${id}`,
-					method: "PUT",
+					method: "POST",
 					data: body,
 				};
 			},

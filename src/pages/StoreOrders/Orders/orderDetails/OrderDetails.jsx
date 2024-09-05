@@ -32,6 +32,8 @@ const OrderDetails = () => {
 		district: "",
 		city: "",
 		address: "",
+
+		pickup_date: "",
 	});
 
 	// Handle errors
@@ -39,12 +41,14 @@ const OrderDetails = () => {
 		district: "",
 		city: "",
 		address: "",
+		pickup_date: "",
 	});
 	const resetError = () => {
 		setError({
 			district: "",
 			city: "",
 			address: "",
+			pickup_date: "",
 		});
 	};
 
@@ -180,6 +184,7 @@ const OrderDetails = () => {
 								{/* select shipping status */}
 								<SelectShippingStatus
 									id={id}
+									error={error}
 									setError={setError}
 									shipping={shipping}
 									resetError={resetError}

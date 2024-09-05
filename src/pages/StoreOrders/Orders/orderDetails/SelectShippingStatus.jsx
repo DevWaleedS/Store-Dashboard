@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ import {
 	RadioGroup,
 	styled,
 } from "@mui/material";
+import SelectPickupDateModal from "../SelectPickupDate/SelectPickupDateModal";
 
 const BpIcon = styled("span")(({ theme }) => ({
 	borderRadius: "50%",
@@ -86,34 +87,50 @@ const SelectShippingStatus = ({
 	resetError,
 	shipping,
 	setError,
+	error,
 	currentOrder,
 }) => {
 	const navigate = useNavigate();
+
+	// to handle set date rang of shipping
+	const [value, setValue] = React.useState(null);
+	const [pickupDateModalIsOpen, setPickupDateModalIsOpen] = useState(false);
+
+	const handleClosePickupDateModal = () => {
+		setPickupDateModalIsOpen(false);
+		setValue(null);
+		resetError();
+	};
+
+	// handle shipping status
+	const [shippingStatus, setShippingStatus] = useState("");
+	const handleOnChange = (e) => {
+		setShippingStatus(e.target.value);
+	};
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
 	// To handle update order Status
 	const [updateOrderStatus, { isLoading }] = useUpdateOrderStatusMutation();
-	const handleUpdateOrderStatus = async (status) => {
+	const handleUpdateOrderStatus = async () => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
 
 		// Data that send to API
-		let data = {
-			status: status,
-		};
-
-		if (status === "ready" || status === "canceled") {
-			data.district = shipping?.district;
-			data.city = shipping?.city;
-			data.street_address = shipping?.address;
-		}
+		let formData = new FormData();
+		formData.append("_method", "PUT");
+		formData.append("status", shippingStatus);
+		formData.append("city", shipping?.city);
+		formData.append("district", shipping?.district);
+		formData.append("street_address", shipping?.address);
+		if (shippingStatus === "delivery_in_progress")
+			formData.append("pickup_date", value.getTime());
 
 		try {
 			const response = await updateOrderStatus({
 				id,
-				body: data,
+				body: formData,
 			});
 
 			// Handle response
@@ -123,12 +140,19 @@ const SelectShippingStatus = ({
 			) {
 				navigate("/Orders");
 				setLoadingTitle("");
+				if (pickupDateModalIsOpen) {
+					handleClosePickupDateModal();
+				}
 			} else {
 				setLoadingTitle("");
 				setError({
 					district: response?.data?.message?.en?.district?.[0] || "",
 					city: response?.data?.message?.en?.city?.[0] || "",
 					address: response?.data?.message?.en?.street_address?.[0] || "",
+					pickup_date:
+						response?.error?.status === 404
+							? response?.error?.data?.error
+							: response?.data?.message?.en?.pickup_date?.[0] || "",
 					weight: response?.data?.message?.en?.weight?.[0] || "",
 				});
 
@@ -156,109 +180,137 @@ const SelectShippingStatus = ({
 	return (
 		currentOrder?.orders?.status !== "ملغي" &&
 		currentOrder?.orders?.status !== "مكتمل" && (
-			<section>
-				<div className='title mb-4'>
-					<h5>حالة الشحن</h5>
-					<div
-						className='order-action-box accordion-box mb-3'
-						id='accordionExample'>
-						<div className='accordion-item w-100'>
-							<button
-								style={{ height: "auto" }}
-								type='button'
-								className='accordion-button  text-end '
-								data-bs-toggle='collapse'
-								data-bs-target='#collapseOne'
-								aria-expanded='true'
-								aria-controls='collapseOne'>
-								<div className='action-title w-100 d-flex flex-wrap'>
-									<ListIcon className='list-icon' />
-									<span className='me-2' style={{ fontSize: "18px" }}>
-										اختيار حالة الشحن
-									</span>
-								</div>
-								<div className='action-icon'>
-									<ArrowDown
-										style={{
-											cursor:
-												currentOrder?.orders?.status === "تم الشحن" ||
-												currentOrder?.orders?.status === "ملغي" ||
-												currentOrder?.orders?.status === "قيد التجهيز"
-													? "not-allowed"
-													: "pointer",
-										}}
-									/>
-								</div>
-							</button>
+			<>
+				<section>
+					<div className='title mb-4'>
+						<h5>حالة الشحن</h5>
+						<div
+							className='order-action-box accordion-box mb-3'
+							id='accordionExample'>
+							<div className='accordion-item w-100'>
+								<button
+									style={{ height: "auto" }}
+									type='button'
+									className='accordion-button  text-end '
+									data-bs-toggle='collapse'
+									data-bs-target='#collapseOne'
+									aria-expanded='true'
+									aria-controls='collapseOne'>
+									<div className='action-title w-100 d-flex flex-wrap'>
+										<ListIcon className='list-icon' />
+										<span className='me-2' style={{ fontSize: "18px" }}>
+											اختيار حالة الشحن
+										</span>
+									</div>
+									<div className='action-icon'>
+										<ArrowDown
+											style={{
+												cursor:
+													currentOrder?.orders?.status ===
+														"طلب مندوب لتسليم الشحنة" ||
+													currentOrder?.orders?.status === "ملغي" ||
+													currentOrder?.orders?.status === "قيد التجهيز"
+														? "not-allowed"
+														: "pointer",
+											}}
+										/>
+									</div>
+								</button>
 
-							<div
-								id='collapseOne'
-								className='accordion-collapse collapse '
-								aria-labelledby='headingOne'
-								data-bs-parent='#accordionExample'>
-								<div className='accordion-body'>
-									<FormControl
-										sx={{
-											"&.MuiFormControl-root": {
-												width: "100%",
-											},
-											"&.MuiFormControlLabel-root": {
-												width: "100%",
-												backgroundColor: "red",
-											},
-										}}>
-										<RadioGroup>
-											<FormControlLabel
-												value='ready'
-												className='mb-2'
-												control={<BpRadio />}
-												sx={formControlLabelStyle}
-												onClick={() => handleUpdateOrderStatus("ready")}
-												label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
-												disabled={
-													isLoading ||
-													currentOrder?.orders?.status === "قيد التجهيز" ||
-													currentOrder?.orders?.status === "تم الشحن" ||
-													currentOrder?.orders?.status === "ملغي"
-												}
-											/>
+								<div
+									id='collapseOne'
+									className='accordion-collapse collapse '
+									aria-labelledby='headingOne'
+									data-bs-parent='#accordionExample'>
+									<div className='accordion-body'>
+										<FormControl
+											sx={{
+												"& .MuiFormControlLabel-root": {
+													"@media(max-width:768px)": {
+														marginRight: "-16px",
+													},
+												},
 
-											<FormControlLabel
-												className='mb-2'
-												label='تم الشحن'
-												control={<BpRadio />}
-												onClick={() =>
-													handleUpdateOrderStatus("delivery_in_progress")
-												}
-												sx={formControlLabelStyle}
-												value='delivery_in_progress'
-												disabled={
-													isLoading ||
-													currentOrder?.orders?.status === "جديد" ||
-													currentOrder?.orders?.status === "تم الشحن" ||
-													currentOrder?.orders?.status === "ملغي"
-												}
-											/>
-											<FormControlLabel
-												value='canceled'
-												control={<BpRadio />}
-												onClick={() => handleUpdateOrderStatus("canceled")}
-												sx={formControlLabelStyle}
-												label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
-												disabled={
-													isLoading ||
-													currentOrder?.orders?.status === "تم الشحن" ||
-													currentOrder?.orders?.status === "ملغي"
-												}
-											/>
-										</RadioGroup>
-									</FormControl>
+												"& .MuiFormControlLabel-label ": {
+													whiteSpace: "normal",
+												},
+											}}>
+											<RadioGroup
+												value={shippingStatus}
+												onChange={(e) => {
+													handleOnChange(e);
+												}}>
+												<FormControlLabel
+													value='ready'
+													className='mb-2'
+													control={<BpRadio />}
+													sx={formControlLabelStyle}
+													onClick={() => handleUpdateOrderStatus()}
+													label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
+													disabled={
+														isLoading ||
+														currentOrder?.orders?.status === "قيد التجهيز" ||
+														currentOrder?.orders?.status ===
+															"طلب مندوب لتسليم الشحنة" ||
+														currentOrder?.orders?.status === "ملغي"
+													}
+												/>
+
+												<FormControlLabel
+													className='mb-2'
+													control={<BpRadio />}
+													label='طلب مندوب لتسليم الشحنة'
+													value='delivery_in_progress'
+													sx={formControlLabelStyle}
+													onClick={() =>
+														setPickupDateModalIsOpen(
+															currentOrder?.orders?.status === "جديد" ||
+																currentOrder?.orders?.status ===
+																	"طلب مندوب لتسليم الشحنة" ||
+																currentOrder?.orders?.status === "ملغي"
+																? false
+																: true
+														)
+													}
+													disabled={
+														isLoading ||
+														currentOrder?.orders?.status === "جديد" ||
+														currentOrder?.orders?.status ===
+															"طلب مندوب لتسليم الشحنة" ||
+														currentOrder?.orders?.status === "ملغي"
+													}
+												/>
+
+												{currentOrder?.orders?.status ===
+													"طلب مندوب لتسليم الشحنة" ||
+												currentOrder?.orders?.status === "ملغي" ? null : (
+													<FormControlLabel
+														value='canceled'
+														control={<BpRadio />}
+														onClick={() => handleUpdateOrderStatus()}
+														sx={formControlLabelStyle}
+														label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
+													/>
+												)}
+											</RadioGroup>
+										</FormControl>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+				<SelectPickupDateModal
+					error={error}
+					value={value}
+					setValue={setValue}
+					isLoading={isLoading}
+					pickupDateModalIsOpen={pickupDateModalIsOpen}
+					handleUpdateOrderStatus={handleUpdateOrderStatus}
+					setPickupDateModalIsOpen={setPickupDateModalIsOpen}
+					handleClosePickupDateModal={handleClosePickupDateModal}
+				/>
+			</>
 		)
 	);
 };

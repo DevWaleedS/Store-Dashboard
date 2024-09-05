@@ -1,0 +1,64 @@
+/* shipping-address-input */
+.shipping-address-input.picker__input {
+	padding: 0;
+}
+
+.shipping-address-input .rs-input-group.rs-input-group-inside {
+	width: 100%;
+	min-height: 56px;
+	padding: 14px;
+	background-color: #cce4ff38;
+	box-shadow: 0 0 5px 0px #cce4ff38;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-ms-border-radius: 6px;
+	-o-border-radius: 6px;
+}
+.rs-picker-date > .rs-input-group.rs-input-group-inside .rs-input {
+	padding-right: 14px;
+}
+.shipping-address-input .rs-input-group,
+.shipping-address-input .rs-input-group .rs-input:focus,
+.shipping-address-input,
+.shipping-address-input .rs-input-group.rs-input-group-inside {
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+.shipping-address-input .rs-input-group,
+.rs-btn {
+	background-color: #f7f7fa !important;
+}
+.rs-btn-primary,
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+	background-color: var(--second-500) !important;
+}
+
+.rs-picker-popup
+	.rs-calendar
+	.rs-calendar-table-cell:hover
+	.rs-calendar-table-cell-content {
+	background-color: var(--second-100) !important;
+	color: var(--second-500) !important;
+}
+.shipping-address-input
+	.rs-input-group.rs-input-group-lg
+	> .rs-input-group-addon {
+	font-weight: 500;
+	color: var(--second-500);
+}
+
+.shipping-address-input .rs-input-group .rs-btn-close .rs-icon {
+	font-size: 16px;
+}
+
+.rs-picker-popup.rs-picker-popup-date {
+	z-index: 2222;
+}
+
+@media (max-width: 768px) {
+	.shipping-address-input .rs-input-group.rs-input-group-inside {
+		padding: 14px;
+	}
+}

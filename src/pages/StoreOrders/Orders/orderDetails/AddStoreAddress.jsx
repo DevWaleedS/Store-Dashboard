@@ -7,6 +7,31 @@ import MenuItem from "@mui/material/MenuItem";
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
 
+//  DatePicker
+import { DatePicker } from "rsuite";
+
+const selectStyle = {
+	fontSize: "18px",
+	width: "100%",
+	backgroundColor: "#cce4ff38",
+	boxShadow: "0 0 5px 0px #eded",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "95%",
+	},
+};
+
 const AddStoreAddress = ({
 	error,
 	shipping,
@@ -52,27 +77,7 @@ const AddStoreAddress = ({
 									district: e.target.value,
 								});
 							}}
-							sx={{
-								fontSize: "18px",
-								width: "100%",
-								backgroundColor: "#cce4ff38",
-								boxShadow: "0 0 5px 0px #eded",
-								"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-									{
-										paddingRight: "20px",
-									},
-								"& .MuiOutlinedInput-root": {
-									"& :hover": {
-										border: "none",
-									},
-								},
-								"& .MuiOutlinedInput-notchedOutline": {
-									border: "none",
-								},
-								"& .MuiSelect-icon": {
-									right: "95%",
-								},
-							}}
+							sx={selectStyle}
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							disabled={
@@ -129,27 +134,7 @@ const AddStoreAddress = ({
 									city: e.target.value,
 								});
 							}}
-							sx={{
-								fontSize: "18px",
-								width: "100%",
-								backgroundColor: "#cce4ff38",
-								boxShadow: "0 0 5px 0px #eded",
-								"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-									{
-										paddingRight: "20px",
-									},
-								"& .MuiOutlinedInput-root": {
-									"& :hover": {
-										border: "none",
-									},
-								},
-								"& .MuiOutlinedInput-notchedOutline": {
-									border: "none",
-								},
-								"& .MuiSelect-icon": {
-									right: "95%",
-								},
-							}}
+							sx={selectStyle}
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							disabled={
@@ -195,11 +180,12 @@ const AddStoreAddress = ({
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-lg-3 col-md-3 col-12'>
 						<label htmlFor='product-name'>
-							العنوان <span className='important-hint'>*</span>
+							العنوان<span className='important-hint'>*</span>
 						</label>
 					</div>
 					<div className='col-lg-9 col-md-9 col-12'>
 						<input
+							className='shipping-address-input'
 							disabled={
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
@@ -217,13 +203,6 @@ const AddStoreAddress = ({
 									address: e.target.value,
 								})
 							}
-							style={{
-								width: "100%",
-								height: "56px",
-								padding: "5px 1rem",
-								backgroundColor: "#cce4ff38",
-								boxShadow: "0 0 5px 0px #eded",
-							}}
 						/>
 					</div>
 					<div className='col-lg-3 col-md-3 col-12'></div>
