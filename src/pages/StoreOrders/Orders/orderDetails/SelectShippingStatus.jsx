@@ -125,7 +125,7 @@ const SelectShippingStatus = ({
 		formData.append("district", shipping?.district);
 		formData.append("street_address", shipping?.address);
 		if (shippingStatus === "delivery_in_progress")
-			formData.append("pickup_date", value.getTime());
+			formData.append("pickup_date", JSON.stringify(value.getTime()));
 
 		try {
 			const response = await updateOrderStatus({

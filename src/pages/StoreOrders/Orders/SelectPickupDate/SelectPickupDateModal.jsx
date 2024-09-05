@@ -76,7 +76,7 @@ const SelectPickupDateModal = ({
 					</section>
 
 					<section className='p-3'>
-						<div className='row mb-md-5 mb-3'>
+						<div className='row mb-1'>
 							<div className='col-12 '>
 								<PageHint
 									hint={` قم بتحديد تاريخ ووقت استلام مندوب الشحن للطلب الخاص بك ، وسيتم التواصل معك من قبل مندوب شركة الشحن .`}
