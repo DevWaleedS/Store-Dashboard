@@ -42,6 +42,9 @@ const AddStoreAddress = ({
 	getCityFromProvince,
 	translateProvinceName,
 }) => {
+	// to handle set date rang of shipping
+	const [value, setValue] = React.useState(null);
+
 	// To handle the shipping information
 	useEffect(() => {
 		if (currentOrder?.orders?.shipping) {
@@ -50,8 +53,10 @@ const AddStoreAddress = ({
 				district: currentOrder?.orders?.shipping?.district,
 				city: currentOrder?.orders?.shipping?.city,
 				address: currentOrder?.orders?.shipping?.street_address,
+
 				weight: currentOrder?.orders?.shipping?.weight,
 			});
+			setValue(currentOrder?.orders?.shipping?.pickup_date);
 		}
 	}, [currentOrder?.orders?.shipping]);
 
@@ -62,12 +67,12 @@ const AddStoreAddress = ({
 			</div>
 			<div className='px-md-3'>
 				<div className='row mb-md-5 mb-3'>
-					<div className='col-lg-3 col-md-3 col-12'>
+					<div className='col-12'>
 						<label htmlFor='product-category'>
 							المنطقة<span className='important-hint'>*</span>
 						</label>
 					</div>
-					<div className='col-lg-9 col-md-9 col-12'>
+					<div className=' col-12'>
 						<Select
 							name='district'
 							value={shipping?.district}
@@ -113,10 +118,12 @@ const AddStoreAddress = ({
 							)}
 						</Select>
 					</div>
-					<div className='col-lg-3 col-md-3 col-12'></div>
-					<div className='col-lg-9 col-md-9 col-12'>
-						<span className='fs-6 text-danger'>{error?.district}</span>
-					</div>
+
+					{error?.district ? (
+						<div className='col-12'>
+							<span className='fs-6 text-danger'>{error?.district}</span>
+						</div>
+					) : null}
 				</div>
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-lg-3 col-md-3 col-12'>
@@ -124,7 +131,7 @@ const AddStoreAddress = ({
 							المدينة<span className='important-hint'>*</span>
 						</label>
 					</div>
-					<div className='col-lg-9 col-md-9 col-12'>
+					<div className='col-12'>
 						<Select
 							name='category_id'
 							value={shipping?.city}
@@ -172,18 +179,19 @@ const AddStoreAddress = ({
 							})}
 						</Select>
 					</div>
-					<div className='col-lg-3 col-md-3 col-12'></div>
-					<div className='col-lg-9 col-md-9 col-12'>
-						<span className='fs-6 text-danger'>{error?.city}</span>
-					</div>
+					{error?.city ? (
+						<div className='col-12'>
+							<span className='fs-6 text-danger'>{error?.city}</span>
+						</div>
+					) : null}
 				</div>
 				<div className='row mb-md-5 mb-3'>
-					<div className='col-lg-3 col-md-3 col-12'>
+					<div className=' col-12'>
 						<label htmlFor='product-name'>
 							العنوان<span className='important-hint'>*</span>
 						</label>
 					</div>
-					<div className='col-lg-9 col-md-9 col-12'>
+					<div className=' col-12'>
 						<input
 							className='shipping-address-input'
 							disabled={
@@ -205,10 +213,43 @@ const AddStoreAddress = ({
 							}
 						/>
 					</div>
-					<div className='col-lg-3 col-md-3 col-12'></div>
-					<div className='col-lg-9 col-md-9 col-12'>
-						<span className='fs-6 text-danger'>{error?.address}</span>
+					{error?.address ? (
+						<div className=' col-12'>
+							<span className='fs-6 text-danger'>{error?.address}</span>
+						</div>
+					) : null}
+				</div>
+
+				<div className='row mb-md-5 mb-3'>
+					<div className='col-12'>
+						<label htmlFor='product-name'>
+							تاريخ تسليم الشحنة للمندوب
+							<span className='important-hint'>*</span>
+						</label>
 					</div>
+					<div className='col-12 '>
+						<DatePicker
+							block
+							size='lg'
+							showMeridian
+							format='yyyy-MM-dd HH:mm:aa'
+							placeholder='حدد تاريخ ووقت تسليم الشحنة'
+							className='select_pickup_date_picker'
+							value={value}
+							onChange={setValue}
+							disabledDate={(date) => {
+								const today = new Date();
+								today.setHours(0, 0, 0, 0);
+								return date < today || date.getTime() === today.getTime();
+							}}
+						/>
+					</div>
+
+					{error?.pickup_date ? (
+						<div className=' mt-3 col-12'>
+							<span className='fs-6 text-danger'>{error?.pickup_date}</span>
+						</div>
+					) : null}
 				</div>
 			</div>
 		</div>

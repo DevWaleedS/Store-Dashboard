@@ -19,7 +19,7 @@ import "./SelectPickupDate.css";
 const style = {
 	position: "absolute",
 	top: "90px",
-
+	height: "650px",
 	left: "0",
 	transform: "translateX(50%)",
 	width: "45%",
@@ -27,6 +27,7 @@ const style = {
 	"@media(max-width:768px)": {
 		top: "80px",
 		width: "96%",
+		height: " auto",
 		transform: "translateX(2%)",
 	},
 };
@@ -43,7 +44,7 @@ const SelectPickupDateModal = ({
 	return (
 		<Modal open={pickupDateModalIsOpen} closeAfterTransition>
 			<Box component={"div"} sx={style}>
-				<div className='change-categories-modal-content'>
+				<div className='change-categories-modal-content h-100 '>
 					<section className='mb-4 '>
 						<div className='row'>
 							<div className='col-12'>
@@ -75,7 +76,7 @@ const SelectPickupDateModal = ({
 						</div>
 					</section>
 
-					<section className='p-3'>
+					<section className='pt-0 pb-3 px-3'>
 						<div className='row mb-1'>
 							<div className='col-12 '>
 								<PageHint
@@ -84,7 +85,7 @@ const SelectPickupDateModal = ({
 								/>
 							</div>
 						</div>
-						<div className='row mb-5 '>
+						<div className='row' style={{ marginBottom: "16rem" }}>
 							<div className='col-12'>
 								<label htmlFor='product-category'>
 									تاريخ تسليم الشحنة لمندوب الشحن:
@@ -98,7 +99,7 @@ const SelectPickupDateModal = ({
 									showMeridian
 									format='yyyy-MM-dd HH:mm:aa'
 									placeholder='حدد تاريخ ووقت تسليم الشحنة'
-									className='shipping-address-input picker__input'
+									className='select_pickup_date_picker'
 									value={value}
 									onChange={setValue}
 									disabledDate={(date) => {

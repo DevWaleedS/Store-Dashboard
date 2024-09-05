@@ -124,8 +124,7 @@ const SelectShippingStatus = ({
 		formData.append("city", shipping?.city);
 		formData.append("district", shipping?.district);
 		formData.append("street_address", shipping?.address);
-		if (shippingStatus === "delivery_in_progress")
-			formData.append("pickup_date", JSON.stringify(value.getTime()));
+		formData.append("pickup_date", JSON.stringify(value?.getTime()));
 
 		try {
 			const response = await updateOrderStatus({
@@ -133,6 +132,7 @@ const SelectShippingStatus = ({
 				body: formData,
 			});
 
+			console.log(response);
 			// Handle response
 			if (
 				response.data?.success === true &&
@@ -179,7 +179,7 @@ const SelectShippingStatus = ({
 
 	return (
 		currentOrder?.orders?.status !== "ملغي" &&
-		currentOrder?.orders?.status !== "مكتمل" && (
+		currentOrder?.orders?.status !== "طلب مندوب لتسليم الشحنة" && (
 			<>
 				<section>
 					<div className='title mb-4'>
@@ -225,6 +225,7 @@ const SelectShippingStatus = ({
 									<div className='accordion-body'>
 										<FormControl
 											sx={{
+												width: "100%",
 												"& .MuiFormControlLabel-root": {
 													"@media(max-width:768px)": {
 														marginRight: "-16px",
@@ -245,7 +246,10 @@ const SelectShippingStatus = ({
 													className='mb-2'
 													control={<BpRadio />}
 													sx={formControlLabelStyle}
-													onClick={() => handleUpdateOrderStatus()}
+													onClick={() => {
+														if (shippingStatus === "ready")
+															handleUpdateOrderStatus();
+													}}
 													label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
 													disabled={
 														isLoading ||
@@ -287,7 +291,10 @@ const SelectShippingStatus = ({
 													<FormControlLabel
 														value='canceled'
 														control={<BpRadio />}
-														onClick={() => handleUpdateOrderStatus()}
+														onClick={() => {
+															if (shippingStatus === "canceled")
+																handleUpdateOrderStatus();
+														}}
 														sx={formControlLabelStyle}
 														label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
 													/>
