@@ -9,6 +9,7 @@ import { IoIosArrowDown } from "react-icons/io";
 
 //  DatePicker
 import { DatePicker } from "rsuite";
+import moment from "moment";
 
 const selectStyle = {
 	fontSize: "18px",
@@ -34,7 +35,10 @@ const selectStyle = {
 
 const AddStoreAddress = ({
 	error,
+	value,
+	setValue,
 	shipping,
+	resetError,
 	currentOrder,
 	setShipping,
 	removeDuplicates,
@@ -42,21 +46,20 @@ const AddStoreAddress = ({
 	getCityFromProvince,
 	translateProvinceName,
 }) => {
-	// to handle set date rang of shipping
-	const [value, setValue] = React.useState(null);
-
 	// To handle the shipping information
 	useEffect(() => {
 		if (currentOrder?.orders?.shipping) {
 			setShipping({
 				...shipping,
-				district: currentOrder?.orders?.shipping?.district,
+				district: translateProvinceName(
+					currentOrder?.orders?.shipping?.district
+				),
 				city: currentOrder?.orders?.shipping?.city,
 				address: currentOrder?.orders?.shipping?.street_address,
-
 				weight: currentOrder?.orders?.shipping?.weight,
 			});
-			setValue(currentOrder?.orders?.shipping?.pickup_date);
+			const pickupDate = new Date(currentOrder?.orders?.shipping?.pickup_date);
+			setValue(pickupDate);
 		}
 	}, [currentOrder?.orders?.shipping]);
 
@@ -68,9 +71,9 @@ const AddStoreAddress = ({
 			<div className='px-md-3'>
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-12'>
-						<label htmlFor='product-category'>
+						<h6>
 							المنطقة<span className='important-hint'>*</span>
-						</label>
+						</h6>
 					</div>
 					<div className=' col-12'>
 						<Select
@@ -81,16 +84,16 @@ const AddStoreAddress = ({
 									...shipping,
 									district: e.target.value,
 								});
+								resetError();
 							}}
 							sx={selectStyle}
 							IconComponent={IoIosArrowDown}
 							displayEmpty
-							disabled={
+							readOnly={
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
-									? true
-									: false
 							}
 							inputProps={{ "aria-label": "Without label" }}
 							renderValue={(selected) => {
@@ -127,9 +130,9 @@ const AddStoreAddress = ({
 				</div>
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-lg-3 col-md-3 col-12'>
-						<label htmlFor='product-category'>
+						<h6>
 							المدينة<span className='important-hint'>*</span>
-						</label>
+						</h6>
 					</div>
 					<div className='col-12'>
 						<Select
@@ -140,16 +143,16 @@ const AddStoreAddress = ({
 									...shipping,
 									city: e.target.value,
 								});
+								resetError();
 							}}
 							sx={selectStyle}
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							disabled={
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
-									? true
-									: false
 							}
 							inputProps={{ "aria-label": "Without label" }}
 							renderValue={(selected) => {
@@ -186,31 +189,31 @@ const AddStoreAddress = ({
 					) : null}
 				</div>
 				<div className='row mb-md-5 mb-3'>
-					<div className=' col-12'>
-						<label htmlFor='product-name'>
+					<div className='col-12'>
+						<h6>
 							العنوان<span className='important-hint'>*</span>
-						</label>
+						</h6>
 					</div>
 					<div className=' col-12'>
 						<input
 							className='shipping-address-input'
-							disabled={
+							readOnly={
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
-									? true
-									: false
 							}
 							type='text'
 							placeholder='عنوان الشحنة'
 							name='name'
 							value={shipping?.address}
-							onChange={(e) =>
+							onChange={(e) => {
 								setShipping({
 									...shipping,
 									address: e.target.value,
-								})
-							}
+								});
+								resetError();
+							}}
 						/>
 					</div>
 					{error?.address ? (
@@ -222,10 +225,10 @@ const AddStoreAddress = ({
 
 				<div className='row mb-md-5 mb-3'>
 					<div className='col-12'>
-						<label htmlFor='product-name'>
+						<h6>
 							تاريخ تسليم الشحنة للمندوب
 							<span className='important-hint'>*</span>
-						</label>
+						</h6>
 					</div>
 					<div className='col-12 '>
 						<DatePicker
@@ -236,17 +239,26 @@ const AddStoreAddress = ({
 							placeholder='حدد تاريخ ووقت تسليم الشحنة'
 							className='select_pickup_date_picker'
 							value={value}
-							onChange={setValue}
+							onChange={(e) => {
+								setValue(e);
+								resetError();
+							}}
 							disabledDate={(date) => {
 								const today = new Date();
 								today.setHours(0, 0, 0, 0);
-								return date < today || date.getTime() === today.getTime();
+								return date < today || date?.getTime() === today?.getTime();
 							}}
+							readOnly={
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
+								currentOrder?.orders?.status === "تم الشحن" ||
+								currentOrder?.orders?.status === "ملغي" ||
+								currentOrder?.orders?.status === "مكتمل"
+							}
 						/>
 					</div>
 
 					{error?.pickup_date ? (
-						<div className=' mt-3 col-12'>
+						<div className=' mt-1 col-12'>
 							<span className='fs-6 text-danger'>{error?.pickup_date}</span>
 						</div>
 					) : null}

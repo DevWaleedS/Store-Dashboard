@@ -27,12 +27,15 @@ const OrderDetails = () => {
 	const { data: currentOrder, isFetching } = useGetOrderByIdQuery(id);
 	// get shipping cities data
 	const [shippingId, setShippingId] = useState(null);
+
 	const { data: shippingCitiesData } = useGetShippingCitiesQuery(shippingId);
+
+	// to handle set date rang of shipping
+	const [value, setValue] = useState(null);
 	const [shipping, setShipping] = useState({
 		district: "",
 		city: "",
 		address: "",
-
 		pickup_date: "",
 	});
 
@@ -71,16 +74,17 @@ const OrderDetails = () => {
 		const unique = shippingCitiesData?.cities?.filter(
 			(obj) => obj?.name_en === name
 		);
+
 		return unique?.[0]?.name || name;
 	}
 
-	function translateProvinceName(name) {
-		const unique = shippingCitiesData?.cities?.filter((obj) => {
-			return obj?.region?.name_en === name;
-		});
+	const translateProvinceName = (name) => {
+		const matchingCity = shippingCitiesData?.cities?.find(
+			(city) => city?.region?.name_en === name
+		);
 
-		return unique?.[0]?.region?.name || name;
-	}
+		return matchingCity?.region?.name || name;
+	};
 
 	// Handle print this page as pdf file
 	const componentRef = useRef();
@@ -158,11 +162,15 @@ const OrderDetails = () => {
 
 							{/* add Store address */}
 
-							{currentOrder?.orders?.status !== "ملغي" && (
+							{currentOrder?.orders?.status !== "ملغي" ||
+							currentOrder?.orders?.status !== "مكتمل" ? (
 								<div className='mb-md-5 mb-4'>
 									<AddStoreAddress
+										value={value}
 										error={error}
 										shipping={shipping}
+										setValue={setValue}
+										resetError={resetError}
 										setShipping={setShipping}
 										currentOrder={currentOrder}
 										removeDuplicates={removeDuplicates}
@@ -171,7 +179,7 @@ const OrderDetails = () => {
 										translateProvinceName={translateProvinceName}
 									/>
 								</div>
-							)}
+							) : null}
 						</section>
 					)}
 				</section>
@@ -182,14 +190,19 @@ const OrderDetails = () => {
 						<div className='order-details-box'>
 							<div className='px-md-3'>
 								{/* select shipping status */}
-								<SelectShippingStatus
-									id={id}
-									error={error}
-									setError={setError}
-									shipping={shipping}
-									resetError={resetError}
-									currentOrder={currentOrder}
-								/>
+								{currentOrder?.orders?.status !== "ملغي" ||
+								currentOrder?.orders?.status !== "مكتمل" ? (
+									<SelectShippingStatus
+										id={id}
+										error={error}
+										value={value}
+										shipping={shipping}
+										setValue={setValue}
+										setError={setError}
+										resetError={resetError}
+										currentOrder={currentOrder}
+									/>
+								) : null}
 
 								{/* Return order */}
 								<RefundOrder currentOrder={currentOrder} id={id} />

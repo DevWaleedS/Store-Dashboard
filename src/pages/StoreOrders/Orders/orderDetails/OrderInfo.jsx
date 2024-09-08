@@ -77,62 +77,69 @@ const OrderInfo = ({ currentOrder }) => {
 					</div>
 				</div>
 				<div className='boxes mb-4'>
-					{currentOrder?.orders?.shipping?.shipping_id && (
-						<div className='box mb-4'>
-							<div className='order-head-row'>
-								<FaServicestack />
-								<span className='me-2'>رقم التتبع</span>{" "}
-								<span
-									className='me-2'
-									style={{
-										display: "block",
-										fontSize: "1rem",
-									}}>
-									( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
-									<a
-										href={currentOrder?.orders?.trackingLink}
-										target='_blank'
-										rel='noreferrer'>
-										<BiLinkExternal
-											style={{
-												width: "16px",
-												cursor: "pointer",
-											}}
-										/>
-									</a>
-									)
-								</span>
-							</div>
-							<div className='order-data-row track_id_box'>
-								<div className='d-flex justify-content-center align-items-center'>
-									<span className='track_id_input'>
-										{currentOrder?.orders?.shipping?.track_id}
-									</span>
-									{copy ? (
-										<div className='copy-track_id-icon'>
-											<AiFillCheckCircle color='#1dbbbe' />
-										</div>
+					{currentOrder?.orders?.shipping?.shipping_id &&
+						currentOrder?.orders?.shipping?.track_id && (
+							<div className='box mb-4'>
+								<div className='order-head-row'>
+									<FaServicestack />
+									{currentOrder?.orders?.shipping?.track_id ? (
+										<span className='me-2'>رقم التحصيل</span>
 									) : (
-										<div className='copy-track_id-icon'>
-											<AiFillCopy
-												color='#1dbbbe'
-												style={{ cursor: "pointer" }}
-												onClick={() => {
-													setCopy(true);
-													setTimeout(() => {
-														navigator.clipboard.writeText(
-															currentOrder?.orders?.shipping?.track_id
-														);
-														setCopy(false);
-													}, 1000);
+										<span className='me-2'>رقم التتبع</span>
+									)}
+									<span
+										className='me-2'
+										style={{
+											display: "block",
+											fontSize: "1rem",
+										}}>
+										( انسخ رقم التتبع و تتبع الشحنة من هنا{" "}
+										<a
+											href={currentOrder?.orders?.trackingLink}
+											target='_blank'
+											rel='noreferrer'>
+											<BiLinkExternal
+												style={{
+													width: "16px",
+													cursor: "pointer",
 												}}
 											/>
-										</div>
-									)}
+										</a>
+										)
+									</span>
+								</div>
+								<div className='order-data-row track_id_box'>
+									<div className='d-flex justify-content-center align-items-center'>
+										<span className='track_id_input'>
+											{currentOrder?.orders?.shipping?.track_id ??
+												currentOrder?.orders?.shipping?.shipping_id}
+										</span>
+										{copy ? (
+											<div className='copy-track_id-icon'>
+												<AiFillCheckCircle color='#1dbbbe' />
+											</div>
+										) : (
+											<div className='copy-track_id-icon'>
+												<AiFillCopy
+													color='#1dbbbe'
+													style={{ cursor: "pointer" }}
+													onClick={() => {
+														setCopy(true);
+														setTimeout(() => {
+															navigator.clipboard.writeText(
+																currentOrder?.orders?.shipping?.track_id ??
+																	currentOrder?.orders?.shipping?.shipping_id
+															);
+															setCopy(false);
+														}, 1000);
+													}}
+												/>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
-						</div>
-					)}
+						)}
 					{currentOrder?.orders?.shipping?.shipping_id && (
 						<div className='box mb-4'>
 							<div className='order-head-row'>

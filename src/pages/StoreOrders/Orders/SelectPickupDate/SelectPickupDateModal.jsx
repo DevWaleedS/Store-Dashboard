@@ -92,7 +92,7 @@ const SelectPickupDateModal = ({
 									<span className='important-hint'>*</span>
 								</label>
 							</div>
-							<div className='col-12  mb-3'>
+							<div className='col-12 '>
 								<DatePicker
 									block
 									size='lg'
@@ -111,7 +111,7 @@ const SelectPickupDateModal = ({
 							</div>
 
 							{error?.pickup_date ? (
-								<div className='col-12'>
+								<div className='col-12 mt-1'>
 									<span className='fs-6 text-danger'>{error?.pickup_date}</span>
 								</div>
 							) : null}

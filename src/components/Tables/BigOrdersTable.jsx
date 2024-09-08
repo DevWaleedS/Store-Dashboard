@@ -286,7 +286,8 @@ export default function BigOrdersTable({
 														<div
 															className='text-overflow'
 															style={{ maxWidth: "210px" }}>
-															{row?.shipping?.shipping_id}
+															{row?.shipping?.track_id ??
+																row?.shipping?.shipping_id}
 														</div>
 													</TableCell>
 													<TableCell align='right'>

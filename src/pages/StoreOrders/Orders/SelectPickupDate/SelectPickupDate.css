@@ -61,4 +61,8 @@
 	.select_pickup_date_picker .rs-input-group.rs-input-group-inside {
 		padding: 14px;
 	}
+
+	.shipping-address-input {
+		font-size: 16px;
+	}
 }

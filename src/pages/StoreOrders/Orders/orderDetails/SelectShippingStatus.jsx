@@ -84,6 +84,8 @@ const formControlLabelStyle = {
 
 const SelectShippingStatus = ({
 	id,
+	value,
+	setValue,
 	resetError,
 	shipping,
 	setError,
@@ -93,7 +95,6 @@ const SelectShippingStatus = ({
 	const navigate = useNavigate();
 
 	// to handle set date rang of shipping
-	const [value, setValue] = React.useState(null);
 	const [pickupDateModalIsOpen, setPickupDateModalIsOpen] = useState(false);
 
 	const handleClosePickupDateModal = () => {
@@ -104,6 +105,7 @@ const SelectShippingStatus = ({
 
 	// handle shipping status
 	const [shippingStatus, setShippingStatus] = useState("");
+
 	const handleOnChange = (e) => {
 		setShippingStatus(e.target.value);
 	};
@@ -117,6 +119,9 @@ const SelectShippingStatus = ({
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
 
+		// Format the date as a timestamp with timezone offset
+		const formattedDate = value ? formatDateAsTimestamp(value) : null;
+
 		// Data that send to API
 		let formData = new FormData();
 		formData.append("_method", "PUT");
@@ -124,7 +129,9 @@ const SelectShippingStatus = ({
 		formData.append("city", shipping?.city);
 		formData.append("district", shipping?.district);
 		formData.append("street_address", shipping?.address);
-		formData.append("pickup_date", JSON.stringify(value?.getTime()));
+		if (shippingStatus !== "completed") {
+			formData.append("pickup_date", formattedDate);
+		}
 
 		try {
 			const response = await updateOrderStatus({
@@ -132,7 +139,6 @@ const SelectShippingStatus = ({
 				body: formData,
 			});
 
-			console.log(response);
 			// Handle response
 			if (
 				response.data?.success === true &&
@@ -177,9 +183,24 @@ const SelectShippingStatus = ({
 		}
 	};
 
+	// Add this helper function
+	const formatDateAsTimestamp = (date) => {
+		const timestamp = date.getTime();
+		const offset = date.getTimezoneOffset();
+		const offsetHours = Math.abs(Math.floor(offset / 60))
+			.toString()
+			.padStart(2, "0");
+		const offsetMinutes = Math.abs(offset % 60)
+			.toString()
+			.padStart(2, "0");
+		const offsetSign = offset > 0 ? "-" : "+";
+
+		return `${timestamp}${offsetSign}${offsetHours}${offsetMinutes}`;
+	};
+
 	return (
 		currentOrder?.orders?.status !== "ملغي" &&
-		currentOrder?.orders?.status !== "طلب مندوب لتسليم الشحنة" && (
+		currentOrder?.orders?.status !== "مكتمل" && (
 			<>
 				<section>
 					<div className='title mb-4'>
@@ -238,18 +259,25 @@ const SelectShippingStatus = ({
 											}}>
 											<RadioGroup
 												value={shippingStatus}
+												onClick={() => {
+													if (
+														currentOrder?.orders?.status !== "جديد" ||
+														currentOrder?.orders?.status !==
+															"طلب مندوب لتسليم الشحنة" ||
+														currentOrder?.orders?.status !== "ملغي"
+													) {
+														setPickupDateModalIsOpen(true);
+													} else {
+														handleUpdateOrderStatus();
+													}
+												}}
 												onChange={(e) => {
 													handleOnChange(e);
 												}}>
 												<FormControlLabel
-													value='ready'
 													className='mb-2'
-													control={<BpRadio />}
+													control={<BpRadio value='ready' name='ready' />}
 													sx={formControlLabelStyle}
-													onClick={() => {
-														if (shippingStatus === "ready")
-															handleUpdateOrderStatus();
-													}}
 													label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
 													disabled={
 														isLoading ||
@@ -262,20 +290,14 @@ const SelectShippingStatus = ({
 
 												<FormControlLabel
 													className='mb-2'
-													control={<BpRadio />}
-													label='طلب مندوب لتسليم الشحنة'
-													value='delivery_in_progress'
-													sx={formControlLabelStyle}
-													onClick={() =>
-														setPickupDateModalIsOpen(
-															currentOrder?.orders?.status === "جديد" ||
-																currentOrder?.orders?.status ===
-																	"طلب مندوب لتسليم الشحنة" ||
-																currentOrder?.orders?.status === "ملغي"
-																? false
-																: true
-														)
+													control={
+														<BpRadio
+															value='delivery_in_progress'
+															name='delivery_in_progress'
+														/>
 													}
+													label='طلب مندوب لتسليم الشحنة'
+													sx={formControlLabelStyle}
 													disabled={
 														isLoading ||
 														currentOrder?.orders?.status === "جديد" ||
@@ -289,16 +311,28 @@ const SelectShippingStatus = ({
 													"طلب مندوب لتسليم الشحنة" ||
 												currentOrder?.orders?.status === "ملغي" ? null : (
 													<FormControlLabel
-														value='canceled'
-														control={<BpRadio />}
-														onClick={() => {
-															if (shippingStatus === "canceled")
-																handleUpdateOrderStatus();
-														}}
+														control={
+															<BpRadio value='canceled' name='canceled' />
+														}
 														sx={formControlLabelStyle}
 														label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
 													/>
 												)}
+
+												<FormControlLabel
+													control={
+														<BpRadio value='completed' name='completed' />
+													}
+													sx={formControlLabelStyle}
+													label='مكتمل'
+													disabled={
+														isLoading ||
+														currentOrder?.orders?.status === "جديد" ||
+														currentOrder?.orders?.status === "قيد التجهيز" ||
+														currentOrder?.orders?.status === "مكتمل" ||
+														currentOrder?.orders?.status === "ملغي"
+													}
+												/>
 											</RadioGroup>
 										</FormControl>
 									</div>
