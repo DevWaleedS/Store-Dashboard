@@ -107,7 +107,14 @@ const SelectShippingStatus = ({
 	const [shippingStatus, setShippingStatus] = useState("");
 
 	const handleOnChange = (e) => {
-		setShippingStatus(e.target.value);
+		const newStatus = e.target.value;
+		setShippingStatus(newStatus);
+
+		if (newStatus === "delivery_in_progress") {
+			setPickupDateModalIsOpen(true);
+		} else {
+			handleUpdateOrderStatus(newStatus);
+		}
 	};
 
 	const LoadingStore = useContext(LoadingContext);
@@ -115,7 +122,7 @@ const SelectShippingStatus = ({
 
 	// To handle update order Status
 	const [updateOrderStatus, { isLoading }] = useUpdateOrderStatusMutation();
-	const handleUpdateOrderStatus = async () => {
+	const handleUpdateOrderStatus = async (status) => {
 		setLoadingTitle("جاري تعديل حالة الطلب");
 		resetError();
 
@@ -125,11 +132,11 @@ const SelectShippingStatus = ({
 		// Data that send to API
 		let formData = new FormData();
 		formData.append("_method", "PUT");
-		formData.append("status", shippingStatus);
+		formData.append("status", status);
 		formData.append("city", shipping?.city);
 		formData.append("district", shipping?.district);
 		formData.append("street_address", shipping?.address);
-		if (shippingStatus !== "completed") {
+		if (status !== "completed") {
 			formData.append("pickup_date", formattedDate);
 		}
 
@@ -259,24 +266,11 @@ const SelectShippingStatus = ({
 											}}>
 											<RadioGroup
 												value={shippingStatus}
-												onClick={() => {
-													if (
-														currentOrder?.orders?.status !== "جديد" ||
-														currentOrder?.orders?.status !==
-															"طلب مندوب لتسليم الشحنة" ||
-														currentOrder?.orders?.status !== "ملغي"
-													) {
-														setPickupDateModalIsOpen(true);
-													} else {
-														handleUpdateOrderStatus();
-													}
-												}}
-												onChange={(e) => {
-													handleOnChange(e);
-												}}>
+												onChange={handleOnChange}>
 												<FormControlLabel
 													className='mb-2'
-													control={<BpRadio value='ready' name='ready' />}
+													value='ready'
+													control={<BpRadio />}
 													sx={formControlLabelStyle}
 													label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
 													disabled={
@@ -290,12 +284,8 @@ const SelectShippingStatus = ({
 
 												<FormControlLabel
 													className='mb-2'
-													control={
-														<BpRadio
-															value='delivery_in_progress'
-															name='delivery_in_progress'
-														/>
-													}
+													value='delivery_in_progress'
+													control={<BpRadio />}
 													label='طلب مندوب لتسليم الشحنة'
 													sx={formControlLabelStyle}
 													disabled={
@@ -320,9 +310,8 @@ const SelectShippingStatus = ({
 												)}
 
 												<FormControlLabel
-													control={
-														<BpRadio value='completed' name='completed' />
-													}
+													value='completed'
+													control={<BpRadio />}
 													sx={formControlLabelStyle}
 													label='مكتمل'
 													disabled={
