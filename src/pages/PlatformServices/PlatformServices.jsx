@@ -227,7 +227,11 @@ const PlatformServices = () => {
 														)}
 													/>
 													<div className='w-100 d-flex justify-content-between'>
-														<div className='service-name'>{service?.name}</div>
+														<div
+															style={{ whiteSpace: "normal" }}
+															className='service-name'>
+															{service?.name}
+														</div>
 														<div className='service-price'>
 															{service?.price}{" "}
 															<span style={{ fontSize: "16px" }}>ر.س</span>
