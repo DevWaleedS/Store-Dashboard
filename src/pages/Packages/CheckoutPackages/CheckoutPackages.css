@@ -5,6 +5,7 @@
 .pack__name {
 	font-size: 18px;
 	font-weight: 500;
+	white-space: normal;
 }
 .change__package_btn {
 	all: unset;
@@ -46,5 +47,10 @@
 	}
 	.checkout-package__title h4 {
 		font-size: 20px;
+	}
+
+	.pack__name {
+		font-size: 16px;
+		font-weight: 400;
 	}
 }

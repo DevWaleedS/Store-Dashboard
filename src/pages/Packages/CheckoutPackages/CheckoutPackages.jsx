@@ -87,10 +87,15 @@ const CheckoutPackages = () => {
 
 	// using this effect to handle merchantReference if paymentSelect is madfu...
 	useEffect(() => {
-		if (+paymentSelect === 5)
+		if (+paymentSelect === 5) {
 			setMerchantReference(
-				`package_reference_${selectedPackage?.unique_id}_${date}`
+				`package_reference_${selectedPackage?.unique_id}_${date
+					.toString()
+					.slice(-5)}`
 			);
+		} else {
+			setMerchantReference(null);
+		}
 	}, [paymentSelect]);
 
 	// handle check out cart

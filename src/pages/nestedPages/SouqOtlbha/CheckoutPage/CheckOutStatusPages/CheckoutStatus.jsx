@@ -247,7 +247,6 @@ const CheckoutStatusModal = () => {
 												fontSize: "24px",
 												fontWight: 500,
 												height: "70px",
-
 												backgroundColor: "#FFF",
 												borderTop: "1px solid #1DBBBE",
 												borderRadius: " 0 0 16px 16px",

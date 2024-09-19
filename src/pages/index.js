@@ -8,7 +8,9 @@ export { default as SocialPages } from "./SocialPages";
 export { default as Notifications } from "./Notifications";
 export { default as MaintenanceMode } from "./MaintenanceMode";
 export { default as RequestDelegate } from "./RequestDelegate";
-export { default as PlatformServices } from "./PlatformServices";
+export { default as PlatformServices } from "./PlatformServices/PlatformServices";
+export { default as CheckoutServices } from "./PlatformServices/CheckoutServices/CheckoutServices";
+export { default as CheckoutServicesInfo } from "./PlatformServices/CheckoutServices/CheckoutServicesInfo";
 export { default as PostalSubscriptions } from "./PostalSubscriptions";
 
 export { default as EvaluationThePlatform } from "./EvaluationThePlatform/EvaluationThePlatform";

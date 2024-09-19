@@ -2,22 +2,20 @@ import React, { useEffect, useState, useContext } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
-import { toast } from "react-toastify";
 
 // Components
-import { Breadcrumb } from "../components";
-import { TopBarSearchInput } from "../global/TopBar";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import { Breadcrumb } from "../../components";
+import { TopBarSearchInput } from "../../global/TopBar";
+import CircularLoading from "../../HelperComponents/CircularLoading";
 
 // Context
-import { LoadingContext } from "../Context/LoadingProvider";
+import CheckoutServices from "./CheckoutServices/CheckoutServices";
 
 // MUI
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
-import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 // Icons
@@ -27,13 +25,10 @@ import { IoIosArrowDown } from "react-icons/io";
 import {
 	useGetPlatformServicesDataQuery,
 	useGetPlatformServicesSelectorQuery,
-	useRequestNewServiceMutation,
-} from "../store/apiSlices/platformServicesApi";
+} from "../../store/apiSlices/platformServicesApi";
 
 // custom hook
-import UseAccountVerification from "../Hooks/UseAccountVerification";
-
-// ---------------------------------------------
+import UseAccountVerification from "../../Hooks/UseAccountVerification";
 
 // Select Style
 const selectStyle = {
@@ -63,8 +58,6 @@ const PlatformServices = () => {
 	// to Handle if the user is not verify  her account
 	UseAccountVerification();
 
-	const LoadingStore = useContext(LoadingContext);
-	const { setLoadingTitle } = LoadingStore;
 	// ------------------------------------------------------------
 	// Get platform services data from api
 	const { data: platformServices, isLoading } =
@@ -76,13 +69,42 @@ const PlatformServices = () => {
 
 	// -----------------------------------------------------------
 
+	const [openCheckoutServices, setOpenCheckoutServices] = useState(false);
 	const [data, setData] = useState({
 		store_name: "",
 		activity: [],
 		services: [],
 		name: "",
 		description: "",
+		paymentype_id: "",
 	});
+
+	const handleOnChangeData = (e) => {
+		const { name, value } = e.target;
+		setData((prevData) => {
+			return { ...prevData, [name]: value };
+		});
+	};
+
+	const [errors, setErrors] = useState({
+		store_name: "",
+		activity: "",
+		services: "",
+		name: "",
+		description: "",
+		paymentype_id: "",
+	});
+
+	const resetErrors = () => {
+		setErrors({
+			store_name: "",
+			activity: "",
+			services: "",
+			name: "",
+			description: "",
+			paymentype_id: "",
+		});
+	};
 	// ---------------------------------------------
 
 	// To get Activity and store name
@@ -96,60 +118,6 @@ const PlatformServices = () => {
 		});
 	}, [platformServices]);
 	// --------------------------------------------
-
-	// Send Request Order
-
-	const [requestNewService] = useRequestNewServiceMutation();
-	const handleRequestService = async () => {
-		setLoadingTitle("جاري ارسال الطلب");
-
-		// data that send to api
-		let formData = new FormData();
-		formData.append("name", data?.name);
-		for (let i = 0; i < data?.services?.length; i++) {
-			formData.append([`service_id[${i}]`], data?.services[i]);
-		}
-		formData.append("description", data?.description);
-
-		try {
-			const response = await requestNewService({
-				body: formData,
-			});
-
-			// Handle response
-			if (
-				response.data?.success === true &&
-				response.data?.data?.status === 200
-			) {
-				setLoadingTitle("");
-
-				setData({ ...data, services: [], name: "", description: "" });
-			} else {
-				setLoadingTitle("");
-
-				setData({ ...data, services: [], name: "", description: "" });
-
-				// Handle display errors using toast notifications
-				toast.error(
-					response?.data?.message?.ar
-						? response.data.message.ar
-						: response.data.message.en,
-					{
-						theme: "light",
-					}
-				);
-
-				Object.entries(response?.data?.message?.en)?.forEach(
-					([key, message]) => {
-						toast.error(message[0], { theme: "light" });
-					}
-				);
-			}
-		} catch (error) {
-			console.error("Error changing edit Product:", error);
-		}
-	};
-	// --------------------------------------
 
 	return (
 		<>
@@ -188,7 +156,7 @@ const PlatformServices = () => {
 										onChange={(e) => console.log(e)}
 										className='w-100'
 										type='text'
-										disabled
+										readOnly
 									/>
 								</div>
 							</div>
@@ -226,16 +194,14 @@ const PlatformServices = () => {
 								<div className='col-md-7 col-12'>
 									<FormControl sx={{ m: 0, width: "100%" }}>
 										<Select
-											className='bg-white'
-											sx={selectStyle}
-											IconComponent={IoIosArrowDown}
 											multiple
 											displayEmpty
-											inputProps={{ "aria-label": "Without label" }}
+											sx={selectStyle}
+											className='bg-white'
+											name='services'
+											IconComponent={IoIosArrowDown}
 											value={data?.services}
-											onChange={(e) =>
-												setData({ ...data, services: e.target.value })
-											}
+											onChange={handleOnChangeData}
 											input={<OutlinedInput />}
 											renderValue={(selected) => {
 												if (data?.services?.length === 0) {
@@ -248,17 +214,25 @@ const PlatformServices = () => {
 												}
 												return selected.map((item) => {
 													const result = platformServicesSelector?.filter(
-														(service) => service?.id === parseInt(item)
+														(service) => service?.id === parseInt(item?.id)
 													);
 													return `${result[0]?.name} , `;
 												});
 											}}>
 											{platformServicesSelector?.map((service, index) => (
-												<MenuItem key={index} value={service?.id}>
+												<MenuItem key={index} value={service}>
 													<Checkbox
-														checked={data?.services?.indexOf(service?.id) > -1}
+														checked={data?.services?.some(
+															(item) => item.id === service.id
+														)}
 													/>
-													<ListItemText primary={service?.name} />
+													<div className='w-100 d-flex justify-content-between'>
+														<div className='service-name'>{service?.name}</div>
+														<div className='service-price'>
+															{service?.price}{" "}
+															<span style={{ fontSize: "16px" }}>ر.س</span>
+														</div>
+													</div>
 												</MenuItem>
 											))}
 										</Select>
@@ -280,8 +254,9 @@ const PlatformServices = () => {
 									</div>
 									<input
 										type='text'
+										name='name'
 										value={data?.name}
-										onChange={(e) => setData({ ...data, name: e.target.value })}
+										onChange={handleOnChangeData}
 										className='w-100 new-service-input'
 										placeholder='ادخل اسم الخدمة الجديدة'
 									/>
@@ -303,9 +278,7 @@ const PlatformServices = () => {
 										className='w-100 new-service-input'
 										placeholder='قم بكتابة وصف واضح للخدمة'
 										value={data?.description}
-										onChange={(e) =>
-											setData({ ...data, description: e.target.value })
-										}
+										onChange={handleOnChangeData}
 									/>
 								</div>
 							</div>
@@ -315,11 +288,9 @@ const PlatformServices = () => {
 								<div className='col-md-7 col-12'>
 									<button
 										className='w-100 upload-request-btn'
-										onClick={() => handleRequestService()}
-										disabled={
-											data?.services?.length === 0 && data?.name === ""
-										}>
-										إرسال
+										onClick={() => setOpenCheckoutServices(true)}
+										disabled={data?.services?.length === 0}>
+										إرسال الطلب
 									</button>
 								</div>
 							</div>
@@ -327,6 +298,20 @@ const PlatformServices = () => {
 					)}
 				</div>
 			</section>
+
+			{openCheckoutServices ? (
+				<CheckoutServices
+					data={data}
+					errors={errors}
+					setData={setData}
+					setErrors={setErrors}
+					resetErrors={resetErrors}
+					handleOnChangeData={handleOnChangeData}
+					platformServices={platformServices}
+					openCheckoutServices={openCheckoutServices}
+					setOpenCheckoutServices={setOpenCheckoutServices}
+				/>
+			) : null}
 		</>
 	);
 };

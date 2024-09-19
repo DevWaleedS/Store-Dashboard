@@ -144,6 +144,7 @@ import UpgradePackages from "./pages/Packages/UpgradePackages";
 import ComparePackages from "./pages/Packages/ComparePackages";
 import CheckoutPackages from "./pages/Packages/CheckoutPackages/CheckoutPackages";
 import LiveCourseDetails from "./pages/Academy/LiveCourses/LiveCourseDetails";
+import CheckoutServicesStatus from "./pages/PlatformServices/CheckoutServices/CheckoutServicesStatus";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -370,6 +371,15 @@ const router = createBrowserRouter([
 				path: "checkout-packages/failed",
 				element: <CheckoutStatus />,
 			},
+			{
+				path: "PlatformServices/success",
+				element: <CheckoutServicesStatus />,
+			},
+
+			{
+				path: "PlatformServices/failed",
+				element: <CheckoutServicesStatus />,
+			},
 
 			{
 				path: "Rating",
@@ -497,6 +507,7 @@ const router = createBrowserRouter([
 				path: "PlatformServices",
 				element: <PlatformServices />,
 			},
+
 			{
 				path: "/RequestDelegate",
 				element: <RequestDelegate />,

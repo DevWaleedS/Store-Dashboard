@@ -29,6 +29,7 @@ const AxiosInterceptors = ({ children }) => {
 						"https://backend.atlbha.com/api/Store/updateSupplier",
 						"https://backend.atlbha.com/api/Store/package_payment",
 						"https://backend.atlbha.com/api/Store/setPackage",
+						"https://backend.atlbha.com/api/Store/etlobhaservice",
 					].includes(response.config.url) &&
 					["delete", "patch", "post", "put"].includes(response.config.method) &&
 					response.data.message?.en !== "The coupon is invalid" &&

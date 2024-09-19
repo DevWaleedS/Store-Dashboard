@@ -209,6 +209,7 @@ const OrderDetails = () => {
 								{/* Export order */}
 								<ExportOrder componentRef={componentRef} />
 								{/* Print Shipping Sticker */}
+
 								<PrintShippingSticker currentOrder={currentOrder} />
 							</div>
 						</div>
