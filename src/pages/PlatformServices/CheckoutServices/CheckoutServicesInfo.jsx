@@ -5,7 +5,7 @@ const CheckoutServicesInfo = ({ selectedServices, grandTotal }) => {
 	// Calculate tax at 15%
 	const taxRate = 0.15;
 	const taxAmount = grandTotal * taxRate;
-	const totalWithTax = grandTotal + taxAmount;
+
 	return (
 		<>
 			<div className='checkout__info'>
@@ -52,7 +52,7 @@ const CheckoutServicesInfo = ({ selectedServices, grandTotal }) => {
 
 								<tr>
 									<th>الضريبة</th>
-									<td>{taxAmount} ر.س</td>
+									<td>{taxAmount.toFixed(2)} ر.س</td>
 								</tr>
 							</tbody>
 
@@ -63,7 +63,7 @@ const CheckoutServicesInfo = ({ selectedServices, grandTotal }) => {
 											الإجمالي <span className='tax-text'>(شامل الضريبة)</span>
 										</div>
 									</th>
-									<td>{totalWithTax} ر.س</td>
+									<td>{grandTotal} ر.س</td>
 								</tr>
 							</tfoot>
 						</>
