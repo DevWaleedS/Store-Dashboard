@@ -1,8 +1,11 @@
 import React from "react";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 import { LuDot } from "react-icons/lu";
-const CheckoutServicesInfo = ({ selectedServices, isLoading, grandTotal }) => {
+const CheckoutServicesInfo = ({ selectedServices, grandTotal }) => {
+	// Calculate tax at 15%
+	const taxRate = 0.15;
+	const taxAmount = grandTotal * taxRate;
+	const totalWithTax = grandTotal + taxAmount;
 	return (
 		<>
 			<div className='checkout__info'>
@@ -45,6 +48,11 @@ const CheckoutServicesInfo = ({ selectedServices, isLoading, grandTotal }) => {
 									<th>السعر</th>
 									<td>{grandTotal} ر.س</td>
 								</tr>
+
+								<tr>
+									<th>الضريبة</th>
+									<td>{taxAmount} ر.س</td>
+								</tr>
 							</tbody>
 
 							<tfoot>
@@ -54,7 +62,7 @@ const CheckoutServicesInfo = ({ selectedServices, isLoading, grandTotal }) => {
 											الإجمالي <span className='tax-text'>(شامل الضريبة)</span>
 										</div>
 									</th>
-									<td>{grandTotal} ر.س</td>
+									<td>{totalWithTax} ر.س</td>
 								</tr>
 							</tfoot>
 						</>
