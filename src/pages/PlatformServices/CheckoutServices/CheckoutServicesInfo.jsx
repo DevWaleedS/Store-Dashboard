@@ -47,7 +47,7 @@ const CheckoutServicesInfo = ({ selectedServices, grandTotal }) => {
 							<tbody className='subtotals'>
 								<tr>
 									<th>السعر</th>
-									<td>{grandTotal} ر.س</td>
+									<td>{(grandTotal / 1.15).toFixed(2)} ر.س</td>
 								</tr>
 
 								<tr>
