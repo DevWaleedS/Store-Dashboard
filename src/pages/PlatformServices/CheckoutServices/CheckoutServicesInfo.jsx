@@ -39,7 +39,8 @@ const CheckoutServicesInfo = ({ selectedServices, grandTotal }) => {
 												</span>
 											</div>
 										</td>
-										<td>{item?.price} ر.س</td>
+
+										<td>{(item?.price / 1.15).toFixed(2)} ر.س</td>
 									</tr>
 								))}
 							</tbody>
