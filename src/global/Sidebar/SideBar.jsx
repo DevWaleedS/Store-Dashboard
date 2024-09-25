@@ -172,7 +172,7 @@ const SideBar = ({
 				)}
 			</div>
 			<Menu>
-				{verificationStatus === "تم التوثيق" ? (
+				{selectedPackage ? (
 					<SidebarLink
 						href={`https://${localStorage.getItem("domain")}`}
 						target='_blank'
