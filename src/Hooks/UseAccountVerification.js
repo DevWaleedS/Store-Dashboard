@@ -3,10 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 import { useDispatch } from "react-redux";
 
-import {
-	closeVerifyModal,
-	openVerifyModal,
-} from "../store/slices/VerifyStoreModal-slice";
+import { openVerifyModal } from "../store/slices/VerifyStoreModal-slice";
 
 const UseAccountVerification = () => {
 	const navigate = useNavigate();
@@ -65,7 +62,7 @@ const UseAccountVerification = () => {
 				!showVerification?.package_paid &&
 				!showVerification?.package_id)
 		) {
-			navigate("/");
+			// navigate("/");
 			dispatchVerifyModal(openVerifyModal());
 		}
 	}, [showVerification, dispatchVerifyModal, navigate]);
