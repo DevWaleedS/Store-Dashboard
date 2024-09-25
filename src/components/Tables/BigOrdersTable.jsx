@@ -161,19 +161,19 @@ function EnhancedTableToolbar(props) {
 								<FiSearch />
 								<input
 									type='text'
-									autoComplete='false'
 									value={search}
+									autoComplete='false'
 									onChange={(e) => setSearch(e.target.value)}
-									placeholder=' ابحث برقم التتبع أو اسم شركة الشحن أو اسم العميل'
+									placeholder='ابحث برقم التتبع أو اسم شركة الشحن أو اسم العميل'
 								/>
 							</div>
 							<div className='select-input-box'>
 								<FiFilter className='filter-icon' />
 								<Select
+									value={select}
 									displayEmpty
 									sx={selectFilterStyles}
 									IconComponent={IoIosArrowDown}
-									value={select}
 									onChange={(e) => setSelect(e.target.value)}
 									inputProps={{ "aria-label": "Without label" }}
 									renderValue={(selected) => {

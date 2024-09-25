@@ -7,14 +7,14 @@ export const platformServicesApi = createApi({
 
 	// base url
 	baseQuery: axiosBaseQuery({
-		baseUrl: "https://backend.atlbha.com/api/Store/",
+		baseUrl: "https://backend.atlbha.com/api/",
 	}),
 
-	tagTypes: ["PlatformServices"],
+	tagTypes: ["PlatformServices", "ShowServiceOrder"],
 	endpoints: (builder) => ({
 		// get store Platform Services Data endpoint..
 		getPlatformServicesData: builder.query({
-			query: () => ({ url: `etlobhaservice/show` }),
+			query: () => ({ url: `Store/etlobhaservice/show` }),
 			providesTags: ["PlatformServices"],
 
 			// Pick out data and prevent nested properties in a hook or selector
@@ -23,22 +23,54 @@ export const platformServicesApi = createApi({
 
 		// get platform  services selector
 		getPlatformServicesSelector: builder.query({
-			query: () => ({ url: `selector/services` }),
+			query: () => ({ url: `Store/selector/services` }),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data.services,
+		}),
+
+		// showServiceOrder
+		showServiceOrder: builder.query({
+			query: ({ id }) => ({ url: `showServiceOrder/${id}` }),
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.websiteorder,
+			providesTags: ["ShowServiceOrder"],
 		}),
 
 		// handle request new service
 		requestNewService: builder.mutation({
 			query: ({ body }) => {
 				return {
-					url: `etlobhaservice`,
+					url: `Store/etlobhaservice`,
 					method: "POST",
 					data: body,
 				};
 			},
 			invalidatesTags: ["PlatformServices"],
+		}),
+
+		// apply Services Coupon
+		applyServicesCoupon: builder.mutation({
+			query: ({ body }) => {
+				return {
+					url: `Store/etlobhaservice`,
+					method: "POST",
+					data: body,
+				};
+			},
+			invalidatesTags: ["ShowServiceOrder"],
+		}),
+
+		// removeServiceCoupon
+		removeServiceCoupon: builder.mutation({
+			query: ({ id }) => {
+				return {
+					url: `removeServiceCoupon/${id}`,
+					method: "GET",
+				};
+			},
+			invalidatesTags: ["ShowServiceOrder"],
 		}),
 	}),
 });
@@ -47,5 +79,8 @@ export const platformServicesApi = createApi({
 export const {
 	useGetPlatformServicesDataQuery,
 	useGetPlatformServicesSelectorQuery,
+	useShowServiceOrderQuery,
 	useRequestNewServiceMutation,
+	useApplyServicesCouponMutation,
+	useRemoveServiceCouponMutation,
 } = platformServicesApi;

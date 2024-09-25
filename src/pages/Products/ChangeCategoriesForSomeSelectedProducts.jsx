@@ -307,13 +307,22 @@ const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 														<p className='text-[#02466a]'>النشاط الفرعي</p>
 													);
 												}
-												return selected?.map((item) => {
-													const result =
-														subcategory[0]?.subcategory?.filter(
-															(sub) => sub?.id === parseInt(item)
-														) || subcategory_id;
-													return `${result[0]?.name} , `;
-												});
+
+												return (
+													<div className=' d-flex justify-content-start flex-wrap gap-1'>
+														{selected.map((item) => {
+															const result =
+																subcategory[0]?.subcategory?.filter(
+																	(sub) => sub?.id === parseInt(item)
+																) || subcategory_id;
+															return (
+																<div className='multiple_select_items'>
+																	{result[0]?.name}
+																</div>
+															);
+														})}
+													</div>
+												);
 											}}>
 											{subcategory[0]?.subcategory?.map((sub, index) => (
 												<MenuItem key={index} value={sub?.id}>

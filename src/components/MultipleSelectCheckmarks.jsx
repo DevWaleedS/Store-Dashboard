@@ -26,6 +26,7 @@ const selectStyle = {
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
 		{
 			paddingRight: "20px",
+			whiteSpace: "normal",
 		},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
@@ -83,12 +84,21 @@ export default function MultipleSelectCheckmarks({ showErr }) {
 										</span>
 									);
 								}
-								return selected?.map((item) => {
-									const result = etlobahCategory?.filter(
-										(service) => service?.id === parseInt(item)
-									);
-									return `${result[0]?.name} , `;
-								});
+
+								return (
+									<div className=' d-flex justify-content-start flex-wrap gap-1 '>
+										{selected.map((item) => {
+											const result = etlobahCategory?.filter(
+												(service) => service?.id === parseInt(item)
+											);
+											return (
+												<div className='multiple_select_items'>
+													{result[0]?.name}
+												</div>
+											);
+										})}
+									</div>
+								);
 							}}>
 							{etlobahCategory?.map((act, index) => (
 								<MenuItem
@@ -131,6 +141,7 @@ export default function MultipleSelectCheckmarks({ showErr }) {
 								"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
 									{
 										paddingRight: "20px",
+										whiteSpace: "normal",
 									},
 								"& .MuiOutlinedInput-root": {
 									"& :hover": {
@@ -156,12 +167,21 @@ export default function MultipleSelectCheckmarks({ showErr }) {
 										<span style={{ color: "#011723" }}>نشاط المتجر الفرعي</span>
 									);
 								}
-								return selected?.map((item) => {
-									const result = subcategories?.filter(
-										(sub) => sub?.id === parseInt(item)
-									);
-									return `${result?.[0]?.name} , `;
-								});
+
+								return (
+									<div className=' d-flex justify-content-start flex-wrap gap-1'>
+										{selected.map((item) => {
+											const result = subcategories?.filter(
+												(sub) => sub?.id === parseInt(item)
+											);
+											return (
+												<div className='multiple_select_items'>
+													{result[0]?.name}
+												</div>
+											);
+										})}
+									</div>
+								);
 							}}>
 							{subcategories?.map((sub, index) => (
 								<MenuItem key={index} value={sub?.id}>

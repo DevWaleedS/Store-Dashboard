@@ -101,9 +101,9 @@ const RequestDelegate = () => {
 										},
 									},
 								}}
-								IconComponent={IoIosArrowDown}
 								value={cityId}
 								displayEmpty
+								IconComponent={IoIosArrowDown}
 								onChange={handleCategoryChange}
 								inputProps={{ "aria-label": "Without label" }}
 								renderValue={(selected) => {

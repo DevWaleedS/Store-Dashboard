@@ -9,7 +9,6 @@ import { IoIosArrowDown } from "react-icons/io";
 
 //  DatePicker
 import { DatePicker } from "rsuite";
-import moment from "moment";
 
 const selectStyle = {
 	fontSize: "18px",

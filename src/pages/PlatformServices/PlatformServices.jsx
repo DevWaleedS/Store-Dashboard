@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -36,6 +36,7 @@ const selectStyle = {
 	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
 		{
 			paddingRight: "20px",
+			whiteSpace: "normal",
 		},
 	"& .MuiOutlinedInput-root": {
 		"& :hover": {
@@ -117,6 +118,7 @@ const PlatformServices = () => {
 			),
 		});
 	}, [platformServices]);
+
 	// --------------------------------------------
 
 	return (
@@ -196,9 +198,9 @@ const PlatformServices = () => {
 										<Select
 											multiple
 											displayEmpty
+											name='services'
 											sx={selectStyle}
 											className='bg-white'
-											name='services'
 											IconComponent={IoIosArrowDown}
 											value={data?.services}
 											onChange={handleOnChangeData}
@@ -212,12 +214,20 @@ const PlatformServices = () => {
 														</span>
 													);
 												}
-												return selected.map((item) => {
-													const result = platformServicesSelector?.filter(
-														(service) => service?.id === parseInt(item?.id)
-													);
-													return `${result[0]?.name} , `;
-												});
+												return (
+													<div className=' d-flex justify-content-start flex-wrap gap-1'>
+														{selected.map((item) => {
+															const result = platformServicesSelector?.filter(
+																(service) => service?.id === parseInt(item?.id)
+															);
+															return (
+																<div className='multiple_select_items'>
+																	{result[0]?.name}
+																</div>
+															);
+														})}
+													</div>
+												);
 											}}>
 											{platformServicesSelector?.map((service, index) => (
 												<MenuItem key={index} value={service}>
@@ -311,7 +321,6 @@ const PlatformServices = () => {
 					setErrors={setErrors}
 					resetErrors={resetErrors}
 					handleOnChangeData={handleOnChangeData}
-					platformServices={platformServices}
 					openCheckoutServices={openCheckoutServices}
 					setOpenCheckoutServices={setOpenCheckoutServices}
 				/>

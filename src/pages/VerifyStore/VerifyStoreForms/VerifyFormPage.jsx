@@ -289,7 +289,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 							<h5 className='label'>نوع النشاط الرئيسي</h5>
 						</div>
-						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1'>
+						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1 gap-1'>
 							<div className='main-categories w-100'>
 								{selectedActivity?.map((activity, index) => (
 									<div key={index} className='categories'>
@@ -303,7 +303,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 						<div className='col-md-4 col-12 mb-md-0 mb-3 d-flex '>
 							<h5 className='label'>نوع النشاط الفرعي</h5>
 						</div>
-						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1'>
+						<div className='col-md-8 col-12 mb-md-0 mb-3 d-flex justify-content-start flex-wrap gap-1 gap-1'>
 							{isLoading ? (
 								<div className='main-categories w-100'>
 									<Skeleton width={100} height={32} variant='rounded' />

@@ -1277,8 +1277,8 @@ table,
 }
 
 .table > tbody .status {
-	width: 95px;
-	max-width: 95px;
+	width: 210px;
+	max-width: 210px;
 	padding: 2px 0;
 	font-size: 15px;
 	font-weight: 500;
@@ -9189,7 +9189,8 @@ input:disabled {
 }
 
 .PlatformServices-page .delegate-request-form .store-activity-input .activity,
-.form-row .form .main-categories .categories {
+.form-row .form .main-categories .categories,
+.multiple_select_items {
 	display: flex;
 	justify-content: center;
 	align-items: center;

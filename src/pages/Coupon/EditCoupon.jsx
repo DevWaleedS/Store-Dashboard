@@ -1075,7 +1075,6 @@ const EditCoupon = () => {
 														<div className='col-12 mb-4'>
 															<FormControl sx={{ m: 0, width: "100%" }}>
 																<Select
-																	// disabled={isEnable === "نشط" ? false : true}
 																	name='select_category_id'
 																	value={select_category_id}
 																	onChange={(e) => {

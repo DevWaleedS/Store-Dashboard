@@ -11,10 +11,10 @@ import { toast } from "react-toastify";
 import { Box, Modal } from "@mui/material";
 
 // components
-import CheckoutServicesInfo from "./CheckoutServicesInfo";
-
-import CircularLoading from "../../../HelperComponents/CircularLoading";
 import RenderPaymentsList from "./RenderPaymentsList";
+import CheckoutServicesInfo from "./CheckoutServicesInfo";
+import RenderServicesCouponInput from "./RenderServicesCouponInput";
+import CircularLoading from "../../../HelperComponents/CircularLoading";
 
 // RTK  Query
 import {
@@ -25,7 +25,11 @@ import { useGetMainInformationQuery } from "../../../store/apiSlices/mainInforma
 
 //  icons
 import { ArrowBack } from "../../../data/Icons";
-import { useRequestNewServiceMutation } from "../../../store/apiSlices/platformServicesApi";
+import {
+	useApplyServicesCouponMutation,
+	useRequestNewServiceMutation,
+	useShowServiceOrderQuery,
+} from "../../../store/apiSlices/platformServicesApi";
 
 // styles
 const style = {
@@ -51,8 +55,15 @@ const CheckoutServices = ({
 	setOpenCheckoutServices,
 }) => {
 	const date = Date.now();
+
 	const [merchantReference, setMerchantReference] = useState(null);
 	const [btnLoading, setBtnLoading] = useState(false);
+
+	// coupon
+	const [showCoupon, setShowCoupon] = useState(false);
+	const [loadingCoupon, setLoadingCoupon] = useState(false);
+	const [coupon, setCoupon] = useState(null);
+	const [couponError, setCouponError] = useState(null);
 
 	// To show the store info that come from api
 	const { data: mainInformation, isLoading } = useGetMainInformationQuery();
@@ -66,15 +77,79 @@ const CheckoutServices = ({
 		}
 	}, [data?.paymentype_id]);
 
-	// Calculate the total price of selected services
-	const totalSelectedServicesPrice = useMemo(() => {
-		return data?.services?.reduce((total, service) => total + service.price, 0);
-	}, [data?.services]);
+	// handle apply code
+	const [
+		applyServicesCoupon,
+		{ data: cartAfterCoupon, isLoading: applyServicesCouponLoading },
+	] = useApplyServicesCouponMutation();
+	const handleApplyDiscountCoupon = async () => {
+		setCoupon("");
+		setLoadingCoupon(true);
+		setCouponError(null);
 
-	// Calculate the grand total (including the main service price)
-	const grandTotal = useMemo(() => {
-		return totalSelectedServicesPrice;
-	}, [totalSelectedServicesPrice]);
+		// data that send to api..
+		let formData = new FormData();
+		formData.append("code", coupon);
+
+		data?.services?.forEach((service, index) =>
+			formData.append(`service_id[${index}]`, service?.id)
+		);
+
+		// make request...
+		try {
+			const response = await applyServicesCoupon({
+				body: formData,
+			});
+
+			// Handle response
+			if (
+				response.data?.success === true &&
+				response.data?.data?.status === 200
+			) {
+				toast.success(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+				if (
+					response?.data?.message?.en === "The coupon is invalid" ||
+					response?.data?.message?.en === "The coupon is already used"
+				) {
+					toast.error(
+						response?.data?.message?.ar
+							? response.data.message.ar
+							: response.data.message.en,
+						{
+							theme: "light",
+						}
+					);
+				}
+
+				setLoadingCoupon(false);
+			} else {
+				setBtnLoading(false);
+				setLoadingCoupon(false);
+
+				// Handle display errors using toast notifications
+				toast.error(
+					response?.data?.message?.ar
+						? response.data.message.ar
+						: response.data.message.en,
+					{
+						theme: "light",
+					}
+				);
+			}
+		} catch (error) {
+			console.error("Error changing appLyDiscountCoupon:", error);
+		}
+	};
+
+	const { data: showServiceOrder, isLoading: showServiceOrderLoading } =
+		useShowServiceOrderQuery({ id: cartAfterCoupon?.data?.websiteorder?.id });
 
 	// Send Request Order
 	const [requestNewService, { isLoading: reqServiceIsLoading }] =
@@ -85,7 +160,13 @@ const CheckoutServices = ({
 
 		// data that send to api
 		let formData = new FormData();
-		formData.append("name", data?.name);
+		formData.append("name", data?.store_name);
+		if (cartAfterCoupon) {
+			formData.append(
+				"order_id",
+				cartAfterCoupon?.data?.websiteorder?.order_number
+			);
+		}
 
 		data?.services?.forEach((service, index) =>
 			formData.append(`service_id[${index}]`, service?.id)
@@ -156,7 +237,7 @@ const CheckoutServices = ({
 			console.error("Error changing edit Product:", error);
 		}
 	};
-	// --------------------------------------
+	// --------------------------------------------------------------
 
 	// handle checkout with madfu
 	const [loginWithMadfu] = useLoginMadfuWithPaymentPackageMutation();
@@ -246,6 +327,20 @@ const CheckoutServices = ({
 			console.log(error);
 		}
 	};
+	// --------------------------------------------------------------
+
+	// Calculate the total price of selected services
+	const totalSelectedServicesPrice = useMemo(() => {
+		return (
+			showServiceOrder?.total_price ??
+			data?.services?.reduce((total, service) => total + service.price, 0)
+		);
+	}, [data?.services, showServiceOrder]);
+
+	// Calculate the grand total (including the main service price)
+	const grandTotal = useMemo(() => {
+		return totalSelectedServicesPrice;
+	}, [totalSelectedServicesPrice]);
 
 	const handleGoBack = () => {
 		setOpenCheckoutServices(false);
@@ -254,7 +349,7 @@ const CheckoutServices = ({
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | دفع اشتراك الباقة </title>
+				<title>لوحة تحكم اطلبها | ادفع و احصل علي خدمات المنصة </title>
 			</Helmet>
 
 			<Modal className='checkout-packages-page' open={true}>
@@ -310,9 +405,27 @@ const CheckoutServices = ({
 												<div className='card '>
 													<div className='card-body'>
 														<CheckoutServicesInfo
+															cartAfterCoupon={showServiceOrder}
 															grandTotal={grandTotal}
 															selectedServices={data?.services}
-															isLoading={reqServiceIsLoading}
+															cartIsLoading={
+																applyServicesCouponLoading ||
+																showServiceOrderLoading
+															}
+														/>
+
+														<RenderServicesCouponInput
+															coupon={coupon}
+															setCoupon={setCoupon}
+															showCoupon={showCoupon}
+															couponError={couponError}
+															setShowCoupon={setShowCoupon}
+															loadingCoupon={loadingCoupon}
+															setCouponError={setCouponError}
+															isLoading={applyServicesCouponLoading}
+															handleApplyDiscountCoupon={
+																handleApplyDiscountCoupon
+															}
 														/>
 
 														<button

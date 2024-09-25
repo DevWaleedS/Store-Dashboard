@@ -1080,13 +1080,22 @@ const EditProduct = () => {
 																if (product?.subcategory_id?.length === 0) {
 																	return "النشاط الفرعي";
 																}
-																return selected?.map((item) => {
-																	const result =
-																		subcategory[0]?.subcategory?.filter(
-																			(sub) => sub?.id === parseInt(item)
-																		) || product?.subcategory_id;
-																	return `${result[0]?.name} , `;
-																});
+
+																return (
+																	<div className=' d-flex justify-content-start flex-wrap gap-1'>
+																		{selected.map((item) => {
+																			const result =
+																				subcategory[0]?.subcategory?.filter(
+																					(sub) => sub?.id === parseInt(item)
+																				) || product?.subcategory_id;
+																			return (
+																				<div className='multiple_select_items'>
+																					{result[0]?.name}
+																				</div>
+																			);
+																		})}
+																	</div>
+																);
 															}}>
 															{subcategory[0]?.subcategory?.map(
 																(sub, index) => (
