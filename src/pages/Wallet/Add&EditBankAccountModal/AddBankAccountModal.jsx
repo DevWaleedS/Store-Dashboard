@@ -31,7 +31,7 @@ import { BsCreditCard } from "react-icons/bs";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { BsFileEarmarkArrowUp } from "react-icons/bs";
-import { IoMdInformationCircleOutline, IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import PageHint from "../../../components/PageHint.jsx";
 import { useShowVerificationQuery } from "../../../store/apiSlices/verifyStoreApi.js";
 
@@ -408,6 +408,7 @@ const AddBankAccountModal = () => {
 	const handleAddBankAccount = async (data) => {
 		setLoadingTitle("جاري اضافة الحساب البنكي");
 		resetErrors();
+		data.preventDefault();
 
 		// data that send to api
 		let formData = new FormData();
@@ -469,13 +470,13 @@ const AddBankAccountModal = () => {
 	const handleAddDocsErrors = (e) => {
 		e.preventDefault();
 		if (!bankAccountInfo?.civil_id) {
-			toast.warning(".يرجى إرفاق الهوية الوطنية", {
+			toast.warning("يرجى إرفاق الهوية الوطنية", {
 				theme: "light",
 			});
 		}
 
 		if (!bankAccountInfo?.website_image) {
-			toast.warning(".يرجى إرفاق  صورة من المتجر الخاص بك", {
+			toast.warning("يرجى إرفاق  صورة من المتجر الخاص بك", {
 				theme: "light",
 			});
 		}
@@ -484,12 +485,12 @@ const AddBankAccountModal = () => {
 			!bankAccountInfo?.national_address &&
 			showVerification?.verification_type === "maeruf"
 		) {
-			toast.warning(".يرجى إرفاق  العنوان الوطني", {
+			toast.warning("يرجى إرفاق  العنوان الوطني", {
 				theme: "light",
 			});
 		}
 		if (!bankAccountInfo?.bankAccountLetter) {
-			toast.warning(".يرجى إرفاق  شهادة الآيبان", {
+			toast.warning("يرجى إرفاق  شهادة الآيبان", {
 				theme: "light",
 			});
 		}
@@ -536,16 +537,32 @@ const AddBankAccountModal = () => {
 									<PageHint
 										hint={`يجب كتابة البيانات الصحيحة ليتم رفعها للجهات المختصة`}
 										flex={
-											"d-flex justify-content-start align-items-center gap-2"
+											"d-flex justify-content-start align-items-center gap-2 "
 										}
+										mb={"mb-2"}
 									/>
+									{showVerification?.verification_status !== "تم التوثيق" ? (
+										<PageHint
+											hint={`يرجي توثيق المتجر أولاً لكي تتمكن من إضافة حسابك البنكي بنجاح!`}
+											flex={
+												"d-flex justify-content-start align-items-center gap-2"
+											}
+										/>
+									) : null}
 								</div>
 							</div>
 
 							<form
 								onSubmit={(e) => {
-									handleSubmit(handleAddBankAccount);
-									handleAddDocsErrors(e);
+									if (
+										!bankAccountInfo?.civil_id ||
+										!bankAccountInfo?.website_image ||
+										!bankAccountInfo?.bankAccountLetter
+									) {
+										handleAddDocsErrors(e);
+									} else {
+										handleSubmit(handleAddBankAccount(e));
+									}
 								}}>
 								<div className='row mb-3'>
 									<div className='col-12'>
