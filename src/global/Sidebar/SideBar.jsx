@@ -114,7 +114,7 @@ const SideBar = ({
 				icon: MarkEmailReadIcon,
 				label: "الاشتراكات البريدية",
 			},
-			{ to: "SEOStore", icon: FaCircle, label: "SEO المتجر" },
+			{ to: "seo_store_setting", icon: FaCircle, label: "SEO المتجر" },
 		],
 
 		template: [

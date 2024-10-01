@@ -131,7 +131,7 @@ export const dashboardSections = [
 	{
 		id: 10,
 		sectionName: "SEO المتجر",
-		route: "SEOStore",
+		route: "seo_store_setting",
 		icon: <FaCircle style={{ width: "14px" }} />,
 	},
 	{
@@ -343,22 +343,4 @@ export const dashboardSections = [
 		route: "PlatformServices",
 		icon: <FaUserCheck />,
 	},
-	// {
-	// 	id: 27,
-	// 	sectionName: "",
-	// 	route: "SEOStore",
-	// 	icon: <FaCircle style={{ width: "14px" }} />,
-	// },
-	// {
-	// 	id: 27,
-	// 	sectionName: "",
-	// 	route: "SEOStore",
-	// 	icon: <FaCircle style={{ width: "14px" }} />,
-	// },
-	// {
-	// 	id: 27,
-	// 	sectionName: "",
-	// 	route: "SEOStore",
-	// 	icon: <FaCircle style={{ width: "14px" }} />,
-	// },
 ];

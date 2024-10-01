@@ -30,6 +30,7 @@ import {
 	useEditCategoryByIdMutation,
 	useGetCategoryByIdQuery,
 } from "../../store/apiSlices/categoriesApi";
+import { Close } from "@mui/icons-material";
 
 const style = {
 	position: "fixed",
@@ -218,6 +219,7 @@ const EditCategory = () => {
 					},
 				]);
 			}
+			setIcons([currentCategory?.categories?.icon]);
 		}
 	}, [currentCategory?.categories]);
 
@@ -315,17 +317,19 @@ const EditCategory = () => {
 												</div>
 
 												<div className='banners-preview-container'>
-													<div className='banner-preview'>
-														{icons[0] && (
-															<img src={icons[0]?.data_url} alt='' />
-														)}
-														{currentCategory?.categories && (
+													{icons[0] ? (
+														<div className='banner-preview'>
+															<Close
+																className='close-icon'
+																onClick={() => setIcons([])}
+															/>
+
 															<img
-																src={currentCategory?.categories?.icon}
+																src={icons[0]?.data_url || icons[0]}
 																alt=''
 															/>
-														)}
-													</div>
+														</div>
+													) : null}
 												</div>
 											</div>
 											<div className='col-md-3 col-12'></div>

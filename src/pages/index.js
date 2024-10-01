@@ -1,6 +1,6 @@
 export { default as Offers } from "./Offers";
 
-export { default as SEOStore } from "./SEOStore";
+export { default as SEOStoreSetting } from "./SEOStoreSetting";
 export { default as RootLayOut } from "./RootLayout";
 export { default as Management } from "./Management";
 export { default as PaintStore } from "./PaintStore";

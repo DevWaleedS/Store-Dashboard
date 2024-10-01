@@ -29,6 +29,7 @@ import { DeleteIcon, UploadIcon } from "../../data/Icons";
 
 // RTK Query
 import { useAddNewCategoryMutation } from "../../store/apiSlices/categoriesApi";
+import { Close } from "@mui/icons-material";
 
 // Modal style
 const style = {
@@ -257,13 +258,17 @@ const AddCategory = () => {
 													)}
 												</ImageUploading>
 											</div>
-											{icons[0] && (
+											{icons[0] ? (
 												<div className='banners-preview-container'>
 													<div className='banner-preview'>
+														<Close
+															className='close-icon'
+															onClick={() => setIcons([])}
+														/>
 														<img src={icons[0]?.data_url} alt='' />
 													</div>
 												</div>
-											)}
+											) : null}
 										</div>
 										<div className='col-md-3 col-12'></div>
 										<div className='col-md-7 col-12'>

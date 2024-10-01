@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
@@ -25,6 +24,8 @@ import {
 	TiktokIconColored,
 	TwitterIcon,
 } from "../data/Icons";
+import { FaCode } from "react-icons/fa6";
+import { IoText } from "react-icons/io5";
 
 // RTK Query
 import {
@@ -32,35 +33,54 @@ import {
 	useUpdateSeoMutation,
 } from "../store/apiSlices/SEOImprovementsApi";
 
+// Components
 import { Breadcrumb } from "../components";
 
 // custom hook
 import UseAccountVerification from "../Hooks/UseAccountVerification";
+import { set } from "react-hook-form";
 
-const PaintStore = () => {
+const SEOStoreSetting = () => {
 	// to Handle if the user is not verify  her account
 	UseAccountVerification();
 
 	// get seo data
 	const { data: Seo, isLoading } = useGetSEODataQuery();
-
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
-	const [updateLinkValue, setUpdateLinkValue] = useState("");
-	const [robotLink, setRobotLink] = useState("");
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
 	const [instagram, setInstagram] = useState("");
+	const [robotLink, setRobotLink] = useState("");
+	const [siteMap, setSiteMap] = useState("");
+	const [header, setHeader] = useState("");
+	const [footer, setFooter] = useState("");
 	const [keyWord, setKeyWord] = useState([]);
+	const [seoSetting, setSeoSetting] = useState({
+		updateLinkValue: "",
+		title: "",
+		metaDescription: "",
+		keyword: [],
+	});
 
-	// to handle errors
+	const handleOnChange = (e) => {
+		const { name, value } = e.target;
+		setSeoSetting((prevData) => {
+			return { ...prevData, [name]: value };
+		});
+	};
+
+	// Handle Regex
 	const LINK_REGEX =
 		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 	const [validPageLink, setValidPageLink] = useState(false);
 	const [pageLinkFocus, setPageLinkFocus] = useState(false);
+
+	// Handle errors
 	const [dataError, setDataError] = useState({
 		updateLinkValue: "",
+		title: "",
 		robotLink: "",
 		keyWord: "",
 		snapchat: "",
@@ -71,6 +91,8 @@ const PaintStore = () => {
 	const resetDataError = () => {
 		setDataError({
 			updateLinkValue: "",
+			title: "",
+			metaDescription: "",
 			robotLink: "",
 			keyWord: "",
 			snapchat: "",
@@ -82,30 +104,47 @@ const PaintStore = () => {
 	// --------------------------------------------------------------
 
 	useEffect(() => {
-		setUpdateLinkValue(Seo?.[0]?.google_analytics);
-		setRobotLink(Seo?.[0]?.robot_link || "");
-		setSnapchat(Seo?.[0]?.snappixel || "");
-		setTwitter(Seo?.[0]?.twitterpixel || "");
-		setTiktok(Seo?.[0]?.tiktokpixel || "");
-		setInstagram(Seo?.[0]?.instapixel || "");
-		setKeyWord(Seo?.[0]?.key_words?.map((key) => key) || []);
+		if (Seo) {
+			setHeader(Seo?.[0]?.header || "");
+			setFooter(Seo?.[0]?.footer || "");
+			setTiktok(Seo?.[0]?.tiktokpixel || "");
+			setSnapchat(Seo?.[0]?.snappixel || "");
+			setTwitter(Seo?.[0]?.twitterpixel || "");
+			setInstagram(Seo?.[0]?.instapixel || "");
+			setSiteMap(Seo?.[0]?.siteMap || "");
+			setRobotLink(Seo?.[0]?.robot_link || "");
+
+			setKeyWord(Seo?.[0]?.key_words?.map((key) => key) || []);
+
+			setSeoSetting({
+				...seoSetting,
+				title: Seo?.[0]?.title || "",
+
+				metaDescription: Seo?.[0]?.metaDescription || "",
+				updateLinkValue: Seo?.[0]?.google_analytics || "",
+			});
+		}
 	}, [Seo]);
 
 	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(updateLinkValue);
+		const storeLinkValidation = LINK_REGEX.test(seoSetting?.updateLinkValue);
 		setValidPageLink(storeLinkValidation);
-	}, [updateLinkValue]);
+	}, [seoSetting?.updateLinkValue]);
 
 	// HANDLE UPDATE SEO DATA
 	const [updateSeo] = useUpdateSeoMutation();
-
 	const handleSEOUpdate = async () => {
 		resetDataError();
 		setLoadingTitle("جاري تعديل تحسينات الSEO");
 
 		// data that send to api
 		let formData = new FormData();
-		formData.append("google_analytics", updateLinkValue);
+		formData.append("google_analytics", seoSetting?.updateLinkValue);
+		formData.append("title", seoSetting?.title);
+		formData.append("metaDescription", seoSetting?.metaDescription);
+		formData.append("header", header);
+		formData.append("footer", footer);
+		formData.append("siteMap", siteMap);
 		formData.append("robot_link", robotLink);
 		formData.append("snappixel", snapchat);
 		formData.append("twitterpixel", twitter);
@@ -163,10 +202,10 @@ const PaintStore = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | تحسينات SEO</title>
+				<title>لوحة تحكم اطلبها | تحسينات SEO الـ</title>
 			</Helmet>
 			<section className='seo-store-page'>
-				<Breadcrumb mb={"mb-3"} currentPage={"تحسينات SEO"} />
+				<Breadcrumb mb={"mb-3"} currentPage={"تحسينات الـ SEO"} />
 
 				{isLoading ? (
 					<div className='data-container'>
@@ -174,6 +213,28 @@ const PaintStore = () => {
 					</div>
 				) : (
 					<div className='data-container'>
+						{/* seo title */}
+						<div className='inputs-group'>
+							<div className='label'>
+								<IoText style={{ color: "#1dbbbe" }} />
+								<label>SEO Title</label>
+							</div>
+							<div className='input'>
+								<input
+									type='text'
+									name='title'
+									value={seoSetting?.title}
+									onChange={handleOnChange}
+									placeholder='ادخل العنوان الخاص بالمتجر'
+									required
+								/>
+							</div>
+
+							{dataError?.title && (
+								<span className='wrong-text'>{dataError?.title}</span>
+							)}
+						</div>
+
 						{/* Google Analytics Link */}
 						<div className='inputs-group'>
 							<div className='label'>
@@ -184,22 +245,22 @@ const PaintStore = () => {
 								<input
 									style={{ textAlign: "left", direction: "ltr" }}
 									type='text'
-									value={updateLinkValue}
-									onChange={(e) => {
-										setUpdateLinkValue(e.target.value);
-									}}
+									name='updateLinkValue'
+									value={seoSetting?.updateLinkValue}
+									onChange={handleOnChange}
 									placeholder='https://analytics.google.com/analytics/web/#/report'
 									onFocus={() => setPageLinkFocus(true)}
 									onBlur={() => setPageLinkFocus(true)}
 									required
 									aria-invalid={validPageLink ? "false" : "true"}
-									aria-describedby='pageLink'></input>
+									aria-describedby='pageLink'
+								/>
 							</div>
 							<p
 								id='pageDesc'
 								className={
-									pageLinkFocus && updateLinkValue && !validPageLink
-										? " d-block wrong-text "
+									pageLinkFocus && seoSetting?.updateLinkValue && !validPageLink
+										? " d-block wrong-text pt-0"
 										: "d-none"
 								}
 								style={{ color: "red", padding: "10px", fontSize: "1rem" }}>
@@ -210,28 +271,50 @@ const PaintStore = () => {
 							)}
 						</div>
 
-						{/* Robots File  */}
-
+						{/* seo Description */}
 						<div className='inputs-group'>
 							<div className='label'>
-								<label> إعدادات ملف Robots </label>
+								<IoText style={{ color: "#1dbbbe" }} />
+								<label>الوصف الخاص بالمتجر</label>
 							</div>
 							<div className='input'>
 								<textarea
+									style={{ textAlign: "right", direction: "rtl" }}
 									className='robot_link_text_area'
-									style={{ textAlign: "left", direction: "ltr" }}
-									value={robotLink}
-									onChange={(e) => {
-										setRobotLink(e.target.value);
-									}}
-									placeholder='Sitemap: https://utlopha.sa/sitemap.xml User-agent: * Allow: / Disallow: /*<iframe Disallow: /*?currency='
+									name='metaDescription'
+									value={seoSetting?.metaDescription}
+									onChange={handleOnChange}
+									placeholder='ادخل الوصف الخاص بالمتجر'
+									required
 								/>
 							</div>
 
+							{dataError?.metaDescription && (
+								<span className='wrong-text'>{dataError?.metaDescription}</span>
+							)}
+						</div>
+
+						{/* Robots File  */}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<FaCode style={{ color: "#1dbbbe" }} />
+									<label> إعدادات ملف Robots </label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										name='robotLink'
+										value={robotLink}
+										setValue={setRobotLink}
+										placeholder='siteMap: https://atlbha.sa/siteMap.xml User-agent: * Allow: / Disallow: /*<iframe Disallow: /*?currency='
+									/>
+								</div>
+							</div>
 							{dataError?.robotLink && (
 								<span className='wrong-text'>{dataError?.robotLink}</span>
 							)}
 						</div>
+
 						{/* Keywords */}
 						<div className='inputs-group'>
 							<div className='label'>
@@ -240,15 +323,80 @@ const PaintStore = () => {
 							</div>
 							<div className='input'>
 								<TagsInput
+									name='keyWord'
 									value={keyWord}
 									onChange={setKeyWord}
-									name='key_words'
 									classNames='key_words'
 									placeHolder='ضع الكلمة ثم اضغط enter'
 								/>
 							</div>
 							{dataError?.keyWord && (
 								<span className='wrong-text'>{dataError?.keyWord}</span>
+							)}
+						</div>
+
+						{/* siteMap file */}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<FaCode style={{ color: "#1dbbbe" }} />
+									<label>إعدادات ملف الـ siteMap</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										name='siteMap'
+										value={siteMap}
+										setValue={setSiteMap}
+										placeholder='siteMap: https://atlpha.sa/siteMap.xml'
+									/>
+								</div>
+							</div>
+							{dataError?.siteMap && (
+								<span className='wrong-text'>{dataError?.siteMap}</span>
+							)}
+						</div>
+
+						{/* header code */}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<FaCode style={{ color: "#1dbbbe" }} />
+									<label>خانة Html/Javascript للهيدر:</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										name='header'
+										value={header}
+										setValue={setHeader}
+										placeholder='خانة Html/Javascript للهيدر: يوضع فيها أية أكواد يحتاج موظف السيو أن يضيفها للمتجر في الهيدر مثل (Google Tag manager) و (Google Search Console) و (Open Graph) وغيرها'
+									/>
+								</div>
+							</div>
+							{dataError?.header && (
+								<span className='wrong-text'>{dataError?.header}</span>
+							)}
+						</div>
+
+						{/* footer code */}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<FaCode style={{ color: "#1dbbbe" }} />
+									<label>
+										<label>خانة Html/Javascript للفوتر:</label>
+									</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										name='footer'
+										value={footer}
+										setValue={setFooter}
+										placeholder='خانة Html/Javascript للفوتر: يوضع فيها أية أكواد يحتاج موظف السيو أن يضيفها للمتجر في الفوتر'
+									/>
+								</div>
+							</div>
+							{dataError?.footer && (
+								<span className='wrong-text'>{dataError?.footer}</span>
 							)}
 						</div>
 
@@ -261,6 +409,7 @@ const PaintStore = () => {
 								</div>
 								<div className='input'>
 									<TextareaCode
+										name='snapchat'
 										value={snapchat}
 										setValue={setSnapchat}
 										placeholder='Snapchat Pixel Codes ...'
@@ -271,6 +420,7 @@ const PaintStore = () => {
 								<span className='wrong-text'>{dataError?.snapchat}</span>
 							)}
 						</div>
+
 						<div className='d-flex flex-column gap-3'>
 							<div className='social-media-inputs'>
 								<div className='label'>
@@ -279,6 +429,7 @@ const PaintStore = () => {
 								</div>
 								<div className='input'>
 									<TextareaCode
+										name='tiktok'
 										value={tiktok}
 										setValue={setTiktok}
 										placeholder='Tiktok Pixel Codes ...'
@@ -297,6 +448,7 @@ const PaintStore = () => {
 								</div>
 								<div className='input'>
 									<TextareaCode
+										name='twitter'
 										value={twitter}
 										setValue={setTwitter}
 										placeholder='Twitter Pixel Codes ...'
@@ -315,6 +467,7 @@ const PaintStore = () => {
 								</div>
 								<div className='input'>
 									<TextareaCode
+										name='instagram'
 										value={instagram}
 										setValue={setInstagram}
 										placeholder='Instagram Pixel Codes ...'
@@ -345,4 +498,4 @@ const PaintStore = () => {
 	);
 };
 
-export default PaintStore;
+export default SEOStoreSetting;

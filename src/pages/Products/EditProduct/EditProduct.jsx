@@ -125,7 +125,6 @@ const EditProduct = () => {
 	const {
 		productHasOptions,
 		setProductHasOptions,
-
 		attributes,
 		setAttributes,
 		optionsSection,
@@ -801,7 +800,6 @@ const EditProduct = () => {
 												</div>
 
 												{/** preview banner here */}
-
 												<div className=' banners-preview-container'>
 													{bannersImage.length > 0 && (
 														<div className=' banners-preview-container'>

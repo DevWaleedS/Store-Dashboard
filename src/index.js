@@ -34,8 +34,8 @@ import {
 	EvaluationThePlatform,
 	PostalSubscriptions,
 	PaintStore,
-	SEOStore,
 	RequestDelegate,
+	SEOStoreSetting,
 } from "./pages";
 
 // rating and comments of store
@@ -517,8 +517,8 @@ const router = createBrowserRouter([
 				element: <EvaluationThePlatform />,
 			},
 			{
-				path: "SEOStore",
-				element: <SEOStore />,
+				path: "seo_store_setting",
+				element: <SEOStoreSetting />,
 			},
 		],
 	},

@@ -4561,6 +4561,7 @@ textarea {
 }
 
 .add-form-wrapper .banners-preview-container .banner-preview {
+	position: relative;
 	width: 100px;
 	height: 100px;
 	border: none;
@@ -4571,6 +4572,15 @@ textarea {
 	-moz-border-radius: 0;
 	-ms-border-radius: 0;
 	-o-border-radius: 0;
+}
+
+.add-form-wrapper .banners-preview-container .banner-preview .close-icon {
+	position: absolute;
+
+	left: 0;
+	font-size: 19px;
+	cursor: pointer;
+	z-index: 1;
 }
 
 .add-form-wrapper .banners-preview-container .banner-preview img {
