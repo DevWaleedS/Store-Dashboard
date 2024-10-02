@@ -128,7 +128,6 @@ const EditCategory = () => {
 
 	// handle edit current Category by id
 	const [editCategoryById] = useEditCategoryByIdMutation();
-
 	const handleUpdateCategory = async (data) => {
 		setLoadingTitle("جاري تعديل النشاط");
 		let formData = new FormData();
