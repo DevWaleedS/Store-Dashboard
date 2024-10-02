@@ -59,7 +59,7 @@ const SEOStoreSetting = () => {
 	const [seoSetting, setSeoSetting] = useState({
 		google_analytics: "",
 		title: "",
-		Search: "",
+		search: "",
 		metaDescription: "",
 		og_title: "",
 		og_type: "",
@@ -85,7 +85,7 @@ const SEOStoreSetting = () => {
 	const [dataError, setDataError] = useState({
 		google_analytics: "",
 		title: "",
-		Search: "",
+		search: "",
 		tag: "",
 		keyWord: "",
 		snapchat: "",
@@ -103,7 +103,7 @@ const SEOStoreSetting = () => {
 		setDataError({
 			google_analytics: "",
 			title: "",
-			Search: "",
+			search: "",
 			tag: "",
 			metaDescription: "",
 			keyWord: "",
@@ -132,7 +132,7 @@ const SEOStoreSetting = () => {
 			setSeoSetting({
 				...seoSetting,
 				title: Seo?.[0]?.title || "",
-				Search: Seo?.[0]?.Search || "",
+				search: Seo?.[0]?.search || "",
 				google_analytics: Seo?.[0]?.google_analytics || "",
 				metaDescription: Seo?.[0]?.metaDescription || "",
 				og_title: Seo?.[0]?.og_title || "",
@@ -184,7 +184,7 @@ const SEOStoreSetting = () => {
 		// data that send to api
 		let formData = new FormData();
 		formData.append("title", seoSetting?.title);
-		formData.append("Search", seoSetting?.Search);
+		formData.append("search", seoSetting?.search);
 		formData.append("google_analytics", seoSetting?.google_analytics);
 		formData.append("metaDescription", seoSetting?.metaDescription);
 		formData.append("tag", gtm);
@@ -221,7 +221,7 @@ const SEOStoreSetting = () => {
 				setDataError({
 					...dataError,
 					google_analytics: response?.data?.message?.en?.google_analytics?.[0],
-					Search: response?.data?.message?.en?.Search?.[0],
+					search: response?.data?.message?.en?.search?.[0],
 					snapchat: response?.data?.message?.en?.snappixel?.[0],
 					twitter: response?.data?.message?.en?.twitterpixel?.[0],
 					tiktok: response?.data?.message?.en?.tiktokpixel?.[0],
@@ -343,16 +343,16 @@ const SEOStoreSetting = () => {
 								<input
 									style={{ textAlign: "left", direction: "ltr" }}
 									type='text'
-									name='Search'
-									value={seoSetting?.Search}
+									name='search'
+									value={seoSetting?.search}
 									onChange={handleOnChange}
 									placeholder='قم بنسخ الرابط وضعه هنا'
 									required
 								/>
 							</div>
 
-							{dataError?.Search && (
-								<span className='wrong-text'>{dataError?.Search}</span>
+							{dataError?.search && (
+								<span className='wrong-text'>{dataError?.search}</span>
 							)}
 						</div>
 
@@ -411,7 +411,7 @@ const SEOStoreSetting = () => {
 										name='gtm'
 										value={gtm}
 										setValue={setGtm}
-										placeholder='google tag manager in head tag'
+										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
 									/>
 								</div>
 							</div>
@@ -434,7 +434,7 @@ const SEOStoreSetting = () => {
 										name='footer'
 										value={footer}
 										setValue={setFooter}
-										placeholder='google tag manager in body tag'
+										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
 									/>
 								</div>
 							</div>
@@ -466,7 +466,7 @@ const SEOStoreSetting = () => {
 								<span className='wrong-text'>{dataError?.og_title}</span>
 							)}
 						</div>
-						{/* seo title */}
+						{/* seo og_url */}
 						<div className='inputs-group'>
 							<div className='label'>
 								<IoText style={{ color: "#1dbbbe" }} />
@@ -526,7 +526,7 @@ const SEOStoreSetting = () => {
 								<span className='wrong-text'>{dataError?.og_description}</span>
 							)}
 						</div>
-						{/* seo title */}
+						{/* seo og_type */}
 						<div className='inputs-group'>
 							<div className='label'>
 								<IoText style={{ color: "#1dbbbe" }} />
@@ -546,7 +546,7 @@ const SEOStoreSetting = () => {
 								<span className='wrong-text'>{dataError?.og_type}</span>
 							)}
 						</div>
-						{/* seo title */}
+						{/* seo ogImage */}
 						<div className='inputs-group upload_og_image'>
 							<div className='label mb-2'>
 								<IoText style={{ color: "#1dbbbe" }} />
@@ -639,6 +639,7 @@ const SEOStoreSetting = () => {
 								<span className='wrong-text'>{dataError?.tiktok}</span>
 							)}
 						</div>
+
 						<div className='d-flex flex-column gap-3'>
 							<div className='social-media-inputs'>
 								<div className='label'>
