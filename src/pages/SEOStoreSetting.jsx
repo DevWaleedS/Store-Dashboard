@@ -133,7 +133,7 @@ const SEOStoreSetting = () => {
 				...seoSetting,
 				title: Seo?.[0]?.title || "",
 				Search: Seo?.[0]?.Search || "",
-				google_analytics: Seo?.[0]?.title || "",
+				google_analytics: Seo?.[0]?.google_analytics || "",
 				metaDescription: Seo?.[0]?.metaDescription || "",
 				og_title: Seo?.[0]?.og_title || "",
 				og_type: Seo?.[0]?.og_type || "",
@@ -256,8 +256,6 @@ const SEOStoreSetting = () => {
 			console.error("Error changing updateSeo:", error);
 		}
 	};
-
-	console.log(seoSetting);
 
 	return (
 		<>
