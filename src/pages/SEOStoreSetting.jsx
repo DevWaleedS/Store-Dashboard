@@ -57,9 +57,10 @@ const SEOStoreSetting = () => {
 	const [keyWord, setKeyWord] = useState([]);
 	const [instagram, setInstagram] = useState("");
 	const [google_analytics, setGoogleAnalytics] = useState("");
-	const [search, setSearch] = useState("");
+
 	const [seoSetting, setSeoSetting] = useState({
 		title: "",
+		search: "",
 		metaDescription: "",
 		og_title: "",
 		og_type: "",
@@ -124,10 +125,11 @@ const SEOStoreSetting = () => {
 			setInstagram(Seo?.[0]?.instapixel || "");
 			setKeyWord(Seo?.[0]?.key_words?.map((key) => key) || []);
 			setGoogleAnalytics(Seo?.[0]?.google_analytics || "");
-			setSearch(Seo?.[0]?.search || "");
+
 			setSeoSetting({
 				...seoSetting,
 				title: Seo?.[0]?.title || "",
+				search: Seo?.[0]?.search || "",
 				metaDescription: Seo?.[0]?.metaDescription || "",
 				og_title: Seo?.[0]?.og_title || "",
 				og_type: Seo?.[0]?.og_type || "",
@@ -173,7 +175,7 @@ const SEOStoreSetting = () => {
 		// data that send to api
 		let formData = new FormData();
 		formData.append("title", seoSetting?.title);
-		formData.append("search", search);
+		formData.append("search", seoSetting?.search);
 		formData.append("google_analytics", google_analytics);
 		formData.append("metaDescription", seoSetting?.metaDescription);
 		formData.append("tag", gtm);
@@ -282,6 +284,27 @@ const SEOStoreSetting = () => {
 							)}
 						</div>
 
+						{/* Google search console */}
+						<div className='inputs-group'>
+							<div className='label'>
+								<IoText style={{ color: "#1dbbbe" }} />
+								<label>ربط Google search console</label>
+							</div>
+							<div className='input'>
+								<input
+									type='text'
+									name='search'
+									value={seoSetting?.search}
+									onChange={handleOnChange}
+									placeholder='قم بوضع google-site-verification فقط'
+								/>
+							</div>
+
+							{dataError?.search && (
+								<span className='wrong-text'>{dataError?.search}</span>
+							)}
+						</div>
+
 						{/* seo Description */}
 						<div className='inputs-group'>
 							<div className='label'>
@@ -337,7 +360,7 @@ const SEOStoreSetting = () => {
 										name='google_analytics'
 										value={google_analytics}
 										setValue={setGoogleAnalytics}
-										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
+										placeholder='قم بنسخ الكود وضعه هنا..'
 									/>
 								</div>
 							</div>
@@ -346,29 +369,6 @@ const SEOStoreSetting = () => {
 								<span className='wrong-text'>
 									{dataError?.google_analytics}
 								</span>
-							)}
-						</div>
-
-						{/* Google search console */}
-						<div className='d-flex flex-column gap-3'>
-							<div className='social-media-inputs'>
-								<div className='label'>
-									<FaCode style={{ color: "#1dbbbe" }} />
-									<label>ربط Google search console</label>
-								</div>
-
-								<div className='input'>
-									<TextareaCode
-										name='search'
-										value={search}
-										setValue={setSearch}
-										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
-									/>
-								</div>
-							</div>
-
-							{dataError?.search && (
-								<span className='wrong-text'>{dataError?.search}</span>
 							)}
 						</div>
 
@@ -384,7 +384,7 @@ const SEOStoreSetting = () => {
 										name='gtm'
 										value={gtm}
 										setValue={setGtm}
-										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
+										placeholder='قم بنسخ الكود وضعه هنا..'
 									/>
 								</div>
 							</div>
