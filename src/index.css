@@ -10075,6 +10075,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	font-size: 20px;
 	font-weight: 500;
 	color: #011723;
+	white-space: normal !important;
 }
 
 .seo-store-page .data-container .social-media-inputs .input {
@@ -10105,6 +10106,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .token.doctype,
 .token.cdata {
 	color: #90a4ae;
+}
+
+.npm__react-simple-code-editor__textarea:empty {
+	position: relative !important;
+	top: -35px !important;
+	text-align: right;
+	direction: rtl;
 }
 
 .token.punctuation {

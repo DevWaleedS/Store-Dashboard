@@ -52,14 +52,14 @@ const SEOStoreSetting = () => {
 	const [snapchat, setSnapchat] = useState("");
 	const [twitter, setTwitter] = useState("");
 	const [tiktok, setTiktok] = useState("");
-	const [instagram, setInstagram] = useState("");
 	const [gtm, setGtm] = useState("");
 	const [footer, setFooter] = useState("");
 	const [keyWord, setKeyWord] = useState([]);
+	const [instagram, setInstagram] = useState("");
+	const [google_analytics, setGoogleAnalytics] = useState("");
+	const [search, setSearch] = useState("");
 	const [seoSetting, setSeoSetting] = useState({
-		google_analytics: "",
 		title: "",
-		search: "",
 		metaDescription: "",
 		og_title: "",
 		og_type: "",
@@ -74,12 +74,6 @@ const SEOStoreSetting = () => {
 			return { ...prevData, [name]: value };
 		});
 	};
-
-	// Handle Regex
-	const LINK_REGEX =
-		/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
-	const [validPageLink, setValidPageLink] = useState(false);
-	const [pageLinkFocus, setPageLinkFocus] = useState(false);
 
 	// Handle errors
 	const [dataError, setDataError] = useState({
@@ -129,11 +123,11 @@ const SEOStoreSetting = () => {
 			setTwitter(Seo?.[0]?.twitterpixel || "");
 			setInstagram(Seo?.[0]?.instapixel || "");
 			setKeyWord(Seo?.[0]?.key_words?.map((key) => key) || []);
+			setGoogleAnalytics(Seo?.[0]?.google_analytics || "");
+			setSearch(Seo?.[0]?.search || "");
 			setSeoSetting({
 				...seoSetting,
 				title: Seo?.[0]?.title || "",
-				search: Seo?.[0]?.search || "",
-				google_analytics: Seo?.[0]?.google_analytics || "",
 				metaDescription: Seo?.[0]?.metaDescription || "",
 				og_title: Seo?.[0]?.og_title || "",
 				og_type: Seo?.[0]?.og_type || "",
@@ -144,11 +138,6 @@ const SEOStoreSetting = () => {
 			setOgImage([Seo?.ogImage]);
 		}
 	}, [Seo]);
-
-	useEffect(() => {
-		const storeLinkValidation = LINK_REGEX.test(seoSetting?.google_analytics);
-		setValidPageLink(storeLinkValidation);
-	}, [seoSetting?.google_analytics]);
 
 	// handle images size
 	const [ogImage, setOgImage] = React.useState([]);
@@ -184,8 +173,8 @@ const SEOStoreSetting = () => {
 		// data that send to api
 		let formData = new FormData();
 		formData.append("title", seoSetting?.title);
-		formData.append("search", seoSetting?.search);
-		formData.append("google_analytics", seoSetting?.google_analytics);
+		formData.append("search", search);
+		formData.append("google_analytics", google_analytics);
 		formData.append("metaDescription", seoSetting?.metaDescription);
 		formData.append("tag", gtm);
 		formData.append("footer", footer);
@@ -293,69 +282,6 @@ const SEOStoreSetting = () => {
 							)}
 						</div>
 
-						{/* Google Analytics Link */}
-						<div className='inputs-group'>
-							<div className='label'>
-								<LinkIcon />
-								<label>ربط جوجل أناليتكس Google Analytics</label>
-							</div>
-							<div className='input'>
-								<input
-									style={{ textAlign: "left", direction: "ltr" }}
-									type='text'
-									name='google_analytics'
-									value={seoSetting?.google_analytics}
-									onChange={handleOnChange}
-									placeholder='https://analytics.google.com/analytics/web/#/report'
-									onFocus={() => setPageLinkFocus(true)}
-									onBlur={() => setPageLinkFocus(true)}
-									required
-									aria-invalid={validPageLink ? "false" : "true"}
-									aria-describedby='pageLink'
-								/>
-							</div>
-							<p
-								id='pageDesc'
-								className={
-									pageLinkFocus &&
-									seoSetting?.google_analytics &&
-									!validPageLink
-										? " d-block wrong-text pt-0"
-										: "d-none"
-								}
-								style={{ color: "red", padding: "10px", fontSize: "1rem" }}>
-								يجب ان يكون الرابط Valid URL
-							</p>
-							{dataError?.google_analytics && (
-								<span className='wrong-text'>
-									{dataError?.google_analytics}
-								</span>
-							)}
-						</div>
-
-						{/* Google search console */}
-						<div className='inputs-group'>
-							<div className='label'>
-								<LinkIcon />
-								<label>ربط Google search console</label>
-							</div>
-							<div className='input'>
-								<input
-									style={{ textAlign: "left", direction: "ltr" }}
-									type='text'
-									name='search'
-									value={seoSetting?.search}
-									onChange={handleOnChange}
-									placeholder='قم بنسخ الرابط وضعه هنا'
-									required
-								/>
-							</div>
-
-							{dataError?.search && (
-								<span className='wrong-text'>{dataError?.search}</span>
-							)}
-						</div>
-
 						{/* seo Description */}
 						<div className='inputs-group'>
 							<div className='label'>
@@ -396,6 +322,53 @@ const SEOStoreSetting = () => {
 							</div>
 							{dataError?.keyWord && (
 								<span className='wrong-text'>{dataError?.keyWord}</span>
+							)}
+						</div>
+
+						{/* Google Analytics Link */}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<FaCode style={{ color: "#1dbbbe" }} />
+									<label>ربط جوجل أناليتكس Google Analytics</label>
+								</div>
+								<div className='input'>
+									<TextareaCode
+										name='google_analytics'
+										value={google_analytics}
+										setValue={setGoogleAnalytics}
+										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
+									/>
+								</div>
+							</div>
+
+							{dataError?.google_analytics && (
+								<span className='wrong-text'>
+									{dataError?.google_analytics}
+								</span>
+							)}
+						</div>
+
+						{/* Google search console */}
+						<div className='d-flex flex-column gap-3'>
+							<div className='social-media-inputs'>
+								<div className='label'>
+									<FaCode style={{ color: "#1dbbbe" }} />
+									<label>ربط Google search console</label>
+								</div>
+
+								<div className='input'>
+									<TextareaCode
+										name='search'
+										value={search}
+										setValue={setSearch}
+										placeholder='قم بادخال الاكواد بدون تاج (<script> , <noscript> , <iframe>)'
+									/>
+								</div>
+							</div>
+
+							{dataError?.search && (
+								<span className='wrong-text'>{dataError?.search}</span>
 							)}
 						</div>
 
@@ -611,7 +584,7 @@ const SEOStoreSetting = () => {
 										name='snapchat'
 										value={snapchat}
 										setValue={setSnapchat}
-										placeholder='Snapchat Pixel Codes ...'
+										placeholder='قم بنسخ الكود وضعه هنا..'
 									/>
 								</div>
 							</div>
@@ -631,7 +604,7 @@ const SEOStoreSetting = () => {
 										name='tiktok'
 										value={tiktok}
 										setValue={setTiktok}
-										placeholder='Tiktok Pixel Codes ...'
+										placeholder='قم بنسخ الكود وضعه هنا..'
 									/>
 								</div>
 							</div>
@@ -651,7 +624,7 @@ const SEOStoreSetting = () => {
 										name='twitter'
 										value={twitter}
 										setValue={setTwitter}
-										placeholder='Twitter Pixel Codes ...'
+										placeholder='قم بنسخ الكود وضعه هنا..'
 									/>
 								</div>
 							</div>
@@ -670,7 +643,7 @@ const SEOStoreSetting = () => {
 										name='instagram'
 										value={instagram}
 										setValue={setInstagram}
-										placeholder='Instagram Pixel Codes ...'
+										placeholder='قم بنسخ الكود وضعه هنا..'
 									/>
 								</div>
 							</div>
