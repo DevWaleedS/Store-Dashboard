@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 
 // Third party
 
@@ -151,7 +151,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const select_value_options = ["نص", "نص و لون", "نص و صورة"];
 
-const AddProductOptionsModal = () => {
+const EditServiceOptionsModal = () => {
 	const { isProductOptionOpen } = useSelector((state) => state.ProductsSlice);
 
 	const dispatch = useDispatch(false);
@@ -458,7 +458,7 @@ const AddProductOptionsModal = () => {
 				qtyAttrNotEmpty
 			) {
 				dispatch(closeProductOptionModal());
-				toast.success("تم حفظ خيارات المنتج", {
+				toast.success("تم حفظ خيارات الخدمة", {
 					theme: "light",
 				});
 			} else {
@@ -949,7 +949,7 @@ const AddProductOptionsModal = () => {
 							<div className='row  mb-2'>
 								<div className='col-12 '>
 									<PageHint
-										hint={`بإمكانك إدارة الكمية بناء على خيارات المنتج`}
+										hint={`بإمكانك إدارة الكمية بناء على خيارات الخدمة`}
 										flex={
 											"d-flex justify-content-start align-items-center gap-2"
 										}
@@ -965,7 +965,7 @@ const AddProductOptionsModal = () => {
 											checked={productHasOptions}
 											onChange={() => setProductHasOptions(!productHasOptions)}
 										/>
-										<span className='switch-label'>تفعيل خيارات المنتج</span>
+										<span className='switch-label'>تفعيل خيارات الخدمة</span>
 									</div>
 								</div>
 							</div>
@@ -1064,15 +1064,15 @@ const AddProductOptionsModal = () => {
 	);
 };
 
-const AddProductOptions = () => {
+const EditServiceOptions = () => {
 	return (
 		<Fragment>
 			{ReactDom.createPortal(
-				<AddProductOptionsModal />,
+				<EditServiceOptionsModal />,
 				document.getElementById("product-option")
 			)}
 		</Fragment>
 	);
 };
 
-export default AddProductOptions;
+export default EditServiceOptions;

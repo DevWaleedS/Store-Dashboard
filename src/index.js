@@ -145,6 +145,8 @@ import ComparePackages from "./pages/Packages/ComparePackages";
 import CheckoutPackages from "./pages/Packages/CheckoutPackages/CheckoutPackages";
 import LiveCourseDetails from "./pages/Academy/LiveCourses/LiveCourseDetails";
 import CheckoutServicesStatus from "./pages/PlatformServices/CheckoutServices/CheckoutServicesStatus";
+import AddNewService from "./pages/Products/AddAndEditServices/AddNewService";
+import EditService from "./pages/Products/AddAndEditServices/EditService";
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -326,6 +328,17 @@ const router = createBrowserRouter([
 				path: "Products/EditProduct/:id",
 				element: <EditProduct />,
 			},
+			// add and edit services
+			{
+				path: "Products/add-service",
+				element: <AddNewService />,
+			},
+
+			{
+				path: "Products/edit-service/:id",
+				element: <EditService />,
+			},
+
 			// EditImportProducts page
 			{
 				path: "Products/EditImportProducts/:id",

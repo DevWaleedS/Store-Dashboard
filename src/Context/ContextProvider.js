@@ -15,9 +15,9 @@ const ContextProvider = (props) => {
 	const [disapledBtn, setDisabledBtn] = useState(false);
 	const [showAlertModal, setShowAlertModal] = useState(false);
 	const [message, setMessage] = useState("");
+
 	//product Options
 	const [productHasOptions, setProductHasOptions] = useState(false);
-
 	const [attributes, setAttributes] = useState([]);
 	const [optionsSection, setOptionsSection] = useState([
 		{
@@ -31,6 +31,9 @@ const ContextProvider = (props) => {
 					image: "",
 					previewImage: "",
 					defaultOption: false,
+					price: "",
+					period: "",
+					discount_price: "",
 				},
 			],
 		},
@@ -46,17 +49,22 @@ const ContextProvider = (props) => {
 				select_value: "نص",
 				values: [
 					{
-						id: 9828394,
+						id: 983984834,
 						title: "",
 						color: "#000000",
 						image: "",
 						previewImage: "",
 						defaultOption: false,
+						price: "",
+						period: "",
+						discount_price: "",
 					},
 				],
 			},
 		]);
 	};
+
+	/* ====================================================================== */
 
 	useEffect(() => {
 		if (title) {
@@ -90,7 +98,6 @@ const ContextProvider = (props) => {
 		setShowAlertModal,
 		message,
 		setMessage,
-		//product Options
 		productHasOptions,
 		setProductHasOptions,
 

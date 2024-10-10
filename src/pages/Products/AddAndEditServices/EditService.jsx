@@ -10,9 +10,9 @@ import { TagsInput } from "react-tag-input-component";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
+import EditServiceOptions from "./EditServiceOptions";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { TextEditor } from "../../../components/TextEditor";
-import EditProductOptions from "./EditProductOptions";
 import { useForm, Controller } from "react-hook-form";
 
 // Redux
@@ -111,7 +111,7 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 	},
 }));
 
-const EditProduct = () => {
+const EditService = () => {
 	// get current product by id
 	const { id } = useParams();
 	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
@@ -442,7 +442,7 @@ const EditProduct = () => {
 
 	const [editProductById] = useEditProductByIdMutation();
 	const handleEditProduct = async (data) => {
-		setLoadingTitle("جاري تعديل المنتج");
+		setLoadingTitle("جاري تعديل الخدمة");
 		resetCouponError();
 
 		// data that send to api
@@ -602,7 +602,7 @@ const EditProduct = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | تعديل منتج</title>
+				<title>لوحة تحكم اطلبها | تعديل خدمة</title>
 			</Helmet>
 			{url !== "" && videoModal()}
 			<div className='add-category-form' open={true}>
@@ -620,9 +620,9 @@ const EditProduct = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title'>
-										<h5 className='mb-3'> تعديل المنتج </h5>
+										<h5 className='mb-3'> تعديل الخدمة </h5>
 
-										<p> قم بتحديث منتجك والمعلومات الضرورية من هنا</p>
+										<p> قم بتحديث خدمةك والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>
@@ -637,7 +637,7 @@ const EditProduct = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-name'>
-													اسم المنتج<span className='important-hint'>*</span>
+													اسم الخدمة<span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -645,11 +645,11 @@ const EditProduct = () => {
 													name={"name"}
 													control={control}
 													rules={{
-														required: "حقل اسم المنتج مطلوب ",
+														required: "حقل اسم الخدمة مطلوب ",
 													}}
 													render={({ field: { onChange, value } }) => (
 														<input
-															placeholder=' اسم المنتج'
+															placeholder=' اسم الخدمة'
 															type='text'
 															name='name'
 															id='product-name'
@@ -679,7 +679,7 @@ const EditProduct = () => {
 													<span
 														className='fs-6 text-danger'
 														style={{ whiteSpace: "normal" }}>
-														اسم المنتج يجب ان لا يتجاوز 25 حرف
+														اسم الخدمة يجب ان لا يتجاوز 25 حرف
 													</span>
 												)}
 											</div>
@@ -689,7 +689,7 @@ const EditProduct = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
-													وصف قصير للمنتج{" "}
+													وصف قصير للخدمة{" "}
 													<span className='important-hint'>*</span>
 												</label>
 											</div>
@@ -698,12 +698,12 @@ const EditProduct = () => {
 													name={"short_description"}
 													control={control}
 													rules={{
-														required: "حقل وصف قصير للمنتج مطلوب",
+														required: "حقل وصف قصير الخمدمة مطلوب",
 													}}
 													render={({ field: { onChange, value } }) => (
 														<textarea
 															name='short_description'
-															placeholder='اكتب وصف قصير للمنتج لا يتجاوز 100 حرف'
+															placeholder='اكتب وصف قصير للخدمة لا يتجاوز 100 حرف'
 															rows={5}
 															value={value}
 															onChange={(e) => {
@@ -742,13 +742,13 @@ const EditProduct = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-desc'>
 													{" "}
-													وصف المنتج<span className='important-hint'>*</span>
+													وصف الخدمة<span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12 product-texteditor'>
 												<TextEditor
 													ToolBar={"product"}
-													placeholder={"قم بكتابة وصف واضح للمنتج"}
+													placeholder={"قم بكتابة وصف واضح للخدمة"}
 												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
@@ -767,7 +767,7 @@ const EditProduct = () => {
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-image'>
 													{" "}
-													صورة المنتج<span className='important-hint'>*</span>
+													صورة الخدمة<span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -1134,7 +1134,7 @@ const EditProduct = () => {
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
+														title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافة خيارات للخدمة'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1236,7 +1236,7 @@ const EditProduct = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												{attributes?.length !== 0 ? (
 													<div className='tax-text'>
-														لتعديل السعر قم بالدخول إلى خيارات المنتج
+														لتعديل السعر قم بالدخول إلى خيارات الخدمة
 													</div>
 												) : null}
 												<span
@@ -1258,7 +1258,7 @@ const EditProduct = () => {
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافة خيارات للمنتج'
+														title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافة خيارات للخدمة'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1341,7 +1341,7 @@ const EditProduct = () => {
 												}>
 												{attributes?.length !== 0 ? (
 													<div className='tax-text'>
-														لتعديل سعرالخصم قم بالدخول إلى خيارات المنتج
+														لتعديل سعرالخصم قم بالدخول إلى خيارات الخدمة
 													</div>
 												) : null}
 												{product?.selling_price &&
@@ -1392,7 +1392,7 @@ const EditProduct = () => {
 														className={"p-0"}
 														TransitionProps={{ timeout: 300 }}
 														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمإلى  الكمية الخاصة بخيارات  المنتج  في حال تم اضافة خيارات للمنتج'
+														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمإلى  الكمية الخاصة بخيارات  الخدمة  في حال تم اضافة خيارات للخدمة'
 														placement='top'>
 														<IconButton>
 															<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1403,7 +1403,7 @@ const EditProduct = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
 													تأكد ان المخزون يشمل إجمإلى الكميه الخاصه بخيارات
-													المنتج
+													الخدمة
 												</div>
 												{attributes?.length !== 0 ? (
 													<Controller
@@ -1477,7 +1477,7 @@ const EditProduct = () => {
 											<div className='col-lg-7 col-md-9 col-12'>
 												{attributes?.length !== 0 ? (
 													<div className='tax-text'>
-														لتعديل المخزون قم بالدخول إلى خيارات المنتج
+														لتعديل المخزون قم بالدخول إلى خيارات الخدمة
 													</div>
 												) : null}
 												<span
@@ -1500,7 +1500,7 @@ const EditProduct = () => {
 
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
-													ضع الوزن التقريبي للمنتج بالجرام
+													ضع الوزن التقريبي للخدمة بالجرام
 												</div>
 												<Controller
 													name={"weight"}
@@ -1544,7 +1544,7 @@ const EditProduct = () => {
 										{/* Key words */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='seo'>الكلمات المفتاحية للمنتج </label>
+												<label htmlFor='seo'>الكلمات المفتاحية للخدمة </label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<TagsInput
@@ -1576,7 +1576,7 @@ const EditProduct = () => {
 													className='product-option-btn w-100'
 													type='button'
 													onClick={() => dispatch(openProductOptionModal())}>
-													تعديل خيارات المنتج
+													تعديل خيارات الخدمة
 													<FiPlus />
 												</button>
 											</div>
@@ -1611,10 +1611,10 @@ const EditProduct = () => {
 				</Modal>
 			</div>
 
-			{/* The Product Opthons Modal */}
-			<EditProductOptions />
+			{/* The Edit Service Options Modal */}
+			<EditServiceOptions />
 		</>
 	);
 };
 
-export default EditProduct;
+export default EditService;

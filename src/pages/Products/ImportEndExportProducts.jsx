@@ -17,6 +17,7 @@ import DropCSVFiles from "./DropCSVFiles";
 
 // RTK Query
 import { useImportProductsFileMutation } from "../../store/apiSlices/productsApi";
+import AddProductDropdown from "./AddProductDropdown/AddProductDropdown";
 
 const ImportEndExportProducts = ({ productsData }) => {
 	const navigate = useNavigate();
@@ -128,15 +129,7 @@ const ImportEndExportProducts = ({ productsData }) => {
 				/>
 			</div>
 			<div className='add-new-product'>
-				<button
-					className=' add-new-product-btn w-100'
-					type='button'
-					onClick={() => {
-						navigate("AddProduct");
-					}}>
-					<MdAdd />
-					<span className='me-2'>اضافة منتج جديد</span>
-				</button>
+				<AddProductDropdown />
 			</div>
 		</div>
 	);

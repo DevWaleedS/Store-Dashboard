@@ -1989,13 +1989,20 @@ nav.navigation {
 .product-options .option-name-input .input-type,
 .product-options .option-color-input .input-type {
 	border-right: 1px solid #ddd;
+	background-color: #fbfbfb;
 	color: #333;
-	font-size: 16px;
-	height: 50px;
+	font-size: 14px;
+	height: 45px;
 	width: 60px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.ser-img-title {
+	font-size: 16px;
+	font-weight: 400;
+	color: #1dbbbe;
 }
 
 .product-options .options-section .add-new-value-btn {

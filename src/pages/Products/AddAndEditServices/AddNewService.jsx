@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
@@ -30,7 +29,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // Components
-import AddProductOptions from "./AddProductOptions";
+import AddServiceOptions from "./AddServiceOptions";
 import { TextEditor } from "../../../components/TextEditor";
 
 // icons and images
@@ -47,7 +46,6 @@ import { useDispatch } from "react-redux";
 import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 // RTK Query
-
 import { useAddNewProductMutation } from "../../../store/apiSlices/productsApi";
 import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
@@ -109,7 +107,7 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 	},
 }));
 
-const AddNewProduct = () => {
+const AddNewService = () => {
 	// get categories selector
 	const { data: selectCategories } = useGetCategoriesQuery();
 
@@ -125,11 +123,10 @@ const AddNewProduct = () => {
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
 
-	const [product, setProduct] = useState({
+	const [service, setService] = useState({
 		selling_price: "",
 		discount_price: "",
-		stock: "",
-		weight: "",
+		period: "",
 		category_id: "",
 		subcategory_id: [],
 	});
@@ -147,47 +144,12 @@ const AddNewProduct = () => {
 			selling_price: "",
 			category_id: "",
 			discount_price: "",
-			stock: "",
-			weight: "",
+			period: "",
 			SEOdescription: "",
 		},
 	});
 
-	// Handle add stock, selling_price, and discount_price from product option to product info
-	useEffect(() => {
-		if (attributes?.length !== 0) {
-			const qty = attributes?.reduce(
-				(accumulator, attr) => accumulator + attr.qty,
-				0
-			);
-
-			// get the default option array
-			const defaultOptions = optionsSection?.map((option) =>
-				option?.values?.filter((value) => value?.defaultOption === true)
-			);
-
-			const defaultOptionsArray =
-				defaultOptions?.map((option) => option?.[0]?.title) || [];
-
-			const matchingObject = attributes?.find(
-				(obj) =>
-					obj?.values?.length === defaultOptions?.length &&
-					obj?.values?.every(
-						(value, index) => value?.title === defaultOptionsArray[index]
-					)
-			);
-
-			setProduct({
-				...product,
-				stock: qty,
-				discount_price: Number(matchingObject?.discount_price) || 0,
-				selling_price: Number(matchingObject?.price) || 0,
-			});
-		}
-	}, [attributes, optionsSection]);
-
-	const [productNameLength, setProductNameLength] = useState(false);
-	const [productError, setProductError] = useState({
+	const [serviceError, setServiceError] = useState({
 		name: "",
 		cover: "",
 		short_description: "",
@@ -196,21 +158,19 @@ const AddNewProduct = () => {
 		category_id: "",
 		discount_price: "",
 		subcategory_id: "",
-		stock: "",
-		weight: "",
+		period: "",
 		SEOdescription: "",
 		images: "",
 	});
 
 	const resetCouponError = () => {
-		setProductError({
+		setServiceError({
 			name: "",
 			cover: "",
 			short_description: "",
 			description: "",
 			selling_price: "",
-			stock: "",
-			weight: "",
+			period: "",
 			images: "",
 			category_id: "",
 			discount_price: "",
@@ -252,8 +212,8 @@ const AddNewProduct = () => {
 
 		if (!isSizeValid) {
 			toast.warning(errorMessage, { theme: "light" });
-			setProductError({
-				...productError,
+			setServiceError({
+				...serviceError,
 				images: errorMessage,
 			});
 			setMultiImages([...multiImages]);
@@ -262,8 +222,8 @@ const AddNewProduct = () => {
 			const updatedImageList = imageList.slice(0, -1);
 			setMultiImages(updatedImageList);
 		} else {
-			setProductError({
-				...productError,
+			setServiceError({
+				...serviceError,
 				images: null,
 			});
 			setMultiImages(imageList);
@@ -290,14 +250,14 @@ const AddNewProduct = () => {
 					toast.warning(errorMessage, {
 						theme: "light",
 					});
-					setProductError({
-						...productError,
+					setServiceError({
+						...serviceError,
 						cover: errorMessage,
 					});
 					setIcons([]);
 				} else {
-					setProductError({
-						...productError,
+					setServiceError({
+						...serviceError,
 						cover: null,
 					});
 				}
@@ -329,14 +289,14 @@ const AddNewProduct = () => {
 
 	const handleOnChange = (e) => {
 		const { name, value } = e.target;
-		setProduct((prevProduct) => {
+		setService((prevProduct) => {
 			return { ...prevProduct, [name]: value };
 		});
 	};
 
 	const subcategory =
 		selectCategories?.filter(
-			(sub) => sub?.id === parseInt(product?.category_id)
+			(sub) => sub?.id === parseInt(service?.category_id)
 		) || [];
 
 	/* UseEffects TO Handle memory leaks */
@@ -347,38 +307,31 @@ const AddNewProduct = () => {
 
 	/**   handle add new product */
 	const [addNewProduct] = useAddNewProductMutation();
-	const handleAddNewProduct = async (data) => {
-		setLoadingTitle("جاري اضافة المنتج");
+	const handleAddNewService = async (data) => {
+		setLoadingTitle("جاري اضافة الخدمة");
 		resetCouponError();
 
 		// data that send to api
 		let formData = new FormData();
 		formData.append("name", data?.name);
+		formData.append("is_service", parseInt(1));
 		formData.append("short_description", data?.short_description);
 		formData.append("description", editorValue);
-		formData.append(
-			"selling_price",
-			attributes?.length !== 0 ? product?.selling_price : data?.selling_price
-		);
+		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
-		formData.append(
-			"discount_price",
-			attributes?.length !== 0 ? product?.discount_price : data?.discount_price
-		);
-		formData.append(
-			"stock",
-			attributes?.length !== 0 ? product?.stock : data?.stock
-		);
-		formData.append("weight", data?.weight);
+		formData.append("discount_price", data?.discount_price);
+
+		formData.append("period", data?.period);
 
 		formData.append("cover", icons[0]);
-		for (let i = 0; i < product?.subcategory_id?.length; i++) {
-			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
-		}
+		service?.subcategory_id?.forEach((subcategory, i) => {
+			formData.append([`subcategory_id[${i}]`], subcategory);
+		});
+
 		if (multiImages.length !== 0) {
-			for (let i = 0; i < multiImages?.length; i++) {
-				formData.append([`images[${i}]`], multiImages[i]?.file);
-			}
+			multiImages?.forEach((image, i) => {
+				formData.append([`images[${i}]`], image?.file);
+			});
 		}
 
 		formData.append(
@@ -389,50 +342,29 @@ const AddNewProduct = () => {
 		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
 		formData.append("amount", 1);
 		if (productHasOptions === true) {
-			for (let i = 0; i < optionsSection?.length; i++) {
-				formData.append([`attribute[${i}][title]`], optionsSection[i]?.name);
-				formData.append(
-					[`attribute[${i}][type]`],
-					optionsSection[i]?.select_value
-				);
-				for (let v = 0; v < optionsSection[i]?.values?.length; v++) {
+			optionsSection?.forEach((option, i) => {
+				formData.append([`attribute[${i}][title]`], option?.name);
+				formData.append([`attribute[${i}][type]`], option?.select_value);
+
+				option?.values?.forEach((value, v) => {
 					formData.append(
 						[`attribute[${i}][value][${v}][title]`],
-						optionsSection[i]?.values[v]?.title
+						value?.title
 					);
 					formData.append(
-						[`attribute[${i}][value][${v}][default_option]`],
-						optionsSection[i]?.values[v]?.defaultOption === true ? 1 : 0
+						[`attribute[${i}][value][${v}][period]`],
+						value?.period
 					);
-					optionsSection[i]?.values[v]?.color &&
-						optionsSection[i]?.select_value === "نص و لون" &&
-						formData.append(
-							[`attribute[${i}][value][${v}][color]`],
-							optionsSection[i]?.values[v]?.color
-						);
-					optionsSection[i]?.values[v]?.image &&
-						optionsSection[i]?.select_value === "نص و صورة" &&
-						formData.append(
-							[`attribute[${i}][value][${v}][image]`],
-
-							optionsSection[i]?.values[v]?.image
-						);
-				}
-			}
-			for (let i = 0; i < attributes?.length; i++) {
-				formData.append([`data[${i}][price]`], attributes[i]?.price || 0);
-				formData.append(
-					[`data[${i}][discount_price]`],
-					attributes[i]?.discount_price || 0
-				);
-				formData.append([`data[${i}][quantity]`], attributes[i]?.qty);
-				for (let v = 0; v < attributes[i]?.values?.length; v++) {
 					formData.append(
-						[`data[${i}][name][${v}]`],
-						attributes[i]?.values[v]?.title
+						[`attribute[${i}][value][${v}][price]`],
+						value?.price
 					);
-				}
-			}
+					formData.append(
+						[`attribute[${i}][value][${v}][discount_price]`],
+						value?.discount_price
+					);
+				});
+			});
 		}
 
 		// make request...
@@ -453,7 +385,7 @@ const AddNewProduct = () => {
 				clearOptions();
 			} else {
 				setLoadingTitle("");
-				setProductError({
+				setServiceError({
 					name: response?.data?.message?.en?.name?.[0],
 					short_description:
 						response?.data?.message?.en?.short_description?.[0],
@@ -463,8 +395,7 @@ const AddNewProduct = () => {
 					category_id: response?.data?.message?.en?.category_id?.[0],
 					discount_price: response?.data?.message?.en?.discount_price?.[0],
 					subcategory_id: response?.data?.message?.en?.subcategory_id?.[0],
-					stock: response?.data?.message?.en?.stock?.[0],
-					weight: response?.data?.message?.en?.weight?.[0],
+					period: response?.data?.message?.en?.period?.[0],
 					SEOdescription: response?.data?.message?.en?.SEOdescription?.[0],
 					images: response?.data?.message?.en?.images?.[0],
 				});
@@ -506,7 +437,7 @@ const AddNewProduct = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | اضافة منتج</title>
+				<title>لوحة تحكم اطلبها | اضافة خدمة</title>
 			</Helmet>
 			{url !== "" && videoModal()}
 			<div className='add-category-form' open={true}>
@@ -524,7 +455,7 @@ const AddNewProduct = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title'>
-										<h5 className='mb-3'> اضافة منتج</h5>
+										<h5 className='mb-3'> اضافة خدمة</h5>
 										<p>قم بإضافة منتجك والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
@@ -532,13 +463,13 @@ const AddNewProduct = () => {
 
 							<form
 								className='form-h-full add-new-product-form'
-								onSubmit={handleSubmit(handleAddNewProduct)}>
+								onSubmit={handleSubmit(handleAddNewService)}>
 								<div className='form-body'>
 									{/* Product name  */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-name'>
-												اسم المنتج <span className='important-hint'>*</span>
+												اسم الخدمة <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -546,22 +477,17 @@ const AddNewProduct = () => {
 												name={"name"}
 												control={control}
 												rules={{
-													required: "حقل اسم المنتج مطلوب ",
+													required: "حقل اسم الخدمة مطلوب ",
 												}}
 												render={({ field: { onChange, value } }) => (
 													<input
-														placeholder=' اسم المنتج'
+														placeholder=' اسم الخدمة'
 														type='text'
 														name='name'
 														id='product-name'
 														value={value}
 														onChange={(e) => {
-															if (e.target.value.length <= 25) {
-																onChange(e.target.value.substring(0, 25));
-																setProductNameLength(false);
-															} else {
-																setProductNameLength(true);
-															}
+															onChange(e.target.value);
 														}}
 													/>
 												)}
@@ -572,17 +498,9 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.name}
+												{serviceError?.name}
 												{errors?.name && errors.name.message}
 											</span>
-
-											{productNameLength && (
-												<span
-													className='fs-6 text-danger'
-													style={{ whiteSpace: "normal" }}>
-													اسم المنتج يجب ان لا يتجاوز 25 حرف
-												</span>
-											)}
 										</div>
 									</div>
 
@@ -590,7 +508,7 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
-												وصف قصير للمنتج{" "}
+												وصف قصير للخدمة{" "}
 												<span className='important-hint'>*</span>
 											</label>
 										</div>
@@ -599,12 +517,12 @@ const AddNewProduct = () => {
 												name={"short_description"}
 												control={control}
 												rules={{
-													required: "حقل وصف قصير للمنتج مطلوب",
+													required: "حقل وصف قصير للخدمة مطلوب",
 												}}
 												render={({ field: { onChange, value } }) => (
 													<textarea
 														name='short_description'
-														placeholder='اكتب وصف قصير للمنتج لا يتجاوز 100 حرف'
+														placeholder='اكتب وصف قصير للخدمة لا يتجاوز 100 حرف'
 														rows={5}
 														value={value}
 														onChange={(e) => {
@@ -623,7 +541,7 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.short_description}
+												{serviceError?.short_description}
 												{errors?.short_description &&
 													errors.short_description.message}
 											</span>
@@ -642,13 +560,13 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-desc'>
 												{" "}
-												وصف المنتج <span className='important-hint'>*</span>
+												وصف الخدمة <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12 product-texteditor'>
 											<TextEditor
 												ToolBar={"product"}
-												placeholder={"قم بكتابة وصف واضح للمنتج"}
+												placeholder={"قم بكتابة وصف واضح للخدمة"}
 											/>
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
@@ -656,7 +574,7 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.description}
+												{serviceError?.description}
 												{errors?.description && errors.description.message}
 											</span>
 										</div>
@@ -667,7 +585,7 @@ const AddNewProduct = () => {
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='product-image'>
 												{" "}
-												صورة المنتج <span className='important-hint'>*</span>
+												صورة الخدمة <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -700,11 +618,11 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											{productError?.cover && (
+											{serviceError?.cover && (
 												<span
 													className='fs-6 text-danger'
 													style={{ whiteSpace: "normal" }}>
-													{productError?.cover}
+													{serviceError?.cover}
 												</span>
 											)}
 										</div>
@@ -821,11 +739,11 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											{productError?.images && (
+											{serviceError?.images && (
 												<span
 													className='fs-6 text-danger'
 													style={{ whiteSpace: "normal" }}>
-													{productError?.images}
+													{serviceError?.images}
 												</span>
 											)}
 										</div>
@@ -854,8 +772,8 @@ const AddNewProduct = () => {
 															value={value}
 															onChange={(e) => {
 																if (value !== e.target.value) {
-																	setProduct({
-																		...product,
+																	setService({
+																		...service,
 																		subcategory_id: [],
 																	});
 																}
@@ -867,7 +785,7 @@ const AddNewProduct = () => {
 															displayEmpty
 															inputProps={{ "aria-label": "Without label" }}
 															renderValue={(selected) => {
-																if (product?.category_id === "" || !selected) {
+																if (service?.category_id === "" || !selected) {
 																	return (
 																		<p className='text-[#ADB5B9]'>
 																			اختر النشاط
@@ -908,7 +826,7 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.category_id}
+												{serviceError?.category_id}
 												{errors?.category_id && errors.category_id.message}
 											</span>
 										</div>
@@ -921,7 +839,7 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<FormControl sx={{ m: 0, width: "100%" }}>
-												{product?.category_id !== "" &&
+												{service?.category_id !== "" &&
 												subcategory[0]?.subcategory.length === 0 ? (
 													<div
 														className='d-flex justify-content-center align-items-center'
@@ -956,11 +874,11 @@ const AddNewProduct = () => {
 														displayEmpty
 														inputProps={{ "aria-label": "Without label" }}
 														name='subcategory_id'
-														value={product?.subcategory_id}
+														value={service?.subcategory_id}
 														onChange={(e) => handleOnChange(e)}
 														input={<OutlinedInput />}
 														renderValue={(selected) => {
-															if (product?.subcategory_id.length === 0) {
+															if (service?.subcategory_id.length === 0) {
 																return "النشاط الفرعي";
 															}
 
@@ -984,7 +902,7 @@ const AddNewProduct = () => {
 															<MenuItem key={index} value={sub?.id}>
 																<Checkbox
 																	checked={
-																		product?.subcategory_id?.indexOf(sub?.id) >
+																		service?.subcategory_id?.indexOf(sub?.id) >
 																		-1
 																	}
 																/>
@@ -997,11 +915,11 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											{productError?.subcategory_id && (
+											{serviceError?.subcategory_id && (
 												<span
 													className='fs-6 text-danger'
 													style={{ whiteSpace: "normal" }}>
-													{productError?.subcategory_id}
+													{serviceError?.subcategory_id}
 												</span>
 											)}
 										</div>
@@ -1016,7 +934,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للخدمة'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1047,12 +965,12 @@ const AddNewProduct = () => {
 														id='price'
 														value={
 															attributes?.length !== 0
-																? product?.selling_price
+																? service?.selling_price
 																: value
 														}
 														onChange={(e) => {
-															setProduct({
-																...product,
+															setService({
+																...service,
 																selling_price: e.target.value.replace(
 																	/[^\d.]|\.(?=.*\.)/g,
 																	""
@@ -1071,7 +989,7 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.selling_price}
+												{serviceError?.selling_price}
 												{errors?.selling_price && errors.selling_price.message}
 											</span>
 										</div>
@@ -1086,7 +1004,7 @@ const AddNewProduct = () => {
 													className={"p-0"}
 													TransitionProps={{ timeout: 300 }}
 													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للمنتج'
+													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للخدمة'
 													placement='top'>
 													<IconButton>
 														<MdInfoOutline color='#1DBBBE' size={"14px"} />
@@ -1107,12 +1025,12 @@ const AddNewProduct = () => {
 														id='low-price'
 														value={
 															attributes?.length !== 0
-																? product?.discount_price
+																? service?.discount_price
 																: value
 														}
 														onChange={(e) => {
-															setProduct({
-																...product,
+															setService({
+																...service,
 																discount_price: e.target.value.replace(
 																	/[^\d.]|\.(?=.*\.)/g,
 																	""
@@ -1128,10 +1046,10 @@ const AddNewProduct = () => {
 										</div>
 										<div className='col-lg-3 col-md-3 col-12'></div>
 										<div className='col-lg-7 col-md-9 col-12'>
-											{product?.selling_price &&
-											product?.discount_price &&
-											Number(product?.selling_price) -
-												Number(product?.discount_price) <=
+											{service?.selling_price &&
+											service?.discount_price &&
+											Number(service?.selling_price) -
+												Number(service?.discount_price) <=
 												0 ? (
 												<span
 													className='fs-6 fs-6 text-danger'
@@ -1141,8 +1059,8 @@ const AddNewProduct = () => {
 											) : null}
 										</div>
 
-										{product?.discount_price &&
-										product?.selling_price === "" ? (
+										{service?.discount_price &&
+										service?.selling_price === "" ? (
 											<>
 												<div className='col-lg-3 col-md-3 col-12'></div>
 												<div className='col-lg-7 col-md-9 col-12'>
@@ -1159,71 +1077,9 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.discount_price}
+												{serviceError?.discount_price}
 												{errors?.discount_price &&
 													errors.discount_price.message}
-											</span>
-										</div>
-									</div>
-
-									{/* Stock */}
-									<div className='row mb-md-5 mb-3'>
-										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='price'>
-												المخزون <span className='important-hint'>*</span>
-												<BootstrapTooltip
-													className={"p-0"}
-													TransitionProps={{ timeout: 300 }}
-													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمالي  الكمية الخاصة بخيارات  المنتج  في حال تم اضافه خيارات للمنتج'
-													placement='top'>
-													<IconButton>
-														<MdInfoOutline color='#1DBBBE' size={"14px"} />
-													</IconButton>
-												</BootstrapTooltip>
-											</label>
-										</div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<div className='tax-text'>
-												تأكد ان المخزون يشمل إجمالي الكميه الخاصة بخيارات المنتج
-											</div>
-											<Controller
-												name={"stock"}
-												control={control}
-												rules={{
-													required: "حقل المخزون مطلوب",
-													pattern: {
-														value: /^[0-9]+$/i,
-														message: "يجب على الحقل المخزون أن يكون رقمًا",
-													},
-													min: {
-														value: 1,
-														message: "  المخزون يجب ان يكون اكبر من 0",
-													},
-												}}
-												render={({ field: { onChange, value } }) => (
-													<input
-														type='text'
-														id='stock'
-														placeholder='اضف الكمية'
-														name='stock'
-														value={
-															attributes?.length !== 0 ? product?.stock : value
-														}
-														onChange={(e) => {
-															onChange(e.target.value.replace(/[^0-9]/g, ""));
-														}}
-													/>
-												)}
-											/>
-										</div>
-										<div className='col-lg-3 col-md-3 col-12'></div>
-										<div className='col-lg-7 col-md-9 col-12'>
-											<span
-												className='fs-6 text-danger'
-												style={{ whiteSpace: "normal" }}>
-												{productError?.stock}
-												{errors?.stock && errors.stock.message}
 											</span>
 										</div>
 									</div>
@@ -1232,34 +1088,33 @@ const AddNewProduct = () => {
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
-												{" "}
-												الوزن <span className='important-hint'>*</span>
+												المدة <span className='important-hint'>*</span>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div className='tax-text'>
-												ضع الوزن التقريبي للمنتج بالجرام
+												ضع مدة التنفيذ الخاصة بالخدمة
 											</div>
 											<Controller
-												name={"weight"}
+												name={"period"}
 												control={control}
 												rules={{
-													required: "حقل الوزن مطلوب",
+													required: "حقل المدة مطلوب",
 													pattern: {
 														value: /^[0-9]+$/i,
-														message: "يجب على الحقل الوزن أن يكون رقمًا",
+														message: "يجب ان تكون المدة  رقمًا",
 													},
 													min: {
 														value: 1,
-														message: "  المخزون يجب ان يكون اكبر من 0",
+														message: "  المدة يجب ان تكون اكبر من 0",
 													},
 												}}
 												render={({ field: { onChange, value } }) => (
 													<input
 														type='text'
-														id='weight'
-														placeholder='1000 جرام'
-														name='weight'
+														id='period'
+														placeholder='يومين'
+														name='period'
 														value={value}
 														onChange={(e) =>
 															onChange(e.target.value.replace(/[^0-9]/g, ""))
@@ -1273,8 +1128,8 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.weight}
-												{errors?.weight && errors.weight.message}
+												{serviceError?.period}
+												{errors?.period && errors.period.message}
 											</span>
 										</div>
 									</div>
@@ -1282,7 +1137,7 @@ const AddNewProduct = () => {
 									{/* Key words */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
-											<label htmlFor='seo'>الكلمات المفتاحية للمنتج </label>
+											<label htmlFor='seo'>الكلمات المفتاحية للخدمة </label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<TagsInput
@@ -1298,7 +1153,7 @@ const AddNewProduct = () => {
 											<span
 												className='fs-6 text-danger'
 												style={{ whiteSpace: "normal" }}>
-												{productError?.SEOdescription}
+												{serviceError?.SEOdescription}
 												{errors?.SEOdescription &&
 													errors.SEOdescription.message}
 											</span>
@@ -1315,7 +1170,7 @@ const AddNewProduct = () => {
 												onClick={() => {
 													dispatch(openProductOptionModal());
 												}}>
-												إضافة خيارات المنتج
+												إضافة خيارات الخدمة
 												<FiPlus />
 											</button>
 										</div>
@@ -1350,9 +1205,9 @@ const AddNewProduct = () => {
 			</div>
 
 			{/* The Product Opthons Modal */}
-			<AddProductOptions />
+			<AddServiceOptions />
 		</>
 	);
 };
 
-export default AddNewProduct;
+export default AddNewService;
