@@ -1,7 +1,7 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 
 // Third party
-
+import { v4 as uuidv4 } from "uuid";
 import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
@@ -307,7 +307,7 @@ const AddProductOptionsModal = () => {
 			select_value: "نص",
 			values: [
 				{
-					id: 1,
+					id: uuidv4(),
 					title: "",
 					color: "#000000",
 					image: "",

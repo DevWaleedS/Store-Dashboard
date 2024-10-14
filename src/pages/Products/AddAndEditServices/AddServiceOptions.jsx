@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useId } from "react";
 
 // Third party
 import ReactDom from "react-dom";
@@ -94,20 +94,20 @@ const switchStyle = {
 /**----------------------------------------------------------------------------- */
 
 const AddServiceOptionsModal = () => {
+	const uniqueId = useId();
 	const dispatch = useDispatch(false);
 	const { isProductOptionOpen } = useSelector((state) => state.ProductsSlice);
 	const contextStore = useContext(Context);
 	const {
 		productHasOptions,
 		setProductHasOptions,
-		attributes,
+
 		optionsSection,
 		setOptionsSection,
 		clearOptions,
 	} = contextStore;
 
 	/** ------------------------------------------------------------- */
-	console.log(attributes);
 
 	//handle name of section
 	const handleSetTitleInput = (e, index) => {
@@ -166,7 +166,7 @@ const AddServiceOptionsModal = () => {
 			select_value: "نص",
 			values: [
 				{
-					id: 1,
+					id: uniqueId + 2332,
 					title: "",
 					price: "",
 					period: "",

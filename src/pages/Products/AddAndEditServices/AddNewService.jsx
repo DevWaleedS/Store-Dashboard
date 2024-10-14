@@ -21,12 +21,8 @@ import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import IconButton from "@mui/material/IconButton";
-import Zoom from "@mui/material/Zoom";
-import { styled } from "@mui/material/styles";
 import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // Components
 import AddServiceOptions from "./AddServiceOptions";
@@ -34,7 +30,6 @@ import { TextEditor } from "../../../components/TextEditor";
 
 // icons and images
 import { FiPlus } from "react-icons/fi";
-import { MdInfoOutline } from "react-icons/md";
 import { UploadIcon } from "../../../data/Icons";
 import { PlayVideo } from "../../../data/images";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -93,20 +88,6 @@ const selectStyle = {
 	},
 };
 
-// tooltip
-const BootstrapTooltip = styled(({ className, ...props }) => (
-	<Tooltip {...props} arrow classes={{ popper: className }} />
-))(({ theme }) => ({
-	[`& .${tooltipClasses.arrow}`]: {
-		color: "#1dbbbe",
-	},
-	[`& .${tooltipClasses.tooltip}`]: {
-		backgroundColor: "#1dbbbe",
-
-		whiteSpace: "normal",
-	},
-}));
-
 const AddNewService = () => {
 	// get categories selector
 	const { data: selectCategories } = useGetCategoriesQuery();
@@ -117,9 +98,10 @@ const AddNewService = () => {
 	const contextStore = useContext(Context);
 	const { productHasOptions, attributes, optionsSection, clearOptions } =
 		contextStore;
-	const LoadingStore = useContext(LoadingContext);
 
+	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
+
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
 
@@ -314,7 +296,7 @@ const AddNewService = () => {
 		// data that send to api
 		let formData = new FormData();
 		formData.append("name", data?.name);
-		formData.append("is_service", parseInt(1));
+		formData.append("is_service", 1);
 		formData.append("short_description", data?.short_description);
 		formData.append("description", editorValue);
 		formData.append("selling_price", data?.selling_price);
@@ -341,6 +323,7 @@ const AddNewService = () => {
 
 		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
 		formData.append("amount", 1);
+
 		if (productHasOptions === true) {
 			optionsSection?.forEach((option, i) => {
 				formData.append([`attribute[${i}][title]`], option?.name);
@@ -930,16 +913,6 @@ const AddNewService = () => {
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
 												السعر <span className='important-hint'>*</span>
-												<BootstrapTooltip
-													className={"p-0"}
-													TransitionProps={{ timeout: 300 }}
-													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافه خيارات للخدمة'
-													placement='top'>
-													<IconButton>
-														<MdInfoOutline color='#1DBBBE' size={"14px"} />
-													</IconButton>
-												</BootstrapTooltip>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -998,19 +971,7 @@ const AddNewService = () => {
 									{/* Discount price */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-											<label htmlFor='low-price'>
-												السعر بعد الخصم
-												<BootstrapTooltip
-													className={"p-0"}
-													TransitionProps={{ timeout: 300 }}
-													TransitionComponent={Zoom}
-													title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافه خيارات للخدمة'
-													placement='top'>
-													<IconButton>
-														<MdInfoOutline color='#1DBBBE' size={"14px"} />
-													</IconButton>
-												</BootstrapTooltip>
-											</label>
+											<label htmlFor='low-price'>السعر بعد الخصم</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div className='tax-text'>السعر يشمل الضريبة</div>

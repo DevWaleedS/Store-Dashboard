@@ -555,10 +555,18 @@ export default function BigProductsTable({
 																	to={
 																		row?.is_import
 																			? `EditImportProducts/${row?.id}`
+																			: row?.is_service
+																			? `edit-service/${row?.id}`
 																			: `EditProduct/${row?.id}`
 																	}
 																	style={{ cursor: "pointer" }}>
-																	<EditIcon title='تعديل المنتج' />
+																	<EditIcon
+																		title={
+																			row?.is_service
+																				? "تعديل الخدمة"
+																				: "تعديل المنتج"
+																		}
+																	/>
 																</Link>
 																<span>
 																	<DeleteIcon

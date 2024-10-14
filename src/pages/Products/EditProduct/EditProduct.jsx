@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-
+import { v4 as uuidv4 } from "uuid";
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
@@ -112,7 +112,6 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 }));
 
 const EditProduct = () => {
-	// get current product by id
 	const { id } = useParams();
 	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
 
@@ -227,7 +226,7 @@ const EditProduct = () => {
 								select_value: "نص",
 								values: [
 									{
-										id: 9828394,
+										id: uuidv4(),
 										title: "",
 										color: "#000000",
 										image: "",

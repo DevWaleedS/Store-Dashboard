@@ -89,7 +89,7 @@ const AddStoreAddress = ({
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							readOnly={
-								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
+								currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
@@ -148,7 +148,7 @@ const AddStoreAddress = ({
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							disabled={
-								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
+								currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
@@ -197,7 +197,7 @@ const AddStoreAddress = ({
 						<input
 							className='shipping-address-input'
 							readOnly={
-								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
+								currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
@@ -221,47 +221,48 @@ const AddStoreAddress = ({
 						</div>
 					) : null}
 				</div>
-
-				<div className='row mb-md-5 mb-3'>
-					<div className='col-12'>
-						<h6>
-							تاريخ تسليم الشحنة للمندوب
-							<span className='important-hint'>*</span>
-						</h6>
-					</div>
-					<div className='col-12 '>
-						<DatePicker
-							block
-							size='lg'
-							showMeridian
-							format='yyyy-MM-dd HH:mm:aa'
-							placeholder='حدد تاريخ ووقت تسليم الشحنة'
-							className='select_pickup_date_picker'
-							value={value}
-							onChange={(e) => {
-								setValue(e);
-								resetError();
-							}}
-							disabledDate={(date) => {
-								const today = new Date();
-								today.setHours(0, 0, 0, 0);
-								return date < today || date?.getTime() === today?.getTime();
-							}}
-							readOnly={
-								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة" ||
-								currentOrder?.orders?.status === "تم الشحن" ||
-								currentOrder?.orders?.status === "ملغي" ||
-								currentOrder?.orders?.status === "مكتمل"
-							}
-						/>
-					</div>
-
-					{error?.pickup_date ? (
-						<div className=' mt-1 col-12'>
-							<span className='fs-6 text-danger'>{error?.pickup_date}</span>
+				{currentOrder?.orders?.shippingtypes?.name !== "اخرى" ? (
+					<div className='row mb-md-5 mb-3'>
+						<div className='col-12'>
+							<h6>
+								تاريخ تسليم الشحنة للمندوب
+								<span className='important-hint'>*</span>
+							</h6>
 						</div>
-					) : null}
-				</div>
+						<div className='col-12 '>
+							<DatePicker
+								block
+								size='lg'
+								showMeridian
+								format='yyyy-MM-dd HH:mm:aa'
+								placeholder='حدد تاريخ ووقت تسليم الشحنة'
+								className='select_pickup_date_picker'
+								value={value}
+								onChange={(e) => {
+									setValue(e);
+									resetError();
+								}}
+								disabledDate={(date) => {
+									const today = new Date();
+									today.setHours(0, 0, 0, 0);
+									return date < today || date?.getTime() === today?.getTime();
+								}}
+								readOnly={
+									currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
+									currentOrder?.orders?.status === "تم الشحن" ||
+									currentOrder?.orders?.status === "ملغي" ||
+									currentOrder?.orders?.status === "مكتمل"
+								}
+							/>
+						</div>
+
+						{error?.pickup_date ? (
+							<div className=' mt-1 col-12'>
+								<span className='fs-6 text-danger'>{error?.pickup_date}</span>
+							</div>
+						) : null}
+					</div>
+				) : null}
 			</div>
 		</div>
 	);

@@ -9,14 +9,14 @@ import { LoadingContext } from "../../../../Context/LoadingProvider";
 import { useUpdateOrderStatusMutation } from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
 
 // Icons
-import { ArrowDown, ListIcon } from "../../../../data/Icons";
 import {
+	Radio,
+	styled,
+	RadioGroup,
 	FormControl,
 	FormControlLabel,
-	Radio,
-	RadioGroup,
-	styled,
 } from "@mui/material";
+import { ArrowDown, ListIcon } from "../../../../data/Icons";
 import SelectPickupDateModal from "../SelectPickupDate/SelectPickupDateModal";
 
 const BpIcon = styled("span")(({ theme }) => ({
@@ -57,7 +57,7 @@ const BpCheckedIcon = styled(BpIcon)({
 	},
 });
 
-// Inspired by blueprintjs
+// Inspired by blue Print js
 function BpRadio(props) {
 	return (
 		<Radio
@@ -95,16 +95,16 @@ const SelectShippingStatus = ({
 	const navigate = useNavigate();
 
 	// to handle set date rang of shipping
+	// handle shipping status
+	const [shippingStatus, setShippingStatus] = useState("");
 	const [pickupDateModalIsOpen, setPickupDateModalIsOpen] = useState(false);
 
 	const handleClosePickupDateModal = () => {
 		setPickupDateModalIsOpen(false);
+		setShippingStatus("");
 		setValue(null);
 		resetError();
 	};
-
-	// handle shipping status
-	const [shippingStatus, setShippingStatus] = useState("");
 
 	const handleOnChange = (e) => {
 		const newStatus = e.target.value;
@@ -136,7 +136,11 @@ const SelectShippingStatus = ({
 		formData.append("city", shipping?.city);
 		formData.append("district", shipping?.district);
 		formData.append("street_address", shipping?.address);
-		if (status !== "completed") {
+		if (
+			status !== "completed" &&
+			status !== "canceled" &&
+			currentOrder?.orders?.shippingtypes?.name !== "اخرى"
+		) {
 			formData.append("pickup_date", formattedDate);
 		}
 
@@ -235,7 +239,7 @@ const SelectShippingStatus = ({
 											style={{
 												cursor:
 													currentOrder?.orders?.status ===
-														"طلب مندوب لتسليم الشحنة" ||
+														"طلب مندوب لتوصيل الشحنة " ||
 													currentOrder?.orders?.status === "ملغي" ||
 													currentOrder?.orders?.status === "قيد التجهيز"
 														? "not-allowed"
@@ -277,29 +281,33 @@ const SelectShippingStatus = ({
 														isLoading ||
 														currentOrder?.orders?.status === "قيد التجهيز" ||
 														currentOrder?.orders?.status ===
-															"طلب مندوب لتسليم الشحنة" ||
+															"طلب مندوب لتوصيل الشحنة " ||
 														currentOrder?.orders?.status === "ملغي"
 													}
 												/>
 
-												<FormControlLabel
-													className='mb-2'
-													value='delivery_in_progress'
-													control={<BpRadio />}
-													label='طلب مندوب لتسليم الشحنة'
-													sx={formControlLabelStyle}
-													disabled={
-														isLoading ||
-														currentOrder?.orders?.status === "جديد" ||
-														currentOrder?.orders?.status ===
-															"طلب مندوب لتسليم الشحنة" ||
-														currentOrder?.orders?.status === "ملغي"
-													}
-												/>
+												{currentOrder?.orders?.shippingtypes?.name !==
+												"اخرى" ? (
+													<FormControlLabel
+														className='mb-2'
+														value='delivery_in_progress'
+														control={<BpRadio />}
+														label='طلب مندوب لتوصيل الشحنة '
+														sx={formControlLabelStyle}
+														disabled={
+															isLoading ||
+															currentOrder?.orders?.status === "جديد" ||
+															currentOrder?.orders?.status ===
+																"طلب مندوب لتوصيل الشحنة " ||
+															currentOrder?.orders?.status === "ملغي"
+														}
+													/>
+												) : null}
 
-												{currentOrder?.orders?.status ===
-													"طلب مندوب لتسليم الشحنة" ||
-												currentOrder?.orders?.status === "ملغي" ? null : (
+												{(currentOrder?.orders?.status !==
+													"طلب مندوب لتوصيل الشحنة " ||
+													currentOrder?.orders?.status !== "ملغي") &&
+												currentOrder?.orders?.shippingtypes?.name === "اخرى" ? (
 													<FormControlLabel
 														control={
 															<BpRadio value='canceled' name='canceled' />
@@ -307,7 +315,7 @@ const SelectShippingStatus = ({
 														sx={formControlLabelStyle}
 														label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
 													/>
-												)}
+												) : null}
 
 												<FormControlLabel
 													value='completed'

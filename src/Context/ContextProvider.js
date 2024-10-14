@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Context from "./context";
 
+import { v4 as uuidv4 } from "uuid";
+
 const ContextProvider = (props) => {
 	const [title, setEndActionTitle] = useState(null);
 	const [subCategories, setSubCategories] = useState([]);
@@ -25,7 +27,7 @@ const ContextProvider = (props) => {
 			select_value: "نص",
 			values: [
 				{
-					id: 9828394,
+					id: uuidv4(),
 					title: "",
 					color: "#000000",
 					image: "",
@@ -49,7 +51,7 @@ const ContextProvider = (props) => {
 				select_value: "نص",
 				values: [
 					{
-						id: 983984834,
+						id: uuidv4() + 1,
 						title: "",
 						color: "#000000",
 						image: "",

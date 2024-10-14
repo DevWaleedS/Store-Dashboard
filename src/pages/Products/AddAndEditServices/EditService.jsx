@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useDropzone } from "react-dropzone";
 import ImageUploading from "react-images-uploading";
 import { TagsInput } from "react-tag-input-component";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { v4 as uuidv4 } from "uuid";
 // Components
 import EditServiceOptions from "./EditServiceOptions";
 import CircularLoading from "../../../HelperComponents/CircularLoading";
@@ -33,13 +32,8 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import Zoom from "@mui/material/Zoom";
-import { styled } from "@mui/material/styles";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 // Icons
-import IconButton from "@mui/material/IconButton";
-import { MdInfoOutline } from "react-icons/md";
 import { UploadIcon } from "../../../data/Icons";
 import { PlayVideo } from "../../../data/images";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -98,27 +92,12 @@ const selectStyle = {
 	},
 };
 
-const BootstrapTooltip = styled(({ className, ...props }) => (
-	<Tooltip {...props} arrow classes={{ popper: className }} />
-))(({ theme }) => ({
-	[`& .${tooltipClasses.arrow}`]: {
-		color: "#1dbbbe",
-	},
-	[`& .${tooltipClasses.tooltip}`]: {
-		backgroundColor: "#1dbbbe",
-
-		whiteSpace: "normal",
-	},
-}));
-
 const EditService = () => {
-	// get current product by id
 	const { id } = useParams();
 	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
 
 	// get categories selector
 	const { data: selectCategories } = useGetCategoriesQuery();
-
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 	const contextStore = useContext(Context);
@@ -126,7 +105,6 @@ const EditService = () => {
 		productHasOptions,
 		setProductHasOptions,
 		attributes,
-		setAttributes,
 		optionsSection,
 		setOptionsSection,
 		clearOptions,
@@ -135,16 +113,15 @@ const EditService = () => {
 	const { setLoadingTitle } = LoadingStore;
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
-	const [product, setProduct] = useState({
+	const [service, setService] = useState({
 		name: "",
 		short_description: "",
 		description: "",
 		selling_price: "",
+		period: "",
 		category_id: "",
 		discount_price: "",
 		subcategory_id: [],
-		stock: "",
-		weight: "",
 	});
 
 	// --------------------------------------------
@@ -168,14 +145,13 @@ const EditService = () => {
 			selling_price: "",
 			category_id: "",
 			discount_price: "",
-			stock: "",
-			weight: "",
+			period: "",
 		},
 	});
 
 	const handleOnChange = (e) => {
 		const { name, value } = e.target;
-		setProduct((prevProduct) => {
+		setService((prevProduct) => {
 			return { ...prevProduct, [name]: value };
 		});
 	};
@@ -183,16 +159,15 @@ const EditService = () => {
 	// To get All Product info from api
 	useEffect(() => {
 		if (currentProduct) {
-			setProduct({
-				...product,
+			setService({
+				...service,
 				name: currentProduct?.name,
 				short_description: currentProduct?.short_description,
 				selling_price: currentProduct?.selling_price,
 				category_id: currentProduct?.category?.id,
 				discount_price: currentProduct?.discount_price,
 				subcategory_id: currentProduct?.subcategory?.map((sub) => sub?.id),
-				stock: currentProduct?.stock,
-				weight: currentProduct?.weight,
+				period: currentProduct?.period,
 			});
 			setEditorValue(currentProduct?.description);
 			setSEOdescription(currentProduct?.SEOdescription?.map((seo) => seo));
@@ -211,14 +186,8 @@ const EditService = () => {
 							values: attribute?.values?.map((value) => ({
 								id: value?.id,
 								title: value?.value?.[0],
-								defaultOption: value?.value?.[1] === "1" ? true : false,
-								color:
-									attribute?.type === "نص و لون"
-										? value?.value?.[2]
-										: "#000000",
-								image: attribute?.type === "نص و صورة" ? value?.value?.[2] : "",
-								previewImage:
-									attribute?.type === "نص و صورة" ? value?.value?.[2] : "",
+								price: value?.price,
+								discount_price: value?.discount_price,
 							})),
 					  }))
 					: [
@@ -227,29 +196,19 @@ const EditService = () => {
 								select_value: "نص",
 								values: [
 									{
-										id: 9828394,
+										id: uuidv4(),
 										title: "",
 										color: "#000000",
 										image: "",
 										previewImage: "",
 										defaultOption: false,
+										price: "",
+										period: "",
+										discount_price: "",
 									},
 								],
 							},
 					  ]
-			);
-			setAttributes(
-				currentProduct?.options?.map((option) => ({
-					id: option?.id,
-					price: Number(option?.price),
-					discount_price: Number(option?.discount_price),
-
-					qty: Number(option?.quantity),
-					values: option?.name?.ar?.split(",")?.map((item, index) => ({
-						id: index + 1,
-						title: item,
-					})),
-				}))
 			);
 		}
 	}, [currentProduct]);
@@ -257,7 +216,6 @@ const EditService = () => {
 	// ---------------------------------------------
 
 	// Handle Errors
-	const [productNameLength, setProductNameLength] = useState(false);
 	const [productError, setProductError] = useState({
 		name: "",
 		cover: "",
@@ -267,8 +225,7 @@ const EditService = () => {
 		category_id: "",
 		discount_price: "",
 		subcategory_id: "",
-		stock: "",
-		weight: "",
+		period: "",
 		SEOdescription: "",
 		images: [],
 	});
@@ -283,49 +240,17 @@ const EditService = () => {
 			category_id: "",
 			discount_price: "",
 			subcategory_id: "",
-			stock: "",
-			weight: "",
+			period: "",
 			SEOdescription: "",
 			images: [],
 		});
 	};
 
-	useEffect(() => {
-		if (attributes?.length !== 0) {
-			const qty = attributes?.reduce(
-				(accumulator, attr) => accumulator + attr.qty,
-				0
-			);
-
-			const defaultOptions = optionsSection?.map(
-				(option) =>
-					option?.values?.find((value) => value.defaultOption === true)?.title
-			);
-
-			const matchingObject = attributes?.find(
-				(obj) =>
-					obj?.values?.length === defaultOptions?.length &&
-					obj?.values?.every(
-						(value, index) => value?.title === defaultOptions[index]
-					)
-			);
-
-			if (matchingObject) {
-				setProduct((prevProduct) => ({
-					...prevProduct,
-					stock: qty,
-					discount_price: Number(matchingObject.discount_price) || 0,
-					selling_price: Number(matchingObject.price) || 0,
-				}));
-			}
-		}
-	}, [attributes, optionsSection]);
-
-	// To update product data Errors
+	// To update product data
 	//--------------------------------------------------
 	useEffect(() => {
-		reset(product);
-	}, [product, reset]);
+		reset(service);
+	}, [service, reset]);
 
 	// ---------------------------------------------------
 	// handle images size
@@ -434,7 +359,7 @@ const EditService = () => {
 	// Handle select Subcategory Array
 	const subcategory =
 		selectCategories?.filter(
-			(sub) => sub?.id === parseInt(product?.category_id)
+			(sub) => sub?.id === parseInt(service?.category_id)
 		) || [];
 	// ---------------------------------------
 
@@ -448,81 +373,57 @@ const EditService = () => {
 		// data that send to api
 		let formData = new FormData();
 		formData.append("_method", "PUT");
+		formData.append("is_service", 1);
 		formData.append("name", data?.name);
-		formData.append("short_description", data?.short_description);
+		formData.append("period", data?.period);
 		formData.append("description", editorValue);
-		formData.append("selling_price", data?.selling_price);
 		formData.append("category_id", data?.category_id);
+		formData.append("selling_price", data?.selling_price);
 		formData.append("discount_price", data?.discount_price);
-		formData.append("stock", data?.stock);
-		formData.append("weight", data?.weight);
+		formData.append("short_description", data?.short_description);
 		formData.append(
 			"SEOdescription",
 			SEOdescription?.length === 0 ? "" : SEOdescription?.join(",")
 		);
-		for (let i = 0; i < product?.subcategory_id?.length; i++) {
-			formData.append([`subcategory_id[${i}]`], product?.subcategory_id[i]);
-		}
 		if (icon?.length !== 0) {
 			formData.append("cover", icon[0] || null);
 		}
+		service?.subcategory_id?.forEach((subcategory_id, i) => {
+			formData.append([`subcategory_id[${i}]`], subcategory_id || null);
+		});
 
 		if (multiImages.length !== 0) {
-			for (let i = 0; i < multiImages?.length; i++) {
-				formData.append(
-					[`images[${i}]`],
-					multiImages[i]?.file || multiImages[i]?.image
-				);
-			}
+			multiImages?.forEach((image, i) => {
+				formData.append(`images[${i}]`, image?.file || image?.image);
+			});
 		}
 		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
 		formData.append("amount", 1);
+
 		if (productHasOptions === true) {
-			for (let i = 0; i < optionsSection?.length; i++) {
-				formData.append([`attribute[${i}][title]`], optionsSection[i]?.name);
-				formData.append(
-					[`attribute[${i}][type]`],
-					optionsSection[i]?.select_value
-				);
-				for (let v = 0; v < optionsSection[i]?.values?.length; v++) {
+			optionsSection?.forEach((option, i) => {
+				formData.append([`attribute[${i}][title]`], option?.name);
+				formData.append([`attribute[${i}][type]`], option?.select_value);
+
+				option?.values?.forEach((value, v) => {
 					formData.append(
 						[`attribute[${i}][value][${v}][title]`],
-						optionsSection[i]?.values[v]?.title
+						value?.title
 					);
 					formData.append(
-						[`attribute[${i}][value][${v}][default_option]`],
-						optionsSection[i]?.values[v]?.defaultOption === true ? 1 : 0
+						[`attribute[${i}][value][${v}][period]`],
+						value?.period
 					);
-					optionsSection[i]?.values[v]?.color &&
-						optionsSection[i]?.select_value === "نص و لون" &&
-						formData.append(
-							[`attribute[${i}][value][${v}][color]`],
-							optionsSection[i]?.values[v]?.color
-						);
-					optionsSection[i]?.values[v]?.image &&
-						optionsSection[i]?.select_value === "نص و صورة" &&
-						formData.append(
-							[`attribute[${i}][value][${v}][image]`],
-
-							optionsSection[i]?.values[v]?.image
-						);
-				}
-			}
-			for (let i = 0; i < attributes?.length; i++) {
-				formData.append([`data[${i}][price]`], attributes[i]?.price || 0);
-				formData.append(
-					[`data[${i}][discount_price]`],
-					attributes[i]?.discount_price || 0
-				);
-
-				formData.append([`data[${i}][quantity]`], attributes[i]?.qty);
-				for (let v = 0; v < attributes[i]?.values?.length; v++) {
 					formData.append(
-						[`data[${i}][name][${v}]`],
-						attributes[i]?.values[v]?.title
+						[`attribute[${i}][value][${v}][price]`],
+						value?.price
 					);
-				}
-			}
+					formData.append(
+						[`attribute[${i}][value][${v}][discount_price]`],
+						value?.discount_price
+					);
+				});
+			});
 		}
 
 		// make request ...
@@ -554,8 +455,7 @@ const EditService = () => {
 					category_id: response?.data?.message?.en?.category_id?.[0],
 					discount_price: response?.data?.message?.en?.discount_price?.[0],
 					subcategory_id: response?.data?.message?.en?.subcategory_id?.[0],
-					stock: response?.data?.message?.en?.stock?.[0],
-					weight: response?.data?.message?.en?.weight?.[0],
+					period: response?.data?.message?.en?.period?.[0],
 					SEOdescription: response?.data?.message?.en?.SEOdescription?.[0],
 					images: response?.data?.message?.en?.["images.0"]?.[0],
 				});
@@ -622,7 +522,7 @@ const EditService = () => {
 									<div className='form-title'>
 										<h5 className='mb-3'> تعديل الخدمة </h5>
 
-										<p> قم بتحديث خدمةك والمعلومات الضرورية من هنا</p>
+										<p> قم بتحديث الخدمة والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
 							</div>
@@ -655,12 +555,7 @@ const EditService = () => {
 															id='product-name'
 															value={value}
 															onChange={(e) => {
-																if (e.target.value.length <= 25) {
-																	onChange(e.target.value.substring(0, 25));
-																	setProductNameLength(false);
-																} else {
-																	setProductNameLength(true);
-																}
+																onChange(e.target.value);
 															}}
 														/>
 													)}
@@ -674,14 +569,6 @@ const EditService = () => {
 													{productError?.name}
 													{errors?.name && errors.name.message}
 												</span>
-
-												{productNameLength && (
-													<span
-														className='fs-6 text-danger'
-														style={{ whiteSpace: "normal" }}>
-														اسم الخدمة يجب ان لا يتجاوز 25 حرف
-													</span>
-												)}
 											</div>
 										</div>
 
@@ -959,7 +846,6 @@ const EditService = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label htmlFor='product-category'>
-													{" "}
 													النشاط الرئيسي
 													<span className='important-hint'>*</span>
 												</label>
@@ -978,9 +864,9 @@ const EditService = () => {
 																name='category_id'
 																sx={selectStyle}
 																onChange={(e) => {
-																	if (product?.category_id !== e.target.value) {
-																		setProduct({
-																			...product,
+																	if (service?.category_id !== e.target.value) {
+																		setService({
+																			...service,
 																			subcategory_id: [],
 																		});
 																	}
@@ -993,7 +879,7 @@ const EditService = () => {
 																inputProps={{ "aria-label": "Without label" }}
 																renderValue={(selected) => {
 																	if (
-																		product?.category_id === "" ||
+																		service?.category_id === "" ||
 																		!selected
 																	) {
 																		return (
@@ -1006,7 +892,7 @@ const EditService = () => {
 																		selectCategories?.filter(
 																			(item) =>
 																				item?.id === parseInt(selected) ||
-																				item?.id === product?.category_id
+																				item?.id === service?.category_id
 																		) || "";
 																	return result[0]?.name;
 																}}>
@@ -1051,7 +937,7 @@ const EditService = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<FormControl sx={{ m: 0, width: "100%" }}>
-													{product?.category_id !== "" &&
+													{service?.category_id !== "" &&
 													subcategory[0]?.subcategory?.length === 0 ? (
 														<div
 															className='d-flex justify-content-center align-items-center'
@@ -1071,11 +957,11 @@ const EditService = () => {
 															displayEmpty
 															inputProps={{ "aria-label": "Without label" }}
 															name='subcategory_id'
-															value={product?.subcategory_id || []}
+															value={service?.subcategory_id || []}
 															onChange={(e) => handleOnChange(e)}
 															input={<OutlinedInput />}
 															renderValue={(selected) => {
-																if (product?.subcategory_id?.length === 0) {
+																if (service?.subcategory_id?.length === 0) {
 																	return "النشاط الفرعي";
 																}
 
@@ -1085,7 +971,7 @@ const EditService = () => {
 																			const result =
 																				subcategory[0]?.subcategory?.filter(
 																					(sub) => sub?.id === parseInt(item)
-																				) || product?.subcategory_id;
+																				) || service?.subcategory_id;
 																			return (
 																				<div className='multiple_select_items'>
 																					{result[0]?.name}
@@ -1100,7 +986,7 @@ const EditService = () => {
 																	<MenuItem key={index} value={sub?.id}>
 																		<Checkbox
 																			checked={
-																				product?.subcategory_id?.indexOf(
+																				service?.subcategory_id?.indexOf(
 																					sub?.id
 																				) > -1
 																			}
@@ -1130,16 +1016,6 @@ const EditService = () => {
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
 												<label>
 													السعر<span className='important-hint'>*</span>
-													<BootstrapTooltip
-														className={"p-0"}
-														TransitionProps={{ timeout: 300 }}
-														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة السعر الحالية بقيمة السعر للخيار الافتراضي في حال تم اضافة خيارات للخدمة'
-														placement='top'>
-														<IconButton>
-															<MdInfoOutline color='#1DBBBE' size={"14px"} />
-														</IconButton>
-													</BootstrapTooltip>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
@@ -1173,8 +1049,8 @@ const EditService = () => {
 																title='قم بالضغط علي الحقل لتعديل السعر'
 																value={value}
 																onChange={(e) => {
-																	setProduct({
-																		...product,
+																	setService({
+																		...service,
 																		selling_price: e.target.value.replace(
 																			/[^\d.]|\.(?=.*\.)/g,
 																			""
@@ -1213,8 +1089,8 @@ const EditService = () => {
 																id='price'
 																value={value}
 																onChange={(e) => {
-																	setProduct({
-																		...product,
+																	setService({
+																		...service,
 																		selling_price: e.target.value.replace(
 																			/[^\d.]|\.(?=.*\.)/g,
 																			""
@@ -1252,19 +1128,7 @@ const EditService = () => {
 										{/* Discount price */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='d-flex flex-md-column flex-row align-items-md-start align-items-baseline col-lg-3 col-md-3 col-12'>
-												<label>
-													السعر بعد الخصم
-													<BootstrapTooltip
-														className={"p-0"}
-														TransitionProps={{ timeout: 300 }}
-														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة السعر بعد الخصم الحالية بقيمة السعر بعد الخصم للخيار الافتراضي في حال تم اضافة خيارات للخدمة'
-														placement='top'>
-														<IconButton>
-															<MdInfoOutline color='#1DBBBE' size={"14px"} />
-														</IconButton>
-													</BootstrapTooltip>
-												</label>
+												<label>السعر بعد الخصم</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>السعر يشمل الضريبة</div>
@@ -1285,8 +1149,8 @@ const EditService = () => {
 																title='قم بالضغط علي الحقل لتعديل سعر الخصم'
 																value={value}
 																onChange={(e) => {
-																	setProduct({
-																		...product,
+																	setService({
+																		...service,
 																		discount_price: e.target.value.replace(
 																			/[^\d.]|\.(?=.*\.)/g,
 																			""
@@ -1313,8 +1177,8 @@ const EditService = () => {
 																id='low-price'
 																value={value}
 																onChange={(e) => {
-																	setProduct({
-																		...product,
+																	setService({
+																		...service,
 																		discount_price: e.target.value.replace(
 																			/[^\d.]|\.(?=.*\.)/g,
 																			""
@@ -1335,19 +1199,14 @@ const EditService = () => {
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div
 												className={
-													product?.discount_price && product?.selling_price
+													service?.discount_price && service?.selling_price
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
-												{attributes?.length !== 0 ? (
-													<div className='tax-text'>
-														لتعديل سعرالخصم قم بالدخول إلى خيارات الخدمة
-													</div>
-												) : null}
-												{product?.selling_price &&
-												product?.discount_price &&
-												Number(product?.selling_price) -
-													Number(product?.discount_price) <=
+												{service?.selling_price &&
+												service?.discount_price &&
+												Number(service?.selling_price) -
+													Number(service?.discount_price) <=
 													0 ? (
 													<span
 														className='fs-6 text-danger'
@@ -1359,8 +1218,8 @@ const EditService = () => {
 
 											<div
 												className={
-													product?.discount_price &&
-													product?.selling_price === ""
+													service?.discount_price &&
+													service?.selling_price === ""
 														? "col-lg-7 col-md-9 col-12"
 														: "d-none"
 												}>
@@ -1387,141 +1246,33 @@ const EditService = () => {
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
 												<label>
-													المخزون <span className='important-hint'>*</span>
-													<BootstrapTooltip
-														className={"p-0"}
-														TransitionProps={{ timeout: 300 }}
-														TransitionComponent={Zoom}
-														title='سيتم استبدال قيمة المخزون الحالية بقيمة إجمإلى  الكمية الخاصة بخيارات  الخدمة  في حال تم اضافة خيارات للخدمة'
-														placement='top'>
-														<IconButton>
-															<MdInfoOutline color='#1DBBBE' size={"14px"} />
-														</IconButton>
-													</BootstrapTooltip>
+													المدة <span className='important-hint'>*</span>
 												</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
-													تأكد ان المخزون يشمل إجمإلى الكميه الخاصه بخيارات
-													الخدمة
-												</div>
-												{attributes?.length !== 0 ? (
-													<Controller
-														name={"stock"}
-														control={control}
-														rules={{
-															required: "حقل المخزون مطلوب",
-															pattern: {
-																value: /^[0-9]+$/i,
-																message: "يجب على الحقل المخزون أن يكون رقمًا",
-															},
-															min: {
-																value: 1,
-																message: "  المخزون يجب ان يكون اكبر من 0",
-															},
-														}}
-														render={({ field: { onChange, value } }) => (
-															<input
-																name='stock'
-																type='text'
-																id='stock'
-																readOnly='true'
-																style={{ cursor: "pointer" }}
-																onClick={() =>
-																	dispatch(openProductOptionModal())
-																}
-																title='قم بالضغط علي الحقل لتعديل  المخزون'
-																placeholder='اضف الكمية'
-																value={value}
-																onChange={(e) =>
-																	onChange(
-																		e.target.value.replace(/[^0-9]/g, "")
-																	)
-																}
-															/>
-														)}
-													/>
-												) : (
-													<Controller
-														name={"stock"}
-														control={control}
-														rules={{
-															required: "حقل المخزون مطلوب",
-															pattern: {
-																value: /^[0-9]+$/i,
-																message: "يجب على الحقل المخزون أن يكون رقمًا",
-															},
-															min: {
-																value: 1,
-																message: "  المخزون يجب ان يكون اكبر من 0",
-															},
-														}}
-														render={({ field: { onChange, value } }) => (
-															<input
-																name='stock'
-																type='text'
-																id='stock'
-																placeholder='اضف الكمية'
-																value={value}
-																onChange={(e) =>
-																	onChange(
-																		e.target.value.replace(/[^0-9]/g, "")
-																	)
-																}
-															/>
-														)}
-													/>
-												)}
-											</div>
-											<div className='col-lg-3 col-md-3 col-12'></div>
-											<div className='col-lg-7 col-md-9 col-12'>
-												{attributes?.length !== 0 ? (
-													<div className='tax-text'>
-														لتعديل المخزون قم بالدخول إلى خيارات الخدمة
-													</div>
-												) : null}
-												<span
-													className='fs-6 text-danger'
-													style={{ whiteSpace: "normal" }}>
-													{productError?.stock}
-													{errors?.stock && errors.stock.message}
-												</span>
-											</div>
-										</div>
-
-										{/* Weight */}
-										<div className='row mb-md-5 mb-3'>
-											<div className='col-lg-3 col-md-3 col-12'>
-												<label htmlFor='price'>
-													{" "}
-													الوزن <span className='important-hint'>*</span>
-												</label>
-											</div>
-
-											<div className='col-lg-7 col-md-9 col-12'>
-												<div className='tax-text'>
-													ضع الوزن التقريبي للخدمة بالجرام
+													ضع مدة التنفيذ الخاصة بالخدمة
 												</div>
 												<Controller
-													name={"weight"}
+													name={"period"}
 													control={control}
 													rules={{
-														required: "حقل الوزن مطلوب",
+														required: "حقل المدة مطلوب",
 														pattern: {
 															value: /^[0-9]+$/i,
-															message: "يجب على الحقل الوزن أن يكون رقمًا",
+															message: "يجب أن يكون حقل المدة رقمًا",
 														},
 														min: {
 															value: 1,
-															message: "  المخزون يجب ان يكون اكبر من 0",
+															message: "  المدة يجب أن تكون اكبر من 0",
 														},
 													}}
 													render={({ field: { onChange, value } }) => (
 														<input
+															name='period'
 															type='text'
-															id='weight'
-															placeholder='1000 جرام'
-															name='weight'
+															id='period'
+															placeholder='يومين'
 															value={value}
 															onChange={(e) =>
 																onChange(e.target.value.replace(/[^0-9]/g, ""))
@@ -1535,8 +1286,8 @@ const EditService = () => {
 												<span
 													className='fs-6 text-danger'
 													style={{ whiteSpace: "normal" }}>
-													{productError?.weight}
-													{errors?.weight && errors.weight.message}
+													{productError?.period}
+													{errors?.period && errors.period.message}
 												</span>
 											</div>
 										</div>

@@ -5,7 +5,7 @@ import ReactDom from "react-dom";
 import { toast } from "react-toastify";
 import { SketchPicker } from "react-color";
 import ImageUploading from "react-images-uploading";
-
+import { v4 as uuidv4 } from "uuid";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { closeProductOptionModal } from "../../../store/slices/ProductsSlice";
@@ -279,7 +279,7 @@ const AddProductOptionsModal = () => {
 	const handleAddNewValue = (blockIndex) => {
 		const updatedBlocks = [...optionsSection];
 		updatedBlocks[blockIndex].values.push({
-			id: updatedBlocks[blockIndex].values.length + 1,
+			id: updatedBlocks[blockIndex].values.length + 8,
 			title: "",
 			color: "#000000",
 			image: "",
@@ -305,7 +305,7 @@ const AddProductOptionsModal = () => {
 			select_value: "نص",
 			values: [
 				{
-					id: 1,
+					id: uuidv4(),
 					title: "",
 					color: "#000000",
 					image: "",
