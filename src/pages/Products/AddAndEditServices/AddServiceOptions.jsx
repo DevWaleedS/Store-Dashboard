@@ -267,10 +267,10 @@ const AddServiceOptionsModal = () => {
 			<section className='mb-6'>
 				{section?.values?.map((item, itemIndex) => (
 					<>
-						<section className='mb-3  d-flex justify-content-start align-items-center gap-1 gap-md-gap-3'>
+						<section className='mb-3 d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
 							<div
 								key={item?.id}
-								className={` w-50 option-color-input d-flex justify-content-start align-items-center`}>
+								className={`w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center`}>
 								<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
 									<div className='input-icon'>
 										<TfiWrite />
@@ -287,8 +287,8 @@ const AddServiceOptionsModal = () => {
 							</div>
 							<div
 								key={item?.id}
-								className={` w-50  option-color-input d-flex justify-content-start align-items-center`}>
-								<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
+								className={`w-100 w-md-50  option-color-input d-flex justify-content-start align-items-center`}>
+								<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
 									<div className='input-icon'>
 										<CiTimer />
 									</div>
@@ -305,10 +305,10 @@ const AddServiceOptionsModal = () => {
 							</div>
 						</section>
 
-						<section className='mb-3  d-flex justify-content-start align-items-center gap-1 gap-md-gap-3'>
+						<section className='mb-3  d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
 							<div
 								key={item?.id}
-								className=' w-50 option-color-input d-flex justify-content-start align-items-center'>
+								className=' w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center'>
 								<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
 									<div className='input-icon'>
 										<IoPricetagsOutline />
@@ -327,7 +327,7 @@ const AddServiceOptionsModal = () => {
 
 							<div
 								key={item?.id}
-								className='w-50 option-color-input d-flex justify-content-start align-items-center '>
+								className='w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center '>
 								<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
 									<div className='input-icon'>
 										<IoPricetagsOutline />
