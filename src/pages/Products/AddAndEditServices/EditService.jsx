@@ -393,10 +393,7 @@ const EditService = () => {
 				formData.append(`images[${i}]`, image?.file || image?.image);
 			});
 		}
-		formData.append(
-			"product_has_options",
-			serviceOptionsSection === true ? 1 : 0
-		);
+		formData.append("product_has_options", serviceHasOptions === true ? 1 : 0);
 		formData.append("amount", 1);
 
 		if (serviceHasOptions === true) {
