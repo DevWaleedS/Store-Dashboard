@@ -82,9 +82,8 @@ export default function PagesDropdown({ dropDownData }) {
 
 	const menuItems = dropDownData.subMenu.map((item, index) => {
 		return (
-			<>
+			<div key={item.id}>
 				<MenuItem
-					key={item.id}
 					onClick={() => {
 						navigateToPage(item.sub_path);
 					}}>
@@ -94,7 +93,7 @@ export default function PagesDropdown({ dropDownData }) {
 				{index === dropDownData.subMenu.length - 1 ? null : (
 					<Divider sx={{ py: 0.1 }} />
 				)}
-			</>
+			</div>
 		);
 	});
 

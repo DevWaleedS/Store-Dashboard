@@ -244,8 +244,8 @@ const EditServiceOptionsModal = () => {
 	/** Handle mapping the options sections */
 	const productOptionsSection = serviceOptionsSection?.map(
 		(section, sectionIndex) => (
-			<section>
-				<section key={section?.id} className='options-section'>
+			<section key={section?.id}>
+				<section className='options-section'>
 					<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
 						<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
 							<div className='input-icon'>
@@ -261,113 +261,102 @@ const EditServiceOptionsModal = () => {
 					</section>
 				</section>
 
-				<section className='mb-6'>
-					{section?.values?.map((item, itemIndex) => (
-						<>
-							<section key={item?.id} className='options-section'>
-								<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
-									{section.values.length > 1 && (
-										<div className='delete-icon delete-option-section-icon d-flex d-md-none me-auto'>
-											<DeleteIcon
-												onClick={() =>
-													handleDeleteValue(sectionIndex, itemIndex)
-												}
-											/>
-										</div>
-									)}
+				{section?.values?.map((item, itemIndex) => (
+					<section key={item?.id} className='mb-6'>
+						<section className='options-section'>
+							<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
+								{section.values.length > 1 && (
+									<div className='delete-icon delete-option-section-icon d-flex d-md-none me-auto'>
+										<DeleteIcon
+											onClick={() => handleDeleteValue(sectionIndex, itemIndex)}
+										/>
+									</div>
+								)}
 
-									<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
+								<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
+									<div className='input-icon'>
+										<TfiWrite />
+									</div>
+									<input
+										type='text'
+										placeholder='عنوان الخدمة الاضافية'
+										value={item?.title}
+										onChange={(e) => {
+											handleSetValueTitleInput(e, sectionIndex, itemIndex);
+										}}
+									/>
+								</div>
+
+								{section.values.length > 1 && (
+									<div className='delete-icon delete-option-section-icon d-none d-md-flex'>
+										<DeleteIcon
+											onClick={() => handleDeleteValue(sectionIndex, itemIndex)}
+										/>
+									</div>
+								)}
+							</section>
+							<section className='mb-3 d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
+								<div
+									className={`w-100 w-md-50  option-color-input d-flex justify-content-start align-items-center`}>
+									<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
 										<div className='input-icon'>
-											<TfiWrite />
+											<CiTimer />
 										</div>
 										<input
 											type='text'
-											placeholder='عنوان الخدمة الاضافية'
-											value={item?.title}
+											placeholder='مدة التنفيذ'
+											value={item?.period}
 											onChange={(e) => {
-												handleSetValueTitleInput(e, sectionIndex, itemIndex);
+												handleSetValuePeriodInput(e, sectionIndex, itemIndex);
 											}}
 										/>
+										<div className='input-type'>يوم</div>
 									</div>
-
-									{section.values.length > 1 && (
-										<div className='delete-icon delete-option-section-icon d-none d-md-flex'>
-											<DeleteIcon
-												onClick={() =>
-													handleDeleteValue(sectionIndex, itemIndex)
-												}
-											/>
-										</div>
-									)}
-								</section>
-								<section className='mb-3 d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
-									<div
-										key={item?.id}
-										className={`w-100 w-md-50  option-color-input d-flex justify-content-start align-items-center`}>
-										<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
-											<div className='input-icon'>
-												<CiTimer />
-											</div>
-											<input
-												type='text'
-												placeholder='مدة التنفيذ'
-												value={item?.period}
-												onChange={(e) => {
-													handleSetValuePeriodInput(e, sectionIndex, itemIndex);
-												}}
-											/>
-											<div className='input-type'>يوم</div>
-										</div>
-									</div>
-								</section>
-
-								<section className='mb-3  d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
-									<div
-										key={item?.id}
-										className=' w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center'>
-										<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
-											<div className='input-icon'>
-												<IoPricetagsOutline />
-											</div>
-											<input
-												type='text'
-												placeholder={`سعر الخيار`}
-												value={item?.price}
-												onChange={(e) => {
-													handleSetValuePriceInput(e, sectionIndex, itemIndex);
-												}}
-											/>
-											<div className='input-type'>ر.س</div>
-										</div>
-									</div>
-
-									<div
-										key={item?.id}
-										className='w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center '>
-										<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
-											<div className='input-icon'>
-												<IoPricetagsOutline />
-											</div>
-											<input
-												type='text'
-												placeholder={`السعر بعد الخصم `}
-												value={item?.discount_price}
-												onChange={(e) => {
-													handleSetValueDiscountPriceInput(
-														e,
-														sectionIndex,
-														itemIndex
-													);
-												}}
-											/>
-											<div className='input-type'>ر.س</div>
-										</div>
-									</div>
-								</section>
+								</div>
 							</section>
-						</>
-					))}
-				</section>
+
+							<section className='mb-3  d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
+								<div className=' w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center'>
+									<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
+										<div className='input-icon'>
+											<IoPricetagsOutline />
+										</div>
+										<input
+											type='text'
+											placeholder={`سعر الخيار`}
+											value={item?.price}
+											onChange={(e) => {
+												handleSetValuePriceInput(e, sectionIndex, itemIndex);
+											}}
+										/>
+										<div className='input-type'>ر.س</div>
+									</div>
+								</div>
+
+								<div className='w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center '>
+									<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
+										<div className='input-icon'>
+											<IoPricetagsOutline />
+										</div>
+										<input
+											type='text'
+											placeholder={`السعر بعد الخصم `}
+											value={item?.discount_price}
+											onChange={(e) => {
+												handleSetValueDiscountPriceInput(
+													e,
+													sectionIndex,
+													itemIndex
+												);
+											}}
+										/>
+										<div className='input-type'>ر.س</div>
+									</div>
+								</div>
+							</section>
+						</section>
+					</section>
+				))}
 			</section>
 		)
 	);

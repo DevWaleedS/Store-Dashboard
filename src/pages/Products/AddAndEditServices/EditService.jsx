@@ -97,7 +97,7 @@ const EditService = () => {
 	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
 
 	// get categories selector
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useGetCategoriesQuery({ is_service: 1 });
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);
 	const contextStore = useContext(Context);
@@ -196,7 +196,7 @@ const EditService = () => {
 								select_value: "نص",
 								values: [
 									{
-										id: uuidv4() + 1,
+										id: uuidv4(),
 										title: "",
 										price: "",
 										period: "",
