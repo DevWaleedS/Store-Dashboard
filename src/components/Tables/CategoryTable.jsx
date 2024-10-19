@@ -631,7 +631,11 @@ export default function EnhancedTable({
 																				row?.store === null ? "none" : "",
 																		}}>
 																		<Link
-																			to={`EditCategory/${row?.id}`}
+																			to={
+																				row?.is_service
+																					? `edit-service-category/${row?.id}`
+																					: `EditCategory/${row?.id}`
+																			}
 																			style={{ cursor: "pointer" }}>
 																			<EditIcon title='تعديل النشاط' />
 																		</Link>

@@ -41,6 +41,26 @@ const ContextProvider = (props) => {
 		},
 	]);
 
+	// services options
+	const [serviceHasOptions, setServiceHasOptions] = useState(false);
+	const [serviceAttributes, setServiceAttributes] = useState([]);
+
+	const [serviceOptionsSection, setServiceOptionsSection] = useState([
+		{
+			name: "",
+			select_value: "نص",
+			values: [
+				{
+					id: uuidv4(),
+					title: "",
+					price: "",
+					period: "",
+					discount_price: "",
+				},
+			],
+		},
+	]);
+
 	const clearOptions = () => {
 		setProductHasOptions(false);
 
@@ -57,6 +77,27 @@ const ContextProvider = (props) => {
 						image: "",
 						previewImage: "",
 						defaultOption: false,
+						price: "",
+						period: "",
+						discount_price: "",
+					},
+				],
+			},
+		]);
+	};
+
+	const clearServicesOptions = () => {
+		setServiceHasOptions(false);
+
+		setServiceAttributes([]);
+		setServiceOptionsSection([
+			{
+				name: "",
+				select_value: "نص",
+				values: [
+					{
+						id: uuidv4() + 1,
+						title: "",
 						price: "",
 						period: "",
 						discount_price: "",
@@ -108,6 +149,14 @@ const ContextProvider = (props) => {
 		optionsSection,
 		setOptionsSection,
 		clearOptions,
+
+		serviceAttributes,
+		setServiceAttributes,
+		serviceOptionsSection,
+		setServiceOptionsSection,
+		clearServicesOptions,
+		serviceHasOptions,
+		setServiceHasOptions,
 	};
 
 	return <Context.Provider value={context}>{props.children}</Context.Provider>;

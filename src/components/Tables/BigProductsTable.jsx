@@ -522,7 +522,9 @@ export default function BigProductsTable({
 																<> {row?.selling_price} ر.س</>
 															)}
 														</TableCell>
-														<TableCell align='center'>{row?.stock}</TableCell>
+														<TableCell align='center'>
+															{row?.is_service ? "__" : row?.stock}
+														</TableCell>
 														<TableCell align='center'>
 															<div
 																className='form-check form-switch'

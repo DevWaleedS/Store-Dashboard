@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 
-// third party
-
+// Third party
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 
 // Context
@@ -56,6 +55,8 @@ const style = {
 };
 
 const AddCategory = () => {
+	const path_name = window.location.pathname;
+
 	const dispatch = useDispatch(true);
 	const { error } = useSelector((state) => state.CategoriesSlice);
 
@@ -122,6 +123,11 @@ const AddCategory = () => {
 
 		const formData = new FormData();
 		formData.append("name", data?.name);
+
+		if (path_name.includes("add-service-category")) {
+			formData.append("is_service", 1);
+		}
+
 		if (icons?.length > 0) {
 			formData.append("icon", icons[0]?.file);
 		}

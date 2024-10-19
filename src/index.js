@@ -225,9 +225,20 @@ const router = createBrowserRouter([
 				element: <AddCategory />,
 			},
 
+			{
+				path: "Category/add-service-category",
+				element: <AddCategory />,
+			},
+
 			// Category details page nested page for Category page
 			{
 				path: "Category/EditCategory/:id",
+				element: <EditCategory />,
+			},
+
+			// Category details page nested page for Category page
+			{
+				path: "Category/edit-service-category/:id",
 				element: <EditCategory />,
 			},
 			{

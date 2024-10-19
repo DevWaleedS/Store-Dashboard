@@ -1,29 +1,45 @@
 import React, { useContext, useState } from "react";
 
-// third party
+// Third party
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 // Icons
-import { MdAdd } from "react-icons/md";
+import { BsBoxSeam } from "react-icons/bs";
+import { PiToolboxLight } from "react-icons/pi";
 
-// context
+// Context
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-// component
+// Component
 import DropCSVFiles from "./DropCSVFiles";
 
 // RTK Query
 import { useImportProductsFileMutation } from "../../store/apiSlices/productsApi";
-import AddProductDropdown from "./AddProductDropdown/AddProductDropdown";
+import { PagesDropdown } from "../../components";
+
+const dropDownData = {
+	main_title: "اضافة جديدة",
+	subMenu: [
+		{
+			id: 1,
+			sub_path: "addProduct",
+			sub_title: "اضافة منتج جديد",
+			icon: <BsBoxSeam />,
+		},
+		{
+			id: 2,
+			sub_path: "add-service",
+			sub_title: "اضافة خدمة جديدة",
+			icon: <PiToolboxLight />,
+		},
+	],
+};
 
 const ImportEndExportProducts = ({ productsData }) => {
-	const navigate = useNavigate();
 	const [file, setFile] = useState("");
 	const [fileError, setFileError] = useState("");
-
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
 
@@ -129,7 +145,7 @@ const ImportEndExportProducts = ({ productsData }) => {
 				/>
 			</div>
 			<div className='add-new-product'>
-				<AddProductDropdown />
+				<PagesDropdown dropDownData={dropDownData} />
 			</div>
 		</div>
 	);

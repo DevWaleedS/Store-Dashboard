@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
 
 // Icons
-import { MdAdd } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
+import { BsBoxSeam } from "react-icons/bs";
 import { IoIosArrowDown } from "react-icons/io";
+import { PiToolboxLight } from "react-icons/pi";
 
 // MUI
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-
-import { Breadcrumb, PageHint } from "../../components";
+import FormControl from "@mui/material/FormControl";
 import { CategoryTable } from "../../components/Tables";
+
+// Components
+import { Breadcrumb, PageHint, PagesDropdown } from "../../components";
 
 // RTK Query
 import {
@@ -24,19 +25,57 @@ import {
 } from "../../store/apiSlices/categoriesApi";
 import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
-const Category = () => {
-	const navigate = useNavigate();
+const selectStyle = {
+	fontSize: "18px",
+	backgroundColor: "#ededed",
+	"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
+		{
+			paddingRight: "20px",
+		},
+	"& .MuiOutlinedInput-root": {
+		"& :hover": {
+			border: "none",
+		},
+	},
+	"& .MuiOutlinedInput-notchedOutline": {
+		border: "none",
+	},
+	"& .MuiSelect-icon": {
+		right: "90%",
+	},
+	"& .MuiSelect-nativeInput": {
+		display: "none",
+	},
+};
 
+const dropDownData = {
+	main_title: "اضافة جديدة",
+	subMenu: [
+		{
+			id: 1,
+			sub_path: "AddCategory",
+			sub_title: " اضافة نشاط منتجات",
+			icon: <BsBoxSeam />,
+		},
+		{
+			id: 2,
+			sub_path: "add-service-category",
+			sub_title: " اضافة نشاط خدمات",
+			icon: <PiToolboxLight />,
+		},
+	],
+};
+
+const Category = () => {
 	// Categories Selector
 	const { data: selectCategories } = useGetCategoriesQuery();
 
 	const [search, setSearch] = useState("");
+	const [categoriesData, setCategoriesData] = useState([]);
 	const [category_id, setCategory_id] = useState("");
 	const [tabSelected, setTabSelected] = useState(1);
-	const [categoriesData, setCategoriesData] = useState([]);
 	const [pageTarget, setPageTarget] = useState(1);
 	const [rowsCount, setRowsCount] = useState(10);
-
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pageCount, setPageCount] = useState(1);
 
@@ -211,30 +250,9 @@ const Category = () => {
 											onChange={(e) => {
 												setCategory_id(e.target.value);
 											}}
-											sx={{
-												fontSize: "18px",
-												backgroundColor: "#ededed",
-												"& .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input":
-													{
-														paddingRight: "20px",
-													},
-												"& .MuiOutlinedInput-root": {
-													"& :hover": {
-														border: "none",
-													},
-												},
-												"& .MuiOutlinedInput-notchedOutline": {
-													border: "none",
-												},
-												"& .MuiSelect-icon": {
-													right: "90%",
-												},
-												"& .MuiSelect-nativeInput": {
-													display: "none",
-												},
-											}}
-											IconComponent={IoIosArrowDown}
+											sx={selectStyle}
 											displayEmpty
+											IconComponent={IoIosArrowDown}
 											inputProps={{ "aria-label": "Without label" }}
 											renderValue={(selected) => {
 												if (category_id === "") {
@@ -279,14 +297,7 @@ const Category = () => {
 								</div>
 
 								<div className='add-category-bt-box'>
-									<button
-										className='add-cat-btn'
-										onClick={() => {
-											navigate("AddCategory");
-										}}>
-										<MdAdd />
-										<span className='me-2'> اضافة نشاط</span>
-									</button>
+									<PagesDropdown dropDownData={dropDownData} />
 								</div>
 							</div>
 						</>

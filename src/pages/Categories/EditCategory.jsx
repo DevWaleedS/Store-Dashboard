@@ -59,6 +59,7 @@ const style = {
 const EditCategory = () => {
 	// get category by is
 	const { id } = useParams();
+	const path_name = window.location.pathname;
 	const { data: currentCategory, isFetching } = useGetCategoryByIdQuery(id);
 
 	const dispatch = useDispatch(true);
@@ -133,6 +134,9 @@ const EditCategory = () => {
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("name", data?.name);
+		if (path_name.includes("edit-service-category")) {
+			formData.append("is_service", 1);
+		}
 
 		if (icons?.length > 0) {
 			formData.append("icon", icons[0]?.file);

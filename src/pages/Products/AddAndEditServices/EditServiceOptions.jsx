@@ -97,47 +97,46 @@ const EditServiceOptionsModal = () => {
 	const dispatch = useDispatch(false);
 	const contextStore = useContext(Context);
 	const {
-		productHasOptions,
-		setProductHasOptions,
-		optionsSection,
-		setOptionsSection,
+		serviceHasOptions,
+		setServiceHasOptions,
+		serviceOptionsSection,
+		setServiceOptionsSection,
 	} = contextStore;
 
 	// ----------------------------------------------------------------
 
-	//handle name of section
-	//handle name of section
+	// handle name of section
 	const handleSetTitleInput = (e, index) => {
-		const updatedPackInfoInput = [...optionsSection];
+		const updatedPackInfoInput = [...serviceOptionsSection];
 		updatedPackInfoInput[index].name = e.target.value;
-		setOptionsSection(updatedPackInfoInput);
+		setServiceOptionsSection(updatedPackInfoInput);
 	};
 
 	//handle value title of block
 	const handleSetValueTitleInput = (e, blockIndex, valueIndex) => {
-		const updatedBlocks = [...optionsSection];
+		const updatedBlocks = [...serviceOptionsSection];
 		updatedBlocks[blockIndex].values[valueIndex].title = e.target.value;
-		setOptionsSection(updatedBlocks);
+		setServiceOptionsSection(updatedBlocks);
 	};
 
 	//  handle value  period of block
 	const handleSetValuePeriodInput = (e, blockIndex, valueIndex) => {
-		const updatedBlocks = [...optionsSection];
+		const updatedBlocks = [...serviceOptionsSection];
 		updatedBlocks[blockIndex].values[valueIndex].period = e.target.value;
-		setOptionsSection(updatedBlocks);
+		setServiceOptionsSection(updatedBlocks);
 	};
 
 	// handle value  price of block
 	const handleSetValuePriceInput = (e, blockIndex, valueIndex) => {
-		const updatedBlocks = [...optionsSection];
+		const updatedBlocks = [...serviceOptionsSection];
 		updatedBlocks[blockIndex].values[valueIndex].price = e.target.value;
-		setOptionsSection(updatedBlocks);
+		setServiceOptionsSection(updatedBlocks);
 	};
 
 	// handle value  discount_price of block
 	const handleSetValueDiscountPriceInput = (e, sectionIndex, itemIndex) => {
 		const value = e.target.value.replace(/[^\d.]|\.(?=.*\.)/g, "");
-		const updatedAttributes = [...optionsSection];
+		const updatedAttributes = [...serviceOptionsSection];
 		const price = updatedAttributes[sectionIndex].values[itemIndex].price;
 
 		if (!price || price === "") {
@@ -153,56 +152,62 @@ const EditServiceOptionsModal = () => {
 		}
 
 		updatedAttributes[sectionIndex].values[itemIndex].discount_price = value;
-		setOptionsSection(updatedAttributes);
+		setServiceOptionsSection(updatedAttributes);
 	};
 
 	const handleAddNewBlock = () => {
-		// Create a new block with default values
-		const newBlock = {
-			name: "",
-			select_value: "نص",
-			values: [
-				{
-					id: uuidv4(),
-					title: "",
-					price: "",
-					period: "",
-					discount_price: "",
-				},
-			],
+		// Create a new value object
+		const newValue = {
+			id: uuidv4(),
+			title: "",
+			price: "",
+			period: "",
+			discount_price: "",
 		};
 
-		// Clone the existing productOptions array and add the new block
-		const updatedBlocks = [...optionsSection, newBlock];
+		// Clone the existing serviceOptionsSection array
+		const updatedBlocks = [...serviceOptionsSection];
+
+		// Add the new value to the last block's values array
+		if (updatedBlocks.length > 0) {
+			const lastBlock = updatedBlocks[updatedBlocks.length - 1];
+			lastBlock.values.push(newValue);
+		} else {
+			// If there are no blocks, create a new one with the new value
+			updatedBlocks.push({
+				values: [newValue],
+			});
+		}
 
 		// Update the state with the new array of blocks
-		setOptionsSection(updatedBlocks);
+		setServiceOptionsSection(updatedBlocks);
 	};
 
 	/** handle delete options section */
-	const handleDeleteBlock = (blockIndex) => {
-		const updatedBlocks = optionsSection?.filter(
-			(__item, index) => index !== blockIndex
-		);
-		setOptionsSection(updatedBlocks);
+	const handleDeleteValue = (sectionIndex, valueIndex) => {
+		const updatedBlocks = [...serviceOptionsSection];
+		updatedBlocks[sectionIndex].values = updatedBlocks[
+			sectionIndex
+		].values.filter((_, index) => index !== valueIndex);
+		setServiceOptionsSection(updatedBlocks);
 	};
 
 	/** ---------------------------------------------- */
 
 	/** handle save Options  */
 	const saveOptions = () => {
-		if (productHasOptions === true) {
+		if (serviceHasOptions === true) {
 			// to check if the name of option in not empty or no
-			const nameNotEmpty = optionsSection?.every(
+			const nameNotEmpty = serviceOptionsSection?.some(
 				(section) => section?.name !== ""
 			);
 
 			// to check if the qtyAttrNotEmpty of option in not empty or no
-			const valuesNotEmpty = optionsSection?.every((section) =>
+			const valuesNotEmpty = serviceOptionsSection?.every((section) =>
 				section?.values?.every((value) => value?.title !== "")
 			);
 			// to check if the qtyAttrNotEmpty of option in not empty or no
-			const periodNotEmpty = optionsSection?.every((section) =>
+			const periodNotEmpty = serviceOptionsSection?.every((section) =>
 				section?.values?.every((value) => value?.period !== "")
 			);
 
@@ -213,9 +218,12 @@ const EditServiceOptionsModal = () => {
 				});
 			} else {
 				!nameNotEmpty &&
-					toast.warning("يرجى ملء حقل مسمى الخيار أولاً", {
-						theme: "light",
-					});
+					toast.warning(
+						"يرجى ملء حقل العنوان الرئيسي للخيارات الاضافية  أولاً",
+						{
+							theme: "light",
+						}
+					);
 				!valuesNotEmpty &&
 					toast.warning("يرجى ملء حقل سعر الخيار أولاً", {
 						theme: "light",
@@ -234,122 +242,135 @@ const EditServiceOptionsModal = () => {
 	};
 
 	/** Handle mapping the options sections */
-	const productOptionsSection = optionsSection?.map((section, sectionIndex) => (
-		<section key={section?.id} className='options-section'>
-			<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
-				{optionsSection?.length > 1 && (
-					<div className='delete-icon delete-option-section-icon d-flex d-md-none me-auto'>
-						<DeleteIcon onClick={() => handleDeleteBlock(sectionIndex)} />
-					</div>
-				)}
-				<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
-					<div className='input-icon'>
-						<TfiWrite />
-					</div>
-					<input
-						type='text'
-						placeholder='مسمى الخيارات'
-						value={section?.name}
-						onChange={(e) => handleSetTitleInput(e, sectionIndex)}
-					/>
-				</div>
+	const productOptionsSection = serviceOptionsSection?.map(
+		(section, sectionIndex) => (
+			<section>
+				<section key={section?.id} className='options-section'>
+					<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
+						<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
+							<div className='input-icon'>
+								<TfiWrite />
+							</div>
+							<input
+								type='text'
+								placeholder='العنوان الرئيسي للخيارات الاضافية'
+								value={section?.name}
+								onChange={(e) => handleSetTitleInput(e, sectionIndex)}
+							/>
+						</div>
+					</section>
+				</section>
 
-				{optionsSection?.length > 1 && (
-					<div className='delete-icon delete-option-section-icon d-none d-md-flex'>
-						<DeleteIcon onClick={() => handleDeleteBlock(sectionIndex)} />
-					</div>
-				)}
+				<section className='mb-6'>
+					{section?.values?.map((item, itemIndex) => (
+						<>
+							<section key={item?.id} className='options-section'>
+								<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
+									{section.values.length > 1 && (
+										<div className='delete-icon delete-option-section-icon d-flex d-md-none me-auto'>
+											<DeleteIcon
+												onClick={() =>
+													handleDeleteValue(sectionIndex, itemIndex)
+												}
+											/>
+										</div>
+									)}
+
+									<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
+										<div className='input-icon'>
+											<TfiWrite />
+										</div>
+										<input
+											type='text'
+											placeholder='عنوان الخدمة الاضافية'
+											value={item?.title}
+											onChange={(e) => {
+												handleSetValueTitleInput(e, sectionIndex, itemIndex);
+											}}
+										/>
+									</div>
+
+									{section.values.length > 1 && (
+										<div className='delete-icon delete-option-section-icon d-none d-md-flex'>
+											<DeleteIcon
+												onClick={() =>
+													handleDeleteValue(sectionIndex, itemIndex)
+												}
+											/>
+										</div>
+									)}
+								</section>
+								<section className='mb-3 d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
+									<div
+										key={item?.id}
+										className={`w-100 w-md-50  option-color-input d-flex justify-content-start align-items-center`}>
+										<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
+											<div className='input-icon'>
+												<CiTimer />
+											</div>
+											<input
+												type='text'
+												placeholder='مدة التنفيذ'
+												value={item?.period}
+												onChange={(e) => {
+													handleSetValuePeriodInput(e, sectionIndex, itemIndex);
+												}}
+											/>
+											<div className='input-type'>يوم</div>
+										</div>
+									</div>
+								</section>
+
+								<section className='mb-3  d-flex flex-column flex-md-row justify-content-start align-items-md-center align-items-start gap-1 gap-md-gap-3'>
+									<div
+										key={item?.id}
+										className=' w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center'>
+										<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
+											<div className='input-icon'>
+												<IoPricetagsOutline />
+											</div>
+											<input
+												type='text'
+												placeholder={`سعر الخيار`}
+												value={item?.price}
+												onChange={(e) => {
+													handleSetValuePriceInput(e, sectionIndex, itemIndex);
+												}}
+											/>
+											<div className='input-type'>ر.س</div>
+										</div>
+									</div>
+
+									<div
+										key={item?.id}
+										className='w-100 w-md-50 option-color-input d-flex justify-content-start align-items-center '>
+										<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
+											<div className='input-icon'>
+												<IoPricetagsOutline />
+											</div>
+											<input
+												type='text'
+												placeholder={`السعر بعد الخصم `}
+												value={item?.discount_price}
+												onChange={(e) => {
+													handleSetValueDiscountPriceInput(
+														e,
+														sectionIndex,
+														itemIndex
+													);
+												}}
+											/>
+											<div className='input-type'>ر.س</div>
+										</div>
+									</div>
+								</section>
+							</section>
+						</>
+					))}
+				</section>
 			</section>
-
-			<section className='mb-6'>
-				{section?.values?.map((item, itemIndex) => (
-					<>
-						<section className='mb-3  d-flex justify-content-start align-items-center gap-1 gap-md-gap-3'>
-							<div
-								key={item?.id}
-								className={` w-50 option-color-input d-flex justify-content-start align-items-center`}>
-								<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
-									<div className='input-icon'>
-										<TfiWrite />
-									</div>
-									<input
-										type='text'
-										placeholder='القيمة'
-										value={item?.title}
-										onChange={(e) => {
-											handleSetValueTitleInput(e, sectionIndex, itemIndex);
-										}}
-									/>
-								</div>
-							</div>
-							<div
-								key={item?.id}
-								className={` w-50  option-color-input d-flex justify-content-start align-items-center`}>
-								<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
-									<div className='input-icon'>
-										<CiTimer />
-									</div>
-									<input
-										type='text'
-										placeholder='مدة التنفيذ'
-										value={item?.period}
-										onChange={(e) => {
-											handleSetValuePeriodInput(e, sectionIndex, itemIndex);
-										}}
-									/>
-									<div className='input-type'>يوم</div>
-								</div>
-							</div>
-						</section>
-
-						<section className='mb-3  d-flex justify-content-start align-items-center gap-1 gap-md-gap-3'>
-							<div
-								key={item?.id}
-								className=' w-50 option-color-input d-flex justify-content-start align-items-center'>
-								<div className='w-100 d-flex justify-content-start align-items-center gap-2 position-relative'>
-									<div className='input-icon'>
-										<IoPricetagsOutline />
-									</div>
-									<input
-										type='text'
-										placeholder={`سعر الخيار`}
-										value={item?.price}
-										onChange={(e) => {
-											handleSetValuePriceInput(e, sectionIndex, itemIndex);
-										}}
-									/>
-									<div className='input-type'>ر.س</div>
-								</div>
-							</div>
-
-							<div
-								key={item?.id}
-								className='w-50 option-color-input d-flex justify-content-start align-items-center '>
-								<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
-									<div className='input-icon'>
-										<IoPricetagsOutline />
-									</div>
-									<input
-										type='text'
-										placeholder={`السعر بعد الخصم `}
-										value={item?.discount_price}
-										onChange={(e) => {
-											handleSetValueDiscountPriceInput(
-												e,
-												sectionIndex,
-												itemIndex
-											);
-										}}
-									/>
-									<div className='input-type'>ر.س</div>
-								</div>
-							</div>
-						</section>
-					</>
-				))}
-			</section>
-		</section>
-	));
+		)
+	);
 
 	return (
 		<>
@@ -402,8 +423,8 @@ const EditServiceOptionsModal = () => {
 									<div className='d-flex justify-content-start align-items-center  active-options-switch'>
 										<Switch
 											sx={switchStyle}
-											checked={productHasOptions}
-											onChange={() => setProductHasOptions(!productHasOptions)}
+											checked={serviceHasOptions}
+											onChange={() => setServiceHasOptions(!serviceHasOptions)}
 										/>
 										<span className='switch-label'>تفعيل خيارات الخدمة</span>
 									</div>
@@ -412,7 +433,7 @@ const EditServiceOptionsModal = () => {
 
 							<section
 								className={`${
-									productHasOptions ? "d-flex" : "d-none"
+									serviceHasOptions ? "d-flex" : "d-none"
 								} row mb-4`}>
 								<div className='col-12 mb-4'>
 									{/* the product options section */}
@@ -437,7 +458,7 @@ const EditServiceOptionsModal = () => {
 								<div className='col-lg-4 col-6'>
 									<button
 										className='save-btn'
-										disabled={!productHasOptions}
+										disabled={!serviceHasOptions}
 										onClick={() => saveOptions()}>
 										حفظ
 									</button>

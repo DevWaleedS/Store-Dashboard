@@ -11,7 +11,11 @@ export const selectCategoriesApi = createApi({
 
 	endpoints: (builder) => ({
 		getCategories: builder.query({
-			query: () => ({ url: "/mainCategories" }),
+			query: (is_service) => ({
+				url: is_service
+					? `/mainCategories?is_service=${is_service}`
+					: `/mainCategories`,
+			}),
 
 			// Pick out data and prevent nested properties in a hook or selector
 			transformResponse: (response, meta, arg) => response.data?.categories,

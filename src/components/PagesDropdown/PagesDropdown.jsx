@@ -1,15 +1,28 @@
 import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { BsBoxSeam } from "react-icons/bs";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import { PiToolboxLight } from "react-icons/pi";
+import MenuItem from "@mui/material/MenuItem";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { IoIosAddCircle } from "react-icons/io";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-import { IoIosAddCircle } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+const buttonStyle = {
+	width: "100%",
+	backgroundColor: "#1dbbbe",
+	":hover": {
+		backgroundColor: "#1dbbbe",
+	},
+	"& .MuiButton-startIcon": {
+		marginLeft: "4px",
+		marginRight: "0",
+	},
+	"& .MuiButton-endIcon": {
+		marginLeft: "0",
+		marginRight: "4px",
+	},
+};
 
 const StyledMenu = styled((props) => (
 	<Menu
@@ -51,7 +64,7 @@ const StyledMenu = styled((props) => (
 	},
 }));
 
-export default function AddProductDropdown() {
+export default function PagesDropdown({ dropDownData }) {
 	const navigate = useNavigate();
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
@@ -67,34 +80,38 @@ export default function AddProductDropdown() {
 		navigate(pageUrl);
 	};
 
+	const menuItems = dropDownData.subMenu.map((item, index) => {
+		return (
+			<>
+				<MenuItem
+					key={item.id}
+					onClick={() => {
+						navigateToPage(item.sub_path);
+					}}>
+					{item.icon}
+					{item.sub_title}
+				</MenuItem>
+				{index === dropDownData.subMenu.length - 1 ? null : (
+					<Divider sx={{ py: 0.1 }} />
+				)}
+			</>
+		);
+	});
+
 	return (
 		<>
 			<Button
-				sx={{
-					width: "100%",
-					backgroundColor: "#1dbbbe",
-					":hover": {
-						backgroundColor: "#1dbbbe",
-					},
-					"& .MuiButton-startIcon": {
-						marginLeft: "4px",
-						marginRight: "0",
-					},
-					"& .MuiButton-endIcon": {
-						marginLeft: "0",
-						marginRight: "4px",
-					},
-				}}
-				id='demo-customized-button'
-				aria-controls={open ? "demo-customized-menu" : undefined}
-				aria-haspopup='true'
-				aria-expanded={open ? "true" : undefined}
-				variant='contained'
+				sx={buttonStyle}
 				disableElevation
+				variant='contained'
+				aria-haspopup='true'
 				onClick={handleClick}
+				id='demo-customized-button'
+				aria-expanded={open ? "true" : undefined}
+				aria-controls={open ? "demo-customized-menu" : undefined}
 				endIcon={<KeyboardArrowDownIcon />}
 				startIcon={<IoIosAddCircle />}>
-				اضافة منتج جديد
+				{dropDownData.main_title}
 			</Button>
 			<StyledMenu
 				id='demo-customized-menu'
@@ -104,23 +121,7 @@ export default function AddProductDropdown() {
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleClose}>
-				<MenuItem
-					onClick={() => {
-						navigateToPage("addProduct");
-					}}
-					disableRipple>
-					<BsBoxSeam />
-					منتج جديد
-				</MenuItem>
-				<Divider sx={{ py: 0.1 }} />
-				<MenuItem
-					onClick={() => {
-						navigateToPage("add-service");
-					}}
-					disableRipple>
-					<PiToolboxLight />
-					اضافه خدمة جديدة
-				</MenuItem>
+				{menuItems}
 			</StyledMenu>
 		</>
 	);

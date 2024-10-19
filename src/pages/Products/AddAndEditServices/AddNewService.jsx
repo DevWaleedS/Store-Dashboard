@@ -90,14 +90,20 @@ const selectStyle = {
 
 const AddNewService = () => {
 	// get categories selector
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useGetCategoriesQuery({
+		is_service: 1,
+	});
 
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
 
 	const contextStore = useContext(Context);
-	const { productHasOptions, attributes, optionsSection, clearOptions } =
-		contextStore;
+	const {
+		serviceAttributes,
+		serviceHasOptions,
+		serviceOptionsSection,
+		clearServicesOptions,
+	} = contextStore;
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -321,11 +327,11 @@ const AddNewService = () => {
 			SEOdescription?.length === 0 ? "" : SEOdescription?.join(",")
 		);
 
-		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
+		formData.append("product_has_options", serviceHasOptions === true ? 1 : 0);
 		formData.append("amount", 1);
 
-		if (productHasOptions === true) {
-			optionsSection?.forEach((option, i) => {
+		if (serviceHasOptions === true) {
+			serviceOptionsSection?.forEach((option, i) => {
 				formData.append([`attribute[${i}][title]`], option?.name);
 				formData.append([`attribute[${i}][type]`], option?.select_value);
 
@@ -365,7 +371,7 @@ const AddNewService = () => {
 				navigate("/Products");
 
 				setEditorValue("");
-				clearOptions();
+				clearServicesOptions();
 			} else {
 				setLoadingTitle("");
 				setServiceError({
@@ -429,7 +435,7 @@ const AddNewService = () => {
 					onClose={() => {
 						navigate("/Products");
 						setEditorValue("");
-						clearOptions();
+						clearServicesOptions();
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -937,7 +943,7 @@ const AddNewService = () => {
 														type='text'
 														id='price'
 														value={
-															attributes?.length !== 0
+															serviceAttributes?.length !== 0
 																? service?.selling_price
 																: value
 														}
@@ -984,11 +990,7 @@ const AddNewService = () => {
 														name={"discount_price"}
 														type='text'
 														id='low-price'
-														value={
-															attributes?.length !== 0
-																? service?.discount_price
-																: value
-														}
+														value={value}
 														onChange={(e) => {
 															setService({
 																...service,
@@ -1054,7 +1056,7 @@ const AddNewService = () => {
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
 											<div className='tax-text'>
-												ضع مدة التنفيذ الخاصة بالخدمة
+												ضع مدة التنفيذ الخاصة بالخدمة بالايام
 											</div>
 											<Controller
 												name={"period"}
@@ -1152,7 +1154,7 @@ const AddNewService = () => {
 												onClick={() => {
 													navigate("/Products");
 													setEditorValue("");
-													clearOptions();
+													clearServicesOptions();
 												}}>
 												إلغاء
 											</button>

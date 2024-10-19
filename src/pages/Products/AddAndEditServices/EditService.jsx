@@ -102,12 +102,11 @@ const EditService = () => {
 	const dispatch = useDispatch(false);
 	const contextStore = useContext(Context);
 	const {
-		productHasOptions,
-		setProductHasOptions,
-		attributes,
-		optionsSection,
-		setOptionsSection,
-		clearOptions,
+		serviceOptionsSection,
+		setServiceOptionsSection,
+		clearServicesOptions,
+		serviceHasOptions,
+		setServiceHasOptions,
 	} = contextStore;
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -173,11 +172,11 @@ const EditService = () => {
 			setSEOdescription(currentProduct?.SEOdescription?.map((seo) => seo));
 			setMultiImages(currentProduct?.images?.map((image) => image));
 
-			setProductHasOptions(
+			setServiceHasOptions(
 				currentProduct?.product_has_options === 1 ? true : false
 			);
 
-			setOptionsSection(
+			setServiceOptionsSection(
 				currentProduct?.attributes?.length !== 0
 					? currentProduct?.attributes?.map((attribute) => ({
 							id: attribute?.id,
@@ -186,8 +185,9 @@ const EditService = () => {
 							values: attribute?.values?.map((value) => ({
 								id: value?.id,
 								title: value?.value?.[0],
-								price: value?.price,
-								discount_price: value?.discount_price,
+								period: value?.value[1],
+								price: value?.value[2],
+								discount_price: value?.value[3],
 							})),
 					  }))
 					: [
@@ -196,12 +196,8 @@ const EditService = () => {
 								select_value: "نص",
 								values: [
 									{
-										id: uuidv4(),
+										id: uuidv4() + 1,
 										title: "",
-										color: "#000000",
-										image: "",
-										previewImage: "",
-										defaultOption: false,
 										price: "",
 										period: "",
 										discount_price: "",
@@ -397,11 +393,14 @@ const EditService = () => {
 				formData.append(`images[${i}]`, image?.file || image?.image);
 			});
 		}
-		formData.append("product_has_options", productHasOptions === true ? 1 : 0);
+		formData.append(
+			"product_has_options",
+			serviceOptionsSection === true ? 1 : 0
+		);
 		formData.append("amount", 1);
 
-		if (productHasOptions === true) {
-			optionsSection?.forEach((option, i) => {
+		if (serviceHasOptions === true) {
+			serviceOptionsSection?.forEach((option, i) => {
 				formData.append([`attribute[${i}][title]`], option?.name);
 				formData.append([`attribute[${i}][type]`], option?.select_value);
 
@@ -442,7 +441,7 @@ const EditService = () => {
 				navigate("/Products");
 
 				setEditorValue("");
-				clearOptions();
+				clearServicesOptions();
 			} else {
 				setLoadingTitle("");
 				setProductError({
@@ -511,7 +510,7 @@ const EditService = () => {
 					onClose={() => {
 						navigate("/Products");
 						setEditorValue("");
-						clearOptions();
+						clearServicesOptions();
 					}}
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'>
@@ -1020,101 +1019,47 @@ const EditService = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>السعر يشمل الضريبة</div>
-												{attributes?.length !== 0 ? (
-													<Controller
-														name={"selling_price"}
-														control={control}
-														rules={{
-															required: "حقل سعر البيع مطلوب",
-															pattern: {
-																value: /^[0-9.]+$/i,
-																message:
-																	"يجب على الحقل سعر البيع أن يكون رقمًا",
-															},
-															min: {
-																value: 1,
-																message: " سعر البيع يجب ان يكون اكبر من 0",
-															},
-														}}
-														render={({ field: { onChange, value } }) => (
-															<input
-																name={"selling_price"}
-																type='text'
-																id='price'
-																readOnly='true'
-																style={{ cursor: "pointer" }}
-																onClick={() =>
-																	dispatch(openProductOptionModal())
-																}
-																title='قم بالضغط علي الحقل لتعديل السعر'
-																value={value}
-																onChange={(e) => {
-																	setService({
-																		...service,
-																		selling_price: e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		),
-																	});
-																	onChange(
-																		e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		)
-																	);
-																}}
-															/>
-														)}
-													/>
-												) : (
-													<Controller
-														name={"selling_price"}
-														control={control}
-														rules={{
-															required: "حقل سعر البيع مطلوب",
-															pattern: {
-																value: /^[0-9.]+$/i,
-																message:
-																	"يجب على الحقل سعر البيع أن يكون رقمًا",
-															},
-															min: {
-																value: 1,
-																message: " سعر البيع يجب ان يكون اكبر من 0",
-															},
-														}}
-														render={({ field: { onChange, value } }) => (
-															<input
-																name={"selling_price"}
-																type='text'
-																id='price'
-																value={value}
-																onChange={(e) => {
-																	setService({
-																		...service,
-																		selling_price: e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		),
-																	});
-																	onChange(
-																		e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		)
-																	);
-																}}
-															/>
-														)}
-													/>
-												)}
+												<Controller
+													name={"selling_price"}
+													control={control}
+													rules={{
+														required: "حقل سعر البيع مطلوب",
+														pattern: {
+															value: /^[0-9.]+$/i,
+															message: "يجب على الحقل سعر البيع أن يكون رقمًا",
+														},
+														min: {
+															value: 1,
+															message: " سعر البيع يجب ان يكون اكبر من 0",
+														},
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															name={"selling_price"}
+															type='text'
+															id='price'
+															value={value}
+															onChange={(e) => {
+																setService({
+																	...service,
+																	selling_price: e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	),
+																});
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																);
+															}}
+														/>
+													)}
+												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
-												{attributes?.length !== 0 ? (
-													<div className='tax-text'>
-														لتعديل السعر قم بالدخول إلى خيارات الخدمة
-													</div>
-												) : null}
 												<span
 													className='fs-6 text-danger'
 													style={{ whiteSpace: "normal" }}>
@@ -1132,69 +1077,33 @@ const EditService = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>السعر يشمل الضريبة</div>
-												{attributes?.length !== 0 ? (
-													<Controller
-														name={"discount_price"}
-														control={control}
-														render={({ field: { onChange, value } }) => (
-															<input
-																name={"discount_price"}
-																type='text'
-																id='low-price'
-																readOnly='true'
-																style={{ cursor: "pointer" }}
-																onClick={() =>
-																	dispatch(openProductOptionModal())
-																}
-																title='قم بالضغط علي الحقل لتعديل سعر الخصم'
-																value={value}
-																onChange={(e) => {
-																	setService({
-																		...service,
-																		discount_price: e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		),
-																	});
-																	onChange(
-																		e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		)
-																	);
-																}}
-															/>
-														)}
-													/>
-												) : (
-													<Controller
-														name={"discount_price"}
-														control={control}
-														render={({ field: { onChange, value } }) => (
-															<input
-																name={"discount_price"}
-																type='text'
-																id='low-price'
-																value={value}
-																onChange={(e) => {
-																	setService({
-																		...service,
-																		discount_price: e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		),
-																	});
-																	onChange(
-																		e.target.value.replace(
-																			/[^\d.]|\.(?=.*\.)/g,
-																			""
-																		)
-																	);
-																}}
-															/>
-														)}
-													/>
-												)}
+												<Controller
+													name={"discount_price"}
+													control={control}
+													render={({ field: { onChange, value } }) => (
+														<input
+															name={"discount_price"}
+															type='text'
+															id='low-price'
+															value={value}
+															onChange={(e) => {
+																setService({
+																	...service,
+																	discount_price: e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	),
+																});
+																onChange(
+																	e.target.value.replace(
+																		/[^\d.]|\.(?=.*\.)/g,
+																		""
+																	)
+																);
+															}}
+														/>
+													)}
+												/>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div
@@ -1251,7 +1160,7 @@ const EditService = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
-													ضع مدة التنفيذ الخاصة بالخدمة
+													ضع مدة التنفيذ الخاصة بالخدمة بالايام
 												</div>
 												<Controller
 													name={"period"}
@@ -1348,7 +1257,7 @@ const EditService = () => {
 													onClick={() => {
 														navigate("/Products");
 														setEditorValue("");
-														clearOptions();
+														clearServicesOptions();
 													}}>
 													إلغاء
 												</button>
