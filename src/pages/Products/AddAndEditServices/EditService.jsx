@@ -1160,35 +1160,42 @@ const EditService = () => {
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
-													ضع مدة التنفيذ الخاصة بالخدمة بالايام
+													ضع مدة التنفيذ الخاصة بالخدمة بالأيام
 												</div>
-												<Controller
-													name={"period"}
-													control={control}
-													rules={{
-														required: "حقل المدة مطلوب",
-														pattern: {
-															value: /^[0-9]+$/i,
-															message: "يجب أن يكون حقل المدة رقمًا",
-														},
-														min: {
-															value: 1,
-															message: "  المدة يجب أن تكون اكبر من 0",
-														},
-													}}
-													render={({ field: { onChange, value } }) => (
-														<input
-															name='period'
-															type='text'
-															id='period'
-															placeholder='يومين'
-															value={value}
-															onChange={(e) =>
-																onChange(e.target.value.replace(/[^0-9]/g, ""))
-															}
-														/>
-													)}
-												/>
+												<div className='period-input'>
+													<Controller
+														name={"period"}
+														control={control}
+														rules={{
+															required: "حقل المدة مطلوب",
+															pattern: {
+																value: /^[0-9]+$/i,
+																message: "يجب أن يكون حقل المدة رقمًا",
+															},
+															min: {
+																value: 1,
+																message: "  المدة يجب أن تكون اكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='period'
+																type='text'
+																id='period'
+																placeholder='ادخل مدة التنفيذ الخاصة بالخدمة بالأيام'
+																value={value}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
+															/>
+														)}
+													/>
+													<span className='input-type d-flex justify-content-center align-items-center'>
+														يوم
+													</span>
+												</div>
 											</div>
 											<div className='col-lg-3 col-md-3 col-12'></div>
 											<div className='col-lg-7 col-md-9 col-12'>
