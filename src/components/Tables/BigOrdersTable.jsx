@@ -344,10 +344,12 @@ export default function BigOrdersTable({
 														</div>
 													</TableCell>
 													<TableCell align='center'>
-														{row?.shippingtypes?.name}
+														{row?.is_service ? "__" : row?.shippingtypes?.name}
 													</TableCell>
 
-													<TableCell align='center'>{row?.quantity}</TableCell>
+													<TableCell align='center'>
+														{row?.is_service ? "__" : row?.quantity}
+													</TableCell>
 
 													<TableCell align='center'>
 														{row?.total_price} ر.س

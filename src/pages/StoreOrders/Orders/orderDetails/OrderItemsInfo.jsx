@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 // The Table title
-function EnhancedTableHead() {
+function EnhancedTableHead({ is_service }) {
 	return (
 		<TableHead sx={{ backgroundColor: "#cce4ff38" }}>
 			<TableRow>
@@ -17,11 +17,16 @@ function EnhancedTableHead() {
 					م
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					المنتج
+					{is_service ? "اسم الخدمة" : "المنتج"}
 				</TableCell>
-				<TableCell align='right' sx={{ color: "#02466a" }}>
-					الكمية
-				</TableCell>
+				{is_service ? (
+					<TableCell />
+				) : (
+					<TableCell align='right' sx={{ color: "#02466a" }}>
+						الكمية
+					</TableCell>
+				)}
+
 				<TableCell align='right' sx={{ color: "#02466a" }}>
 					الإجمالي
 				</TableCell>
@@ -34,21 +39,28 @@ const OrderItemsInfo = ({ currentOrder }) => {
 	return (
 		<div className='order-details-box'>
 			<div className='title mb-4 d-flex justify-content-between  align-content-center  flex-wrap'>
-				<h5>تفاصيل المنتجات</h5>
-				<div className='d-flex justify-content-between  align-content-center gap-1'>
-					<h6>عدد القطع:</h6>
-					<p style={{ fontSize: "14px", fontWight: "400" }}>
-						{currentOrder?.orders?.totalCount === 1 && <>(قطعة واحده)</>}
-						{currentOrder?.orders?.totalCount === 2 && <>(قطعتين)</>}
-						{currentOrder?.orders?.totalCount > 2 && (
-							<>({currentOrder?.orders?.totalCount} قطعة)</>
-						)}
-					</p>
-				</div>
+				{currentOrder?.orders?.is_service ? (
+					<h5>تفاصيل الخدمات</h5>
+				) : (
+					<h5>تفاصيل المنتجات</h5>
+				)}
+
+				{currentOrder?.orders?.is_service ? null : (
+					<div className='d-flex justify-content-between  align-content-center gap-1'>
+						<h6>عدد القطع:</h6>
+						<p style={{ fontSize: "14px", fontWight: "400" }}>
+							{currentOrder?.orders?.totalCount === 1 && <>(قطعة واحده)</>}
+							{currentOrder?.orders?.totalCount === 2 && <>(قطعتين)</>}
+							{currentOrder?.orders?.totalCount > 2 && (
+								<>({currentOrder?.orders?.totalCount} قطعة)</>
+							)}
+						</p>
+					</div>
+				)}
 			</div>
 			<TableContainer>
 				<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-					<EnhancedTableHead />
+					<EnhancedTableHead is_service={currentOrder?.orders?.is_service} />
 					<TableBody>
 						{currentOrder?.orders?.orderItem?.map((row, index) => (
 							<TableRow hover tabIndex={-1} key={index}>
@@ -89,9 +101,7 @@ const OrderItemsInfo = ({ currentOrder }) => {
 									</div>
 								</TableCell>
 								<TableCell align='right' sx={{ width: "90px" }}>
-									<div className='text-center'>
-										<span>{row?.quantity}</span>
-									</div>
+									{currentOrder?.orders?.is_service ? null : row?.quantity}
 								</TableCell>
 								<TableCell align='center'>
 									<span className='table-price_span'>{row?.sum} ر.س</span>
@@ -132,24 +142,28 @@ const OrderItemsInfo = ({ currentOrder }) => {
 								</span>
 							</TableCell>
 						</TableRow>
-						<TableRow>
-							<TableCell
-								colSpan={3}
-								component='th'
-								scope='row'
-								align='right'
-								style={{ borderBottom: "none" }}>
-								<span style={{ fontWeight: "700" }}>الشحن</span>
-							</TableCell>
-							<TableCell align='center' style={{ borderBottom: "none" }}>
-								<span
-									className='table-price_span'
-									style={{ fontWeight: "500" }}>
-									{currentOrder?.orders?.shipping_price} ر.س
-								</span>
-							</TableCell>
-						</TableRow>
-						{currentOrder?.orders?.codprice !== 0 && (
+						{currentOrder?.orders?.is_service ? null : (
+							<TableRow>
+								<TableCell
+									colSpan={3}
+									component='th'
+									scope='row'
+									align='right'
+									style={{ borderBottom: "none" }}>
+									<span style={{ fontWeight: "700" }}>الشحن</span>
+								</TableCell>
+								<TableCell align='center' style={{ borderBottom: "none" }}>
+									<span
+										className='table-price_span'
+										style={{ fontWeight: "500" }}>
+										{currentOrder?.orders?.shipping_price} ر.س
+									</span>
+								</TableCell>
+							</TableRow>
+						)}
+
+						{currentOrder?.orders?.codprice > 0 &&
+						!currentOrder?.orders?.is_service ? (
 							<TableRow>
 								<TableCell
 									colSpan={3}
@@ -168,33 +182,33 @@ const OrderItemsInfo = ({ currentOrder }) => {
 									</span>
 								</TableCell>
 							</TableRow>
-						)}
+						) : null}
 
-						{currentOrder?.orders?.overweight !== 0 &&
-							currentOrder?.orders?.overweight_price !== 0 && (
-								<TableRow>
-									<TableCell
-										colSpan={3}
-										component='th'
-										scope='row'
-										align='right'
-										style={{ borderBottom: "none" }}>
-										<span style={{ fontWeight: "700" }}>
-											تكلفة الوزن الزائد ({currentOrder?.orders?.overweight}{" "}
-											<span>kg</span>)
-										</span>
-									</TableCell>
+						{currentOrder?.orders?.overweight > 0 &&
+						currentOrder?.orders?.overweight_price > 0 ? (
+							<TableRow>
+								<TableCell
+									colSpan={3}
+									component='th'
+									scope='row'
+									align='right'
+									style={{ borderBottom: "none" }}>
+									<span style={{ fontWeight: "700" }}>
+										تكلفة الوزن الزائد ({currentOrder?.orders?.overweight}{" "}
+										<span>kg</span>)
+									</span>
+								</TableCell>
 
-									<TableCell align='center' style={{ borderBottom: "none" }}>
-										<span
-											className='table-price_span'
-											style={{ fontWeight: "500" }}>
-											{currentOrder?.orders?.overweight_price} ر.س
-										</span>
-									</TableCell>
-								</TableRow>
-							)}
-						{currentOrder?.orders?.discount !== 0 && (
+								<TableCell align='center' style={{ borderBottom: "none" }}>
+									<span
+										className='table-price_span'
+										style={{ fontWeight: "500" }}>
+										{currentOrder?.orders?.overweight_price} ر.س
+									</span>
+								</TableCell>
+							</TableRow>
+						) : null}
+						{currentOrder?.orders?.discount > 0 ? (
 							<TableRow>
 								<TableCell
 									colSpan={3}
@@ -212,7 +226,7 @@ const OrderItemsInfo = ({ currentOrder }) => {
 									</span>
 								</TableCell>
 							</TableRow>
-						)}
+						) : null}
 						<TableRow>
 							<TableCell
 								colSpan={3}

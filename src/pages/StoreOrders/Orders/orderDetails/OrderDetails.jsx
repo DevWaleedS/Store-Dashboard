@@ -161,9 +161,9 @@ const OrderDetails = () => {
 							</div>
 
 							{/* add Store address */}
-
-							{currentOrder?.orders?.status !== "ملغي" ||
-							currentOrder?.orders?.status !== "مكتمل" ? (
+							{!currentOrder?.orders?.is_service &&
+							(currentOrder?.orders?.status !== "ملغي" ||
+								currentOrder?.orders?.status !== "مكتمل") ? (
 								<div className='mb-md-5 mb-4'>
 									<AddStoreAddress
 										value={value}
@@ -190,8 +190,9 @@ const OrderDetails = () => {
 						<div className='order-details-box'>
 							<div className='px-md-3'>
 								{/* select shipping status */}
-								{currentOrder?.orders?.status !== "ملغي" ||
-								currentOrder?.orders?.status !== "مكتمل" ? (
+								{!currentOrder?.orders?.is_service &&
+								(currentOrder?.orders?.status !== "ملغي" ||
+									currentOrder?.orders?.status !== "مكتمل") ? (
 									<SelectShippingStatus
 										id={id}
 										error={error}
@@ -205,12 +206,18 @@ const OrderDetails = () => {
 								) : null}
 
 								{/* Return order */}
-								<RefundOrder currentOrder={currentOrder} id={id} />
+
+								{!currentOrder?.orders?.is_service ? (
+									<RefundOrder currentOrder={currentOrder} id={id} />
+								) : null}
+
 								{/* Export order */}
 								<ExportOrder componentRef={componentRef} />
-								{/* Print Shipping Sticker */}
 
-								<PrintShippingSticker currentOrder={currentOrder} />
+								{/* Print Shipping Sticker */}
+								{!currentOrder?.orders?.is_service ? (
+									<PrintShippingSticker currentOrder={currentOrder} />
+								) : null}
 							</div>
 						</div>
 					</div>

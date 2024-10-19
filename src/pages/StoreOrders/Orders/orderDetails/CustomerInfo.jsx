@@ -57,7 +57,12 @@ const CustomerInfo = ({
 							</div>
 						</div>
 						<div className='row'>
-							<div className='col-md-6 col-12 mb-3'>
+							<div
+								className={`mb-3 ${
+									currentOrder?.orders?.is_service
+										? "col-12 "
+										: "col-md-6 col-12 "
+								}`}>
 								<h6 className='mb-2'>البريد الالكتروني</h6>
 								<div
 									className='info-box'
@@ -67,72 +72,77 @@ const CustomerInfo = ({
 									}}>
 									<Message />
 
-									<span className='text-overflow'>
+									<span className='text-overflow '>
 										{currentOrder?.orders?.user?.email}
 									</span>
 								</div>
 							</div>
-							<div className='col-md-6 col-12 mb-3'>
-								<h6 className='mb-3'>المنطقة</h6>
-								<div className='info-box'>
-									<FaCity
-										style={{
-											width: "24px",
-											height: "24px",
-											fill: "#1dbbbe",
-										}}
-									/>
-									<span style={{ whiteSpace: "normal" }}>
-										{translateProvinceName(
-											currentOrder?.orders?.OrderAddress?.district
-										)}
-									</span>
-								</div>
-							</div>
-							<div className='col-md-6 col-12 mb-3'>
-								<h6 className='mb-3'>المدينة</h6>
-
-								<div className='info-box'>
-									<FaMountainCity
-										style={{
-											width: "24px",
-											height: "24px",
-											fill: "#1dbbbe",
-										}}
-									/>
-									<span style={{ whiteSpace: "normal" }}>
-										{translateCityName(
-											currentOrder?.orders?.OrderAddress?.city
-										)}
-									</span>
-								</div>
-							</div>
-							{currentOrder?.orders?.OrderAddress?.postal_code && (
-								<div className='col-md-6 col-12 mb-3'>
-									<h6 className='mb-3'>الرمز البريدي</h6>
-									<div className='info-box'>
-										<FaSignsPost
-											style={{
-												width: "24px",
-												height: "24px",
-												fill: "#1dbbbe",
-											}}
-										/>
-										<span style={{ whiteSpace: "normal" }}>
-											{currentOrder?.orders?.OrderAddress?.postal_code}
-										</span>
+							{!currentOrder?.orders?.is_service ? (
+								<>
+									{" "}
+									<div className='col-md-6 col-12 mb-3'>
+										<h6 className='mb-3'>المنطقة</h6>
+										<div className='info-box'>
+											<FaCity
+												style={{
+													width: "24px",
+													height: "24px",
+													fill: "#1dbbbe",
+												}}
+											/>
+											<span style={{ whiteSpace: "normal" }}>
+												{translateProvinceName(
+													currentOrder?.orders?.OrderAddress?.district
+												)}
+											</span>
+										</div>
 									</div>
-								</div>
-							)}
-							<div className='col-12 mb-3'>
-								<h6 className='mb-3'>العنوان</h6>
-								<div className='info-box'>
-									<Location />
-									<span style={{ whiteSpace: "normal" }}>
-										{currentOrder?.orders?.OrderAddress?.street_address}
-									</span>
-								</div>
-							</div>
+									<div className='col-md-6 col-12 mb-3'>
+										<h6 className='mb-3'>المدينة</h6>
+
+										<div className='info-box'>
+											<FaMountainCity
+												style={{
+													width: "24px",
+													height: "24px",
+													fill: "#1dbbbe",
+												}}
+											/>
+											<span style={{ whiteSpace: "normal" }}>
+												{translateCityName(
+													currentOrder?.orders?.OrderAddress?.city
+												)}
+											</span>
+										</div>
+									</div>
+									{currentOrder?.orders?.OrderAddress?.postal_code && (
+										<div className='col-md-6 col-12 mb-3'>
+											<h6 className='mb-3'>الرمز البريدي</h6>
+											<div className='info-box'>
+												<FaSignsPost
+													style={{
+														width: "24px",
+														height: "24px",
+														fill: "#1dbbbe",
+													}}
+												/>
+												<span style={{ whiteSpace: "normal" }}>
+													{currentOrder?.orders?.OrderAddress?.postal_code}
+												</span>
+											</div>
+										</div>
+									)}
+									<div className='col-12 mb-3'>
+										<h6 className='mb-3'>العنوان</h6>
+										<div className='info-box'>
+											<Location />
+											<span style={{ whiteSpace: "normal" }}>
+												{currentOrder?.orders?.OrderAddress?.street_address}
+											</span>
+										</div>
+									</div>
+								</>
+							) : null}
 						</div>
 					</div>
 				</div>

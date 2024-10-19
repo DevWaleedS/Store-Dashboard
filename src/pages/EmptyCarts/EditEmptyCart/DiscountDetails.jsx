@@ -49,6 +49,7 @@ const switchStyle = {
 };
 
 const DiscountDetails = ({
+	is_service,
 	currentCartData,
 	errors,
 	setDiscount_total,
@@ -75,6 +76,7 @@ const DiscountDetails = ({
 	// to handle open discount_type inputs
 	useEffect(() => {
 		if (
+			is_service &&
 			currentCartData?.discount_type !== "" &&
 			currentCartData?.discount_total !== 0 &&
 			currentCartData?.discount_value !== 0
@@ -84,6 +86,7 @@ const DiscountDetails = ({
 			setOpenPercentMenu(false);
 		}
 	}, [
+		is_service,
 		currentCartData?.discount_type,
 		currentCartData?.discount_total,
 		currentCartData?.discount_value,
@@ -93,30 +96,63 @@ const DiscountDetails = ({
 			<div className='container-title'> تفاصيل الخصم</div>
 			<div className='container-body' style={{ height: "100%" }}>
 				<div className='row'>
-					<div className='col-12 mb-4'>
-						<Switch
-							onChange={() => {
-								setFree_shipping(!free_shipping);
-								setOpenPercentMenu(false);
-							}}
-							checked={free_shipping}
-							sx={switchStyle}
-						/>
+					{!is_service ? (
+						<>
+							{" "}
+							<div className='col-12 mb-4'>
+								<Switch
+									onChange={() => {
+										setFree_shipping(!free_shipping);
+										setOpenPercentMenu(false);
+									}}
+									checked={free_shipping}
+									sx={switchStyle}
+								/>
 
-						<span className='me-2'>شحن مجاني </span>
-					</div>
-					<div className='col-12 mb-4'>
-						<Switch
-							onChange={() => {
-								setOpenPercentMenu(!openPercentMenu);
-								setFree_shipping(false);
-							}}
-							checked={openPercentMenu}
-							sx={switchStyle}
-						/>
+								<span
+									className='d-inline-block'
+									style={{ marginRight: "-6px", paddingTop: "10px" }}>
+									شحن مجاني{" "}
+								</span>
+							</div>
+							<div className='col-12 mb-4 d-flex align-items-center'>
+								<Switch
+									onChange={() => {
+										setOpenPercentMenu(!openPercentMenu);
+										setFree_shipping(false);
+									}}
+									checked={openPercentMenu}
+									sx={switchStyle}
+								/>
 
-						<span className='me-2'> خصم على السلة </span>
-					</div>
+								<span
+									className='d-inline-block '
+									style={{ marginRight: "-6px", paddingTop: "10px" }}>
+									خصم على السلة{" "}
+								</span>
+							</div>
+						</>
+					) : (
+						<div className='col-12 mb-4 d-flex align-items-center'>
+							<Switch
+								readOnly={is_service}
+								disabled={is_service}
+								checked={is_service}
+								onChange={() => {
+									setOpenPercentMenu(is_service);
+									setFree_shipping(false);
+								}}
+								sx={switchStyle}
+							/>
+
+							<span
+								className='d-inline-block '
+								style={{ marginRight: "-6px", paddingTop: "10px" }}>
+								خصم على السلة{" "}
+							</span>
+						</div>
+					)}
+
 					<div className='col-12 '>
 						{openPercentMenu && (
 							<>

@@ -57,24 +57,34 @@ const OrderInfo = ({ currentOrder }) => {
 							<span>{currentOrder?.orders?.total_price} ر.س</span>
 						</div>
 					</div>
-					<div className='box'>
-						<div className='order-head-row'>
-							<Quantity />
-							<span className='me-2'> عدد المنتجات</span>
-						</div>
-						<div className='order-data-row'>
-							<span>{currentOrder?.orders?.quantity}</span>
-						</div>
-					</div>
-					<div className='box'>
-						<div className='order-head-row'>
-							<Delevray style={{ width: "34px", height: "34px" }} />
-							<span className='me-2'>شركة الشحن</span>
-						</div>
-						<div className='order-data-row'>
-							<span>{currentOrder?.orders?.shippingtypes?.name}</span>
-						</div>
-					</div>
+
+					{currentOrder?.orders?.is_service ? null : (
+						<>
+							<div className='box'>
+								<div className='order-head-row'>
+									<Quantity />
+
+									<span className='me-2'>
+										عدد المنتجات
+										<span className='important-hint'>*</span>
+									</span>
+								</div>
+
+								<div className='order-data-row'>
+									<span>{currentOrder?.orders?.quantity}</span>
+								</div>
+							</div>
+							<div className='box'>
+								<div className='order-head-row'>
+									<Delevray style={{ width: "34px", height: "34px" }} />
+									<span className='me-2'>شركة الشحن</span>
+								</div>
+								<div className='order-data-row'>
+									<span>{currentOrder?.orders?.shippingtypes?.name}</span>
+								</div>
+							</div>
+						</>
+					)}
 				</div>
 				<div className='boxes mb-4'>
 					{currentOrder?.orders?.shipping?.shipping_id && (
@@ -148,21 +158,23 @@ const OrderInfo = ({ currentOrder }) => {
 						</div>
 					)}
 				</div>
-				<div className=''>
-					<div className='order-head-row'>
-						<BsFillInfoSquareFill style={{ width: "22px", height: "22px" }} />
-						<span className='me-2'>ملاحظات الطلب</span>
+				{currentOrder?.orders?.is_service ? null : (
+					<div>
+						<div className='order-head-row'>
+							<BsFillInfoSquareFill style={{ width: "22px", height: "22px" }} />
+							<span className='me-2'>ملاحظات الطلب</span>
+						</div>
+						<div className='order-data-row'>
+							<span
+								style={{
+									whiteSpace: "normal",
+									textAlign: "center",
+								}}>
+								{currentOrder?.orders?.description}
+							</span>
+						</div>
 					</div>
-					<div className='order-data-row'>
-						<span
-							style={{
-								whiteSpace: "normal",
-								textAlign: "center",
-							}}>
-							{currentOrder?.orders?.description}
-						</span>
-					</div>
-				</div>
+				)}
 			</div>
 		</div>
 	);

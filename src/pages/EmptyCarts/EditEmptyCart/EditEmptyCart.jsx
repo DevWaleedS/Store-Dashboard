@@ -289,12 +289,16 @@ const EditEmptyCart = () => {
 
 									{/** Products details */}
 									<div className='mb-md-5 mb-3'>
-										<ProductsTableDetails tableData={currentCartData} />
+										<ProductsTableDetails
+											tableData={currentCartData}
+											is_service={currentCartData?.is_service}
+										/>
 									</div>
 
 									{/** Discount details */}
 									<div className='mb-md-5 mb-3'>
 										<DiscountDetails
+											is_service={currentCartData?.is_service}
 											data={currentCartData}
 											errors={errors}
 											setDiscount_total={setDiscount_total}

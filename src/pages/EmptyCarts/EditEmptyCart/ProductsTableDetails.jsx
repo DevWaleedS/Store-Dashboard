@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-function EnhancedTableHead() {
+function EnhancedTableHead({ is_service }) {
 	return (
 		<TableHead sx={{ backgroundColor: "#cce4ff38" }}>
 			<TableRow>
@@ -16,11 +16,17 @@ function EnhancedTableHead() {
 					م
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
-					المنتج
+					{is_service ? " اسم الخدمة" : " المنتج"}
 				</TableCell>
-				<TableCell align='right' sx={{ color: "#02466a" }}>
-					الكمية
-				</TableCell>
+
+				{is_service ? (
+					<TableCell />
+				) : (
+					<TableCell align='right' sx={{ color: "#02466a" }}>
+						الكمية
+					</TableCell>
+				)}
+
 				<TableCell align='right' sx={{ color: "#02466a" }}>
 					الإجمالي
 				</TableCell>
@@ -29,21 +35,29 @@ function EnhancedTableHead() {
 	);
 }
 
-const ProductsTableDetails = ({ tableData }) => {
+const ProductsTableDetails = ({ tableData, is_service }) => {
 	return (
 		<div
 			className='userData-container overflow-hidden'
 			style={{ borderBottom: "none" }}>
 			<div className='container-title d-flex justify-content-between align-items-center'>
 				<div className='tit-box'>
-					<span>تفاصيل المنتجات</span>
-					<span className='product-count me-2'>({tableData?.count} منتج)</span>
+					{is_service ? (
+						<span>تفاصيل الخدمات</span>
+					) : (
+						<>
+							<span>تفاصيل المنتجات</span>
+							<span className='product-count me-2'>
+								({tableData?.count} منتج)
+							</span>
+						</>
+					)}
 				</div>
 			</div>
 
 			<TableContainer>
 				<Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-					<EnhancedTableHead />
+					<EnhancedTableHead is_service={is_service} />
 					<TableBody>
 						{tableData?.cartDetail?.map((row, index) => (
 							<TableRow hover tabIndex={-1} key={index}>
@@ -83,16 +97,17 @@ const ProductsTableDetails = ({ tableData }) => {
 									</div>
 								</TableCell>
 								<TableCell align='right' sx={{ width: "90px" }}>
-									<div className='text-center'>
-										<span>{row?.qty}</span>
-									</div>
+									{is_service ? null : (
+										<div className='text-center'>
+											<span>{row?.qty}</span>
+										</div>
+									)}
 								</TableCell>
 								<TableCell align='center'>
 									<span className='table-price_span'>{row?.sum} ر.س</span>
 								</TableCell>
 							</TableRow>
 						))}
-						{/* Additional rows for subtotal, tax, etc. could also be componentized if needed */}
 					</TableBody>
 				</Table>
 			</TableContainer>
