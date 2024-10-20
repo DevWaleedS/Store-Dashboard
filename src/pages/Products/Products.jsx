@@ -199,7 +199,7 @@ const Products = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | المنتجات</title>
+				<title>لوحة تحكم اطلبها | المنتجات والخدمات </title>
 			</Helmet>
 			<div className='products p-lg-3'>
 				<div className='mb-3'>

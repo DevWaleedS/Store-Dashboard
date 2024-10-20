@@ -271,23 +271,27 @@ const SelectShippingStatus = ({
 											<RadioGroup
 												value={shippingStatus}
 												onChange={handleOnChange}>
-												<FormControlLabel
-													className='mb-2'
-													value='ready'
-													control={<BpRadio />}
-													sx={formControlLabelStyle}
-													label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
-													disabled={
-														isLoading ||
-														currentOrder?.orders?.status === "قيد التجهيز" ||
-														currentOrder?.orders?.status ===
-															"طلب مندوب لتوصيل الشحنة " ||
-														currentOrder?.orders?.status === "ملغي"
-													}
-												/>
+												{!currentOrder?.orders?.is_service ? (
+													<FormControlLabel
+														className='mb-2'
+														value='ready'
+														control={<BpRadio />}
+														sx={formControlLabelStyle}
+														label='قيد التجهيز (يرجى ملء بيانات الشحنة أولاً)'
+														disabled={
+															isLoading ||
+															currentOrder?.orders?.status === "قيد التجهيز" ||
+															currentOrder?.orders?.status ===
+																"طلب مندوب لتوصيل الشحنة " ||
+															currentOrder?.orders?.status === "ملغي"
+														}
+													/>
+												) : null}
 
-												{currentOrder?.orders?.shippingtypes?.name !==
-												"اخرى" ? (
+												{(currentOrder?.orders?.shippingtypes?.name &&
+													currentOrder?.orders?.shippingtypes?.name !==
+														"اخرى") ||
+												!currentOrder?.orders?.is_service ? (
 													<FormControlLabel
 														className='mb-2'
 														value='delivery_in_progress'
@@ -303,11 +307,19 @@ const SelectShippingStatus = ({
 														}
 													/>
 												) : null}
-
-												{(currentOrder?.orders?.status !==
-													"طلب مندوب لتوصيل الشحنة " ||
-													currentOrder?.orders?.status !== "ملغي") &&
-												currentOrder?.orders?.shippingtypes?.name === "اخرى" ? (
+												{currentOrder?.orders?.is_service ? (
+													<FormControlLabel
+														control={
+															<BpRadio value='canceled' name='canceled' />
+														}
+														sx={formControlLabelStyle}
+														label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
+													/>
+												) : (currentOrder?.orders?.status !==
+														"طلب مندوب لتوصيل الشحنة " ||
+														currentOrder?.orders?.status !== "ملغي") &&
+												  currentOrder?.orders?.shippingtypes?.name ===
+														"اخرى" ? (
 													<FormControlLabel
 														control={
 															<BpRadio value='canceled' name='canceled' />
@@ -317,19 +329,33 @@ const SelectShippingStatus = ({
 													/>
 												) : null}
 
-												<FormControlLabel
-													value='completed'
-													control={<BpRadio />}
-													sx={formControlLabelStyle}
-													label='مكتمل'
-													disabled={
-														isLoading ||
-														currentOrder?.orders?.status === "جديد" ||
-														currentOrder?.orders?.status === "قيد التجهيز" ||
-														currentOrder?.orders?.status === "مكتمل" ||
-														currentOrder?.orders?.status === "ملغي"
-													}
-												/>
+												{currentOrder?.orders?.is_service ? (
+													<FormControlLabel
+														value='completed'
+														control={<BpRadio />}
+														sx={formControlLabelStyle}
+														label='مكتمل'
+														disabled={
+															isLoading ||
+															currentOrder?.orders?.status === "مكتمل" ||
+															currentOrder?.orders?.status === "ملغي"
+														}
+													/>
+												) : (
+													<FormControlLabel
+														value='completed'
+														control={<BpRadio />}
+														sx={formControlLabelStyle}
+														label='مكتمل'
+														disabled={
+															isLoading ||
+															currentOrder?.orders?.status === "جديد" ||
+															currentOrder?.orders?.status === "قيد التجهيز" ||
+															currentOrder?.orders?.status === "مكتمل" ||
+															currentOrder?.orders?.status === "ملغي"
+														}
+													/>
+												)}
 											</RadioGroup>
 										</FormControl>
 									</div>

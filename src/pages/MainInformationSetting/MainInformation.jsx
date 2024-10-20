@@ -425,7 +425,10 @@ const MainInformation = () => {
 											backgroundColor: "#1dbbbe",
 										}}
 										onClick={handleUpdateStoreMainInformation}>
-										التالي
+										{mainInformation?.setting_store?.verification_status ===
+										"لم يتم الطلب"
+											? "التالي"
+											: "حفظ الإعدادت "}
 									</Button>
 								</div>
 							</div>

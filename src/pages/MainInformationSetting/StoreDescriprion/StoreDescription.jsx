@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Document } from "../../../data/Icons";
 
@@ -7,6 +7,12 @@ const StoreDescription = ({
 	setDescriptionValue,
 	settingErr,
 }) => {
+	const [isMaxLength, setIsMaxLength] = useState(false);
+
+	useEffect(() => {
+		setIsMaxLength(descriptionValue.length >= 120);
+	}, [descriptionValue]);
+
 	return (
 		<div className='row d-flex justify-content-center align-items-center'>
 			<div className='col-lg-8 col-12'>
@@ -23,14 +29,22 @@ const StoreDescription = ({
 						value={descriptionValue}
 						onChange={(e) => setDescriptionValue(e.target.value)}
 						className='form-control store-desc'
-						placeholder='وصف المتجر'
-						rows='3'></textarea>
+						placeholder='ادخل وصف للمتجر لا يتعدي الـ١٢٠ حرف'
+						rows='3'
+						maxLength={120}
+					/>
 				</div>
-				{settingErr?.description && (
+				{isMaxLength ? (
+					<span className='fs-6 w-100 text-danger'>
+						لقد تجاوزت الحد المسموح به من الحروف (١٢٠ حرف)
+					</span>
+				) : null}
+
+				{settingErr?.description ? (
 					<span className='fs-6 w-100 text-danger'>
 						{settingErr?.description}
 					</span>
-				)}
+				) : null}
 			</div>
 		</div>
 	);

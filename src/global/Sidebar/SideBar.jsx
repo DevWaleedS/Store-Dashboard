@@ -212,7 +212,7 @@ const SideBar = ({
 				<SidebarLink
 					to='Products'
 					icon={Products}
-					label='المنتجات'
+					label=' المنتجات والخدمات'
 					className='menu-link'
 					onClick={() => {
 						closeSidebar();

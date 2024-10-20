@@ -190,9 +190,8 @@ const OrderDetails = () => {
 						<div className='order-details-box'>
 							<div className='px-md-3'>
 								{/* select shipping status */}
-								{!currentOrder?.orders?.is_service &&
-								(currentOrder?.orders?.status !== "ملغي" ||
-									currentOrder?.orders?.status !== "مكتمل") ? (
+								{currentOrder?.orders?.status !== "ملغي" ||
+								currentOrder?.orders?.status !== "مكتمل" ? (
 									<SelectShippingStatus
 										id={id}
 										error={error}

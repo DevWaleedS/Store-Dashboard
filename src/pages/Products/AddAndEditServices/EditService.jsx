@@ -351,7 +351,7 @@ const EditService = () => {
 		return () => icon.forEach((banner) => URL.revokeObjectURL(banner.preview));
 	}, []);
 	// -------------------------------------------------
-
+	console.log(serviceHasOptions);
 	// Handle select Subcategory Array
 	const subcategory =
 		selectCategories?.filter(
