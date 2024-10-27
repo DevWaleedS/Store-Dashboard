@@ -3,6 +3,7 @@ import SetDomainType from "./SetDomainType";
 
 const DomainName = ({
 	domain,
+	isHasDomain,
 	settingErr,
 	setDomain,
 	domainType,
@@ -35,6 +36,7 @@ const DomainName = ({
 					setDomain={setDomain}
 					settingErr={settingErr}
 					domainType={domainType}
+					isHasDomain={isHasDomain}
 					setDomainType={setDomainType}
 					label={"لدي الدومين الخاص بي"}
 					hint={`قم بادخال اسم الدومين الخاص بك ثم انسخ الـ DNS ثم قم بتغيير اعدادات الدومين وسيتم التواصل معك لإتمام إجراءات التفعيل.`}
@@ -50,6 +52,7 @@ const DomainName = ({
 					setDomain={setDomain}
 					settingErr={settingErr}
 					domainType={domainType}
+					isHasDomain={isHasDomain}
 					label={"أريد شراء دومين"}
 					setDomainType={setDomainType}
 					hint={`يمكنك كتابة دومين لمتجرك أو ابحث عن دومين في https://godaddy.com  ثم تواصل معنا لحجز الدومين وربطة مع المتجر .`}
@@ -64,6 +67,7 @@ const DomainName = ({
 					setDomain={setDomain}
 					settingErr={settingErr}
 					domainType={domainType}
+					isHasDomain={isHasDomain}
 					setDomainType={setDomainType}
 				/>
 			</div>

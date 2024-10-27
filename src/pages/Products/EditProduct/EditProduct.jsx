@@ -48,11 +48,12 @@ import { IoIosArrowDown, IoIosAddCircle } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 
 // RTK Query
-import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
+
 import {
 	useEditProductByIdMutation,
 	useGetProductByIdQuery,
 } from "../../../store/apiSlices/productsApi";
+import { useSelectCategoriesQuery } from "../../../store/apiSlices/categoriesApi";
 
 // Style Select Mui
 const style = {
@@ -116,7 +117,7 @@ const EditProduct = () => {
 	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
 
 	// get categories selector
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);

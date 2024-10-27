@@ -45,31 +45,66 @@ import {
 	useDeleteCategoryMutation,
 } from "../../store/apiSlices/categoriesApi";
 
+const switchStyles = {
+	width: "50px",
+	"& .MuiSwitch-track": {
+		width: 26,
+		height: 14,
+		opacity: 1,
+		backgroundColor: "#ff9f1a",
+		boxSizing: "border-box",
+	},
+	"& .MuiSwitch-thumb": {
+		boxShadow: "none",
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		transform: "translate(6px,6px)",
+		color: "#fff",
+	},
+	"&:hover": {
+		"& .MuiSwitch-thumb": {
+			boxShadow: "none",
+		},
+	},
+
+	"& .MuiSwitch-switchBase": {
+		padding: 1,
+		"&.Mui-checked": {
+			transform: "translateX(11px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				opacity: 1,
+				backgroundColor: "#3AE374",
+			},
+		},
+	},
+};
+
 function EnhancedTableHead(props) {
 	const { tabSelectedId } = props;
 	return (
 		<TableHead sx={{ backgroundColor: "#d9f2f9" }}>
 			<TableRow>
 				<TableCell
-					align='left'
-					sx={{ color: "#02466a", minWidth: "73px", textAlign: "center" }}>
+					sx={{ color: "#02466a", textAlign: "center", minWidth: "60px" }}>
 					م
 				</TableCell>
-				<TableCell align='center' sx={{ color: "#02466a", minWidth: "80px" }}>
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					ID
 				</TableCell>
 				<TableCell
 					align='center'
 					sx={{
 						color: "#02466a",
-						minWidth: "300px",
+						minWidth: "200px",
 						textAlign: "right",
-						paddingRight: "68px !important",
+						paddingRight: "30px !important",
 					}}>
 					النشاط الأساسي
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a" }}>
-					فرعي
+					نوع النشاط
 				</TableCell>
 				<TableCell align='center' sx={{ color: "#02466a", textAlign: "right" }}>
 					الأنشطة الفرعية
@@ -146,43 +181,7 @@ function EnhancedTableToolbar(props) {
 									setActionType("changeStatusAll");
 								}}>
 								<IconButton>
-									<Switch
-										sx={{
-											width: "50px",
-											"& .MuiSwitch-track": {
-												width: 26,
-												height: 14,
-												opacity: 1,
-												backgroundColor: "#ff9f1a",
-												boxSizing: "border-box",
-											},
-											"& .MuiSwitch-thumb": {
-												boxShadow: "none",
-												width: 10,
-												height: 10,
-												borderRadius: 5,
-												transform: "translate(6px,6px)",
-												color: "#fff",
-											},
-											"&:hover": {
-												"& .MuiSwitch-thumb": {
-													boxShadow: "none",
-												},
-											},
-
-											"& .MuiSwitch-switchBase": {
-												padding: 1,
-												"&.Mui-checked": {
-													transform: "translateX(11px)",
-													color: "#fff",
-													"& + .MuiSwitch-track": {
-														opacity: 1,
-														backgroundColor: "#3AE374",
-													},
-												},
-											},
-										}}
-									/>
+									<Switch sx={switchStyles} />
 									تعطيل الكل
 								</IconButton>
 							</Tooltip>
@@ -434,10 +433,10 @@ export default function EnhancedTable({
 																className='flex items-center '
 																style={{
 																	display: "flex",
+
 																	justifyContent:
 																		tabSelectedId === 1 ? "start" : "center",
 																	alignItems: "center",
-																	gap: "7px",
 																}}>
 																{tabSelectedId === 1 && (
 																	<Checkbox
@@ -463,14 +462,12 @@ export default function EnhancedTable({
 															</div>
 														</TableCell>
 
-														<TableCell align='center' sx={{ minWidth: "73px" }}>
-															{row?.number}
-														</TableCell>
+														<TableCell align='center'>{row?.number}</TableCell>
 														<TableCell>
 															<div
 																className='cate-prim d-flex align-items-center justify-content-start'
 																style={{
-																	minWidth: " 300px",
+																	minWidth: " 200px",
 																}}>
 																<img
 																	className='img_icons'
@@ -496,7 +493,15 @@ export default function EnhancedTable({
 															</div>
 														</TableCell>
 														<TableCell align='center'>
-															{row?.countsubcategory}
+															{row?.is_service ? (
+																<span style={{ color: "#1dbbbe" }}>
+																	نشاط خدمات
+																</span>
+															) : (
+																<span style={{ color: "#02466a" }}>
+																	نشاط منتجات
+																</span>
+															)}
 														</TableCell>
 
 														<TableCell align='right'>
@@ -554,7 +559,11 @@ export default function EnhancedTable({
 																			}}>
 																			{tabSelectedId === 1 ? (
 																				<Link
-																					to={`EditCategory/${row?.id}`}
+																					to={
+																						row?.is_service
+																							? `edit-service-category/${row?.id}`
+																							: `EditCategory/${row?.id}`
+																					}
 																					style={{ cursor: "pointer" }}
 																					title='المزيد من الأنشطة'>
 																					...

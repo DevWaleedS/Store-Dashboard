@@ -117,7 +117,7 @@ const MainInformation = () => {
 			setDefaultStoreIcon(mainInformation?.icon);
 			setStoreName(mainInformation?.store_name);
 			setDomainType(mainInformation?.domain_type || "later_time");
-			setDomain([mainInformation?.domain]);
+			setDomain(mainInformation?.domain);
 			setCountry(mainInformation?.country?.id || 1);
 			setCity(mainInformation?.city?.id);
 			setStoreEmail(mainInformation?.user?.email);
@@ -336,6 +336,7 @@ const MainInformation = () => {
 							{/* Domain name */}
 							<div className='col-12 mb-4'>
 								<DomainName
+									isHasDomain={mainInformation?.domain}
 									domain={domain}
 									setDomain={setDomain}
 									settingErr={settingErr}

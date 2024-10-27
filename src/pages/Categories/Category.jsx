@@ -22,8 +22,8 @@ import {
 	useGetCategoriesDataQuery,
 	useSearchInEtlbohaCategoriesMutation,
 	useSearchInStoreCategoriesMutation,
+	useSelectCategoriesQuery,
 } from "../../store/apiSlices/categoriesApi";
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 const selectStyle = {
 	fontSize: "18px",
@@ -68,7 +68,7 @@ const dropDownData = {
 
 const Category = () => {
 	// Categories Selector
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 
 	const [search, setSearch] = useState("");
 	const [categoriesData, setCategoriesData] = useState([]);

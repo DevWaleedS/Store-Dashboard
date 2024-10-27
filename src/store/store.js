@@ -40,7 +40,6 @@ import { selectShippingCitiesApi } from "./apiSlices/selectorsApis/selectShippin
 import { platformServicesApi } from "./apiSlices/platformServicesApi";
 
 // selector apis
-import { selectCategoriesApi } from "./apiSlices/selectorsApis/selectCategoriesApi";
 import { selectImportProductsApi } from "./apiSlices/selectorsApis/selectImportProductsApi";
 import { selectPaymentsTypesApi } from "./apiSlices/selectorsApis/selectPaymentsTypesApi";
 import { SEOImprovementsApi } from "./apiSlices/SEOImprovementsApi";
@@ -113,7 +112,6 @@ export const store = configureStore({
 			technicalSupportApi.middleware,
 			upgradePackagesApi.middleware,
 			platformServicesApi.middleware,
-			selectCategoriesApi.middleware,
 			shippingCompaniesApi.middleware,
 			importPaymentMethodApi.middleware,
 			souqOtlobhaProductsApi.middleware,
@@ -167,7 +165,6 @@ export const store = configureStore({
 		[SEOImprovementsApi.reducerPath]: SEOImprovementsApi.reducer,
 		[editUserDetailsApi.reducerPath]: editUserDetailsApi.reducer,
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
-		[selectCategoriesApi.reducerPath]: selectCategoriesApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,

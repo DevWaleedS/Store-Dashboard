@@ -39,9 +39,9 @@ import {
 	useEditCouponByIdMutation,
 	useChangeCouponStatusMutation,
 } from "../../store/apiSlices/couponApi";
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 import { useGetPaymentsTypesQuery } from "../../store/apiSlices/selectorsApis/selectPaymentsTypesApi";
 import { useGetImportProductsQuery } from "../../store/apiSlices/selectorsApis/selectImportProductsApi";
+import { useSelectCategoriesQuery } from "../../store/apiSlices/categoriesApi";
 
 // Modal Style
 const style = {
@@ -123,7 +123,7 @@ const selectStyle = {
 const EditCoupon = () => {
 	// Selectors Rtk
 	const { id } = useParams();
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 	const { data: selectPayments } = useGetPaymentsTypesQuery();
 	const { data: selectProducts } = useGetImportProductsQuery();
 

@@ -26,10 +26,6 @@ import {
 	useUpdateVerificationMutation,
 } from "../../../store/apiSlices/verifyStoreApi";
 import { useGetCitiesQuery } from "../../../store/apiSlices/selectorsApis/selectCitiesApi";
-import {
-	useGetCategoriesQuery,
-	useGetSubCategoriesByCategoriesIdsQuery,
-} from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
 
 // third party
 import { toast } from "react-toastify";
@@ -48,6 +44,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // Icons
 import { IoIosArrowDown } from "react-icons/io";
 import { UploadIcon, WebsiteIcon } from "../../../data/Icons";
+import {
+	useSelectCategoriesQuery,
+	useSelectSubCategoriesByCategoriesIdsQuery,
+} from "../../../store/apiSlices/categoriesApi";
 
 const VerifyFormPage = forwardRef((props, ref) => {
 	/** ----------------------------------------------------*/
@@ -72,7 +72,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
 
 	// categories and sub categories data
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 
 	const selectedActivity = selectCategories?.filter((item) => {
 		return activity?.some((ele) => {
@@ -85,7 +85,7 @@ const VerifyFormPage = forwardRef((props, ref) => {
 		.join("&");
 
 	const { data: subCategories, isLoading } =
-		useGetSubCategoriesByCategoriesIdsQuery({ categoriesIds: queryParams });
+		useSelectSubCategoriesByCategoriesIdsQuery({ categoriesIds: queryParams });
 
 	const selectedSubActivities = subCategories?.filter((item) => {
 		return subActivities?.some((ele) => {

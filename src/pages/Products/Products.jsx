@@ -11,7 +11,7 @@ import { BigProductsTable } from "../../components/Tables";
 import { AddProductFromStoreModal } from "../nestedPages/SouqOtlbha";
 
 // RTK Query
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
+
 import {
 	useFilterImportedProductsByCategoriesMutation,
 	useFilterStoreProductsByCategoriesMutation,
@@ -23,13 +23,14 @@ import {
 
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
+import { useSelectCategoriesQuery } from "../../store/apiSlices/categoriesApi";
 
 const Products = () => {
 	// to Handle if the user is not verify  her account
 	UseAccountVerification();
 
 	// Categories Selector
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 
 	const [search, setSearch] = useState("");
 	const [pageCount, setPageCount] = useState(1);

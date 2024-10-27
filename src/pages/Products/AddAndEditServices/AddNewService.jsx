@@ -42,7 +42,7 @@ import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 // RTK Query
 import { useAddNewProductMutation } from "../../../store/apiSlices/productsApi";
-import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
+import { useSelectCategoriesQuery } from "../../../store/apiSlices/categoriesApi";
 
 // style the select mui
 const style = {
@@ -90,7 +90,7 @@ const selectStyle = {
 
 const AddNewService = () => {
 	// get categories selector
-	const { data: selectCategories } = useGetCategoriesQuery({
+	const { data: selectCategories } = useSelectCategoriesQuery({
 		is_service: 1,
 	});
 

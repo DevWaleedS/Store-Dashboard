@@ -16,12 +16,12 @@ import Checkbox from "@mui/material/Checkbox";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../store/slices/ChangeCategoriesForSomeSelectedProducts";
-import { IoIosArrowDown, IoMdInformationCircleOutline } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import { useChangeCategoriesForSomeSelectedProductsMutation } from "../../store/apiSlices/productsApi";
 
 // RTK Query
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 import { PageHint } from "../../components";
+import { useSelectCategoriesQuery } from "../../store/apiSlices/categoriesApi";
 
 // Style the modal
 const style = {
@@ -75,7 +75,7 @@ const formControlStyle = {
 
 const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 	// to get categories
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 
 	// handle open and close modal
 	const { modalIsOpen } = useSelector(

@@ -118,7 +118,12 @@ const AddCategory = () => {
 	// Handle profile data
 	const [addNewCategory] = useAddNewCategoryMutation();
 	const handleCreateNewCategory = async (data) => {
-		setLoadingTitle("جاري حفظ النشاط");
+		setLoadingTitle(
+			path_name.includes("add-service-category")
+				? "جاري اضافة نشاط الخدمات"
+				: "جاري اضافة نشاط المنتجات"
+		);
+
 		resetCategoryError();
 
 		const formData = new FormData();
@@ -184,7 +189,13 @@ const AddCategory = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | اضافة نشاط</title>
+				<title>
+					{` لوحة تحكم اطلبها  |	${
+						path_name.includes("add-service-category")
+							? "اضافة نشاط الخدمات"
+							: "اضافة نشاط المنتجات"
+					} `}
+				</title>
 			</Helmet>
 			<div className='add-category-form' open={true}>
 				<Modal
@@ -200,7 +211,12 @@ const AddCategory = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title'>
-										<h5 className='mb-3'> اضافة نشاط</h5>
+										<h5 className='mb-3'>
+											{" "}
+											{path_name.includes("add-service-category")
+												? "اضافة نشاط الخدمات"
+												: "اضافة نشاط المنتجات"}
+										</h5>
 										<p>قم بتحديث النشاط والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
@@ -299,7 +315,9 @@ const AddCategory = () => {
 										<div className='col-md-3 col-12'>
 											<label htmlFor='category-name'>
 												{" "}
-												النشاط الرئيسي
+												{path_name.includes("add-service-category")
+													? "اسم نشاط الخدمة الرئيسي"
+													: "اسم نشاط المنتج الرئيسي"}
 												<span className='important-hint'>*</span>
 											</label>
 										</div>

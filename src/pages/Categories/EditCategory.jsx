@@ -130,7 +130,11 @@ const EditCategory = () => {
 	// handle edit current Category by id
 	const [editCategoryById] = useEditCategoryByIdMutation();
 	const handleUpdateCategory = async (data) => {
-		setLoadingTitle("جاري تعديل النشاط");
+		setLoadingTitle(
+			path_name.includes("edit-service-category")
+				? "جاري تعديل نشاط الخدمات"
+				: "جاري تعديل نشاط المنتجات"
+		);
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("name", data?.name);
@@ -229,7 +233,13 @@ const EditCategory = () => {
 	return (
 		<>
 			<Helmet>
-				<title>لوحة تحكم اطلبها | تعديل نشاط</title>
+				<title>
+					{`لوحة تحكم اطلبها  |	${
+						path_name.includes("edit-service-category")
+							? "تعديل نشاط الخدمات"
+							: "تعديل نشاط المنتجات"
+					}   	 `}
+				</title>
 			</Helmet>
 			<div className='' open={true}>
 				<Modal
@@ -245,7 +255,13 @@ const EditCategory = () => {
 							<div className='d-flex'>
 								<div className='col-12'>
 									<div className='form-title'>
-										<h5 className='mb-3'> تعديل نشاط</h5>
+										<h5 className='mb-3'>
+											{" "}
+											{path_name.includes("edit-service-category")
+												? "تعديل نشاط الخدمات"
+												: "تعديل نشاط المنتجات"}{" "}
+										</h5>
+
 										<p>قم بتحديث النشاط والمعلومات الضرورية من هنا</p>
 									</div>
 								</div>
@@ -276,16 +292,7 @@ const EditCategory = () => {
 														onChange={onChange}
 														dataURLKey='data_url'
 														acceptType={["jpg", "png", "jpeg"]}>
-														{({
-															imageList,
-															onImageUpload,
-															onImageRemoveAll,
-															onImageUpdate,
-															onImageRemove,
-															isDragging,
-															dragProps,
-														}) => (
-															// write your building UI
+														{({ onImageUpload, dragProps }) => (
 															<div>
 																<div
 																	className='add-image-btn-box '
@@ -348,7 +355,9 @@ const EditCategory = () => {
 											<div className='col-md-3 col-12'>
 												<label htmlFor='category-name'>
 													{" "}
-													النشاط الرئيسي
+													{path_name.includes("edit-service-category")
+														? "اسم نشاط الخدمة الرئيسي"
+														: "اسم نشاط المنتج الرئيسي"}
 													<span className='important-hint'>*</span>
 												</label>
 											</div>

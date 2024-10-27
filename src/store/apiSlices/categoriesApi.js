@@ -5,18 +5,20 @@ import axiosBaseQuery from "../../API/axiosBaseQuery";
 export const categoriesApi = createApi({
 	reducerPath: "categoriesApi",
 
-	// base url
+	// Base URL
 	baseQuery: axiosBaseQuery({
 		baseUrl: "https://backend.atlbha.com/api/Store/",
 	}),
 
-	tagTypes: ["Categories"],
+	tagTypes: ["Categories", "SelectCategories"],
+
 	endpoints: (builder) => ({
 		// get categories
 		getCategoriesData: builder.query({
 			query: (arg) => ({
 				url: `category?page=${arg.page}&number=${arg.number}`,
 			}),
+
 			providesTags: ["Categories"],
 		}),
 
@@ -70,6 +72,7 @@ export const categoriesApi = createApi({
 				url: `searchCategoryEtlobha?query=${arg.query}`,
 				method: "GET",
 			}),
+			invalidatesTags: ["Categories"],
 		}),
 
 		// filter in categories by category id
@@ -87,7 +90,7 @@ export const categoriesApi = createApi({
 				method: "POST",
 				data: body,
 			}),
-			invalidatesTags: ["Categories"],
+			invalidatesTags: ["Categories", "SelectCategories"],
 		}),
 
 		// get category by id
@@ -104,7 +107,30 @@ export const categoriesApi = createApi({
 				method: "POST",
 				data: body,
 			}),
-			invalidatesTags: ["Categories"],
+			invalidatesTags: ["Categories", "SelectCategories"],
+		}),
+
+		// Select Categories
+		selectCategories: builder.query({
+			query: (arg) => ({
+				url: arg?.is_service
+					? `selector/mainCategories?is_service=${arg?.is_service}`
+					: `selector/mainCategories`,
+			}),
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.categories,
+			providesTags: ["SelectCategories"],
+		}),
+
+		// get SubCategories
+		selectSubCategoriesByCategoriesIds: builder.query({
+			query: ({ categoriesIds }) => ({
+				url: `selector/subcategories?${categoriesIds}`,
+			}),
+
+			// Pick out data and prevent nested properties in a hook or selector
+			transformResponse: (response, meta, arg) => response.data?.categories,
 		}),
 	}),
 });
@@ -122,4 +148,6 @@ export const {
 	useAddNewCategoryMutation,
 	useGetCategoryByIdQuery,
 	useEditCategoryByIdMutation,
+	useSelectCategoriesQuery,
+	useSelectSubCategoriesByCategoriesIdsQuery,
 } = categoriesApi;

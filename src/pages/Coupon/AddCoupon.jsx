@@ -31,9 +31,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import { DateIcon, SearchIcon } from "../../data/Icons";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useAddNewCouponMutation } from "../../store/apiSlices/couponApi";
-import { useGetCategoriesQuery } from "../../store/apiSlices/selectorsApis/selectCategoriesApi";
 import { useGetPaymentsTypesQuery } from "../../store/apiSlices/selectorsApis/selectPaymentsTypesApi";
 import { useGetImportProductsQuery } from "../../store/apiSlices/selectorsApis/selectImportProductsApi";
+import { useSelectCategoriesQuery } from "../../store/apiSlices/categoriesApi";
 
 // Modal Style
 const style = {
@@ -114,8 +114,7 @@ const selectStyle = {
 
 const AddCoupon = () => {
 	//  Selectors rtk
-
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 	const { data: selectPayments } = useGetPaymentsTypesQuery();
 	const { data: selectProducts } = useGetImportProductsQuery();
 

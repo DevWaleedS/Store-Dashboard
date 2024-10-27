@@ -3934,7 +3934,6 @@ nav.navigation {
 /* select-country */
 .select-country .form-select,
 .store-desc,
-.domain-name input,
 .domain-name .main-domain-hint,
 .modal-input-group input,
 .store-email-input,
@@ -3968,14 +3967,26 @@ nav.navigation {
 	font-size: 1rem;
 	color: #02466a;
 }
-.domain-name input {
-	width: 100%;
-	padding-left: 12px !important;
+
+.domain-name .domain-input-box {
+	position: relative;
+	height: 55px;
+	padding-right: 16px;
+
+	background-color: var(--white-200);
+	border: 1px solid var(--gray-100);
+	color: var(--black-600);
+	font-size: 18px;
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	-ms-border-radius: 4px;
 	-o-border-radius: 4px;
+}
+.domain-name .domain-input-box input {
+	width: 100%;
+	padding-left: 12px !important;
+	padding: 0 45px 0 30px !important;
 }
 
 .domain-name .main-domain-hint {
@@ -4749,7 +4760,7 @@ textarea {
 	width: 100%;
 	max-width: 100%;
 	height: 56px;
-	padding: 20px 20px 20px 0 ;
+	padding: 20px 20px 20px 0;
 	background: #ffffff;
 	border: 1px solid #a7a7a71a;
 	border-radius: 8px;
@@ -4762,14 +4773,14 @@ textarea {
 .add-form-wrapper form .period-input input {
 	all: unset;
 	border: none !important;
-width: 90%;
+	width: 90%;
 	max-width: 100%;
 	height: 56px;
 }
 
 .add-form-wrapper form .period-input .input-type {
 	height: 56px;
-width: 10%;
+	width: 10%;
 	font-size: 16px;
 	background-color: #a7a7a71a;
 	border: 1px solid #a7a7a71a;

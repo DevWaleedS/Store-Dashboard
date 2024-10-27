@@ -47,9 +47,8 @@ import { useDispatch } from "react-redux";
 import { openProductOptionModal } from "../../../store/slices/ProductsSlice";
 
 // RTK Query
-
 import { useAddNewProductMutation } from "../../../store/apiSlices/productsApi";
-import { useGetCategoriesQuery } from "../../../store/apiSlices/selectorsApis/selectCategoriesApi";
+import { useSelectCategoriesQuery } from "../../../store/apiSlices/categoriesApi";
 
 // style the select mui
 const style = {
@@ -111,7 +110,7 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 
 const AddNewProduct = () => {
 	// get categories selector
-	const { data: selectCategories } = useGetCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery();
 
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();
