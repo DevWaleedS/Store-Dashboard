@@ -92,7 +92,7 @@ function EnhancedTableHead(props) {
 						textAlign: "right",
 						paddingRight: "70px !important",
 					}}>
-					اسم المنتج
+					الاسم
 				</TableCell>
 				<TableCell align='right' sx={{ color: "#02466a" }}>
 					النشاط

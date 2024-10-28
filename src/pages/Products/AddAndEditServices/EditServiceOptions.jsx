@@ -16,11 +16,12 @@ import Context from "../../../Context/context";
 
 // Icons
 import { FiPlus } from "react-icons/fi";
+import { CiTimer } from "react-icons/ci";
 import { TfiWrite } from "react-icons/tfi";
+import { TbClockHour8 } from "react-icons/tb";
 import { DeleteIcon } from "../../../data/Icons";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { CiTimer } from "react-icons/ci";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -126,6 +127,13 @@ const EditServiceOptionsModal = () => {
 		setServiceOptionsSection(updatedBlocks);
 	};
 
+	// handle value of hours of block
+	const handleSetValueHoursInput = (e, blockIndex, valueIndex) => {
+		const updatedBlocks = [...serviceOptionsSection];
+		updatedBlocks[blockIndex].values[valueIndex].hours = e.target.value;
+		setServiceOptionsSection(updatedBlocks);
+	};
+
 	// handle value  price of block
 	const handleSetValuePriceInput = (e, blockIndex, valueIndex) => {
 		const updatedBlocks = [...serviceOptionsSection];
@@ -162,6 +170,7 @@ const EditServiceOptionsModal = () => {
 			title: "",
 			price: "",
 			period: "",
+			hours: "",
 			discount_price: "",
 		};
 
@@ -228,14 +237,14 @@ const EditServiceOptionsModal = () => {
 					toast.warning("يرجى ملء حقل سعر الخيار أولاً", {
 						theme: "light",
 					});
-				!periodNotEmpty &&
-					toast.warning("يرجى ملء حقل المدة أولاً", {
-						theme: "light",
-					});
+				// !periodNotEmpty &&
+				// 	toast.warning("يرجى ملء حقل المدة أولاً", {
+				// 		theme: "light",
+				// 	});
 			}
 		} else {
 			dispatch(closeProductOptionModal());
-			toast.warning("  لم يتم اضافة اي خيارات ليتم حفظها", {
+			toast.warning("لم يتم اضافة اي خيارات ليتم حفظها", {
 				theme: "light",
 			});
 		}
@@ -244,7 +253,7 @@ const EditServiceOptionsModal = () => {
 	/** Handle mapping the options sections */
 	const productOptionsSection = serviceOptionsSection?.map(
 		(section, sectionIndex) => (
-			<section key={section?.id}>
+			<section key={`section-${section?.id || sectionIndex}`}>
 				<section className='options-section'>
 					<section className='mb-4 d-flex flex-column flex-md-row justify-content-start align-items-center gap-3'>
 						<div className='option-name-input d-flex justify-content-start align-items-center gap-2'>
@@ -304,13 +313,30 @@ const EditServiceOptionsModal = () => {
 										</div>
 										<input
 											type='text'
-											placeholder='مدة التنفيذ'
+											placeholder='مدة التنفيذ بالأيام'
 											value={item?.period}
 											onChange={(e) => {
 												handleSetValuePeriodInput(e, sectionIndex, itemIndex);
 											}}
 										/>
-										<div className='input-type'>يوم</div>
+										<div className='input-type'>أيام</div>
+									</div>
+								</div>
+								<div
+									className={`w-100 w-md-50  option-color-input d-flex justify-content-start align-items-center`}>
+									<div className='w-100 d-flex justify-content-start align-items-center gap-1 position-relative'>
+										<div className='input-icon'>
+											<TbClockHour8 />
+										</div>
+										<input
+											type='text'
+											placeholder='مدة التنفيذ بالساعات'
+											value={item?.hours}
+											onChange={(e) => {
+												handleSetValueHoursInput(e, sectionIndex, itemIndex);
+											}}
+										/>
+										<div className='input-type'>ساعات</div>
 									</div>
 								</div>
 							</section>

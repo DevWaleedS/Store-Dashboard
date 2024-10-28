@@ -113,9 +113,7 @@ export const categoriesApi = createApi({
 		// Select Categories
 		selectCategories: builder.query({
 			query: (arg) => ({
-				url: arg?.is_service
-					? `selector/mainCategories?is_service=${arg?.is_service}`
-					: `selector/mainCategories`,
+				url: `selector/mainCategories?is_service=${arg?.is_service}`,
 			}),
 
 			// Pick out data and prevent nested properties in a hook or selector

@@ -115,6 +115,7 @@ const AddNewService = () => {
 		selling_price: "",
 		discount_price: "",
 		period: "",
+		hours: "",
 		category_id: "",
 		subcategory_id: [],
 	});
@@ -133,6 +134,7 @@ const AddNewService = () => {
 			category_id: "",
 			discount_price: "",
 			period: "",
+			hours: "",
 			SEOdescription: "",
 		},
 	});
@@ -147,6 +149,7 @@ const AddNewService = () => {
 		discount_price: "",
 		subcategory_id: "",
 		period: "",
+		hours: "",
 		SEOdescription: "",
 		images: "",
 	});
@@ -159,6 +162,7 @@ const AddNewService = () => {
 			description: "",
 			selling_price: "",
 			period: "",
+			hours: "",
 			images: "",
 			category_id: "",
 			discount_price: "",
@@ -303,13 +307,13 @@ const AddNewService = () => {
 		let formData = new FormData();
 		formData.append("name", data?.name);
 		formData.append("is_service", 1);
-		formData.append("short_description", data?.short_description);
-		formData.append("description", editorValue);
-		formData.append("selling_price", data?.selling_price);
-		formData.append("category_id", data?.category_id);
-		formData.append("discount_price", data?.discount_price);
-
 		formData.append("period", data?.period);
+		formData.append("hours", data?.hours);
+		formData.append("description", editorValue);
+		formData.append("category_id", data?.category_id);
+		formData.append("selling_price", data?.selling_price);
+		formData.append("discount_price", data?.discount_price);
+		formData.append("short_description", data?.short_description);
 
 		formData.append("cover", icons[0]);
 		service?.subcategory_id?.forEach((subcategory, i) => {
@@ -344,6 +348,11 @@ const AddNewService = () => {
 						[`attribute[${i}][value][${v}][period]`],
 						value?.period
 					);
+					formData.append(
+						[`attribute[${i}][value][${v}][hours]`],
+						value?.hours
+					);
+
 					formData.append(
 						[`attribute[${i}][value][${v}][price]`],
 						value?.price
@@ -385,6 +394,7 @@ const AddNewService = () => {
 					discount_price: response?.data?.message?.en?.discount_price?.[0],
 					subcategory_id: response?.data?.message?.en?.subcategory_id?.[0],
 					period: response?.data?.message?.en?.period?.[0],
+					hours: response?.data?.message?.en?.hours?.[0],
 					SEOdescription: response?.data?.message?.en?.SEOdescription?.[0],
 					images: response?.data?.message?.en?.images?.[0],
 				});
@@ -1047,11 +1057,11 @@ const AddNewService = () => {
 										</div>
 									</div>
 
-									{/* Weight */}
+									{/* period by days */}
 									<div className='row mb-md-5 mb-3'>
 										<div className='col-lg-3 col-md-3 col-12'>
 											<label htmlFor='price'>
-												المدة <span className='important-hint'>*</span>
+												<label> المدة بالأيام</label>
 											</label>
 										</div>
 										<div className='col-lg-7 col-md-9 col-12'>
@@ -1063,7 +1073,6 @@ const AddNewService = () => {
 													name={"period"}
 													control={control}
 													rules={{
-														required: "حقل المدة مطلوب",
 														pattern: {
 															value: /^[0-9]+$/i,
 															message: "يجب ان تكون المدة  رقمًا",
@@ -1087,7 +1096,7 @@ const AddNewService = () => {
 													)}
 												/>
 												<span className='input-type d-flex justify-content-center align-items-center'>
-													يوم
+													أيام
 												</span>
 											</div>
 										</div>
@@ -1098,6 +1107,60 @@ const AddNewService = () => {
 												style={{ whiteSpace: "normal" }}>
 												{serviceError?.period}
 												{errors?.period && errors.period.message}
+											</span>
+										</div>
+									</div>
+
+									{/* period by days */}
+									<div className='row mb-md-5 mb-3'>
+										<div className='col-lg-3 col-md-3 col-12'>
+											<label htmlFor='price'>
+												<label> المدة بالساعة</label>
+											</label>
+										</div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<div className='tax-text'>
+												ضع مدة التنفيذ الخاصة بالخدمة بالساعة
+											</div>
+											<div className='period-input'>
+												<Controller
+													name={"hours"}
+													control={control}
+													rules={{
+														pattern: {
+															value: /^[0-9]+$/i,
+															message: "يجب ان تكون المدة  رقمًا",
+														},
+														min: {
+															value: 1,
+															message: "  المدة يجب ان تكون اكبر من 0",
+														},
+													}}
+													render={({ field: { onChange, value } }) => (
+														<input
+															type='text'
+															id='hours'
+															placeholder='ادخل مدة التنفيذ الخاصة بالخدمة بالساعة'
+															name='hours'
+															value={value}
+															onChange={(e) =>
+																onChange(e.target.value.replace(/[^0-9]/g, ""))
+															}
+														/>
+													)}
+												/>
+												<span className='input-type d-flex justify-content-center align-items-center'>
+													ساعات
+												</span>
+											</div>
+										</div>
+										<div className='col-lg-3 col-md-3 col-12'></div>
+										<div className='col-lg-7 col-md-9 col-12'>
+											<span
+												className='fs-6 text-danger'
+												style={{ whiteSpace: "normal" }}>
+												{serviceError?.hours}
+												{errors?.hours && errors.hours.message}
 											</span>
 										</div>
 									</div>

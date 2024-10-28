@@ -75,7 +75,9 @@ const formControlStyle = {
 
 const ChangeCategoriesForSomeSelectedProducts = ({ setSelected, selected }) => {
 	// to get categories
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 
 	// handle open and close modal
 	const { modalIsOpen } = useSelector(

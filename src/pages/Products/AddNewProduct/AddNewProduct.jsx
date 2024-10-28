@@ -110,7 +110,9 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 
 const AddNewProduct = () => {
 	// get categories selector
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 
 	const dispatch = useDispatch(false);
 	const navigate = useNavigate();

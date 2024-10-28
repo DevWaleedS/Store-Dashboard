@@ -72,7 +72,9 @@ const VerifyFormPage = forwardRef((props, ref) => {
 	const { subActivities } = useSelector((state) => state.AddSubActivity);
 
 	// categories and sub categories data
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 
 	const selectedActivity = selectCategories?.filter((item) => {
 		return activity?.some((ele) => {

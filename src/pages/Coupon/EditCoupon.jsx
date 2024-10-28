@@ -123,7 +123,9 @@ const selectStyle = {
 const EditCoupon = () => {
 	// Selectors Rtk
 	const { id } = useParams();
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 	const { data: selectPayments } = useGetPaymentsTypesQuery();
 	const { data: selectProducts } = useGetImportProductsQuery();
 

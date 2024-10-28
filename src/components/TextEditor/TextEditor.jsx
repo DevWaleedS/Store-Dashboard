@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import ReactQuill from "react-quill";
 
 // Context
@@ -9,6 +9,7 @@ import "./TextEditor.css";
 import "react-quill/dist/quill.snow.css";
 
 const TextEditor = ({ ToolBar, placeholder, readOnly }) => {
+	const quillRef = useRef(null);
 	const editorContent = useContext(TextEditorContext);
 	const { setEditorValue, editorValue } = editorContent;
 
@@ -38,13 +39,13 @@ const TextEditor = ({ ToolBar, placeholder, readOnly }) => {
 		];
 	} else if (ToolBar === "evaluationThePlatform") {
 		toolbarOptions = [["italic", "underline", "bold"]];
-	}
-	else if (ToolBar === "readOnly") {
+	} else if (ToolBar === "readOnly") {
 		toolbarOptions = [];
 	}
 
 	return (
 		<ReactQuill
+			ref={quillRef}
 			theme='snow'
 			dir='rtl'
 			readOnly={readOnly}

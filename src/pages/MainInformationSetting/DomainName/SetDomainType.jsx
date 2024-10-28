@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { DnsInfoLabel, PageHint } from "../../../components";
-import { IoCopy, IoCopyOutline } from "react-icons/io5";
+import { IoCopyOutline } from "react-icons/io5";
+import { LuCopyCheck } from "react-icons/lu";
 
 import { toast } from "react-toastify";
 
@@ -122,7 +123,7 @@ const SetDomainType = ({
 														handleCopyDomain(domain);
 													}}>
 													{isCopied ? (
-														<IoCopy style={{ color: "#1dbbbe" }} />
+														<LuCopyCheck style={{ color: "#1dbbbe" }} />
 													) : (
 														<IoCopyOutline style={{ color: "#1dbbbe" }} />
 													)}
@@ -135,7 +136,7 @@ const SetDomainType = ({
 												name='domain'
 												id='domain'
 												value={domain}
-												readOnly={isHasDomain !== ""}
+												disabled={isHasDomain !== ""}
 												onChange={(e) => {
 													setDomain(
 														e.target.value

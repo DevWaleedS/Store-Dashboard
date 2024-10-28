@@ -17,6 +17,7 @@
 	padding-left: 8px;
 	padding-right: 16px;
 }
+.quill .ql-editor *,
 .quill .ql-editor p,
 .quill .ql-editor ol,
 .quill .ql-editor ul,
@@ -27,7 +28,8 @@
 .quill .ql-editor h3,
 .quill .ql-editor h4,
 .quill .ql-editor h5,
-.quill .ql-editor h6 {
+.quill .ql-editor h6,
+.quill .ql-editor span {
 	white-space: normal;
 }
 

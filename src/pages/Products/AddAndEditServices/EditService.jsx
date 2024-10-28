@@ -121,6 +121,7 @@ const EditService = () => {
 		description: "",
 		selling_price: "",
 		period: "",
+		hours: "",
 		category_id: "",
 		discount_price: "",
 		subcategory_id: [],
@@ -148,6 +149,7 @@ const EditService = () => {
 			category_id: "",
 			discount_price: "",
 			period: "",
+			hours: "",
 		},
 	});
 
@@ -170,6 +172,7 @@ const EditService = () => {
 				discount_price: currentProduct?.discount_price,
 				subcategory_id: currentProduct?.subcategory?.map((sub) => sub?.id),
 				period: currentProduct?.period,
+				hours: currentProduct?.hours,
 			});
 			setEditorValue(currentProduct?.description);
 			setSEOdescription(currentProduct?.SEOdescription?.map((seo) => seo));
@@ -189,8 +192,9 @@ const EditService = () => {
 								id: value?.id,
 								title: value?.value?.[0],
 								period: value?.value[1],
-								price: value?.value[2],
-								discount_price: value?.value[3],
+								hours: value?.value[2],
+								price: value?.value[3],
+								discount_price: value?.value[4],
 							})),
 					  }))
 					: [
@@ -225,6 +229,7 @@ const EditService = () => {
 		discount_price: "",
 		subcategory_id: "",
 		period: "",
+		hours: "",
 		SEOdescription: "",
 		images: [],
 	});
@@ -240,6 +245,7 @@ const EditService = () => {
 			discount_price: "",
 			subcategory_id: "",
 			period: "",
+			hours: "",
 			SEOdescription: "",
 			images: [],
 		});
@@ -354,7 +360,7 @@ const EditService = () => {
 		return () => icon.forEach((banner) => URL.revokeObjectURL(banner.preview));
 	}, []);
 	// -------------------------------------------------
-	console.log(serviceHasOptions);
+
 	// Handle select Subcategory Array
 	const subcategory =
 		selectCategories?.filter(
@@ -375,6 +381,7 @@ const EditService = () => {
 		formData.append("is_service", 1);
 		formData.append("name", data?.name);
 		formData.append("period", data?.period);
+		formData.append("hours", data?.hours);
 		formData.append("description", editorValue);
 		formData.append("category_id", data?.category_id);
 		formData.append("selling_price", data?.selling_price);
@@ -412,6 +419,11 @@ const EditService = () => {
 					formData.append(
 						[`attribute[${i}][value][${v}][period]`],
 						value?.period
+					);
+
+					formData.append(
+						[`attribute[${i}][value][${v}][hours]`],
+						value?.hours
 					);
 					formData.append(
 						[`attribute[${i}][value][${v}][price]`],
@@ -455,6 +467,7 @@ const EditService = () => {
 					discount_price: response?.data?.message?.en?.discount_price?.[0],
 					subcategory_id: response?.data?.message?.en?.subcategory_id?.[0],
 					period: response?.data?.message?.en?.period?.[0],
+					hours: response?.data?.message?.en?.hours?.[0],
 					SEOdescription: response?.data?.message?.en?.SEOdescription?.[0],
 					images: response?.data?.message?.en?.["images.0"]?.[0],
 				});
@@ -1151,12 +1164,10 @@ const EditService = () => {
 											</div>
 										</div>
 
-										{/* Stock */}
+										{/* period by days */}
 										<div className='row mb-md-5 mb-3'>
 											<div className='col-lg-3 col-md-3 col-12'>
-												<label>
-													المدة <span className='important-hint'>*</span>
-												</label>
+												<label> المدة بالأيام</label>
 											</div>
 											<div className='col-lg-7 col-md-9 col-12'>
 												<div className='tax-text'>
@@ -1167,7 +1178,6 @@ const EditService = () => {
 														name={"period"}
 														control={control}
 														rules={{
-															required: "حقل المدة مطلوب",
 															pattern: {
 																value: /^[0-9]+$/i,
 																message: "يجب أن يكون حقل المدة رقمًا",
@@ -1193,7 +1203,7 @@ const EditService = () => {
 														)}
 													/>
 													<span className='input-type d-flex justify-content-center align-items-center'>
-														يوم
+														أيام
 													</span>
 												</div>
 											</div>
@@ -1204,6 +1214,60 @@ const EditService = () => {
 													style={{ whiteSpace: "normal" }}>
 													{productError?.period}
 													{errors?.period && errors.period.message}
+												</span>
+											</div>
+										</div>
+
+										{/* period by hours */}
+										<div className='row mb-md-5 mb-3'>
+											<div className='col-lg-3 col-md-3 col-12'>
+												<label> المدة بالساعة</label>
+											</div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<div className='tax-text'>
+													ضع مدة التنفيذ الخاصة بالخدمة بالساعات
+												</div>
+												<div className='period-input'>
+													<Controller
+														name={"hours"}
+														control={control}
+														rules={{
+															pattern: {
+																value: /^[0-9]+$/i,
+																message: "يجب أن يكون حقل المدة رقمًا",
+															},
+															min: {
+																value: 1,
+																message: "  المدة يجب أن تكون اكبر من 0",
+															},
+														}}
+														render={({ field: { onChange, value } }) => (
+															<input
+																name='hours'
+																type='text'
+																id='hours'
+																placeholder='ادخل مدة التنفيذ الخاصة بالخدمة بالساعة'
+																value={value}
+																onChange={(e) =>
+																	onChange(
+																		e.target.value.replace(/[^0-9]/g, "")
+																	)
+																}
+															/>
+														)}
+													/>
+													<span className='input-type d-flex justify-content-center align-items-center'>
+														ساعات
+													</span>
+												</div>
+											</div>
+											<div className='col-lg-3 col-md-3 col-12'></div>
+											<div className='col-lg-7 col-md-9 col-12'>
+												<span
+													className='fs-6 text-danger'
+													style={{ whiteSpace: "normal" }}>
+													{productError?.hours}
+													{errors?.hours && errors.hours.message}
 												</span>
 											</div>
 										</div>

@@ -117,7 +117,9 @@ const EditProduct = () => {
 	const { data: currentProduct, isFetching } = useGetProductByIdQuery(id);
 
 	// get categories selector
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch(false);

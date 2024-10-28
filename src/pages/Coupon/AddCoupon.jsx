@@ -114,7 +114,9 @@ const selectStyle = {
 
 const AddCoupon = () => {
 	//  Selectors rtk
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 	const { data: selectPayments } = useGetPaymentsTypesQuery();
 	const { data: selectProducts } = useGetImportProductsQuery();
 

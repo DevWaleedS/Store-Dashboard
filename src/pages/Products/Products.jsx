@@ -30,7 +30,9 @@ const Products = () => {
 	UseAccountVerification();
 
 	// Categories Selector
-	const { data: selectCategories } = useSelectCategoriesQuery();
+	const { data: selectCategories } = useSelectCategoriesQuery({
+		is_service: 0,
+	});
 
 	const [search, setSearch] = useState("");
 	const [pageCount, setPageCount] = useState(1);

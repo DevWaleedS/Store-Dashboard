@@ -1807,6 +1807,7 @@ nav.navigation {
 	color: var(--bs-blue);
 	font-size: 15px;
 	font-weight: 500;
+	white-space: normal !important;
 }
 
 .option-info-label span,
@@ -3966,6 +3967,7 @@ nav.navigation {
 .domain-wrapper .domain-name .domain-input-label {
 	font-size: 1rem;
 	color: #02466a;
+	white-space: normal;
 }
 
 .domain-name .domain-input-box {
@@ -4781,7 +4783,7 @@ textarea {
 .add-form-wrapper form .period-input .input-type {
 	height: 56px;
 	width: 10%;
-	font-size: 16px;
+	font-size: 14px;
 	background-color: #a7a7a71a;
 	border: 1px solid #a7a7a71a;
 }
@@ -4798,6 +4800,10 @@ textarea {
 		-moz-border-radius: 6px;
 		-ms-border-radius: 6px;
 		-o-border-radius: 6px;
+	}
+
+	.add-form-wrapper form .period-input .input-type {
+		width: 20%;
 	}
 }
 
@@ -13976,6 +13982,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 	.upload-icon-btn {
 		height: 45px;
 		font-size: 16px;
+	}
+	.domain-wrapper {
+		padding: 16px 10px;
+	}
+	.domain-name .domain-input-box {
+		height: 46px;
+		font-size: 16px;
+	}
+	.dns_info_label__info-wrapper {
+		margin-left: -30px;
+	}
+
+	.domain-name .domain-input-box input {
+		padding: 0 0px 0 16px !important;
 	}
 
 	.domain-name,
