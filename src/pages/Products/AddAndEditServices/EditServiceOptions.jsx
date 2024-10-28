@@ -220,7 +220,7 @@ const EditServiceOptionsModal = () => {
 				section?.values?.every((value) => value?.period !== "")
 			);
 
-			if (nameNotEmpty && valuesNotEmpty && periodNotEmpty) {
+			if (nameNotEmpty && valuesNotEmpty) {
 				dispatch(closeProductOptionModal());
 				toast.success("تم حفظ خيارات الخدمة", {
 					theme: "light",
