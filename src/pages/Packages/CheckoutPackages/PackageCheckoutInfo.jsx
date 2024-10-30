@@ -1,7 +1,7 @@
 import React from "react";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { CircularLoading } from "../../../HelperComponents";
 import { useSetPackageIdPrePaymentMutation } from "../../../store/apiSlices/upgradePackagesApi";
 import { CircularProgress } from "@mui/material";
 

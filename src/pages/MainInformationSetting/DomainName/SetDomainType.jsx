@@ -140,6 +140,7 @@ const SetDomainType = ({
 												onChange={(e) => {
 													setDomain(
 														e.target.value
+															.replace(/^https?:\/\//i, "") // Remove http:// or https://
 															.replace(/[^A-Za-z0-9-.]/g, "")
 															.toLowerCase()
 													);

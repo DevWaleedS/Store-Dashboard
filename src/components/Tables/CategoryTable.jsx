@@ -24,7 +24,8 @@ import TableContainer from "@mui/material/TableContainer";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import { TablePagination } from "./TablePagination";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 import DeleteCategoryAlert from "../../pages/Categories/DeleteCategoryAlert";
 import { openDeleteCategoryAlert } from "../../store/slices/CategoriesSlice";
 

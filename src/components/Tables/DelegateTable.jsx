@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 
 // REDUX
 import { useSelector } from "react-redux";

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { removeWhiteSpace } from "../../../HelperComponents";
 
 const StorePhoneNumber = ({ phoneNumber, setPhoneNumber, settingErr }) => {
 	/*Phone number validation */
@@ -30,6 +31,9 @@ const StorePhoneNumber = ({ phoneNumber, setPhoneNumber, settingErr }) => {
 							id='phonenumber'
 							placeholder='رقم الهاتف'
 							value={phoneNumber}
+							onPaste={(e) => {
+								removeWhiteSpace(e);
+							}}
 							onChange={(e) => setPhoneNumber(e.target.value)}
 							maxLength='9'
 							required

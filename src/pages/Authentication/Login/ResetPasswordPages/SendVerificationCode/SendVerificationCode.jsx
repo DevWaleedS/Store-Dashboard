@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { ReactComponent as SvgComponent } from "../../../../../data/Icons/Component 59 – 11.svg";
@@ -12,7 +11,11 @@ import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvid
 
 import "./SendVerificationCode.css";
 import { AlertModal } from "../AlertModal";
-import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+
+// Helpers
+import { CircularLoading } from "../../../../../HelperComponents";
+
+// Api
 import {
 	useReSendVerificationCodeByEmailMutation,
 	useRestorePassWordMutation,

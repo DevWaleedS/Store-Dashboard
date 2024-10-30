@@ -15,7 +15,7 @@ import { TopBarSearchInput } from "../../../../global/TopBar";
 import SelectShippingStatus from "./SelectShippingStatus";
 import PrintShippingSticker from "./PrintShippingSticker";
 import Breadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../../HelperComponents";
 
 // RTK Query
 import { useGetOrderByIdQuery } from "../../../../store/apiSlices/ordersApiSlices/ordersApi";

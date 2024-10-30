@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { TablePagination } from "../../../components/Tables/TablePagination";
 
 //Icons

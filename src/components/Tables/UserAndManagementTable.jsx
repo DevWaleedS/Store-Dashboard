@@ -22,7 +22,7 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 
 // Icons
 import { DeleteIcon, EditIcon, Reports } from "../../data/Icons";

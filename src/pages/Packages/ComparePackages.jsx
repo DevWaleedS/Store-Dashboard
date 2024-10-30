@@ -1,5 +1,6 @@
 import React from "react";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 import { useGetPackagesQuery } from "../../store/apiSlices/selectorsApis/selectPackageApi";
 

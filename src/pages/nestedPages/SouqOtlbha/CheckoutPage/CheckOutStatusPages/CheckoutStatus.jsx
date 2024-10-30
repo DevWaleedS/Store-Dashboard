@@ -10,7 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "./CheckOutStatus.css";
 import { useGetUpgradePackagesQuery } from "../../../../../store/apiSlices/upgradePackagesApi";
-import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../../../HelperComponents";
 import { useShowVerificationQuery } from "../../../../../store/apiSlices/verifyStoreApi";
 import { useDispatch } from "react-redux";
 import { openVerifyModal } from "../../../../../store/slices/VerifyStoreModal-slice";

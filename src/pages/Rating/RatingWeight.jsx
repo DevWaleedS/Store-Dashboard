@@ -28,7 +28,8 @@ import {
 } from "../../data/Icons";
 
 // Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 import DeleteOneModalComp from "../../components/DeleteOneModal/DeleteOneModal";
 
 // RTK Query

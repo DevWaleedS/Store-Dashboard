@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 
 // Third party
-
 import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,7 +10,7 @@ import { Link } from "react-router-dom";
 import { TextEditorContext } from "../../../Context/TextEditorProvider";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { TextEditor } from "../../../components/TextEditor";
 
 // MUI

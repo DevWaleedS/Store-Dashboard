@@ -3,8 +3,8 @@ import React, { Fragment } from "react";
 // Third party
 import { useNavigate } from "react-router-dom";
 
-// Components
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../../HelperComponents";
 
 // Icons
 import { BsStarFill } from "react-icons/bs";

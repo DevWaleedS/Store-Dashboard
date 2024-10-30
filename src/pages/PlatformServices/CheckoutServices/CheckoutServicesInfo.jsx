@@ -1,12 +1,10 @@
 import React from "react";
 
+import { LuDot } from "react-icons/lu";
 import { IoIosClose } from "react-icons/io";
-
 import { CircularProgress } from "@mui/material";
 
-import { LuDot } from "react-icons/lu";
-
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { useRemoveServiceCouponMutation } from "../../../store/apiSlices/platformServicesApi";
 const CheckoutServicesInfo = ({
 	selectedServices,

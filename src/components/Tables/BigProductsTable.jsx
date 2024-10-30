@@ -22,7 +22,7 @@ import PropTypes from "prop-types";
 import { DeleteIcon, EditIcon } from "../../data/Icons";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 import Context from "../../Context/context";
 import TablePagination from "./TablePagination/TablePagination";
 import { DeleteContext } from "../../Context/DeleteProvider";

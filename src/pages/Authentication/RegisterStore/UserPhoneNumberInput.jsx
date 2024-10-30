@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 // Icons
 import { MdErrorOutline } from "react-icons/md";
+import { removeWhiteSpace } from "../../../HelperComponents";
 
 const UserPhoneNumberInput = ({
 	phonenumberError,
@@ -39,6 +40,9 @@ const UserPhoneNumberInput = ({
 						name='phonenumber'
 						maxLength='9'
 						minLength='9'
+						onPaste={(e) => {
+							removeWhiteSpace(e);
+						}}
 						value={registerInfo?.phonenumber}
 						onChange={handleRegisterInfo}
 						placeholder='500000000'

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import ImageUploading from "react-images-uploading";
 
 // Components
-import CircularLoading from "../HelperComponents/CircularLoading";
+import { CircularLoading } from "../HelperComponents";
 import TextareaCode from "../components/TextareaCode/TextareaCode";
 
 // Context

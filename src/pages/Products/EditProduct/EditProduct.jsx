@@ -10,7 +10,7 @@ import { TagsInput } from "react-tag-input-component";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { TextEditor } from "../../../components/TextEditor";
 import EditProductOptions from "./EditProductOptions";
 import { useForm, Controller } from "react-hook-form";

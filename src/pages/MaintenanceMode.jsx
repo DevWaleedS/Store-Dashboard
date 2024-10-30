@@ -22,9 +22,6 @@ import { Button, Switch } from "@mui/material";
 import { RiText } from "react-icons/ri";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-// Component
-import CircularLoading from "../HelperComponents/CircularLoading";
-
 // RTK Query
 import {
 	useGetMaintenanceModeDataQuery,

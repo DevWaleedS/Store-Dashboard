@@ -9,7 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // Context
 import { LoadingContext } from "../../Context/LoadingProvider";

@@ -2,7 +2,8 @@ import React, { Fragment, useEffect } from "react";
 import "./TermsModal.css";
 import { ImArrowRight } from "react-icons/im";
 import { useGetAtlhaPagesDataQuery } from "../../../store/apiSlices/atlbhaPagesApi";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../HelperComponents";
 
 const BackDrop = ({ closeModal }) => {
 	return <div className='backdrop' onClick={closeModal}></div>;

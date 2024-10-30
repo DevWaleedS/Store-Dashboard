@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { TablePagination } from "../../../components/Tables/TablePagination";
 
 // RTK Query

@@ -9,6 +9,7 @@ import { useForm, Controller } from "react-hook-form";
 
 // Context
 import { LoadingContext } from "../../../Context/LoadingProvider";
+import { removeWhiteSpace } from "../../../HelperComponents";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -673,6 +674,9 @@ const EditBankAccountModal = () => {
 												type='text'
 												name='bankAccount'
 												id='bankAccount'
+												onPaste={(e) => {
+													removeWhiteSpace(e);
+												}}
 												placeholder='ادخل رقم الحساب البنكي الخاص بك '
 												{...register("bankAccount", {
 													required: "حقل  رقم الحساب البنكي مطلوب",
@@ -705,6 +709,9 @@ const EditBankAccountModal = () => {
 												type='text'
 												name='iban'
 												id='iban'
+												onPaste={(e) => {
+													removeWhiteSpace(e);
+												}}
 												maxLength={22}
 												placeholder='12345678923456789'
 												{...register("iban", {

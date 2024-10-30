@@ -20,7 +20,7 @@ import {
 	useLoginMadfuWithPaymentPackageMutation,
 } from "../../../store/apiSlices/upgradePackagesApi";
 
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { useGetMainInformationQuery } from "../../../store/apiSlices/mainInformationApi";
 import { useGetUpgradePackagesQuery } from "../../../store/apiSlices/upgradePackagesApi";
 import PackageCheckoutInfo from "./PackageCheckoutInfo";

@@ -14,7 +14,7 @@ import { Box, Modal } from "@mui/material";
 import RenderPaymentsList from "./RenderPaymentsList";
 import CheckoutServicesInfo from "./CheckoutServicesInfo";
 import RenderServicesCouponInput from "./RenderServicesCouponInput";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 
 // RTK  Query
 import {

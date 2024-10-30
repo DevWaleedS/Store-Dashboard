@@ -16,7 +16,8 @@ import { Button } from "@mui/material";
 
 // Components
 import { SendSupportReplayModal } from "../../components/Modal";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // Icons
 import {

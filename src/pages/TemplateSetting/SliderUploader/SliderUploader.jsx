@@ -9,7 +9,7 @@ import ImageUploading from "react-images-uploading";
 import { MdFileUpload } from "react-icons/md";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 
 // MUI
 import { Button, FormControl, Switch } from "@mui/material";

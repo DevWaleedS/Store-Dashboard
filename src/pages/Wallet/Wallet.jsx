@@ -12,7 +12,8 @@ import {
 } from "./index.js";
 import { Breadcrumb } from "../../components";
 import BillingTable from "../../components/Tables/BillingTable.jsx";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // Icons
 import { FiPlus } from "react-icons/fi";

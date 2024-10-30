@@ -14,6 +14,7 @@ import axios from "axios";
 import TermsModal from "../TermsModal/TermsModal";
 import Context from "../../../Context/context";
 import AlertModal from "../Login/ResetPasswordPages/AlertModal/AlertModal";
+import { removeWhiteSpace } from "../../../HelperComponents";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  	=> TO HANDLE THE REG_EXPRESS <=
@@ -271,6 +272,9 @@ function RegisterDelegate() {
 										name='phonenumber'
 										maxLength='9'
 										minLength='0'
+										onPaste={(e) => {
+											removeWhiteSpace(e);
+										}}
 										value={registerInfo?.phonenumber}
 										onChange={handleRegisterInfo}
 										type='tel'

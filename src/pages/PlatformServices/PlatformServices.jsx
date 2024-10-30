@@ -6,7 +6,8 @@ import { Helmet } from "react-helmet";
 // Components
 import { Breadcrumb } from "../../components";
 import { TopBarSearchInput } from "../../global/TopBar";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // Context
 import CheckoutServices from "./CheckoutServices/CheckoutServices";

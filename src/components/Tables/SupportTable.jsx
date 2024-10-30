@@ -33,7 +33,7 @@ import TableContainer from "@mui/material/TableContainer";
 import { TablePagination } from "./TablePagination";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 
 // Icons
 import {

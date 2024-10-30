@@ -11,7 +11,8 @@ import { LoadingContext } from "../../../../Context/LoadingProvider";
 // Components
 import OptionsModal from "./OptionsModal";
 import { Breadcrumb } from "../../../../components";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../../HelperComponents";
 
 // Icons
 import { Cross10 } from "../../../../data/Icons";

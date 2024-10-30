@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSendStoresInfoToMadfuMutation } from "../../../../store/apiSlices/paymentGatewaysApi";
 import { toast } from "react-toastify";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../../HelperComponents";
+import { removeWhiteSpace } from "../../../../HelperComponents";
 import { PageHint } from "../../../../components";
 
 const SendStoresInfo = ({ isStoreIfoLoading, storeInfoData }) => {
@@ -120,6 +121,9 @@ const SendStoresInfo = ({ isStoreIfoLoading, storeInfoData }) => {
 								maxLength={9}
 								placeholder='قم بادخال رقم الجوال'
 								value={storeInfo.phonenumber}
+								onPaste={(e) => {
+									removeWhiteSpace(e);
+								}}
 								onChange={handleSendInfoOnChange}
 							/>
 							<span>966+</span>

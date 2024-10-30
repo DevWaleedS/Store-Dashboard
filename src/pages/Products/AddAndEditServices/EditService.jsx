@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 // Components
 import EditServiceOptions from "./EditServiceOptions";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { TextEditor } from "../../../components/TextEditor";
 import { useForm, Controller } from "react-hook-form";
 

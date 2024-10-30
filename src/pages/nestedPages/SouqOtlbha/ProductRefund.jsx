@@ -5,9 +5,8 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Components
-
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../HelperComponents";
 
 // Context
 import { LoadingContext } from "../../../Context/LoadingProvider";

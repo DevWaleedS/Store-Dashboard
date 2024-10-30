@@ -14,7 +14,8 @@ import { ArrowBack, ArrowDown, PDFIcon } from "../../../data/Icons";
 
 // Components
 import { CourseVideoModal } from "../../../components/Modal";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
+
 import VideoOfCourseDuration from "../VideoOfCourseDuration/VideoOfCourseDuration";
 
 // RTK Query

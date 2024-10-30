@@ -13,7 +13,9 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Helpers
+import { removeWhiteSpace, CircularLoading } from "../../HelperComponents";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -542,6 +544,9 @@ const EditUserPage = () => {
 														name='phonenumber'
 														type='tel'
 														id='phonenumber'
+														onPaste={(e) => {
+															removeWhiteSpace(e);
+														}}
 														className='direction-ltr'
 														placeholder='567891234'
 														{...register("phonenumber", {

@@ -8,6 +8,7 @@ import { useDropzone } from "react-dropzone";
 
 // Context
 import { LoadingContext } from "../../../Context/LoadingProvider";
+import { removeWhiteSpace } from "../../../HelperComponents";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -678,6 +679,9 @@ const AddBankAccountModal = () => {
 											<input
 												type='text'
 												name='bankAccount'
+												onPaste={(e) => {
+													removeWhiteSpace(e);
+												}}
 												id='bankAccount'
 												placeholder='ادخل رقم الحساب البنكي الخاص بك '
 												{...register("bankAccount", {
@@ -712,6 +716,9 @@ const AddBankAccountModal = () => {
 												name='iban'
 												id='iban'
 												maxLength={22}
+												onPaste={(e) => {
+													removeWhiteSpace(e);
+												}}
 												placeholder='12345678923456789'
 												{...register("iban", {
 													required: "حقل رقم آيبان الحساب مطلوب",

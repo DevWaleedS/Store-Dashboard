@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
-// Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // Context
 import { LoadingContext } from "../../Context/LoadingProvider";

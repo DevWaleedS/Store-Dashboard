@@ -4,7 +4,8 @@ import {
 	useGetUpgradePackagesQuery,
 	useSetPackageIdPrePaymentMutation,
 } from "../../store/apiSlices/upgradePackagesApi";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 import "./Packages.css";
 import { useNavigate } from "react-router-dom";

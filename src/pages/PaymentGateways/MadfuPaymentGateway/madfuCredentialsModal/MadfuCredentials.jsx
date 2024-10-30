@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 import { PageHint } from "../../../../components";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../../HelperComponents";
 import { useMadfuAuthMutation } from "../../../../store/apiSlices/paymentGatewaysApi";
 
 const MadfuCredentials = ({

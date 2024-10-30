@@ -19,7 +19,7 @@ import { Info } from "../../data/Icons";
 
 //Components
 import { TablePagination } from "./TablePagination";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 
 function EnhancedTableHead(props) {
 	return (

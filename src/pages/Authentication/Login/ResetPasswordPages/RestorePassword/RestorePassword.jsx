@@ -16,8 +16,13 @@ import { ResetPasswordContext } from "../../../../../Context/ResetPasswordProvid
 
 // Icons
 import { SvgComponent, SvgKey } from "../../../../../data/Icons";
-import CircularLoading from "../../../../../HelperComponents/CircularLoading";
 import { useRestorePassWordMutation } from "../../../../../store/apiSlices/loginApi";
+
+// Helpers
+import {
+	removeWhiteSpace,
+	CircularLoading,
+} from "../../../../../HelperComponents";
 
 const RestorePassword = () => {
 	const navigate = useNavigate();
@@ -126,6 +131,9 @@ const RestorePassword = () => {
 											setResetPasswordError("");
 										}}
 										type='tel'
+										onPaste={(e) => {
+											removeWhiteSpace(e);
+										}}
 										name='phoneNumber'
 										placeholder='ادخل رقم الجوال المستخدم في التسجيل '
 										maxLength='9'

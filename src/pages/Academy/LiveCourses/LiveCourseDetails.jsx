@@ -6,10 +6,9 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 
 // Icons
 import { ArrowBack } from "../../../data/Icons";
-import { MdOutlineTitle } from "react-icons/md";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 
 // RTK Query
 import { useGetLiveCourseByIdQuery } from "../../../store/apiSlices/academyApi";

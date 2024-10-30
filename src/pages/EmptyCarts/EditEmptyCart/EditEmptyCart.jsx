@@ -22,7 +22,8 @@ import DiscountDetails from "./DiscountDetails";
 import { Breadcrumb } from "../../../components";
 import SendOfferMessage from "./SendOfferMessage";
 import ProductsTableDetails from "./ProductsTableDetails";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../HelperComponents";
 
 // Datepicker
 import DatePicker from "react-datepicker";

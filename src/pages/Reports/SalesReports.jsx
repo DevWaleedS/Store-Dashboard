@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 const SalesReports = ({ salesReport, loading }) => {
 	return (

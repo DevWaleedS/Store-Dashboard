@@ -11,7 +11,7 @@ import { LoadingContext } from "../../../../Context/LoadingProvider";
 
 // Components
 import { TopBarSearchInput } from "../../../../global/TopBar";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../../HelperComponents";
 
 // To print this page
 import ReactToPrint from "react-to-print";

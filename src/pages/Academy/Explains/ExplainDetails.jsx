@@ -8,7 +8,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowBack } from "../../../data/Icons";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 
 // RTK Query
 import { useGetAcademyExplainVideoByIdQuery } from "../../../store/apiSlices/academyApi";

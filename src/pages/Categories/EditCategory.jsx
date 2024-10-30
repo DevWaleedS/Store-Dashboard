@@ -17,7 +17,9 @@ import { openAddSubCategory } from "../../store/slices/AddSubCategory-slice";
 
 // Components
 import AddSubCategory from "../nestedPages/AddSubCategory";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // Icons
 import { AiOutlinePlus } from "react-icons/ai";

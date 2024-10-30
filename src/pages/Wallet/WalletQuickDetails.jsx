@@ -13,7 +13,7 @@ const WalletQuickDetails = ({ supplierDashboard, loading }) => {
 		},
 
 		{
-			id: 4,
+			id: 455,
 			icon: <IoWallet />,
 			title: "بانتظار الإيداع",
 			numbers: supplierDashboard?.TotalAwaitingToTransfer,

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 // components
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import CircularLoading from "../HelperComponents/CircularLoading";
+import { CircularLoading } from "../HelperComponents";
 
 // context
 import { LoadingContext } from "../Context/LoadingProvider";

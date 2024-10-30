@@ -15,7 +15,7 @@ import { EyeClose, EyeOPen, SvgComponent } from "../../../../../data/Icons";
 
 // Styles
 import "./CreateNewPassword.css";
-import CircularLoading from "../../../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../../../HelperComponents";
 import { useReCreateNewPasswordMutation } from "../../../../../store/apiSlices/loginApi";
 
 const CreateNewPassword = () => {

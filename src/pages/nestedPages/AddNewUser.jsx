@@ -9,7 +9,7 @@ import { useForm, Controller } from "react-hook-form";
 
 // Context
 import { LoadingContext } from "../../Context/LoadingProvider";
-
+import { removeWhiteSpace } from "../../HelperComponents";
 // import Dropzone Library
 import { useDropzone } from "react-dropzone";
 
@@ -501,6 +501,9 @@ const AddNewUser = () => {
 												id='phonenumber'
 												placeholder='567891234'
 												className='direction-ltr'
+												onPaste={(e) => {
+													removeWhiteSpace(e);
+												}}
 												{...register("phonenumber", {
 													required: "حقل  رقم الجوال مطلوب",
 													pattern: {

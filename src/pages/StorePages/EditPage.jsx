@@ -13,7 +13,8 @@ import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Components
 import { TextEditor } from "../../components/TextEditor";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // MUI
 import Box from "@mui/material/Box";

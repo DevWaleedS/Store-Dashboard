@@ -10,8 +10,7 @@ import { BsGift } from "react-icons/bs";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import moment from "moment";
 import Context from "../Context/context";
-import CircularLoading from "../HelperComponents/CircularLoading";
-
+import { CircularLoading } from "../HelperComponents";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 
 const Offers = () => {

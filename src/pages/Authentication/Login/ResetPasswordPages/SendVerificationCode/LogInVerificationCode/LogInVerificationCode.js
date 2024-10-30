@@ -12,7 +12,9 @@ import "../SendVerificationCode.css";
 
 import LogoHeader from "../../../../LogoHeader/LogoHeader";
 import { AlertModal } from "../../AlertModal";
-import CircularLoading from "../../../../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../../../../HelperComponents";
+
 import {
 	useReSendVerificationCodeByPhoneMutation,
 	useVerifyUserMutation,

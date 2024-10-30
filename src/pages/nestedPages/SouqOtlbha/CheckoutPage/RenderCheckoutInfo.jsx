@@ -1,5 +1,6 @@
 import React from "react";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../../HelperComponents";
 import { Cross10 } from "../../../../data/Icons";
 import { toast } from "react-toastify";
 import { useRemoveCartItemsMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";

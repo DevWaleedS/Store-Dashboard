@@ -12,7 +12,8 @@ import RenderCouponInput from "./RenderCouponInput";
 import RenderPaymentsList from "./RenderPaymentsList";
 import RenderShippingList from "./RenderShippingList";
 import RenderCheckoutInfo from "./RenderCheckoutInfo";
-import CircularLoading from "../../../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../../../HelperComponents";
 
 // RTK Query
 import {

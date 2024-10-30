@@ -10,8 +10,8 @@ import { Link, useNavigate } from "react-router-dom";
 // Context
 import { LoadingContext } from "../../Context/LoadingProvider";
 
-// Components
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -32,6 +32,7 @@ import {
 	useEditUserProfileDataMutation,
 	useGetUserProfileDataQuery,
 } from "../../store/apiSlices/editUserDetailsApi";
+import { removeWhiteSpace } from "../../HelperComponents";
 
 const style = {
 	position: "fixed",
@@ -595,9 +596,11 @@ const EditUserDetails = () => {
 													className='phone-input direction-ltr'
 													name='phonenumber'
 													type='tel'
+													onPaste={(e) => {
+														removeWhiteSpace(e);
+													}}
 													placeholder={500000000}
 													{...register("phonenumber", {})}
-													disabled
 													style={{ cursor: "auto" }}
 												/>
 

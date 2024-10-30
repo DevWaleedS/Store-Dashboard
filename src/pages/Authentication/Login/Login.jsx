@@ -8,7 +8,7 @@ import { ResetPasswordContext } from "../../../Context/ResetPasswordProvider";
 
 // RTk Query
 import { useLoginMutation } from "../../../store/apiSlices/loginApi";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 
 /** -----------------------------------------------------------------------------------------------------------
  *  TO HANDLE THE REG_EXPRESS

@@ -10,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 // Components
 import { TopBarSearchInput } from "../../global/TopBar";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 import { openAddBankAccountModal } from "../../store/slices/AddBankAccountModal";
 import { openCommentModal } from "../../store/slices/BankAccStatusCommentModal";
 

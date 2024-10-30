@@ -13,7 +13,8 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 
 // Components
 import useFetch from "../../Hooks/UseFetch";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // MUI
 import Box from "@mui/material/Box";

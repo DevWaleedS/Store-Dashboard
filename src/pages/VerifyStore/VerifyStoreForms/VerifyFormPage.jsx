@@ -9,7 +9,7 @@ import React, {
 import { Skeleton } from "@mui/material";
 
 // Components
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 
 // Context
 import { LoadingContext } from "../../../Context/LoadingProvider";

@@ -26,7 +26,8 @@ import UploadStoreLogo from "./UploadStoreLogo/UploadStoreLogo";
 import UploadStoreIcon from "./UploadStoreIcon/UploadStoreIcon";
 import StorePhoneNumber from "./StorePhoneNumber/StorePhoneNumber";
 import StoreDescription from "./StoreDescriprion/StoreDescription";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 import StoreEmailAddress from "./StoreEmailAddress/StoreEmailAddress";
 
 // Icons
@@ -117,7 +118,7 @@ const MainInformation = () => {
 			setDefaultStoreIcon(mainInformation?.icon);
 			setStoreName(mainInformation?.store_name);
 			setDomainType(mainInformation?.domain_type || "later_time");
-			setDomain(mainInformation?.domain);
+			setDomain(mainInformation?.domain?.replace(/^https?:\/\//i, ""));
 			setCountry(mainInformation?.country?.id || 1);
 			setCity(mainInformation?.city?.id);
 			setStoreEmail(mainInformation?.user?.email);
@@ -157,8 +158,13 @@ const MainInformation = () => {
 		formData.append("domain_type", domainType);
 
 		if (domainType === "has_domain" || domainType === "pay_domain") {
-			formData.append("domain", domain);
+			const hasProtocol = /^https?:\/\//i.test(domain);
+			const cleanDomain = hasProtocol
+				? domain.replace(/^https?:\/\//i, "")
+				: domain;
+			formData.append("domain", cleanDomain);
 		}
+
 		formData.append("country_id", country);
 		formData.append("city_id", city);
 		formData.append(

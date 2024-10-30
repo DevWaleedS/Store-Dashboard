@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 
 // Components
 import AcademyWidget from "../AcademyWidget";
-import CircularLoading from "../../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../../HelperComponents";
 import { TablePagination } from "../../../components/Tables/TablePagination";
 
 // RTK Query

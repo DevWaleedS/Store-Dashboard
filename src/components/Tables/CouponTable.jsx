@@ -23,7 +23,7 @@ import TableContainer from "@mui/material/TableContainer";
 
 // Components
 import { TablePagination } from "./TablePagination";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import DeleteOneModalComp from "../DeleteOneModal/DeleteOneModal";
 

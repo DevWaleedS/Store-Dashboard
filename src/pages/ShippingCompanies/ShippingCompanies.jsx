@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 import { Breadcrumb, PageHint } from "../../components";
 import { TopBarSearchInput } from "../../global/TopBar";
 import ShippingCompaniesData from "./ShippingCompaniesData";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 
 // RTK Query
 import {

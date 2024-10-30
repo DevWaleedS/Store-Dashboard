@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 // Third party
 import "rsuite/dist/rsuite.min.css";
 import { useNavigate } from "react-router-dom";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+import { CircularLoading } from "../../HelperComponents";
 
 // MUI
 import PropTypes from "prop-types";

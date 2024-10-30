@@ -9,7 +9,8 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
-import CircularLoading from "../../HelperComponents/CircularLoading";
+// Helpers
+import { CircularLoading } from "../../HelperComponents";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
 // Redux

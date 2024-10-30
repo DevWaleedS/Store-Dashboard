@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 // Components
 
 import { FormatNotifications } from "../components";
+import { CircularLoading } from "../HelperComponents";
 import DeleteModal from "../components/DeleteModal/DeleteModal";
-import CircularLoading from "../HelperComponents/CircularLoading";
 import { TablePagination } from "../components/Tables/TablePagination";
 import DeleteOneModalComp from "../components/DeleteOneModal/DeleteOneModal";
 
