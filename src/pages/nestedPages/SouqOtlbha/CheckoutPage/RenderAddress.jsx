@@ -8,7 +8,7 @@ import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectors
 
 const RenderAddress = ({ shipping, setShipping, error }) => {
 	// get shipping cities..
-	const { data: shippingCitiesData } = useGetShippingCitiesQuery(5);
+	const { data: shippingCitiesData } = useGetShippingCitiesQuery(1);
 
 	// handle set cities by arabic
 	function removeDuplicates(arr) {

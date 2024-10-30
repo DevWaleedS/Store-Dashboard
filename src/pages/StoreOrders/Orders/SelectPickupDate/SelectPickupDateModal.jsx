@@ -12,7 +12,6 @@ import { PageHint } from "../../../../components";
 import { DatePicker } from "rsuite";
 
 // import css style
-
 import "./SelectPickupDate.css";
 
 // Style the modal

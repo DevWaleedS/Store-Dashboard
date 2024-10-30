@@ -22,6 +22,9 @@ import { useGetOrderByIdQuery } from "../../../../store/apiSlices/ordersApiSlice
 import { useGetShippingCitiesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCitiesApi";
 
 const OrderDetails = () => {
+	// Handle print this page as pdf file
+	const componentRef = useRef();
+
 	// get current order by id
 	const { id } = useParams();
 	const { data: currentOrder, isFetching } = useGetOrderByIdQuery(id);
@@ -85,9 +88,6 @@ const OrderDetails = () => {
 
 		return matchingCity?.region?.name || name;
 	};
-
-	// Handle print this page as pdf file
-	const componentRef = useRef();
 
 	useEffect(() => {
 		if (currentOrder?.orders?.shippingtypes) {

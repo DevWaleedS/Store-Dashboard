@@ -36,7 +36,7 @@ function CartMenu({ data }) {
 				<>
 					<div className='products-list'>
 						{data?.cartDetail?.map((product) => (
-							<div className='product'>
+							<div className='product' key={product?.id}>
 								<div className='image'>
 									<Link to={`ProductRefund/${product?.product?.id}`}>
 										<img
