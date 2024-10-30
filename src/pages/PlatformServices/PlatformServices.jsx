@@ -76,8 +76,6 @@ const PlatformServices = () => {
 		store_name: "",
 		activity: [],
 		services: [],
-		name: "",
-		description: "",
 		paymentype_id: "",
 	});
 
@@ -92,8 +90,6 @@ const PlatformServices = () => {
 		store_name: "",
 		activity: "",
 		services: "",
-		name: "",
-		description: "",
 		paymentype_id: "",
 	});
 
@@ -102,8 +98,7 @@ const PlatformServices = () => {
 			store_name: "",
 			activity: "",
 			services: "",
-			name: "",
-			description: "",
+
 			paymentype_id: "",
 		});
 	};
@@ -252,49 +247,6 @@ const PlatformServices = () => {
 											))}
 										</Select>
 									</FormControl>
-								</div>
-							</div>
-
-							<div className='row align-items-center mb-4'>
-								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
-									<label htmlFor='order-number' className='d-block'>
-										اضافة خدمة جديدة
-										<span>(اختياري)</span>
-									</label>
-								</div>
-								<div className='col-md-7 col-12'>
-									<div className='new-service-hint'>
-										يمكنك اضافة خدمة جديدة في حال لم تكن موجودة في قائمة الخدمات
-										بالأعلى
-									</div>
-									<input
-										type='text'
-										name='name'
-										value={data?.name}
-										onChange={handleOnChangeData}
-										className='w-100 new-service-input'
-										placeholder='ادخل اسم الخدمة الجديدة'
-									/>
-								</div>
-							</div>
-
-							<div className='row align-items-center mb-4'>
-								<div className='col-md-4 col-12 d-flex justify-content-md-start mb-md-0 mb-2'>
-									<label htmlFor='order-number' className='d-block'>
-										وصف الخدمة
-										<span>(اختياري)</span>
-									</label>
-								</div>
-								<div className='col-md-7 col-12'>
-									<textarea
-										rows={4}
-										id='product-desc'
-										name='description'
-										className='w-100 new-service-input'
-										placeholder='قم بكتابة وصف واضح للخدمة'
-										value={data?.description}
-										onChange={handleOnChangeData}
-									/>
 								</div>
 							</div>
 
