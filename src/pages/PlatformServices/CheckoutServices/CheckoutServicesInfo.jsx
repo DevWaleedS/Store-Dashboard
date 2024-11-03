@@ -148,10 +148,8 @@ const CheckoutServicesInfo = ({
 											</div>
 										</th>
 										<td>
-											{cartAfterCoupon?.coupon
-												? (
-														grandTotal - cartAfterCoupon?.coupon?.discount
-												  )?.toFixed(2)
+											{cartAfterCoupon?.discount_value
+												? cartAfterCoupon?.discount_value
 												: grandTotal?.toFixed(2)}{" "}
 											ر.س
 										</td>
