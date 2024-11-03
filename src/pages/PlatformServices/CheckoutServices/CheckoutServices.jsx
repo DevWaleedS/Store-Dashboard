@@ -106,19 +106,20 @@ const CheckoutServices = ({
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				toast.success(
-					response?.data?.message?.ar
-						? response.data.message.ar
-						: response.data.message.en,
-					{
-						theme: "light",
-					}
-				);
 				if (
 					response?.data?.message?.en === "The coupon is invalid" ||
 					response?.data?.message?.en === "The coupon is already used"
 				) {
 					toast.error(
+						response?.data?.message?.ar
+							? response.data.message.ar
+							: response.data.message.en,
+						{
+							theme: "light",
+						}
+					);
+				} else {
+					toast.success(
 						response?.data?.message?.ar
 							? response.data.message.ar
 							: response.data.message.en,
@@ -161,11 +162,8 @@ const CheckoutServices = ({
 		// data that send to api
 		let formData = new FormData();
 		formData.append("name", data?.store_name);
-		if (cartAfterCoupon) {
-			formData.append(
-				"order_id",
-				cartAfterCoupon?.data?.websiteorder?.order_number
-			);
+		if (cartAfterCoupon?.data?.websiteorder?.id) {
+			formData.append("order_id", cartAfterCoupon?.data?.websiteorder?.id);
 		}
 
 		data?.services?.forEach((service, index) =>

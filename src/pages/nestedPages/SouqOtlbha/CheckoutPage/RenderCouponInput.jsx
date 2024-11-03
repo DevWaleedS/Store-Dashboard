@@ -102,7 +102,7 @@ const RenderCouponInput = ({
 							onClick={handleApplyDiscountCoupon}
 							type='button'
 							className='btn btn-primary'
-							disabled={loadingCoupon || isApplyDiscountLoading}>
+							disabled={loadingCoupon || isApplyDiscountLoading || !coupon}>
 							تطبيق
 						</button>
 					</form>

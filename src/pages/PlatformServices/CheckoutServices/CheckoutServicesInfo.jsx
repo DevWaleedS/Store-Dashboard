@@ -122,12 +122,16 @@ const CheckoutServicesInfo = ({
 													</button>
 												</span>
 											</th>
+
 											<td>
 												{cartAfterCoupon?.coupon?.discount_type === "نسبة مئوية"
-													? `${
-															selectedServices?.price_after_coupon *
+													? `${(
+															selectedServices?.reduce(
+																(sum, item) => sum + item.price,
+																0
+															) *
 															(cartAfterCoupon?.coupon?.discount / 100)
-													  } ر.س`
+													  ).toFixed(2)} ر.س`
 													: `${cartAfterCoupon?.coupon?.discount?.toFixed(
 															2
 													  )} ر.س`}
