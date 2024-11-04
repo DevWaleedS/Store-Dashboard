@@ -56,7 +56,7 @@ const SetDomainType = ({
 									handleOnChange(e);
 								}}>
 								<FormControlLabel
-									disabled={isHasDomain !== ""}
+									disabled={isHasDomain}
 									sx={{
 										marginRight: -1,
 										"& .MuiTypography-root": {
@@ -69,7 +69,7 @@ const SetDomainType = ({
 									control={
 										<Radio
 											checked={domainType === value}
-											disabled={isHasDomain !== ""}
+											disabled={isHasDomain}
 											sx={{
 												"& .MuiSvgIcon-root": {
 													fontSize: 18,
@@ -136,7 +136,7 @@ const SetDomainType = ({
 												name='domain'
 												id='domain'
 												value={domain}
-												disabled={isHasDomain !== ""}
+												disabled={isHasDomain}
 												onChange={(e) => {
 													setDomain(
 														e.target.value
