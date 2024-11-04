@@ -13,14 +13,14 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 // Third part
 
 import { ToastContainer } from "react-toastify";
-import { Outlet, ScrollRestoration } from "react-router-dom";
+import { Link, Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
 
 // App Modal
 import MaintenanceMode from "./MaintenanceMode";
-import { VerifayStoreAlert } from "../components/Modal";
+import { PackagePeriodAlert, VerifayStoreAlert } from "../components/Modal";
 import { VerifayAfterMainInfoAlert } from "../components/Modal";
 import { DelegateRequestAlert, VerifyStoreModal } from "../components/Modal";
 
@@ -34,8 +34,8 @@ import PrivateRoute from "./Authentication/Login/PrivateRoute/PrivateRoute";
 import AxiosInterceptors from "../API/AxiosInterceptors";
 import SideBar from "../global/Sidebar/SideBar";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
-import UseIsSubscribeInPackages from "../Hooks/UseIsSubscribeInPackages";
 import UseAccountVerification from "../Hooks/UseAccountVerification";
+import { Message } from "rsuite";
 
 const RootLayout = () => {
 	// UseIsSubscribeInPackages();
@@ -132,6 +132,7 @@ const RootLayout = () => {
 									</div>
 									<div className='pages-content'>
 										<div className='main-content'>
+											<PackagePeriodAlert showVerification={showVerification} />
 											{/** use ScrollRestoration from react router dom to fix scrolling issue */}
 											<ScrollRestoration />
 											<Outlet />

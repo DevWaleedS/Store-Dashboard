@@ -11,6 +11,7 @@ import "./Packages.css";
 import { useNavigate } from "react-router-dom";
 import PackagesFeatures from "./PackagesFeatures";
 import { toast } from "react-toastify";
+import { Message } from "rsuite";
 
 export const PackagesPlans = () => {
 	const navigate = useNavigate();
@@ -19,23 +20,6 @@ export const PackagesPlans = () => {
 	const packagesIsNotActive = upgradePackages?.every?.(
 		(pack) => pack?.status === "غير نشط"
 	);
-
-	// Find the package with the highest yearly_price
-	const highestPricedPackage = upgradePackages?.reduce((max, item) => {
-		// Calculate the price considering the discount
-		const priceWithDiscount =
-			item.discount > 0 ? item.yearly_price - item.discount : item.yearly_price;
-
-		// Determine if the current item should be the new max
-		return priceWithDiscount >
-			(max
-				? max.discount > 0
-					? max.yearly_price - max.discount
-					: max.yearly_price
-				: 0)
-			? item
-			: max;
-	}, null);
 
 	// handle set package id and navigate user to checkout package
 	const [setPackageIdPrePayment] = useSetPackageIdPrePaymentMutation();
@@ -88,8 +72,26 @@ export const PackagesPlans = () => {
 						<div
 							key={idx}
 							className={`p-4 content-package ${
-								item === highestPricedPackage ? "top-package" : ""
+								item?.is_selected && item?.package_paid ? "top-package" : ""
 							}`}>
+							{item?.is_selected && item?.package_paid ? (
+								item?.left_days === 0 ? (
+									<Message closable type='error' showIcon>
+										الباقة منتهية <strong>انتبه!</strong>
+									</Message>
+								) : item?.left_days <= 30 ? (
+									<Message closable type='warning' showIcon>
+										<strong>يرجي الانتباه!</strong> الباقة ستنتهي خلال{" "}
+										<strong>
+											{item?.left_days === 1
+												? "يوم !"
+												: item?.left_days === 2
+												? "يومين !"
+												: item?.left_days > 2 && item?.left_days + "أيام !"}
+										</strong>
+									</Message>
+								) : null
+							) : null}
 							<div className='w-100'>
 								<h2 className='d-flex align-items-center  text-center gap-4 mb-6 justify-content-center pack-name'>
 									{item?.name}
@@ -121,7 +123,17 @@ export const PackagesPlans = () => {
 
 							{item?.is_selected && item?.package_paid ? (
 								<div className='w-100 d-flex justify-content-center align-items-center current_package_btn'>
-									الباقة الحالية
+									{item?.left_days <= 30 ? (
+										<button
+											className='package_btn'
+											onClick={() => {
+												handleNavigateToCheckoutPackages(item);
+											}}>
+											تجديد الباقة
+										</button>
+									) : (
+										"	الباقة الحالية "
+									)}
 								</div>
 							) : (
 								<button

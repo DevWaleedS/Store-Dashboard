@@ -34,6 +34,26 @@ body,
 	white-space: pre-line;
 }
 
+.package-alert .rs-message-warning {
+	width: 79%;
+	position: fixed;
+	z-index: 1000;
+	top: 92px;
+	left: 20px;
+}
+
+.rs-message-body {
+	white-space: normal;
+}
+
+@media (max-width: 768px) {
+	.package-alert .rs-message-warning {
+		width: 94%;
+		top: 86px;
+		left: 12px;
+	}
+}
+
 .content > .row {
 	width: 100%;
 	overflow: hidden;

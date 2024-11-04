@@ -125,6 +125,33 @@
 	background-color: var(--second-500) !important;
 	color: #fff;
 }
+
+/* style for alert Message using  rsuite */
+.rs-message-warning {
+	width: 100%;
+}
+.rs-message-container {
+	display: flex;
+	padding: 12px 18px 12px 12px;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 8px;
+}
+
+.rs-message-warning .rs-btn-close {
+	z-index: 999;
+	position: absolute;
+	font-size: 10px;
+	padding: 12px;
+	left: 12px;
+	right: auto;
+	top: 3px;
+}
+
+.rs-message-warning .rs-btn-close svg {
+	font-size: 16px;
+}
+/* style for mobile */
 @media (max-width: 768px) {
 	.package-boxes .content-package {
 		width: 100%;
