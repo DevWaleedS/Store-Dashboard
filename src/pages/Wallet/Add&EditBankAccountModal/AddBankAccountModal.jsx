@@ -729,7 +729,7 @@ const AddBankAccountModal = () => {
 												onPaste={(e) => {
 													removeWhiteSpace(e);
 												}}
-												placeholder='ادخل رقم آيبان الحساب البنكي بدون SA '
+												placeholder=' SA ادخل رقم الآيبان بدون'
 												{...register("iban", {
 													required: "حقل رقم آيبان الحساب مطلوب",
 												})}
