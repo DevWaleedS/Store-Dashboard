@@ -406,10 +406,9 @@ const AddBankAccountModal = () => {
 
 	/** handle save Options  */
 	const [addBankAccount, { isLoading }] = useAddBankAccountMutation();
-	const handleAddBankAccount = async (data) => {
+	const handleAddBankAccount = async (e, data) => {
 		setLoadingTitle("جاري اضافة الحساب البنكي");
 		resetErrors();
-		data.preventDefault();
 
 		// data that send to api
 		let formData = new FormData();
@@ -555,15 +554,25 @@ const AddBankAccountModal = () => {
 
 							<form
 								onSubmit={(e) => {
+									e.preventDefault();
 									if (
 										!bankAccountInfo?.civil_id ||
 										!bankAccountInfo?.website_image ||
 										!bankAccountInfo?.bankAccountLetter
 									) {
 										handleAddDocsErrors(e);
-									} else {
-										handleSubmit(handleAddBankAccount(e));
+										return;
 									}
+
+									// Get form values directly from the form state
+									const formValues = {
+										bankId: bankAccountInfo.bankId,
+										bankAccountHolderName: e.target.bankAccountHolderName.value,
+										bankAccount: e.target.bankAccount.value,
+										iban: e.target.iban.value,
+									};
+
+									handleAddBankAccount(e, formValues);
 								}}>
 								<div className='row mb-3'>
 									<div className='col-12'>
@@ -595,6 +604,7 @@ const AddBankAccountModal = () => {
 													if (bankAccountInfo?.bankId === "" || !selected) {
 														return <p className='text-[#ADB5B9]'>اختر البنك</p>;
 													}
+
 													const result =
 														banks?.filter(
 															(item) => item?.bankId === parseInt(selected)
@@ -719,7 +729,7 @@ const AddBankAccountModal = () => {
 												onPaste={(e) => {
 													removeWhiteSpace(e);
 												}}
-												placeholder='12345678923456789'
+												placeholder='ادخل رقم آيبان الحساب البنكي بدون SA '
 												{...register("iban", {
 													required: "حقل رقم آيبان الحساب مطلوب",
 												})}
