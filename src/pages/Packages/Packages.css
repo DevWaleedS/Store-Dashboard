@@ -127,10 +127,12 @@
 }
 
 /* style for alert Message using  rsuite */
-.rs-message-warning {
+.package-alert .rs-message,
+.end_package_period .rs-message {
 	width: 100%;
 }
-.rs-message-container {
+.package-alert .rs-message-container,
+.end_package_period .rs-message-container {
 	display: flex;
 	padding: 12px 18px 12px 12px;
 	justify-content: flex-start;
@@ -138,7 +140,8 @@
 	gap: 8px;
 }
 
-.rs-message-warning .rs-btn-close {
+.package-alert .rs-message .rs-btn-close,
+.end_package_period .rs-message .rs-btn-close {
 	z-index: 999;
 	position: absolute;
 	font-size: 10px;
@@ -148,13 +151,37 @@
 	top: 3px;
 }
 
-.rs-message-warning .rs-btn-close svg {
+.package-alert .rs-message .rs-btn-close svg,
+.end_package_period .rs-message .rs-btn-close svg {
 	font-size: 16px;
 }
+
+.package-alert .rs-message {
+	width: 79%;
+	position: fixed;
+	z-index: 1000;
+	top: 92px;
+	left: 20px;
+}
+.end_package_period .rs-message {
+	position: absolute;
+	top: -65px;
+}
+
+.package-alert .rs-message-body,
+.end_package_period .rs-message-body {
+	white-space: normal;
+}
+
 /* style for mobile */
 @media (max-width: 768px) {
 	.package-boxes .content-package {
 		width: 100%;
+	}
+	.package-alert .rs-message {
+		width: 94%;
+		top: 86px;
+		left: 12px;
 	}
 
 	.package-boxes .content-package .package_btn {

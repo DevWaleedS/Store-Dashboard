@@ -12,15 +12,23 @@ const PackagePeriodAlert = ({ showVerification }) => {
 	if (!isVisible) return null;
 
 	return (
-		<div className='package-alert'>
+		<div className='package-alert pt-3'>
 			{showVerification?.left <= 30 && showVerification?.package_paid ? (
 				showVerification?.left === 0 ? (
 					<Message closable type='error' showIcon onClose={handleClose}>
-						الباقة منتهية <strong>انتبه!</strong>
+						<strong>انتهت!</strong> مدة الاشتراك في باقة{" "}
+						<strong>
+							<span style={{ color: "#1dbbbe" }}>
+								({showVerification?.package})
+							</span>{" "}
+						</strong>
+						<Link to='/upgrade-packages' className='me-2' onClick={handleClose}>
+							تجديد الاشتراك الآن
+						</Link>
 					</Message>
 				) : showVerification?.left <= 30 ? (
 					<Message closable type='warning' showIcon onClose={handleClose}>
-						<strong>يرجي الانتباه!</strong> الباقة ستنتهي خلال{" "}
+						<strong>يرجي الانتباه!</strong> ستنتهي الباقة خلال{" "}
 						<strong>
 							{showVerification?.left === 1
 								? "يوم !"
@@ -30,7 +38,7 @@ const PackagePeriodAlert = ({ showVerification }) => {
 								  showVerification?.left + "أيام !"}
 						</strong>
 						<Link to='/upgrade-packages' className='me-2' onClick={handleClose}>
-							جدد الآن
+							جدد الاشتراك الآن
 						</Link>
 					</Message>
 				) : null

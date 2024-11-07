@@ -74,24 +74,27 @@ export const PackagesPlans = () => {
 							className={`p-4 content-package ${
 								item?.is_selected && item?.package_paid ? "top-package" : ""
 							}`}>
-							{item?.is_selected && item?.package_paid ? (
-								item?.left_days === 0 ? (
-									<Message closable type='error' showIcon>
-										الباقة منتهية <strong>انتبه!</strong>
-									</Message>
-								) : item?.left_days <= 30 ? (
-									<Message closable type='warning' showIcon>
-										<strong>يرجي الانتباه!</strong> الباقة ستنتهي خلال{" "}
-										<strong>
-											{item?.left_days === 1
-												? "يوم !"
-												: item?.left_days === 2
-												? "يومين !"
-												: item?.left_days > 2 && item?.left_days + "أيام !"}
-										</strong>
-									</Message>
-								) : null
-							) : null}
+							<div className='end_package_period w-100'>
+								{item?.is_selected && item?.package_paid ? (
+									item?.left_days === 0 ? (
+										<Message closable type='error' showIcon>
+											<strong>انتهت!</strong> مدة الاشتراك في الباقة{" "}
+										</Message>
+									) : item?.left_days <= 30 ? (
+										<Message closable type='warning' showIcon>
+											<strong>يرجي الانتباه!</strong> ستنتهي الباقة خلال{" "}
+											<strong>
+												{item?.left_days === 1
+													? "يوم !"
+													: item?.left_days === 2
+													? "يومين !"
+													: item?.left_days > 2 && item?.left_days + "أيام !"}
+											</strong>
+										</Message>
+									) : null
+								) : null}
+							</div>
+
 							<div className='w-100'>
 								<h2 className='d-flex align-items-center  text-center gap-4 mb-6 justify-content-center pack-name'>
 									{item?.name}
