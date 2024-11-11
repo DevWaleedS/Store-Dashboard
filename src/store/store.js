@@ -72,6 +72,7 @@ import { getStoreTokenApi } from "./apiSlices/getStoreTokenApi";
 import { selectPackageApi } from "./apiSlices/selectorsApis/selectPackageApi";
 import { upgradePackagesApi } from "./apiSlices/upgradePackagesApi";
 import { atlbhaPagesApi } from "./apiSlices/atlbhaPagesApi";
+import { selectPeriodTypesApi } from "./apiSlices/selectorsApis/selectPeriodTypesApi";
 
 // store
 export const store = configureStore({
@@ -104,6 +105,7 @@ export const store = configureStore({
 			editUserDetailsApi.middleware,
 			mainInformationApi.middleware,
 			selectCountriesApi.middleware,
+			selectPeriodTypesApi.middleware,
 			maintenanceModeApi.middleware,
 			paymentGatewaysApi.middleware,
 			templateSettingApi.middleware,
@@ -167,6 +169,7 @@ export const store = configureStore({
 		[technicalSupportApi.reducerPath]: technicalSupportApi.reducer,
 		[platformServicesApi.reducerPath]: platformServicesApi.reducer,
 		[shippingCompaniesApi.reducerPath]: shippingCompaniesApi.reducer,
+		[selectPeriodTypesApi.reducerPath]: selectPeriodTypesApi.reducer,
 		[postalSubscriptionsApi.reducerPath]: postalSubscriptionsApi.reducer,
 		[souqOtlobhaProductsApi.reducerPath]: souqOtlobhaProductsApi.reducer,
 		[importPaymentMethodApi.reducerPath]: importPaymentMethodApi.reducer,
@@ -192,7 +195,6 @@ export const store = configureStore({
 		ImportProductHintModal: ImportProductHintModal,
 		VerifyStoreAlertModal: VerifyStoreAlertModalSlice,
 		VerifyAfterMainModal: VerifyStoreAlertAfterMainModalSlice,
-
 		BankAccStatusCommentModal,
 		BankAccountAlert,
 		CategoriesSlice,

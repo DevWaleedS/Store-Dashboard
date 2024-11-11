@@ -11,16 +11,33 @@ const TopBarSearchInput = () => {
 	const [search, setSearch] = useState("");
 	const [searchSuggestions, setSearchSuggestions] = useState(null);
 
+	const [timeoutId, setTimeoutId] = useState(null);
+
 	useEffect(() => {
-		if (search !== "") {
-			setSearchSuggestions(
-				dashboardSections?.filter((suggestion) =>
-					suggestion?.sectionName?.includes(search)
-				)
-			);
-		} else {
-			setSearchSuggestions(null);
+		if (timeoutId) {
+			clearTimeout(timeoutId);
 		}
+
+		const newTimeoutId = setTimeout(() => {
+			if (search !== "") {
+				const filteredResults = dashboardSections?.filter((suggestion) =>
+					suggestion?.sectionName?.toLowerCase().includes(search.toLowerCase())
+				);
+				// Remove duplicates using Set
+				const uniqueResults = [...new Set(filteredResults)];
+				setSearchSuggestions(uniqueResults);
+			} else {
+				setSearchSuggestions(null);
+			}
+		}, 100);
+
+		setTimeoutId(newTimeoutId);
+
+		return () => {
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
+		};
 	}, [search]);
 
 	return (

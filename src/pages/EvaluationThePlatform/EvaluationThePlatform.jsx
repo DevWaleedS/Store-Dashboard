@@ -103,9 +103,7 @@ const EvaluationThePlatform = () => {
 						<div className='evaluation-the-platform'>
 							<TextEditor
 								ToolBar={"evaluationThePlatform"}
-								placeholder={
-									"منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة الإلكترونية"
-								}
+								placeholder={`تقييمك يهمنا ويساعدنا كثير في تحسين خدماتنا لتقديم الافضل ودعم كبير لنا`}
 							/>
 						</div>
 					</div>
@@ -115,8 +113,10 @@ const EvaluationThePlatform = () => {
 						)}
 					</div>
 				</div>
+
 				<div className='row'>
-					<div className='col-12 mb-4'>
+					{/*
+		<div className='col-12 mb-4'>
 						<div className='preview-valuation'>
 							معاينة التقييم{" "}
 							<span>(يظهر تقييمك في الصفحة الرئيسية للمنصة)</span>
@@ -134,7 +134,8 @@ const EvaluationThePlatform = () => {
 							</div>
 							{editorValue === "" || editorValue === "<p><br></p>" ? (
 								<div className='evaluation-content'>
-									منصة رائعة وسهلة أوصي باستخدامها لتبدأ بالتجارة الإلكترونية
+									تقييمك يهمنا ويساعدنا كثير في تحسين خدماتنا لتقديم الافضل ودعم
+									كبير لنا
 								</div>
 							) : (
 								<div
@@ -146,7 +147,7 @@ const EvaluationThePlatform = () => {
 							)}
 						</div>
 					</div>
-
+	*/}
 					<div className='col-12 mb-5'>
 						<div className=' d-flex flex-column justify-content-center align-items-center'>
 							<button

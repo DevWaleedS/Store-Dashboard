@@ -87,7 +87,7 @@ export const dashboardSections = [
 		icon: <Orders />,
 	},
 	{
-		id: 4,
+		id: 90990430439,
 		sectionName: "المرتجعات",
 		route: "ReturnOrders",
 		icon: <BsCartX />,
@@ -105,7 +105,7 @@ export const dashboardSections = [
 		icon: <Discoint />,
 	},
 	{
-		id: 6,
+		id: 83983489398,
 		sectionName: "اضافة كود خصم",
 		route: "Coupon/AddCoupon",
 		icon: <Discoint />,
@@ -147,7 +147,7 @@ export const dashboardSections = [
 		icon: <PagesIcon />,
 	},
 	{
-		id: 12,
+		id: 19837398,
 		sectionName: "انشاء صفحة جديدة",
 		route: "Pages/AddPage",
 		icon: <PagesIcon />,
@@ -241,7 +241,7 @@ export const dashboardSections = [
 	},
 
 	{
-		id: 19,
+		id: 1989389989,
 		sectionName: "بيانات المتجر",
 		route: "SocialPages",
 		icon: <Info />,

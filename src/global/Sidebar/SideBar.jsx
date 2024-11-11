@@ -167,7 +167,16 @@ const SideBar = ({
 						onClick={() => navigate("/upgrade-packages")}
 						className='verify_box d-flex justify-content-center align-content-center gap-1 mouse-pointer'>
 						<FaCrown className='verify_icon' />
-						<p className='mb-0 pb-0'>{selectedPackage?.name}</p>
+						<p
+							className='mb-0 pb-0 '
+							style={{
+								maxWidth: "103px",
+								overflow: "hidden",
+								whiteSpace: "nowrap",
+								textOverflow: "ellipsis",
+							}}>
+							{selectedPackage?.name}
+						</p>
 					</div>
 				)}
 			</div>

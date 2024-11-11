@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -6,11 +6,14 @@ import { Helmet } from "react-helmet";
 // Icons
 import { TopBarSearchInput } from "../../global/TopBar";
 import PackagesPlans from "./PackagesPlans";
-import { Breadcrumb, PageHint } from "../../components";
-import { useShowVerificationQuery } from "../../store/apiSlices/verifyStoreApi";
+import { Breadcrumb } from "../../components";
+
+import { useGetUpgradePackagesQuery } from "../../store/apiSlices/upgradePackagesApi";
+import PackagesHead from "./PackagesHead";
 
 const UpgradePackages = () => {
-	const { data: showVerification } = useShowVerificationQuery();
+	const [packageType, setPackageType] = useState("");
+	const { data: upgradePackages, isLoading } = useGetUpgradePackagesQuery();
 
 	return (
 		<>
@@ -30,20 +33,19 @@ const UpgradePackages = () => {
 					currentPage={"تطوير الباقة"}
 				/>
 
-				<div className='row '>
-					<PageHint
-						hint={
-							!showVerification?.package_id
-								? `لكي تتمكن من مواصلة نشاطك بشكل احترافي قم باختيار الباقة التي تناسب متجرك.`
-								: `نوفر لك مجموعة متنوعة من الباقات، بامكانك اختيار الباقة التي تتناسب مع إحتياجات متجرك بكل سهولة.`
-						}
-						flex={"d-flex justify-content-start align-items-center gap-2"}
-					/>
-				</div>
+				<PackagesHead
+					packageType={packageType}
+					setPackageType={setPackageType}
+				/>
 
 				{/* Package Plans */}
 				<div className='row'>
-					<PackagesPlans />
+					<PackagesPlans
+						isLoading={isLoading}
+						packageType={packageType}
+						setPackageType={setPackageType}
+						upgradePackages={upgradePackages}
+					/>
 				</div>
 			</section>
 		</>

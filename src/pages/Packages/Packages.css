@@ -1,3 +1,14 @@
+.packages-header {
+	padding: 20px 14px;
+	box-shadow: #24242429 0px 0px 2px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+}
+
 .package-boxes .content-package {
 	width: 430px;
 	height: auto;

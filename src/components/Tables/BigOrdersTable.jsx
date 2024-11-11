@@ -117,6 +117,10 @@ function EnhancedTableHead(props) {
 				</TableCell>
 
 				<TableCell align='center' sx={{ color: "#02466a" }}>
+					نوع الطلب
+				</TableCell>
+
+				<TableCell align='center' sx={{ color: "#02466a" }}>
 					الكمية
 				</TableCell>
 				<TableCell sx={{ color: "#02466a" }} align='center'>
@@ -137,7 +141,7 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-	numSelected: PropTypes.number.isRequired,
+	numSelected: PropTypes.number,
 	onSelectAllClick: PropTypes.func,
 	rowCount: PropTypes.number,
 };
@@ -205,7 +209,7 @@ function EnhancedTableToolbar(props) {
 }
 
 EnhancedTableToolbar.propTypes = {
-	numSelected: PropTypes.number.isRequired,
+	numSelected: PropTypes.number,
 };
 
 export default function BigOrdersTable({
@@ -323,7 +327,7 @@ export default function BigOrdersTable({
 																			? "#ffebeb"
 																			: row?.status === "قيد التجهيز"
 																			? "#ffecd1c7"
-																			: "#9df1ba",
+																			: "rgb(157 241 186 / 52%)",
 																	color:
 																		row?.status === "طلب مندوب لتسليم الشحنة"
 																			? "##9df1ba"
@@ -335,9 +339,9 @@ export default function BigOrdersTable({
 																			? "#ff9f1a"
 																			: "#07b543",
 																	borderRadius: "16px",
-																	padding: "4px 12px",
-																	fontWeight: 500,
-																	fontSize: "16px",
+																	padding: "3px 10px",
+																	fontWeight: 400,
+																	fontSize: "14px",
 																}}>
 																{row?.status}
 															</span>
@@ -345,6 +349,36 @@ export default function BigOrdersTable({
 													</TableCell>
 													<TableCell align='center'>
 														{row?.is_service ? "__" : row?.shippingtypes?.name}
+													</TableCell>
+
+													<TableCell align='center'>
+														{row?.is_service ? (
+															<span
+																className='status d-flex justify-content-center align-items-center'
+																style={{
+																	backgroundColor: "rgb(241 216 157)",
+																	color: "rgb(181 121 7)",
+																	borderRadius: "16px",
+																	padding: "3px 10px",
+																	fontWeight: 400,
+																	fontSize: "14px",
+																}}>
+																طلب خدمة
+															</span>
+														) : (
+															<span
+																className='status d-flex justify-content-center align-items-center'
+																style={{
+																	backgroundColor: "rgb(241 157 157 / 34%)",
+																	color: "rgb(181 7 39)",
+																	borderRadius: "16px",
+																	padding: "3px 10px",
+																	fontWeight: 500,
+																	fontSize: "14px",
+																}}>
+																شراء منتجات
+															</span>
+														)}
 													</TableCell>
 
 													<TableCell align='center'>
@@ -372,16 +406,16 @@ export default function BigOrdersTable({
 																			: null,
 																	color:
 																		row?.payment_status === "تم الدفع"
-																			? "#9df1ba"
+																			? "#07b543"
 																			: row?.payment_status === "فشل الدفع "
 																			? "#ff7b7b"
 																			: row?.payment_status === "لم يتم الدفع"
 																			? "#ff9f1a"
 																			: null,
 																	borderRadius: "16px",
-																	padding: "4px 12px",
+																	padding: "3px 10px",
 																	fontWeight: 500,
-																	fontSize: "16px",
+																	fontSize: "14px",
 																}}>
 																{row?.payment_status}
 															</span>

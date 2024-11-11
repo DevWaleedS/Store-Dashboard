@@ -5,6 +5,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useGetPackagesQuery } from "../../../store/apiSlices/selectorsApis/selectPackageApi";
 import { ComparisonPackages } from "../../../data/Icons";
 import { useNavigate } from "react-router-dom";
+import PackagePeriodNaming from "../../Packages/PackagePeriodNaming";
 
 // select style
 const selectStyle = {
@@ -14,8 +15,9 @@ const selectStyle = {
 	"&.MuiInputBase-root": {
 		backgroundColor: "#FFF",
 	},
-	"& .MuiSelect-select.MuiSelect-outlined": {
+	"& .MuiOutlinedInput-input": {
 		paddingRight: "20px !important",
+		whiteSpace: "normal",
 	},
 
 	"& .MuiOutlinedInput-root": {
@@ -24,25 +26,60 @@ const selectStyle = {
 			border: "none",
 		},
 	},
+
 	"& .MuiOutlinedInput-notchedOutline": {
-		border: "1px solid #e4e4e4",
-		" :hover": {
-			borderColor: "#e4e4e4",
-			borderWidth: "1px",
-		},
-	},
-	"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-		borderColor: "#e4e4e4",
-		borderWidth: "1px",
+		border: "none",
 	},
 	"& .MuiSelect-icon": {
 		right: "95%",
 	},
 };
 
+const PackageData = ({ width, item }) => {
+	return (
+		<p
+			style={{
+				width: width,
+			}}
+			className=' d-flex flex-row justify-content-between gap-5 align-items-center'>
+			<h6
+				className='pack-name'
+				style={{
+					maxWidth: "198px",
+					overflow: "hidden",
+					whiteSpace: "nowrap",
+					textOverflow: "ellipsis",
+				}}>
+				{" "}
+				{item?.name}
+			</h6>
+			<section className=' d-flex flex-row justify-content-end align-items-center gap-1'>
+				{item?.discount > 0 ? (
+					<section className='d-flex flex-row justify-content-end align-items-center gap-1'>
+						<span className='pack-discount-price '>
+							{item?.yearly_price} <span className='pack-currency'>ر.س</span>
+						</span>
+						<span className='pack-price'>
+							{item?.yearly_price - item?.discount}
+							<span className='pack-currency pe-1'>ر.س</span>
+						</span>
+					</section>
+				) : (
+					<span className='pack-price'>
+						{item?.yearly_price}
+						<span className='pack-currency'>ر.س </span>
+					</span>
+				)}
+				/<PackagePeriodNaming pack={item} />
+			</section>
+		</p>
+	);
+};
+
 const SelectPackage = ({ packageError, package_id, handleRegisterInfo }) => {
 	const navigate = useNavigate();
 	const { data: packages } = useGetPackagesQuery();
+
 	return (
 		<div>
 			<h5 className='d-flex justify-content-start align-items-center'>
@@ -63,49 +100,27 @@ const SelectPackage = ({ packageError, package_id, handleRegisterInfo }) => {
 					IconComponent={IoIosArrowDown}
 					displayEmpty
 					renderValue={(selected) => {
-						if (package_id === "" || package_id === "undefined" || !selected) {
+						if (!package_id || !selected) {
 							return <p style={{ color: "#7d7d7d" }}>أختر نوع الباقة</p>;
 						}
 						const result = packages?.filter(
 							(item) => parseInt(item?.id) === parseInt(selected)
 						);
 
-						return result?.[0]?.name;
+						return <PackageData width={"85%"} item={result?.[0]} />;
 					}}>
-					{packages?.map((item, idx) => {
+					{packages?.map((item) => {
 						return (
 							<MenuItem
-								key={idx}
+								key={item?.id}
 								className='souq_storge_category_filter_items'
 								sx={{
 									backgroundColor: "inherit",
 									height: "3rem",
 									"&:hover": {},
 								}}
-								value={`${item?.id}`}>
-								<p className=' w-100 d-flex justify-content-between align-items-center'>
-									<span className='pack-name'> {item?.name}</span>
-
-									{item?.discount > 0 ? (
-										<>
-											<div>
-												<span className='pack-discount-price '>
-													{item?.yearly_price}{" "}
-													<span className='pack-currency '>ر.س</span>
-												</span>
-												<span className='pack-price'>
-													{item?.yearly_price - item?.discount}
-													<span className='pack-currency pe-1'>ر.س</span>
-												</span>
-											</div>
-										</>
-									) : (
-										<span className='pack-price'>
-											{item?.yearly_price}
-											<span className='pack-currency'>ر.س </span>
-										</span>
-									)}
-								</p>
+								value={item?.id}>
+								<PackageData width={"100%"} item={item} />
 							</MenuItem>
 						);
 					})}
