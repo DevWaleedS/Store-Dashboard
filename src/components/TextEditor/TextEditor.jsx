@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 
 // Context
@@ -12,6 +12,10 @@ const TextEditor = ({ ToolBar, placeholder, readOnly }) => {
 	const quillRef = useRef(null);
 	const editorContent = useContext(TextEditorContext);
 	const { setEditorValue, editorValue } = editorContent;
+
+	useEffect(() => {
+		quillRef.current?.focus();
+	}, []);
 
 	let toolbarOptions;
 	if (ToolBar === "createOrEditPages") {

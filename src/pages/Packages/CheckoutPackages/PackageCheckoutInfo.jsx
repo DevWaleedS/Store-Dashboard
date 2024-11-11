@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CircularLoading } from "../../../HelperComponents";
 import { useSetPackageIdPrePaymentMutation } from "../../../store/apiSlices/upgradePackagesApi";
 import { CircularProgress } from "@mui/material";
+import PackagePeriodNaming from "../PackagePeriodNaming";
 
 const PackageCheckoutInfo = ({
 	packageId,
@@ -72,23 +73,28 @@ const PackageCheckoutInfo = ({
 													تغيير الباقة
 												</button>
 											</div>
-
-											<ul className='product-options'>
-												<li>(إشتراك سنوي)</li>
-											</ul>
 										</td>
-										<td>{selectedPackage?.yearly_price} ر.س</td>
+										<td>
+											{selectedPackage?.yearly_price} ر.س /{" "}
+											<PackagePeriodNaming pack={selectedPackage} />
+										</td>
 									</tr>
 								</tbody>
 								<tbody className='subtotals'>
 									<tr>
 										<th>السعر</th>
-										<td>{selectedPackage?.yearly_price} ر.س</td>
+										<td>
+											{selectedPackage?.yearly_price} ر.س /{" "}
+											<PackagePeriodNaming pack={selectedPackage} />
+										</td>
 									</tr>
 									{selectedPackage?.discount ? (
 										<tr>
 											<th>الخصم</th>
-											<td>{selectedPackage?.discount} ر.س</td>
+											<td>
+												{selectedPackage?.discount} ر.س /{" "}
+												<PackagePeriodNaming pack={selectedPackage} />
+											</td>
 										</tr>
 									) : null}
 
@@ -145,7 +151,13 @@ const PackageCheckoutInfo = ({
 										<th>
 											الإجمالي <span className='tax-text'>(شامل الضريبة)</span>
 										</th>
-										<td>{selectedPackage?.price_after_coupon} ر.س</td>
+										<td>
+											{selectedPackage?.price_after_coupon}
+											<span style={{ fontSize: "15px" }}>
+												{" "}
+												ر.س / <PackagePeriodNaming pack={selectedPackage} />
+											</span>
+										</td>
 									</tr>
 								</tfoot>
 							</>
