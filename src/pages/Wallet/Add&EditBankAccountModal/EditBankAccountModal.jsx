@@ -438,7 +438,6 @@ const EditBankAccountModal = () => {
 	const handleEditBankAccount = async (data) => {
 		setLoadingTitle("جاري تعديل بيانات الحساب البنكي");
 		resetErrors();
-		data.preventDefault();
 
 		// data that send to api...
 		let formData = new FormData();
