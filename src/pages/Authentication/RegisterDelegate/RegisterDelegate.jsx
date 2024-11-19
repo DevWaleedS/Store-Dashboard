@@ -44,7 +44,7 @@ function RegisterDelegate() {
 	// TO STORE DATA FROM SELECTORS API
 	const [citiesList, setCitiesList] = useState([]);
 	const [city, setCity] = useState("");
-	const [isChecked, setIsChecked] = useState(0);
+	const [isChecked, setIsChecked] = useState(false);
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO  CREATE THE VALIDATION AND ERRORS <=
@@ -74,6 +74,7 @@ function RegisterDelegate() {
 
 	const handleRegisterInfo = (e) => {
 		const { name, value } = e.target;
+
 		setRegisterInfo((prevStoreInfo) => {
 			return { ...prevStoreInfo, [name]: value };
 		});
@@ -130,7 +131,7 @@ function RegisterDelegate() {
 		formData.append("email", registerInfo?.email);
 		formData.append("phonenumber", "+966" + registerInfo?.phonenumber);
 		formData.append("city_id", city);
-		formData.append("checkbox_field", isChecked);
+		formData.append("checkbox_field", isChecked ? 1 : 0);
 
 		axios
 			.post("https://backend.atlbha.com/api/registerapi", formData)
@@ -268,16 +269,16 @@ function RegisterDelegate() {
 											boxShadow: "none",
 											padding: " 0 25px 0 0",
 											borderRadius: "none",
+											direction: "ltr",
 										}}
 										name='phonenumber'
-										maxLength='9'
-										minLength='0'
+										maxLength={9}
 										onPaste={(e) => {
 											removeWhiteSpace(e);
 										}}
 										value={registerInfo?.phonenumber}
 										onChange={handleRegisterInfo}
-										type='tel'
+										type='number'
 										placeholder='500000000'
 										required
 										aria-invalid={validPhoneNumber ? "false" : "true"}
@@ -388,13 +389,8 @@ function RegisterDelegate() {
 												className='form-check-input'
 												id='flexCheckDefault'
 												checked={isChecked}
-												onChange={(e) => {
-													if (e.target.checked) {
-														setIsChecked(1);
-													} else {
-														setIsChecked(0);
-													}
-												}}
+												onChange={(e) => setIsChecked(e.target.checked)}
+												aria-label='Accept terms and conditions'
 											/>
 
 											<Typography

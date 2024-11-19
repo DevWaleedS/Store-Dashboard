@@ -53,6 +53,8 @@ const CheckoutStatusModal = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const package_reference = localStorage.getItem("package_reference");
+
 	const {
 		data: upgradePackages,
 		isLoading,
@@ -75,7 +77,10 @@ const CheckoutStatusModal = () => {
 				showVerification?.verification_status === "تم التوثيق") ||
 			(showVerification?.package_paid &&
 				showVerification?.package_id &&
-				showVerification?.verification_status !== "تم التوثيق")
+				showVerification?.verification_status !== "تم التوثيق") ||
+			(showVerification?.package_paid &&
+				showVerification?.package_id &&
+				showVerification?.verification_status === "تم التوثيق")
 		) {
 			dispatch(openVerifyModal());
 			navigate("/");
@@ -215,6 +220,23 @@ const CheckoutStatusModal = () => {
 													يمكنك الاستمتاع بكافة مميزات الباقة الآن.
 												</span>{" "}
 											</p>
+											<div
+												style={{
+													fontWeight: 400,
+													whiteSpace: "normal",
+													fontSize: "16px",
+												}}>
+												<span
+													style={{
+														fontWeight: 500,
+														whiteSpace: "normal",
+														fontSize: "16px",
+														color: "#1dbbbe",
+													}}>
+													رقم العملية :
+												</span>{" "}
+												{package_reference}
+											</div>
 										</div>
 									)}
 								</div>

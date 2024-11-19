@@ -193,6 +193,11 @@ const CheckoutServices = ({
 					response.data?.data?.payment?.Message ===
 						"Invoice Created Successfully!"
 				) {
+					localStorage.setItem(
+						"service_reference",
+						response?.data?.data?.Websiteorders?.reference
+					);
+
 					window.location.href = response.data?.data?.payment?.Data?.PaymentURL;
 					setBtnLoading(false);
 				} else {
@@ -312,6 +317,11 @@ const CheckoutServices = ({
 				setBtnLoading(false);
 				setOpenCheckoutServices(false);
 				window.location.href = response.data.data.data.checkoutLink;
+
+				localStorage.setItem(
+					"service_reference",
+					response.data.data.data?.merchantReference
+				);
 			} else {
 				toast.error(response?.message, { theme: "colored" });
 				setBtnLoading(false);

@@ -5,9 +5,6 @@ import axios from "axios";
 import Radium from "radium"; /** import this library to write media query with inline style */
 import { Link, useNavigate } from "react-router-dom";
 
-// Icons
-import { MdErrorOutline } from "react-icons/md";
-
 // MUI
 import { Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
@@ -54,7 +51,7 @@ const RegisterBox = () => {
 	const [showTermsModal, setShowTermsModal] = useState(false);
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [isChecked, setIsChecked] = useState(0);
+	const [isChecked, setIsChecked] = useState(false);
 
 	/** -----------------------------------------------------------------------------------------------------------
 	 *  	=> TO  CREATE THE VALIDATION AND ERRORS <=
@@ -139,7 +136,7 @@ const RegisterBox = () => {
 		formData.append("package_id", registerInfo?.package_id);
 		formData.append("user_name", registerInfo?.user_name);
 		formData.append("phonenumber", "+966" + registerInfo?.phonenumber);
-		formData.append("checkbox_field", isChecked);
+		formData.append("checkbox_field", isChecked ? 1 : 0);
 
 		axios
 			.post("https://backend.atlbha.com/api/registerapi", formData)
@@ -265,13 +262,8 @@ const RegisterBox = () => {
 												className='form-check-input'
 												id='flexCheckDefault'
 												checked={isChecked}
-												onChange={(e) => {
-													if (e.target.checked) {
-														setIsChecked(1);
-													} else {
-														setIsChecked(0);
-													}
-												}}
+												onChange={(e) => setIsChecked(e.target.checked)}
+												aria-label='Accept terms and conditions'
 											/>
 
 											<Typography

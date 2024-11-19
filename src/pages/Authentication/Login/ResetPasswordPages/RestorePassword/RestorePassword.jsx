@@ -130,13 +130,13 @@ const RestorePassword = () => {
 											setPhoneNumber(e.target.value);
 											setResetPasswordError("");
 										}}
-										type='tel'
+										type='number'
 										onPaste={(e) => {
 											removeWhiteSpace(e);
 										}}
 										name='phoneNumber'
 										placeholder='ادخل رقم الجوال المستخدم في التسجيل '
-										maxLength='9'
+										maxLength={9}
 										required
 										aria-invalid={validPhoneNumber ? "false" : "true"}
 										aria-describedby='phoneNumber'

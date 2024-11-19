@@ -26,6 +26,10 @@ const StorePhoneNumber = ({ phoneNumber, setPhoneNumber, settingErr }) => {
 					<div className='store_phone_number domain-name direction-ltr d-flex align-content-center justify-content-between'>
 						<div className='main-domain-hint'>+966</div>
 						<input
+							type='number'
+							style={{
+								direction: "ltr",
+							}}
 							className='direction-ltr text-right store-email-input w-100'
 							name='phonenumber'
 							id='phonenumber'
@@ -35,7 +39,7 @@ const StorePhoneNumber = ({ phoneNumber, setPhoneNumber, settingErr }) => {
 								removeWhiteSpace(e);
 							}}
 							onChange={(e) => setPhoneNumber(e.target.value)}
-							maxLength='9'
+							maxLength={9}
 							required
 							aria-invalid={validPhoneNumber ? "false" : "true"}
 							aria-describedby='phoneNumber'

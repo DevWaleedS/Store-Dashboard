@@ -495,9 +495,12 @@ const AddNewUser = () => {
 												<Mobile />
 											</div>
 											<input
+												style={{
+													direction: "ltr",
+												}}
 												maxLength={9}
 												name='phonenumber'
-												type='tel'
+												type='number'
 												id='phonenumber'
 												placeholder='567891234'
 												className='direction-ltr'

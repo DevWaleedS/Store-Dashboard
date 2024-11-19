@@ -46,6 +46,7 @@ const contentStyles = {
 const CheckoutStatusModal = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
+	const service_reference = localStorage.getItem("service_reference");
 
 	const handleCloseAlert = () => {
 		navigate("/");
@@ -85,6 +86,24 @@ const CheckoutStatusModal = () => {
 											يمكنك الاستمتاع بكافة مميزات الخدمات الآن.
 										</span>{" "}
 									</p>
+
+									<div
+										style={{
+											fontWeight: 400,
+											whiteSpace: "normal",
+											fontSize: "16px",
+										}}>
+										<span
+											style={{
+												fontWeight: 500,
+												whiteSpace: "normal",
+												fontSize: "16px",
+												color: "#1dbbbe",
+											}}>
+											رقم العملية :
+										</span>{" "}
+										{service_reference}
+									</div>
 								</div>
 							</div>
 						) : (

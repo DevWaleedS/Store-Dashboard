@@ -35,11 +35,11 @@ const UserPhoneNumberInput = ({
 							boxShadow: "none",
 							padding: " 0 25px 0 0",
 							borderRadius: "none",
+							direction: "ltr",
 						}}
-						type='tel'
+						type='number'
 						name='phonenumber'
-						maxLength='9'
-						minLength='9'
+						maxLength={9}
 						onPaste={(e) => {
 							removeWhiteSpace(e);
 						}}

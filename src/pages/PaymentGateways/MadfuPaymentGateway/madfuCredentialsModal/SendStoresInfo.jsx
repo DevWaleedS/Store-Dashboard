@@ -115,7 +115,8 @@ const SendStoresInfo = ({ isStoreIfoLoading, storeInfoData }) => {
 						<label htmlFor='phonenumber'> رقم الجوال</label>
 						<div className='store-info-phonenumber'>
 							<input
-								type='text'
+								type='number'
+								style={{ direction: "ltr" }}
 								id='phonenumber'
 								name='phonenumber'
 								maxLength={9}

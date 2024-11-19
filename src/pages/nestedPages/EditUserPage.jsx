@@ -540,9 +540,12 @@ const EditUserPage = () => {
 														<Mobile />
 													</div>
 													<input
+														style={{
+															direction: "ltr",
+														}}
 														maxLength={9}
 														name='phonenumber'
-														type='tel'
+														type='number'
 														id='phonenumber'
 														onPaste={(e) => {
 															removeWhiteSpace(e);

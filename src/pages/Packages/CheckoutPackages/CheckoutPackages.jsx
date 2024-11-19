@@ -135,6 +135,11 @@ const CheckoutPackages = () => {
 						window.location.href =
 							response?.data?.data?.payment?.Data?.PaymentURL;
 
+						localStorage.setItem(
+							"package_reference",
+							response?.data?.data?.payment?.Data?.InvoiceId
+						);
+
 						setBtnLoading(false);
 					} else {
 						// to handle madfu login
@@ -255,6 +260,10 @@ const CheckoutPackages = () => {
 			) {
 				setBtnLoading(false);
 				window.location.href = response.data.data.data.checkoutLink;
+				localStorage.setItem(
+					"package_reference",
+					response.data.data.data?.merchantReference
+				);
 			} else {
 				toast.error(response?.message, { theme: "colored" });
 				setBtnLoading(false);
