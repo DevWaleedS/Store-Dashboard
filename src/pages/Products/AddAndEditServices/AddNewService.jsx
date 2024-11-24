@@ -231,6 +231,7 @@ const AddNewService = () => {
 			"image/jpeg": [],
 			"image/jpg": [],
 			"image/png": [],
+			"image/webp": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -599,7 +600,7 @@ const AddNewService = () => {
 														style={{
 															whiteSpace: "normal",
 														}}>
-														( سيتم قبول الصور jpeg & png & jpg )
+														( سيتم قبول الصور jpeg & png & jpg & webp )
 													</span>
 
 													<div className='tax-text '>
@@ -659,15 +660,7 @@ const AddNewService = () => {
 													"mkv",
 												]}
 												allowNonImageType={true}>
-												{({
-													imageList,
-													onImageUpload,
-													onImageRemoveAll,
-													onImageUpdate,
-													onImageRemove,
-													isDragging,
-													dragProps,
-												}) => (
+												{({ imageList, onImageUpload, onImageRemove }) => (
 													// write your building UI
 													<div className='d-flex flex-row align-items-center gap-1 gap-md-4'>
 														{imageList.map((image, index) => {

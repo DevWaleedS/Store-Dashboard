@@ -280,6 +280,7 @@ const AddNewProduct = () => {
 			"image/jpeg": [],
 			"image/jpg": [],
 			"image/png": [],
+			"image/webp": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -683,7 +684,7 @@ const AddNewProduct = () => {
 														style={{
 															whiteSpace: "normal",
 														}}>
-														( سيتم قبول الصور jpeg & png & jpg )
+														( سيتم قبول الصور jpeg & png & jpg & webp )
 													</span>
 
 													<div className='tax-text '>
@@ -737,6 +738,7 @@ const AddNewProduct = () => {
 													"jpeg",
 													"svg",
 													"gif",
+													"webp",
 													"mp4",
 													"avi",
 													"mov",

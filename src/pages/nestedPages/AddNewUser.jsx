@@ -151,8 +151,9 @@ const AddNewUser = () => {
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
-			"image/png": [],
 			"image/jpg": [],
+			"image/png": [],
+			"image/webp": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -547,7 +548,7 @@ const AddNewUser = () => {
 													className={` ${
 														files?.length === 0 ? "helper" : "d-none"
 													}`}>
-													اختر صورة PNG أو JPG فقط{" "}
+													اختر صورة PNG أو JPG أو WEBP{" "}
 												</p>
 
 												<span> استعراض</span>

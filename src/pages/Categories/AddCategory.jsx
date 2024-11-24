@@ -238,16 +238,8 @@ const AddCategory = () => {
 													value={icons}
 													onChange={onChange}
 													dataURLKey='data_url'
-													acceptType={["jpg", "png", "jpeg"]}>
-													{({
-														imageList,
-														onImageUpload,
-														onImageRemoveAll,
-														onImageUpdate,
-														onImageRemove,
-														isDragging,
-														dragProps,
-													}) => (
+													acceptType={["jpg", "png", "jpeg", "webp"]}>
+													{({ onImageUpload, dragProps }) => (
 														// write your building UI
 														<div>
 															<div
@@ -266,7 +258,7 @@ const AddCategory = () => {
 																		</label>
 																	</div>
 																	<span>
-																		( سيتم قبول الصور jpeg & png & jpg)
+																		( سيتم قبول الصور jpeg & png & jpg & webp)
 																	</span>
 																	<div className='tax-text '>
 																		(الحد الأقصى للصورة 1MB)

@@ -590,11 +590,11 @@ const EditUserPage = () => {
 														/>
 														{files.length <= 0 ? (
 															<p className='helper'>
-																اختر صورة PNG أو JPG فقط{" "}
+																اختر صورة PNG أو JPG أو WEBP{" "}
 															</p>
 														) : (
 															<p className='d-none'>
-																اختر صورة PNG أو JPG فقط{" "}
+																اختر صورة PNG أو JPG أو WEBP{" "}
 															</p>
 														)}
 

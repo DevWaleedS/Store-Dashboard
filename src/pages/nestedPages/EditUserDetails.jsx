@@ -180,8 +180,9 @@ const EditUserDetails = () => {
 	const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
 		accept: {
 			"image/jpeg": [],
-			"image/png": [],
 			"image/jpg": [],
+			"image/png": [],
+			"image/webp": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -541,7 +542,7 @@ const EditUserDetails = () => {
 														<ul style={{ width: "80%" }}>{files}</ul>
 													) : (
 														<p className='helper' style={{ fontSize: "16px" }}>
-															اختر صورة PNG أو JPG فقط{" "}
+															اختر صورة PNG أو JPG أو WEBP{" "}
 														</p>
 													)}
 

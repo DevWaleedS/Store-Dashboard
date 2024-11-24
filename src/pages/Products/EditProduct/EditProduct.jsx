@@ -379,6 +379,7 @@ const EditProduct = () => {
 			"image/jpeg": [],
 			"image/jpg": [],
 			"image/png": [],
+			"image/webp": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -793,7 +794,7 @@ const EditProduct = () => {
 															style={{
 																whiteSpace: "normal",
 															}}>
-															( سيتم قبول الصور jpeg & png & jpg )
+															( سيتم قبول الصور jpeg & png & jpg & webp )
 														</span>
 														<div className='tax-text '>
 															(الحد الأقصى للصورة 1MB)
@@ -855,6 +856,7 @@ const EditProduct = () => {
 														"jpeg",
 														"svg",
 														"gif",
+														"webp",
 														"mp4",
 														"avi",
 														"mov",

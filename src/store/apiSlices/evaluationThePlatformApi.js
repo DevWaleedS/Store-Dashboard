@@ -12,7 +12,7 @@ export const evaluationThePlatformApi = createApi({
 
 	tagTypes: ["EvaluationThePlatformApi"],
 	endpoints: (builder) => ({
-		// update Store Main Information
+		// Add A New Evaluation The Platform Api
 		AddEvaluationThePlatformApi: builder.mutation({
 			query: ({ body }) => {
 				return {
@@ -23,9 +23,23 @@ export const evaluationThePlatformApi = createApi({
 			},
 			invalidatesTags: ["EvaluationThePlatformApi"],
 		}),
+
+		// Get The The exist Comment
+		GetExistComment: builder.query({
+			query: () => {
+				return {
+					url: `existComment`,
+					method: "GET",
+				};
+			},
+			transformResponse: (response, meta, arg) => response.data,
+			providesTags: ["EvaluationThePlatformApi"],
+		}),
 	}),
 });
 
 // Export endpoints and hooks
-export const { useAddEvaluationThePlatformApiMutation } =
-	evaluationThePlatformApi;
+export const {
+	useAddEvaluationThePlatformApiMutation,
+	useGetExistCommentQuery,
+} = evaluationThePlatformApi;

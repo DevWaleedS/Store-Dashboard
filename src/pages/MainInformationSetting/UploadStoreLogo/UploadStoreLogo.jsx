@@ -103,8 +103,8 @@ const UploadStoreLogo = ({
 						value={storeLogoUpdate}
 						onChange={onChangeStoreLogo}
 						dataURLKey='data_url'
-						acceptType={["jpg", "png", "jpeg"]}>
-						{({ imageList, onImageUpload, dragProps }) => (
+						acceptType={["jpg", "png", "jpeg", "webp"]}>
+						{({ onImageUpload, dragProps }) => (
 							// Ui For Upload Log
 							<Fragment>
 								{/** Preview Image Box */}
@@ -138,7 +138,7 @@ const UploadStoreLogo = ({
 												<label htmlFor='add-image'> اسحب الصورة هنا</label>
 											</div>
 											<span className='upload_image_hint'>
-												( سيتم قبول الصور jpeg & png & jpg )
+												( سيتم قبول الصور jpeg & png & jpg & webp )
 											</span>
 										</div>
 									)}

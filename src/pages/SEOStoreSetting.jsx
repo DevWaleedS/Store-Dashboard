@@ -540,7 +540,7 @@ const SEOStoreSetting = () => {
 										value={ogImage}
 										onChange={onChange}
 										dataURLKey='data_url'
-										acceptType={["jpg", "png", "jpeg"]}>
+										acceptType={["jpg", "png", "jpeg", "webp"]}>
 										{({ onImageUpload, dragProps }) => (
 											<div
 												className='add-image-btn-box '
@@ -557,7 +557,9 @@ const SEOStoreSetting = () => {
 															اسحب الصورة هنا
 														</label>
 													</div>
-													<span>( سيتم قبول الصور jpeg & png & jpg)</span>
+													<span>
+														( سيتم قبول الصور jpeg & png & jpg & webp)
+													</span>
 													<div className='tax-text '>
 														(الحد الأقصى للصورة 1MB)
 													</div>

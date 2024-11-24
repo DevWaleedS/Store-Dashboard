@@ -648,17 +648,9 @@ const AddProductOptionsModal = () => {
 										}}
 										maxNumber={1}
 										dataURLKey='data_url'
-										acceptType={["jpg", "png", "jpeg"]}
+										acceptType={["jpg", "png", "jpeg", "webp"]}
 										allowNonImageType={true}>
-										{({
-											imageList,
-											onImageUpload,
-											onImageRemoveAll,
-											onImageUpdate,
-											onImageRemove,
-											isDragging,
-											dragProps,
-										}) =>
+										{({ onImageUpload }) =>
 											item?.previewImage ? (
 												<>
 													<div className='product-options-img-wrapper d-flex justify-content-center align-items-center gap-2 px-2'>

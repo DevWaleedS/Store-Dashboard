@@ -77,6 +77,9 @@
 	-ms-border-radius: 8px;
 	-o-border-radius: 8px;
 }
+.send-valuation-btn:disabled {
+	background: #c4c4c4;
+}
 
 @media (max-width: 768px) {
 	.evaluationThePlatform .label {

@@ -293,7 +293,7 @@ const EditCategory = () => {
 														value={icons}
 														onChange={onChange}
 														dataURLKey='data_url'
-														acceptType={["jpg", "png", "jpeg"]}>
+														acceptType={["jpg", "png", "jpeg", "webp"]}>
 														{({ onImageUpload, dragProps }) => (
 															<div>
 																<div
@@ -312,7 +312,7 @@ const EditCategory = () => {
 																			</label>
 																		</div>
 																		<span>
-																			( سيتم قبول الصور jpeg & png & jpg)
+																			( سيتم قبول الصور jpeg & png & jpg & webp)
 																		</span>
 																		<div className='tax-text mb-0'>
 																			(الحد الأقصى للصورة 1MB)

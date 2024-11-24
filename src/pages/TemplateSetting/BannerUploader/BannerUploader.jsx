@@ -283,7 +283,7 @@ const BannerUploader = ({ Banners, loading }) => {
 											)}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg", "webp"]}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button
@@ -347,7 +347,7 @@ const BannerUploader = ({ Banners, loading }) => {
 											)}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg", "webp"]}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button
@@ -411,7 +411,7 @@ const BannerUploader = ({ Banners, loading }) => {
 											)}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg", "webp"]}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 // Third party
 import { Helmet } from "react-helmet";
@@ -9,7 +9,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 import { TextEditorContext } from "../../Context/TextEditorProvider";
 
 // Icons
-import { UserImage } from "../../data/images";
+// import { UserImage } from "../../data/images";
 
 // Css Styles
 import "./EvaluationThePlatform.css";
@@ -19,10 +19,14 @@ import { Breadcrumb } from "../../components";
 import { TextEditor } from "../../components/TextEditor";
 
 // RTK query
-import { useAddEvaluationThePlatformApiMutation } from "../../store/apiSlices/evaluationThePlatformApi";
+import {
+	useAddEvaluationThePlatformApiMutation,
+	useGetExistCommentQuery,
+} from "../../store/apiSlices/evaluationThePlatformApi";
 
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
+import { CircularLoading } from "../../HelperComponents";
 
 const EvaluationThePlatform = () => {
 	// to Handle if the user is not verify  her account
@@ -32,6 +36,10 @@ const EvaluationThePlatform = () => {
 	const { setLoadingTitle } = LoadingStore;
 
 	// -----------------------------------------------------------
+	// Get The The exist Comment
+	const [curtComment, setCurComment] = useState();
+	const { data: commentData, isLoading: existCommentLoading } =
+		useGetExistCommentQuery();
 
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
@@ -39,6 +47,13 @@ const EvaluationThePlatform = () => {
 
 	// To handle errors
 	const [evaluationError, setEvaluationError] = useState("");
+
+	useEffect(() => {
+		if (commentData?.Comment_text?.comment_text) {
+			setEditorValue(commentData?.Comment_text?.comment_text);
+			setCurComment(commentData?.Comment_text?.comment_text);
+		}
+	}, [commentData?.Comment_text?.comment_text]);
 
 	// send add Evaluation The Platform Function
 	const [addEvaluationThePlatform, { isLoading }] =
@@ -51,6 +66,7 @@ const EvaluationThePlatform = () => {
 		// data that send to api...
 		let formData = new FormData();
 		formData.append("comment_text", editorValue);
+		formData.append("updateComment", commentData?.existComment ? 1 : 0);
 
 		// make request...
 		try {
@@ -87,35 +103,50 @@ const EvaluationThePlatform = () => {
 		}
 	};
 
+	const isDisabled =
+		editorValue === "" ||
+		editorValue === "<p><br></p>" ||
+		editorValue === curtComment ||
+		isLoading ||
+		existCommentLoading;
+
 	return (
 		<>
 			<Helmet>
 				<title>لوحة تحكم اطلبها | تقييم المنصة</title>
 			</Helmet>
 			<section className='academy-page evaluationThePlatform p-lg-3'>
-				<Breadcrumb mb={"mb-md-5 mb-3"} currentPage={"تقييم المنصة"} />
-
-				<div className='row mb-5'>
-					<div className='col-12'>
-						<div className='label d-flex align-items-center justify-content-center text-center'>
-							قم بتقييم تجربة استخدامك لمنصة اطلبها
-						</div>
-						<div className='evaluation-the-platform'>
-							<TextEditor
-								ToolBar={"evaluationThePlatform"}
-								placeholder={`تقييمك يهمنا ويساعدنا كثير في تحسين خدماتنا لتقديم الافضل ودعم كبير لنا`}
-							/>
-						</div>
+				{existCommentLoading ? (
+					<div
+						className=' d-flex justify-content-center align-items-center'
+						style={{ height: "70vh" }}>
+						<CircularLoading />
 					</div>
-					<div className='col-12'>
-						{evaluationError && (
-							<span className='fs-6 text-danger'>{evaluationError}</span>
-						)}
-					</div>
-				</div>
+				) : (
+					<>
+						<Breadcrumb mb={"mb-md-5 mb-3"} currentPage={"تقييم المنصة"} />
 
-				<div className='row'>
-					{/*
+						<div className='row mb-5'>
+							<div className='col-12'>
+								<div className='label d-flex align-items-center justify-content-center text-center'>
+									قم بتقييم تجربة استخدامك لمنصة اطلبها
+								</div>
+								<div className='evaluation-the-platform'>
+									<TextEditor
+										ToolBar={"evaluationThePlatform"}
+										placeholder={`تقييمك يهمنا ويساعدنا كثير في تحسين خدماتنا لتقديم الافضل ودعم كبير لنا`}
+									/>
+								</div>
+							</div>
+							<div className='col-12'>
+								{evaluationError && (
+									<span className='fs-6 text-danger'>{evaluationError}</span>
+								)}
+							</div>
+						</div>
+
+						<div className='row'>
+							{/*
 		<div className='col-12 mb-4'>
 						<div className='preview-valuation'>
 							معاينة التقييم{" "}
@@ -148,21 +179,21 @@ const EvaluationThePlatform = () => {
 						</div>
 					</div>
 	*/}
-					<div className='col-12 mb-5'>
-						<div className=' d-flex flex-column justify-content-center align-items-center'>
-							<button
-								disabled={
-									editorValue === "" || editorValue === "<p><br></p>"
-										? true
-										: false || isLoading
-								}
-								onClick={handleAddEvaluationThePlatform}
-								className='send-valuation-btn d-flex flex-column justify-content-center align-items-center'>
-								ارسال
-							</button>
+							<div className='col-12 mb-5'>
+								<div className=' d-flex flex-column justify-content-center align-items-center'>
+									<button
+										disabled={isDisabled}
+										onClick={handleAddEvaluationThePlatform}
+										className='send-valuation-btn d-flex flex-column justify-content-center align-items-center'>
+										{commentData?.existComment
+											? "تعديل التقييم"
+											: "ارسال التقييم"}
+									</button>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
+					</>
+				)}
 			</section>
 		</>
 	);

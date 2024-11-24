@@ -289,7 +289,7 @@ const SliderUploader = ({ sliders, loading }) => {
 											)}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg", "webp"]}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button
@@ -355,7 +355,7 @@ const SliderUploader = ({ sliders, loading }) => {
 											)}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg", "webp"]}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button
@@ -421,7 +421,7 @@ const SliderUploader = ({ sliders, loading }) => {
 											)}
 											maxNumber={2}
 											dataURLKey='data_url'
-											acceptType={["jpg", "png", "jpeg"]}>
+											acceptType={["jpg", "png", "jpeg", "webp"]}>
 											{({ onImageUpload, dragProps }) => (
 												<div className='upload-files-input mb-2'>
 													<button

@@ -144,6 +144,7 @@ const CreatePage = () => {
 			"image/jpeg": [],
 			"image/jpg": [],
 			"image/png": [],
+			"image/webp": [],
 		},
 
 		onDrop: (acceptedFiles) => {
@@ -675,13 +676,13 @@ const CreatePage = () => {
 															/>
 															{images?.length <= 0 ? (
 																<p role='button' style={{ fontSize: "16px" }}>
-																	اختر صورة PNG أو JPG فقط{" "}
+																	اختر صورة PNG أو JPG أو WEBP{" "}
 																</p>
 															) : (
 																<p
 																	className='d-none'
 																	style={{ fontSize: "16px" }}>
-																	اختر صورة PNG أو JPG فقط{" "}
+																	اختر صورة PNG أو JPG أو WEBP{" "}
 																</p>
 															)}
 
