@@ -75,28 +75,39 @@ const DiscountDetails = ({
 
 	// to handle open discount_type inputs
 	useEffect(() => {
-		if (
-			is_service &&
-			currentCartData?.discount_type !== "" &&
-			currentCartData?.discount_total !== 0 &&
-			currentCartData?.discount_value !== 0
-		) {
-			setOpenPercentMenu(true);
-		} else {
-			setOpenPercentMenu(false);
-		}
-	}, [
-		is_service,
-		currentCartData?.discount_type,
-		currentCartData?.discount_total,
-		currentCartData?.discount_value,
-	]);
+		const hasValidDiscount =
+			currentCartData?.discount_type &&
+			currentCartData?.discount_total > 0 &&
+			currentCartData?.discount_value > 0;
+
+		setOpenPercentMenu(is_service ?? hasValidDiscount);
+	}, [is_service, currentCartData]);
+
 	return (
 		<div className='userData-container'>
 			<div className='container-title'> تفاصيل الخصم</div>
 			<div className='container-body' style={{ height: "100%" }}>
 				<div className='row'>
-					{!is_service ? (
+					{is_service ? (
+						<div className='col-12 mb-4 d-flex align-items-center'>
+							<Switch
+								readOnly={is_service}
+								disabled={is_service}
+								checked={is_service}
+								onChange={() => {
+									setOpenPercentMenu(is_service);
+									setFree_shipping(false);
+								}}
+								sx={switchStyle}
+							/>
+
+							<span
+								className='d-inline-block '
+								style={{ marginRight: "-6px", paddingTop: "10px" }}>
+								خصم على السلة{" "}
+							</span>
+						</div>
+					) : (
 						<>
 							{" "}
 							<div className='col-12 mb-4'>
@@ -132,25 +143,6 @@ const DiscountDetails = ({
 								</span>
 							</div>
 						</>
-					) : (
-						<div className='col-12 mb-4 d-flex align-items-center'>
-							<Switch
-								readOnly={is_service}
-								disabled={is_service}
-								checked={is_service}
-								onChange={() => {
-									setOpenPercentMenu(is_service);
-									setFree_shipping(false);
-								}}
-								sx={switchStyle}
-							/>
-
-							<span
-								className='d-inline-block '
-								style={{ marginRight: "-6px", paddingTop: "10px" }}>
-								خصم على السلة{" "}
-							</span>
-						</div>
 					)}
 
 					<div className='col-12 '>
