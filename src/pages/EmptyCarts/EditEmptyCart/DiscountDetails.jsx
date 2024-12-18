@@ -73,16 +73,6 @@ const DiscountDetails = ({
 		}
 	}, [currentCartData]);
 
-	// to handle open discount_type inputs
-	useEffect(() => {
-		const hasValidDiscount =
-			currentCartData?.discount_type &&
-			currentCartData?.discount_total > 0 &&
-			currentCartData?.discount_value > 0;
-
-		setOpenPercentMenu(is_service ?? hasValidDiscount);
-	}, [is_service, currentCartData]);
-
 	return (
 		<div className='userData-container'>
 			<div className='container-title'> تفاصيل الخصم</div>
@@ -146,7 +136,7 @@ const DiscountDetails = ({
 					)}
 
 					<div className='col-12 '>
-						{openPercentMenu && (
+						{openPercentMenu ? (
 							<>
 								<label htmlFor='coupon-name ' className='d-block mb-1'>
 									نوع الخصم
@@ -276,7 +266,7 @@ const DiscountDetails = ({
 									)}
 								</div>
 							</>
-						)}
+						) : null}
 					</div>
 				</div>
 			</div>

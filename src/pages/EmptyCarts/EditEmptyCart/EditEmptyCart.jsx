@@ -60,11 +60,11 @@ const style = {
 };
 
 const EditEmptyCart = () => {
+	const navigate = useNavigate();
 	const { id } = useParams();
+
 	// get empty cart data by id
 	const { data: currentCartData, isFetching } = useGetEmptyCartByIdQuery(id);
-
-	const navigate = useNavigate();
 
 	const LoadingStore = useContext(LoadingContext);
 	const { setLoadingTitle } = LoadingStore;
@@ -72,8 +72,12 @@ const EditEmptyCart = () => {
 	// To get the editor content
 	const editorContent = useContext(TextEditorContext);
 	const { editorValue, setEditorValue } = editorContent;
-
-	const [openPercentMenu, setOpenPercentMenu] = useState(false);
+	const [openPercentMenu, setOpenPercentMenu] = useState(
+		currentCartData?.is_service ||
+			(currentCartData?.discount_type &&
+				currentCartData?.discount_total > 0 &&
+				currentCartData?.discount_value > 0)
+	);
 	const [free_shipping, setFree_shipping] = useState(false);
 	const [discount_type, setDiscount_type] = useState(null);
 	const [discount_value, setDiscount_value] = useState(0);
@@ -87,19 +91,16 @@ const EditEmptyCart = () => {
 	// to handle open discount_type inputs
 	useEffect(() => {
 		if (
-			currentCartData?.discount_type !== "" &&
-			currentCartData?.discount_total !== 0 &&
-			currentCartData?.discount_value !== 0
+			currentCartData?.is_service ||
+			(currentCartData?.discount_type &&
+				currentCartData?.discount_total > 0 &&
+				currentCartData?.discount_value > 0)
 		) {
 			setOpenPercentMenu(true);
 		} else {
 			setOpenPercentMenu(false);
 		}
-	}, [
-		currentCartData?.discount_type,
-		currentCartData?.discount_total,
-		currentCartData?.discount_value,
-	]);
+	}, [currentCartData]);
 
 	// To Calc discount total if the discount value is percent
 	useEffect(() => {
@@ -300,7 +301,7 @@ const EditEmptyCart = () => {
 									<div className='mb-md-5 mb-3'>
 										<DiscountDetails
 											is_service={currentCartData?.is_service}
-											data={currentCartData}
+											currentCartData={currentCartData}
 											errors={errors}
 											setDiscount_total={setDiscount_total}
 											setDiscount_value={setDiscount_value}

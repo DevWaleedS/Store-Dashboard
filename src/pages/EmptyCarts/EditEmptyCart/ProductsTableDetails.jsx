@@ -161,7 +161,10 @@ const ProductsTableDetails = ({ tableData, is_service }) => {
 								<span
 									className='table-price_span'
 									style={{ fontWeight: "500" }}>
-									{tableData?.shipping_price} ر.س
+									{tableData?.free_shipping
+										? "شحن مجاني"
+										: tableData?.shipping_price}{" "}
+									ر.س
 								</span>
 							</TableCell>
 						</TableRow>
