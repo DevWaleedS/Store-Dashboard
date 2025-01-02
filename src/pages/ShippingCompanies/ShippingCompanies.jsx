@@ -97,6 +97,8 @@ const ShippingCompanies = () => {
 		currentTime: "",
 		overprice: "",
 		currentOverprice: "",
+		cod_price: "",
+		currentCodPrice: "",
 	});
 
 	// -----------------------------------------------------------
@@ -143,6 +145,11 @@ const ShippingCompanies = () => {
 				currentOverprice: otherShippingCompany?.overprice,
 				currentPrice: otherShippingCompany?.price,
 				currentTime: otherShippingCompany?.time,
+				//cod price
+				cod_price: !otherShippingCompany?.cod_price
+					? ""
+					: otherShippingCompany?.cod_price,
+				currentCodPrice: otherShippingCompany?.cod_price,
 			}));
 		}
 	}, [otherShippingCompany]);
@@ -268,6 +275,7 @@ const ShippingCompanies = () => {
 		formData.append("price", otherShipCompDetails?.price);
 		formData.append("time", otherShipCompDetails?.time);
 		formData.append("overprice", otherShipCompDetails?.overprice);
+		formData.append("cod_price", otherShipCompDetails?.cod_price);
 
 		// make request...
 		try {
@@ -365,6 +373,10 @@ const ShippingCompanies = () => {
 										currentShippingOverPrice={
 											otherShipCompDetails?.status &&
 											otherShipCompDetails?.currentOverprice
+										}
+										currentShippingCodPrice={
+											otherShipCompDetails?.status &&
+											otherShipCompDetails?.currentCodPrice
 										}
 										image={otherShippingCompany?.image}
 										hideSwitch={true}
@@ -492,6 +504,31 @@ const ShippingCompanies = () => {
 													value={otherShipCompDetails?.overprice}
 													onChange={(e) => handleOnChangeDetails(e)}
 													placeholder='حدد تكلفة الوزن الزائد لكل كيلو جرام  '
+													className='shipping-price'
+													disabled={!otherShipCompDetails?.status}
+												/>
+												<div className='currency p-2'> ر.س</div>
+											</div>
+											<div className='shipping-price-hint d-flex d-md-none'>
+												تكلفة الوزن الزائد
+											</div>
+											<div
+												style={{
+													backgroundColor: !otherShipCompDetails?.status
+														? "#fefefeef"
+														: "#fffffff7",
+												}}
+												className='shipping-price-input-box d-flex justify-content-center align-items-center gap-1 mb-2'>
+												<div className='shipping-price-hint d-none d-md-flex'>
+													تكلفة الدفع عند الاستلام
+												</div>
+
+												<input
+													type='text'
+													name='cod_price'
+													value={otherShipCompDetails?.cod_price}
+													onChange={(e) => handleOnChangeDetails(e)}
+													placeholder=' تكلفة الدفع عند الاستلام  ام  '
 													className='shipping-price'
 													disabled={!otherShipCompDetails?.status}
 												/>

@@ -50,6 +50,7 @@ const ShippingCompaniesData = ({
 	shippingCompanyName,
 	currentShippingPrice,
 	currentShippingTime,
+	currentShippingCodPrice,
 	changeStatus,
 	checked,
 	image,
@@ -71,16 +72,16 @@ const ShippingCompaniesData = ({
 	return (
 		<div className='data-widget'>
 			<div className='data'>
-				<div className='shipping-image-box'>
+				<div className='shipping-image-box px-3'>
 					<img
 						src={image}
 						alt=''
 						loading='lazy'
-						style={{ width: hideSwitch ? "120px" : "" }}
+						style={{ width: hideSwitch ? "120px" : "", marginTop: "26px" }}
 					/>
 
-					{currentShippingPrice && (
-						<div className='current-price mt-1 w-100 d-flex justify-content-center'>
+					{currentShippingPrice ? (
+						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
 							تكلفة الشحن :
 							{currentShippingPrice === "" ||
 							currentShippingPrice === "0" ||
@@ -90,16 +91,21 @@ const ShippingCompaniesData = ({
 								<span> {currentShippingPrice} ر.س </span>
 							)}
 						</div>
-					)}
+					) : null}
 					{Number(currentShippingTime) !== 0 && (
-						<div className='current-price mt-1 w-100 d-flex justify-content-center'>
+						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
 							مدة التوصيل الحالية :{" "}
 							<span>{daysDefinition(currentShippingTime)}</span>
 						</div>
 					)}
 					{currentShippingOverPrice && (
-						<div className='current-price mt-1 w-100 d-flex justify-content-center'>
+						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
 							تكلفة الوزن الزائد : <span>{currentShippingOverPrice} ر.س</span>
+						</div>
+					)}
+					{currentShippingCodPrice && (
+						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
+							الدفع عند الاستلام : <span>{currentShippingCodPrice} ر.س</span>
 						</div>
 					)}
 				</div>

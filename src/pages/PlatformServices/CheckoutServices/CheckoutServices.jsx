@@ -306,7 +306,7 @@ const CheckoutServices = ({
 		formData.append("guest_order_data", JSON.stringify(guestOrderData));
 		formData.append("order", JSON.stringify(orderInfo));
 		formData.append("order_details", JSON.stringify(orderDetails));
-		formData.append("url", `http://store.atlbha.com/checkout-packages`);
+		formData.append("url", `http://store.atlbha.com/PlatformServices`);
 
 		try {
 			const response = await createOrderWithMadfu({ body: formData });
