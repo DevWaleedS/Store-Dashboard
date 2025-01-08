@@ -329,7 +329,7 @@ const ShippingCompanies = () => {
 					</div>
 				</div>
 
-				<Breadcrumb mb={"mb-md-5 mb-3"} currentPage={"	شركات الشحن"} />
+				<Breadcrumb mb={"mb-md-5 mb-3"} currentPage={"شركات الشحن"} />
 
 				<div className='row  mb-2'>
 					<div className='col-12 '>
@@ -510,7 +510,7 @@ const ShippingCompanies = () => {
 												<div className='currency p-2'> ر.س</div>
 											</div>
 											<div className='shipping-price-hint d-flex d-md-none'>
-												تكلفة الوزن الزائد
+												تكلفة الدفع عند الاستلام
 											</div>
 											<div
 												style={{
@@ -528,7 +528,7 @@ const ShippingCompanies = () => {
 													name='cod_price'
 													value={otherShipCompDetails?.cod_price}
 													onChange={(e) => handleOnChangeDetails(e)}
-													placeholder=' تكلفة الدفع عند الاستلام  ام  '
+													placeholder=' تكلفة الدفع عند الاستلام    '
 													className='shipping-price'
 													disabled={!otherShipCompDetails?.status}
 												/>

@@ -72,42 +72,45 @@ const ShippingCompaniesData = ({
 	return (
 		<div className='data-widget'>
 			<div className='data'>
-				<div className='shipping-image-box px-3'>
+				<div className='w-100 h-100  d-flex flex-md-column flex-row justify-content-md-center justify-content-start gap-md-0 gap-2 align-items-center shipping-image-box px-3'>
 					<img
 						src={image}
 						alt=''
+						className='img-fluid'
 						loading='lazy'
 						style={{ width: hideSwitch ? "120px" : "", marginTop: "26px" }}
 					/>
 
-					{currentShippingPrice ? (
-						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
-							تكلفة الشحن :
-							{currentShippingPrice === "" ||
-							currentShippingPrice === "0" ||
-							currentShippingPrice === 0 ? (
-								<span> شحن مجاني </span>
-							) : (
-								<span> {currentShippingPrice} ر.س </span>
-							)}
-						</div>
-					) : null}
-					{Number(currentShippingTime) !== 0 && (
-						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
-							مدة التوصيل الحالية :{" "}
-							<span>{daysDefinition(currentShippingTime)}</span>
-						</div>
-					)}
-					{currentShippingOverPrice && (
-						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
-							تكلفة الوزن الزائد : <span>{currentShippingOverPrice} ر.س</span>
-						</div>
-					)}
-					{currentShippingCodPrice && (
-						<div className='current-price mt-1 w-100 d-flex justify-content-start'>
-							الدفع عند الاستلام : <span>{currentShippingCodPrice} ر.س</span>
-						</div>
-					)}
+					<div className='d-flex flex-column justify-content-start align-items-start'>
+						{currentShippingPrice ? (
+							<div className='current-price mt-1 w-100 d-flex justify-content-start'>
+								تكلفة الشحن :
+								{currentShippingPrice === "" ||
+								currentShippingPrice === "0" ||
+								currentShippingPrice === 0 ? (
+									<span> شحن مجاني </span>
+								) : (
+									<span> {currentShippingPrice} ر.س </span>
+								)}
+							</div>
+						) : null}
+						{Number(currentShippingTime) !== 0 && (
+							<div className='current-price mt-1 w-100 d-flex justify-content-start'>
+								مدة التوصيل الحالية :{" "}
+								<span>{daysDefinition(currentShippingTime)}</span>
+							</div>
+						)}
+						{currentShippingOverPrice && (
+							<div className='current-price mt-1 w-100 d-flex justify-content-start'>
+								تكلفة الوزن الزائد : <span>{currentShippingOverPrice} ر.س</span>
+							</div>
+						)}
+						{currentShippingCodPrice && (
+							<div className='current-price mt-1 w-100 d-flex justify-content-start'>
+								الدفع عند الاستلام : <span>{currentShippingCodPrice} ر.س</span>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 			{!hideSwitch && (
