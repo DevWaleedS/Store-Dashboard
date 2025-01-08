@@ -76,9 +76,13 @@ const ShippingCompaniesData = ({
 					<img
 						src={image}
 						alt=''
-						className='img-fluid'
 						loading='lazy'
-						style={{ width: hideSwitch ? "120px" : "", marginTop: "26px" }}
+						style={{
+							width: hideSwitch ? "120px" : "",
+							marginTop: "26px",
+							maxWidth: "100%",
+							maxHight: "100%",
+						}}
 					/>
 
 					<div className='d-flex flex-column justify-content-start align-items-start'>
