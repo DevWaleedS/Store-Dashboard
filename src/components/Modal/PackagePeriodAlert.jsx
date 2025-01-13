@@ -26,7 +26,8 @@ const PackagePeriodAlert = ({ showVerification }) => {
 							تجديد الاشتراك الآن
 						</Link>
 					</Message>
-				) : showVerification?.left <= 30 ? (
+				) : showVerification?.left <= 30 &&
+				  showVerification?.periodtype !== "14 يوم" ? (
 					<Message closable type='warning' showIcon onClose={handleClose}>
 						<strong>يرجي الانتباه!</strong> ستنتهي الباقة خلال{" "}
 						<strong>
@@ -39,6 +40,23 @@ const PackagePeriodAlert = ({ showVerification }) => {
 						</strong>
 						<Link to='/upgrade-packages' className='me-2' onClick={handleClose}>
 							جدد الاشتراك الآن
+						</Link>
+					</Message>
+				) : showVerification?.left <= 14 &&
+				  showVerification?.periodtype === "14 يوم" ? (
+					<Message closable type='warning' showIcon onClose={handleClose}>
+						<strong>يرجي الانتباه!</strong> هذه الباقة <strong>تجريبية</strong>{" "}
+						وستنتهي خلال{" "}
+						<strong>
+							{showVerification?.left === 1
+								? "يوم !"
+								: showVerification?.left === 2
+								? "يومين !"
+								: showVerification?.left > 2 &&
+								  showVerification?.left + "أيام !"}
+						</strong>
+						<Link to='/upgrade-packages' className='me-2' onClick={handleClose}>
+							اشترك الآن
 						</Link>
 					</Message>
 				) : null

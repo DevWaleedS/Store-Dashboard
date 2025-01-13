@@ -22,12 +22,18 @@ const UseAccountVerification = () => {
 	// This is modal verification Store Status message That is display after dashboard is open
 	useEffect(() => {
 		if (
-			showVerification &&
-			!checkoutSuccess &&
-			!failedSuccess &&
-			!showVerification?.setting_is_done &&
-			showVerification?.verification_status !== "تم التوثيق" &&
-			!showVerification?.package_paid
+			(showVerification &&
+				!checkoutSuccess &&
+				!failedSuccess &&
+				!showVerification?.setting_is_done &&
+				showVerification?.verification_status !== "تم التوثيق" &&
+				!showVerification?.package_paid) ||
+			(showVerification &&
+				!checkoutSuccess &&
+				!failedSuccess &&
+				!showVerification?.setting_is_done &&
+				showVerification?.verification_status !== "تم التوثيق" &&
+				showVerification?.package_paid)
 		) {
 			navigate("/MainInformation");
 		} else if (
@@ -62,7 +68,6 @@ const UseAccountVerification = () => {
 				!showVerification?.package_paid &&
 				!showVerification?.package_id)
 		) {
-			// navigate("/");
 			dispatchVerifyModal(openVerifyModal());
 		}
 	}, [showVerification, dispatchVerifyModal, navigate]);

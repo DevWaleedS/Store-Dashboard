@@ -119,8 +119,8 @@ const ShippingCompanies = () => {
 			);
 		}
 	}, [shippingCompanies]);
-	// -----------------------------------------------
 
+	// -----------------------------------------------
 	useEffect(() => {
 		if (otherShippingCompany) {
 			setOtherShipCompDetails((prevDetails) => ({
@@ -528,7 +528,7 @@ const ShippingCompanies = () => {
 													name='cod_price'
 													value={otherShipCompDetails?.cod_price}
 													onChange={(e) => handleOnChangeDetails(e)}
-													placeholder=' تكلفة الدفع عند الاستلام    '
+													placeholder=' تكلفة الدفع عند الاستلام'
 													className='shipping-price'
 													disabled={!otherShipCompDetails?.status}
 												/>

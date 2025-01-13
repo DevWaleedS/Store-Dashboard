@@ -125,6 +125,9 @@ const CheckoutPackages = () => {
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
+				if (selectedPackage?.price_after_coupon === 0) {
+					handleNavigateToHome();
+				}
 				if (response?.data?.message?.en === "order send successfully") {
 					if (
 						response?.data?.message?.en === "order send successfully" &&
@@ -278,6 +281,9 @@ const CheckoutPackages = () => {
 		}
 	};
 
+	const handleNavigateToHome = (path) => {
+		navigate("/");
+	};
 	const handleGoBack = () => {
 		navigate("/");
 	};
@@ -346,18 +352,23 @@ const CheckoutPackages = () => {
 															loadingPackages={loadingPackages}
 														/>
 
-														<RenderPackageCouponInput
-															coupon={coupon}
-															setCoupon={setCoupon}
-															showCoupon={showCoupon}
-															couponError={couponError}
-															setShowCoupon={setShowCoupon}
-															setBtnLoading={setBtnLoading}
-															loadingCoupon={loadingCoupon}
-															setCouponError={setCouponError}
-															setLoadingCoupon={setLoadingCoupon}
-															cartId={selectedPackage?.unique_id}
-														/>
+														{selectedPackage?.yearly_price -
+															selectedPackage?.discount >
+															0 && (
+															<RenderPackageCouponInput
+																coupon={coupon}
+																setCoupon={setCoupon}
+																showCoupon={showCoupon}
+																couponError={couponError}
+																setShowCoupon={setShowCoupon}
+																setBtnLoading={setBtnLoading}
+																loadingCoupon={loadingCoupon}
+																setCouponError={setCouponError}
+																setLoadingCoupon={setLoadingCoupon}
+																cartId={selectedPackage?.unique_id}
+															/>
+														)}
+
 														<FormControlLabel
 															sx={{
 																width: "100%",

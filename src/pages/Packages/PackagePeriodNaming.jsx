@@ -13,6 +13,8 @@ const PackagePeriodNaming = ({ pack }) => {
 					? "3 أشهر"
 					: pack?.periodtype === "month"
 					? "شهرياََ"
+					: pack?.periodtype === "2weeks"
+					? "١٤ يوم"
 					: ""}
 			</span>
 		</>

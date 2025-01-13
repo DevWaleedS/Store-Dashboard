@@ -47,7 +47,6 @@ const switchStyle = {
 
 const ShippingCompaniesData = ({
 	currentShippingOverPrice,
-	shippingCompanyName,
 	currentShippingPrice,
 	currentShippingTime,
 	currentShippingCodPrice,

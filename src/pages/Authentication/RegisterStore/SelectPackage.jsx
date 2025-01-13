@@ -55,15 +55,22 @@ const PackageData = ({ width, item }) => {
 			</h6>
 			<section className=' d-flex flex-row justify-content-end align-items-center gap-1'>
 				{item?.discount > 0 ? (
-					<section className='d-flex flex-row justify-content-end align-items-center gap-1'>
-						<span className='pack-discount-price '>
-							{item?.yearly_price} <span className='pack-currency'>ر.س</span>
-						</span>
-						<span className='pack-price'>
-							{item?.yearly_price - item?.discount}
-							<span className='pack-currency pe-1'>ر.س</span>
-						</span>
-					</section>
+					item?.yearly_price - item?.discount === 0 ? (
+						<span className='price'>مجاناً</span>
+					) : (
+						<>
+							<section className='d-flex flex-row justify-content-end align-items-center gap-1'>
+								<span className='pack-discount-price '>
+									{item?.yearly_price}{" "}
+									<span className='pack-currency'>ر.س</span>
+								</span>
+								<span className='pack-price'>
+									{item?.yearly_price - item?.discount}
+									<span className='pack-currency pe-1'>ر.س</span>
+								</span>
+							</section>
+						</>
+					)
 				) : (
 					<span className='pack-price'>
 						{item?.yearly_price}

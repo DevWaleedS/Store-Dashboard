@@ -71,16 +71,20 @@ const PackageData = ({ item }) => {
 					</h2>
 					<h2 className='gap-1 d-flex justify-content-center align-items-baseline pack-price-box'>
 						{item?.discount > 0 ? (
-							<>
-								<span className='price'>
-									{item?.yearly_price - item?.discount}
-									<span className='currency pe-1'>ر.س</span>
-								</span>
-								<span className='discount-price'>
-									{item?.yearly_price}
-									<span className='currency'>ر.س</span>
-								</span>
-							</>
+							item?.yearly_price - item?.discount === 0 ? (
+								<span className='price'>مجاناً</span>
+							) : (
+								<>
+									<span className='price'>
+										{item?.yearly_price - item?.discount}
+										<span className='currency pe-1'>ر.س</span>
+									</span>
+									<span className='discount-price'>
+										{item?.yearly_price}
+										<span className='currency'>ر.س</span>
+									</span>
+								</>
+							)
 						) : (
 							<span className='price'>
 								{item?.yearly_price} <span className='currency '>ر.س</span>

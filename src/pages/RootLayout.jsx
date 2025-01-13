@@ -35,7 +35,6 @@ import AxiosInterceptors from "../API/AxiosInterceptors";
 import SideBar from "../global/Sidebar/SideBar";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 import UseAccountVerification from "../Hooks/UseAccountVerification";
-import { Message } from "rsuite";
 
 const RootLayout = () => {
 	// UseIsSubscribeInPackages();
