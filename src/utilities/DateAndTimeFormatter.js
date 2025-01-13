@@ -1,6 +1,6 @@
 import moment from "moment-with-locales-es6";
 
-const FormatNotifications = ({ date }) => {
+const DateAndTimeFormatter = ({ date }) => {
 	const calcPassedMinutes = (date1, date2) =>
 		Math.round(Math.abs(date2 - date1) / (1000 * 60));
 
@@ -50,4 +50,4 @@ const FormatNotifications = ({ date }) => {
 	return moment(date).locale("ar").format("D MMMM YYYY");
 };
 
-export default FormatNotifications;
+export default DateAndTimeFormatter;

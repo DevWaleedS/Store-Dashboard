@@ -5,8 +5,6 @@ import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 // Components
-
-import { FormatNotifications } from "../components";
 import { CircularLoading } from "../HelperComponents";
 import DeleteModal from "../components/DeleteModal/DeleteModal";
 import { TablePagination } from "../components/Tables/TablePagination";
@@ -30,6 +28,9 @@ import {
 	useGetNotificationsQuery,
 } from "../store/apiSlices/notificationsApi";
 import { TopBarSearchInput } from "../global/TopBar";
+
+// Utilities
+import { DateAndTimeFormatter } from "../utilities";
 
 const Notifications = () => {
 	const [pageTarget, setPageTarget] = useState(1);
@@ -272,9 +273,7 @@ const Notifications = () => {
 															<div className='time-delete w-100 h-100 d-flex flex-md-row flex-column align-items-md-center align-items-end justify-content-end gap-md-5 gap-2'>
 																<div className=''>
 																	<p className='notification-time'>
-																		<FormatNotifications
-																			date={not.created_at}
-																		/>
+																		{DateAndTimeFormatter(not.created_at)}
 																	</p>
 																</div>
 

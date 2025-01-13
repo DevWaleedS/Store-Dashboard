@@ -1,5 +1,6 @@
 import React from "react";
 import { Message } from "rsuite";
+import { DaysFormatter } from "../../utilities";
 
 const PackagePeriodAlert = ({ pack }) => {
 	return (
@@ -14,13 +15,7 @@ const PackagePeriodAlert = ({ pack }) => {
 					) : pack?.left_days <= 30 ? (
 						<Message closable type='warning' showIcon>
 							<strong>يرجي الانتباه!</strong> ستنتهي الباقة خلال{" "}
-							<strong>
-								{pack?.left_days === 1
-									? "يوم !"
-									: pack?.left_days === 2
-									? "يومين !"
-									: pack?.left_days > 2 && pack?.left_days + "أيام !"}
-							</strong>
+							<strong>{DaysFormatter(pack?.left_days)} !</strong>
 						</Message>
 					) : null
 				) : null}

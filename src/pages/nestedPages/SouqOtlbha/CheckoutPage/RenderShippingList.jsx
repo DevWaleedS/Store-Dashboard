@@ -4,6 +4,7 @@ import React, { useEffect, useImperativeHandle, forwardRef } from "react";
 import { useReCalculateCartByShippingIdMutation } from "../../../../store/apiSlices/souqOtlobhaProductsApi";
 import { useGetShippingCompaniesQuery } from "../../../../store/apiSlices/selectorsApis/selectShippingCompaniesApi";
 
+import { DaysFormatter } from "../../../../utilities";
 const RenderShippingList = forwardRef(
 	(
 		{ shippingSelect, setShippingSelect, setShipping, shippingTypeErrors },
@@ -11,16 +12,6 @@ const RenderShippingList = forwardRef(
 	) => {
 		// get shipping Companies..
 		const { data: shippingCompanies } = useGetShippingCompaniesQuery();
-
-		// TO HANDLE NAME OF DAYS
-		const daysDefinition = (time) => {
-			const timeValue = Number(time);
-			if (timeValue === 0) return;
-			if (timeValue === 1) return "يوم واحد";
-			if (timeValue === 2) return "يومين";
-			if (timeValue >= 3 && timeValue <= 10) return `${timeValue} أيام`;
-			return `${timeValue} يوم`;
-		};
 
 		// To select first item by default
 		useEffect(() => {
@@ -89,15 +80,17 @@ const RenderShippingList = forwardRef(
 							<span className='payment-methods__item-title'>
 								{shipping?.name}
 							</span>
+
 							{shipping?.time !== "0" && shipping?.price !== "0" && (
 								<span style={{ fontSize: "0.8rem", color: "#919191" }}>
 									{shipping?.time
-										? `مدة التوصيل : ${daysDefinition(shipping?.time)}`
+										? `مدة التوصيل : ${DaysFormatter(shipping?.time)}`
 										: ""}
 								</span>
 							)}
 						</div>
 					</div>
+
 					<img
 						src={shipping?.image}
 						alt=''

@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch } from "@mui/material";
+import { DaysFormatter } from "../../utilities";
 
 const switchStyle = {
 	"& .MuiSwitch-track": {
@@ -55,19 +56,6 @@ const ShippingCompaniesData = ({
 	image,
 	hideSwitch,
 }) => {
-	const daysDefinition = (time) => {
-		let timeValue = Number(time);
-		if (timeValue === 1) {
-			return "يوم واحد";
-		} else if (timeValue === 2) {
-			return "يومين";
-		} else if (timeValue <= 10 && timeValue >= 3) {
-			return `${timeValue} أيام`;
-		} else {
-			return `${timeValue} يوم`;
-		}
-	};
-
 	return (
 		<div className='data-widget'>
 			<div className='data'>
@@ -81,6 +69,7 @@ const ShippingCompaniesData = ({
 							marginTop: "26px",
 							maxWidth: "100%",
 							maxHight: "100%",
+							height: "100%",
 						}}
 					/>
 
@@ -100,7 +89,7 @@ const ShippingCompaniesData = ({
 						{Number(currentShippingTime) !== 0 && (
 							<div className='current-price mt-1 w-100 d-flex justify-content-start'>
 								مدة التوصيل الحالية :{" "}
-								<span>{daysDefinition(currentShippingTime)}</span>
+								<span>{DaysFormatter(currentShippingTime)}</span>
 							</div>
 						)}
 						{currentShippingOverPrice && (

@@ -27,6 +27,7 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
 import Context from "../../Context/context";
+import { DaysFormatter } from "../../utilities";
 
 // switch style
 const switchStyle = {
@@ -155,18 +156,6 @@ const ShippingCompanies = () => {
 	}, [otherShippingCompany]);
 
 	// TO HANDLE NAME OF DAYS
-	const daysDefinition = (time) => {
-		let timeValue = Number(time);
-		if (timeValue === 1) {
-			return "يوم واحد";
-		} else if (timeValue === 2) {
-			return "يومين";
-		} else if (timeValue <= 10 && timeValue >= 3) {
-			return `${timeValue} أيام`;
-		} else {
-			return `${timeValue} يوم`;
-		}
-	};
 
 	// handle onchange function
 	const handleOnChangeDetails = (e) => {
@@ -482,7 +471,7 @@ const ShippingCompanies = () => {
 													{otherShipCompDetails?.time === "" ||
 													otherShipCompDetails?.time === "0"
 														? "يوم"
-														: daysDefinition(otherShipCompDetails?.time)}
+														: DaysFormatter(otherShipCompDetails?.time)}
 												</div>
 											</div>
 											<div className='shipping-price-hint d-flex d-md-none'>

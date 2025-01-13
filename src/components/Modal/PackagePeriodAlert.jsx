@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Message } from "rsuite";
+import { DaysFormatter } from "../../utilities";
 
 const PackagePeriodAlert = ({ showVerification }) => {
 	const [isVisible, setIsVisible] = useState(true);
@@ -30,14 +31,7 @@ const PackagePeriodAlert = ({ showVerification }) => {
 				  showVerification?.periodtype !== "14 يوم" ? (
 					<Message closable type='warning' showIcon onClose={handleClose}>
 						<strong>يرجي الانتباه!</strong> ستنتهي الباقة خلال{" "}
-						<strong>
-							{showVerification?.left === 1
-								? "يوم !"
-								: showVerification?.left === 2
-								? "يومين !"
-								: showVerification?.left > 2 &&
-								  showVerification?.left + "أيام !"}
-						</strong>
+						<strong>{DaysFormatter(showVerification?.left)} !</strong>
 						<Link to='/upgrade-packages' className='me-2' onClick={handleClose}>
 							جدد الاشتراك الآن
 						</Link>
@@ -46,15 +40,8 @@ const PackagePeriodAlert = ({ showVerification }) => {
 				  showVerification?.periodtype === "14 يوم" ? (
 					<Message closable type='warning' showIcon onClose={handleClose}>
 						<strong>يرجي الانتباه!</strong> هذه الباقة <strong>تجريبية</strong>{" "}
-						وستنتهي خلال{" "}
-						<strong>
-							{showVerification?.left === 1
-								? "يوم !"
-								: showVerification?.left === 2
-								? "يومين !"
-								: showVerification?.left > 2 &&
-								  showVerification?.left + "أيام !"}
-						</strong>
+						وستنتهي خلال
+						<strong>{DaysFormatter(showVerification?.left)} !</strong>
 						<Link to='/upgrade-packages' className='me-2' onClick={handleClose}>
 							اشترك الآن
 						</Link>

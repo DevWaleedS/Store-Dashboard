@@ -56,6 +56,7 @@ const PackageData = ({ item }) => {
 		localStorage.setItem("package_id", id);
 	};
 
+	if (item?.periodtype && item?.is_selected && item?.package_paid) return null;
 	return (
 		<>
 			<div
