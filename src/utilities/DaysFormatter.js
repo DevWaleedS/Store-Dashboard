@@ -1,10 +1,3 @@
-// utils/DaysFormatter.js
-
-/**
- * Formats a given number of days into a human-readable string.
- * @param {number} days - The number of days to format.
- * @returns {string} - The formatted string (e.g., "2 weeks", "3 months").
- */
 const DaysFormatter = (days) => {
 	let daysValue = Number(days);
 	if (daysValue < 0) {

@@ -213,7 +213,8 @@ const MainInformation = () => {
 
 				if (
 					response?.data?.data?.setting_store?.verification_status ===
-					"لم يتم الطلب"
+						"لم يتم الطلب" &&
+					!response?.data?.data?.setting_store.package_paid
 				) {
 					dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
 				}

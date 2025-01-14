@@ -13,7 +13,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 // Third part
 
 import { ToastContainer } from "react-toastify";
-import { Link, Outlet, ScrollRestoration } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 // top bar and side bar
 import TopBar from "../global/TopBar/TopBar";
@@ -35,6 +35,9 @@ import AxiosInterceptors from "../API/AxiosInterceptors";
 import SideBar from "../global/Sidebar/SideBar";
 import { useShowVerificationQuery } from "../store/apiSlices/verifyStoreApi";
 import UseAccountVerification from "../Hooks/UseAccountVerification";
+
+// Whatsapp Icon
+import { FloatingWhatsappIcon } from "../components";
 
 const RootLayout = () => {
 	// UseIsSubscribeInPackages();
@@ -139,6 +142,9 @@ const RootLayout = () => {
 									</div>
 								</div>
 							</main>
+
+							{/* floating whatsapp icon */}
+							<FloatingWhatsappIcon />
 						</div>
 					</CssBaseline>
 				</ThemeProvider>

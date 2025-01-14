@@ -1,0 +1,22 @@
+.floating-whatsapp-icon .floating-whatsapp-button {
+	right: auto;
+	left: 2rem;
+}
+.floating-whatsapp-icon .floating-whatsapp-chatbox {
+	right: auto;
+	left: 4rem;
+}
+.floating-whatsapp-icon .floating-whatsapp-chatbox header {
+	background-color: var(--second-500);
+}
+
+.floating-whatsapp-icon .floating-whatsapp-chatbox header img {
+	background-color: #fff;
+}
+
+.floating-whatsapp-icon .floating-whatsapp-chatbox footer form button svg {
+	fill: var(--primary-500);
+}
+.floating-whatsapp-icon .floating-whatsapp-chatbox footer form input {
+	font-size: 1rem;
+}

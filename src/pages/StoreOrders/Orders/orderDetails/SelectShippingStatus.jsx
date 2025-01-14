@@ -19,6 +19,9 @@ import {
 import { ArrowDown, ListIcon } from "../../../../data/Icons";
 import SelectPickupDateModal from "../SelectPickupDate/SelectPickupDateModal";
 
+// Utilities
+import { FormatDateAsTimestamp } from "../../../../utilities";
+
 const BpIcon = styled("span")(({ theme }) => ({
 	borderRadius: "50%",
 	width: 18,
@@ -127,7 +130,7 @@ const SelectShippingStatus = ({
 		resetError();
 
 		// Format the date as a timestamp with timezone offset
-		const formattedDate = value ? formatDateAsTimestamp(value) : null;
+		const formattedDate = value ? FormatDateAsTimestamp(value) : null;
 
 		// Data that send to API
 		let formData = new FormData();
@@ -192,21 +195,6 @@ const SelectShippingStatus = ({
 		} catch (error) {
 			console.error("Error changing update order status :", error);
 		}
-	};
-
-	// Add this helper function
-	const formatDateAsTimestamp = (date) => {
-		const timestamp = date.getTime();
-		const offset = date.getTimezoneOffset();
-		const offsetHours = Math.abs(Math.floor(offset / 60))
-			.toString()
-			.padStart(2, "0");
-		const offsetMinutes = Math.abs(offset % 60)
-			.toString()
-			.padStart(2, "0");
-		const offsetSign = offset > 0 ? "-" : "+";
-
-		return `${timestamp}${offsetSign}${offsetHours}${offsetMinutes}`;
 	};
 
 	return (
