@@ -211,11 +211,7 @@ const MainInformation = () => {
 				localStorage.setItem("logo", mainInformation?.logo);
 				localStorage.setItem("domain", mainInformation?.domain);
 
-				if (
-					response?.data?.data?.setting_store?.verification_status ===
-						"لم يتم الطلب" &&
-					!response?.data?.data?.setting_store.package_paid
-				) {
+				if (!response?.data?.data?.setting_store.package_paid) {
 					dispatchVerifyAfterMainAlert(openVerifyAfterMainModal());
 				}
 			} else {
