@@ -21,7 +21,7 @@ const FloatingWhatsappIcon = () => {
 			statusMessage='سيتم التواصل في أقرب وقت'
 			chatMessage='مرحباً، كيف يمكنني مساعدتك؟'
 			placeholder='أكتب رسالتك هنا...'
-			phoneNumber='+966505549056'
+			phoneNumber='+966567009332'
 		/>
 	);
 };
