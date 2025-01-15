@@ -281,8 +281,8 @@ const CheckoutPackages = () => {
 		}
 	};
 
-	const handleNavigateToHome = (path) => {
-		navigate("/");
+	const handleNavigateToHome = () => {
+		handleGoBack();
 	};
 	const handleGoBack = () => {
 		navigate("/");

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Message } from "rsuite";
+
+// utilities
 import { DaysFormatter } from "../../utilities";
 
 const PackagePeriodAlert = ({ showVerification }) => {

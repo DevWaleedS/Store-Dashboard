@@ -27,6 +27,8 @@ import { LoadingContext } from "../../Context/LoadingProvider";
 // custom hook
 import UseAccountVerification from "../../Hooks/UseAccountVerification";
 import Context from "../../Context/context";
+
+// utilities
 import { DaysFormatter } from "../../utilities";
 
 // switch style

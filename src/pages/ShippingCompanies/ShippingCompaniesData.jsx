@@ -1,5 +1,7 @@
 import React from "react";
 import { Switch } from "@mui/material";
+
+// Utilities
 import { DaysFormatter } from "../../utilities";
 
 const switchStyle = {

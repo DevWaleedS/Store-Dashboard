@@ -1,5 +1,7 @@
 import React from "react";
 import { Message } from "rsuite";
+
+// utilities
 import { DaysFormatter } from "../../utilities";
 
 const PackagePeriodAlert = ({ pack }) => {
