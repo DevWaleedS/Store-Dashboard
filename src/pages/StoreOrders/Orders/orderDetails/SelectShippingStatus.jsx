@@ -136,15 +136,17 @@ const SelectShippingStatus = ({
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
-		formData.append("city", shipping?.city);
-		formData.append("district", shipping?.district);
-		formData.append("street_address", shipping?.address);
-		if (
-			status !== "completed" &&
-			status !== "canceled" &&
-			currentOrder?.orders?.shippingtypes?.name !== "اخرى"
-		) {
-			formData.append("pickup_date", formattedDate);
+		if (!currentOrder?.orders.is_service) {
+			formData.append("city", shipping?.city);
+			formData.append("district", shipping?.district);
+			formData.append("street_address", shipping?.address);
+			if (
+				status !== "completed" &&
+				status !== "canceled" &&
+				currentOrder?.orders?.shippingtypes?.name !== "اخرى"
+			) {
+				formData.append("pickup_date", formattedDate);
+			}
 		}
 
 		try {
