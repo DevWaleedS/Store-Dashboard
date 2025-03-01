@@ -278,10 +278,8 @@ const SelectShippingStatus = ({
 													/>
 												) : null}
 
-												{(currentOrder?.orders?.shippingtypes?.name &&
-													currentOrder?.orders?.shippingtypes?.name !==
-														"اخرى") ||
-												!currentOrder?.orders?.is_service ? (
+												{currentOrder?.orders?.shippingtypes?.name !== "اخرى" ||
+												currentOrder?.orders?.is_service !== false ? (
 													<FormControlLabel
 														className='mb-2'
 														value='delivery_in_progress'
