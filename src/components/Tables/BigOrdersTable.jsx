@@ -168,7 +168,7 @@ function EnhancedTableToolbar(props) {
 									value={search}
 									autoComplete='false'
 									onChange={(e) => setSearch(e.target.value)}
-									placeholder='ابحث برقم التتبع أو اسم شركة الشحن أو اسم العميل'
+									placeholder='ابحث برقم التتبع أو رقم اللطلب أو اسم شركة الشحن أو اسم العميل'
 								/>
 							</div>
 							<div className='select-input-box'>

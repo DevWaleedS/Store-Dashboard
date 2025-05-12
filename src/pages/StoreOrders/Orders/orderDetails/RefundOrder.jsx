@@ -23,7 +23,7 @@ const RefundOrder = ({ id, currentOrder }) => {
 	const [refundError, setRefundError] = useState("");
 
 	// set price of order
-	const [price, setPrice] = useState(null);
+	const [price, setPrice] = useState("");
 	useEffect(() => {
 		if (currentOrder) {
 			// if shipping is other return total price if aramex return price  without sipping price and over wight

@@ -119,6 +119,7 @@ const RootLayout = () => {
 							{isVerifyAfterMainOpen && <VerifayAfterMainInfoAlert />}
 							{/** Delegate Request Alert */}
 							<DelegateRequestAlert />
+
 							<main className='content'>
 								<div className='row'>
 									<div className='sidebar-col'>

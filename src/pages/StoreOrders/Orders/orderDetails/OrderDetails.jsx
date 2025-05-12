@@ -16,6 +16,7 @@ import SelectShippingStatus from "./SelectShippingStatus";
 import PrintShippingSticker from "./PrintShippingSticker";
 import Breadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { CircularLoading } from "../../../../HelperComponents";
+import RefundAmountModal from "./RefundAmountModal";
 
 // RTK Query
 import { useGetOrderByIdQuery } from "../../../../store/apiSlices/ordersApiSlices/ordersApi";
@@ -222,6 +223,9 @@ const OrderDetails = () => {
 					</div>
 				</section>
 			</section>
+
+			{/*Refund Amount Modal */}
+			<RefundAmountModal currentOrder={currentOrder} id={id} />
 		</>
 	);
 };

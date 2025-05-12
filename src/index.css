@@ -439,6 +439,12 @@ textarea {
 	white-space: normal !important;
 }
 
+button {
+	cursor: pointer;
+	border: none;
+	outline: none;
+}
+
 /* --------------------------------------------------------------------------------------------- */
 
 /* TOP BAR STYLE */

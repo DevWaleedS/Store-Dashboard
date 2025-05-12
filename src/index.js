@@ -1,6 +1,4 @@
-import React from "react";
-// import pro side bar from pro sidebar
-import { ProSidebarProvider } from "react-pro-sidebar";
+import { lazy, Suspense } from "react";
 
 // import React Router Dom
 import ReactDOM from "react-dom/client";
@@ -17,67 +15,11 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle";
 
-// IMPORT ALL PAGES
-import RootLayout from "./pages/RootLayout";
-
 // INDEX CSS FILE
 import "./index.css";
 
-import {
-	Offers,
-	// Management,
-	SocialPages,
-	//MarketingCampaign,
-	//BranchesAndWarehouses,
-	Notifications,
-	PlatformServices,
-	EvaluationThePlatform,
-	PostalSubscriptions,
-	PaintStore,
-	RequestDelegate,
-	SEOStoreSetting,
-} from "./pages";
-
-// rating and comments of store
-import { Rating } from "./pages/Rating";
-
-// Academy Component
-import { Academy } from "./pages/Academy";
-import { CourseDetails } from "./pages/Academy/Courses";
-import { ExplainDetails } from "./pages/Academy/Explains";
-
-// Products Pages ...
-import {
-	AddNewProduct,
-	EditImportProducts,
-	EditProduct,
-	Products,
-} from "./pages/Products";
-
-import { ErrorPage } from "./pages/ErrorPage";
-import { VerifyStore } from "./pages/VerifyStore";
-import { TemplateSetting } from "./pages/TemplateSetting";
-import { ShippingCompanies } from "./pages/ShippingCompanies";
-import { DashboardHomePage } from "./pages/DashboardHomePage";
-import { PaymentGateways } from "./pages/PaymentGateways";
-// ---------------------------------------------------------------------------------------//
-
-// Import Nested Pages
-import {
-	EditUserPage,
-	JobTitles,
-	EditRole,
-	UserData,
-	CreateRole,
-	AddNewUser,
-	EditUserDetails,
-
-	// CreateOffer,
-
-	// OfferDetails,
-} from "./pages/nestedPages";
-
-// ---------------------------------------------------------------------------------------//
+// Root Layout - keep this non-lazy as it's the main structure
+import RootLayout from "./pages/RootLayout";
 
 // IMPORT ALL Context Providers
 import DeleteProvider from "./Context/DeleteProvider";
@@ -87,66 +29,244 @@ import TextEditorProvider from "./Context/TextEditorProvider";
 import UserAuthorProvider from "./Context/UserAuthorProvider";
 import NotificationProvider from "./Context/NotificationProvider";
 import ResetPasswordProvider from "./Context/ResetPasswordProvider";
+import Loading from "./pages/Loading/Loading";
 
-// Souq Otlobha and checkout Pages
-import {
-	SouqOtlobha,
-	ProductRefund,
-	CartPage,
-	CheckoutPage,
-} from "./pages/nestedPages/SouqOtlbha";
-import { CheckoutStatus } from "./pages/nestedPages/SouqOtlbha/CheckoutPage/CheckOutStatusPages";
+// Lazy load all pages
+const DashboardHomePage = lazy(() =>
+	import("./pages/DashboardHomePage/DashboardHomePage")
+);
+const ErrorPage = lazy(() =>
+	import("./pages/ErrorPage/ErrorPage").then((module) => ({
+		default: module.ErrorPage,
+	}))
+);
+const Offers = lazy(() => import("./pages/Offers"));
+const SocialPages = lazy(() => import("./pages/SocialPages"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const PlatformServices = lazy(() =>
+	import("./pages/PlatformServices/PlatformServices")
+);
+const EvaluationThePlatform = lazy(() =>
+	import("./pages/EvaluationThePlatform/EvaluationThePlatform")
+);
+const PostalSubscriptions = lazy(() => import("./pages/PostalSubscriptions"));
+const PaintStore = lazy(() => import("./pages/PaintStore"));
+const RequestDelegate = lazy(() => import("./pages/RequestDelegate"));
+const SEOStoreSetting = lazy(() => import("./pages/SEOStoreSetting"));
+const Rating = lazy(() =>
+	import("./pages/Rating").then((module) => ({ default: module.Rating }))
+);
 
-// main Information setting Page
-import { MainInformation } from "./pages/MainInformationSetting";
+// Academy
+const Academy = lazy(() =>
+	import("./pages/Academy").then((module) => ({ default: module.Academy }))
+);
+const CourseDetails = lazy(() =>
+	import("./pages/Academy/Courses").then((module) => ({
+		default: module.CourseDetails,
+	}))
+);
+const ExplainDetails = lazy(() =>
+	import("./pages/Academy/Explains").then((module) => ({
+		default: module.ExplainDetails,
+	}))
+);
+const LiveCourseDetails = lazy(() =>
+	import("./pages/Academy/LiveCourses/LiveCourseDetails")
+);
 
-// Login and reset password  pages
-import Main from "./pages/Authentication/Main/Main";
+// Products
+const Products = lazy(() =>
+	import("./pages/Products").then((module) => ({ default: module.Products }))
+);
+const AddNewProduct = lazy(() =>
+	import("./pages/Products").then((module) => ({
+		default: module.AddNewProduct,
+	}))
+);
+const EditProduct = lazy(() =>
+	import("./pages/Products").then((module) => ({ default: module.EditProduct }))
+);
+const EditImportProducts = lazy(() =>
+	import("./pages/Products").then((module) => ({
+		default: module.EditImportProducts,
+	}))
+);
+const AddNewService = lazy(() =>
+	import("./pages/Products/AddAndEditServices/AddNewService")
+);
+const EditService = lazy(() =>
+	import("./pages/Products/AddAndEditServices/EditService")
+);
 
-import { RestorePassword } from "./pages/Authentication/Login/ResetPasswordPages/RestorePassword";
-import { CreateNewPassword } from "./pages/Authentication/Login/ResetPasswordPages/CreateNewPassword";
-import SendVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode";
-import LogInVerificationCode from "./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode";
-import VerificationPage from "./pages/Authentication/VerificationPage/VerificationPage";
+// Authentication
+const Main = lazy(() => import("./pages/Authentication/Main/Main"));
+const VerificationPage = lazy(() =>
+	import("./pages/Authentication/VerificationPage/VerificationPage")
+);
+const RestorePassword = lazy(() =>
+	import("./pages/Authentication/Login/ResetPasswordPages/RestorePassword")
+);
+const CreateNewPassword = lazy(() =>
+	import("./pages/Authentication/Login/ResetPasswordPages/CreateNewPassword")
+);
+const SendVerificationCode = lazy(() =>
+	import(
+		"./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/SendVerificationCode"
+	)
+);
+const LogInVerificationCode = lazy(() =>
+	import(
+		"./pages/Authentication/Login/ResetPasswordPages/SendVerificationCode/LogInVerificationCode/LogInVerificationCode"
+	)
+);
 
-// categories
-import { Category, AddCategory, EditCategory } from "./pages/Categories";
+// Categories
+const Category = lazy(() =>
+	import("./pages/Categories").then((module) => ({ default: module.Category }))
+);
+const AddCategory = lazy(() =>
+	import("./pages/Categories").then((module) => ({
+		default: module.AddCategory,
+	}))
+);
+const EditCategory = lazy(() =>
+	import("./pages/Categories").then((module) => ({
+		default: module.EditCategory,
+	}))
+);
+
+// Coupons
+const Coupon = lazy(() =>
+	import("./pages/Coupon").then((module) => ({ default: module.Coupon }))
+);
+const AddCoupon = lazy(() =>
+	import("./pages/Coupon").then((module) => ({ default: module.AddCoupon }))
+);
+const EditCoupon = lazy(() =>
+	import("./pages/Coupon").then((module) => ({ default: module.EditCoupon }))
+);
+
+// Empty Carts
+const EmptyCarts = lazy(() =>
+	import("./pages/EmptyCarts").then((module) => ({
+		default: module.EmptyCarts,
+	}))
+);
+const EditEmptyCart = lazy(() =>
+	import("./pages/EmptyCarts").then((module) => ({
+		default: module.EditEmptyCart,
+	}))
+);
+
+// Store Pages
+const Pages = lazy(() =>
+	import("./pages/StorePages").then((module) => ({ default: module.Pages }))
+);
+const CreatePage = lazy(() =>
+	import("./pages/StorePages").then((module) => ({
+		default: module.CreatePage,
+	}))
+);
+const EditPage = lazy(() =>
+	import("./pages/StorePages").then((module) => ({ default: module.EditPage }))
+);
+
+// Orders
+const Orders = lazy(() =>
+	import("./pages/StoreOrders/Orders").then((module) => ({
+		default: module.Orders,
+	}))
+);
+const OrderDetails = lazy(() =>
+	import("./pages/StoreOrders/Orders").then((module) => ({
+		default: module.OrderDetails,
+	}))
+);
+const ReturnOrders = lazy(() =>
+	import("./pages/StoreOrders/ReturnOrders").then((module) => ({
+		default: module.ReturnOrders,
+	}))
+);
+const ReturnOrderDetails = lazy(() =>
+	import("./pages/StoreOrders/ReturnOrders").then((module) => ({
+		default: module.ReturnOrderDetails,
+	}))
+);
+
+// Souq Otlobha
+const SouqOtlobha = lazy(() =>
+	import("./pages/nestedPages/SouqOtlbha").then((module) => ({
+		default: module.SouqOtlobha,
+	}))
+);
+const ProductRefund = lazy(() =>
+	import("./pages/nestedPages/SouqOtlbha").then((module) => ({
+		default: module.ProductRefund,
+	}))
+);
+const CartPage = lazy(() =>
+	import("./pages/nestedPages/SouqOtlbha").then((module) => ({
+		default: module.CartPage,
+	}))
+);
+const CheckoutPage = lazy(() =>
+	import("./pages/nestedPages/SouqOtlbha").then((module) => ({
+		default: module.CheckoutPage,
+	}))
+);
+const CheckoutStatus = lazy(() =>
+	import(
+		"./pages/nestedPages/SouqOtlbha/CheckoutPage/CheckOutStatusPages"
+	).then((module) => ({ default: module.CheckoutStatus }))
+);
 
 // Technical Support
-import { TechnicalSupport } from "./pages/TechnicalSupport";
-import TechnicalSupportDetails from "./pages/TechnicalSupport/TechnicalSupportDetails";
+const TechnicalSupport = lazy(() =>
+	import("./pages/TechnicalSupport/TechnicalSupport")
+);
+const TechnicalSupportDetails = lazy(() =>
+	import("./pages/TechnicalSupport/TechnicalSupportDetails")
+);
 
-// coupons
-import { Coupon, AddCoupon, EditCoupon } from "./pages/Coupon";
+// User Management
+const EditUserDetails = lazy(() =>
+	import("./pages/nestedPages").then((module) => ({
+		default: module.EditUserDetails,
+	}))
+);
 
-// empty carts
-import { EditEmptyCart, EmptyCarts } from "./pages/EmptyCarts";
+// Settings
+const VerifyStore = lazy(() => import("./pages/VerifyStore"));
+const TemplateSetting = lazy(() =>
+	import("./pages/TemplateSetting/TemplateSetting")
+);
+const ShippingCompanies = lazy(() =>
+	import("./pages/ShippingCompanies/ShippingCompanies")
+);
+const PaymentGateways = lazy(() =>
+	import("./pages/PaymentGateways/PaymentGateways")
+);
+const MainInformation = lazy(() =>
+	import("./pages/MainInformationSetting/MainInformation")
+);
 
-// store pages
-import { CreatePage, EditPage, Pages } from "./pages/StorePages";
+// Wallet
+const Wallet = lazy(() => import("./pages/Wallet/Wallet"));
+const BillingInfo = lazy(() => import("./pages/Wallet/BillingInfo"));
 
-// wallet and billing
-import { Wallet } from "./pages/Wallet";
-import BillingInfo from "./pages/Wallet/BillingInfo";
+// Reports
+const Reports = lazy(() => import("./pages/Reports/Reports"));
 
-// reports
-import { Reports } from "./pages/Reports";
-
-/** Store orders and return orders */
-import { OrderDetails, Orders } from "./pages/StoreOrders/Orders";
-import {
-	ReturnOrderDetails,
-	ReturnOrders,
-} from "./pages/StoreOrders/ReturnOrders";
-
-// packages
-import UpgradePackages from "./pages/Packages/UpgradePackages";
-import ComparePackages from "./pages/Packages/ComparePackages";
-import CheckoutPackages from "./pages/Packages/CheckoutPackages/CheckoutPackages";
-import LiveCourseDetails from "./pages/Academy/LiveCourses/LiveCourseDetails";
-import CheckoutServicesStatus from "./pages/PlatformServices/CheckoutServices/CheckoutServicesStatus";
-import AddNewService from "./pages/Products/AddAndEditServices/AddNewService";
-import EditService from "./pages/Products/AddAndEditServices/EditService";
+// Packages
+const UpgradePackages = lazy(() => import("./pages/Packages/UpgradePackages"));
+const ComparePackages = lazy(() => import("./pages/Packages/ComparePackages"));
+const CheckoutPackages = lazy(() =>
+	import("./pages/Packages/CheckoutPackages/CheckoutPackages")
+);
+const CheckoutServicesStatus = lazy(() =>
+	import("./pages/PlatformServices/CheckoutServices/CheckoutServicesStatus")
+);
 
 /**
  * ----------------------------------------------------------------------------------------------
@@ -155,7 +275,10 @@ import EditService from "./pages/Products/AddAndEditServices/EditService";
  */
 
 const router = createBrowserRouter([
-	{ path: "/auth/:type", element: <Main /> },
+	{
+		path: "/auth/:type",
+		element: <Main />,
+	},
 	{ path: "VerificationPage", element: <VerificationPage /> },
 	// RestorePassword Pages
 	{
@@ -551,22 +674,22 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<Provider store={store}>
-		<ProSidebarProvider>
-			<UserAuthorProvider>
-				<ContextProvider>
-					<ResetPasswordProvider>
-						<NotificationProvider>
-							<LoadingProvider>
-								<DeleteProvider>
-									<TextEditorProvider>
+		<UserAuthorProvider>
+			<ContextProvider>
+				<ResetPasswordProvider>
+					<NotificationProvider>
+						<LoadingProvider>
+							<DeleteProvider>
+								<TextEditorProvider>
+									<Suspense fallback={<Loading />}>
 										<RouterProvider router={router} />
-									</TextEditorProvider>
-								</DeleteProvider>
-							</LoadingProvider>
-						</NotificationProvider>
-					</ResetPasswordProvider>
-				</ContextProvider>
-			</UserAuthorProvider>
-		</ProSidebarProvider>
+									</Suspense>
+								</TextEditorProvider>
+							</DeleteProvider>
+						</LoadingProvider>
+					</NotificationProvider>
+				</ResetPasswordProvider>
+			</ContextProvider>
+		</UserAuthorProvider>
 	</Provider>
 );

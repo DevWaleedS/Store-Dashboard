@@ -89,7 +89,7 @@ const AddStoreAddress = ({
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							readOnly={
-								currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة " ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
@@ -148,7 +148,7 @@ const AddStoreAddress = ({
 							IconComponent={IoIosArrowDown}
 							displayEmpty
 							disabled={
-								currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة " ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
@@ -197,7 +197,7 @@ const AddStoreAddress = ({
 						<input
 							className='shipping-address-input'
 							readOnly={
-								currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
+								currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة " ||
 								currentOrder?.orders?.status === "تم الشحن" ||
 								currentOrder?.orders?.status === "ملغي" ||
 								currentOrder?.orders?.status === "مكتمل"
@@ -248,7 +248,7 @@ const AddStoreAddress = ({
 									return date < today || date?.getTime() === today?.getTime();
 								}}
 								readOnly={
-									currentOrder?.orders?.status === "طلب مندوب لتوصيل الشحنة " ||
+									currentOrder?.orders?.status === "طلب مندوب لتسليم الشحنة " ||
 									currentOrder?.orders?.status === "تم الشحن" ||
 									currentOrder?.orders?.status === "ملغي" ||
 									currentOrder?.orders?.status === "مكتمل"

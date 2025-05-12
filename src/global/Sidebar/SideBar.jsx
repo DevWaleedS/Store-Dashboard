@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { Sidebar, Menu } from "react-pro-sidebar";
 
 // Redux
@@ -52,13 +52,13 @@ import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import { useNavigate } from "react-router-dom";
 import { useGetUpgradePackagesQuery } from "../../store/apiSlices/upgradePackagesApi";
 
-const SideBar = ({
+const SideBar = memo(function SideBar({
 	open,
 	closeSidebar,
 	verificationStatus,
 	packagePaidStatus,
 	packageId,
-}) => {
+}) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const Z_index = useContext(Context);
@@ -395,6 +395,6 @@ const SideBar = ({
 			</Menu>
 		</Sidebar>
 	);
-};
+});
 
 export default SideBar;

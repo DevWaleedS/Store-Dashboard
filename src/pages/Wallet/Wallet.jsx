@@ -1,17 +1,15 @@
-import React, { useState } from "react";
-
+import { useState } from "react";
 // Third party
 import { Helmet } from "react-helmet";
 
-// components
-import {
-	WalletQuickDetails,
-	AddBankAccountModal,
-	EditBankAccountModal,
-	BankAccountsTable,
-} from "./index.js";
+// components - Import directly from their source files, not through index.js
+import WalletQuickDetails from "./WalletQuickDetails"; // Adjust path as needed
+import AddBankAccountModal from "./Add&EditBankAccountModal/AddBankAccountModal"; // Adjust path
+import EditBankAccountModal from "./Add&EditBankAccountModal/EditBankAccountModal"; // Adjust path
+import BankAccountsTable from "./BankAccountsTable"; // Adjust path
 import { Breadcrumb } from "../../components";
 import BillingTable from "../../components/Tables/BillingTable.jsx";
+
 // Helpers
 import { CircularLoading } from "../../HelperComponents";
 

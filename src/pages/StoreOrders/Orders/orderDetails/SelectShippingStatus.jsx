@@ -21,6 +21,8 @@ import SelectPickupDateModal from "../SelectPickupDate/SelectPickupDateModal";
 
 // Utilities
 import { FormatDateAsTimestamp } from "../../../../utilities";
+import { useDispatch } from "react-redux";
+import { openDelegateRequestAlert } from "../../../../store/slices/DelegateRequestAlert-slice";
 
 const BpIcon = styled("span")(({ theme }) => ({
 	borderRadius: "50%",
@@ -96,6 +98,7 @@ const SelectShippingStatus = ({
 	currentOrder,
 }) => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	// to handle set date rang of shipping
 	// handle shipping status
@@ -136,6 +139,7 @@ const SelectShippingStatus = ({
 		let formData = new FormData();
 		formData.append("_method", "PUT");
 		formData.append("status", status);
+
 		if (!currentOrder?.orders.is_service) {
 			formData.append("city", shipping?.city);
 			formData.append("district", shipping?.district);
@@ -160,10 +164,18 @@ const SelectShippingStatus = ({
 				response.data?.success === true &&
 				response.data?.data?.status === 200
 			) {
-				navigate("/Orders");
-				setLoadingTitle("");
 				if (pickupDateModalIsOpen) {
 					handleClosePickupDateModal();
+				}
+				if (
+					status === "canceled" &&
+					currentOrder?.orders?.shippingtypes?.name !== "اخرى"
+				) {
+					setLoadingTitle("");
+					dispatch(openDelegateRequestAlert());
+				} else {
+					navigate("/Orders");
+					setLoadingTitle("");
 				}
 			} else {
 				setLoadingTitle("");
@@ -229,7 +241,7 @@ const SelectShippingStatus = ({
 											style={{
 												cursor:
 													currentOrder?.orders?.status ===
-														"طلب مندوب لتوصيل الشحنة " ||
+														"طلب مندوب لتسليم الشحنة" ||
 													currentOrder?.orders?.status === "ملغي" ||
 													currentOrder?.orders?.status === "قيد التجهيز"
 														? "not-allowed"
@@ -272,30 +284,30 @@ const SelectShippingStatus = ({
 															isLoading ||
 															currentOrder?.orders?.status === "قيد التجهيز" ||
 															currentOrder?.orders?.status ===
-																"طلب مندوب لتوصيل الشحنة " ||
+																"طلب مندوب لتسليم الشحنة" ||
 															currentOrder?.orders?.status === "ملغي"
 														}
 													/>
 												) : null}
 
 												{currentOrder?.orders?.shippingtypes?.name !== "اخرى" ||
-												currentOrder?.orders?.is_service !== false ? (
+												!currentOrder?.orders?.is_service ? (
 													<FormControlLabel
 														className='mb-2'
 														value='delivery_in_progress'
 														control={<BpRadio />}
-														label='طلب مندوب لتوصيل الشحنة '
+														label='طلب مندوب لتسليم الشحنة '
 														sx={formControlLabelStyle}
 														disabled={
 															isLoading ||
 															currentOrder?.orders?.status === "جديد" ||
 															currentOrder?.orders?.status ===
-																"طلب مندوب لتوصيل الشحنة " ||
+																"طلب مندوب لتسليم الشحنة" ||
 															currentOrder?.orders?.status === "ملغي"
 														}
 													/>
 												) : null}
-												{currentOrder?.orders?.is_service ? (
+												{!currentOrder?.orders?.is_service ? (
 													<FormControlLabel
 														control={
 															<BpRadio value='canceled' name='canceled' />
@@ -304,7 +316,7 @@ const SelectShippingStatus = ({
 														label=' إلغاء الشحنة (إلغاء الطلب بالكامل) '
 													/>
 												) : (currentOrder?.orders?.status !==
-														"طلب مندوب لتوصيل الشحنة " ||
+														"طلب مندوب لتسليم الشحنة" ||
 														currentOrder?.orders?.status !== "ملغي") &&
 												  currentOrder?.orders?.shippingtypes?.name ===
 														"اخرى" ? (
